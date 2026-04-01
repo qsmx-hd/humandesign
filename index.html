@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图完整系列 · 勤思妙享</title>
+<style>
+  :root {
+    --primary: #6c3fc5;
+    --secondary: #c94fa0;
+    --accent: #f4a234;
+    --teal: #2ab8a0;
+    --sky: #3a9fd8;
+    --green: #00b894;
+    --rose: #f43f5e;
+    --gold: #d4a017;
+    --violet: #8b5cf6;
+    --dark: #1a1040;
+    --card-bg: #ffffff;
+    --page-bg: #f5f2fc;
+    --text: #2d2250;
+    --muted: #7a6fa8;
+    --border: #e0d8f5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(26,18,48,0.97);
+    backdrop-filter: blur(14px);
+    display: flex; align-items: center; gap: 0;
+    padding: 0 20px; height: 54px;
+    overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-brand {
+    color: #fff; font-size: 14px; font-weight: 700;
+    white-space: nowrap; margin-right: 20px;
+    background: linear-gradient(90deg,#c94fa0,#f4a234,#2ab8a0);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+  }
+  nav a {
+    color: rgba(255,255,255,0.65); text-decoration: none;
+    font-size: 12px; padding: 6px 10px; border-radius: 20px;
+    white-space: nowrap; transition: all .2s;
+  }
+  nav a:hover { color: #fff; background: rgba(255,255,255,0.12); }
+  nav a.active { color: #fff; background: rgba(255,255,255,0.18); }
+  .nav-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #c94fa0, #f4a234);
+    color: white; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 10px;
+    margin-left: 4px; vertical-align: middle;
+  }
+  .nav-divider {
+    width: 1px; height: 18px; background: rgba(255,255,255,0.15);
+    margin: 0 8px; flex-shrink: 0;
+  }
+  .nav-start { margin-left: auto; flex-shrink: 0; }
+  .nav-start a {
+    background: linear-gradient(135deg,#c94fa0,#f4a234);
+    color: white !important; font-weight: 600;
+    padding: 5px 14px !important;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 100px 20px 80px;
+    text-align: center;
+    background: linear-gradient(180deg, #1a1040 0%, #2d1b69 40%, #3d2075 70%, #f5f2fc 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,79,160,0.12) 0%, transparent 70%);
+    top: -200px; left: 50%; transform: translateX(-50%);
+  }
+  .hero::after {
+    content: ''; position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,184,160,0.1) 0%, transparent 70%);
+    bottom: -100px; right: 10%;
+  }
+  .hero-inner { max-width: 780px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-label {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(201,79,160,0.25), rgba(244,162,52,0.25));
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 5px 20px;
+    font-size: 12px; color: rgba(255,255,255,0.8);
+    letter-spacing: 3px; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 52px; font-weight: 900; color: #fff;
+    margin-bottom: 18px; line-height: 1.2;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg, #c94fa0, #f4a234, #2ab8a0);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-desc {
+    font-size: 17px; color: rgba(255,255,255,0.72);
+    max-width: 520px; margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 0;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px; padding: 20px 32px;
+    text-align: center; min-width: 120px;
+  }
+  .hero-stat + .hero-stat { border-left: 1px solid rgba(255,255,255,0.1); }
+  .hero-stat-num {
+    font-size: 36px; font-weight: 900;
+    background: linear-gradient(135deg, #c94fa0, #f4a234);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* ===== PATH SECTION ===== */
+  .path-section {
+    max-width: 900px; margin: -30px auto 0;
+    padding: 0 20px; position: relative; z-index: 2;
+  }
+  .path-card {
+    background: var(--card-bg);
+    border-radius: 24px; padding: 40px;
+    box-shadow: 0 8px 40px rgba(108,92,231,0.12);
+    border: 1px solid var(--border);
+  }
+  .path-title {
+    text-align: center; font-size: 22px; font-weight: 800;
+    color: var(--text); margin-bottom: 36px;
+  }
+  .path-title span { color: var(--secondary); }
+  .path-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center; gap: 0;
+  }
+  .path-node {
+    background: linear-gradient(135deg, var(--page-bg), #fff);
+    border: 2px solid var(--border);
+    border-radius: 20px; padding: 24px 20px;
+    text-align: center; position: relative;
+    transition: all .3s;
+  }
+  .path-node:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(108,92,231,0.15);
+  }
+  .path-node.beginner { border-color: #a29bfe; }
+  .path-node.intermediate { border-color: #f4a234; }
+  .path-node.advanced { border-color: #2ab8a0; }
+  .path-node-icon {
+    font-size: 40px; margin-bottom: 12px;
+    display: block;
+  }
+  .path-node-title {
+    font-size: 16px; font-weight: 800; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .path-node-sub {
+    font-size: 12px; color: var(--muted); margin-bottom: 12px;
+  }
+  .path-node-count {
+    display: inline-block;
+    background: var(--page-bg);
+    border-radius: 10px; padding: 3px 12px;
+    font-size: 12px; font-weight: 700;
+    color: var(--muted);
+  }
+  .beginner .path-node-count { color: var(--primary); }
+  .intermediate .path-node-count { color: var(--accent); }
+  .advanced .path-node-count { color: var(--teal); }
+  .path-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: var(--muted);
+    padding: 0 12px;
+  }
+  .path-arrow-line {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .path-arrow-label {
+    font-size: 11px; color: var(--muted);
+    background: var(--page-bg);
+    padding: 2px 8px; border-radius: 8px;
+  }
+
+  /* ===== SERIES CARDS ===== */
+  .series-section { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+  .series-section-title {
+    text-align: center; font-size: 26px; font-weight: 900;
+    color: var(--text); margin-bottom: 12px;
+  }
+  .series-section-sub {
+    text-align: center; font-size: 14px; color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .series-card {
+    background: var(--card-bg);
+    border-radius: 24px; overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all .3s;
+    text-decoration: none; color: inherit;
+    display: block;
+  }
+  .series-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(108,92,231,0.18);
+  }
+  .series-card-banner {
+    height: 140px; display: flex;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .series-card.beginner .series-card-banner {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe, #fd79a8);
+  }
+  .series-card.intermediate .series-card-banner {
+    background: linear-gradient(135deg, #2d1b69, #c94fa0, #f4a234);
+  }
+  .series-card.advanced .series-card-banner {
+    background: linear-gradient(135deg, #0f0c29, #14b8a6, #8b5cf6);
+  }
+  .series-card-banner::before {
+    content: ''; position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    top: -80px; right: -40px;
+  }
+  .series-card-banner::after {
+    content: ''; position: absolute;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    bottom: -40px; left: 20px;
+  }
+  .series-card-emoji { font-size: 64px; position: relative; z-index: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  .series-card-level {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 12px; padding: 3px 12px;
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.9); letter-spacing: 1px;
+  }
+  .series-card-body { padding: 28px; }
+  .series-card-title {
+    font-size: 20px; font-weight: 900; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .series-card-desc {
+    font-size: 13px; color: var(--muted);
+    margin-bottom: 20px; line-height: 1.6;
+  }
+  .series-card-topics {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 20px;
+  }
+  .series-card-topic {
+    background: var(--page-bg);
+    border-radius: 8px; padding: 4px 10px;
+    font-size: 11px; color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .series-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .series-card-meta {
+    font-size: 12px; color: var(--muted);
+  }
+  .series-card-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700;
+    color: var(--secondary);
+    transition: gap .2s;
+  }
+  .series-card:hover .series-card-link { gap: 10px; }
+
+  /* ===== TOC ===== */
+  .toc-section { max-width: 900px; margin: 40px auto; padding: 0 20px 80px; }
+  .toc-tabs { display: flex; gap: 0; background: var(--card-bg); border-radius: 16px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; }
+  .toc-tab {
+    padding: 8px 20px; border-radius: 12px; font-size: 13px;
+    font-weight: 600; color: var(--muted); cursor: pointer;
+    white-space: nowrap; transition: all .2s; border: none;
+    background: none; font-family: inherit;
+  }
+  .toc-tab.active { background: var(--primary); color: #fff; }
+  .toc-panel { display: none; }
+  .toc-panel.active { display: block; }
+  .toc-list { list-style: none; }
+  .toc-list li {
+    background: var(--card-bg); border-radius: 14px;
+    padding: 16px 20px; margin-bottom: 10px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px;
+    transition: all .2s;
+  }
+  .toc-list li:hover { border-color: var(--primary); transform: translateX(4px); }
+  .toc-num {
+    min-width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+  }
+  .beginner .toc-num { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+  .intermediate .toc-num { background: linear-gradient(135deg, #c94fa0, #f4a234); }
+  .advanced .toc-num { background: linear-gradient(135deg, #8b5cf6, #14b8a6); }
+  .toc-text { flex: 1; }
+  .toc-text-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .toc-text-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .toc-badge { font-size: 11px; background: var(--page-bg); border-radius: 8px; padding: 2px 8px; color: var(--muted); border: 1px solid var(--border); }
+
+  /* ===== FREE CHART CTA ===== */
+  .free-cta {
+    max-width: 700px; margin: 50px auto;
+    padding: 0 20px 80px;
+  }
+  .free-cta-card {
+    background: linear-gradient(135deg, #1a1040, #2d1b69, #3d2075);
+    border-radius: 28px; padding: 48px 40px;
+    text-align: center; position: relative; overflow: hidden;
+    color: white;
+  }
+  .free-cta-card::before {
+    content: ''; position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,79,160,0.2) 0%, transparent 70%);
+    top: -100px; right: -80px;
+  }
+  .free-cta-card::after {
+    content: ''; position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,184,160,0.15) 0%, transparent 70%);
+    bottom: -60px; left: -40px;
+  }
+  .free-cta-icon {
+    font-size: 52px; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .free-cta-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .free-cta-title {
+    font-size: 24px; font-weight: 800; margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .free-cta-sub {
+    font-size: 14px; opacity: 0.75; margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+  .free-cta-url {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 16px; padding: 16px 32px;
+    font-size: 15px; font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all .25s;
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+    word-break: break-all;
+    max-width: 100%;
+  }
+  .free-cta-url:hover {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  /* ===== CONTACT SECTION ===== */
+  .contact-section {
+    max-width: 700px; margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+  .contact-card {
+    background: linear-gradient(135deg, #1a1040, #2d1b69, #3d2075);
+    border-radius: 28px; padding: 48px 40px;
+    text-align: center; position: relative; overflow: hidden;
+    color: white;
+  }
+  .contact-card::before {
+    content: ''; position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,79,160,0.2) 0%, transparent 70%);
+    top: -100px; right: -80px;
+  }
+  .contact-card::after {
+    content: ''; position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,184,160,0.15) 0%, transparent 70%);
+    bottom: -60px; left: -40px;
+  }
+  .contact-poster {
+    width: 160px; height: 160px;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.3);
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .contact-title {
+    font-size: 20px; font-weight: 800; margin-bottom: 6px;
+    position: relative; z-index: 1;
+  }
+  .contact-subtitle {
+    font-size: 13px; opacity: 0.7; margin-bottom: 28px;
+    position: relative; z-index: 1;
+  }
+  .contact-items {
+    display: flex; justify-content: center; gap: 16px;
+    flex-wrap: wrap; position: relative; z-index: 1;
+  }
+  .contact-item {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px; padding: 14px 24px;
+    display: flex; align-items: center; gap: 10px;
+    transition: all .2s;
+  }
+  .contact-item:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+  .contact-icon { font-size: 22px; }
+  .contact-label { font-size: 11px; opacity: 0.6; }
+  .contact-value { font-size: 14px; font-weight: 600; }
+  .contact-desc {
+    font-size: 12px; opacity: 0.5; margin-top: 20px;
+    position: relative; z-index: 1;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 30px 20px;
+    font-size: 13px;
+  }
+  footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+  footer a:hover { color: #fff; }
+
+  /* ===== JUMP LINKS ===== */
+  .jump-bar {
+    position: fixed; right: 20px; bottom: 30px; z-index: 998;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .jump-btn {
+    width: 46px; height: 46px; border-radius: 50%;
+    border: none; cursor: pointer; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    transition: transform .2s;
+  }
+  .jump-btn:hover { transform: scale(1.1); }
+  .jump-btn.beginner { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+  .jump-btn.intermediate { background: linear-gradient(135deg, #c94fa0, #f4a234); }
+  .jump-btn.advanced { background: linear-gradient(135deg, #8b5cf6, #14b8a6); }
+  .jump-btn.home { background: var(--card-bg); border: 2px solid var(--border); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 34px; }
+    .hero-stats { gap: 12px; }
+    .hero-stat { min-width: 100px; padding: 16px 20px; }
+    .hero-stat + .hero-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
+    .path-flow { grid-template-columns: 1fr; gap: 16px; }
+    .path-arrow { transform: rotate(90deg); padding: 8px 0; }
+    .series-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <span class="nav-brand">勤思妙享 · 人类图</span>
+  <a href="#overview">总览</a>
+  <div class="nav-divider"></div>
+  <a href="#beginner">🌱 入门系列</a>
+  <a href="#intermediate">🌿 进阶系列</a>
+  <a href="#advanced">🌳 高阶系列</a>
+  <div class="nav-divider"></div>
+  <a href="#toc">目录索引</a>
+  <div class="nav-divider"></div>
+  <a href="#freetool">🔮 免费出图</a>
+  <div class="nav-divider"></div>
+  <a href="#contact">📬 联系</a>
+  <span class="nav-badge">共19篇</span>
+  <div class="nav-start">
+    <a href="#beginner">开始学习 →</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-label">HUMAN DESIGN · 勤思妙享</div>
+    <h1>人类图<span>完整系列</span></h1>
+    <p class="hero-desc">
+      从零基础到高阶解读，19篇图解文章构成完整知识体系。<br>
+      每篇配 SVG 示意图 · 核心卡片 · 速查表格 · 实战路径
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">19</div>
+        <div class="hero-stat-label">篇完整图解</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">层级体系</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">60+</div>
+        <div class="hero-stat-label">张图解卡片</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PATH ===== -->
+<section class="path-section">
+  <div class="path-card">
+    <div class="path-title">📚 学习路径 · <span>三层进阶体系</span></div>
+    <div class="path-flow">
+      <div class="path-node beginner">
+        <span class="path-node-icon">🌱</span>
+        <div class="path-node-title">入门系列</div>
+        <div class="path-node-sub">建立认知 · 截获流量</div>
+        <span class="path-node-count">6 篇</span>
+      </div>
+      <div class="path-arrow">→</div>
+      <div class="path-node intermediate">
+        <span class="path-node-icon">🌿</span>
+        <div class="path-node-title">进阶系列</div>
+        <div class="path-node-sub">深度转化 · 建立信任</div>
+        <span class="path-node-count">7 篇</span>
+      </div>
+      <div class="path-arrow">→</div>
+      <div class="path-node advanced">
+        <span class="path-node-icon">🌳</span>
+        <div class="path-node-title">高阶系列</div>
+        <div class="path-node-sub">深化变现 · 高净值服务</div>
+        <span class="path-node-count">6 篇</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERIES CARDS ===== -->
+<section class="series-section" id="beginner">
+  <div class="series-section-title">🌱 入门系列</div>
+  <div class="series-section-sub">适合零基础用户，建立人类图核心认知框架</div>
+  <div class="series-grid">
+    <div>
+      <a href="beginner.html" class="series-card beginner" target="_blank">
+        <div class="series-card-banner">
+          <span class="series-card-emoji">🌱</span>
+          <span class="series-card-level">入 门</span>
+        </div>
+        <div class="series-card-body">
+          <div class="series-card-title">人类图入门系列 · 完整6篇</div>
+          <div class="series-card-desc">从零开始，图文并茂掌握人类图基础知识体系</div>
+          <div class="series-card-topics">
+            <span class="series-card-topic">四大类型</span>
+            <span class="series-card-topic">九大能量中心</span>
+            <span class="series-card-topic">策略与权威</span>
+            <span class="series-card-topic">通道与闸门</span>
+            <span class="series-card-topic">生活实践</span>
+          </div>
+          <div class="series-card-footer">
+            <span class="series-card-meta">共6篇 · 含SVG图解</span>
+            <span class="series-card-link">打开阅读 →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- TOC for beginner -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第①篇 · 什么是人类图
+        </div>
+      </a>
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第②篇 · 四大类型
+        </div>
+      </a>
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第③篇 · 九大能量中心
+        </div>
+      </a>
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第④篇 · 策略与权威
+        </div>
+      </a>
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第⑤篇 · 通道与闸门
+        </div>
+      </a>
+      <a href="beginner.html" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #e0d8f5;font-size:13px;font-weight:700;color:#6c5ce7;">
+          📖 第⑥篇 · 运用于生活
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="series-section" id="intermediate">
+  <div class="series-section-title">🌿 进阶系列</div>
+  <div class="series-section-sub">适合有基础用户，深入理解性格与关系模式</div>
+  <div class="series-grid">
+    <div>
+      <a href="intermediate.html" class="series-card intermediate" target="_blank">
+        <div class="series-card-banner">
+          <span class="series-card-emoji">🌿</span>
+          <span class="series-card-level">进 阶</span>
+        </div>
+        <div class="series-card-body">
+          <div class="series-card-title">人类图进阶系列 · 完整7篇</div>
+          <div class="series-card-desc">深度解读性格底色、能量流动与关系互动模式</div>
+          <div class="series-card-topics">
+            <span class="series-card-topic">12种轮廓</span>
+            <span class="series-card-topic">三大回路</span>
+            <span class="series-card-topic">四种定义</span>
+            <span class="series-card-topic">四箭头变量</span>
+            <span class="series-card-topic">爻线深解</span>
+            <span class="series-card-topic">关系互动</span>
+            <span class="series-card-topic">实操手册</span>
+          </div>
+          <div class="series-card-footer">
+            <span class="series-card-meta">共7篇 · 含SVG图解</span>
+            <span class="series-card-link">打开阅读 →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="intermediate.html#article1" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第①篇 · 轮廓 Profile（12种人生角色）
+        </div>
+      </a>
+      <a href="intermediate.html#article2" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第②篇 · 回路系统（三大回路）
+        </div>
+      </a>
+      <a href="intermediate.html#article3" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第③篇 · 定义类型（单一/分裂/三分/四分）
+        </div>
+      </a>
+      <a href="intermediate.html#article4" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第④篇 · 变量与四箭头
+        </div>
+      </a>
+      <a href="intermediate.html#article5" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第⑤篇 · 爻线六种性格深解
+        </div>
+      </a>
+      <a href="intermediate.html#article6" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第⑥篇 · 跨类型关系解读
+        </div>
+      </a>
+      <a href="intermediate.html#article7" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #f4e8d4;font-size:13px;font-weight:700;color:#c94fa0;">
+          📖 第⑦篇 · 完整实操手册
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="series-section" id="advanced">
+  <div class="series-section-title">🌳 高阶系列</div>
+  <div class="series-section-sub">适合深度用户，探索人生使命与时机奥秘</div>
+  <div class="series-grid">
+    <div>
+      <a href="advanced.html" class="series-card advanced" target="_blank">
+        <div class="series-card-banner">
+          <span class="series-card-emoji">🌳</span>
+          <span class="series-card-level">高 阶</span>
+        </div>
+        <div class="series-card-body">
+          <div class="series-card-title">人类图高阶系列 · 完整6篇</div>
+          <div class="series-card-desc">通往人生使命、完整能量图谱与高阶解读能力</div>
+          <div class="series-card-topics">
+            <span class="series-card-topic">轮回交叉</span>
+            <span class="series-card-topic">非自己主题</span>
+            <span class="series-card-topic">行星系统</span>
+            <span class="series-card-topic">权威深层</span>
+            <span class="series-card-topic">64闸门</span>
+            <span class="series-card-topic">生命周期</span>
+          </div>
+          <div class="series-card-footer">
+            <span class="series-card-meta">共6篇 · 含SVG图解</span>
+            <span class="series-card-link">打开阅读 →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <a href="advanced.html#article1" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第①篇 · 轮回交叉（人生使命）
+        </div>
+      </a>
+      <a href="advanced.html#article2" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第②篇 · 非自己主题
+        </div>
+      </a>
+      <a href="advanced.html#article3" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第③篇 · 行星 × 轮回六线
+        </div>
+      </a>
+      <a href="advanced.html#article4" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第④篇 · 权威深层机制
+        </div>
+      </a>
+      <a href="advanced.html#article5" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第⑤篇 · 64闸门全景
+        </div>
+      </a>
+      <a href="advanced.html#article6" target="_blank" style="text-decoration:none;color:inherit;">
+        <div style="background:white;border-radius:16px;padding:16px 20px;border:1px solid #d4f5f0;font-size:13px;font-weight:700;color:#14b8a6;">
+          📖 第⑥篇 · 生命周期与时机
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOC ===== -->
+<section class="toc-section" id="toc">
+  <div class="series-section-title">📑 完整目录索引</div>
+  <div class="series-section-sub">点击直接跳转到对应文章</div>
+
+  <div class="toc-tabs">
+    <button class="toc-tab active" onclick="showTab('all')">全部 19 篇</button>
+    <button class="toc-tab" onclick="showTab('beginner')">🌱 入门 6篇</button>
+    <button class="toc-tab" onclick="showTab('intermediate')">🌿 进阶 7篇</button>
+    <button class="toc-tab" onclick="showTab('advanced')">🌳 高阶 6篇</button>
+  </div>
+
+  <div class="toc-panel active" data-tab="all">
+    <ul class="toc-list beginner">
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">①</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 什么是人类图</div>
+          <div class="toc-text-sub">起源、框架与核心理念</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">②</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 四大类型</div>
+          <div class="toc-text-sub">生成者/投射者/反映者/Manifesting</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">③</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 九大能量中心</div>
+          <div class="toc-text-sub">顶部/逻辑/喉咙/意志/情绪/直觉/根部/脾/荐骨</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">④</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 策略与权威</div>
+          <div class="toc-text-sub">等待回应 · 跟随内在权威做决策</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑤</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 通道与闸门</div>
+          <div class="toc-text-sub">36条通道 · 64个闸门能量图</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑥</div>
+        <div class="toc-text">
+          <div class="toc-text-title">入门 · 运用于生活</div>
+          <div class="toc-text-sub">实操练习 · 日常决策场景</div>
+        </div>
+        <span class="toc-badge">🌱入门</span>
+      </li>
+    </ul>
+    <ul class="toc-list intermediate">
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">①</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 轮廓 Profile</div>
+          <div class="toc-text-sub">12种人生角色完整图解卡</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">②</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 回路系统</div>
+          <div class="toc-text-sub">三大回路能量流动详解</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">③</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 定义类型</div>
+          <div class="toc-text-sub">单一/分裂/三分/四分 四种定义</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">④</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 变量与四箭头</div>
+          <div class="toc-text-sub">消化/动力/视角/环境 4箭头详解</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑤</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 爻线六种性格深解</div>
+          <div class="toc-text-sub">6种爻线完整卡片 · 含阴影警示</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑥</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 跨类型关系解读</div>
+          <div class="toc-text-sub">5×4 关系互动速查表</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑦</div>
+        <div class="toc-text">
+          <div class="toc-text-title">进阶 · 完整实操手册</div>
+          <div class="toc-text-sub">7步操作流程 · 个人整合模板</div>
+        </div>
+        <span class="toc-badge">🌿进阶</span>
+      </li>
+    </ul>
+    <ul class="toc-list advanced">
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">①</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 轮回交叉</div>
+          <div class="toc-text-sub">四轴闸门组合 · 人生使命图</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">②</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 非自己主题</div>
+          <div class="toc-text-sub">四步陷阱→信号→出路 流程图</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">③</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 行星 × 轮回六线</div>
+          <div class="toc-text-sub">9大行星角色卡 · 6条意识进化路径</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">④</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 权威深层机制</div>
+          <div class="toc-text-sub">情绪波峰波谷 · 5种权威质地</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑤</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 64闸门全景</div>
+          <div class="toc-text-sub">8×8完整矩阵图 · 高阶速查索引</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer">
+        <div class="toc-num">⑥</div>
+        <div class="toc-text">
+          <div class="toc-text-title">高阶 · 生命周期与时机</div>
+          <div class="toc-text-sub">四季人生图 · 轮回十字 · 时机判断</div>
+        </div>
+        <span class="toc-badge">🌳高阶</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="toc-panel" data-tab="beginner">
+    <ul class="toc-list beginner">
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">①</div><div class="toc-text"><div class="toc-text-title">什么是人类图</div><div class="toc-text-sub">起源、框架与核心理念</div></div></li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">②</div><div class="toc-text"><div class="toc-text-title">四大类型</div><div class="toc-text-sub">生成者/投射者/反映者/Manifesting</div></div></li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">③</div><div class="toc-text"><div class="toc-text-title">九大能量中心</div><div class="toc-text-sub">9个能量中心详解</div></div></li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">④</div><div class="toc-text"><div class="toc-text-title">策略与权威</div><div class="toc-text-sub">等待回应 · 做正确决策</div></div></li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">⑤</div><div class="toc-text"><div class="toc-text-title">通道与闸门</div><div class="toc-text-sub">36条通道 · 64个闸门</div></div></li>
+      <li onclick="window.open('beginner.html','_blank')" style="cursor:pointer"><div class="toc-num">⑥</div><div class="toc-text"><div class="toc-text-title">运用于生活</div><div class="toc-text-sub">实操练习 · 日常场景</div></div></li>
+    </ul>
+  </div>
+
+  <div class="toc-panel" data-tab="intermediate">
+    <ul class="toc-list intermediate">
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">①</div><div class="toc-text"><div class="toc-text-title">轮廓 Profile</div><div class="toc-text-sub">12种人生角色完整图解</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">②</div><div class="toc-text"><div class="toc-text-title">回路系统</div><div class="toc-text-sub">三大回路能量流动</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">③</div><div class="toc-text"><div class="toc-text-title">定义类型</div><div class="toc-text-sub">单一/分裂/三分/四分</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">④</div><div class="toc-text"><div class="toc-text-title">变量与四箭头</div><div class="toc-text-sub">消化/动力/视角/环境</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">⑤</div><div class="toc-text"><div class="toc-text-title">爻线六种性格深解</div><div class="toc-text-sub">含阴影警示</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">⑥</div><div class="toc-text"><div class="toc-text-title">跨类型关系解读</div><div class="toc-text-sub">5×4 关系速查表</div></div></li>
+      <li onclick="window.open('intermediate.html','_blank')" style="cursor:pointer"><div class="toc-num">⑦</div><div class="toc-text"><div class="toc-text-title">完整实操手册</div><div class="toc-text-sub">7步流程 · 整合模板</div></div></li>
+    </ul>
+  </div>
+
+  <div class="toc-panel" data-tab="advanced">
+    <ul class="toc-list advanced">
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">①</div><div class="toc-text"><div class="toc-text-title">轮回交叉</div><div class="toc-text-sub">人生使命图</div></div></li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">②</div><div class="toc-text"><div class="toc-text-title">非自己主题</div><div class="toc-text-sub">陷阱→信号→出路</div></div></li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">③</div><div class="toc-text"><div class="toc-text-title">行星 × 轮回六线</div><div class="toc-text-sub">9行星 · 6进化路径</div></div></li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">④</div><div class="toc-text"><div class="toc-text-title">权威深层机制</div><div class="toc-text-sub">波峰波谷 · 权威质地</div></div></li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">⑤</div><div class="toc-text"><div class="toc-text-title">64闸门全景</div><div class="toc-text-sub">8×8矩阵 · 高阶索引</div></div></li>
+      <li onclick="window.open('advanced.html','_blank')" style="cursor:pointer"><div class="toc-num">⑥</div><div class="toc-text"><div class="toc-text-title">生命周期与时机</div><div class="toc-text-sub">四季人生 · 时机判断</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== FREE CHART CTA ===== -->
+<section class="free-cta" id="freetool">
+  <div class="free-cta-card">
+    <div class="free-cta-icon">🔮</div>
+    <div class="free-cta-badge">⚡ 免费出图</div>
+    <div class="free-cta-title">生成你的专属人类图</div>
+    <div class="free-cta-sub">输入出生信息，立即获得完整的人类图谱</div>
+    <a href="https://www.lifegps.cn/l/RALosKuq" target="_blank" class="free-cta-url">
+      👉 点击免费生成人类图 → lifegps.cn
+    </a>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact-section" id="contact">
+  <div class="contact-card">
+    <div class="contact-title">🌟 与全球研究者连接</div>
+    <div class="contact-subtitle">Human Design · 勤思妙享</div>
+    <div class="contact-items">
+      <div class="contact-item">
+        <span class="contact-icon">📧</span>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">dengqinmin@163.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">💬</span>
+        <div>
+          <div class="contact-label">WeChat</div>
+          <div class="contact-value">Khimmin</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-desc">欢迎交流 · 共同探索人类图奥秘</div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>🌱 入门系列 · 🌿 进阶系列 · 🌳 高阶系列 · 共19篇完整图解</p>
+  <p style="margin-top:8px;">由 <a href="#contact">勤思妙享</a> 制作 · Human Design 知识体系 · 联系方式：dengqinmin@163.com / Khimmin</p>
+</footer>
+
+<!-- ===== JUMP BUTTONS ===== -->
+<div class="jump-bar">
+  <button class="jump-btn home" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+  <button class="jump-btn beginner" onclick="document.getElementById('beginner').scrollIntoView({behavior:'smooth'})" title="入门系列">🌱</button>
+  <button class="jump-btn intermediate" onclick="document.getElementById('intermediate').scrollIntoView({behavior:'smooth'})" title="进阶系列">🌿</button>
+  <button class="jump-btn advanced" onclick="document.getElementById('advanced').scrollIntoView({behavior:'smooth'})" title="高阶系列">🌳</button>
+  <button class="jump-btn advanced" onclick="window.open('https://www.lifegps.cn/l/RALosKuq','_blank')" title="免费出图" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">🔮</button>
+</div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.toc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.toc-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  if (tab === 'all') {
+    document.querySelector('.toc-panel[data-tab="all"]').classList.add('active');
+  } else {
+    document.querySelector('.toc-panel[data-tab="' + tab + '"]').classList.add('active');
+  }
+}
+</script>
+
+</body>
+</html>

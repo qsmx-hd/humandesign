@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图高阶系列 · 勤思妙享</title>
+<style>
+  :root {
+    --primary: #8b5cf6;
+    --secondary: #ec4899;
+    --accent: #f59e0b;
+    --teal: #14b8a6;
+    --sky: #38bdf8;
+    --dark: #0f0c29;
+    --dark2: #1a1040;
+    --card-bg: #ffffff;
+    --page-bg: #f0efff;
+    --text: #1e1040;
+    --muted: #7c6fa8;
+    --border: #ddd6fe;
+    --gold: #d4a017;
+    --rose: #f43f5e;
+    --violet: #7c3aed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(15,12,41,0.97);
+    backdrop-filter: blur(14px);
+    display: flex; align-items: center; gap: 0;
+    padding: 0 20px; height: 54px;
+    overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-brand {
+    color: #fff; font-size: 14px; font-weight: 700;
+    white-space: nowrap; margin-right: 18px;
+    background: linear-gradient(90deg,#ec4899,#8b5cf6,#14b8a6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  nav a {
+    color: rgba(255,255,255,0.6); text-decoration: none;
+    font-size: 12px; padding: 6px 12px; border-radius: 20px;
+    white-space: nowrap; transition: all .25s; letter-spacing: 0.3px;
+  }
+  nav a:hover, nav a.active {
+    background: rgba(139,92,246,0.45); color: #fff;
+  }
+
+  /* HERO */
+  .hero {
+    margin-top: 54px;
+    background: linear-gradient(135deg, #0f0c29 0%, #1a1040 45%, #0f2a3a 100%);
+    padding: 80px 20px 70px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 40%, rgba(139,92,246,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 25%, rgba(236,72,153,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 55% 80%, rgba(20,184,166,0.2) 0%, transparent 45%),
+      radial-gradient(ellipse at 70% 60%, rgba(245,158,11,0.15) 0%, transparent 40%);
+  }
+  .hero-stars {
+    position: absolute; inset: 0; overflow: hidden;
+  }
+  .star {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+  .hero-badge {
+    position: relative; display: inline-block;
+    background: rgba(139,92,246,0.35); border: 1px solid rgba(139,92,246,0.6);
+    color: #c4b5fd; padding: 5px 20px; border-radius: 20px;
+    font-size: 12px; letter-spacing: 3px; margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    position: relative; font-size: clamp(26px,5vw,46px);
+    color: #fff; font-weight: 900; margin-bottom: 14px; line-height: 1.15;
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg,#ec4899,#8b5cf6,#14b8a6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    position: relative; color: rgba(255,255,255,0.65);
+    font-size: 16px; max-width: 580px; margin: 0 auto 34px;
+  }
+  .hero-divider {
+    position: relative; display: flex; align-items: center; gap: 12px;
+    max-width: 500px; margin: 0 auto 24px;
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  }
+  .hero-divider span { color: rgba(255,255,255,0.4); font-size: 18px; }
+  .hero-tags { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .hero-tag {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.8); padding: 5px 14px; border-radius: 15px;
+    font-size: 13px;
+  }
+
+  /* SECTIONS */
+  .section {
+    max-width: 920px; margin: 70px auto; padding: 0 20px;
+  }
+  .section-header {
+    display: flex; align-items: flex-start; gap: 18px; margin-bottom: 34px;
+  }
+  .section-num {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0;
+    background: linear-gradient(135deg,var(--violet),var(--secondary));
+    box-shadow: 0 6px 22px rgba(139,92,246,0.45);
+    position: relative;
+  }
+  .section-num::after {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 50%; border: 2px solid rgba(139,92,246,0.3);
+    animation: pulse-ring 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-ring {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 0; }
+  }
+  .section-title-wrap {}
+  .section-label { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; margin-bottom: 5px; text-transform: uppercase; }
+  .section-title { font-size: clamp(20px,3.5vw,30px); font-weight: 900; color: var(--dark); }
+  .section-title em {
+    font-style: normal;
+    background: linear-gradient(90deg,var(--violet),var(--secondary));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .section-intro {
+    background: linear-gradient(135deg,#fff,#fafafa);
+    border-left: 4px solid var(--violet);
+    padding: 16px 22px; border-radius: 0 14px 14px 0;
+    color: var(--text); font-size: 15px; margin-bottom: 28px;
+    box-shadow: 0 3px 16px rgba(139,92,246,0.08);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  .divider {
+    height: 1px; margin: 70px 0;
+    background: linear-gradient(90deg,transparent,var(--border),transparent);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg); border-radius: 18px;
+    padding: 26px; margin-bottom: 22px;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.08);
+    border: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 17px; font-weight: 800; color: var(--dark); margin-bottom: 14px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 18px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 16px; }
+
+  /* ===== CROSS DIAGRAM ===== */
+  .cross-diagram {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 30px 20px;
+  }
+  .cross-axis {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .cross-item {
+    border-radius: 14px; padding: 16px 20px; text-align: center; min-width: 160px;
+    border: 2px solid; background: #fff;
+  }
+  .cross-item-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.7; }
+  .cross-item-num { font-size: 22px; font-weight: 900; }
+  .cross-item-name { font-size: 14px; font-weight: 700; margin-top: 2px; }
+  .cross-arrow { font-size: 24px; color: var(--muted); }
+  .cross-center-box {
+    background: linear-gradient(135deg,#1a1040,#0f0c29);
+    border-radius: 16px; padding: 24px 32px; text-align: center; color: #fff;
+    border: 2px solid rgba(139,92,246,0.4);
+  }
+  .cross-center-label { font-size: 11px; letter-spacing: 1.5px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .cross-center-name { font-size: 22px; font-weight: 900; background: linear-gradient(90deg,#c4b5fd,#f0abfc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cross-center-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+  /* ===== NOT-SELF ===== */
+  .notself-flow {
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .notself-step {
+    display: flex; align-items: stretch; gap: 18px;
+  }
+  .notself-icon {
+    width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .notself-content {
+    flex: 1; border-radius: 14px; padding: 18px 20px; background: #fff;
+    border: 1px solid var(--border); box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+  }
+  .notself-label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; opacity: 0.6; }
+  .notself-name { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .notself-desc { font-size: 13px; color: var(--muted); }
+  .notself-arrow {
+    font-size: 20px; color: var(--border);
+    display: flex; align-items: center; padding: 0 8px;
+  }
+
+  .shadow-box {
+    background: linear-gradient(135deg,#1a1040,#0f0c29);
+    border-radius: 16px; padding: 24px; color: #fff;
+    border: 1px solid rgba(139,92,246,0.25);
+  }
+  .shadow-box h4 { font-size: 16px; margin-bottom: 12px; color: #f0abfc; }
+  .shadow-item {
+    display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start;
+  }
+  .shadow-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .shadow-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+
+  /* ===== PLANETS / RAVE ===== */
+  .planet-grid {
+    display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 14px;
+  }
+  .planet-card {
+    border-radius: 14px; padding: 18px 14px; background: #fff;
+    border: 1px solid var(--border); border-left: 4px solid;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+  }
+  .planet-name { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .planet-role { font-size: 11px; letter-spacing: 0.5px; opacity: 0.65; margin-bottom: 8px; }
+  .planet-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .rave-lines-wrap { overflow-x: auto; border-radius: 14px; }
+  .rave-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rave-table th {
+    padding: 12px 14px; text-align: center;
+    background: linear-gradient(135deg,#0f0c29,#1a1040);
+    color: #c4b5fd; font-size: 11px; letter-spacing: 1px;
+  }
+  .rave-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .rave-table tr:nth-child(even) td { background: #faf9ff; }
+  .rave-table tr:hover td { background: #f3eeff; }
+  .td-bold { font-weight: 700; }
+
+  /* ===== REFLECTIONS ===== */
+  .ref-card {
+    border-radius: 16px; padding: 24px; margin-bottom: 16px;
+    background: #fff; border: 1px solid var(--border);
+    border-top: 4px solid; box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+  }
+
+  /* ===== 64 GATES ===== */
+  .gates-matrix {
+    display: grid; grid-template-columns: repeat(8,1fr); gap: 6px;
+  }
+  .gate-cell {
+    aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; cursor: default;
+    position: relative; transition: transform .15s;
+  }
+  .gate-cell:hover { transform: scale(1.08); z-index: 2; }
+  .gate-num { font-size: 14px; font-weight: 900; }
+  .gate-name { font-size: 8px; opacity: 0.8; text-align: center; line-height: 1.2; }
+
+  .gate-legend {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    margin-top: 16px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+
+  /* ===== TIMING / LIFE CYCLES ===== */
+  .timing-flow {
+    display: flex; align-items: stretch; gap: 0;
+    overflow-x: auto; padding: 10px 0;
+  }
+  .timing-stage {
+    flex: 1; min-width: 140px; text-align: center; position: relative;
+    padding: 16px 12px;
+  }
+  .timing-stage::after {
+    content: '→'; position: absolute; right: -8px; top: 50%;
+    transform: translateY(-50%); font-size: 18px; color: var(--border);
+  }
+  .timing-stage:last-child::after { display: none; }
+  .timing-circle {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; color: #fff;
+  }
+  .timing-age { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+  .timing-theme { font-size: 12px; color: var(--muted); }
+  .timing-desc { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+  .life-cross-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;
+  }
+  .life-cross-card {
+    border-radius: 14px; padding: 20px; background: #fff;
+    border: 1px solid var(--border); text-align: center;
+  }
+  .life-cross-name { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+  .life-cross-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ===== SUMMARY ===== */
+  .summary-card {
+    background: linear-gradient(135deg,#0f0c29,#1a1040,#0a1828);
+    border-radius: 22px; padding: 40px; color: #fff; margin-top: 60px;
+    position: relative; overflow: hidden;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: radial-gradient(circle,rgba(139,92,246,0.35),transparent 70%);
+  }
+  .summary-card::after {
+    content: '';
+    position: absolute; bottom: -40px; left: -40px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: radial-gradient(circle,rgba(20,184,166,0.25),transparent 70%);
+  }
+  .summary-card h2 {
+    font-size: 24px; margin-bottom: 24px; position: relative;
+    background: linear-gradient(90deg,#c4b5fd,#f0abfc);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 14px; position: relative; }
+  .summary-item {
+    background: rgba(255,255,255,0.07); border-radius: 14px;
+    padding: 18px; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .summary-item-title { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 1px; margin-bottom: 8px; text-transform: uppercase; }
+  .summary-item-content { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.6; }
+
+  /* ===== MATRIX BANNER ===== */
+  .matrix-banner {
+    background: linear-gradient(135deg,#1a1040,#0f0c29);
+    border-radius: 18px; padding: 28px; margin-bottom: 40px;
+    display: grid; grid-template-columns: 1fr auto 1fr 1fr;
+    gap: 16px; align-items: center;
+    border: 1px solid rgba(139,92,246,0.2);
+  }
+  .matrix-col { text-align: center; }
+  .matrix-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .matrix-title { font-size: 15px; font-weight: 800; color: #fff; }
+  .matrix-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+  .matrix-arrow { font-size: 24px; color: rgba(255,255,255,0.2); }
+  .matrix-divider {
+    width: 1px; height: 50px; background: rgba(255,255,255,0.15);
+  }
+
+  /* ===== TIP BOX ===== */
+  .tip-box {
+    background: linear-gradient(135deg,#fffbeb,#fff8f0);
+    border: 1px solid #fde68a; border-radius: 14px;
+    padding: 16px 20px; margin: 18px 0; font-size: 13px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .tip-icon { font-size: 22px; flex-shrink: 0; }
+
+  .warn-box {
+    background: linear-gradient(135deg,#fff1f2,#fff);
+    border: 1px solid #fecdd3; border-radius: 14px;
+    padding: 16px 20px; margin: 18px 0; font-size: 13px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .warn-icon { font-size: 22px; flex-shrink: 0; }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x: auto; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    padding: 12px 14px; font-size: 11px; text-align: center;
+    background: linear-gradient(135deg,#0f0c29,#1a1040); color: #c4b5fd;
+    letter-spacing: 0.5px;
+  }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .data-table tr:hover td { background: #f8f5ff; }
+
+  /* ===== UTILITY ===== */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .bg-purple { background: #f3eeff; color: var(--violet); }
+  .bg-pink { background: #fdf2f8; color: #be185d; }
+  .bg-amber { background: #fffbeb; color: #b45309; }
+  .bg-teal { background: #f0fdfa; color: #0f766e; }
+  .bg-sky { background: #f0f9ff; color: #0369a1; }
+  .bg-rose { background: #fff1f2; color: #be123c; }
+  .bg-gold { background: #fefce8; color: #92400e; }
+
+  .c-purple { color: var(--violet); }
+  .c-pink { color: #be185d; }
+  .c-amber { color: #b45309; }
+  .c-teal { color: #0f766e; }
+  .c-sky { color: #0369a1; }
+
+  .border-violet { border-left-color: var(--violet); }
+  .border-pink { border-left-color: #ec4899; }
+  .border-teal { border-left-color: var(--teal); }
+  .border-amber { border-left-color: var(--accent); }
+  .border-sky { border-left-color: var(--sky); }
+
+  /* ===== CONTACT ===== */
+  .contact-footer {
+    background: linear-gradient(135deg, #0f0c29, #1a1040, #2d1b69);
+    color: white; padding: 48px 40px;
+    text-align: center; margin-top: 60px;
+    position: relative; overflow: hidden;
+  }
+  .contact-footer::before {
+    content: ''; position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,184,160,0.15) 0%, transparent 70%);
+    top: -100px; right: -80px;
+  }
+  .contact-footer h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
+  .contact-footer p { opacity: 0.7; font-size: 14px; margin-bottom: 24px; position: relative; z-index: 1; }
+  .contact-chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; position: relative; z-index: 1; }
+  .contact-chip {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px; padding: 10px 20px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; transition: all .2s;
+    text-decoration: none; color: inherit;
+  }
+  .contact-chip:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
+
+  @media (max-width: 700px) {
+    .matrix-banner { grid-template-columns: 1fr 1fr; }
+    .matrix-divider, .matrix-arrow { display: none; }
+    .life-cross-wrap { grid-template-columns: 1fr; }
+    .section { padding: 0 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <span class="nav-brand">✦ 人类图 · 高阶</span>
+  <a href="#s1">轮回交叉</a>
+  <a href="#s2">非自己</a>
+  <a href="#s3">行星系统</a>
+  <a href="#s4">权威深层</a>
+  <a href="#s5">64闸门</a>
+  <a href="#s6">生命周期</a>
+  <a href="#s7">三层矩阵</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-stars">
+    <div class="star" style="width:2px;height:2px;top:15%;left:10%;animation-delay:0s;"></div>
+    <div class="star" style="width:3px;height:3px;top:25%;left:30%;animation-delay:.8s;"></div>
+    <div class="star" style="width:2px;height:2px;top:60%;left:20%;animation-delay:1.5s;"></div>
+    <div class="star" style="width:3px;height:3px;top:40%;left:70%;animation-delay:.4s;"></div>
+    <div class="star" style="width:2px;height:2px;top:80%;left:55%;animation-delay:2s;"></div>
+    <div class="star" style="width:2px;height:2px;top:30%;left:85%;animation-delay:1.2s;"></div>
+    <div class="star" style="width:3px;height:3px;top:70%;left:90%;animation-delay:.6s;"></div>
+    <div class="star" style="width:2px;height:2px;top:50%;left:50%;animation-delay:1.8s;"></div>
+  </div>
+  <div class="hero-badge">MASTER · 高阶系列</div>
+  <h1>人类图 <span>高阶解码</span></h1>
+  <p>从人生使命到生命周期，从阴影陷阱到完整行星图谱<br>触及人类图最深层的天空</p>
+  <div class="hero-divider"><span>✦</span></div>
+  <div class="hero-tags">
+    <span class="hero-tag">🎯 轮回交叉</span>
+    <span class="hero-tag">🌑 非自己主题</span>
+    <span class="hero-tag">🪐 行星系统</span>
+    <span class="hero-tag">⚖ 权威深层</span>
+    <span class="hero-tag">🔢 64闸门全景</span>
+    <span class="hero-tag">⏳ 生命周期</span>
+    <span class="hero-tag">🧩 三层矩阵</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: 轮回交叉 -->
+<!-- ============================================================ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 01 · 人生使命</div>
+      <div class="section-title">轮回交叉 — <em>你此生为何而来</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    🎯 <strong>轮回交叉（Incarnation Cross）</strong>是人类图的灵魂级指标，由四个固定位置的闸门组合而成，揭示你此生<strong>必须完成的课题</strong>、你为谁服务，以及你被设计来活出的独特人生轨迹。它超越类型和权威，是你人生故事的主题句。
+  </div>
+
+  <!-- 交叉图解 -->
+  <div class="card" style="margin-bottom:22px;">
+    <div class="card-title">🔮 轮回交叉的结构</div>
+    <div class="cross-diagram">
+      <div class="cross-axis">
+        <div class="cross-item" style="border-color:#8b5cf6;background:#f8f5ff;">
+          <div class="cross-item-label" style="color:#7c3aed;">左侧 × 设计</div>
+          <div class="cross-item-num" style="color:#7c3aed;">闸门 41</div>
+          <div class="cross-item-name">设计太阳</div>
+        </div>
+        <div class="cross-arrow">×</div>
+        <div class="cross-item" style="border-color:#ec4899;background:#fdf2f8;">
+          <div class="cross-item-label" style="color:#be185d;">左侧 × 个性</div>
+          <div class="cross-item-num" style="color:#be185d;">闸门 30</div>
+          <div class="cross-item-name">个性太阳</div>
+        </div>
+      </div>
+
+      <div style="font-size:22px;color:var(--border);">+</div>
+
+      <div class="cross-axis">
+        <div class="cross-item" style="border-color:#14b8a6;background:#f0fdfa;">
+          <div class="cross-item-label" style="color:#0f766e;">右侧 × 设计</div>
+          <div class="cross-item-num" style="color:#0f766e;">闸门 12</div>
+          <div class="cross-item-name">设计地球</div>
+        </div>
+        <div class="cross-arrow">×</div>
+        <div class="cross-item" style="border-color:#f59e0b;background:#fffbeb;">
+          <div class="cross-item-label" style="color:#b45309;">右侧 × 个性</div>
+          <div class="cross-item-num" style="color:#b45309;">闸门 22</div>
+          <div class="cross-item-name">个性地球</div>
+        </div>
+      </div>
+
+      <div class="cross-center-box">
+        <div class="cross-center-label">你的轮回交叉</div>
+        <div class="cross-center-name">右角度交叉之自我（Right Angle Cross of Self）</div>
+        <div class="cross-center-sub">闸门 41-30 · 12-22</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四种交叉类型 -->
+  <div class="grid-2">
+    <div class="card" style="border-top:4px solid #8b5cf6;">
+      <div class="card-title" style="color:#7c3aed;">① 右角度交叉 Right Angle Cross（最常见，约88%）</div>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成90度角，有一条轴线承载压力，指向你<strong>必须面对的人生主题</strong>。</p>
+      <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
+        <li>自我表达与接收之间的张力</li>
+        <li>有明确的人生方向感</li>
+        <li>需要与特定的人/社群互动来完成使命</li>
+        <li>最接近"传统命运"概念</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #ec4899;">
+      <div class="card-title" style="color:#be185d;">② 左角度交叉 Left Angle Cross（约6%）</div>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成150度角，能量指向<strong>内心整合</strong>，主要服务于身边小圈子。</p>
+      <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
+        <li>人生方向由内在决定，非外部驱动</li>
+        <li>倾向于安静、深度的生命表达</li>
+        <li>使命在日常中自然流露</li>
+        <li>通常有艺术/灵性/治疗的天赋</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #14b8a6;">
+      <div class="card-title" style="color:#0f766e;">③ 分离交叉 Juxtaposition Cross（约4%）</div>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成0度或180度，平行或对分，强调<strong>持续的主题</strong>而非单一命运。</p>
+      <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
+        <li>有持续重复出现的人生主题</li>
+        <li>没有"必须完成"的命运压力</li>
+        <li>更像一条生命河流而非瀑布</li>
+        <li>需要主动创造而非等待命运</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #f59e0b;">
+      <div class="card-title" style="color:#b45309;">④ 神秘交叉 Mysterious / Allocentric（极罕见）</div>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">最神秘的交叉类型，携带非常规使命，可能一生不被理解。</p>
+      <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
+        <li>代表真正"不同"的存在方式</li>
+        <li>使命通常在身后才被理解</li>
+        <li>走在人类意识进化前沿</li>
+        <li>最需要坚定地跟随内在权威</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">💡</span>
+    <div><strong>如何找到你的轮回交叉？</strong> 在图表中查找：个性太阳（☉）+ 个性地球（🜨）、设计太阳（Ds）+ 设计地球（🜩）四个闸门组合，去 Jovian Archive 网站搜索"Incarnation Cross by Gate"即可找到你的具体命名。</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: 非自己主题 -->
+<!-- ============================================================ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#be185d,#8b5cf6);">2</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 02 · 阴影与陷阱</div>
+      <div class="section-title">非自己主题 — <em>你最常跌入的坑</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    🌑 <strong>非自己（Not-Self）</strong>是当你脱离人类图设计、开始用"小我"而非"内在权威"做决策时，会陷入的心理模式与情绪陷阱。它不是你的敌人，而是提醒你<strong>"你走偏了"</strong>的信号灯。识别非自己，是活出真实自己的第一步。
+  </div>
+
+  <!-- 非自己流程图 -->
+  <div class="notself-flow">
+    <div class="notself-step">
+      <div class="notself-icon" style="background:#f0fdfa;color:#0f766e;">🌱</div>
+      <div class="notself-content" style="border-left:4px solid #14b8a6;">
+        <div class="notself-label">STEP 1 · 锚点</div>
+        <div class="notself-name" style="color:#0f766e;">识别你的主题闸门</div>
+        <div class="notself-desc">图表中决定你<b>主题</b>（Theme）的闸门——通常是最影响你的情绪/个性闸门，也是你最容易在生活中反复体验的那股能量的闸门。</div>
+      </div>
+    </div>
+    <div class="notself-arrow" style="justify-content:center;">↓</div>
+    <div class="notself-step">
+      <div class="notself-icon" style="background:#fff1f2;color:#be185d;">⚠️</div>
+      <div class="notself-content" style="border-left:4px solid #ec4899;">
+        <div class="notself-label">STEP 2 · 陷阱</div>
+        <div class="notself-name" style="color:#be185d;">偏离主题 → 非自己</div>
+        <div class="notself-desc">当你的行为、决策或情绪<strong>远离</strong>该闸门的正面表达，而是陷入其阴影面时，你就进入了"非自己"模式——表现为：挫败感、怨恨、执念、愤怒。</div>
+      </div>
+    </div>
+    <div class="notself-arrow" style="justify-content:center;">↓</div>
+    <div class="notself-step">
+      <div class="notself-icon" style="background:#f8f5ff;color:#7c3aed;">🔔</div>
+      <div class="notself-content" style="border-left:4px solid #8b5cf6;">
+        <div class="notself-label">STEP 3 · 信号</div>
+        <div class="notself-name" style="color:#7c3aed;">非自己的三种信号</div>
+        <div class="notself-desc">① <strong>挫败感</strong>（Frustration）：一直在对抗，但收不到结果<br>② <strong>怨恨</strong>（Bitter）：对方不配合，长期积压不满<br>③ <strong>投射</strong>（Projection）：觉得别人有问题，实际是自己的阴影</div>
+      </div>
+    </div>
+    <div class="notself-arrow" style="justify-content:center;">↓</div>
+    <div class="notself-step">
+      <div class="notself-icon" style="background:#fffbeb;color:#b45309;">🔄</div>
+      <div class="notself-content" style="border-left:4px solid #f59e0b;">
+        <div class="notself-label">STEP 4 · 出路</div>
+        <div class="notself-name" style="color:#b45309;">回归真正的自己</div>
+        <div class="notself-desc">停下来 → 深呼吸 → 问自己："此刻，我的内在权威要我做什么？"<br>回到策略 + 权威，不是逼自己改变，而是<strong>暂停并重新等待回应</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 阴影卡片 -->
+  <div class="shadow-box" style="margin-top:24px;">
+    <h4>🌑 常见非自己陷阱对照表</h4>
+    <div class="grid-2">
+      <div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(236,72,153,0.3);color:#f0abfc;">1</div>
+          <div class="shadow-text"><strong style="color:#f0abfc;">生产者</strong>的陷阱：<br>不停"要"，不断说"好"——最终被自己的承诺压垮，陷入"我是谁的受害者"的情绪。</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(236,72,153,0.3);color:#f0abfc;">2</div>
+          <div class="shadow-text"><strong style="color:#f0abfc;">投射者</strong>的陷阱：<br>被邀请前就主动出击，给建议、批评，被忽视后陷入苦涩和"你们都不识货"的怨恨。</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(236,72,153,0.3);color:#f0abfc;">3</div>
+          <div class="shadow-text"><strong style="color:#f0abfc;">显现者</strong>的陷阱：<br>不告知就行动，引发他人的愤怒阻力，陷入"为什么没人理解我"的孤立感。</div>
+        </div>
+      </div>
+      <div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(139,92,246,0.3);color:#c4b5fd;">4</div>
+          <div class="shadow-text"><strong style="color:#c4b5fd;">情绪中心空白</strong>的人：<br>在情绪高峰期做决定，事后后悔——典型非自己行为，因为<b>没有等待情绪清明</b>。</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(139,92,246,0.3);color:#c4b5fd;">5</div>
+          <div class="shadow-text"><strong style="color:#c4b5fd;">喉咙中心空白</strong>的人：<br>试图通过说话建立存在感，不自觉地说太多、承诺太多——陷入"我说的话没人听"的沮丧。</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-icon" style="background:rgba(139,92,246,0.3);color:#c4b5fd;">6</div>
+          <div class="shadow-text"><strong style="color:#c4b5fd;">G中心空白</strong>的人：<br>拼命寻找"我是谁"的答案，将自我价值寄托于方向感——当方向不明时陷入焦虑和迷茫。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <span class="warn-icon">⚠️</span>
+    <div><strong>警告：不要用非自己自审</strong><br>人类图不是用来给自己贴"非自己"罪名的工具。当你陷入非自己时，只是提醒你需要暂停和回归策略——这不是失败，是<strong>数据反馈</strong>。自我批判只会让你更深地陷入非自己。</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: 行星系统 -->
+<!-- ============================================================ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#f59e0b,#be185d);">3</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 03 · 能量图谱</div>
+      <div class="section-title">行星 × 轮回六线 — <em>完整天体能量图谱</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    🪐 人类图不止太阳，还有<strong>月亮、水星、金星</strong>等七大行星，加上地球、北交点、南交点——每个星体落在一个闸门和一条爻线上，共同编织成你独一无二的宇宙出生图谱。理解行星层次，才能真正进入高阶解读。
+  </div>
+
+  <!-- 行星卡片 -->
+  <div class="planet-grid">
+    <div class="planet-card" style="border-left-color:#8b5cf6;">
+      <div class="planet-name">☉ 太阳 Sun</div>
+      <div class="planet-role">意识 · 个性 · 核心身份</div>
+      <div class="planet-desc">你的核心人格，太阳闸门代表你此生最需要表达的特质。激活它，你就是那道光。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#f59e0b;">
+      <div class="planet-name">☽ 月亮 Moon</div>
+      <div class="planet-role">无意识 · 身体 · 日常节奏</div>
+      <div class="planet-desc">你的身体设计，影响日常反应和情绪模式。每28天走完一圈，月亮位置决定你的"日常自动驾驶仪"。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#38bdf8;">
+      <div class="planet-name">☿ 水星 Mercury</div>
+      <div class="planet-role">思维 · 沟通 · 信息处理</div>
+      <div class="planet-desc">你的思维方式和沟通风格，以及你如何接收、传递信息。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#14b8a6;">
+      <div class="planet-name">♀ 金星 Venus</div>
+      <div class="planet-role">价值观 · 关系 · 吸引力</div>
+      <div class="planet-desc">你的核心价值观，在关系中看重什么，以及你被什么所吸引。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#f97316;">
+      <div class="planet-name">♂ 火星 Mars</div>
+      <div class="planet-role">行动 · 欲望 · 驱动力</div>
+      <div class="planet-desc">你的行动模式、性驱动力，以及你面对阻碍时的反应方式。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#6366f1;">
+      <div class="planet-name">♃ 木星 Jupiter</div>
+      <div class="planet-role">成长 · 扩展 · 信念</div>
+      <div class="planet-desc">你成长和扩展的领域，你天然相信什么，以及什么带来你的好运。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#a78bfa;">
+      <div class="planet-name">♄ 土星 Saturn</div>
+      <div class="planet-role">结构 · 考验 · 成熟</div>
+      <div class="planet-desc">你的人生功课所在，需要通过时间和努力才能建立的结构和成就。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#ec4899;">
+      <div class="planet-name">☊ 北交点 Node</div>
+      <div class="planet-role">今生方向 · 进化之路</div>
+      <div class="planet-desc">你今生需要发展的方向——那条你不太舒服但必须走向的道路，是灵魂的进化方向。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#64748b;">
+      <div class="planet-name">☋ 南交点 South</div>
+      <div class="planet-role">前世惯性 · 舒适区</div>
+      <div class="planet-desc">你前世的习性、舒适区——这是你不由自主会滑回去的地方，需要有意识地超越。</div>
+    </div>
+  </div>
+
+  <!-- 轮回六线 -->
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">🌀 轮回六线（Rave Lines）</div>
+    <p style="font-size:13px;margin-bottom:16px;color:var(--muted);">轮回六线代表人类意识进化的六个层面，每条线对应一种集体使命。找到你的行星在哪条线上，就知道它们为哪个进化层面服务。</p>
+    <div class="rave-lines-wrap">
+      <table class="rave-table">
+        <tr>
+          <th style="width:40px;">线</th>
+          <th>名称</th>
+          <th>关键词</th>
+          <th>使命描述</th>
+          <th>闸门代表</th>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--violet);">1</strong></td>
+          <td class="td-bold">觉知线 Logic</td>
+          <td>思考 · 分析 · 系统</td>
+          <td>通过思维和逻辑模式为集体建立意识框架</td>
+          <td>1,6,13,46</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--sky);">2</strong></td>
+          <td class="td-bold">觉醒线 Mutation</td>
+          <td>突变 · 灵感 · 顿悟</td>
+          <td>带来突然的意识转变，通过振动频率感染他人</td>
+          <td>10,15,20,35</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--teal);">3</strong></td>
+          <td class="td-bold">炼金线 Transformations</td>
+          <td>转化 · 身体 · 日常</td>
+          <td>通过日常生活的仪式和身体实践带来深层转化</td>
+          <td>41,22,18,48</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--accent);">4</strong></td>
+          <td class="td-bold">感知线 Sensing</td>
+          <td>感知 · 体验 · 智慧</td>
+          <td>通过深度感知积累智慧，再分享给集体</td>
+          <td>17,7,21,16</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--secondary);">5</strong></td>
+          <td class="td-bold">预言线 Prophet</td>
+          <td>预言 · 信仰 · 救赎</td>
+          <td>通过信念和预言为集体提供方向感，是引路者</td>
+          <td>11,29,59,36</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--rose);">6</strong></td>
+          <td class="td-bold">和解线 Reconciliation</td>
+          <td>和解 · 超越 · 成熟</td>
+          <td>在二元对立中寻找超越，在极端间找到和解之路</td>
+          <td>27,50,21,24</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: 权威深层机制 -->
+<!-- ============================================================ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#14b8a6,#38bdf8);">4</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 04 · 决策智慧</div>
+      <div class="section-title">内在权威的深层机制 — <em>如何听见你的内在声音</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    ⚖ 内在权威是你人类图的核心——<strong>它是你做出正确决策的方式</strong>。但真正掌握权威，不只是"知道"你是哪种权威，而是理解每种权威的<strong>时机、质地、和陷阱</strong>，以及如何将它从知识变成日常本能。
+  </div>
+
+  <div class="ref-card" style="border-top-color:#8b5cf6;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;">
+      <div>
+        <div style="font-size:12px;color:var(--violet);letter-spacing:1px;margin-bottom:8px;">情绪权威 Emotional Authority</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px;">等待情绪清明</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;">你的情绪有完整的28天周期波峰波谷。真正的答案只有在情绪<strong>穿越峰值、归于平静</strong>后才浮现。仓促的"现在就要答案"会让你反复后悔。</p>
+        <div style="background:#f8f5ff;border-radius:10px;padding:12px;">
+          <div style="font-size:12px;font-weight:700;color:var(--violet);margin-bottom:6px;">⚖ 深层机制</div>
+          <div style="font-size:12px;color:var(--muted);">情绪是信息，不是决策工具。等待清明=允许身体知道你真正的答案。</div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <svg viewBox="0 0 200 120" width="200" height="120">
+          <line x1="20" y1="80" x2="180" y2="80" stroke="#ddd" stroke-width="1"/>
+          <text x="10" y="85" font-size="10" fill="#999">0</text>
+          <path d="M20,80 Q50,20 80,80 Q110,140 140,80 Q170,20 180,50" stroke="#8b5cf6" stroke-width="2.5" fill="none"/>
+          <circle cx="80" cy="80" r="5" fill="#f43f5e" stroke="#fff" stroke-width="2"/>
+          <circle cx="140" cy="80" r="5" fill="#14b8a6" stroke="#fff" stroke-width="2"/>
+          <text x="80" y="100" text-anchor="middle" font-size="10" fill="#f43f5e">情绪峰值</text>
+          <text x="140" y="100" text-anchor="middle" font-size="10" fill="#14b8a6">清明</text>
+          <text x="100" y="112" text-anchor="middle" font-size="10" fill="#999">等待穿越峰值 → 答案出现</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="ref-card" style="border-top-color:#38bdf8;">
+      <div style="font-size:12px;color:var(--sky);letter-spacing:1px;margin-bottom:8px;">荐骨权威 Sacral Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">倾听身体回应</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">荐骨发出的"嗯哼"/"啊哈"/收紧/放松——这是你身体的<strong>即时反馈系统</strong>。不是声音，是身体感受。</p>
+      <div style="margin-top:10px;padding:10px;background:#f0f9ff;border-radius:8px;">
+        <div style="font-size:12px;color:var(--sky);">✅ 身体说"是"：温暖、扩张、想行动</div>
+        <div style="font-size:12px;color:var(--sky);margin-top:4px;">❌ 身体说"否"：收紧、停顿、不想继续</div>
+      </div>
+    </div>
+    <div class="ref-card" style="border-top-color:#f59e0b;">
+      <div style="font-size:12px;color:var(--accent);letter-spacing:1px;margin-bottom:8px;">直觉权威 Splenic Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">捕捉瞬间直觉</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">直觉是<strong>电光石火的一瞬</strong>——突然知道"这是对的"或"危险"。它不会说原因，只说结论。不要分析它，分析会摧毁它。</p>
+      <div style="margin-top:10px;padding:10px;background:#fffbeb;border-radius:8px;">
+        <div style="font-size:12px;color:#b45309;">⚠ 陷阱：用荐骨（分析）或情绪（担忧）替代直觉</div>
+      </div>
+    </div>
+    <div class="ref-card" style="border-top-color:#14b8a6;">
+      <div style="font-size:12px;color:var(--teal);letter-spacing:1px;margin-bottom:8px;">自我权威 Ego Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">相信你的决定</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">你是唯一一个必须对自己的承诺负责的人。在你<strong>说"我愿意"</strong>的那一刻，权威就被激活了。你的Yes就是权威，不需要他人确认。</p>
+    </div>
+    <div class="ref-card" style="border-top-color:#ec4899;">
+      <div style="font-size:12px;color:#be185d;letter-spacing:1px;margin-bottom:8px;">环境权威 Environmental</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">感受空间给你的信号</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">你的身体对物理环境有本能反应——某些地方让你<strong>扩张</strong>，某些地方让你<strong>收缩</strong>。去对地方，做对选择。</p>
+      <div style="margin-top:10px;padding:10px;background:#fdf2f8;border-radius:8px;">
+        <div style="font-size:12px;color:#be185d;">🏡 测试法：去一个地方坐15分钟，感受身体</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:20px;">
+    <span class="tip-icon">🧘</span>
+    <div><strong>权威整合练习：</strong>从今天起，当你面临一个中等以上重要性的决定时，<strong>暂停3秒</strong>，先把问题放在心里，然后只做以下一件事：<br>① 情绪型 → 等一个呼吸周期，问"我现在真正平静吗？" ② 荐骨型 → 问自己，观察身体收紧还是扩张 ③ 直觉型 → 问"此刻我瞬间知道什么？" ④ 自我型 → 问"我愿意吗？" ⑤ 环境型 → 想象自己在不同选项的空间里，感受身体反应</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: 64闸门全景 -->
+<!-- ============================================================ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">5</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 05 · 闸门索引</div>
+      <div class="section-title">64闸门全景图 — <em>高阶速查百科</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    🔢 64个闸门，对应64卦易经，是人类图的<strong>原子级单位</strong>。每个闸门是一条能量通道的入口，激活的闸门组合决定了你的独特性。以下是完整的64闸门速查矩阵，可以对照自己的图表进行深度索引。
+  </div>
+
+  <!-- 64闸门矩阵 -->
+  <div class="card">
+    <div class="card-title">🗺 64闸门速查矩阵（按回路分组着色）</div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <div style="min-width:560px;">
+        <div class="gates-matrix">
+          <!-- 1-8 集体逻辑 -->
+          <div class="gate-cell" style="background:#c4d9f8;color:#1a3a80;"><span class="gate-num">1</span><span class="gate-name">形态</span></div>
+          <div class="gate-cell" style="background:#c4d9f8;color:#1a3a80;"><span class="gate-num">2</span><span class="gate-name">自我</span></div>
+          <div class="gate-cell" style="background:#ddeeff;color:#1a4a80;"><span class="gate-num">3</span><span class="gate-name">组织</span></div>
+          <div class="gate-cell" style="background:#ddeeff;color:#1a4a80;"><span class="gate-num">4</span><span class="gate-name">羊</span></div>
+          <div class="gate-cell" style="background:#ddeeff;color:#1a4a80;"><span class="gate-num">5</span><span class="gate-name">等待</span></div>
+          <div class="gate-cell" style="background:#ddeeff;color:#1a4a80;"><span class="gate-num">6</span><span class="gate-name">冲突</span></div>
+          <div class="gate-cell" style="background:#c4d9f8;color:#1a3a80;"><span class="gate-num">7</span><span class="gate-name">自我引领</span></div>
+          <div class="gate-cell" style="background:#c4d9f8;color:#1a3a80;"><span class="gate-num">8</span><span class="gate-name">贡献</span></div>
+          <!-- 9-16 -->
+          <div class="gate-cell" style="background:#ffe4b5;color:#7a3a00;"><span class="gate-num">9</span><span class="gate-name">专注</span></div>
+          <div class="gate-cell" style="background:#ffe4b5;color:#7a3a00;"><span class="gate-num">10</span><span class="gate-name">自我行为</span></div>
+          <div class="gate-cell" style="background:#ffe4b5;color:#7a3a00;"><span class="gate-num">11</span><span class="gate-name">理想</span></div>
+          <div class="gate-cell" style="background:#ffe4b5;color:#7a3a00;"><span class="gate-num">12</span><span class="gate-name">静止</span></div>
+          <div class="gate-cell" style="background:#d4b5ff;color:#4a1080;"><span class="gate-num">13</span><span class="gate-name">耳</span></div>
+          <div class="gate-cell" style="background:#d4b5ff;color:#4a1080;"><span class="gate-num">14</span><span class="gate-name">财产</span></div>
+          <div class="gate-cell" style="background:#d4b5ff;color:#4a1080;"><span class="gate-num">15</span><span class="gate-name">节律</span></div>
+          <div class="gate-cell" style="background:#d4b5ff;color:#4a1080;"><span class="gate-num">16</span><span class="gate-name">技能</span></div>
+          <!-- 17-24 -->
+          <div class="gate-cell" style="background:#ffc8d4;color:#7a0030;"><span class="gate-num">17</span><span class="gate-name">意见</span></div>
+          <div class="gate-cell" style="background:#ffc8d4;color:#7a0030;"><span class="gate-num">18</span><span class="gate-name">批判</span></div>
+          <div class="gate-cell" style="background:#ffc8d4;color:#7a0030;"><span class="gate-num">19</span><span class="gate-name">欲望</span></div>
+          <div class="gate-cell" style="background:#ffc8d4;color:#7a0030;"><span class="gate-num">20</span><span class="gate-name">觉察</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a4a30;"><span class="gate-num">21</span><span class="gate-name">猎手</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a4a30;"><span class="gate-num">22</span><span class="gate-name">优雅</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a4a30;"><span class="gate-num">23</span><span class="gate-name">分裂</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a4a30;"><span class="gate-num">24</span><span class="gate-name">理性</span></div>
+          <!-- 25-32 -->
+          <div class="gate-cell" style="background:#ffd4a8;color:#6a2a00;"><span class="gate-num">25</span><span class="gate-name">精神</span></div>
+          <div class="gate-cell" style="background:#ffd4a8;color:#6a2a00;"><span class="gate-num">26</span><span class="gate-name">小猪</span></div>
+          <div class="gate-cell" style="background:#ffd4a8;color:#6a2a00;"><span class="gate-num">27</span><span class="gate-name">养护</span></div>
+          <div class="gate-cell" style="background:#ffd4a8;color:#6a2a00;"><span class="gate-num">28</span><span class="gate-name">挣扎</span></div>
+          <div class="gate-cell" style="background:#b5f0c8;color:#0a4a20;"><span class="gate-num">29</span><span class="gate-name">承诺</span></div>
+          <div class="gate-cell" style="background:#b5f0c8;color:#0a4a20;"><span class="gate-num">30</span><span class="gate-name">感受</span></div>
+          <div class="gate-cell" style="background:#b5f0c8;color:#0a4a20;"><span class="gate-num">31</span><span class="gate-name">影响</span></div>
+          <div class="gate-cell" style="background:#b5f0c8;color:#0a4a20;"><span class="gate-num">32</span><span class="gate-name">延续</span></div>
+          <!-- 33-40 -->
+          <div class="gate-cell" style="background:#a8d4ff;color:#1a3a80;"><span class="gate-num">33</span><span class="gate-name">隐士</span></div>
+          <div class="gate-cell" style="background:#a8d4ff;color:#1a3a80;"><span class="gate-num">34</span><span class="gate-name">力量</span></div>
+          <div class="gate-cell" style="background:#a8d4ff;color:#1a3a80;"><span class="gate-num">35</span><span class="gate-name">变迁</span></div>
+          <div class="gate-cell" style="background:#a8d4ff;color:#1a3a80;"><span class="gate-num">36</span><span class="gate-name">文明</span></div>
+          <div class="gate-cell" style="background:#ffd4b5;color:#7a3a00;"><span class="gate-num">37</span><span class="gate-name">家庭</span></div>
+          <div class="gate-cell" style="background:#ffd4b5;color:#7a3a00;"><span class="gate-num">38</span><span class="gate-name">斗争</span></div>
+          <div class="gate-cell" style="background:#ffd4b5;color:#7a3a00;"><span class="gate-num">39</span><span class="gate-name">挑衅</span></div>
+          <div class="gate-cell" style="background:#ffd4b5;color:#7a3a00;"><span class="gate-num">40</span><span class="gate-name">分离</span></div>
+          <!-- 41-48 -->
+          <div class="gate-cell" style="background:#e0c8ff;color:#5a1a80;"><span class="gate-num">41</span><span class="gate-name">开始</span></div>
+          <div class="gate-cell" style="background:#e0c8ff;color:#5a1a80;"><span class="gate-num">42</span><span class="gate-name">完成</span></div>
+          <div class="gate-cell" style="background:#e0c8ff;color:#5a1a80;"><span class="gate-num">43</span><span class="gate-name">洞察</span></div>
+          <div class="gate-cell" style="background:#e0c8ff;color:#5a1a80;"><span class="gate-num">44</span><span class="gate-name">警觉</span></div>
+          <div class="gate-cell" style="background:#ffd0a8;color:#7a2000;"><span class="gate-num">45</span><span class="gate-name">聚集</span></div>
+          <div class="gate-cell" style="background:#ffd0a8;color:#7a2000;"><span class="gate-num">46</span><span class="gate-name">喜悦</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a3a20;"><span class="gate-num">47</span><span class="gate-name">束缚</span></div>
+          <div class="gate-cell" style="background:#c8f0e0;color:#0a3a20;"><span class="gate-num">48</span><span class="gate-name">深度</span></div>
+          <!-- 49-56 -->
+          <div class="gate-cell" style="background:#ffd8c8;color:#7a2010;"><span class="gate-num">49</span><span class="gate-name">原则</span></div>
+          <div class="gate-cell" style="background:#ffd8c8;color:#7a2010;"><span class="gate-num">50</span><span class="gate-name">价值观</span></div>
+          <div class="gate-cell" style="background:#ffd8c8;color:#7a2010;"><span class="gate-num">51</span><span class="gate-name">惊吓</span></div>
+          <div class="gate-cell" style="background:#ffd8c8;color:#7a2010;"><span class="gate-num">52</span><span class="gate-name">静止</span></div>
+          <div class="gate-cell" style="background:#b5d4ff;color:#1a2a80;"><span class="gate-num">53</span><span class="gate-name">开始</span></div>
+          <div class="gate-cell" style="background:#b5d4ff;color:#1a2a80;"><span class="gate-num">54</span><span class="gate-name">野心</span></div>
+          <div class="gate-cell" style="background:#b5d4ff;color:#1a2a80;"><span class="gate-num">55</span><span class="gate-name">精神</span></div>
+          <div class="gate-cell" style="background:#b5d4ff;color:#1a2a80;"><span class="gate-num">56</span><span class="gate-name">刺激</span></div>
+          <!-- 57-64 -->
+          <div class="gate-cell" style="background:#a8e0c8;color:#0a3a20;"><span class="gate-num">57</span><span class="gate-name">直击</span></div>
+          <div class="gate-cell" style="background:#a8e0c8;color:#0a3a20;"><span class="gate-num">58</span><span class="gate-name">活力</span></div>
+          <div class="gate-cell" style="background:#a8e0c8;color:#0a3a20;"><span class="gate-num">59</span><span class="gate-name">亲密</span></div>
+          <div class="gate-cell" style="background:#a8e0c8;color:#0a3a20;"><span class="gate-num">60</span><span class="gate-name">接受</span></div>
+          <div class="gate-cell" style="background:#c8d4f8;color:#2a1a80;"><span class="gate-num">61</span><span class="gate-name">神秘</span></div>
+          <div class="gate-cell" style="background:#c8d4f8;color:#2a1a80;"><span class="gate-num">62</span><span class="gate-name">细节</span></div>
+          <div class="gate-cell" style="background:#c8d4f8;color:#2a1a80;"><span class="gate-num">63</span><span class="gate-name">怀疑</span></div>
+          <div class="gate-cell" style="background:#c8d4f8;color:#2a1a80;"><span class="gate-num">64</span><span class="gate-name">困惑</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#c4d9f8;"></div>集体逻辑（觉知）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d4b5ff;"></div>集体抽象（传承）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a8d4ff;"></div>集体逻辑（系统）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ffe4b5;"></div>个人（突变）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ffc8d4;"></div>个人（灵感）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ffd4b5;"></div>部落（防御）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ffd0a8;"></div>部落（金钱）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b5f0c8;"></div>部落（情感）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a8e0c8;"></div>个体（直觉）</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c8d4f8;"></div>个体（神秘）</div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <span class="tip-icon">🔍</span>
+    <div><strong>高阶练习：</strong>对照自己的图表，在矩阵中圈出所有已激活的闸门（深色）。观察：①它们属于哪些颜色区块（回路）？②集中在矩阵的哪个区域（左上/右下等）？③缺失了哪些颜色区块？这些空白往往是你在人生中需要"他人桥接"的能量领域。</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: 生命周期 -->
+<!-- ============================================================ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#ec4899,#f59e0b);">6</div>
+    <div class="section-title-wrap">
+      <div class="section-label">MASTER 06 · 时间法则</div>
+      <div class="section-title">生命周期与时机 — <em>轮回十字解读</em></div>
+    </div>
+  </div>
+
+  <div class="section-intro">
+    ⏳ 人类图揭示了你的<strong>生命周期节律</strong>——从出生到死亡，你的能量焦点会经历清晰的阶段转换。同时，轮回十字（Crusifix，由太阳×地球两条轴线组成）还揭示了你人生中最关键的时间节点和时机信号。
+  </div>
+
+  <!-- 生命周期 -->
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-title">🌿 人生四季 · 能量焦点转换</div>
+    <div class="timing-flow">
+      <div class="timing-stage">
+        <div class="timing-circle" style="background:linear-gradient(135deg,#a8e0c8,#14b8a6);">🌱</div>
+        <div class="timing-age">0~30岁</div>
+        <div class="timing-theme" style="color:#0f766e;">播种期</div>
+        <div class="timing-desc">体验、试错、积累。人类图中的开放中心在此阶段被反复刺激，最终部分"固化"为定义中心。情感、认知模式在此奠定。</div>
+      </div>
+      <div class="timing-stage">
+        <div class="timing-circle" style="background:linear-gradient(135deg,#b5d4ff,#38bdf8);">🌿</div>
+        <div class="timing-age">30~50岁</div>
+        <div class="timing-theme" style="color:#0369a1;">成长期</div>
+        <div class="timing-desc">方向逐渐清晰，能量从探索转向<strong>实现</strong>。太阳/地球闸门的影响力开始真正发挥，轮回交叉的主题变得不可忽视。</div>
+      </div>
+      <div class="timing-stage">
+        <div class="timing-circle" style="background:linear-gradient(135deg,#d4b5ff,#8b5cf6);">🌳</div>
+        <div class="timing-age">50~70岁</div>
+        <div class="timing-theme" style="color:#6d28d9;">盛果期</div>
+        <div class="timing-desc">使命兑现期。你对自我本质的理解带来最大影响力，往往是这个阶段才真正开始"活出自己"。</div>
+      </div>
+      <div class="timing-stage">
+        <div class="timing-circle" style="background:linear-gradient(135deg,#ffd4b5,#f59e0b);">🍂</div>
+        <div class="timing-age">70岁+</div>
+        <div class="timing-theme" style="color:#b45309;">传承期</div>
+        <div class="timing-desc">成为榜样和传承者。你的存在本身成为他人的参照系，你所学到的智慧以非语言的方式传递下去。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 轮回十字 -->
+  <div class="life-cross-wrap">
+    <div class="life-cross-card">
+      <div style="font-size:28px;margin-bottom:10px;">⬆ × ⬇</div>
+      <div class="life-cross-name">个性轴线 Personal Axis</div>
+      <p class="life-cross-desc">太阳×地球，连接你的<strong>意识</strong>层面。<br>这条轴线决定你的社会身份、个人表达、你的命运主题在社会中的呈现方式。</p>
+      <div style="margin-top:10px;padding:8px 12px;background:#f8f5ff;border-radius:8px;font-size:12px;">
+        <span style="color:var(--violet);font-weight:700;">☉</span> 个性太阳 = 意识人格<br>
+        <span style="color:var(--accent);font-weight:700;">🜨</span> 个性地球 = 意识焦点
+      </div>
+    </div>
+    <div class="life-cross-card">
+      <div style="font-size:28px;margin-bottom:10px;">⬆ × ⬇</div>
+      <div class="life-cross-name">设计轴线 Design Axis</div>
+      <p class="life-cross-desc">设计太阳×设计地球，连接你的<strong>无意识</strong>层面。<br>这条轴线决定你的身体设计、遗传倾向、你的"真实自我"与"社会自我"之间的张力来源。</p>
+      <div style="margin-top:10px;padding:8px 12px;background:#f0fdfa;border-radius:8px;font-size:12px;">
+        <span style="color:var(--teal);font-weight:700;">Ds</span> 设计太阳 = 无意识人格<br>
+        <span style="color:var(--sky);font-weight:700;">🜩</span> 设计地球 = 无意识焦点
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title">🔑 时机判断：轮回十字给你的信号</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <tr>
+          <th style="width:40px;">轴</th>
+          <th>主题闸门</th>
+          <th>代表时机</th>
+          <th>生活中如何观察</th>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--violet);">个</strong></td>
+          <td>闸门 30（感受）~ 41（开始）</td>
+          <td>情感/欲望的时机</td>
+          <td>当情感闸门（30/55等）被激活时，情感决策更准确；当开始闸门（41）活跃时，新项目开始时机好</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--teal);">设</strong></td>
+          <td>闸门 12（静止）~ 22（优雅）</td>
+          <td>表达/沟通的时机</td>
+          <td>当你感到想说、想表达，且闸门12-22轴线活跃时，你的言语最具穿透力</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--accent);">综</strong></td>
+          <td>轮回交叉整体</td>
+          <td>人生方向的时机</td>
+          <td>当方向闸门（10/15/46）出现能量激活时，方向感最强，是做重大人生决定的窗口</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: 三层矩阵总览 -->
+<!-- ============================================================ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#14b8a6,#8b5cf6,#ec4899);">✦</div>
+    <div class="section-title-wrap">
+      <div class="section-label">COMPLETE · 完整矩阵</div>
+      <div class="section-title">入门 → 进阶 → 高阶 — <em>三层内容矩阵全览</em></div>
+    </div>
+  </div>
+
+  <div class="matrix-banner">
+    <div class="matrix-col">
+      <div class="matrix-label">入门系列</div>
+      <div style="font-size:11px;background:#a8e0c8;color:#0a3a20;padding:2px 8px;border-radius:8px;margin-bottom:6px;">6篇</div>
+      <div class="matrix-title">基础认知</div>
+      <div class="matrix-sub">类型·权威·策略</div>
+    </div>
+    <div class="matrix-divider"></div>
+    <div class="matrix-col">
+      <div class="matrix-label">进阶系列</div>
+      <div style="font-size:11px;background:#b5d4ff;color:#2a1a80;padding:2px 8px;border-radius:8px;margin-bottom:6px;">7篇</div>
+      <div class="matrix-title">深度理解</div>
+      <div class="matrix-sub">轮廓·回路·爻线</div>
+    </div>
+    <div class="matrix-divider"></div>
+    <div class="matrix-col">
+      <div class="matrix-label">高阶系列</div>
+      <div style="font-size:11px;background:#d4b5ff;color:#4a1080;padding:2px 8px;border-radius:8px;margin-bottom:6px;">6篇</div>
+      <div class="matrix-title">使命解码</div>
+      <div class="matrix-sub">轮回·生命周期</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card" style="border-top:4px solid #14b8a6;">
+      <div class="card-title" style="color:#0f766e;">🌱 入门系列 · 6篇</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合新用户 / 公众号引流</div>
+      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
+        <li>什么是人类图（5大系统）</li>
+        <li>四大能量类型</li>
+        <li>九大能量中心</li>
+        <li>策略与内在权威</li>
+        <li>通道与闸门入门</li>
+        <li>如何用于生活</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #8b5cf6;">
+      <div class="card-title" style="color:#7c3aed;">🌿 进阶系列 · 7篇</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合已有基础 / 深度读者</div>
+      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
+        <li>轮廓（12种人生剧本）</li>
+        <li>回路系统（三大回路）</li>
+        <li>定义类型（单一/分裂/三分/四分）</li>
+        <li>变量四箭头（精细调校）</li>
+        <li>爻线六种深解</li>
+        <li>跨类型关系解读</li>
+        <li>完整实操手册</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:4px solid #ec4899;">
+      <div class="card-title" style="color:#be185d;">🌳 高阶系列 · 6篇</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合深度用户 / 高净值读者</div>
+      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
+        <li>轮回交叉（人生使命）</li>
+        <li>非自己主题（阴影陷阱）</li>
+        <li>行星系统（完整能量图谱）</li>
+        <li>权威深层机制</li>
+        <li>64闸门全景索引</li>
+        <li>生命周期与时机</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUMMARY -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="summary-card">
+    <h2>✦ 高阶系列 · 核心总结速查卡</h2>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-item-title">轮回交叉</div>
+        <div class="summary-item-content">此生使命主题句<br>右角度/左角度/分离/神秘<br>由四轴闸门组合定义</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">非自己</div>
+        <div class="summary-item-content">挫败/怨恨/投射<br>信号灯而非失败<br>回归策略+权威即出路</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">行星系统</div>
+        <div class="summary-item-content">太阳=意识核心<br>月亮=身体节奏<br>月亮每28天走完一圈</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">轮回六线</div>
+        <div class="summary-item-content">6条意识进化路径<br>觉知/觉醒/炼金/感知<br>预言/和解</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">权威深层</div>
+        <div class="summary-item-content">情绪=等清明<br>荐骨=身体回应<br>直觉=瞬间知道</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">64闸门</div>
+        <div class="summary-item-content">64种独特能量入口<br>按回路分类（9回路）<br>激活=你的人生主题</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">生命周期</div>
+        <div class="summary-item-content">0-30播种/30-50成长<br>50-70盛果/70+传承<br>四季能量焦点不同</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-item-title">三层矩阵</div>
+        <div class="summary-item-content">入门（引流）<br>进阶（转化）<br>高阶（深化/变现）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:60px;"></div>
+
+<script>
+  // 导航高亮
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.getAttribute('id');
+        const active = document.querySelector(`nav a[href="#${id}"]`);
+        if (active) {
+          active.classList.add('active');
+          active.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+
+  // 星星动画随机延迟
+  document.querySelectorAll('.star').forEach((star, i) => {
+    star.style.animationDelay = (i * 0.4 + Math.random() * 1) + 's';
+    star.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+  });
+</script>
+
+<!-- ===== CONTACT FOOTER ===== -->
+<div class="contact-footer">
+  <h2>🌟 与全球人类图研究者连接</h2>
+  <p>Human Design · 勤思妙享 · 欢迎交流共同探索</p>
+  <div class="contact-chips">
+    <a class="contact-chip" href="mailto:dengqinmin@163.com" style="text-decoration:none;color:inherit;">
+      📧 dengqinmin@163.com
+    </a>
+    <span class="contact-chip">💬 WeChat: Khimmin</span>
+    <a class="contact-chip" href="index.html" target="_blank" style="text-decoration:none;color:inherit;">
+      🌐 完整系列（共19篇）
+    </a>
+    <a class="contact-chip" href="https://www.lifegps.cn/l/RALosKuq" target="_blank" style="text-decoration:none;color:inherit;background:rgba(255,215,0,0.15);border-color:rgba(255,215,0,0.4);">
+      🔮 免费出图
+    </a>
+  </div>
+  <p style="margin-top:24px;font-size:12px;opacity:0.4;position:relative;z-index:1;">© 勤思妙享 · Human Design 高阶系列图解</p>
+</div>
+
+</body>
+</html>

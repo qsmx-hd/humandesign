@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图入门系列 · 勤思妙享</title>
+<style>
+:root {
+  --purple: #6c5ce7;
+  --purple-light: #a29bfe;
+  --pink: #fd79a8;
+  --teal: #00cec9;
+  --orange: #e17055;
+  --yellow: #fdcb6e;
+  --green: #00b894;
+  --blue: #0984e3;
+  --bg: #f7f6ff;
+  --white: #ffffff;
+  --text: #2d3436;
+  --text-2: #636e72;
+  --border: #e4e1f7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+
+/* ===== NAV ===== */
+.top-nav{background:linear-gradient(135deg,#6c5ce7,#a29bfe,#fd79a8);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(108,92,231,0.3);}
+.nav-inner{display:flex;align-items:center;gap:0;overflow-x:auto;padding:0 16px;}
+.nav-logo{color:white;font-weight:800;font-size:15px;padding:14px 20px 14px 0;white-space:nowrap;border-right:1px solid rgba(255,255,255,0.2);margin-right:8px;flex-shrink:0;}
+.nav-btn{color:rgba(255,255,255,0.85);font-size:13px;padding:14px 14px;cursor:pointer;white-space:nowrap;transition:all 0.2s;border-radius:0;border:none;background:none;font-family:inherit;}
+.nav-btn:hover,.nav-btn.active{color:white;background:rgba(255,255,255,0.15);}
+
+/* ===== HERO ===== */
+.series-hero{background:linear-gradient(135deg,#2d1b69 0%,#6c5ce7 50%,#fd79a8 100%);color:white;padding:70px 40px 60px;text-align:center;position:relative;overflow:hidden;}
+.series-hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,0.04);top:-150px;right:-100px;}
+.series-hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.05);bottom:-80px;left:-50px;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 18px;font-size:12px;letter-spacing:2px;margin-bottom:20px;}
+.series-hero h1{font-size:44px;font-weight:900;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,0.2);}
+.series-hero p{font-size:17px;opacity:0.9;margin-bottom:32px;max-width:540px;margin-left:auto;margin-right:auto;}
+.hero-steps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.hero-step{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:6px 16px;font-size:13px;}
+
+/* ===== SECTIONS ===== */
+.article-section{max-width:860px;margin:0 auto;padding:50px 20px 20px;}
+.article-header{margin-bottom:32px;}
+.article-num{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--purple-light));color:white;border-radius:20px;padding:5px 16px;font-size:13px;font-weight:700;margin-bottom:14px;}
+.article-title{font-size:30px;font-weight:900;color:var(--text);margin-bottom:10px;line-height:1.3;}
+.article-sub{font-size:15px;color:var(--text-2);line-height:1.6;}
+.divider{height:1px;background:linear-gradient(90deg,var(--purple),var(--pink),transparent);margin:50px 0;}
+
+/* ===== CARDS ===== */
+.card{background:white;border-radius:20px;padding:28px;margin-bottom:20px;border:1px solid var(--border);box-shadow:0 2px 16px rgba(108,92,231,0.07);}
+.card-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text);display:flex;align-items:center;gap:8px;}
+
+/* ===== INTRO BLOCK ===== */
+.intro-block{background:linear-gradient(135deg,#f3f0ff,#fff0f7);border-radius:20px;padding:30px;margin-bottom:24px;border:1px solid #e4d9ff;}
+.intro-block p{font-size:15px;color:var(--text);line-height:1.8;}
+.intro-block strong{color:var(--purple);}
+
+/* ===== DEFINITION GRID ===== */
+.def-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:20px 0;}
+.def-card{border-radius:14px;padding:20px 16px;text-align:center;}
+.def-card .icon{font-size:28px;margin-bottom:10px;}
+.def-card .label{font-size:13px;font-weight:700;margin-bottom:6px;}
+.def-card .desc{font-size:12px;line-height:1.5;opacity:0.85;}
+.def-card.c1{background:#f3f0ff;color:#5a4fcf;border:1px solid #ddd5ff;}
+.def-card.c2{background:#fff0f7;color:#c0396e;border:1px solid #ffd5e8;}
+.def-card.c3{background:#e8fdf7;color:#007a5e;border:1px solid #b2f0de;}
+.def-card.c4{background:#fff8e6;color:#9a6800;border:1px solid #ffe8a0;}
+
+/* ===== ORIGIN TIMELINE ===== */
+.origin-line{display:flex;gap:0;margin:20px 0;overflow-x:auto;padding-bottom:8px;}
+.origin-node{flex:1;min-width:110px;text-align:center;position:relative;padding:0 4px;}
+.origin-node::before{content:'';position:absolute;top:20px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--pink));}
+.origin-node:first-child::before{left:50%;}
+.origin-node:last-child::before{right:50%;}
+.on-dot{width:14px;height:14px;background:var(--purple);border-radius:50%;margin:0 auto 10px;border:3px solid white;box-shadow:0 0 0 2px var(--purple);position:relative;z-index:1;}
+.on-year{font-size:11px;font-weight:700;color:var(--purple);margin-bottom:4px;}
+.on-text{font-size:11px;color:var(--text-2);line-height:1.4;}
+
+/* ===== SYSTEM BLOCKS ===== */
+.system-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0;}
+.sys-block{border-radius:12px;padding:16px 12px;text-align:center;border:1.5px solid;}
+.sys-block .sys-icon{font-size:22px;margin-bottom:8px;}
+.sys-block .sys-name{font-size:13px;font-weight:700;margin-bottom:4px;}
+.sys-block .sys-desc{font-size:11px;opacity:0.8;line-height:1.4;}
+.sys-block.易{background:#fff8e6;border-color:#ffe8a0;color:#9a6800;}
+.sys-block.星{background:#f0f4ff;border-color:#c0d0ff;color:#2455c7;}
+.sys-block.卡{background:#fff0f7;border-color:#ffd5e8;color:#c0396e;}
+.sys-block.脉{background:#e8fdf7;border-color:#b2f0de;color:#007a5e;}
+.sys-block.物{background:#f5f5f5;border-color:#ddd;color:#555;}
+
+/* ===== TYPE CARDS (Article 2) ===== */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:20px 0;}
+.type-card{border-radius:18px;padding:24px 20px;text-align:center;transition:transform 0.2s;cursor:default;}
+.type-card:hover{transform:translateY(-4px);}
+.type-card .type-pct{font-size:36px;font-weight:900;margin-bottom:4px;}
+.type-card .type-name{font-size:18px;font-weight:800;margin-bottom:10px;}
+.type-card .type-en{font-size:11px;opacity:0.7;margin-bottom:12px;letter-spacing:1px;}
+.type-card .type-key{font-size:13px;line-height:1.6;}
+.type-card.manifestor{background:linear-gradient(135deg,#fff3e0,#ffe0b2);color:#bf360c;border:2px solid #ffcc80;}
+.type-card.generator{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#1b5e20;border:2px solid #a5d6a7;}
+.type-card.mangen{background:linear-gradient(135deg,#e8f5e9,#dcedc8);color:#33691e;border:2px solid #aed581;}
+.type-card.projector{background:linear-gradient(135deg,#e3f2fd,#bbdefb);color:#0d47a1;border:2px solid #90caf9;}
+.type-card.reflector{background:linear-gradient(135deg,#f3e5f5,#e1bee7);color:#4a148c;border:2px solid #ce93d8;}
+
+.type-detail{background:white;border-radius:16px;padding:22px;margin-bottom:14px;border:1px solid var(--border);display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;}
+.td-badge{border-radius:12px;padding:10px 14px;text-align:center;min-width:80px;flex-shrink:0;}
+.td-badge .pct{font-size:20px;font-weight:900;}
+.td-badge .name{font-size:13px;font-weight:700;margin-top:2px;}
+.td-content h4{font-size:15px;font-weight:700;margin-bottom:6px;}
+.td-content p{font-size:13px;color:var(--text-2);line-height:1.6;}
+.td-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.td-tag{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;}
+
+/* ===== CENTERS (Article 3) ===== */
+.body-diagram{position:relative;margin:20px auto;max-width:340px;height:480px;}
+.body-svg-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.center-dot{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;text-align:center;line-height:1.2;cursor:pointer;transition:transform 0.2s;border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,0.15);}
+.center-dot:hover{transform:scale(1.15);}
+
+.centers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0;}
+.center-card{border-radius:14px;padding:18px;display:flex;gap:12px;align-items:flex-start;border:1.5px solid;}
+.cc-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cc-body h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+.cc-body p{font-size:12px;color:var(--text-2);line-height:1.5;}
+.cc-body .cc-tag{font-size:11px;font-weight:600;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:8px;}
+
+/* ===== STRATEGY TABLE (Article 4) ===== */
+.strategy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+.strat-card{border-radius:16px;padding:22px;border:2px solid;}
+.strat-card .s-type{font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:8px;}
+.strat-card .s-strategy{font-size:18px;font-weight:800;margin-bottom:6px;}
+.strat-card .s-authority{font-size:13px;margin-bottom:12px;opacity:0.8;}
+.strat-card .s-desc{font-size:12px;line-height:1.6;color:var(--text-2);}
+.strat-card.man{background:#fff3e0;border-color:#ffcc80;color:#bf360c;}
+.strat-card.gen{background:#e8f5e9;border-color:#a5d6a7;color:#1b5e20;}
+.strat-card.pro{background:#e3f2fd;border-color:#90caf9;color:#0d47a1;}
+.strat-card.ref{background:#f3e5f5;border-color:#ce93d8;color:#4a148c;}
+
+.authority-list{margin:20px 0;}
+.auth-item{background:white;border-radius:14px;padding:16px 20px;margin-bottom:12px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;}
+.auth-num{width:32px;height:32px;background:linear-gradient(135deg,var(--purple),var(--pink));border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:14px;flex-shrink:0;}
+.auth-body h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+.auth-body p{font-size:12px;color:var(--text-2);line-height:1.5;}
+
+/* ===== CHANNELS (Article 5) ===== */
+.channel-explain{background:linear-gradient(135deg,#f3f0ff,#e8f5ff);border-radius:16px;padding:24px;margin:16px 0;border:1px solid #d5cdff;}
+.channel-explain p{font-size:14px;line-height:1.8;color:var(--text);}
+
+.channel-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:20px 0;}
+.ch-type{border-radius:14px;padding:20px;text-align:center;border:2px solid;}
+.ch-type .ch-icon{font-size:30px;margin-bottom:10px;}
+.ch-type .ch-name{font-size:15px;font-weight:800;margin-bottom:8px;}
+.ch-type .ch-desc{font-size:12px;line-height:1.5;}
+.ch-type.defined{background:#e8f5e9;border-color:#a5d6a7;color:#1b5e20;}
+.ch-type.open{background:#fff3e0;border-color:#ffcc80;color:#bf360c;}
+
+.gate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:20px 0;}
+.gate-card{border-radius:12px;padding:14px 10px;text-align:center;background:white;border:1px solid var(--border);}
+.gate-num{font-size:22px;font-weight:900;color:var(--purple);line-height:1;}
+.gate-name{font-size:11px;font-weight:600;color:var(--text-2);margin-top:4px;line-height:1.3;}
+
+.channel-sample{background:white;border-radius:16px;padding:20px;margin:16px 0;border:1px solid var(--border);}
+.ch-sample-title{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--purple);}
+.ch-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;}
+.ch-gate{background:var(--purple);color:white;border-radius:8px;padding:4px 10px;font-weight:700;flex-shrink:0;}
+.ch-arrow{color:var(--text-2);}
+.ch-name-text{color:var(--text);}
+.ch-meaning{color:var(--text-2);font-size:12px;}
+
+/* ===== LIFE GUIDE (Article 6) ===== */
+.life-scenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:20px 0;}
+.scenario{border-radius:16px;padding:22px;border:2px solid;}
+.scenario .sc-icon{font-size:28px;margin-bottom:12px;}
+.scenario .sc-title{font-size:16px;font-weight:800;margin-bottom:8px;}
+.scenario .sc-desc{font-size:13px;line-height:1.6;margin-bottom:12px;}
+.scenario .sc-tip{font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;display:inline-block;}
+.scenario.work{background:#e3f2fd;border-color:#90caf9;color:#0d47a1;}
+.scenario.relation{background:#fce4ec;border-color:#f48fb1;color:#880e4f;}
+.scenario.health{background:#e8f5e9;border-color:#a5d6a7;color:#1b5e20;}
+.scenario.decision{background:#fff8e1;border-color:#ffe082;color:#e65100;}
+
+.practice-steps{counter-reset:step;}
+.p-step{counter-increment:step;background:white;border-radius:14px;padding:18px 20px 18px 60px;margin-bottom:12px;position:relative;border:1px solid var(--border);}
+.p-step::before{content:counter(step);position:absolute;left:16px;top:16px;width:32px;height:32px;background:linear-gradient(135deg,var(--purple),var(--pink));color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;}
+.p-step h4{font-size:14px;font-weight:700;margin-bottom:5px;}
+.p-step p{font-size:13px;color:var(--text-2);line-height:1.5;}
+
+.quick-ref{background:linear-gradient(135deg,#2d1b69,#6c5ce7);border-radius:20px;padding:32px;color:white;margin:30px 0;}
+.qr-title{font-size:20px;font-weight:800;margin-bottom:20px;text-align:center;}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
+.qr-item{background:rgba(255,255,255,0.12);border-radius:12px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,0.2);}
+.qr-item .qi-label{font-size:11px;opacity:0.75;margin-bottom:6px;letter-spacing:1px;}
+.qr-item .qi-value{font-size:14px;font-weight:700;}
+
+/* ===== FOOTER ===== */
+.series-footer{background:linear-gradient(135deg,#2d1b69,#6c5ce7);color:white;padding:50px 40px;text-align:center;margin-top:60px;}
+.series-footer h2{font-size:24px;font-weight:800;margin-bottom:12px;}
+.series-footer p{opacity:0.8;font-size:14px;margin-bottom:24px;}
+.footer-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;}
+.f-tag{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:6px 18px;font-size:13px;}
+/* ===== CONTACT IN FOOTER ===== */
+.contact-bar{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:20px;}
+.contact-chip{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:14px;padding:10px 20px;display:flex;align-items:center;gap:8px;font-size:13px;transition:all .2s;}
+.contact-chip:hover{background:rgba(255,255,255,0.22);transform:translateY(-2px);}
+
+/* ===== HIGHLIGHT ===== */
+.hl{background:linear-gradient(135deg,#f3f0ff,#fff0f7);border-left:4px solid var(--purple);border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0;font-size:14px;line-height:1.7;}
+.hl strong{color:var(--purple);}
+
+/* ===== MISC ===== */
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.tag{border-radius:16px;padding:4px 14px;font-size:12px;font-weight:600;}
+.tag.purple{background:#f0ecff;color:var(--purple);}
+.tag.pink{background:#fff0f7;color:#c0396e;}
+.tag.green{background:#e8fdf7;color:#007a5e;}
+.tag.orange{background:#fff3e0;color:#bf360c;}
+.tag.blue{background:#e3f2fd;color:#0d47a1;}
+
+@media(max-width:600px){
+  .series-hero h1{font-size:28px;}
+  .type-grid{grid-template-columns:1fr 1fr;}
+  .article-title{font-size:22px;}
+  .body-diagram{height:360px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">🌀 勤思妙享</div>
+    <button class="nav-btn active" onclick="scrollTo('s1')">① 什么是人类图</button>
+    <button class="nav-btn" onclick="scrollTo('s2')">② 四大类型</button>
+    <button class="nav-btn" onclick="scrollTo('s3')">③ 九大中心</button>
+    <button class="nav-btn" onclick="scrollTo('s4')">④ 策略与权威</button>
+    <button class="nav-btn" onclick="scrollTo('s5')">⑤ 通道与闸门</button>
+    <button class="nav-btn" onclick="scrollTo('s6')">⑥ 用于生活</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="series-hero">
+  <div class="hero-badge">📖 入门系列 · 共6篇</div>
+  <h1>人类图入门图解</h1>
+  <p>从零开始认识人类图——用视觉化方式，把这套读懂自己的系统讲清楚</p>
+  <div class="hero-steps">
+    <span class="hero-step">01 什么是人类图</span>
+    <span class="hero-step">→ 02 四大类型</span>
+    <span class="hero-step">→ 03 九大中心</span>
+    <span class="hero-step">→ 04 策略权威</span>
+    <span class="hero-step">→ 05 通道闸门</span>
+    <span class="hero-step">→ 06 用于生活</span>
+  </div>
+</div>
+
+<!-- ===================== ARTICLE 1 ===================== -->
+<div id="s1" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第一篇</div>
+    <div class="article-title">什么是人类图？</div>
+    <div class="article-sub">一套融合东西方智慧的"自我使用说明书"，帮你了解自己的能量运作方式</div>
+  </div>
+
+  <div class="intro-block">
+    <p>想象一下，如果你出生那一刻，宇宙给你打印了一份<strong>专属说明书</strong>——里面写着你的能量类型、决策方式、天赋与挑战……这就是人类图想给你的东西。</p>
+    <p style="margin-top:10px;">人类图（Human Design）不是算命，而是一套<strong>能量蓝图系统</strong>。它结合了五大古老智慧，通过你的出生时间地点，生成独一无二的「人类图盘」。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧬 人类图由5大系统融合而成</div>
+    <div class="system-grid">
+      <div class="sys-block 易">
+        <div class="sys-icon">☯️</div>
+        <div class="sys-name">易经 64卦</div>
+        <div class="sys-desc">64个闸门的能量原型，来自中国古老智慧</div>
+      </div>
+      <div class="sys-block 星">
+        <div class="sys-icon">⭐</div>
+        <div class="sys-name">占星学</div>
+        <div class="sys-desc">行星位置影响能量中心的激活方式</div>
+      </div>
+      <div class="sys-block 卡">
+        <div class="sys-icon">🌳</div>
+        <div class="sys-name">卡巴拉生命树</div>
+        <div class="sys-desc">9大能量中心的结构来源</div>
+      </div>
+      <div class="sys-block 脉">
+        <div class="sys-icon">🔆</div>
+        <div class="sys-name">脉轮系统</div>
+        <div class="sys-desc">身体能量中心的位置对应关系</div>
+      </div>
+      <div class="sys-block 物">
+        <div class="sys-icon">🔬</div>
+        <div class="sys-name">量子物理</div>
+        <div class="sys-desc">中微子流理论，解释能量印记的机制</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 人类图诞生简史</div>
+    <div class="origin-line">
+      <div class="origin-node">
+        <div class="on-dot"></div>
+        <div class="on-year">1987年</div>
+        <div class="on-text">Ra Uru Hu 在西班牙伊维萨岛接收到人类图系统</div>
+      </div>
+      <div class="origin-node">
+        <div class="on-dot"></div>
+        <div class="on-year">1990s</div>
+        <div class="on-text">开始系统化教学，向全球传播</div>
+      </div>
+      <div class="origin-node">
+        <div class="on-dot"></div>
+        <div class="on-year">2000s</div>
+        <div class="on-text">Richard Rudd 发展出"基因天命"分支体系</div>
+      </div>
+      <div class="origin-node">
+        <div class="on-dot"></div>
+        <div class="on-year">2010s</div>
+        <div class="on-text">人类图进入中国，中文社群快速发展</div>
+      </div>
+      <div class="origin-node">
+        <div class="on-dot"></div>
+        <div class="on-year">2020s</div>
+        <div class="on-text">与AI、正念等领域融合，影响力持续扩大</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺️ 人类图告诉你什么？</div>
+    <div class="def-grid">
+      <div class="def-card c1">
+        <div class="icon">⚡</div>
+        <div class="label">能量类型</div>
+        <div class="desc">你是哪种能量体质？如何与世界互动？</div>
+      </div>
+      <div class="def-card c2">
+        <div class="icon">🧭</div>
+        <div class="label">策略</div>
+        <div class="desc">你应该如何行动才能顺流而不是硬拼？</div>
+      </div>
+      <div class="def-card c3">
+        <div class="icon">🔮</div>
+        <div class="label">内在权威</div>
+        <div class="desc">当你做重要决定时，应该听什么声音？</div>
+      </div>
+      <div class="def-card c4">
+        <div class="icon">✨</div>
+        <div class="label">人生主题</div>
+        <div class="desc">你这辈子最核心的成长与体验主题是什么？</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <strong>核心理念：</strong>人类图不是让你"变成"某种人，而是帮你认识你<strong>本来就是</strong>的样子。当你按照自己的设计生活，阻力自然减少，能量自然流动。
+  </div>
+
+  <div class="tag-row">
+    <span class="tag purple">🌀 自我认知</span>
+    <span class="tag blue">⭐ 东西融合</span>
+    <span class="tag green">✅ 实用工具</span>
+    <span class="tag pink">💫 能量蓝图</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== ARTICLE 2 ===================== -->
+<div id="s2" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第二篇</div>
+    <div class="article-title">四大能量类型</div>
+    <div class="article-sub">全人类只有4种（5类）能量体质，你是哪一种？</div>
+  </div>
+
+  <div class="intro-block">
+    <p>人类图把所有人划分为<strong>4种能量类型</strong>（显化者、生产者、显化生产者、投射者、反映者），每种类型都有其独特的能量运作方式、策略和使命。</p>
+  </div>
+
+  <div class="type-grid">
+    <div class="type-card manifestor">
+      <div class="type-pct">9%</div>
+      <div class="type-name">显化者</div>
+      <div class="type-en">MANIFESTOR</div>
+      <div class="type-key">🔥 先行者<br>不需等待，直接启动</div>
+    </div>
+    <div class="type-card generator">
+      <div class="type-pct">37%</div>
+      <div class="type-name">生产者</div>
+      <div class="type-en">GENERATOR</div>
+      <div class="type-key">⚡ 能量源<br>用回应找到正确方向</div>
+    </div>
+    <div class="type-card mangen">
+      <div class="type-pct">33%</div>
+      <div class="type-name">显化生产者</div>
+      <div class="type-en">MANIFESTING GENERATOR</div>
+      <div class="type-key">🌪️ 多面手<br>快速多线并进</div>
+    </div>
+    <div class="type-card projector">
+      <div class="type-pct">20%</div>
+      <div class="type-name">投射者</div>
+      <div class="type-en">PROJECTOR</div>
+      <div class="type-key">🔭 引导者<br>等待邀请，深度指引</div>
+    </div>
+    <div class="type-card reflector">
+      <div class="type-pct">1%</div>
+      <div class="type-name">反映者</div>
+      <div class="type-en">REFLECTOR</div>
+      <div class="type-key">🌙 镜子<br>反映社会健康状态</div>
+    </div>
+  </div>
+
+  <!-- Detailed breakdown -->
+  <div style="margin-top:28px;">
+
+    <div class="type-detail">
+      <div class="td-badge" style="background:#fff3e0;color:#bf360c;">
+        <div class="pct">9%</div>
+        <div class="name">显化者</div>
+      </div>
+      <div class="td-content">
+        <h4>🔥 天生的先行者与开创者</h4>
+        <p>显化者拥有直接启动行动的能量，不需要等待或回应外部信号。他们天生就有能力把内在冲动直接转化为现实。历史上很多开创性的领袖、艺术家往往是显化者。</p>
+        <div class="td-tags">
+          <span class="td-tag" style="background:#fff3e0;color:#bf360c;">策略：告知</span>
+          <span class="td-tag" style="background:#fff3e0;color:#bf360c;">主题：和平</span>
+          <span class="td-tag" style="background:#fff3e0;color:#bf360c;">挑战：被误解</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="type-detail">
+      <div class="td-badge" style="background:#e8f5e9;color:#1b5e20;">
+        <div class="pct">37%</div>
+        <div class="name">生产者</div>
+      </div>
+      <div class="td-content">
+        <h4>⚡ 世界的能量支柱</h4>
+        <p>生产者是人类最大的能量群体，拥有持续的骶骨能量。他们的关键是学会"等待回应"——当外部世界呼唤，骶骨发出"嗯哼（Uh-huh）"的确认感时，才全力投入。</p>
+        <div class="td-tags">
+          <span class="td-tag" style="background:#e8f5e9;color:#1b5e20;">策略：等待回应</span>
+          <span class="td-tag" style="background:#e8f5e9;color:#1b5e20;">主题：满足感</span>
+          <span class="td-tag" style="background:#e8f5e9;color:#1b5e20;">挑战：挫败感</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="type-detail">
+      <div class="td-badge" style="background:#f1f8e9;color:#33691e;">
+        <div class="pct">33%</div>
+        <div class="name">显化生产者</div>
+      </div>
+      <div class="td-content">
+        <h4>🌪️ 快速多线的能量混合体</h4>
+        <p>显化生产者兼具生产者的骶骨能量和显化者的行动力，常常同时推进多件事。他们的挑战是跳步太快、忘记告知，但一旦找到正确轨道，效率惊人。</p>
+        <div class="td-tags">
+          <span class="td-tag" style="background:#f1f8e9;color:#33691e;">策略：回应后告知</span>
+          <span class="td-tag" style="background:#f1f8e9;color:#33691e;">主题：满足感</span>
+          <span class="td-tag" style="background:#f1f8e9;color:#33691e;">挑战：急躁跳步</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="type-detail">
+      <div class="td-badge" style="background:#e3f2fd;color:#0d47a1;">
+        <div class="pct">20%</div>
+        <div class="name">投射者</div>
+      </div>
+      <div class="td-content">
+        <h4>🔭 洞察人心的深度引导者</h4>
+        <p>投射者没有持续的骶骨能量，但拥有极强的洞察他人系统的能力。他们的策略是"等待邀请"——当被真诚邀请时，他们的智慧才能被正确接收和欣赏。</p>
+        <div class="td-tags">
+          <span class="td-tag" style="background:#e3f2fd;color:#0d47a1;">策略：等待邀请</span>
+          <span class="td-tag" style="background:#e3f2fd;color:#0d47a1;">主题：成功</span>
+          <span class="td-tag" style="background:#e3f2fd;color:#0d47a1;">挑战：苦涩感</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="type-detail">
+      <div class="td-badge" style="background:#f3e5f5;color:#4a148c;">
+        <div class="pct">1%</div>
+        <div class="name">反映者</div>
+      </div>
+      <div class="td-content">
+        <h4>🌙 社群健康的月亮镜子</h4>
+        <p>反映者极为稀有，几乎所有能量中心都是开放的，他们不断反映和放大周围的能量。他们与月亮周期深度连接，重大决定需要等待28天完整的月亮周期。</p>
+        <div class="td-tags">
+          <span class="td-tag" style="background:#f3e5f5;color:#4a148c;">策略：等待月亮周期</span>
+          <span class="td-tag" style="background:#f3e5f5;color:#4a148c;">主题：惊喜</span>
+          <span class="td-tag" style="background:#f3e5f5;color:#4a148c;">挑战：失望感</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== ARTICLE 3 ===================== -->
+<div id="s3" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第三篇</div>
+    <div class="article-title">九大能量中心</div>
+    <div class="article-sub">人类图盘上的9个几何中心，每个都对应身体的一个区域与心理功能</div>
+  </div>
+
+  <div class="intro-block">
+    <p>人类图盘中有<strong>9个能量中心</strong>（Centres），来源于卡巴拉生命树与脉轮系统。每个中心要么是<strong>有定义的（实色）</strong>，要么是<strong>开放的（空白）</strong>。有定义 = 稳定一致的能量；开放 = 可吸收放大外部能量的区域，也是我们被条件化的地方。</p>
+  </div>
+
+  <!-- 身体图示意 + 中心位置（SVG绘制） -->
+  <div class="card" style="text-align:center;">
+    <div class="card-title" style="justify-content:center;">⬡ 9大中心位置示意图</div>
+    <svg viewBox="0 0 320 480" width="100%" style="max-width:320px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background -->
+      <rect width="320" height="480" fill="#f7f6ff" rx="16"/>
+
+      <!-- 连接线 -->
+      <line x1="160" y1="58" x2="160" y2="100" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="120" x2="160" y2="158" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="180" x2="160" y2="218" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="240" x2="100" y2="278" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="240" x2="220" y2="278" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="240" x2="160" y2="300" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="100" y1="298" x2="100" y2="338" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="220" y1="298" x2="220" y2="338" stroke="#a29bfe" stroke-width="2"/>
+      <line x1="160" y1="318" x2="160" y2="358" stroke="#a29bfe" stroke-width="2"/>
+
+      <!-- 顶中心 HEAD -->
+      <polygon points="160,18 185,50 135,50" fill="#fd79a8" stroke="white" stroke-width="2"/>
+      <text x="160" y="38" text-anchor="middle" fill="white" font-size="9" font-weight="bold">头脑</text>
+
+      <!-- AJNA -->
+      <polygon points="160,62 185,94 135,94" fill="#a29bfe" stroke="white" stroke-width="2"/>
+      <text x="160" y="82" text-anchor="middle" fill="white" font-size="9" font-weight="bold">阿吉那</text>
+
+      <!-- THROAT -->
+      <polygon points="160,106 185,138 135,138" fill="#6c5ce7" stroke="white" stroke-width="2"/>
+      <text x="160" y="126" text-anchor="middle" fill="white" font-size="9" font-weight="bold">喉咙</text>
+
+      <!-- G/SELF -->
+      <polygon points="160,148 195,180 160,212 125,180" fill="#e17055" stroke="white" stroke-width="2"/>
+      <text x="160" y="176" text-anchor="middle" fill="white" font-size="9" font-weight="bold">G中心</text>
+      <text x="160" y="188" text-anchor="middle" fill="white" font-size="8">/自我</text>
+
+      <!-- WILL/EGO -->
+      <polygon points="220,222 245,254 195,254" fill="#fdcb6e" stroke="white" stroke-width="2"/>
+      <text x="220" y="242" text-anchor="middle" fill="#5d4800" font-size="8" font-weight="bold">意志力</text>
+
+      <!-- EMOTIONAL SOLAR PLEXUS -->
+      <polygon points="220,262 245,294 195,294" fill="#00b894" stroke="white" stroke-width="2"/>
+      <text x="220" y="276" text-anchor="middle" fill="white" font-size="8" font-weight="bold">情绪</text>
+      <text x="220" y="287" text-anchor="middle" fill="white" font-size="7">太阳神经</text>
+
+      <!-- SPLEEN -->
+      <polygon points="100,222 125,254 75,254" fill="#0984e3" stroke="white" stroke-width="2"/>
+      <text x="100" y="242" text-anchor="middle" fill="white" font-size="8" font-weight="bold">脾脏</text>
+
+      <!-- SACRAL -->
+      <polygon points="160,262 195,294 125,294" fill="#e84393" stroke="white" stroke-width="2"/>
+      <text x="160" y="282" text-anchor="middle" fill="white" font-size="9" font-weight="bold">骶骨</text>
+
+      <!-- ROOT -->
+      <polygon points="160,306 195,338 125,338" fill="#636e72" stroke="white" stroke-width="2"/>
+      <text x="160" y="326" text-anchor="middle" fill="white" font-size="9" font-weight="bold">根部</text>
+
+      <!-- Labels right side -->
+      <text x="254" y="246" fill="#5d4800" font-size="10">意志力</text>
+      <text x="254" y="282" fill="#007a5e" font-size="10">情绪</text>
+      <text x="30" y="246" fill="#0d47a1" font-size="10" text-anchor="end">脾脏</text>
+
+    </svg>
+    <p style="font-size:12px;color:var(--text-2);margin-top:12px;">▲ 有定义的中心（彩色）提供稳定能量；开放中心（白色）吸收周围能量</p>
+  </div>
+
+  <div class="centers-grid">
+    <div class="center-card" style="background:#fff0f7;border-color:#ffd5e8;">
+      <div class="cc-icon" style="background:#ffd5e8;">🧠</div>
+      <div class="cc-body">
+        <h4>头脑中心 Head</h4>
+        <p>思维与灵感的发源地，产生问题与困惑，驱动人类探索意义。</p>
+        <span class="cc-tag" style="background:#fff0f7;color:#c0396e;">压力中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#f3f0ff;border-color:#ddd5ff;">
+      <div class="cc-icon" style="background:#ddd5ff;">🔮</div>
+      <div class="cc-body">
+        <h4>阿吉那中心 Ajna</h4>
+        <p>概念化与分析中心，负责处理、整合和表达思想。</p>
+        <span class="cc-tag" style="background:#f3f0ff;color:#5a4fcf;">意识中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#ede9ff;border-color:#c5beff;">
+      <div class="cc-icon" style="background:#c5beff;">🗣️</div>
+      <div class="cc-body">
+        <h4>喉咙中心 Throat</h4>
+        <p>表达与显化的核心，所有能量最终都流向喉咙以表达或行动。</p>
+        <span class="cc-tag" style="background:#ede9ff;color:#6c5ce7;">表达中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#fff3e0;border-color:#ffcc80;">
+      <div class="cc-icon" style="background:#ffcc80;">❤️</div>
+      <div class="cc-body">
+        <h4>G/自我中心 G Centre</h4>
+        <p>身份认同、爱与方向感的中心，决定"我是谁、我要去哪里"。</p>
+        <span class="cc-tag" style="background:#fff3e0;color:#bf360c;">身份中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#fff8e1;border-color:#ffe082;">
+      <div class="cc-icon" style="background:#ffe082;">💪</div>
+      <div class="cc-body">
+        <h4>意志力中心 Will/Ego</h4>
+        <p>意志力、竞争与物质世界的中心，管理承诺与价值感。</p>
+        <span class="cc-tag" style="background:#fff8e1;color:#e65100;">动力中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#e8fdf7;border-color:#b2f0de;">
+      <div class="cc-icon" style="background:#b2f0de;">🌊</div>
+      <div class="cc-body">
+        <h4>情绪中心 Solar Plexus</h4>
+        <p>情绪、感受与情感波浪，也是最强的内在权威来源之一。</p>
+        <span class="cc-tag" style="background:#e8fdf7;color:#007a5e;">权威中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#e3f2fd;border-color:#90caf9;">
+      <div class="cc-icon" style="background:#90caf9;">🌿</div>
+      <div class="cc-body">
+        <h4>脾脏中心 Spleen</h4>
+        <p>直觉、免疫与生存本能，在当下瞬间传递警觉信号。</p>
+        <span class="cc-tag" style="background:#e3f2fd;color:#0d47a1;">直觉中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#fce4ec;border-color:#f48fb1;">
+      <div class="cc-icon" style="background:#f48fb1;">⚡</div>
+      <div class="cc-body">
+        <h4>骶骨中心 Sacral</h4>
+        <p>生命力与生殖能量的核心，只有生产者拥有有定义的骶骨。</p>
+        <span class="cc-tag" style="background:#fce4ec;color:#880e4f;">生命力中心</span>
+      </div>
+    </div>
+    <div class="center-card" style="background:#f5f5f5;border-color:#ddd;">
+      <div class="cc-icon" style="background:#ddd;">🌱</div>
+      <div class="cc-body">
+        <h4>根部中心 Root</h4>
+        <p>压力与肾上腺素的来源，驱动行动的底层动力。</p>
+        <span class="cc-tag" style="background:#f5f5f5;color:#555;">压力中心</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <strong>关键理解：</strong>开放中心不是弱点！开放中心是你与他人连接、学习和体验多样性的窗口。只有当你误以为开放中心的特质"属于你"时，才会产生条件化（Conditioning）。
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== ARTICLE 4 ===================== -->
+<div id="s4" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第四篇</div>
+    <div class="article-title">策略与内在权威</div>
+    <div class="article-sub">人类图中最实用的两个工具——告诉你"什么时候行动"和"听谁的声音"</div>
+  </div>
+
+  <div class="intro-block">
+    <p>如果人类图只学两件事，那就是<strong>策略（Strategy）</strong>和<strong>内在权威（Inner Authority）</strong>。<br>
+    策略告诉你<strong>何时行动</strong>，权威告诉你<strong>如何决策</strong>。两者结合，就是你专属的"正确行动指南"。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺️ 四大类型 × 专属策略</div>
+    <div class="strategy-grid">
+      <div class="strat-card man">
+        <div class="s-type">MANIFESTOR · 显化者</div>
+        <div class="s-strategy">🔔 告知</div>
+        <div class="s-authority">Inform before acting</div>
+        <div class="s-desc">在行动之前，提前告知会被影响到的人。这能减少阻力，让他人配合而非阻碍你。</div>
+      </div>
+      <div class="strat-card gen">
+        <div class="s-type">GENERATOR · 生产者</div>
+        <div class="s-strategy">⏳ 等待回应</div>
+        <div class="s-authority">Wait to respond</div>
+        <div class="s-desc">不要主动发起，而是等待生活中的事物向你提问或呈现，然后用骶骨的"嗯哼"来回应。</div>
+      </div>
+      <div class="strat-card pro">
+        <div class="s-type">PROJECTOR · 投射者</div>
+        <div class="s-strategy">🤝 等待邀请</div>
+        <div class="s-authority">Wait for the invitation</div>
+        <div class="s-desc">等待真诚的邀请（特别是在工作、关系、居所等大事上），被邀请时你的智慧才会被真正看见。</div>
+      </div>
+      <div class="strat-card ref">
+        <div class="s-type">REFLECTOR · 反映者</div>
+        <div class="s-strategy">🌙 等待月亮周期</div>
+        <div class="s-authority">Wait a lunar cycle</div>
+        <div class="s-desc">重大决定需要等待28天完整的月亮周期，在此期间与信任的人交谈，观察感受的变化。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔮 内在权威——你的决策罗盘</div>
+    <p style="font-size:14px;color:var(--text-2);margin-bottom:16px;">内在权威由你图中最低的有定义能量中心决定，共有7种类型：</p>
+    <div class="authority-list">
+      <div class="auth-item">
+        <div class="auth-num">1</div>
+        <div class="auth-body">
+          <h4>🌊 情绪权威（Solar Plexus Authority）</h4>
+          <p>最常见的权威（约50%的人）。决策前需要"骑乘情绪波浪"，高潮或低谷时都不要做重大决定，等到情绪平稳清晰时再决定。核心原则：<strong>没有紧迫感就是清晰的信号。</strong></p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">2</div>
+        <div class="auth-body">
+          <h4>⚡ 骶骨权威（Sacral Authority）</h4>
+          <p>生产者专属。骶骨会在当下发出"嗯哼（是）"或"嗯嗯（否）"的声音或身体感觉，这是本能的即时回应，要学会分辨和信任这个声音。</p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">3</div>
+        <div class="auth-body">
+          <h4>🌿 脾脏权威（Splenic Authority）</h4>
+          <p>脾脏权威非常轻微，只在当下一瞬间传递信号，不会重复。声音通常很小，像一个轻柔的"知道"。需要学会在安静中倾听身体的直觉信号。</p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">4</div>
+        <div class="auth-body">
+          <h4>💪 自我投射权威（Ego Manifested Authority）</h4>
+          <p>听自己真实的语言——当你开口说话时，你会听到自己想要什么。留意那些自然脱口而出的、关于"我想要/我需要"的话语。</p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">5</div>
+        <div class="auth-body">
+          <h4>🗣️ 自我权威（Self-Projected Authority）</h4>
+          <p>投射者专属。通过与信任的人大声说出你的想法来找到清晰度，在说话过程中你会听到自己的真实感受和想法。</p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">6</div>
+        <div class="auth-body">
+          <h4>🧠 心智权威（Mental Projector Authority）</h4>
+          <p>没有内在权威，需要依赖外部环境。通过与不同的人交谈、在不同空间中感受，来获得关于决策的清晰感，重点是观察环境对自己的影响。</p>
+        </div>
+      </div>
+      <div class="auth-item">
+        <div class="auth-num">7</div>
+        <div class="auth-body">
+          <h4>🌙 月亮权威（Lunar Authority）</h4>
+          <p>反映者专属。等待完整的月亮周期（28天），在此过程中与信任的人交谈，让月亮的不同位置帮你看到决策的不同面向。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <strong>实践提示：</strong>策略与权威不是限制，而是减少阻力的智慧。当你违背策略强行行动时，生活会给你对应类型的"信号"——显化者遭遇阻力，生产者感到挫败，投射者感到苦涩，反映者感到失望。这些负面情绪是提醒你"走偏了"的信号，而非惩罚。
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== ARTICLE 5 ===================== -->
+<div id="s5" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第五篇</div>
+    <div class="article-title">通道与闸门</div>
+    <div class="article-sub">人类图中更精细的能量结构——64个闸门、36条通道，构成你独特的能量线路</div>
+  </div>
+
+  <div class="channel-explain">
+    <p>人类图盘中，9个能量中心由<strong>36条通道（Channels）</strong>相互连接。每条通道的两端各有一个<strong>闸门（Gate）</strong>——来自易经的64卦。<br><br>
+    当一条通道的两个闸门都被行星激活时，该通道就是<strong>有定义的（彩色）</strong>，这代表你稳定拥有该通道的能量特质。如果只有一个闸门被激活，则称为"悬挂闸门"，会对外界有特定的吸引与渴望。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 通道的两种状态</div>
+    <div class="channel-types">
+      <div class="ch-type defined">
+        <div class="ch-icon">🔗</div>
+        <div class="ch-name">有定义通道</div>
+        <div class="ch-desc">两端闸门都激活，通道呈彩色实线。代表你稳定、一致地拥有这条通道的能量特质，是你身份的一部分。</div>
+      </div>
+      <div class="ch-type open">
+        <div class="ch-icon">⭕</div>
+        <div class="ch-name">开放通道</div>
+        <div class="ch-desc">通道呈白色虚线。当你遇到拥有对应闸门的人，你会暂时体验该通道的能量，这是人与人之间能量交流的方式。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔢 64个闸门——来自易经的能量原型（部分示例）</div>
+    <div class="gate-grid">
+      <div class="gate-card"><div class="gate-num">1</div><div class="gate-name">自我表达之门</div></div>
+      <div class="gate-card"><div class="gate-num">2</div><div class="gate-name">高我方向之门</div></div>
+      <div class="gate-card"><div class="gate-num">7</div><div class="gate-name">自我角色之门</div></div>
+      <div class="gate-card"><div class="gate-num">10</div><div class="gate-name">自我行为之门</div></div>
+      <div class="gate-card"><div class="gate-num">13</div><div class="gate-name">倾听者之门</div></div>
+      <div class="gate-card"><div class="gate-num">17</div><div class="gate-name">意见之门</div></div>
+      <div class="gate-card"><div class="gate-num">20</div><div class="gate-name">当下之门</div></div>
+      <div class="gate-card"><div class="gate-num">25</div><div class="gate-name">无私之灵</div></div>
+      <div class="gate-card"><div class="gate-num">34</div><div class="gate-name">力量之门</div></div>
+      <div class="gate-card"><div class="gate-num">36</div><div class="gate-name">情绪黑暗之门</div></div>
+      <div class="gate-card"><div class="gate-num">48</div><div class="gate-name">深度之门</div></div>
+      <div class="gate-card"><div class="gate-num">57</div><div class="gate-name">直觉清晰之门</div></div>
+      <div class="gate-card"><div class="gate-num">64</div><div class="gate-name">困惑/完结之门</div></div>
+      <div class="gate-card"><div class="gate-num">1</div><div class="gate-name">…共64个</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--text-2);margin-top:8px;">* 64个闸门对应易经64卦，每个闸门有其独特的能量主题与表达方式</p>
+  </div>
+
+  <div class="channel-sample">
+    <div class="ch-sample-title">✨ 经典通道解读举例（6条）</div>
+    <div class="ch-row">
+      <span class="ch-gate">34-20</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">超凡魅力通道</span>
+      <span class="ch-meaning">｜骶骨-喉咙｜行动力直接转化为当下表达</span>
+    </div>
+    <div class="ch-row">
+      <span class="ch-gate">1-8</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">灵感通道</span>
+      <span class="ch-meaning">｜G中心-喉咙｜创造性自我表达</span>
+    </div>
+    <div class="ch-row">
+      <span class="ch-gate">36-35</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">波浪通道</span>
+      <span class="ch-meaning">｜情绪-喉咙｜通过情感经历寻求进步</span>
+    </div>
+    <div class="ch-row">
+      <span class="ch-gate">47-64</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">抽象思维通道</span>
+      <span class="ch-meaning">｜阿吉那-头脑｜将混沌整合为抽象智慧</span>
+    </div>
+    <div class="ch-row">
+      <span class="ch-gate">57-20</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">脑波通道</span>
+      <span class="ch-meaning">｜脾脏-喉咙｜直觉当下的表达</span>
+    </div>
+    <div class="ch-row">
+      <span class="ch-gate">10-20</span>
+      <span class="ch-arrow">→</span>
+      <span class="ch-name-text">醒觉通道</span>
+      <span class="ch-meaning">｜G中心-喉咙｜忠于自我即是觉醒</span>
+    </div>
+  </div>
+
+  <div class="hl">
+    <strong>闸门 vs 通道：</strong>只有一个闸门 = 有潜力但需要他人"补全"；两个闸门都有 = 通道完整，能量持续流动。这也解释了为什么你会被某些特定的人所吸引——他们可能正好拥有你"悬挂的另一半"。
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===================== ARTICLE 6 ===================== -->
+<div id="s6" class="article-section">
+  <div class="article-header">
+    <div class="article-num">📖 第六篇</div>
+    <div class="article-title">如何用人类图指导生活</div>
+    <div class="article-sub">从"知道"到"活出来"——把人类图落地到工作、关系、健康与决策</div>
+  </div>
+
+  <div class="intro-block">
+    <p>学了人类图知识之后，最重要的一步是<strong>实验（Experiment）</strong>。人类图的创始人Ra Uru Hu 强调：不要相信人类图，<strong>用它做实验</strong>。给自己7年时间，观察按照自己的设计生活，会发生什么变化。</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 四大生活场景应用</div>
+    <div class="life-scenarios">
+      <div class="scenario work">
+        <div class="sc-icon">💼</div>
+        <div class="sc-title">职业 & 工作</div>
+        <div class="sc-desc">了解你的能量类型，选择与之匹配的工作方式。生产者适合深耕一件事；投射者适合顾问、教练、管理者；显化者适合开创者角色。</div>
+        <span class="sc-tip" style="background:#c5dcf5;color:#0d47a1;">用策略选择项目，避免错误投入</span>
+      </div>
+      <div class="scenario relation">
+        <div class="sc-icon">💞</div>
+        <div class="sc-title">关系 & 人际</div>
+        <div class="sc-desc">了解彼此的图，理解能量差异。开放中心的"磁场效应"解释了为什么某些人让你感觉精力充沛，某些人让你感觉被耗尽。</div>
+        <span class="sc-tip" style="background:#f9c0d5;color:#880e4f;">用图解析关系动力，减少误解</span>
+      </div>
+      <div class="scenario health">
+        <div class="sc-icon">🌿</div>
+        <div class="sc-title">健康 & 能量管理</div>
+        <div class="sc-desc">不同类型的能量需求不同。生产者需要充分使用能量才能睡好；投射者需要休息和独处来恢复；反映者需要规律的独处时间。</div>
+        <span class="sc-tip" style="background:#b7e6d1;color:#007a5e;">按能量设计安排作息节奏</span>
+      </div>
+      <div class="scenario decision">
+        <div class="sc-icon">🧭</div>
+        <div class="sc-title">重要决策</div>
+        <div class="sc-desc">停止用头脑做所有决策。学会辨认和信任你的内在权威——情绪权威等待波浪过去，骶骨权威倾听当下的身体信号。</div>
+        <span class="sc-tip" style="background:#ffe5b3;color:#e65100;">以权威为主，头脑为辅</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 从入门到实践：5步走</div>
+    <div class="practice-steps">
+      <div class="p-step">
+        <h4>获取你的人类图盘</h4>
+        <p>在 mybodygraph.com 或 jovianarchive.com 免费生成，需要准确的出生时间（最好精确到分钟）、出生日期和出生地点。</p>
+      </div>
+      <div class="p-step">
+        <h4>先只学类型 + 策略 + 权威</h4>
+        <p>不要一开始就深入64闸门和36通道，先用最核心的三个元素做实验，够用了。其余的内容随着实践慢慢展开。</p>
+      </div>
+      <div class="p-step">
+        <h4>观察"阻力信号"</h4>
+        <p>注意生活中的挫败感、苦涩感、阻力感。这些往往是你没有遵循策略权威的信号，而不是外部环境的错。</p>
+      </div>
+      <div class="p-step">
+        <h4>找到你的开放中心主题</h4>
+        <p>识别你的开放中心，思考你在这些区域被怎样"条件化"了。常见问题：开放意志力的人容易过度承诺；开放情绪的人容易回避冲突。</p>
+      </div>
+      <div class="p-step">
+        <h4>持续实验，记录变化</h4>
+        <p>给自己3-6个月的实验期，记录当你遵循策略权威时发生了什么，和强行行动时有什么不同。人类图最终要通过活出来才能真正理解。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Reference Card -->
+  <div class="quick-ref">
+    <div class="qr-title">📌 人类图速查卡</div>
+    <div class="qr-grid">
+      <div class="qr-item">
+        <div class="qi-label">显化者</div>
+        <div class="qi-value">策略：告知<br>主题：和平</div>
+      </div>
+      <div class="qr-item">
+        <div class="qi-label">生产者</div>
+        <div class="qi-value">策略：等待回应<br>主题：满足</div>
+      </div>
+      <div class="qr-item">
+        <div class="qi-label">显化生产者</div>
+        <div class="qi-value">策略：回应+告知<br>主题：满足</div>
+      </div>
+      <div class="qr-item">
+        <div class="qi-label">投射者</div>
+        <div class="qi-value">策略：等待邀请<br>主题：成功</div>
+      </div>
+      <div class="qr-item">
+        <div class="qi-label">反映者</div>
+        <div class="qi-value">策略：等待月亮<br>主题：惊喜</div>
+      </div>
+      <div class="qr-item">
+        <div class="qi-label">核心工具</div>
+        <div class="qi-value">策略 + 权威<br>先学这两个</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <strong>最后一句话：</strong>人类图是一面镜子，不是一个标签。它的目的不是让你说"我是投射者所以我不能主动"，而是帮你更深地认识自己的能量运作，<strong>减少内耗，活得更真实</strong>。带着好奇心去实验，这才是人类图给你的邀请。
+  </div>
+
+  <div class="tag-row">
+    <span class="tag purple">🧘 减少内耗</span>
+    <span class="tag green">✅ 实验精神</span>
+    <span class="tag blue">🔭 自我觉察</span>
+    <span class="tag pink">💫 活出设计</span>
+    <span class="tag orange">🌱 持续实践</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="series-footer">
+  <h2>🌀 勤思妙享 · 人类图入门系列</h2>
+  <p>知识在图中，智慧在生活里。带着好奇心，开始你的人类图实验之旅。</p>
+  <div class="footer-tags">
+    <span class="f-tag">📖 什么是人类图</span>
+    <span class="f-tag">⚡ 四大类型</span>
+    <span class="f-tag">⬡ 九大中心</span>
+    <span class="f-tag">🧭 策略与权威</span>
+    <span class="f-tag">🔗 通道与闸门</span>
+    <span class="f-tag">🌱 生活应用</span>
+  </div>
+  <div class="contact-bar">
+    <a class="contact-chip" href="mailto:dengqinmin@163.com" style="text-decoration:none;color:inherit;">
+      📧 dengqinmin@163.com
+    </a>
+    <span class="contact-chip">💬 WeChat: Khimmin</span>
+    <a class="contact-chip" href="index.html" target="_blank" style="text-decoration:none;color:inherit;">
+      🌐 查看完整系列（共19篇）
+    </a>
+    <a class="contact-chip" href="https://www.lifegps.cn/l/RALosKuq" target="_blank" style="text-decoration:none;color:inherit;background:rgba(255,215,0,0.15);border-color:rgba(255,215,0,0.4);">
+      🔮 免费出图
+    </a>
+  </div>
+  <p style="margin-top:24px;font-size:12px;opacity:0.5;">© 勤思妙享 · Human Design 入门系列图解 · 欢迎与全球研究者交流</p>
+</div>
+
+<script>
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // update active nav
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const map = {s1:0,s2:1,s3:2,s4:3,s5:4,s6:5};
+  const idx = map[id];
+  if(idx !== undefined){
+    document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  }
+}
+
+// Highlight active nav on scroll
+const sections = ['s1','s2','s3','s4','s5','s6'];
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  const map = {s1:0,s2:1,s3:2,s4:3,s5:4,s6:5};
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if(map[current] !== undefined){
+    document.querySelectorAll('.nav-btn')[map[current]].classList.add('active');
+  }
+});
+</script>
+</body>
+</html>
