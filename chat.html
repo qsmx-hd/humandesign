@@ -109,6 +109,26 @@
             gap: 10px;
         }
 
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--border-gold);
+            color: var(--accent-gold);
+        }
+
         .user-badge {
             display: flex;
             align-items: center;
@@ -226,6 +246,7 @@
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-block;
         }
 
         .type-chip:hover {
@@ -635,6 +656,10 @@
                 width: 100%;
                 right: -100%;
             }
+
+            .back-btn span.back-text {
+                display: none;
+            }
         }
 
         /* ===== 类型选择弹窗 ===== */
@@ -756,6 +781,10 @@
             </div>
         </div>
         <div class="header-actions">
+            <a href="index.html" class="back-btn" title="返回首页">
+                <span>🏠</span>
+                <span class="back-text">返回首页</span>
+            </a>
             <div class="user-badge" id="userBadge" onclick="toggleSettings()">
                 <span class="type-dot" id="typeDot" style="background: var(--text-muted);"></span>
                 <span id="userBadgeText">设置你的类型</span>
@@ -769,15 +798,21 @@
             <!-- 欢迎卡片 -->
             <div class="welcome-card" id="welcomeCard">
                 <h2>🌀 欢迎来到 Human Design AI</h2>
-                <p>我是基于人类图（Human Design）系统的 AI 助手。我可以结合你的人类图类型，<br>为你提供个性化的情绪支持和建议。</p>
+                <p>我是基于人类图（Human Design）系统的 AI 知识助手，可以为你解答人类图相关问题，提供类型解读和建议。</p>
                 <div class="welcome-types">
+                    <p style="font-size:13px; color: var(--text-secondary); margin-bottom:8px;">选择你的类型，获取针对性解读 👇</p>
                     <button class="type-chip" onclick="selectType('显示者')">🔴 显示者</button>
                     <button class="type-chip" onclick="selectType('生产者')">🟡 生产者</button>
                     <button class="type-chip" onclick="selectType('显示生产者')">🟠 显示生产者</button>
-                    <button class="type-chip" onclick="selectType('投影者')">🔵 投影者</button>
+                    <button class="type-chip" onclick="selectType('投影者')">🔵 投射者</button>
                     <button class="type-chip" onclick="selectType('反映者')">⚪️ 反映者</button>
                 </div>
-                <p style="font-size:12px; color: var(--text-muted);">💡 或者直接告诉我你的出生日期，比如「1995年3月12日」，我来帮你算！</p>
+                <p style="font-size:12px; color: var(--text-muted); margin-bottom:8px;">💡 不知道自己的类型？使用权威网站获取免费人类图：</p>
+                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                    <a href="https://www.mybodygraph.com/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 myBodyGraph</a>
+                    <a href="https://humandesign.org.cn/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 亚洲人类图学院</a>
+                </div>
+                <p style="font-size:11px; color: var(--text-muted); margin-top:12px;">⚠️ AI 回复仅供参考，如需准确分析请咨询专业人类图解读师。</p>
             </div>
         </div>
 
@@ -787,7 +822,7 @@
                 <textarea
                     class="input-field"
                     id="messageInput"
-                    placeholder="说说你现在的感受，比如「我是显示者，今天情绪不好」..."
+                    placeholder="说说你的感受或提问，比如「我是显示者，最近压力很大」..."
                     rows="1"
                     onkeydown="handleKeyDown(event)"
                     oninput="autoResize(this)"
@@ -802,7 +837,7 @@
             <div class="quick-actions">
                 <button class="quick-btn" onclick="quickMessage('今天情绪不好')">😔 今天情绪不好</button>
                 <button class="quick-btn" onclick="quickMessage('什么是人类图？')">🌀 什么是人类图</button>
-                <button class="quick-btn" onclick="quickMessage('我是哪种类型？')">🔮 我是什么类型</button>
+                <button class="quick-btn" onclick="quickMessage('显示者有什么特征？')">🔍 显示者特征</button>
                 <button class="quick-btn" onclick="openTypeModal()">✏️ 修改类型</button>
             </div>
         </div>
@@ -843,7 +878,7 @@
                         <option value="显示者">🔴 显示者 Manifestor</option>
                         <option value="生产者">🟡 生产者 Generator</option>
                         <option value="显示生产者">🟠 显示生产者 Manifesting Generator</option>
-                        <option value="投影者">🔵 投影者 Projector</option>
+                        <option value="投影者">🔵 投射者 Projector</option>
                         <option value="反映者">⚪️ 反映者 Reflector</option>
                     </select>
                 </div>
@@ -865,7 +900,7 @@
     <div class="type-modal" id="typeModal">
         <div class="type-modal-content">
             <h3>✨ 选择你的人类图类型</h3>
-            <p>了解你的类型后，我可以为你提供更贴合个人特点的建议。你也可以直接告诉我出生日期，让我来帮你算！</p>
+            <p>了解你的类型后，我可以为你提供更贴合个人特点的建议。你可以通过权威网站获取准确的人类图信息，然后告诉我你的类型。</p>
             <div class="type-grid">
                 <div class="type-option" onclick="confirmType('显示者')">
                     <span class="emoji">🔴</span>
@@ -882,9 +917,9 @@
                     <span class="name">显示生产者</span>
                     <span class="en-name">MG</span>
                 </div>
-                <div class="type-option" onclick="confirmType('投影者')">
+                <div class="type-option" onclick="confirmType('投射者')">
                     <span class="emoji">🔵</span>
-                    <span class="name">投影者</span>
+                    <span class="name">投射者</span>
                     <span class="en-name">Projector</span>
                 </div>
             </div>
@@ -896,7 +931,7 @@
         // ===== 全局状态 =====
         let currentUser = null;
         let isLoading = false;
-        let chatHistory = []; // 对话历史，用于多轮上下文
+        let chatHistory = [];
 
         // DeepSeek API 配置（硬编码，用于 GitHub Pages 静态部署）
         const DEEPSEEK_API_KEY = 'sk-4e1541851be644d691e677d23ba27d63';
@@ -904,19 +939,55 @@
         const DEEPSEEK_MODEL = 'deepseek-chat';
 
         // 人类图系统提示词
-        const SYSTEM_PROMPT = `你是 Human Design AI，一位专业的人类图（Human Design）智能助手。你具备以下能力：
+        const SYSTEM_PROMPT = `你是 Human Design AI，一位专业的人类图（Human Design）知识助手。基于 Ra Uru Hu 创立的原始人类图体系。
 
-1. **人类图知识体系**：精通人类图的五大类型（显示者 Manifestor、生产者 Generator、显示生产者 Manifesting Generator、投射者 Projector、反映者 Reflector）、九大能量中心、策略与权威、通道与闸门、轮回交叉、轮廓 Profile、变量四箭头等全部知识。
+## ⚠️ 最重要规则（必须严格遵守）
 
-2. **个性化分析**：当用户告诉你他们的人类图类型时，提供针对性的建议和解读，包括该类型的策略、权威、常见挑战和成长建议。
+**你没有任何能力计算或推测用户的人类图信息。** 以下所有核心信息都依赖于精确的天文计算（需要出生日期、时间、地点），你绝对不能为用户生成或编造这些信息：
 
-3. **情绪支持**：结合人类图理念，为用户提供温暖、有洞见的情绪支持和人生建议。
+- 类型（显示者、生产者、显示生产者、投射者、反映者）
+- 人生角色 / 轮廓 Profile（如 1/3、2/4 等）
+- 内在权威（情绪型、荐骨型、投射型等）
+- 闸门 Gates、通道 Channels
+- 能量中心的定义状态
+- 轮回交叉 / 人生使命 Incarnation Cross
+- 定义类型（单一定义、分裂定义等）
+- 变量 Variables（四箭头）
 
-4. **实用指导**：帮助用户将人类图知识应用于日常工作、关系、健康和决策。
+**当用户问"我是什么类型？"或提供出生日期要求解读时，你必须明确告知用户：**
+"我无法计算您的人类图。人类图的计算需要精确的出生日期、时间和地点，通过专业的天文计算才能得出准确结果。建议您使用以下权威网站获取免费的人类图：
+- myBodyGraph：https://www.mybodygraph.com/
+- 亚洲人类图学院：https://humandesign.org.cn/
+获取您的人类图后，欢迎回来告诉我您的类型，我可以为您提供针对性的知识解读和建议。"
 
-5. **语言风格**：温暖、专业、有深度，适当使用表情符号，回答要结构清晰、易于阅读。
+## ✅ 你可以做的事情
 
-请始终基于人类图的专业知识回答，如果遇到超出人类图范围的问题，可以结合一般心理学知识，但要明确区分。
+1. **知识科普**：解释人类图体系的概念，如五大类型的特点和策略、九大能量中心的功能、通道和闸门的基础知识等。
+
+2. **类型解读**：当用户**主动告诉你TA的类型**时（如"我是显示者"），你可以提供该类型的策略、权威、常见特征和成长建议等知识性解读。注意：只能解读用户主动告知的类型，不能推测。
+
+3. **概念解释**：解释人类图中的专业术语，如"等待邀请"对投射者意味着什么、"荐骨回应"如何运作等。
+
+4. **知识问答**：回答关于人类图体系的一般性问题，如类型之间的关系、不同类型在职场和亲密关系中的互动模式等。
+
+5. **情绪支持**：基于用户分享的生活状况，结合人类图理念提供温暖的建议和视角。
+
+## ❌ 你绝对不能做的事情
+
+- 不能根据出生日期、星座、MBTI等信息推测或编造任何人类图数据
+- 不能告诉用户"你可能是XX类型"或"你的闸门大概是XX"
+- 不能为用户生成完整的个人人类图解读（除非用户明确提供了来自权威计算的结果）
+- 不能凭空编造通道、闸门的个人化含义
+- 不能提供人生使命或轮回交叉的个人化解读
+
+## 语言风格
+- 温暖、专业、有深度
+- 适当使用表情符号
+- 回答结构清晰、易于阅读
+- 在涉及个人数据时，始终提醒用户以权威计算结果为准
+
+## 免责声明
+- 当用户提供具体类型信息时，在回复末尾自然地加上："💡 提示：以上解读基于人类图体系的知识科普，仅供参考。如需准确的个人人类图分析，建议咨询专业的人类图解读师。"
 
 回复语言：用户用中文提问时用中文回复，用英文提问时用英文回复。`;
 
@@ -924,7 +995,7 @@
             '显示者': '🔴',
             '生产者': '🟡',
             '显示生产者': '🟠',
-            '投影者': '🔵',
+            '投射者': '🔵',
             '反映者': '⚪️'
         };
 
@@ -932,21 +1003,18 @@
             '显示者': '#e57373',
             '生产者': '#fff176',
             '显示生产者': '#ffb74d',
-            '投影者': '#64b5f6',
+            '投射者': '#64b5f6',
             '反映者': '#e0e0e0'
         };
 
         // ===== 初始化 =====
         document.addEventListener('DOMContentLoaded', () => {
-            // 尝试从 localStorage 恢复用户状态
             const savedUser = localStorage.getItem('hd_user');
             if (savedUser) {
                 try {
                     currentUser = JSON.parse(savedUser);
                     updateUserBadge(currentUser);
-                    // 隐藏欢迎卡
                     document.getElementById('welcomeCard').style.display = 'none';
-                    // 恢复对话历史
                     const savedHistory = localStorage.getItem('hd_chat_history');
                     if (savedHistory) {
                         chatHistory = JSON.parse(savedHistory);
@@ -955,10 +1023,8 @@
                 } catch(e) {}
             }
 
-            // 更新 API 状态显示
             document.getElementById('apiStatusText').textContent = '已接入 DeepSeek AI 引擎';
             document.querySelector('.api-status-dot').classList.remove('inactive');
-            // 隐藏不需要的 provider 选择
             document.getElementById('aiProviderSelect').value = 'deepseek';
             document.getElementById('apiKeyItem').style.display = 'none';
 
@@ -971,27 +1037,23 @@
             const message = input.value.trim();
             if (!message || isLoading) return;
 
-            // 添加用户消息
             addMessage('user', message);
             input.value = '';
             input.style.height = 'auto';
 
-            // 显示加载状态
             showTyping();
             isLoading = true;
             document.getElementById('sendBtn').disabled = true;
 
             try {
-                // 构建用户上下文（如果用户设置了类型）
                 let userContext = '';
                 if (currentUser && currentUser.hd_type) {
-                    userContext = `\n\n[用户的人类图类型：${currentUser.hd_type}${currentUser.name ? '，昵称：' + currentUser.name : ''}]`;
+                    userContext = '\n\n[用户的人类图类型：' + currentUser.hd_type + (currentUser.name ? '，昵称：' + currentUser.name : '') + ']';
                 }
 
-                // 构建对话消息列表
                 const messages = [
                     { role: 'system', content: SYSTEM_PROMPT },
-                    ...chatHistory.slice(-10), // 最近10条历史消息保持上下文
+                    ...chatHistory.slice(-10),
                     { role: 'user', content: message + userContext }
                 ];
 
@@ -999,7 +1061,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                        'Authorization': 'Bearer ' + DEEPSEEK_API_KEY
                     },
                     body: JSON.stringify({
                         model: DEEPSEEK_MODEL,
@@ -1019,16 +1081,13 @@
                     const aiResponse = data.choices[0].message.content;
                     addMessage('assistant', aiResponse);
 
-                    // 保存到对话历史
                     chatHistory.push({ role: 'user', content: message });
                     chatHistory.push({ role: 'assistant', content: aiResponse });
-                    // 只保留最近20条
                     if (chatHistory.length > 20) {
                         chatHistory = chatHistory.slice(-20);
                     }
                     localStorage.setItem('hd_chat_history', JSON.stringify(chatHistory));
 
-                    // 检测用户是否提到了人类图类型
                     detectUserType(message);
                 } else {
                     addMessage('assistant', '抱歉，AI 引擎返回了空回复，请稍后重试。');
@@ -1077,35 +1136,30 @@
         function addMessage(role, content, silent) {
             const area = document.getElementById('messagesArea');
 
-            // 隐藏欢迎卡
             const welcomeCard = document.getElementById('welcomeCard');
             if (welcomeCard && welcomeCard.style.display !== 'none') {
                 welcomeCard.style.display = 'none';
             }
 
             const msg = document.createElement('div');
-            msg.className = `message ${role}`;
+            msg.className = 'message ' + role;
 
             const avatar = role === 'user' ? '👤' : '🌀';
             const avatarBg = role === 'user' ? '#2a2540' : '#2a2820';
 
-            // 格式化消息内容（处理 Markdown 风格）
             const formattedContent = formatContent(content);
 
-            msg.innerHTML = `
-                <div class="avatar" style="background:${avatarBg}">${avatar}</div>
-                <div>
-                    <div class="bubble">${formattedContent}</div>
-                    <div class="time-tag">${new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'})}</div>
-                </div>
-            `;
+            msg.innerHTML = '<div class="avatar" style="background:' + avatarBg + '">' + avatar + '</div>'
+                + '<div>'
+                + '<div class="bubble">' + formattedContent + '</div>'
+                + '<div class="time-tag">' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>'
+                + '</div>';
 
             area.appendChild(msg);
             area.scrollTop = area.scrollHeight;
         }
 
         function formatContent(text) {
-            // 简单格式化
             let html = text
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/_(.*?)_/g, '<em>$1</em>')
@@ -1120,14 +1174,12 @@
             const typing = document.createElement('div');
             typing.id = 'typingIndicator';
             typing.className = 'message assistant';
-            typing.innerHTML = `
-                <div class="avatar" style="background:#2a2820">🌀</div>
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
+            typing.innerHTML = '<div class="avatar" style="background:#2a2820">🌀</div>'
+                + '<div class="typing-indicator">'
+                + '<div class="typing-dot"></div>'
+                + '<div class="typing-dot"></div>'
+                + '<div class="typing-dot"></div>'
+                + '</div>';
             area.appendChild(typing);
             area.scrollTop = area.scrollHeight;
         }
@@ -1137,13 +1189,11 @@
             if (typing) typing.remove();
         }
 
-        // ===== 快捷消息 =====
         function quickMessage(text) {
             document.getElementById('messageInput').value = text;
             sendMessage();
         }
 
-        // ===== 键盘事件 =====
         function handleKeyDown(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -1156,7 +1206,6 @@
             el.style.height = Math.min(el.scrollHeight, 120) + 'px';
         }
 
-        // ===== 用户界面更新 =====
         function updateUserBadge(user) {
             const badge = document.getElementById('userBadge');
             const dot = document.getElementById('typeDot');
@@ -1166,7 +1215,7 @@
                 badge.classList.add('has-type');
                 dot.style.background = TYPE_COLORS[user.hd_type] || 'var(--accent-gold)';
                 const emoji = TYPE_EMOJI[user.hd_type] || '✨';
-                text.textContent = `${emoji} ${user.hd_type}`;
+                text.textContent = emoji + ' ' + user.hd_type;
                 document.getElementById('hdTypeSelect').value = user.hd_type;
             } else {
                 badge.classList.remove('has-type');
@@ -1175,7 +1224,6 @@
             }
         }
 
-        // ===== 设置面板 =====
         function toggleSettings() {
             const panel = document.getElementById('settingsPanel');
             const overlay = document.getElementById('settingsOverlay');
@@ -1184,14 +1232,12 @@
         }
 
         function onProviderChange() {
-            // 始终使用 DeepSeek，不需要切换
             document.getElementById('apiKeyItem').style.display = 'none';
             document.getElementById('apiStatusText').textContent = '已接入 DeepSeek AI 引擎';
             document.querySelector('.api-status-dot').classList.remove('inactive');
         }
 
         async function saveApiKey() {
-            // API Key 已内置，无需手动设置
             alert('DeepSeek AI 引擎已内置配置，无需手动输入 API Key。');
         }
 
@@ -1199,14 +1245,13 @@
             const hd_type = document.getElementById('hdTypeSelect').value;
             const name = document.getElementById('userNameInput').value.trim();
 
-            // 直接保存到 localStorage，不需要后端
             currentUser = currentUser || { id: 'web_' + Date.now() };
             currentUser.hd_type = hd_type || null;
             currentUser.name = name || null;
             localStorage.setItem('hd_user', JSON.stringify(currentUser));
             updateUserBadge(currentUser);
             toggleSettings();
-            addMessage('assistant', `✨ 档案已保存！你的人类图类型已设置为 ${hd_type || '未设置'}。有什么想聊的吗？`);
+            addMessage('assistant', '✨ 档案已保存！你的人类图类型已设置为 ' + (hd_type || '未设置') + '。有什么想聊的吗？');
         }
 
         async function clearHistory() {
@@ -1227,18 +1272,22 @@
             const card = document.createElement('div');
             card.className = 'welcome-card';
             card.id = 'welcomeCard';
-            card.innerHTML = `
-                <h2>🌀 欢迎来到 Human Design AI</h2>
-                <p>我是基于人类图（Human Design）系统的 AI 助手。我可以结合你的人类图类型，<br>为你提供个性化的情绪支持和建议。</p>
-                <div class="welcome-types">
-                    <button class="type-chip" onclick="selectType('显示者')">🔴 显示者</button>
-                    <button class="type-chip" onclick="selectType('生产者')">🟡 生产者</button>
-                    <button class="type-chip" onclick="selectType('显示生产者')">🟠 显示生产者</button>
-                    <button class="type-chip" onclick="selectType('投影者')">🔵 投影者</button>
-                    <button class="type-chip" onclick="selectType('反映者')">⚪️ 反映者</button>
-                </div>
-                <p style="font-size:12px; color: var(--text-muted);">💡 或者直接告诉我你的出生日期，比如「1995年3月12日」，我来帮你算！</p>
-            `;
+            card.innerHTML = '<h2>🌀 欢迎来到 Human Design AI</h2>'
+                + '<p>我是基于人类图（Human Design）系统的 AI 知识助手，可以为你解答人类图相关问题，提供类型解读和建议。</p>'
+                + '<div class="welcome-types">'
+                + '<p style="font-size:13px; color: var(--text-secondary); margin-bottom:8px;">选择你的类型，获取针对性解读 👇</p>'
+                + '<button class="type-chip" onclick="selectType(\'显示者\')">🔴 显示者</button>'
+                + '<button class="type-chip" onclick="selectType(\'生产者\')">🟡 生产者</button>'
+                + '<button class="type-chip" onclick="selectType(\'显示生产者\')">🟠 显示生产者</button>'
+                + '<button class="type-chip" onclick="selectType(\'投射者\')">🔵 投射者</button>'
+                + '<button class="type-chip" onclick="selectType(\'反映者\')">⚪️ 反映者</button>'
+                + '</div>'
+                + '<p style="font-size:12px; color: var(--text-muted); margin-bottom:8px;">💡 不知道自己的类型？使用权威网站获取免费人类图：</p>'
+                + '<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">'
+                + '<a href="https://www.mybodygraph.com/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 myBodyGraph</a>'
+                + '<a href="https://humandesign.org.cn/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 亚洲人类图学院</a>'
+                + '</div>'
+                + '<p style="font-size:11px; color: var(--text-muted); margin-top:12px;">⚠️ AI 回复仅供参考，如需准确分析请咨询专业人类图解读师。</p>';
             return card;
         }
 
@@ -1246,7 +1295,6 @@
             // 对话历史已在 DOMContentLoaded 中恢复，此函数保留兼容
         }
 
-        // ===== 类型选择 =====
         function openTypeModal() {
             document.getElementById('typeModal').classList.add('open');
         }
@@ -1261,7 +1309,7 @@
 
         function confirmType(type) {
             closeTypeModal();
-            document.getElementById('messageInput').value = `我是${type}`;
+            document.getElementById('messageInput').value = '我是' + type;
             sendMessage();
         }
     </script>
