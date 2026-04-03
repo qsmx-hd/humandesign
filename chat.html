@@ -328,6 +328,48 @@
             font-style: italic;
         }
 
+        /* ===== 复制按钮 ===== */
+        .msg-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+            padding-left: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message.assistant:hover .msg-actions {
+            opacity: 1;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--border-gold);
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        .copy-btn.copied {
+            border-color: #4ade80;
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
         .time-tag {
             font-size: 10px;
             color: var(--text-muted);
@@ -673,6 +715,10 @@
 
             .back-btn span.back-text {
                 display: none;
+            }
+
+            .msg-actions {
+                opacity: 1;
             }
         }
 
@@ -1109,9 +1155,16 @@
                 streamBubble.classList.remove('streaming-cursor');
                 streamBubble.removeAttribute('id');
 
+                // 在 bubble 后面插入复制按钮
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'msg-actions';
+                actionsDiv.innerHTML = '<button class="copy-btn" onclick="copyMessage(this)">📋 复制</button>';
+                streamBubble.parentNode.insertBefore(actionsDiv, streamBubble.nextSibling);
+
                 if (!fullContent) {
                     streamBubble.textContent = '抱歉，AI 引擎返回了空回复，请稍后重试。';
                 } else {
+                    streamBubble.setAttribute('data-raw', fullContent);
                     chatHistory.push({ role: 'user', content: message });
                     chatHistory.push({ role: 'assistant', content: fullContent });
                     if (chatHistory.length > 20) {
@@ -1183,9 +1236,17 @@
 
             const formattedContent = formatContent(content);
 
+            let actionsHtml = '';
+            if (role === 'assistant') {
+                actionsHtml = '<div class="msg-actions">'
+                    + '<button class="copy-btn" onclick="copyMessage(this)">📋 复制</button>'
+                    + '</div>';
+            }
+
             msg.innerHTML = '<div class="avatar" style="background:' + avatarBg + '">' + avatar + '</div>'
                 + '<div>'
-                + '<div class="bubble">' + formattedContent + '</div>'
+                + '<div class="bubble"' + (role === 'assistant' ? ' data-raw="' + content.replace(/"/g, '&quot;').replace(/</g, '&lt;') + '"' : '') + '>' + formattedContent + '</div>'
+                + actionsHtml
                 + '<div class="time-tag">' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>'
                 + '</div>';
 
@@ -1201,6 +1262,58 @@
                 .replace(/\n\n/g, '<br><br>')
                 .replace(/\n/g, '<br>');
             return html;
+        }
+
+        // ===== 一键复制 AI 回复（清除 Markdown 格式） =====
+        function stripMarkdown(text) {
+            return text
+                .replace(/^#{1,6}\s+/gm, '')       // 去掉 # 标题
+                .replace(/\*\*(.*?)\*\*/g, '$1')    // 去掉 **加粗**
+                .replace(/\*(.*?)\*/g, '$1')         // 去掉 *斜体*
+                .replace(/__(.*?)__/g, '$1')         // 去掉 __加粗__
+                .replace(/_(.*?)_/g, '$1')           // 去掉 _斜体_
+                .replace(/`(.*?)`/g, '$1')           // 去掉 `行内代码`
+                .replace(/```[\s\S]*?```/g, '')     // 去掉代码块
+                .replace(/^[-*+]\s+/gm, '')          // 去掉 - 列表符号
+                .replace(/^\d+\.\s+/gm, '')          // 去掉 1. 有序列表
+                .replace(/^>\s+/gm, '')              // 去掉 > 引用
+                .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // 去掉链接
+                .replace(/^---+$/gm, '')             // 去掉分割线
+                .replace(/\n{3,}/g, '\n\n')          // 多个空行变两个
+                .trim();
+        }
+
+        function copyMessage(btn) {
+            // 找到同一条消息中的 bubble
+            const msgDiv = btn.closest('.message.assistant');
+            const bubble = msgDiv.querySelector('.bubble');
+            // 优先从 data-raw 属性获取原始文本，清除 Markdown
+            const rawText = bubble.getAttribute('data-raw');
+            const displayText = bubble.innerText || bubble.textContent;
+            const text = rawText ? stripMarkdown(rawText) : displayText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                btn.classList.add('copied');
+                btn.innerHTML = '✅ 已复制';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '📋 复制';
+                }, 2000);
+            }).catch(() => {
+                // fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.classList.add('copied');
+                btn.innerHTML = '✅ 已复制';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '📋 复制';
+                }, 2000);
+            });
         }
 
         function showTyping() {
