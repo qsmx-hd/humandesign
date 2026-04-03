@@ -368,6 +368,20 @@
             30% { transform: translateY(-4px); opacity: 1; }
         }
 
+        /* ===== 流式输出打字光标 ===== */
+        .streaming-cursor::after {
+            content: '▊';
+            animation: blink-cursor 0.6s infinite;
+            color: var(--accent-gold);
+            font-size: 13px;
+            margin-left: 1px;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         /* ===== 底部输入区 ===== */
         .input-area {
             padding: 16px 24px 20px;
@@ -938,58 +952,26 @@
         const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
         const DEEPSEEK_MODEL = 'deepseek-chat';
 
-        // 人类图系统提示词
-        const SYSTEM_PROMPT = `你是 Human Design AI，一位专业的人类图（Human Design）知识助手。基于 Ra Uru Hu 创立的原始人类图体系。
+        // 人类图系统提示词（精简版，减少 token 加快响应）
+        const SYSTEM_PROMPT = `你是 Human Design AI，基于 Ra Uru Hu 创立的人类图体系的知识助手。
 
-## ⚠️ 最重要规则（必须严格遵守）
+【核心规则】你不能计算或推测用户的人类图信息（类型、人生角色、闸门、通道、轮回交叉等需要天文计算）。当用户问自身类型时，引导去 https://www.mybodygraph.com/ 或 https://humandesign.org.cn/ 获取。
 
-**你没有任何能力计算或推测用户的人类图信息。** 以下所有核心信息都依赖于精确的天文计算（需要出生日期、时间、地点），你绝对不能为用户生成或编造这些信息：
+【可以做的事】
+1. 知识科普：五大类型特点/策略、九大能量中心、通道闸门基础
+2. 类型解读：仅当用户主动告知类型时（如"我是显示者"），提供该类型策略和成长建议
+3. 概念解释：专业术语如"等待邀请""荐骨回应"等
+4. 情绪支持：结合人类图理念提供建议
 
-- 类型（显示者、生产者、显示生产者、投射者、反映者）
-- 人生角色 / 轮廓 Profile（如 1/3、2/4 等）
-- 内在权威（情绪型、荐骨型、投射型等）
-- 闸门 Gates、通道 Channels
-- 能量中心的定义状态
-- 轮回交叉 / 人生使命 Incarnation Cross
-- 定义类型（单一定义、分裂定义等）
-- 变量 Variables（四箭头）
+【禁止做的事】
+- 禁止根据出生日期/星座推测类型
+- 禁止说"你可能是XX类型"
+- 禁止编造闸门通道的个人化含义
+- 禁止提供人生使命的个人化解读
 
-**当用户问"我是什么类型？"或提供出生日期要求解读时，你必须明确告知用户：**
-"我无法计算您的人类图。人类图的计算需要精确的出生日期、时间和地点，通过专业的天文计算才能得出准确结果。建议您使用以下权威网站获取免费的人类图：
-- myBodyGraph：https://www.mybodygraph.com/
-- 亚洲人类图学院：https://humandesign.org.cn/
-获取您的人类图后，欢迎回来告诉我您的类型，我可以为您提供针对性的知识解读和建议。"
+【格式要求】简洁回答，适当用表情符号。当用户提供类型信息时，末尾加："💡 提示：以上解读基于知识科普，仅供参考。如需准确分析请咨询专业人类图解读师。"
 
-## ✅ 你可以做的事情
-
-1. **知识科普**：解释人类图体系的概念，如五大类型的特点和策略、九大能量中心的功能、通道和闸门的基础知识等。
-
-2. **类型解读**：当用户**主动告诉你TA的类型**时（如"我是显示者"），你可以提供该类型的策略、权威、常见特征和成长建议等知识性解读。注意：只能解读用户主动告知的类型，不能推测。
-
-3. **概念解释**：解释人类图中的专业术语，如"等待邀请"对投射者意味着什么、"荐骨回应"如何运作等。
-
-4. **知识问答**：回答关于人类图体系的一般性问题，如类型之间的关系、不同类型在职场和亲密关系中的互动模式等。
-
-5. **情绪支持**：基于用户分享的生活状况，结合人类图理念提供温暖的建议和视角。
-
-## ❌ 你绝对不能做的事情
-
-- 不能根据出生日期、星座、MBTI等信息推测或编造任何人类图数据
-- 不能告诉用户"你可能是XX类型"或"你的闸门大概是XX"
-- 不能为用户生成完整的个人人类图解读（除非用户明确提供了来自权威计算的结果）
-- 不能凭空编造通道、闸门的个人化含义
-- 不能提供人生使命或轮回交叉的个人化解读
-
-## 语言风格
-- 温暖、专业、有深度
-- 适当使用表情符号
-- 回答结构清晰、易于阅读
-- 在涉及个人数据时，始终提醒用户以权威计算结果为准
-
-## 免责声明
-- 当用户提供具体类型信息时，在回复末尾自然地加上："💡 提示：以上解读基于人类图体系的知识科普，仅供参考。如需准确的个人人类图分析，建议咨询专业的人类图解读师。"
-
-回复语言：用户用中文提问时用中文回复，用英文提问时用英文回复。`;
+语言：中文提问用中文回复，英文提问用英文回复。`;
 
         const TYPE_EMOJI = {
             '显示者': '🔴',
@@ -1031,7 +1013,7 @@
             document.getElementById('messageInput').focus();
         });
 
-        // ===== 消息发送（直接调用 DeepSeek API） =====
+        // ===== 消息发送（流式输出，逐字显示） =====
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -1041,9 +1023,21 @@
             input.value = '';
             input.style.height = 'auto';
 
-            showTyping();
             isLoading = true;
             document.getElementById('sendBtn').disabled = true;
+
+            // 创建 AI 消息气泡（用于流式输出）
+            const area = document.getElementById('messagesArea');
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'message assistant';
+            aiMsg.innerHTML = '<div class="avatar" style="background:#2a2820">🌀</div>'
+                + '<div>'
+                + '<div class="bubble streaming-cursor" id="streamBubble">正在思考</div>'
+                + '<div class="time-tag">' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>'
+                + '</div>';
+            area.appendChild(aiMsg);
+            area.scrollTop = area.scrollHeight;
+            const streamBubble = document.getElementById('streamBubble');
 
             try {
                 let userContext = '';
@@ -1068,34 +1062,74 @@
                         messages: messages,
                         temperature: 0.7,
                         max_tokens: 2000,
-                        stream: false
+                        stream: true
                     })
                 });
 
-                const data = await response.json();
-                hideTyping();
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    streamBubble.classList.remove('streaming-cursor');
+                    streamBubble.textContent = '抱歉，AI 引擎返回了错误：' + (errData.error?.message || response.status);
+                    throw new Error('API error ' + response.status);
+                }
 
-                if (data.error) {
-                    addMessage('assistant', '抱歉，AI 引擎返回了错误：' + (data.error.message || JSON.stringify(data.error)));
-                } else if (data.choices && data.choices.length > 0) {
-                    const aiResponse = data.choices[0].message.content;
-                    addMessage('assistant', aiResponse);
+                // 流式读取
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullContent = '';
+                let buffer = '';
 
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (!trimmed || !trimmed.startsWith('data:')) continue;
+                        const data = trimmed.slice(5).trim();
+                        if (data === '[DONE]') break;
+
+                        try {
+                            const parsed = JSON.parse(data);
+                            const delta = parsed.choices?.[0]?.delta?.content;
+                            if (delta) {
+                                fullContent += delta;
+                                streamBubble.innerHTML = formatContent(fullContent);
+                                area.scrollTop = area.scrollHeight;
+                            }
+                        } catch(e) { /* 忽略解析错误 */ }
+                    }
+                }
+
+                // 流式输出完成
+                streamBubble.classList.remove('streaming-cursor');
+                streamBubble.removeAttribute('id');
+
+                if (!fullContent) {
+                    streamBubble.textContent = '抱歉，AI 引擎返回了空回复，请稍后重试。';
+                } else {
                     chatHistory.push({ role: 'user', content: message });
-                    chatHistory.push({ role: 'assistant', content: aiResponse });
+                    chatHistory.push({ role: 'assistant', content: fullContent });
                     if (chatHistory.length > 20) {
                         chatHistory = chatHistory.slice(-20);
                     }
                     localStorage.setItem('hd_chat_history', JSON.stringify(chatHistory));
-
                     detectUserType(message);
-                } else {
-                    addMessage('assistant', '抱歉，AI 引擎返回了空回复，请稍后重试。');
                 }
+
             } catch(err) {
-                hideTyping();
                 console.error('API Error:', err);
-                addMessage('assistant', '网络错误，请检查网络连接后重试。\n\n错误详情：' + err.message);
+                const bubble = document.getElementById('streamBubble');
+                if (bubble) {
+                    bubble.classList.remove('streaming-cursor');
+                    if (bubble.textContent === '正在思考') {
+                        bubble.textContent = '网络错误，请检查网络连接后重试。\n\n错误详情：' + err.message;
+                    }
+                }
             } finally {
                 isLoading = false;
                 document.getElementById('sendBtn').disabled = false;
