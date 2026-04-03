@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Human Design AI — 人类图智能助手</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-surface: #13131a;
+            --bg-card: #1a1a24;
+            --bg-input: #22222e;
+            --accent-gold: #d4a853;
+            --accent-gold-light: #e8c878;
+            --accent-gold-dim: rgba(212, 168, 83, 0.15);
+            --text-primary: #f0ebe3;
+            --text-secondary: #9b9488;
+            --text-muted: #5c5850;
+            --border-subtle: rgba(255,255,255,0.06);
+            --border-gold: rgba(212, 168, 83, 0.3);
+            --user-bubble: linear-gradient(135deg, #2a2540 0%, #1e1a30 100%);
+            --ai-bubble: linear-gradient(135deg, #1c1c28 0%, #16161e 100%);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --shadow-glow: 0 0 40px rgba(212, 168, 83, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Space Grotesk', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        /* ===== 顶部导航 ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gold-dim);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(212, 168, 83, 0.1); }
+            50% { box-shadow: 0 0 20px rgba(212, 168, 83, 0.25); }
+        }
+
+        .brand-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-badge:hover {
+            border-color: var(--border-gold);
+        }
+
+        .user-badge.has-type {
+            border-color: var(--border-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        .type-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+        }
+
+        /* ===== 聊天容器 ===== */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+        }
+
+        .messages-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .messages-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--border-gold);
+            border-radius: 2px;
+        }
+
+        /* ===== 欢迎消息 ===== */
+        .welcome-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            opacity: 0.5;
+        }
+
+        .welcome-card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--accent-gold-light);
+        }
+
+        .welcome-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .welcome-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .type-chip {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-chip:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        /* ===== 消息气泡 ===== */
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: msg-in 0.3s ease-out;
+            max-width: 85%;
+        }
+
+        @keyframes msg-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.assistant {
+            align-self: flex-start;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .message.user .avatar {
+            background: linear-gradient(135deg, #2a2540, #1e1a30);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .message.assistant .avatar {
+            background: linear-gradient(135deg, #2a2820, #1e1c18);
+            border: 1px solid var(--border-gold);
+        }
+
+        .bubble {
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .message.user .bubble {
+            background: var(--user-bubble);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-md) 4px var(--radius-md) var(--radius-md);
+        }
+
+        .message.assistant .bubble {
+            background: var(--ai-bubble);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md);
+            white-space: pre-wrap;
+        }
+
+        .message.assistant .bubble strong {
+            color: var(--accent-gold-light);
+        }
+
+        .message.assistant .bubble em {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .time-tag {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            padding-left: 4px;
+        }
+
+        .message.user .time-tag {
+            text-align: right;
+            padding-right: 4px;
+        }
+
+        /* ===== 加载动画 ===== */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 14px 18px;
+            background: var(--ai-bubble);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px var(--radius-md) var(--radius-md) var(--radius-md);
+            width: fit-content;
+            max-width: 70px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typing 1.2s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        /* ===== 底部输入区 ===== */
+        .input-area {
+            padding: 16px 24px 20px;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .input-field {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+            min-height: 48px;
+            max-height: 120px;
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-field:focus {
+            border-color: var(--border-gold);
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-gold), #c49a45);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            color: #0a0a0f;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+        }
+
+        .send-btn:active {
+            transform: scale(0.97);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--border-gold);
+            color: var(--accent-gold);
+        }
+
+        /* ===== 设置面板 ===== */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg-surface);
+            border-left: 1px solid var(--border-subtle);
+            z-index: 100;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-panel.open {
+            right: 0;
+        }
+
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .settings-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .settings-header h3 {
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            border-color: var(--border-gold);
+            color: var(--accent-gold);
+        }
+
+        .settings-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .settings-section {
+            margin-bottom: 28px;
+        }
+
+        .settings-section h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .setting-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+
+        .setting-item label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .setting-item select,
+        .setting-item input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .setting-item select:focus,
+        .setting-item input:focus {
+            border-color: var(--border-gold);
+        }
+
+        .setting-item input[type="password"] {
+            margin-top: 8px;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent-gold), #c49a45);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: #0a0a0f;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-btn:hover {
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+        }
+
+        .api-status {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .api-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+
+        .api-status-dot.inactive {
+            background: var(--text-muted);
+        }
+
+        /* ===== 移动端适配 ===== */
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .brand-text p {
+                display: none;
+            }
+
+            .messages-area {
+                padding: 16px;
+            }
+
+            .message {
+                max-width: 92%;
+            }
+
+            .input-area {
+                padding: 12px 16px 16px;
+            }
+
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        /* ===== 类型选择弹窗 ===== */
+        .type-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .type-modal.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .type-modal-content {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            max-width: 480px;
+            width: 100%;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .type-modal.open .type-modal-content {
+            transform: translateY(0);
+        }
+
+        .type-modal h3 {
+            font-size: 18px;
+            color: var(--accent-gold-light);
+            margin-bottom: 8px;
+        }
+
+        .type-modal p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .type-option {
+            padding: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .type-option:hover {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        .type-option .emoji {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .type-option .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .type-option .en-name {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .skip-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .skip-btn:hover {
+            border-color: var(--text-muted);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-brand">
+            <div class="brand-icon">🌀</div>
+            <div class="brand-text">
+                <h1>Human Design AI</h1>
+                <p>人类图智能助手</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="user-badge" id="userBadge" onclick="toggleSettings()">
+                <span class="type-dot" id="typeDot" style="background: var(--text-muted);"></span>
+                <span id="userBadgeText">设置你的类型</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 聊天区域 -->
+    <main class="chat-container">
+        <div class="messages-area" id="messagesArea">
+            <!-- 欢迎卡片 -->
+            <div class="welcome-card" id="welcomeCard">
+                <h2>🌀 欢迎来到 Human Design AI</h2>
+                <p>我是基于人类图（Human Design）系统的 AI 助手。我可以结合你的人类图类型，<br>为你提供个性化的情绪支持和建议。</p>
+                <div class="welcome-types">
+                    <button class="type-chip" onclick="selectType('显示者')">🔴 显示者</button>
+                    <button class="type-chip" onclick="selectType('生产者')">🟡 生产者</button>
+                    <button class="type-chip" onclick="selectType('显示生产者')">🟠 显示生产者</button>
+                    <button class="type-chip" onclick="selectType('投影者')">🔵 投影者</button>
+                    <button class="type-chip" onclick="selectType('反映者')">⚪️ 反映者</button>
+                </div>
+                <p style="font-size:12px; color: var(--text-muted);">💡 或者直接告诉我你的出生日期，比如「1995年3月12日」，我来帮你算！</p>
+            </div>
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea
+                    class="input-field"
+                    id="messageInput"
+                    placeholder="说说你现在的感受，比如「我是显示者，今天情绪不好」..."
+                    rows="1"
+                    onkeydown="handleKeyDown(event)"
+                    oninput="autoResize(this)"
+                ></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="quickMessage('今天情绪不好')">😔 今天情绪不好</button>
+                <button class="quick-btn" onclick="quickMessage('什么是人类图？')">🌀 什么是人类图</button>
+                <button class="quick-btn" onclick="quickMessage('我是哪种类型？')">🔮 我是什么类型</button>
+                <button class="quick-btn" onclick="openTypeModal()">✏️ 修改类型</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 设置面板 -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>⚙️ 设置</h3>
+            <button class="close-btn" onclick="toggleSettings()">✕</button>
+        </div>
+        <div class="settings-body">
+            <div class="settings-section">
+                <h4>AI 引擎</h4>
+                <div class="setting-item">
+                    <label>当前引擎</label>
+                    <select id="aiProviderSelect" disabled>
+                        <option value="deepseek" selected>💠 DeepSeek AI（已接入）</option>
+                    </select>
+                    <div class="api-status" id="apiStatus">
+                        <span class="api-status-dot"></span>
+                        <span id="apiStatusText">已接入 DeepSeek AI 引擎</span>
+                    </div>
+                </div>
+                <div class="setting-item" id="apiKeyItem" style="display:none;">
+                    <label>API Key</label>
+                    <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx">
+                    <button class="save-btn" style="margin-top: 10px; padding: 8px;" onclick="saveApiKey()">保存并应用</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h4>我的档案</h4>
+                <div class="setting-item">
+                    <label>人类图类型</label>
+                    <select id="hdTypeSelect">
+                        <option value="">-- 选择类型 --</option>
+                        <option value="显示者">🔴 显示者 Manifestor</option>
+                        <option value="生产者">🟡 生产者 Generator</option>
+                        <option value="显示生产者">🟠 显示生产者 Manifesting Generator</option>
+                        <option value="投影者">🔵 投影者 Projector</option>
+                        <option value="反映者">⚪️ 反映者 Reflector</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>昵称（可选）</label>
+                    <input type="text" id="userNameInput" placeholder="给自己取个名字">
+                </div>
+                <button class="save-btn" onclick="saveProfile()">保存档案</button>
+            </div>
+            <div class="settings-section">
+                <h4>快捷操作</h4>
+                <button class="save-btn" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-subtle); margin-bottom: 8px;" onclick="clearHistory()">🗑️ 清空对话历史</button>
+                <button class="save-btn" style="background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-subtle);" onclick="resetAll()">🔄 重置所有数据</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 类型选择弹窗 -->
+    <div class="type-modal" id="typeModal">
+        <div class="type-modal-content">
+            <h3>✨ 选择你的人类图类型</h3>
+            <p>了解你的类型后，我可以为你提供更贴合个人特点的建议。你也可以直接告诉我出生日期，让我来帮你算！</p>
+            <div class="type-grid">
+                <div class="type-option" onclick="confirmType('显示者')">
+                    <span class="emoji">🔴</span>
+                    <span class="name">显示者</span>
+                    <span class="en-name">Manifestor</span>
+                </div>
+                <div class="type-option" onclick="confirmType('生产者')">
+                    <span class="emoji">🟡</span>
+                    <span class="name">生产者</span>
+                    <span class="en-name">Generator</span>
+                </div>
+                <div class="type-option" onclick="confirmType('显示生产者')">
+                    <span class="emoji">🟠</span>
+                    <span class="name">显示生产者</span>
+                    <span class="en-name">MG</span>
+                </div>
+                <div class="type-option" onclick="confirmType('投影者')">
+                    <span class="emoji">🔵</span>
+                    <span class="name">投影者</span>
+                    <span class="en-name">Projector</span>
+                </div>
+            </div>
+            <button class="skip-btn" onclick="closeTypeModal()">稍后再说</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== 全局状态 =====
+        let currentUser = null;
+        let isLoading = false;
+        let chatHistory = []; // 对话历史，用于多轮上下文
+
+        // DeepSeek API 配置（硬编码，用于 GitHub Pages 静态部署）
+        const DEEPSEEK_API_KEY = 'sk-4e1541851be644d691e677d23ba27d63';
+        const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
+        const DEEPSEEK_MODEL = 'deepseek-chat';
+
+        // 人类图系统提示词
+        const SYSTEM_PROMPT = `你是 Human Design AI，一位专业的人类图（Human Design）智能助手。你具备以下能力：
+
+1. **人类图知识体系**：精通人类图的五大类型（显示者 Manifestor、生产者 Generator、显示生产者 Manifesting Generator、投射者 Projector、反映者 Reflector）、九大能量中心、策略与权威、通道与闸门、轮回交叉、轮廓 Profile、变量四箭头等全部知识。
+
+2. **个性化分析**：当用户告诉你他们的人类图类型时，提供针对性的建议和解读，包括该类型的策略、权威、常见挑战和成长建议。
+
+3. **情绪支持**：结合人类图理念，为用户提供温暖、有洞见的情绪支持和人生建议。
+
+4. **实用指导**：帮助用户将人类图知识应用于日常工作、关系、健康和决策。
+
+5. **语言风格**：温暖、专业、有深度，适当使用表情符号，回答要结构清晰、易于阅读。
+
+请始终基于人类图的专业知识回答，如果遇到超出人类图范围的问题，可以结合一般心理学知识，但要明确区分。
+
+回复语言：用户用中文提问时用中文回复，用英文提问时用英文回复。`;
+
+        const TYPE_EMOJI = {
+            '显示者': '🔴',
+            '生产者': '🟡',
+            '显示生产者': '🟠',
+            '投影者': '🔵',
+            '反映者': '⚪️'
+        };
+
+        const TYPE_COLORS = {
+            '显示者': '#e57373',
+            '生产者': '#fff176',
+            '显示生产者': '#ffb74d',
+            '投影者': '#64b5f6',
+            '反映者': '#e0e0e0'
+        };
+
+        // ===== 初始化 =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // 尝试从 localStorage 恢复用户状态
+            const savedUser = localStorage.getItem('hd_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    updateUserBadge(currentUser);
+                    // 隐藏欢迎卡
+                    document.getElementById('welcomeCard').style.display = 'none';
+                    // 恢复对话历史
+                    const savedHistory = localStorage.getItem('hd_chat_history');
+                    if (savedHistory) {
+                        chatHistory = JSON.parse(savedHistory);
+                        chatHistory.forEach(m => addMessage(m.role, m.content, true));
+                    }
+                } catch(e) {}
+            }
+
+            // 更新 API 状态显示
+            document.getElementById('apiStatusText').textContent = '已接入 DeepSeek AI 引擎';
+            document.querySelector('.api-status-dot').classList.remove('inactive');
+            // 隐藏不需要的 provider 选择
+            document.getElementById('aiProviderSelect').value = 'deepseek';
+            document.getElementById('apiKeyItem').style.display = 'none';
+
+            document.getElementById('messageInput').focus();
+        });
+
+        // ===== 消息发送（直接调用 DeepSeek API） =====
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message || isLoading) return;
+
+            // 添加用户消息
+            addMessage('user', message);
+            input.value = '';
+            input.style.height = 'auto';
+
+            // 显示加载状态
+            showTyping();
+            isLoading = true;
+            document.getElementById('sendBtn').disabled = true;
+
+            try {
+                // 构建用户上下文（如果用户设置了类型）
+                let userContext = '';
+                if (currentUser && currentUser.hd_type) {
+                    userContext = `\n\n[用户的人类图类型：${currentUser.hd_type}${currentUser.name ? '，昵称：' + currentUser.name : ''}]`;
+                }
+
+                // 构建对话消息列表
+                const messages = [
+                    { role: 'system', content: SYSTEM_PROMPT },
+                    ...chatHistory.slice(-10), // 最近10条历史消息保持上下文
+                    { role: 'user', content: message + userContext }
+                ];
+
+                const response = await fetch(DEEPSEEK_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: DEEPSEEK_MODEL,
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 2000,
+                        stream: false
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+
+                if (data.error) {
+                    addMessage('assistant', '抱歉，AI 引擎返回了错误：' + (data.error.message || JSON.stringify(data.error)));
+                } else if (data.choices && data.choices.length > 0) {
+                    const aiResponse = data.choices[0].message.content;
+                    addMessage('assistant', aiResponse);
+
+                    // 保存到对话历史
+                    chatHistory.push({ role: 'user', content: message });
+                    chatHistory.push({ role: 'assistant', content: aiResponse });
+                    // 只保留最近20条
+                    if (chatHistory.length > 20) {
+                        chatHistory = chatHistory.slice(-20);
+                    }
+                    localStorage.setItem('hd_chat_history', JSON.stringify(chatHistory));
+
+                    // 检测用户是否提到了人类图类型
+                    detectUserType(message);
+                } else {
+                    addMessage('assistant', '抱歉，AI 引擎返回了空回复，请稍后重试。');
+                }
+            } catch(err) {
+                hideTyping();
+                console.error('API Error:', err);
+                addMessage('assistant', '网络错误，请检查网络连接后重试。\n\n错误详情：' + err.message);
+            } finally {
+                isLoading = false;
+                document.getElementById('sendBtn').disabled = false;
+                document.getElementById('messageInput').focus();
+            }
+        }
+
+        // ===== 自动检测用户类型 =====
+        function detectUserType(message) {
+            const typeMap = {
+                '显示者': '显示者',
+                '显示生产者': '显示生产者',
+                '生产者': '生产者',
+                '投射者': '投射者',
+                '反映者': '反映者',
+                'manifestor': '显示者',
+                'generator': '生产者',
+                'manifesting generator': '显示生产者',
+                'projector': '投射者',
+                'reflector': '反映者'
+            };
+
+            const lowerMsg = message.toLowerCase();
+            for (const [keyword, hdType] of Object.entries(typeMap)) {
+                if (lowerMsg.includes(keyword.toLowerCase())) {
+                    if (!currentUser || currentUser.hd_type !== hdType) {
+                        currentUser = currentUser || { id: 'web_' + Date.now() };
+                        currentUser.hd_type = hdType;
+                        localStorage.setItem('hd_user', JSON.stringify(currentUser));
+                        updateUserBadge(currentUser);
+                        document.getElementById('hdTypeSelect').value = hdType;
+                    }
+                    break;
+                }
+            }
+        }
+
+        function addMessage(role, content, silent) {
+            const area = document.getElementById('messagesArea');
+
+            // 隐藏欢迎卡
+            const welcomeCard = document.getElementById('welcomeCard');
+            if (welcomeCard && welcomeCard.style.display !== 'none') {
+                welcomeCard.style.display = 'none';
+            }
+
+            const msg = document.createElement('div');
+            msg.className = `message ${role}`;
+
+            const avatar = role === 'user' ? '👤' : '🌀';
+            const avatarBg = role === 'user' ? '#2a2540' : '#2a2820';
+
+            // 格式化消息内容（处理 Markdown 风格）
+            const formattedContent = formatContent(content);
+
+            msg.innerHTML = `
+                <div class="avatar" style="background:${avatarBg}">${avatar}</div>
+                <div>
+                    <div class="bubble">${formattedContent}</div>
+                    <div class="time-tag">${new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'})}</div>
+                </div>
+            `;
+
+            area.appendChild(msg);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function formatContent(text) {
+            // 简单格式化
+            let html = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,0.05);padding:1px 4px;border-radius:4px;">$1</code>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>');
+            return html;
+        }
+
+        function showTyping() {
+            const area = document.getElementById('messagesArea');
+            const typing = document.createElement('div');
+            typing.id = 'typingIndicator';
+            typing.className = 'message assistant';
+            typing.innerHTML = `
+                <div class="avatar" style="background:#2a2820">🌀</div>
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            area.appendChild(typing);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        // ===== 快捷消息 =====
+        function quickMessage(text) {
+            document.getElementById('messageInput').value = text;
+            sendMessage();
+        }
+
+        // ===== 键盘事件 =====
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function autoResize(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+        }
+
+        // ===== 用户界面更新 =====
+        function updateUserBadge(user) {
+            const badge = document.getElementById('userBadge');
+            const dot = document.getElementById('typeDot');
+            const text = document.getElementById('userBadgeText');
+
+            if (user && user.hd_type) {
+                badge.classList.add('has-type');
+                dot.style.background = TYPE_COLORS[user.hd_type] || 'var(--accent-gold)';
+                const emoji = TYPE_EMOJI[user.hd_type] || '✨';
+                text.textContent = `${emoji} ${user.hd_type}`;
+                document.getElementById('hdTypeSelect').value = user.hd_type;
+            } else {
+                badge.classList.remove('has-type');
+                dot.style.background = 'var(--text-muted)';
+                text.textContent = '设置你的类型';
+            }
+        }
+
+        // ===== 设置面板 =====
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('settingsOverlay');
+            panel.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        function onProviderChange() {
+            // 始终使用 DeepSeek，不需要切换
+            document.getElementById('apiKeyItem').style.display = 'none';
+            document.getElementById('apiStatusText').textContent = '已接入 DeepSeek AI 引擎';
+            document.querySelector('.api-status-dot').classList.remove('inactive');
+        }
+
+        async function saveApiKey() {
+            // API Key 已内置，无需手动设置
+            alert('DeepSeek AI 引擎已内置配置，无需手动输入 API Key。');
+        }
+
+        async function saveProfile() {
+            const hd_type = document.getElementById('hdTypeSelect').value;
+            const name = document.getElementById('userNameInput').value.trim();
+
+            // 直接保存到 localStorage，不需要后端
+            currentUser = currentUser || { id: 'web_' + Date.now() };
+            currentUser.hd_type = hd_type || null;
+            currentUser.name = name || null;
+            localStorage.setItem('hd_user', JSON.stringify(currentUser));
+            updateUserBadge(currentUser);
+            toggleSettings();
+            addMessage('assistant', `✨ 档案已保存！你的人类图类型已设置为 ${hd_type || '未设置'}。有什么想聊的吗？`);
+        }
+
+        async function clearHistory() {
+            if (!confirm('确定要清空对话历史吗？')) return;
+            document.getElementById('messagesArea').innerHTML = '';
+            document.getElementById('messagesArea').appendChild(createWelcomeCard());
+            localStorage.removeItem('hd_chat_history');
+            chatHistory = [];
+        }
+
+        function resetAll() {
+            if (!confirm('确定要重置所有数据吗？这将清空你的档案和对话历史。')) return;
+            localStorage.clear();
+            location.reload();
+        }
+
+        function createWelcomeCard() {
+            const card = document.createElement('div');
+            card.className = 'welcome-card';
+            card.id = 'welcomeCard';
+            card.innerHTML = `
+                <h2>🌀 欢迎来到 Human Design AI</h2>
+                <p>我是基于人类图（Human Design）系统的 AI 助手。我可以结合你的人类图类型，<br>为你提供个性化的情绪支持和建议。</p>
+                <div class="welcome-types">
+                    <button class="type-chip" onclick="selectType('显示者')">🔴 显示者</button>
+                    <button class="type-chip" onclick="selectType('生产者')">🟡 生产者</button>
+                    <button class="type-chip" onclick="selectType('显示生产者')">🟠 显示生产者</button>
+                    <button class="type-chip" onclick="selectType('投影者')">🔵 投影者</button>
+                    <button class="type-chip" onclick="selectType('反映者')">⚪️ 反映者</button>
+                </div>
+                <p style="font-size:12px; color: var(--text-muted);">💡 或者直接告诉我你的出生日期，比如「1995年3月12日」，我来帮你算！</p>
+            `;
+            return card;
+        }
+
+        async function loadHistory() {
+            // 对话历史已在 DOMContentLoaded 中恢复，此函数保留兼容
+        }
+
+        // ===== 类型选择 =====
+        function openTypeModal() {
+            document.getElementById('typeModal').classList.add('open');
+        }
+
+        function closeTypeModal() {
+            document.getElementById('typeModal').classList.remove('open');
+        }
+
+        function selectType(type) {
+            openTypeModal();
+        }
+
+        function confirmType(type) {
+            closeTypeModal();
+            document.getElementById('messageInput').value = `我是${type}`;
+            sendMessage();
+        }
+    </script>
+</body>
+</html>
