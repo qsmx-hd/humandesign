@@ -25,6 +25,26 @@
             --radius-md: 14px;
             --radius-sm: 10px;
             --shadow-glow: 0 0 40px rgba(212, 168, 83, 0.08);
+            --theme-transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* ===== 浅色模式 ===== */
+        body.light-mode {
+            --bg-deep: #f5f0ea;
+            --bg-surface: #ede7de;
+            --bg-card: #e4dcd1;
+            --bg-input: #f8f3ed;
+            --accent-gold: #b8862e;
+            --accent-gold-light: #c9982f;
+            --accent-gold-dim: rgba(184, 134, 46, 0.12);
+            --text-primary: #2a1f0e;
+            --text-secondary: #6b5d48;
+            --text-muted: #a89880;
+            --border-subtle: rgba(0,0,0,0.08);
+            --border-gold: rgba(184, 134, 46, 0.35);
+            --user-bubble: linear-gradient(135deg, #ddd6f0 0%, #cfc8e8 100%);
+            --ai-bubble: linear-gradient(135deg, #eae4da 0%, #e0d9ce 100%);
+            --shadow-glow: 0 0 40px rgba(184, 134, 46, 0.10);
         }
 
         * {
@@ -127,6 +147,27 @@
         .back-btn:hover {
             border-color: var(--border-gold);
             color: var(--accent-gold);
+        }
+
+        /* ===== 主题切换按钮 ===== */
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--border-gold);
+            transform: rotate(20deg) scale(1.1);
         }
 
         .user-badge {
@@ -431,6 +472,139 @@
             backdrop-filter: blur(20px);
             border-top: 1px solid var(--border-subtle);
             flex-shrink: 0;
+        }
+
+        body.light-mode .input-area {
+            background: rgba(237, 231, 222, 0.85);
+        }
+
+        /* ===== 图片上传按钮 ===== */
+        .upload-btn {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            font-size: 20px;
+            color: var(--text-muted);
+        }
+
+        .upload-btn:hover {
+            border-color: var(--border-gold);
+            color: var(--accent-gold);
+            background: var(--accent-gold-dim);
+        }
+
+        /* ===== 图片预览区 ===== */
+        .image-preview-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0 6px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .image-preview-bar.show {
+            display: flex;
+        }
+
+        .image-preview-thumb {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+
+        .image-preview-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .image-preview-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== 消息中的图片 ===== */
+        .msg-image {
+            max-width: 240px;
+            max-height: 200px;
+            border-radius: 10px;
+            display: block;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* ===== 识别结果卡片 ===== */
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-top: 8px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .result-card .result-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold-light);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-card .result-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .result-card .result-label {
+            color: var(--text-muted);
+            flex-shrink: 0;
+            min-width: 80px;
+        }
+
+        .result-card .result-value {
+            color: var(--text-primary);
+        }
+
+        /* ===== 拖拽上传高亮 ===== */
+        .input-area.drag-over {
+            border-top-color: var(--accent-gold);
+            background: var(--accent-gold-dim);
         }
 
         .input-wrapper {
@@ -841,6 +1015,7 @@
             </div>
         </div>
         <div class="header-actions">
+            <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="切换主题"></button>
             <a href="index.html" class="back-btn" title="返回首页">
                 <span>🏠</span>
                 <span class="back-text">返回首页</span>
@@ -877,8 +1052,19 @@
         </div>
 
         <!-- 输入区域 -->
-        <div class="input-area">
+        <div class="input-area" id="inputArea">
+            <!-- 图片预览条 -->
+            <div class="image-preview-bar" id="imagePreviewBar">
+                <div class="image-preview-thumb" id="imageThumb">
+                    <img id="imageThumbImg" src="" alt="预览">
+                    <button class="image-preview-remove" onclick="removeImage()" title="移除图片">✕</button>
+                </div>
+                <span class="image-preview-hint">📋 图片已附加，发送后将自动识别人类图信息</span>
+            </div>
             <div class="input-wrapper">
+                <!-- 隐藏文件上传input -->
+                <input type="file" id="imageFileInput" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
+                <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('imageFileInput').click()" title="上传人类图图片">🖼️</button>
                 <textarea
                     class="input-field"
                     id="messageInput"
@@ -899,6 +1085,7 @@
                 <button class="quick-btn" onclick="quickMessage('什么是人类图？')">🌀 什么是人类图</button>
                 <button class="quick-btn" onclick="quickMessage('显示者有什么特征？')">🔍 显示者特征</button>
                 <button class="quick-btn" onclick="openTypeModal()">✏️ 修改类型</button>
+                <button class="quick-btn" onclick="document.getElementById('imageFileInput').click()">🖼️ 上传人类图</button>
             </div>
         </div>
     </main>
@@ -992,6 +1179,8 @@
         let currentUser = null;
         let isLoading = false;
         let chatHistory = [];
+        let pendingImageBase64 = null;   // 待发送的图片 base64
+        let pendingImageMime = null;     // 图片 MIME 类型
 
         // DeepSeek API 配置（硬编码，用于 GitHub Pages 静态部署）
         const DEEPSEEK_API_KEY = 'sk-4e1541851be644d691e677d23ba27d63';
@@ -1019,6 +1208,32 @@
 
 语言：中文提问用中文回复，英文提问用英文回复。`;
 
+        // 人类图图片识别专用提示词
+        const IMAGE_SYSTEM_PROMPT = `你是一位专业的人类图（Human Design）图表解读助手。用户上传了一张人类图图表图片，请仔细识别图片中的所有可见信息，并按以下结构化格式输出解析结果：
+
+## 📊 人类图基础信息识别结果
+
+**一、基础信息**
+- 类型：[识别结果]
+- 内在权威：[识别结果]
+- 人生角色：[识别结果，如 6/2]
+- 定义：[单一/二分/三分/四分]
+- 轮回交叉：[识别结果]
+
+**二、能量中心状态**（九大中心：头脑、思维、喉咙、G中心/自我、心脏/意志力、情绪/太阳神经丛、荐骨、脾、根部）
+- 已定义（实色）中心：[列出]
+- 未定义（空白）中心：[列出]
+
+**三、已开启通道**
+[列出所有已激活的通道，格式：闸门号-闸门号（通道名称）]
+
+**四、关键闸门**（如可识别）
+[列出个性面和设计面的关键闸门]
+
+---
+⚠️ 注意：以上信息完全基于图片识别，如有不清晰之处请以权威网站（mybodygraph.com / humandesign.org.cn）的结果为准。
+如需深入解读，请告诉我你最想了解哪个方面？`;
+
         const TYPE_EMOJI = {
             '显示者': '🔴',
             '生产者': '🟡',
@@ -1035,8 +1250,97 @@
             '反映者': '#e0e0e0'
         };
 
+        // ===== 主题切换 =====
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            const isLight = body.classList.toggle('light-mode');
+            btn.textContent = isLight ? '🌙' : '☀️';
+            btn.title = isLight ? '切换到深色模式' : '切换到浅色模式';
+            localStorage.setItem('hd_theme', isLight ? 'light' : 'dark');
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('hd_theme');
+            const btn = document.getElementById('themeBtn');
+            if (saved === 'light') {
+                document.body.classList.add('light-mode');
+                btn.textContent = '🌙';
+                btn.title = '切换到深色模式';
+            } else {
+                btn.textContent = '☀️';
+                btn.title = '切换到浅色模式';
+            }
+        }
+
+        // ===== 图片上传处理 =====
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                alert('请选择图片文件（JPG、PNG、WebP 等）');
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert('图片大小不能超过 10MB');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const dataUrl = e.target.result;
+                // 提取 mime 和 base64
+                const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+                if (match) {
+                    pendingImageMime = match[1];
+                    pendingImageBase64 = match[2];
+                    // 显示预览
+                    document.getElementById('imageThumbImg').src = dataUrl;
+                    document.getElementById('imagePreviewBar').classList.add('show');
+                    document.getElementById('messageInput').placeholder = '可以补充描述，或直接发送识别人类图图片...';
+                }
+            };
+            reader.readAsDataURL(file);
+            // 重置 input，允许重复选同一文件
+            event.target.value = '';
+        }
+
+        function removeImage() {
+            pendingImageBase64 = null;
+            pendingImageMime = null;
+            document.getElementById('imageThumbImg').src = '';
+            document.getElementById('imagePreviewBar').classList.remove('show');
+            document.getElementById('messageInput').placeholder = '说说你的感受或提问，比如「我是显示者，最近压力很大」...';
+        }
+
+        // ===== 拖拽上传 =====
+        function initDragDrop() {
+            const inputArea = document.getElementById('inputArea');
+            inputArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                inputArea.classList.add('drag-over');
+            });
+            inputArea.addEventListener('dragleave', () => {
+                inputArea.classList.remove('drag-over');
+            });
+            inputArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                inputArea.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    // 模拟 file input 触发
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    document.getElementById('imageFileInput').files = dt.files;
+                    handleImageSelect({ target: document.getElementById('imageFileInput') });
+                }
+            });
+        }
+
         // ===== 初始化 =====
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initDragDrop();
+
             const savedUser = localStorage.getItem('hd_user');
             if (savedUser) {
                 try {
@@ -1059,15 +1363,29 @@
             document.getElementById('messageInput').focus();
         });
 
-        // ===== 消息发送（流式输出，逐字显示） =====
+        // ===== 消息发送（支持图片+文字，流式输出） =====
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
-            if (!message || isLoading) return;
+            const hasImage = !!pendingImageBase64;
 
-            addMessage('user', message);
+            if (!message && !hasImage) return;
+            if (isLoading) return;
+
+            // 显示用户消息
+            if (hasImage) {
+                addMessageWithImage('user', message, `data:${pendingImageMime};base64,${pendingImageBase64}`);
+            } else {
+                addMessage('user', message);
+            }
+
+            const sentMessage = message;
+            const sentImageBase64 = pendingImageBase64;
+            const sentImageMime = pendingImageMime;
+
             input.value = '';
             input.style.height = 'auto';
+            removeImage();
 
             isLoading = true;
             document.getElementById('sendBtn').disabled = true;
@@ -1078,7 +1396,7 @@
             aiMsg.className = 'message assistant';
             aiMsg.innerHTML = '<div class="avatar" style="background:#2a2820">🌀</div>'
                 + '<div>'
-                + '<div class="bubble streaming-cursor" id="streamBubble">正在思考</div>'
+                + '<div class="bubble streaming-cursor" id="streamBubble">' + (hasImage ? '正在识别图片中的人类图信息' : '正在思考') + '</div>'
                 + '<div class="time-tag">' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>'
                 + '</div>';
             area.appendChild(aiMsg);
@@ -1087,14 +1405,36 @@
 
             try {
                 let userContext = '';
-                if (currentUser && currentUser.hd_type) {
+                if (currentUser && currentUser.hd_type && !hasImage) {
                     userContext = '\n\n[用户的人类图类型：' + currentUser.hd_type + (currentUser.name ? '，昵称：' + currentUser.name : '') + ']';
                 }
 
+                // 构建消息体
+                let userContent;
+                if (hasImage) {
+                    // 图片识别模式：使用 vision content 格式
+                    userContent = [
+                        {
+                            type: 'image_url',
+                            image_url: {
+                                url: `data:${sentImageMime};base64,${sentImageBase64}`
+                            }
+                        },
+                        {
+                            type: 'text',
+                            text: sentMessage || '请识别这张人类图图表，提取所有可见信息并按结构化格式输出。'
+                        }
+                    ];
+                } else {
+                    userContent = sentMessage + userContext;
+                }
+
+                const systemPrompt = hasImage ? IMAGE_SYSTEM_PROMPT : SYSTEM_PROMPT;
+
                 const messages = [
-                    { role: 'system', content: SYSTEM_PROMPT },
-                    ...chatHistory.slice(-10),
-                    { role: 'user', content: message + userContext }
+                    { role: 'system', content: systemPrompt },
+                    ...(hasImage ? [] : chatHistory.slice(-10)),
+                    { role: 'user', content: userContent }
                 ];
 
                 const response = await fetch(DEEPSEEK_API_URL, {
@@ -1106,8 +1446,8 @@
                     body: JSON.stringify({
                         model: DEEPSEEK_MODEL,
                         messages: messages,
-                        temperature: 0.7,
-                        max_tokens: 2000,
+                        temperature: 0.3,
+                        max_tokens: 3000,
                         stream: true
                     })
                 });
@@ -1165,13 +1505,18 @@
                     streamBubble.textContent = '抱歉，AI 引擎返回了空回复，请稍后重试。';
                 } else {
                     streamBubble.setAttribute('data-raw', fullContent);
-                    chatHistory.push({ role: 'user', content: message });
-                    chatHistory.push({ role: 'assistant', content: fullContent });
-                    if (chatHistory.length > 20) {
-                        chatHistory = chatHistory.slice(-20);
+                    if (!hasImage) {
+                        chatHistory.push({ role: 'user', content: sentMessage });
+                        chatHistory.push({ role: 'assistant', content: fullContent });
+                        if (chatHistory.length > 20) {
+                            chatHistory = chatHistory.slice(-20);
+                        }
+                        localStorage.setItem('hd_chat_history', JSON.stringify(chatHistory));
+                        detectUserType(sentMessage);
+                    } else {
+                        // 图片识别后自动检测类型并保存
+                        detectUserType(fullContent);
                     }
-                    localStorage.setItem('hd_chat_history', JSON.stringify(chatHistory));
-                    detectUserType(message);
                 }
 
             } catch(err) {
@@ -1179,7 +1524,7 @@
                 const bubble = document.getElementById('streamBubble');
                 if (bubble) {
                     bubble.classList.remove('streaming-cursor');
-                    if (bubble.textContent === '正在思考') {
+                    if (bubble.textContent.includes('正在')) {
                         bubble.textContent = '网络错误，请检查网络连接后重试。\n\n错误详情：' + err.message;
                     }
                 }
@@ -1188,6 +1533,32 @@
                 document.getElementById('sendBtn').disabled = false;
                 document.getElementById('messageInput').focus();
             }
+        }
+
+        // ===== 带图片的用户消息 =====
+        function addMessageWithImage(role, text, imgSrc) {
+            const area = document.getElementById('messagesArea');
+            const welcomeCard = document.getElementById('welcomeCard');
+            if (welcomeCard && welcomeCard.style.display !== 'none') {
+                welcomeCard.style.display = 'none';
+            }
+
+            const msg = document.createElement('div');
+            msg.className = 'message ' + role;
+            msg.innerHTML = '<div class="avatar" style="background:#2a2540">👤</div>'
+                + '<div>'
+                + '<div class="bubble">'
+                + '<img class="msg-image" src="' + imgSrc + '" alt="上传的人类图">'
+                + (text ? '<div>' + escapeHtml(text) + '</div>' : '<div style="color:var(--text-muted);font-size:12px;">识别人类图图表</div>')
+                + '</div>'
+                + '<div class="time-tag">' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>'
+                + '</div>';
+            area.appendChild(msg);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
 
         // ===== 自动检测用户类型 =====
@@ -1259,6 +1630,7 @@
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/_(.*?)_/g, '<em>$1</em>')
                 .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,0.05);padding:1px 4px;border-radius:4px;">$1</code>')
+                .replace(/^#{1,3}\s+(.*)/gm, '<div style="font-weight:700;color:var(--accent-gold-light);margin:6px 0 2px;">$1</div>')
                 .replace(/\n\n/g, '<br><br>')
                 .replace(/\n/g, '<br>');
             return html;
@@ -1434,7 +1806,8 @@
                 + '<a href="https://www.mybodygraph.com/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 myBodyGraph</a>'
                 + '<a href="https://humandesign.org.cn/" target="_blank" class="type-chip" style="text-decoration:none; font-size:11px;">🌐 亚洲人类图学院</a>'
                 + '</div>'
-                + '<p style="font-size:11px; color: var(--text-muted); margin-top:12px;">⚠️ AI 回复仅供参考，如需准确分析请咨询专业人类图解读师。</p>';
+                + '<p style="font-size:11px; color: var(--text-muted); margin-top:12px;">⚠️ AI 回复仅供参考，如需准确分析请咨询专业人类图解读师。</p>'
+                + '<p style="font-size:11px; color: var(--text-muted); margin-top:6px;">🖼️ 已有人类图图表？点击输入框左侧的图片按钮上传，AI 将自动识别解析。</p>';
             return card;
         }
 
