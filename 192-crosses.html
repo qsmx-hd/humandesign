@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图 · 192种轮回交叉查询 V2</title>
+<style>
+:root{--bg:#F5EDE4;--bg-dark:#2D2118;--bg-card:#FFF8F0;--gold:#C4956A;--gold-light:#E8D5C0;--gold-dark:#8B6914;--brown:#5C4033;--brown-light:#8B7355;--text:#2D2118;--text-light:#6B5B4E;--text-muted:#9C8B7E;--border:#D4C4B0;--shadow:rgba(45,33,24,0.1);--ra:#C4956A;--jx:#8B6914;--la:#5C4033;--radius:12px;--radius-sm:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.header{background:linear-gradient(135deg,#2D2118 0%,#4A3728 50%,#2D2118 100%);color:#FFF;padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at center,rgba(196,149,106,0.15) 0%,transparent 70%);animation:glow 8s ease-in-out infinite alternate}
+@keyframes glow{from{transform:scale(1)}to{transform:scale(1.1)}}
+.header h1{font-size:28px;font-weight:700;letter-spacing:4px;position:relative;z-index:1}
+.header h1 .accent{color:var(--gold)}
+.header .subtitle{font-size:14px;color:var(--gold-light);margin-top:8px;letter-spacing:2px;position:relative;z-index:1}
+.header .badge{display:inline-block;margin-top:10px;padding:3px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;background:rgba(196,149,106,0.2);color:var(--gold-light);border:1px solid rgba(196,149,106,0.3);position:relative;z-index:1}
+.header .divider{width:60px;height:2px;background:var(--gold);margin:16px auto 0;position:relative;z-index:1}
+.stats-bar{display:flex;justify-content:center;gap:24px;padding:16px 20px;background:var(--bg-card);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-item .num{font-size:24px;font-weight:700;color:var(--gold)}
+.stat-item .label{font-size:12px;color:var(--text-muted)}
+.filter-section{background:var(--bg-card);padding:20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px var(--shadow)}
+.search-box{position:relative;margin-bottom:16px}
+.search-box input{width:100%;padding:12px 16px 12px 44px;border:2px solid var(--border);border-radius:var(--radius);font-size:15px;background:#FFF;color:var(--text);transition:border-color .3s;outline:none;font-family:inherit}
+.search-box input:focus{border-color:var(--gold)}
+.search-box input::placeholder{color:var(--text-muted)}
+.search-box .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text-muted)}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap}
+.filter-group{flex:1;min-width:0}
+.filter-group label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:600}
+.filter-group select{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:#FFF;color:var(--text);cursor:pointer;outline:none;font-family:inherit;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239C8B7E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:border-color .3s}
+.filter-group select:focus{border-color:var(--gold)}
+.angle-tabs{display:flex;gap:0;margin-top:12px;border-radius:var(--radius-sm);overflow:hidden;border:2px solid var(--border)}
+.angle-tab{flex:1;padding:10px 8px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;background:#FFF;color:var(--text-muted);transition:all .3s;border:none;font-family:inherit}
+.angle-tab:hover{background:var(--gold-light)}
+.angle-tab.active-RA{background:var(--ra);color:#FFF}
+.angle-tab.active-JX{background:var(--jx);color:#FFF}
+.angle-tab.active-LA{background:var(--la);color:#FFF}
+.angle-tab.active-ALL{background:var(--bg-dark);color:var(--gold)}
+.angle-tab .pct{display:block;font-size:11px;font-weight:400;opacity:.8}
+.results-info{padding:12px 20px;font-size:13px;color:var(--text-muted);background:var(--bg)}
+.results-info strong{color:var(--gold)}
+.cross-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:16px 20px}
+.cross-card{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.cross-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px var(--shadow);border-color:var(--gold)}
+.cross-card .card-header{padding:14px 16px 10px;display:flex;align-items:center;gap:12px}
+.cross-card .gate-badge{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#FFF;flex-shrink:0}
+.cross-card .gate-badge.ra{background:var(--ra)}
+.cross-card .gate-badge.jx{background:var(--jx)}
+.cross-card .gate-badge.la{background:var(--la)}
+.cross-card .card-title{flex:1;min-width:0}
+.cross-card .cross-name{font-size:16px;font-weight:700;color:var(--text);line-height:1.3}
+.cross-card .cross-name-en{font-size:12px;color:var(--text-muted);margin-top:2px}
+.cross-card .angle-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;color:#FFF;flex-shrink:0}
+.cross-card .angle-badge.ra{background:var(--ra)}
+.cross-card .angle-badge.jx{background:var(--jx)}
+.cross-card .angle-badge.la{background:var(--la)}
+.cross-card .card-body{padding:0 16px 14px}
+.cross-card .gate-config{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.cross-card .gate-pair{display:flex;align-items:center;gap:3px;padding:4px 10px;background:var(--bg);border-radius:20px;font-size:12px;color:var(--text-light);font-weight:600}
+.cross-card .gate-pair .sep{color:var(--border);margin:0 1px}
+.cross-card .quarter-tag{display:inline-block;margin-top:8px;padding:3px 10px;background:var(--bg);border-radius:20px;font-size:11px;color:var(--text-muted)}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(45,33,24,0.6);z-index:1000;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg-card);border-radius:var(--radius);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(45,33,24,0.3);animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-header{padding:24px 24px 16px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border)}
+.modal-header .gate-badge-lg{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#FFF;flex-shrink:0}
+.modal-header .gate-badge-lg.ra{background:var(--ra)}
+.modal-header .gate-badge-lg.jx{background:var(--jx)}
+.modal-header .gate-badge-lg.la{background:var(--la)}
+.modal-header .info{flex:1}
+.modal-header .info h2{font-size:22px;color:var(--text)}
+.modal-header .info .en-name{font-size:14px;color:var(--text-muted)}
+.modal-close{width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);color:var(--text-muted);font-size:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-close:hover{background:var(--border);color:var(--text)}
+.modal-body{padding:20px 24px 24px}
+.modal-body .detail-section{margin-bottom:20px}
+.modal-body .detail-section:last-child{margin-bottom:0}
+.modal-body .detail-label{font-size:12px;color:var(--text-muted);font-weight:600;letter-spacing:1px;margin-bottom:8px}
+.modal-body .gate-diagram{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-body .gate-box{padding:14px;border-radius:var(--radius-sm);text-align:center}
+.modal-body .gate-box.conscious{background:linear-gradient(135deg,#2D2118,#4A3728);color:#FFF}
+.modal-body .gate-box.unconscious{background:linear-gradient(135deg,#5C4033,#8B7355);color:#FFF}
+.modal-body .gate-box .type{font-size:11px;opacity:.7;margin-bottom:4px}
+.modal-body .gate-box .nums{font-size:20px;font-weight:700}
+.modal-body .gate-box .nums .slash{opacity:.5;margin:0 2px}
+.modal-body .angle-type-box{padding:14px;border-radius:var(--radius-sm);background:var(--bg);display:flex;align-items:center;gap:12px}
+.modal-body .angle-type-box .icon{font-size:28px}
+.modal-body .angle-type-box .angle-info h4{font-size:15px;color:var(--text)}
+.modal-body .angle-type-box .angle-info p{font-size:12px;color:var(--text-muted);margin-top:2px}
+.modal-body .quarter-box{padding:14px;border-radius:var(--radius-sm);background:var(--bg);border-left:4px solid var(--gold)}
+.modal-body .quarter-box h4{font-size:15px;color:var(--text)}
+.modal-body .quarter-box .en{font-size:12px;color:var(--text-muted)}
+.modal-body .quarter-box p{font-size:13px;color:var(--text-light);margin-top:6px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state .icon{font-size:48px;margin-bottom:16px}
+.empty-state h3{font-size:18px;color:var(--text-light);margin-bottom:8px}
+.empty-state p{font-size:14px}
+.no-results{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:15px}
+.scroll-top{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--bg-dark);color:var(--gold);border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(45,33,24,0.3);transition:all .3s;display:none;z-index:99}
+.scroll-top.visible{display:flex;align-items:center;justify-content:center}
+.scroll-top:hover{transform:translateY(-3px)}
+.footer{text-align:center;padding:24px 20px;color:var(--text-muted);font-size:12px;border-top:1px solid var(--border);background:var(--bg-card)}
+@media(max-width:600px){.header h1{font-size:22px;letter-spacing:2px}.header .subtitle{font-size:12px}.cross-grid{grid-template-columns:1fr;padding:12px;gap:12px}.filter-section{padding:14px}.filter-row{flex-direction:column}.stats-bar{gap:16px}.stat-item .num{font-size:20px}.angle-tabs{flex-direction:column}.modal{max-width:100%}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>人类图 · <span class="accent">192</span>种轮回交叉</h1>
+  <div class="subtitle">INCARNATION CROSSES LOOKUP</div>
+  <div class="badge">V2 · 数据已校对</div>
+  <div class="divider"></div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="num">4</div><div class="label">等分 Quarters</div></div>
+  <div class="stat-item"><div class="num">64</div><div class="label">闸门 Gates</div></div>
+  <div class="stat-item"><div class="num">192</div><div class="label">轮回交叉 Crosses</div></div>
+  <div class="stat-item"><div class="num">3</div><div class="label">角度家族 Families</div></div>
+</div>
+
+<div class="filter-section">
+  <div class="search-box">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索闸门编号、轮回交叉名称…">
+  </div>
+  <div class="filter-row">
+    <div class="filter-group">
+      <label>等分 Quarter</label>
+      <select id="quarterFilter"><option value="all">全部等分</option></select>
+    </div>
+    <div class="filter-group">
+      <label>闸门 Gate</label>
+      <select id="gateFilter"><option value="all">全部闸门</option></select>
+    </div>
+  </div>
+  <div class="angle-tabs" id="angleTabs">
+    <button class="angle-tab active-ALL" data-angle="all">全部<span class="pct">192</span></button>
+    <button class="angle-tab" data-angle="RA">右角度<span class="pct">~64%</span></button>
+    <button class="angle-tab" data-angle="JX">并列<span class="pct">~3%</span></button>
+    <button class="angle-tab" data-angle="LA">左角度<span class="pct">~33%</span></button>
+  </div>
+</div>
+
+<div class="results-info" id="resultsInfo"></div>
+<div class="cross-grid" id="crossGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="gate-badge-lg" id="modalBadge"></div>
+      <div class="info"><h2 id="modalName"></h2><div class="en-name" id="modalEnName"></div></div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTopBtn">↑</button>
+
+<div class="footer">
+  数据来源：Ra Uru Hu / Jovian Archive · Chetan Parkyn &amp; Carola Eastwood《人类图轮回交叉全书》<br>
+  闸门配置校对：xanion.net · humandesign.tools · ahumandesign.com<br>
+  人类图 · 192种轮回交叉查询工具 V2 © 能量圈
+</div>
+
+<script>
+// DATA FORMAT: [gate, raName, raNameEn, jxName, jxNameEn, laName, laNameEn, persPair, raDesPair, jxlaDesPair]
+// persPair = Personality Sun/Earth (shared by all 3 angles)
+// raDesPair = Design Sun/Design Earth for Right Angle
+// jxlaDesPair = Design Sun/Design Earth for Juxtaposition & Left Angle
+const QUARTERS=[
+{id:"initiation",n:"初始的等分",e:"Quarter of Initiation",t:"心智 · Mind",icon:"🧠",d:"与思考、觉知和方向的探索有关。此等分关注理解生命的方向和意义，追寻心智层面的启迪。太阳在冬季，象征意识的萌发。",g:[
+["13","人面狮身","Sphinx","倾听","Listening","面具","Masks","13/7","1/2","43/23"],
+["49","解释","Explanation","原则","Principles","革命","Revolution","49/4","43/23","14/8"],
+["30","感染","Contagion","命运","Fates","工业","Industry","30/29","14/8","34/20"],
+["55","沉睡的凤凰","Sleeping Phoenix","情绪","Moods","精神","Spirit","55/59","34/20","9/16"],
+["37","计划","Planning","交易","Bargains","迁移","Migration","37/40","9/16","5/35"],
+["63","意识","Consciousness","疑问","Doubt","统治","Dominion","63/64","5/35","26/45"],
+["22","统领","Rulership","优雅","Grace","告知","Informing","22/47","26/45","11/12"],
+["36","伊甸园","Eden","危机","Crisis","面","Plane","36/6","11/12","10/15"],
+["25","爱之船","Vessel of Love","天真","Innocence","疗愈","Healing","25/46","10/15","58/52"],
+["17","服务","Service","意见","Opinions","动荡","Upheaval","17/18","58/52","38/39"],
+["21","紧张","Tension","控制","Control","努力","Endeavour","21/48","38/39","54/53"],
+["51","渗透","Penetration","震惊","Shock","号角","Clarion","51/57","54/53","61/62"],
+["42","马雅","Maya","完成","Completion","限制","Limitation","42/32","61/62","60/56"],
+["3","律法","Laws","突变","Mutation","愿望","Wishes","3/50","60/56","41/31"],
+["27","意料之外","Unexpected","照顾","Caring","校准","Alignment","27/28","41/31","19/33"],
+["24","四方之路","Four Ways","理性","Rationalization","轮回","Incarnation","24/44","19/33","13/7"]
+]},
+{id:"civilization",n:"文明的等分",e:"Quarter of Civilization",t:"形式 · Form",icon:"🏛️",d:"与创造、建设和组织有关。此等分关注构建文明的形态，从技能到社群，从形式到结构。太阳在春季，象征万物的生长。",g:[
+["2","人面狮身","Sphinx","驾驶","Driver","挑战","Defiance","2/1","13/7","49/4"],
+["23","解释","Explanation","同化","Assimilation","奉献","Dedication","23/43","49/4","30/29"],
+["8","感染","Contagion","贡献","Contribution","不确定性","Uncertainty","8/14","30/29","55/59"],
+["20","沉睡的凤凰","Sleeping Phoenix","当下","The Now","二元性","Duality","20/34","55/59","37/40"],
+["16","计划","Planning","实验","Experimentation","辨认","Identification","16/9","37/40","63/64"],
+["35","意识","Consciousness","经验","Experience","分离","Separation","35/5","63/64","22/47"],
+["45","统领","Rulership","拥有","Possession","对抗","Confrontation","45/26","22/47","36/6"],
+["12","伊甸园","Eden","表达","Articulation","教育","Education","12/11","36/6","25/46"],
+["15","爱之船","Vessel of Love","极端","Extremes","预防","Prevention","15/10","25/46","17/18"],
+["52","服务","Service","静止","Stillness","要求","Demands","52/58","17/18","21/48"],
+["39","紧张","Tension","挑衅","Provocation","个人主义","Individualism","39/38","21/48","51/57"],
+["53","渗透","Penetration","开始","Beginnings","循环","Cycles","53/54","51/57","42/32"],
+["62","马雅","Maya","细节","Details","遮蔽","Obscuration","62/61","42/32","3/50"],
+["56","律法","Laws","刺激","Stimulation","分心","Distraction","56/60","3/50","27/28"],
+["31","意料之外","Unexpected","影响","Influence","创始者","Alpha","31/41","27/28","24/44"],
+["33","四方之路","Four Ways","退隐","Retreat","精致","Refinement","33/19","24/44","2/1"]
+]},
+{id:"duality",n:"二元化的等分",e:"Quarter of Duality",t:"人际连结 · Bonding",icon:"🤝",d:"与关系、连结和互动有关。此等分关注人与人之间的纽带，从亲密关系到社会契约。太阳在夏季，象征连接的热度。",g:[
+["7","人面狮身","Sphinx","互动","Interaction","面具","Masks","7/13","2/1","23/43"],
+["4","解释","Explanation","公式化","Formulization","革命","Revolution","4/49","23/43","8/14"],
+["29","感染","Contagion","承诺","Commitment","工业","Industry","29/30","8/14","20/34"],
+["59","沉睡的凤凰","Sleeping Phoenix","策略","Strategy","精神","Spirit","59/55","20/34","16/9"],
+["40","计划","Planning","拒绝","Denial","迁移","Migration","40/37","16/9","35/5"],
+["64","意识","Consciousness","困惑","Confusion","统治","Dominion","64/63","35/5","45/26"],
+["47","统领","Rulership","压迫","Oppression","告知","Informing","47/22","45/26","12/11"],
+["6","伊甸园","Eden","冲突","Conflict","面","Plane","6/36","12/11","15/10"],
+["46","爱之船","Vessel of Love","机缘","Serendipity","疗愈","Healing","46/25","15/10","52/58"],
+["18","服务","Service","修正","Correction","动荡","Upheaval","18/17","52/58","39/38"],
+["48","紧张","Tension","深度","Depth","努力","Endeavour","48/21","39/38","53/54"],
+["57","渗透","Penetration","直觉","Intuition","号角","Clarion","57/51","53/54","62/61"],
+["32","马雅","Maya","保守","Conservation","限制","Limitation","32/42","62/61","56/60"],
+["50","律法","Laws","价值","Values","愿望","Wishes","50/3","56/60","31/41"],
+["28","意料之外","Unexpected","风险","Risks","校准","Alignment","28/27","31/41","33/19"],
+["44","四方之路","Four Ways","警觉","Alertness","轮回","Incarnation","44/24","33/19","7/13"]
+]},
+{id:"mutation",n:"突变的等分",e:"Quarter of Mutation",t:"蜕变 · Transformation",icon:"🦋",d:"与转变、突变和进化有关。此等分关注深层的变革力量，推动意识与生命的质变。太阳在秋季，象征收获与蜕变。",g:[
+["1","人面狮身","Sphinx","自我表达","Self-Expression","挑战","Defiance","1/2","7/13","4/49"],
+["43","解释","Explanation","洞见","Insight","奉献","Dedication","43/23","4/49","29/30"],
+["14","感染","Contagion","赋能","Empowering","不确定性","Uncertainty","14/8","29/30","59/55"],
+["34","沉睡的凤凰","Sleeping Phoenix","力量","Power","二元性","Duality","34/20","59/55","40/37"],
+["9","计划","Planning","专注","Focus","辨认","Identification","9/16","40/37","64/63"],
+["5","意识","Consciousness","习惯","Habits","分离","Separation","5/35","64/63","47/22"],
+["26","统领","Rulership","诡术师","Trickster","对抗","Confrontation","26/45","47/22","6/36"],
+["11","伊甸园","Eden","想法","Ideas","教育","Education","11/12","6/36","46/25"],
+["10","爱之船","Vessel of Love","行为","Behavior","预防","Prevention","10/15","46/25","18/17"],
+["58","服务","Service","活力","Vitality","要求","Demands","58/52","18/17","48/21"],
+["38","紧张","Tension","反对","Opposition","个人主义","Individualism","38/39","48/21","57/51"],
+["54","渗透","Penetration","雄心","Ambition","循环","Cycles","54/53","57/51","32/42"],
+["61","马雅","Maya","思考","Thinking","遮蔽","Obscuration","61/62","32/42","50/3"],
+["60","律法","Laws","限制","Limitation","分心","Distraction","60/56","50/3","28/27"],
+["41","意料之外","Unexpected","幻想","Fantasy","创始者","Alpha","41/31","28/27","44/24"],
+["19","四方之路","Four Ways","需要","Need","精致","Refinement","19/33","44/24","1/2"]
+]}
+];
+
+const ANGLE_INFO={
+  RA:{name:"右角度交叉",en:"Right Angle Cross",icon:"→",pct:"~64%",desc:"右角度交叉的人（线1-3），其人生主题带有较强的个人色彩。他们通过自身的经历来理解和完成自己的使命，与他人的互动是辅助性的。"},
+  JX:{name:"并列交叉",en:"Juxtaposition Cross",icon:"⇌",pct:"~3%",desc:"并列交叉的人（线4），其人生主题处于固定位置，既非完全个人化也非完全人际化。他们是命运中的「固定点」，具有独特的连接作用。"},
+  LA:{name:"左角度交叉",en:"Left Angle Cross",icon:"←",pct:"~33%",desc:"左角度交叉的人（线5-6），其人生主题与他人的关系密不可分。他们需要通过与他人的互动来完成自己的使命，关系是核心。"}
+};
+
+// Build flat cross list
+let allCrosses=[];
+QUARTERS.forEach(q=>{
+  q.g.forEach(g=>{
+    const [gate,raName,raNameEn,jxName,jxNameEn,laName,laNameEn,persPair,raDesPair,jxlaDesPair]=g;
+    const [cSun,cEarth]=persPair.split('/');
+    // RA cross
+    const [raDSun,raDEarth]=raDesPair.split('/');
+    allCrosses.push({gate,quarterId:q.id,quarterName:q.n,quarterEn:q.e,quarterTheme:q.t,quarterIcon:q.icon,quarterDesc:q.d,angle:"RA",name:raName,nameEn:raNameEn,cSun,cEarth,dSun:raDSun,dEarth:raDEarth,config:persPair+'|'+raDesPair});
+    // JX cross
+    const [jxDSun,jxDEarth]=jxlaDesPair.split('/');
+    allCrosses.push({gate,quarterId:q.id,quarterName:q.n,quarterEn:q.e,quarterTheme:q.t,quarterIcon:q.icon,quarterDesc:q.d,angle:"JX",name:jxName,nameEn:jxNameEn,cSun,cEarth,dSun:jxDSun,dEarth:jxDEarth,config:persPair+'|'+jxlaDesPair});
+    // LA cross
+    allCrosses.push({gate,quarterId:q.id,quarterName:q.n,quarterEn:q.e,quarterTheme:q.t,quarterIcon:q.icon,quarterDesc:q.d,angle:"LA",name:laName,nameEn:laNameEn,cSun,cEarth,dSun:jxDSun,dEarth:jxDEarth,config:persPair+'|'+jxlaDesPair});
+  });
+});
+
+// DOM refs
+const searchInput=document.getElementById('searchInput');
+const quarterFilter=document.getElementById('quarterFilter');
+const gateFilter=document.getElementById('gateFilter');
+const angleTabs=document.getElementById('angleTabs');
+const crossGrid=document.getElementById('crossGrid');
+const resultsInfo=document.getElementById('resultsInfo');
+const modalOverlay=document.getElementById('modalOverlay');
+const modalBadge=document.getElementById('modalBadge');
+const modalName=document.getElementById('modalName');
+const modalEnName=document.getElementById('modalEnName');
+const modalBody=document.getElementById('modalBody');
+const modalClose=document.getElementById('modalClose');
+const scrollTopBtn=document.getElementById('scrollTopBtn');
+
+let currentAngle='all';
+
+// Populate filters
+QUARTERS.forEach(q=>{
+  const opt=document.createElement('option');
+  opt.value=q.id;opt.textContent=q.n+' ('+q.t+')';
+  quarterFilter.appendChild(opt);
+});
+
+function updateGateFilter(){
+  const qId=quarterFilter.value;
+  gateFilter.innerHTML='<option value="all">全部闸门</option>';
+  const quarters=qId==='all'?QUARTERS:QUARTERS.filter(q=>q.id===qId);
+  quarters.forEach(q=>{
+    q.g.forEach(g=>{
+      const opt=document.createElement('option');
+      opt.value=g[0];opt.textContent='闸门 '+g[0]+' — '+g[1];
+      gateFilter.appendChild(opt);
+    });
+  });
+}
+updateGateFilter();
+quarterFilter.addEventListener('change',()=>{updateGateFilter();render();});
+
+// Angle tabs
+angleTabs.addEventListener('click',e=>{
+  const tab=e.target.closest('.angle-tab');
+  if(!tab)return;
+  currentAngle=tab.dataset.angle;
+  angleTabs.querySelectorAll('.angle-tab').forEach(t=>{
+    t.className='angle-tab';
+    if(t.dataset.angle===currentAngle) t.classList.add('active-'+(currentAngle==='all'?'ALL':currentAngle));
+  });
+  render();
+});
+
+// Search
+searchInput.addEventListener('input',()=>render());
+gateFilter.addEventListener('change',()=>render());
+
+// Render
+function render(){
+  const search=searchInput.value.trim().toLowerCase();
+  const qId=quarterFilter.value;
+  const gId=gateFilter.value;
+  const angle=currentAngle;
+
+  let filtered=allCrosses.filter(c=>{
+    if(qId!=='all'&&c.quarterId!==qId)return false;
+    if(gId!=='all'&&c.gate!==gId)return false;
+    if(angle!=='all'&&c.angle!==angle)return false;
+    if(search){
+      const s=search;
+      return c.gate.includes(s)||c.name.includes(s)||c.nameEn.toLowerCase().includes(s)||c.config.includes(s)||c.quarterName.includes(s)||c.quarterTheme.includes(s);
+    }
+    return true;
+  });
+
+  resultsInfo.innerHTML='共找到 <strong>'+filtered.length+'</strong> 种轮回交叉';
+
+  if(filtered.length===0){
+    crossGrid.innerHTML='<div class="no-results">没有找到匹配的轮回交叉 🤔</div>';
+    return;
+  }
+
+  crossGrid.innerHTML=filtered.map(c=>{
+    const angleCls=c.angle.toLowerCase();
+    const angleLabel=c.angle==='RA'?'右角度':c.angle==='JX'?'并列':'左角度';
+    return `<div class="cross-card" onclick="showDetail('${c.gate}','${c.angle}')">
+      <div class="card-header">
+        <div class="gate-badge ${angleCls}">${c.gate}</div>
+        <div class="card-title">
+          <div class="cross-name">${c.name} · ${angleLabel}交叉</div>
+          <div class="cross-name-en">${c.nameEn} Cross</div>
+        </div>
+        <span class="angle-badge ${angleCls}">${angleLabel}</span>
+      </div>
+      <div class="card-body">
+        <div class="gate-config">
+          <span class="gate-pair">☀ ${c.cSun} <span class="sep">|</span> 🌍 ${c.cEarth}</span>
+          <span class="gate-pair">◑ ${c.dSun} <span class="sep">|</span> ◐ ${c.dEarth}</span>
+        </div>
+        <span class="quarter-tag">${c.quarterIcon} ${c.quarterName} · ${c.quarterTheme}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Detail modal
+function showDetail(gate,angle){
+  const c=allCrosses.find(x=>x.gate===gate&&x.angle===angle);
+  if(!c)return;
+  const angleCls=angle.toLowerCase();
+  const ai=ANGLE_INFO[angle];
+  const angleLabel=angle==='RA'?'右角度':angle==='JX'?'并列':'左角度';
+
+  modalBadge.className='gate-badge-lg '+angleCls;
+  modalBadge.textContent=c.gate;
+  modalName.textContent=c.name+' · '+angleLabel+'交叉';
+  modalEnName.textContent=c.nameEn+' Cross';
+
+  modalBody.innerHTML=`
+    <div class="detail-section">
+      <div class="detail-label">闸门配置 GATE CONFIGURATION</div>
+      <div class="gate-diagram">
+        <div class="gate-box conscious">
+          <div class="type">意识 · Conscious</div>
+          <div class="nums">☀ ${c.cSun} <span class="slash">|</span> 🌍 ${c.cEarth}</div>
+        </div>
+        <div class="gate-box unconscious">
+          <div class="type">潜意识 · Unconscious</div>
+          <div class="nums">◑ ${c.dSun} <span class="slash">|</span> ◐ ${c.dEarth}</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">完整配置 FULL CONFIG</div>
+      <div style="padding:12px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;font-size:18px;font-weight:700;color:var(--text);letter-spacing:1px">
+        ${c.cSun}/${c.cEarth} | ${c.dSun}/${c.dEarth}
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">角度家族 ANGLE FAMILY</div>
+      <div class="angle-type-box">
+        <div class="icon">${ai.icon}</div>
+        <div class="angle-info">
+          <h4>${ai.name}</h4>
+          <p>${ai.en} · 占比${ai.pct}</p>
+          <p style="margin-top:6px">${ai.desc}</p>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">所属等分 QUARTER</div>
+      <div class="quarter-box">
+        <h4>${c.quarterIcon} ${c.quarterName}</h4>
+        <div class="en">${c.quarterEn} · ${c.quarterTheme}</div>
+        <p>${c.quarterDesc}</p>
+      </div>
+    </div>
+  `;
+
+  modalOverlay.classList.add('active');
+  document.body.style.overflow='';
+}
+
+modalClose.addEventListener('click',closeModal);
+modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function closeModal(){
+  modalOverlay.classList.remove('active');
+  document.body.style.overflow='';
+}
+
+// Scroll top
+window.addEventListener('scroll',()=>{
+  scrollTopBtn.classList.toggle('visible',window.scrollY>400);
+});
+scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// Init
+render();
+</script>
+</body>
+</html>

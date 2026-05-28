@@ -397,14 +397,25 @@
     font-size: 14px; opacity: 0.75; margin-bottom: 32px;
     position: relative; z-index: 1;
   }
-  .free-cta-aura {
+  .free-cta-url {
     display: inline-block;
-    max-width: 380px; width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 8px 36px rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 16px; padding: 16px 32px;
+    font-size: 15px; font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all .25s;
     margin-bottom: 32px;
     position: relative; z-index: 1;
-    cursor: default;
+    word-break: break-all;
+    max-width: 100%;
+  }
+  .free-cta-url:hover {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
 
   /* ===== CONTACT SECTION ===== */
@@ -506,98 +517,6 @@
     .path-arrow { transform: rotate(90deg); padding: 8px 0; }
     .series-grid { grid-template-columns: 1fr; }
   }
-  /* ===== TOOL LINK CARDS ===== */
-  .tools-section {
-    max-width: 900px; margin: 60px auto; padding: 0 20px;
-  }
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-  }
-  .tool-card {
-    background: var(--card-bg);
-    border-radius: 24px; overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    transition: all .3s;
-    text-decoration: none; color: inherit;
-    display: block;
-  }
-  .tool-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(108,92,231,0.18);
-  }
-  .tool-card-banner {
-    height: 140px; display: flex;
-    align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .tool-card.lines .tool-card-banner {
-    background: linear-gradient(135deg, #2D2118 0%, #4A3728 50%, #C4956A 100%);
-  }
-  .tool-card.guide .tool-card-banner {
-    background: linear-gradient(135deg, #2D2118 0%, #6c5ce7 50%, #a29bfe 100%);
-  }
-  .tool-card.channels .tool-card-banner {
-    background: linear-gradient(135deg, #2D2118 0%, #6c3fc5 50%, #c94fa0 100%);
-  }
-  .tool-card.crosses .tool-card-banner {
-    background: linear-gradient(135deg, #2D2118 0%, #5C4033 50%, #8B6914 100%);
-  }
-  .tool-card-banner::before {
-    content: ''; position: absolute;
-    width: 200px; height: 200px; border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    top: -80px; right: -40px;
-  }
-  .tool-card-banner::after {
-    content: ''; position: absolute;
-    width: 120px; height: 120px; border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-    bottom: -40px; left: 20px;
-  }
-  .tool-card-emoji { font-size: 64px; position: relative; z-index: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-  .tool-card-level {
-    position: absolute; top: 16px; right: 16px;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 12px; padding: 3px 12px;
-    font-size: 11px; font-weight: 700;
-    color: rgba(255,255,255,0.9); letter-spacing: 1px;
-  }
-  .tool-card-body { padding: 28px; }
-  .tool-card-title {
-    font-size: 20px; font-weight: 900; color: var(--text);
-    margin-bottom: 6px;
-  }
-  .tool-card-desc {
-    font-size: 13px; color: var(--muted);
-    margin-bottom: 20px; line-height: 1.6;
-  }
-  .tool-card-topics {
-    display: flex; flex-wrap: wrap; gap: 6px;
-    margin-bottom: 20px;
-  }
-  .tool-card-topic {
-    background: var(--page-bg);
-    border-radius: 8px; padding: 4px 10px;
-    font-size: 11px; color: var(--muted);
-    border: 1px solid var(--border);
-  }
-  .tool-card-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-  }
-  .tool-card-meta { font-size: 12px; color: var(--muted); }
-  .tool-card-link {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 13px; font-weight: 700;
-    color: var(--secondary); transition: gap .2s;
-  }
-  .tool-card:hover .tool-card-link { gap: 10px; }
-
 </style>
 </head>
 <body>
@@ -613,15 +532,11 @@
   <div class="nav-divider"></div>
   <a href="#toc">目录索引</a>
   <div class="nav-divider"></div>
+  <a href="#toc" onclick="setTimeout(() => showTab('channels'), 100);">🔮 36通道</a>
+  <div class="nav-divider"></div>
   <a href="#freetool">🔮 免费出图</a>
   <div class="nav-divider"></div>
   <a href="human-design-guide.html" target="_blank">📖 入门手册</a>
-  <div class="nav-divider"></div>
-  <a href="36 Channels/36-channels.html" target="_blank">🔮 36通道</a>
-  <div class="nav-divider"></div>
-  <a href="384-lines.html" target="_blank">🔢 384爻</a>
-  <div class="nav-divider"></div>
-  <a href="192-crosses.html" target="_blank">✨ 192交叉</a>
   <div class="nav-divider"></div>
   <a href="chat.html" target="_blank">🤖 AI 聊天</a>
   <div class="nav-divider"></div>
@@ -1140,99 +1055,9 @@
     <div class="free-cta-icon">🔮</div>
     <div class="free-cta-badge">⚡ 免费出图</div>
     <div class="free-cta-title">生成你的专属人类图</div>
-    <div class="free-cta-sub">请用微信扫一扫打开小程序</div>
     <div class="free-cta-sub">输入出生信息，立即获得完整的人类图谱</div>
-    <img src="Aura.png" alt="人类图示例" class="free-cta-aura" title="请用微信扫一扫打开小程序">
-  </div>
-</section>
-
-<!-- ===== DEEP TOOLS ===== -->
-<section class="tools-section" id="deeptools">
-  <div class="series-section-title">🛠️ 深度工具</div>
-  <div class="series-section-sub">专业级查询工具，点击直接打开</div>
-  <div class="tools-grid">
-    <a href="human-design-guide.html" target="_blank" class="tool-card guide">
-      <div class="tool-card-banner">
-        <span class="tool-card-emoji">📖</span>
-        <span class="tool-card-level">入门必读</span>
-      </div>
-      <div class="tool-card-body">
-        <div class="tool-card-title">人类图入门手册</div>
-        <div class="tool-card-desc">从零开始认识人类图，类型/权威/Profile/通道一册通，图文并茂适合初学者</div>
-        <div class="tool-card-topics">
-          <span class="tool-card-topic">五大类型</span>
-          <span class="tool-card-topic">内在权威</span>
-          <span class="tool-card-topic">人生角色</span>
-          <span class="tool-card-topic">36通道</span>
-        </div>
-        <div class="tool-card-footer">
-          <span class="tool-card-meta">入门级 · 一册通读</span>
-          <span class="tool-card-link">打开手册 →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="36 Channels/36-channels.html" target="_blank" class="tool-card channels">
-      <div class="tool-card-banner">
-        <span class="tool-card-emoji">🔮</span>
-        <span class="tool-card-level">速查工具</span>
-      </div>
-      <div class="tool-card-body">
-        <div class="tool-card-title">36条通道速查</div>
-        <div class="tool-card-desc">人类图全部36条通道的文章目录索引，含通道名称、短描述，点击直达详解文章</div>
-        <div class="tool-card-topics">
-          <span class="tool-card-topic">36通道</span>
-          <span class="tool-card-topic">文章索引</span>
-          <span class="tool-card-topic">快速跳转</span>
-          <span class="tool-card-topic">能量通道</span>
-        </div>
-        <div class="tool-card-footer">
-          <span class="tool-card-meta">共36通道 · 目录索引</span>
-          <span class="tool-card-link">打开通道 →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="384-lines.html" target="_blank" class="tool-card lines">
-      <div class="tool-card-banner">
-        <span class="tool-card-emoji">🔢</span>
-        <span class="tool-card-level">深度工具</span>
-      </div>
-      <div class="tool-card-body">
-        <div class="tool-card-title">384爻深度分析</div>
-        <div class="tool-card-desc">64卦 × 6爻全覆盖，人格星与设计星双线对照，含闸门主题与爻线含义</div>
-        <div class="tool-card-topics">
-          <span class="tool-card-topic">64闸门</span>
-          <span class="tool-card-topic">6爻解读</span>
-          <span class="tool-card-topic">人格星/设计星</span>
-          <span class="tool-card-topic">双线对照</span>
-        </div>
-        <div class="tool-card-footer">
-          <span class="tool-card-meta">共384爻 · 深度融合版</span>
-          <span class="tool-card-link">打开工具 →</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="192-crosses.html" target="_blank" class="tool-card crosses">
-      <div class="tool-card-banner">
-        <span class="tool-card-emoji">✨</span>
-        <span class="tool-card-level">深度工具</span>
-      </div>
-      <div class="tool-card-body">
-        <div class="tool-card-title">192种轮回交叉查询</div>
-        <div class="tool-card-desc">RA · JX · LA 三种角度完整覆盖，192张使命卡，支持搜索与多维筛选</div>
-        <div class="tool-card-topics">
-          <span class="tool-card-topic">RA 角度</span>
-          <span class="tool-card-topic">JX 角度</span>
-          <span class="tool-card-topic">LA 角度</span>
-          <span class="tool-card-topic">使命主题</span>
-        </div>
-        <div class="tool-card-footer">
-          <span class="tool-card-meta">共192交叉 · V2版本</span>
-          <span class="tool-card-link">打开工具 →</span>
-        </div>
-      </div>
+    <a href="https://www.lifegps.cn/l/RALosKuq" target="_blank" class="free-cta-url">
+      👉 点击免费生成人类图 → lifegps.cn
     </a>
   </div>
 </section>
@@ -1274,10 +1099,7 @@
   <button class="jump-btn beginner" onclick="document.getElementById('beginner').scrollIntoView({behavior:'smooth'})" title="入门系列">🌱</button>
   <button class="jump-btn intermediate" onclick="document.getElementById('intermediate').scrollIntoView({behavior:'smooth'})" title="进阶系列">🌿</button>
   <button class="jump-btn advanced" onclick="document.getElementById('advanced').scrollIntoView({behavior:'smooth'})" title="高阶系列">🌳</button>
-  <button class="jump-btn advanced" onclick="window.open('index.html#freetool','_blank')" title="免费出图" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">🔮</button>
-  <button class="jump-btn beginner" onclick="window.open('human-design-guide.html','_blank')" title="入门手册">📖</button>
-  <button class="jump-btn" onclick="window.open('384-lines.html','_blank')" title="384爻工具" style="background:linear-gradient(135deg,#C4956A,#8B6914);color:#fff;">🔢</button>
-  <button class="jump-btn" onclick="window.open('192-crosses.html','_blank')" title="192轮回交叉" style="background:linear-gradient(135deg,#5C4033,#C4956A);color:#fff;">✨</button>
+  <button class="jump-btn advanced" onclick="window.open('https://www.lifegps.cn/l/RALosKuq','_blank')" title="免费出图" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">🔮</button>
 </div>
 
 <script>
