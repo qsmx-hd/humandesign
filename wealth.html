@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财运之道 · 人类图财富分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #F5F0E8;
+    color: #2D1F12;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 0.5px solid #E0D8C8;
+    padding: 20px 20px 16px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-badge {
+    display: inline-block;
+    background: #F5EDE0;
+    color: #8B5E3C;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .header h1 { font-size: 20px; font-weight: 500; color: #3D2B1F; letter-spacing: 0.5px; }
+  .header p { font-size: 12px; color: #8B7D6B; margin-top: 4px; }
+
+  .form-section {
+    background: #fff;
+    margin: 12px 16px;
+    border-radius: 16px;
+    padding: 20px;
+    border: 0.5px solid #E0D8C8;
+  }
+  .form-section h2 {
+    font-size: 13px; font-weight: 500; color: #3D2B1F;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+  }
+  .form-section h2::before {
+    content: ''; display: inline-block; width: 4px; height: 14px;
+    background: #8B5E3C; border-radius: 2px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-item { display: flex; flex-direction: column; gap: 4px; }
+  .form-item label { font-size: 11px; color: #8B7D6B; }
+  .form-item select, .form-item input {
+    border: 0.5px solid #D0C8B8; border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; color: #2D1F12;
+    background: #FAF8F4; outline: none;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888780' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+  .form-item input { background-image: none; }
+  .form-item select:focus, .form-item input:focus { border-color: #C9A84C; background: #FFFDF8; }
+  .form-item.full { grid-column: 1 / -1; }
+
+  .gate-input-area { margin-top: 10px; }
+  .gate-input-area > label { font-size: 11px; color: #8B7D6B; display: block; margin-bottom: 4px; }
+  .gate-group { margin-bottom: 10px; }
+  .gate-group-title { font-size: 11px; color: #A09888; margin-bottom: 6px; padding-left: 2px; }
+  .gate-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gate-chip {
+    background: #F5EDE0; color: #8B5E3C; font-size: 11px;
+    padding: 3px 10px; border-radius: 20px; cursor: pointer;
+    border: 0.5px solid #D4C4A8; user-select: none; transition: all 0.15s;
+  }
+  .gate-chip.active { background: #8B5E3C; color: #fff; border-color: #8B5E3C; }
+
+  .analyze-btn {
+    display: block; width: 100%; margin-top: 16px; padding: 13px;
+    background: #8B5E3C; color: #fff; font-size: 14px; font-weight: 500;
+    border: none; border-radius: 10px; cursor: pointer; letter-spacing: 1px;
+    transition: background 0.15s;
+  }
+  .analyze-btn:hover { background: #6B4A2A; }
+  .analyze-btn:active { background: #3D2B1F; }
+
+  .result-section { margin: 0 16px 20px; display: none; }
+  .result-section.visible { display: block; }
+
+  .result-summary {
+    background: #3D2B1F;
+    border-radius: 16px; padding: 20px; color: #fff; margin-bottom: 12px;
+  }
+  .result-summary .name { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+  .result-summary .title { font-size: 18px; font-weight: 500; margin-bottom: 8px; letter-spacing: 0.5px; }
+  .result-summary .subtitle { font-size: 12px; opacity: 0.8; line-height: 1.6; }
+  .result-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .result-tag {
+    background: rgba(255,255,255,0.15); font-size: 11px;
+    padding: 3px 10px; border-radius: 20px; border: 0.5px solid rgba(255,255,255,0.25);
+  }
+
+  /* 综合画像卡 */
+  .portrait-card {
+    background: #fff; border-radius: 14px; border: 0.5px solid #E0D8C8;
+    padding: 20px; margin-bottom: 10px;
+  }
+  .portrait-card .portrait-label {
+    font-size: 11px; font-weight: 500; color: #8B5E3C;
+    letter-spacing: 0.5px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .portrait-card .portrait-label::before {
+    content: ''; display: block; width: 18px; height: 2px;
+    background: #C9A84C; border-radius: 1px;
+  }
+  .portrait-tagline {
+    font-size: 15px; font-weight: 500; color: #3D2B1F;
+    line-height: 1.5; margin-bottom: 12px;
+  }
+  .portrait-paths {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .portrait-path {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: #F5F0E8; border-radius: 10px; padding: 10px 12px;
+    font-size: 13px; color: #3D2B1F;
+  }
+  .path-rank {
+    min-width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 500; flex-shrink: 0; margin-top: 1px;
+  }
+  .path-rank.r1 { background: #8B5E3C; color: #fff; }
+  .path-rank.r2 { background: #E8DCC8; color: #8B5E3C; }
+  .path-rank.r3 { background: #EDE8DC; color: #8B7D6B; }
+  .path-text strong { font-weight: 500; color: #2D1F12; display: block; margin-bottom: 2px; }
+  .path-text span { font-size: 12px; color: #8B7D6B; }
+
+  .portrait-avoid {
+    margin-top: 12px; padding: 10px 12px;
+    background: #F5E8E0; border-radius: 10px;
+    font-size: 12px; color: #8B3A2A; line-height: 1.6;
+  }
+  .portrait-avoid strong { font-weight: 500; display: block; margin-bottom: 2px; }
+
+  /* 维度卡片 */
+  .cards-container { display: flex; flex-direction: column; gap: 10px; }
+  .card { background: #fff; border-radius: 14px; border: 0.5px solid #E0D8C8; overflow: hidden; }
+  .card-header { display: flex; align-items: center; padding: 14px 16px; gap: 10px; cursor: pointer; }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .card-header-text { flex: 1; }
+  .card-header-text .dim-label { font-size: 11px; color: #8B7D6B; }
+  .card-header-text .dim-value { font-size: 14px; font-weight: 500; color: #2D1F12; margin-top: 1px; }
+  .card-arrow { color: #A09888; font-size: 12px; transition: transform 0.2s; }
+  .card.expanded .card-arrow { transform: rotate(180deg); }
+  .card-body { display: none; padding: 0 16px 16px; border-top: 0.5px solid #EDE8DC; }
+  .card.expanded .card-body { display: block; }
+
+  .insight-block { margin-bottom: 12px; }
+  .insight-block:last-child { margin-bottom: 0; }
+  .insight-label {
+    font-size: 11px; font-weight: 500; color: #8B7D6B;
+    letter-spacing: 0.5px; margin-bottom: 4px; margin-top: 12px;
+  }
+  .insight-text { font-size: 13px; color: #3D2B1F; line-height: 1.7; }
+  .insight-text strong { color: #2D1F12; font-weight: 500; }
+  .insight-tips { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .tip-item { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: #3D2B1F; }
+  .tip-item .tip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+  .theme-purple .card-icon { background: #F5EDE0; }
+  .theme-purple .dim-value { color: #8B5E3C; }
+  .theme-purple .card-arrow { color: #D4C4A8; }
+  .theme-purple .insight-label { color: #C9A84C; }
+
+  .theme-blue .card-icon { background: #F0E8D8; }
+  .theme-blue .dim-value { color: #A67C3D; }
+  .theme-blue .card-arrow { color: #C4B896; }
+  .theme-blue .insight-label { color: #A67C3D; }
+
+  .theme-green .card-icon { background: #EDF0E3; }
+  .theme-green .dim-value { color: #7A8B3E; }
+  .theme-green .card-arrow { color: #A3B06A; }
+  .theme-green .insight-label { color: #7A8B3E; }
+
+  .theme-amber .card-icon { background: #F8F0E0; }
+  .theme-amber .dim-value { color: #9C6B2B; }
+  .theme-amber .card-arrow { color: #D4A843; }
+  .theme-amber .insight-label { color: #9C6B2B; }
+
+  .theme-pink .card-icon { background: #F5E8E0; }
+  .theme-pink .dim-value { color: #A65D4D; }
+  .theme-pink .card-arrow { color: #C9968A; }
+  .theme-pink .insight-label { color: #A65D4D; }
+
+  .theme-teal .card-icon { background: #E5EDE8; }
+  .theme-teal .dim-value { color: #6B7D5E; }
+  .theme-teal .card-arrow { color: #8AAA8A; }
+  .theme-teal .insight-label { color: #6B7D5E; }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: #A09888; font-size: 13px; }
+  .empty-state .icon { font-size: 32px; margin-bottom: 10px; }
+
+  .section-divider {
+    font-size: 11px; color: #A09888; padding: 8px 4px 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-divider::after { content: ''; flex: 1; height: 0.5px; background: #E0D8C8; }
+
+  .footer-note {
+    text-align: center; font-size: 11px; color: #A09888;
+    padding: 12px 20px 40px; line-height: 1.6;
+  }
+
+  /* ===== 打印优化 ===== */
+  @media print {
+    body { background: #fff; color: #2D1F12; }
+
+    /* header 打印时取消 sticky，确保在第1页 */
+    .header {
+      position: static !important;
+      page-break-inside: avoid;
+    }
+
+    /* 分析结果从第2页开始 */
+    .result-section { page-break-before: always; }
+
+    /* 输入区域不被分页打断 */
+    .form-section, .gate-group { page-break-inside: avoid; }
+
+    /* 分组标题在打印中必须可见 */
+    .gate-group-title {
+      color: #2D1F12 !important;
+      font-weight: bold !important;
+      font-size: 11px !important;
+      margin-bottom: 6px !important;
+      padding-left: 2px !important;
+    }
+
+    /* 闸门打印样式：跟前端一致的金色底+棕色字，选中变棕色底+白字 */
+    .gate-chip,
+    .gate-chips .gate-chip {
+      display: inline-block !important;
+      border: 0.5px solid #D4C4A8 !important;
+      background: #F5EDE0 !important;
+      color: #8B5E3C !important;
+      font-weight: 500 !important;
+      font-size: 11px !important;
+      padding: 3px 10px !important;
+      border-radius: 20px !important;
+      margin: 0 3px 3px 0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .gate-chip.active,
+    .gate-chips .gate-chip.active {
+      background: #8B5E3C !important;
+      color: #fff !important;
+      border-color: #8B5E3C !important;
+      font-weight: bold !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* 分组标题在打印中必须可见、加粗 */
+    .insight-label {
+      color: #2D1F12 !important;
+      font-weight: bold !important;
+      font-size: 12px !important;
+      margin-bottom: 6px !important;
+    }
+
+    /* 结果摘要打印时不灰度，强制保留深色背景和白字 */
+    .result-summary {
+      background: #3D2B1F !important;
+      color: #fff !important;
+      page-break-inside: avoid;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .result-summary .name,
+    .result-summary .subtitle {
+      color: #fff !important;
+      opacity: 1 !important;
+    }
+    .result-summary .title {
+      color: #fff !important;
+    }
+    .result-tag {
+      background: rgba(255,255,255,0.2) !important;
+      color: #fff !important;
+      border-color: rgba(255,255,255,0.35) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* 卡片与内容块防分页打断 —— 恢复 V5 效果 */
+    .card, .portrait-card, .insight-block {
+      page-break-inside: avoid;
+      margin-bottom: 10px;
+    }
+
+    /* 各维度详细解读：在打印时从新页开始，放在第3页首行 */
+    .section-divider {
+      page-break-before: always;
+      color: #2D1F12 !important;
+      font-weight: bold !important;
+      font-size: 12px !important;
+      padding: 12px 4px 8px !important;
+    }
+    .section-divider::after {
+      background: #E0D8C8 !important;
+    }
+
+    /* 隐藏按钮，但保留页脚 */
+    .analyze-btn { display: none !important; }
+
+    /* 打印页脚：四行显示 */
+    .footer-note {
+      display: block !important;
+      text-align: center !important;
+      font-size: 10px !important;
+      color: #8B7D6B !important;
+      padding: 20px !important;
+      line-height: 1.8 !important;
+      margin-top: 20px !important;
+      border-top: 0.5px solid #E0D8C8 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">人类图系统</div>
+  <h1>财运之道</h1>
+  <p>顺应你的设计，让财富自然流入</p>
+</div>
+
+<div class="form-section">
+  <h2>输入你的人类图信息</h2>
+  <div class="form-grid">
+    <div class="form-item full">
+      <label>姓名（可选）</label>
+      <input type="text" id="userName" value="Kan Man Tang">
+    </div>
+    <div class="form-item">
+      <label>能量类型</label>
+      <select id="type">
+        <option value="">请选择</option>
+        <option value="生产者">生产者</option>
+        <option value="显示生产者">显示生产者</option>
+        <option value="投射者">投射者</option>
+        <option value="显示者">显示者</option>
+        <option value="反映者">反映者</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>内在权威</label>
+      <select id="authority">
+        <option value="">请选择</option>
+        <option value="情绪权威">情绪权威</option>
+        <option value="荐骨权威">荐骨权威</option>
+        <option value="脾脏权威">脾脏权威</option>
+        <option value="意志力权威">意志力权威</option>
+        <option value="G中心权威">G中心权威</option>
+        <option value="心智权威">心智权威（投射者）</option>
+        <option value="月亮权威">月亮权威（反映者）</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>Profile 人生角色</label>
+      <select id="profile">
+        <option value="">请选择</option>
+        <option value="1/3">1/3 研究者/烈士</option>
+        <option value="1/4">1/4 研究者/机会主义者</option>
+        <option value="2/4">2/4 隐士/机会主义者</option>
+        <option value="2/5">2/5 隐士/异端</option>
+        <option value="3/5">3/5 烈士/异端</option>
+        <option value="3/6">3/6 烈士/角色模型</option>
+        <option value="4/6">4/6 机会主义者/角色模型</option>
+        <option value="4/1">4/1 机会主义者/研究者</option>
+        <option value="5/1">5/1 异端/研究者</option>
+        <option value="5/2">5/2 异端/隐士</option>
+        <option value="6/2">6/2 角色模型/隐士</option>
+        <option value="6/3">6/3 角色模型/烈士</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>意志力中心</label>
+      <select id="willCenter">
+        <option value="">请选择</option>
+        <option value="定义">定义（有颜色）</option>
+        <option value="空白">空白（无颜色）</option>
+      </select>
+    </div>
+    <div class="form-item">
+      <label>G 中心</label>
+      <select id="gCenter">
+        <option value="">请选择</option>
+        <option value="定义">定义（有颜色）</option>
+        <option value="空白">空白（无颜色）</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gate-input-area">
+    <label>财运相关闸门（勾选你图中有的）</label>
+
+    <div class="gate-group">
+      <div class="gate-group-title">财富 · 资源 · 能量</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="14" onclick="toggleGate(this)">14 能量库</div>
+        <div class="gate-chip" data-gate="8" onclick="toggleGate(this)">8 贡献</div>
+        <div class="gate-chip" data-gate="1" onclick="toggleGate(this)">1 创造力</div>
+        <div class="gate-chip" data-gate="2" onclick="toggleGate(this)">2 接受者</div>
+        <div class="gate-chip" data-gate="34" onclick="toggleGate(this)">34 强大力量</div>
+        <div class="gate-chip" data-gate="27" onclick="toggleGate(this)">27 滋养</div>
+        <div class="gate-chip" data-gate="3" onclick="toggleGate(this)">3 秩序</div>
+      </div>
+    </div>
+
+    <div class="gate-group">
+      <div class="gate-group-title">领导 · 影响 · 号召</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="45" onclick="toggleGate(this)">45 王者</div>
+        <div class="gate-chip" data-gate="21" onclick="toggleGate(this)">21 猎人</div>
+        <div class="gate-chip" data-gate="31" onclick="toggleGate(this)">31 影响力</div>
+        <div class="gate-chip" data-gate="16" onclick="toggleGate(this)">16 热情</div>
+        <div class="gate-chip" data-gate="20" onclick="toggleGate(this)">20 当下</div>
+      </div>
+    </div>
+
+    <div class="gate-group">
+      <div class="gate-group-title">野心 · 跃升 · 成就</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="54" onclick="toggleGate(this)">54 野心</div>
+        <div class="gate-chip" data-gate="38" onclick="toggleGate(this)">38 斗士</div>
+        <div class="gate-chip" data-gate="39" onclick="toggleGate(this)">39 挑衅</div>
+        <div class="gate-chip" data-gate="52" onclick="toggleGate(this)">52 山峰</div>
+        <div class="gate-chip" data-gate="53" onclick="toggleGate(this)">53 发展</div>
+      </div>
+    </div>
+
+    <div class="gate-group">
+      <div class="gate-group-title">专业 · 价值 · 持续</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="48" onclick="toggleGate(this)">48 深井</div>
+        <div class="gate-chip" data-gate="32" onclick="toggleGate(this)">32 持续</div>
+        <div class="gate-chip" data-gate="18" onclick="toggleGate(this)">18 修正</div>
+        <div class="gate-chip" data-gate="28" onclick="toggleGate(this)">28 冒险家</div>
+        <div class="gate-chip" data-gate="50" onclick="toggleGate(this)">50 价值观</div>
+      </div>
+    </div>
+
+    <div class="gate-group">
+      <div class="gate-group-title">直觉 · 感知 · 人际</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="57" onclick="toggleGate(this)">57 直觉</div>
+        <div class="gate-chip" data-gate="59" onclick="toggleGate(this)">59 亲密</div>
+        <div class="gate-chip" data-gate="6" onclick="toggleGate(this)">6 摩擦</div>
+        <div class="gate-chip" data-gate="37" onclick="toggleGate(this)">37 家族</div>
+        <div class="gate-chip" data-gate="40" onclick="toggleGate(this)">40 独立</div>
+      </div>
+    </div>
+
+    <div class="gate-group">
+      <div class="gate-group-title">语言 · 表达 · 传播</div>
+      <div class="gate-chips">
+        <div class="gate-chip" data-gate="12" onclick="toggleGate(this)">12 谨慎</div>
+        <div class="gate-chip" data-gate="33" onclick="toggleGate(this)">33 隐居</div>
+        <div class="gate-chip" data-gate="35" onclick="toggleGate(this)">35 变化</div>
+        <div class="gate-chip" data-gate="56" onclick="toggleGate(this)">56 刺激</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="analyze-btn" onclick="analyze()">生成我的财运之道</button>
+</div>
+
+<div class="result-section" id="resultSection">
+  <div class="result-summary" id="resultSummary"></div>
+  <div id="portraitContainer"></div>
+  <div class="cards-container" id="cardsContainer"></div>
+</div>
+
+<div class="footer-note">
+  人类图揭示的是你最顺遂的财富路径<br>
+  不是预测，是一张属于你的使用说明书<br>
+  human-design-wealth-V10<br>
+  Powered by Kan Man Tang
+</div>
+
+<script>
+// ============================================================
+// 财运解读文本库
+// ============================================================
+const WEALTH_DATA = {
+
+  type: {
+    "生产者": {
+      icon: "🌱", title: "满足感驱动型财富",
+      core: "你的财富公式是：<strong>热爱 × 回应 × 坚持</strong>。当你在做真正让自己有满足感的事时，能量是取之不竭的，客户和机会会自然被你的高频状态吸引。",
+      tips: [
+        { color: "#7A8B3E", text: "等待内心「响应」再行动——被某个机会触动时再推进，而非主动硬闯" },
+        { color: "#7A8B3E", text: "不喜欢的项目即便利润高也容易陷入倦怠，最终钱也留不住" },
+        { color: "#7A8B3E", text: "精通一件事的深度，比跨行做多件事的广度更能带来持续现金流" }
+      ],
+      caution: "警惕「沮丧感」——当你感到沮丧时，说明你在做不属于你的事，财富流在往外漏。",
+      // 推荐路径（用于综合画像）
+      bestPath: ["专注深耕一个让自己热爱的领域", "等待回应再行动，不要硬推项目", "做精做深，形成稀缺性"],
+      avoid: "不要强迫自己做不感兴趣的赚钱项目，沮丧感是资源泄漏的信号"
+    },
+    "显示生产者": {
+      icon: "⚡", title: "多线并行 · 快节奏财富",
+      core: "你是人类图里最高效的能量体。财富来自你那非线性的、跳跃式的做事方式——<strong>你可以同时推进多个项目</strong>，只要每一个都让你感到兴奋。",
+      tips: [
+        { color: "#7A8B3E", text: "在决定前先「告知」周边人，减少阻力，财富推进更顺畅" },
+        { color: "#7A8B3E", text: "允许自己在不同赛道跳跃，这不是不专注，而是你天生的工作方式" },
+        { color: "#7A8B3E", text: "先动手试试看，往往比反复思考更快找到对的财富路径" }
+      ],
+      caution: "警惕不告而动引发的人际摩擦，往往会把已经谈好的财务合作搞砸。",
+      bestPath: ["多个兴奋点并行推进，不必强迫单一专注", "先行动再优化，快速迭代", "行动前告知关键人，减少人际阻力"],
+      avoid: "不要为了显得专注而压制自己跳跃的本能，也不要在没通知的情况下突然改变方向"
+    },
+    "投射者": {
+      icon: "🔭", title: "智慧引导型财富",
+      core: "你的财富来自<strong>被看见、被邀请</strong>。你是最了解他人系统的人，你的洞察力、管理能力和引导能力，在别人邀请你时价值最高。",
+      tips: [
+        { color: "#A67C3D", text: "等待正式的邀请再推进重大财务合作——受邀的机会才带来真正的财" },
+        { color: "#A67C3D", text: "把自己的专业知识展示出来（内容、写作、讲课），让机会找来你" },
+        { color: "#A67C3D", text: "保护好能量，避免被不适合的项目耗尽，从而错过真正重要的机会" }
+      ],
+      caution: "没有邀请就主动推销自己往往碰壁，先建立信任，再等待邀请。",
+      bestPath: ["持续输出专业内容，让邀请主动来找你", "成为某个系统的「解读者」或「优化者」", "管理好能量，只接受真正适合自己的邀请"],
+      avoid: "不要在没有邀请的情况下主动闯入别人的系统，能量会被耗尽却没有回报"
+    },
+    "显示者": {
+      icon: "🔥", title: "开创先行型财富",
+      core: "你是人类图里唯一天生可以<strong>主动发起</strong>的类型。财富来自你的独立行动力和开创新事物的能力，你不需要等待，可以直接开始。",
+      tips: [
+        { color: "#8B3A2A", text: "在重大财务行动前「通知」关键人，减少他人抵抗带来的阻力损耗" },
+        { color: "#8B3A2A", text: "你适合做先驱、奠定方向，然后让别人来执行细节" },
+        { color: "#8B3A2A", text: "愤怒感是信号——当你感到愤怒时检查是否有人妨碍你的财务行动" }
+      ],
+      caution: "独来独往可能让合作伙伴感到疏离，重要的财务决策要主动沟通。",
+      bestPath: ["主动开创新项目、新赛道，不需等待", "做先驱者，让他人跟随你的方向", "行动前告知关键人，减少「被抵抗」带来的摩擦"],
+      avoid: "不要试图通过「等待」来获得许可——你的能量就是用来开创的，不是用来等待的"
+    },
+    "反映者": {
+      icon: "🌙", title: "环境感知型财富",
+      core: "你是人类图里最稀有的类型（仅占1%）。你的财富与<strong>你所在的环境和圈子</strong>高度相关——好的环境会让你发光，差的环境会让你精疲力竭。",
+      tips: [
+        { color: "#9C6B2B", text: "选择正确的城市、公司、团队比选择正确的项目更重要" },
+        { color: "#9C6B2B", text: "财务大决策需要经历一个完整的月亮周期（约28天）才做决定" },
+        { color: "#9C6B2B", text: "你能准确感知一个企业或团队的健康状况，这是珍贵的顾问能力" }
+      ],
+      caution: "在不健康的环境里待太久会让你失去方向感，优先保护自己的空间。",
+      bestPath: ["优先选择高频健康的团队和环境", "发挥你对「系统健康度」的感知能力，做顾问或评估者", "用月亮周期做财务决策，不冲动"],
+      avoid: "不要在低频、压抑的环境里硬撑——环境对你的影响远超其他类型"
+    }
+  },
+
+  authority: {
+    "情绪权威": {
+      icon: "🌊", title: "情绪波浪决策法",
+      core: "你的财务决策需要<strong>等情绪波浪过去之后</strong>再定夺。在高峰期（兴奋）或低谷期（沮丧）时签的合同、做的投资，往往会后悔。",
+      tips: [
+        { color: "#A67C3D", text: "重大财务决策：「今天感觉很对」→ 等3天再确认 → 还是对就行动" },
+        { color: "#A67C3D", text: "学会问自己：「如果现在情绪消退了，我还愿意做这件事吗？」" },
+        { color: "#A67C3D", text: "你的「逐渐清晰感」是最可靠的财务罗盘" }
+      ],
+      decisionStyle: "等待 · 观察情绪曲线"
+    },
+    "荐骨权威": {
+      icon: "💡", title: "即时直觉响应法",
+      core: "你的财务直觉就在身体里。当被问到某个项目或机会时，身体那个<strong>自发的「嗯」或「呃」</strong>就是答案，不需要用脑子分析太多。",
+      tips: [
+        { color: "#7A8B3E", text: "训练识别骶骨的「啊哈」（是）和「呃嗯」（否）——比任何财务分析都准" },
+        { color: "#7A8B3E", text: "当你犹豫不定时，大概率是「否」——清晰的是会有一种推进感" },
+        { color: "#7A8B3E", text: "过度思考反而会遮蔽你的财务本能" }
+      ],
+      decisionStyle: "当下 · 信任身体的第一反应"
+    },
+    "脾脏权威": {
+      icon: "✨", title: "当下直觉感知法",
+      core: "你有最古老的意识——<strong>当下瞬间的直觉</strong>。它只说一次，非常安静，如果你忽略了它，它不会重复。对财务机会的第一感受往往是最准的。",
+      tips: [
+        { color: "#9C6B2B", text: "培养静心习惯，让那个安静的内在信号更容易被听见" },
+        { color: "#9C6B2B", text: "对财务合作的第一直觉（安全/不安全感）非常可靠，不要理性化掉它" },
+        { color: "#9C6B2B", text: "在轻松愉快的状态下做的财务决定往往更准确" }
+      ],
+      decisionStyle: "当下 · 信任那个安静的第一感"
+    },
+    "意志力权威": {
+      icon: "🦁", title: "内心承诺驱动法",
+      core: "你的财务决策来自<strong>内心深处「我想要」的承诺感</strong>。问自己：「我真的想要这个吗？」——不是应该要，不是别人觉得值，而是你自己真的想。",
+      tips: [
+        { color: "#8B3A2A", text: "说出「我想要」就是你的承诺，不要轻易改口" },
+        { color: "#8B3A2A", text: "只承诺你真正愿意做到底的事，散漫的承诺会消耗意志力中心能量" },
+        { color: "#8B3A2A", text: "你对创业、自营事业有天然的驱动力" }
+      ],
+      decisionStyle: "当下 · 「我想要」即是答案"
+    },
+    "G中心权威": {
+      icon: "🧭", title: "方向感导航法",
+      core: "你需要感受这个财务机会是否<strong>符合你的人生方向和身份认同</strong>。当一个机会让你感到「这就是我」时，就是对的。",
+      tips: [
+        { color: "#8B5E3C", text: "问自己：「这件事5年后还会是我想做的吗？」" },
+        { color: "#8B5E3C", text: "财富跟着身份认同走，先搞清楚「我是谁」再决定「做什么」" }
+      ],
+      decisionStyle: "感受 · 与身份认同是否契合"
+    },
+    "心智权威": {
+      icon: "💬", title: "外部反思决策法",
+      core: "你需要<strong>对信任的人大声说出你的财务困惑</strong>，在说话的过程中听到自己的答案。不是问别人意见，而是借助他人作为镜子听见自己。",
+      tips: [
+        { color: "#8B5E3C", text: "找3位信任的人，把你的财务选择大声说出来——答案会在说话中浮现" },
+        { color: "#8B5E3C", text: "别期待别人给你答案，你需要的是一个会倾听的「镜子」" }
+      ],
+      decisionStyle: "说出来 · 在语言中听见答案"
+    },
+    "月亮权威": {
+      icon: "🌕", title: "月亮周期决策法",
+      core: "任何重大财务决定，都需要<strong>一个完整的月亮周期（28天）</strong>来感受和确认。这不是拖延，这是你天生的决策节奏。",
+      tips: [
+        { color: "#9C6B2B", text: "把财务选项放置28天，在不同的月亮阶段感受它" },
+        { color: "#9C6B2B", text: "用月历记录你对某个机会的感受变化，最终答案会自然浮现" }
+      ],
+      decisionStyle: "等待 · 用月亮周期感受"
+    }
+  },
+
+  profile: {
+    "1/3": {
+      icon: "📚", title: "扎根试错 · 厚积薄发",
+      core: "你需要<strong>先把基础打牢，再谈财富</strong>。1爻要求深度研究，没有底气的投资容易赔；3爻通过试错找到对的路，每一次「失败」都是财富认知的升级。",
+      rhythm: "财富节奏：大量学习 → 多次试错 → 找到真正适合的方向 → 厚积薄发",
+      tips: [
+        { color: "#8B5E3C", text: "在没有研究透彻前，不要把大额资金投入新领域" },
+        { color: "#8B5E3C", text: "把每次商业试错看作「学费」，它会让你的财富判断越来越准" },
+        { color: "#8B5E3C", text: "你的安全感来自知识积累，而非快速赚到多少钱" }
+      ],
+      wealthTiming: "需要时间积累，不是最快的类型，但一旦找到方向会非常稳固"
+    },
+    "1/4": {
+      icon: "📖", title: "知识基础 · 人脉传播",
+      core: "你需要<strong>建立扎实的知识基础，并通过人脉网络传播价值</strong>。4爻的人脉不是普通社交，是深度信任关系，财富常常通过熟人介绍进来。",
+      rhythm: "财富节奏：深度研究一个领域 → 建立真实的信任关系网络 → 通过圈层介绍获得机会",
+      tips: [
+        { color: "#8B5E3C", text: "维护好现有关系网，转介绍是你最重要的获客渠道" },
+        { color: "#8B5E3C", text: "专业深度是你的信任资本，值得持续投资在学习上" }
+      ],
+      wealthTiming: "通过持续深耕和口碑积累，财运会稳步上升"
+    },
+    "2/4": {
+      icon: "🤝", title: "天赋自然 · 熟人带财",
+      core: "<strong>你有天然的才华，很多时候自己都没意识到。</strong>财富常常来自熟人圈——朋友的介绍、老客户的复购、社群里的连接。",
+      rhythm: "财富节奏：专注自己喜欢的事 → 才华被熟人看见 → 通过人脉获得机会",
+      tips: [
+        { color: "#7A8B3E", text: "不要总想着去开拓陌生市场，你的熟人圈是最大的金矿" },
+        { color: "#7A8B3E", text: "需要独处时间来恢复能量，不要因「社交焦虑」而乱接项目" },
+        { color: "#7A8B3E", text: "把你天然会的事系统化、产品化，才能规模化变现" }
+      ],
+      wealthTiming: "通过人脉圈自然流入，无需强推，时机对了就来了"
+    },
+    "2/5": {
+      icon: "🌟", title: "隐士出山 · 公众期待",
+      core: "你有天赋但喜欢独处，外界却常常对你有<strong>「救世主」式的期待</strong>。财富的关键在于：允许自己被看见，同时管理好外界的投射。",
+      rhythm: "财富节奏：独自打磨才华 → 被外界发现和期待 → 成为某个领域的实用解决者",
+      tips: [
+        { color: "#A67C3D", text: "你的公众形象和口碑是重要财富资产，值得认真经营" },
+        { color: "#A67C3D", text: "别承诺超出自己能力的事，外界期待值管理很重要" }
+      ],
+      wealthTiming: "在被外界「发现」后会有明显的财运跃升"
+    },
+    "3/5": {
+      icon: "🔬", title: "试错探路 · 实用影响力",
+      core: "你通过<strong>不断试错找到真正有效的路</strong>，然后把经验变成实用的东西影响他人。每一次「失败」都在给你积累真实可信的案例。",
+      rhythm: "财富节奏：大量试错 → 积累真实经验 → 成为某个实用领域的权威 → 影响力变现",
+      tips: [
+        { color: "#A65D4D", text: "你的真实案例（包括失败的）比任何理论都有价值" },
+        { color: "#A65D4D", text: "不要为试错感到羞耻，这是你找到真相的必经之路" }
+      ],
+      wealthTiming: "中后期凭借真实案例的积累，影响力变现会越来越有力"
+    },
+    "3/6": {
+      icon: "🦅", title: "三阶段财运觉醒",
+      core: "你的财运有清晰的三个阶段：<strong>0-30岁大量试错</strong>；<strong>30-50岁爬上屋顶观察</strong>（谨慎积累）；<strong>50岁后角色模型</strong>，成为别人的灯塔。",
+      rhythm: "不要用30岁前的「失败」定义你的财运，后半段才是真正绽放的时候",
+      tips: [
+        { color: "#A65D4D", text: "30岁前的失败是资产，它们是你后来智慧的源头" },
+        { color: "#A65D4D", text: "30-50岁期间，比起冒险，更要稳健经营，积累信誉" },
+        { color: "#A65D4D", text: "50岁后你的生命经验本身就有巨大的变现价值" }
+      ],
+      wealthTiming: "典型的「后来居上」——越到人生后期，财运越旺"
+    },
+    "4/6": {
+      icon: "🏛️", title: "人脉根基 · 角色模型",
+      core: "<strong>稳定的关系网络是你最重要的财富基础设施。</strong>同时你会随着年龄增长成为越来越有影响力的角色模型，后期财运上行。",
+      rhythm: "财富节奏：建立深厚信任关系 → 经过考验后进入角色模型阶段 → 成为圈子里的领袖",
+      tips: [
+        { color: "#9C6B2B", text: "维护核心关系圈比拓展新人脉更重要" },
+        { color: "#9C6B2B", text: "你对财务机会的判断会随着年龄越来越准" }
+      ],
+      wealthTiming: "中年后因口碑和信任关系积累，财运会持续上行"
+    },
+    "4/1": {
+      icon: "🌐", title: "知识人脉 · 双重资产",
+      core: "<strong>知识基础 + 人脉网络</strong>是你的双重财富引擎。你需要既有扎实的专业背景，又有能撬动机会的真实关系网。",
+      rhythm: "财富节奏：深耕专业领域 → 通过熟人圈传递价值 → 人脉转化为商业机会",
+      tips: [
+        { color: "#7A8B3E", text: "每年都在一个领域加深专业度，同时维护关键人际关系" }
+      ],
+      wealthTiming: "随着专业深度和人脉宽度同步增长，财运会稳步提升"
+    },
+    "5/1": {
+      icon: "📡", title: "公众影响力变现",
+      core: "你是「异端者」，外界对你有强烈的投射和期待。<strong>你的公众形象本身就是最大的财富杠杆</strong>——当你成为某个领域的实用解决者，机会会主动找来你。",
+      rhythm: "财富节奏：建立知识基础 → 通过公众形象吸引机会 → 被「英雄化」后大规模变现",
+      tips: [
+        { color: "#A67C3D", text: "打造可信的公众形象和个人品牌，这是你的最大资产" },
+        { color: "#A67C3D", text: "专注于提供实用、可落地的价值，这是你的核心竞争力" },
+        { color: "#A67C3D", text: "管理好外界对你的期待，避免承诺过多" }
+      ],
+      wealthTiming: "一旦公众影响力建立，财运可以呈指数级增长"
+    },
+    "5/2": {
+      icon: "💎", title: "隐世高人 · 被发现的财运",
+      core: "你有隐逸的天性，但外界总能发现你的才华。<strong>你不需要主动营销，只需要做好自己</strong>，财运自然会因「被发现」而来。",
+      rhythm: "财富节奏：安心打磨才华和能力 → 在某个圈子被发现 → 机会主动找来",
+      tips: [
+        { color: "#8B5E3C", text: "你的才华不需要硬推销，找到合适的展示场景即可" },
+        { color: "#8B5E3C", text: "保护好独处时间，这是你财富创造力的来源" }
+      ],
+      wealthTiming: "被「发现」后会有爆发式的机会涌入，需要做好准备"
+    },
+    "6/2": {
+      icon: "🌈", title: "角色模型的后期绽放",
+      core: "你的财运有三阶段：<strong>0-30岁</strong>试错；<strong>30-50岁</strong>退守观察，沉淀自己；<strong>50岁后</strong>成为真正的角色模型，引领他人，财运全面开花。",
+      rhythm: "不要焦虑前期的「慢」，这是你在蓄势——后期的财富爆发是值得等待的",
+      tips: [
+        { color: "#7A8B3E", text: "30岁后减少不必要的冒险，稳健积累财富基础" },
+        { color: "#7A8B3E", text: "你的人生智慧和经历，在后半段会成为极有价值的变现资源" },
+        { color: "#7A8B3E", text: "你的天赋（2爻）会在合适时机被人发现，无需过度焦虑" }
+      ],
+      wealthTiming: "典型的晚成型——50岁后才是真正的财富主场"
+    },
+    "6/3": {
+      icon: "🦋", title: "经历即财富 · 角色模型",
+      core: "你经历了试错（3爻）和观察（6爻）两重洗礼。<strong>你丰富的人生经历本身就是财富资产</strong>，越到后期越有影响力和号召力。",
+      rhythm: "财富节奏：前期大量经历 → 中期消化沉淀 → 后期成为真正的智慧引领者",
+      tips: [
+        { color: "#A65D4D", text: "把你的经历和故事整理成可传授的智慧，这是你的核心变现资产" }
+      ],
+      wealthTiming: "需要经历足够多后才能绽放，中期后财运显著提升"
+    }
+  },
+
+  centers: {
+    will: {
+      defined: {
+        title: "意志力中心有定义",
+        text: "你有<strong>稳定的意志力和承诺力</strong>。适合创业、独立运营、管理财务目标。说出的承诺能做到，这让你在商业合作中很有信誉。但要注意不要过度承诺耗尽意志力。"
+      },
+      undefined: {
+        title: "意志力中心空白",
+        text: "你<strong>不适合轻易许下财务承诺</strong>（如：「我一定能在3个月内达成XXX」）。过多的财务目标设定会让你感到耗竭。更健康的方式是：做当下觉得对的事，不为财务目标过度施压给自己。"
+      }
+    },
+    g: {
+      defined: {
+        title: "G 中心有定义",
+        text: "你有<strong>稳定的身份感和方向感</strong>。你知道自己是谁、想去哪里，这种清晰感会吸引和你方向一致的财富机会。不用担心「迷失方向」，你的身份认同就是你的财务罗盘。"
+      },
+      undefined: {
+        title: "G 中心空白",
+        text: "你的方向感容易受环境影响。<strong>选择正确的人和空间</strong>对你的财运影响巨大——在充满方向感的人身边，你也会找到清晰的财富路径。反之亦然。"
+      }
+    }
+  },
+
+  gates: {
+    // 财富 · 资源 · 能量
+    "14": { name: "能量库", icon: "💰", group: "财富·能量",
+      text: "<strong>财富与热情绑定的核心闸门。</strong>你的财运与你的热情高度绑定——只有在做真正让你兴奋的事情时，能量才是丰盛的。当你为了钱做不感兴趣的事，财富反而会悄悄流走。最高表达：做热爱的事，然后让财富随之而来。" },
+    "8": { name: "贡献", icon: "🎁", group: "财富·能量",
+      text: "<strong>通过真实贡献创造价值的闸门。</strong>你的财富来自真正帮助他人解决问题的能力。不是表演式的付出，而是发自内心、量力而行的贡献。当你专注于真实价值的创造，财富会作为回报自然流入。" },
+    "1": { name: "创造力", icon: "🎨", group: "财富·能量",
+      text: "<strong>原创力与自我表达的闸门。</strong>你有独特的创造能量。财富路径在于：找到属于你自己的独特表达方式，不要模仿别人。你的原创性本身就是稀缺资源，越是真实地表达自己，越能吸引匹配的机会和报酬。" },
+    "2": { name: "接受者", icon: "🌀", group: "财富·能量",
+      text: "<strong>天然方向感与接收能力的闸门。</strong>你有接收宇宙指引的天赋——当你放松下来，答案会自然出现。财富不需要强求，而是在你处于内在和谐时自然流入。不要过度努力，试着放松接收。" },
+    "34": { name: "强大力量", icon: "💪", group: "财富·能量",
+      text: "<strong>强大执行力与个人力量的闸门。</strong>你有极强的推进能量。当你的力量被用在「正确的方向」上时，财富增长会非常迅速。关键是：确保你用力的方向是你真正热爱的，否则力量会变成内耗。" },
+    "27": { name: "滋养", icon: "🌿", group: "财富·能量",
+      text: "<strong>照顾与滋养他人的闸门。</strong>你有照料他人、维系社群的天然能力。财富路径在于：通过你的滋养能力建立深厚的客户关系和社群生态。被你照顾过的人，会成为最忠实的支持者和传播者。" },
+    "3": { name: "秩序", icon: "🔧", group: "财富·能量",
+      text: "<strong>在混乱中建立秩序的闸门。</strong>你天生能在复杂局面中找到解法。财富路径在于：解决「别人搞不定的混乱」——无论是系统优化、项目救援还是流程重建。越是混乱的地方，越是你的机会所在。" },
+    // 领导 · 影响 · 号召
+    "45": { name: "王者", icon: "👑", group: "领导·影响",
+      text: "<strong>资源聚集与领导力的核心闸门。</strong>你天生有掌管资源和领导族群的能力——无论是管理团队、经营社群还是打造品牌，都有自然的号召力。财富往往通过你整合资源、带领他人的方式流入。" },
+    "21": { name: "猎人", icon: "🎯", group: "领导·影响",
+      text: "<strong>控制力与资源把控的闸门。</strong>你有管控全局、掌握资源分配的天然能力。财富路径在于担任有实权的角色——项目负责人、团队领导、资源整合者。当你真正掌控一件事，才能发挥出最大价值。" },
+    "31": { name: "影响力", icon: "📣", group: "领导·影响",
+      text: "<strong>公众影响力与引领他人的闸门。</strong>你有被他人选择和追随的磁力。财富来自于当你成为一个「可见的引领者」之后的影响力变现——演讲、内容、品牌、社群领袖。你的声音本身就有价值。" },
+    "16": { name: "热情", icon: "🔥", group: "领导·影响",
+      text: "<strong>热情传播与技能展示的闸门。</strong>你对自己热爱的事有极强的感染力——你的热情会自动传染给周围的人。财富路径：把你最热情的技能展示出来，用真实的热情吸引跟随者和客户，感染力本身就是价值。" },
+    "20": { name: "当下", icon: "⚡", group: "领导·影响",
+      text: "<strong>活在当下与即时表达的闸门。</strong>你有把当下感受直接转化为语言或行动的能力。财富路径：内容创作、实时分享、即兴演说——你在当下的真实感受往往是最有共鸣的内容，别犹豫，直接说出来。" },
+    // 野心 · 跃升 · 成就
+    "54": { name: "野心", icon: "🚀", group: "野心·跃升",
+      text: "<strong>借势跃升与向上攀登的闸门。</strong>你有强烈的向上攀登的野心，财富最容易通过进入正确的圈层、找到贵人、借势跃升来实现。人脉质量对你的财运影响极大，与「大树」站在一起，会更快实现财务目标。" },
+    "38": { name: "斗士", icon: "⚔️", group: "野心·跃升",
+      text: "<strong>为有价值的事战斗的闸门。</strong>你有极强的意志力去对抗阻力、坚持自己认为有意义的事。财富路径：投身于你真心认为有价值的事业，当你找到「值得一战的理由」，你的坚持会带来超乎寻常的回报。" },
+    "39": { name: "挑衅", icon: "💥", group: "野心·跃升",
+      text: "<strong>激发他人潜力与突破局限的闸门。</strong>你有打破平静、激发他人行动的能量。财富路径：成为激励者、挑战者、催化师——帮助他人突破瓶颈。你的「挑衅」能量被认可后，会有很高的溢价空间。" },
+    "52": { name: "山峰", icon: "⛰️", group: "野心·跃升",
+      text: "<strong>静心专注与积聚能量的闸门。</strong>你有超常的专注力，能在一件事上持续深耕。财富路径：选定一个领域然后沉下去，不要被「成功捷径」分心。深度专注本身就是稀缺的竞争力，时间会给你答案。" },
+    "53": { name: "发展", icon: "🌱", group: "野心·跃升",
+      text: "<strong>启动新周期与发展的闸门。</strong>你有开启新事物的天然推力。财富路径：善用你擅长「启动新周期」的能力，无论是新项目、新品牌还是新的生命阶段，你的「开始能量」是很有价值的稀缺资源。" },
+    // 专业 · 价值 · 持续
+    "48": { name: "深井", icon: "🌊", group: "专业·价值",
+      text: "<strong>深度专业价值的闸门。</strong>你的财富密码是：越深入，越值钱。表面的广度不如一个领域的真正精通。当你在某个领域钻得足够深，专业知识本身就会成为稀缺资源，吸引高价值的机会。" },
+    "32": { name: "持续", icon: "⏰", group: "专业·价值",
+      text: "<strong>持续性与可行性评估的闸门。</strong>你有天然的能力感知一个商业想法是否能持续运转。这是宝贵的商业直觉——你能在早期就判断出哪些财富路径是可以持续的，哪些只是昙花一现，要相信这个感知。" },
+    "18": { name: "修正", icon: "🔍", group: "专业·价值",
+      text: "<strong>洞察缺陷与优化系统的闸门。</strong>你有一眼看出「哪里不对」的天赋。财富路径：做顾问、审核、优化——帮助他人发现和修复系统漏洞。你的批判性眼光在正确的场景下是极高价值的专业能力。" },
+    "28": { name: "冒险家", icon: "🎲", group: "专业·价值",
+      text: "<strong>寻找生命意义与冒险精神的闸门。</strong>你对「值不值得」有非常敏锐的判断。财富路径：只投入你认为真正有意义的赌注，不要为了「感觉应该赚钱」而轻易冒险。意义感是你财富决策最重要的标准。" },
+    "50": { name: "价值观", icon: "⚖️", group: "专业·价值",
+      text: "<strong>维系价值体系与社群法则的闸门。</strong>你有天然的「什么对大家最好」的判断力。财富路径：承担维系团队价值观、社群规则、组织文化的角色。你的「是非感」和「集体智慧」是组织不可缺少的财富。" },
+    // 直觉 · 感知 · 人际
+    "57": { name: "直觉", icon: "🔮", group: "直觉·人际",
+      text: "<strong>当下生存直觉的闸门。</strong>你对财务安全与危险有非常敏锐的感知——当某个财务决定让你感到不安全时，要认真对待这个感觉。你的第一反应往往是对的，不要被理性分析覆盖掉这个直觉。" },
+    "59": { name: "亲密", icon: "🤝", group: "直觉·人际",
+      text: "<strong>信任与亲密关系的闸门。</strong>你的财富常常通过深度的人际信任关系流入。你有打破障碍、建立真实连接的天然能力，客户关系、合伙关系对你的财运有很大影响。深度经营关系就是经营财富。" },
+    "6": { name: "摩擦", icon: "🌉", group: "直觉·人际",
+      text: "<strong>情感连接与边界建立的闸门。</strong>你有调节亲密与距离的天然能力。财富路径：发挥你在人际关系中「搭桥」的能力——无论是商业合作谈判、团队文化建设还是客户关系维护，你都有独特的连接天赋。" },
+    "37": { name: "家族", icon: "🏠", group: "直觉·人际",
+      text: "<strong>家族与社群凝聚力的闸门。</strong>你有把人们聚在一起、建立归属感的天然能力。财富路径：经营有归属感的社群、团队或品牌社区。你的「家族凝聚力」是让客户愿意长期留下来的黏性所在。" },
+    "40": { name: "独立", icon: "🦅", group: "直觉·人际",
+      text: "<strong>独立意志与休整需要的闸门。</strong>你需要定期的独处和休整时间来保持最佳能量状态。财富路径：建立有边界的工作节奏——允许自己休息，反而能让你更高质量地输出价值。过度付出会耗尽你的财富能量。" },
+    // 语言 · 表达 · 传播
+    "12": { name: "谨慎", icon: "🎭", group: "语言·表达",
+      text: "<strong>等待时机表达的闸门。</strong>你的语言和表达有独特的力量，但需要在合适的时机才能发挥。财富路径：不要为了「填满沉默」而随意说话，等待真正有感觉的时候再发声——你的声音一旦出现，会极具感染力。" },
+    "33": { name: "隐居", icon: "📜", group: "语言·表达",
+      text: "<strong>记忆、历史与人生经验的闸门。</strong>你有把过去的经历转化为有价值故事的天赋。财富路径：通过讲述故事、分享经历来传递价值——无论是自媒体、课程还是咨询，你的「经历变故事」是非常有价值的变现能力。" },
+    "35": { name: "变化", icon: "🌊", group: "语言·表达",
+      text: "<strong>追求变化与丰富经历的闸门。</strong>你有强烈的探索新体验的冲动，同时能把经验转化为分享。财富路径：做「体验家」——通过丰富的人生体验积累独特内容，然后通过内容创作、培训或顾问变现。" },
+    "56": { name: "刺激", icon: "💬", group: "语言·表达",
+      text: "<strong>故事讲述与启发他人的闸门。</strong>你有通过故事和语言激发他人好奇心和行动力的天赋。财富路径：内容创作、讲课、演讲、销售文案——凡是需要「用语言打动人」的场景，你都有天然优势。" }
+  }
+};
+
+// ============================================================
+// 综合画像引擎
+// ============================================================
+function generatePortrait(type, authority, profile) {
+  if (!type && !authority && !profile) return null;
+
+  const typeData = WEALTH_DATA.type[type];
+  const profileData = WEALTH_DATA.profile[profile];
+  const authData = WEALTH_DATA.authority[authority];
+
+  // 生成综合一句话标语
+  let tagline = '';
+  if (type && profile) {
+    tagline = buildTagline(type, profile);
+  } else if (type) {
+    tagline = typeData ? `你是${typeData.title}的实践者` : '';
+  } else if (profile) {
+    tagline = profileData ? profileData.title : '';
+  }
+
+  // 生成推荐赚钱路径
+  const paths = buildPaths(type, authority, profile);
+
+  // 生成最高警示
+  const avoid = buildAvoid(type, profile, authority);
+
+  // 财运时机
+  const timing = profileData ? profileData.wealthTiming : null;
+
+  return { tagline, paths, avoid, timing };
+}
+
+function buildTagline(type, profile) {
+  const typeData = WEALTH_DATA.type[type];
+  const profileData = WEALTH_DATA.profile[profile];
+  if (!typeData || !profileData) return typeData ? typeData.title : '';
+
+  const lineNum = profile.split('/')[0];
+  const taglines = {
+    "生产者": {
+      "1": "扎实打底的满足感追随者，以深耕换财富",
+      "2": "天赋驱动的满足感创造者，让热爱被熟人看见",
+      "3": "试错中找到满足感的人，每次失败都在校准方向",
+      "4": "用热情和人脉双轮驱动的财富创造者",
+      "5": "被公众期待的满足感传播者，影响力即财富",
+      "6": "等待时机绽放的满足感引领者，后期财运无可限量"
+    },
+    "显示生产者": {
+      "1": "在多赛道试验中找到自己热爱方向的快手",
+      "2": "天赋自然、多线并行的快节奏财富创造者",
+      "3": "快速试错、快速迭代的多线并行执行者",
+      "4": "依托人脉网络快速推进多项目的能量体",
+      "5": "公众影响力加持下的高效多线并行者",
+      "6": "蓄势待发的多面手，后半场才是真正爆发"
+    },
+    "投射者": {
+      "1": "知识渊博的智慧引导者，等待被看见的时机",
+      "2": "天赋加持的洞察者，让熟人的邀请带来财富",
+      "3": "用真实经验构建专业权威的智慧引导者",
+      "4": "深度人脉滋养的智慧引导者，等待圈层邀请",
+      "5": "公众期待下的智慧引导者，影响力带来邀请",
+      "6": "等待角色成熟的智慧引导者，时机对了才出山"
+    },
+    "显示者": {
+      "1": "知识武装的开创先行者，先研究透再行动",
+      "2": "天赋驱动、随机而动的开创先行者",
+      "3": "试错磨砺的开创先行者，越挫越勇",
+      "4": "以人脉为后盾的开创先行者，告知后大步向前",
+      "5": "被公众期待的开创先行者，影响力带来财富",
+      "6": "后半场绽放的开创先行者，蓄势足够才启动"
+    },
+    "反映者": {
+      "1": "深思熟虑的环境感知者，等待月亮清晰再行动",
+      "2": "天赋自现的环境感知者，好环境让你发光",
+      "3": "在试错中优化环境选择的反映者",
+      "4": "以人脉为雷达的环境感知者",
+      "5": "被外界发现的环境感知者，圈层选择决定财运",
+      "6": "越来越智慧的环境感知者，晚成型财运"
+    }
+  };
+
+  return (taglines[type] && taglines[type][lineNum]) || `${typeData.title} · ${profileData.title}`;
+}
+
+function buildPaths(type, authority, profile) {
+  const paths = [];
+
+  // P1：类型决定的主策略
+  if (type && WEALTH_DATA.type[type]) {
+    const d = WEALTH_DATA.type[type];
+    if (d.bestPath) {
+      paths.push({ rank: 1, title: '核心财富路径', desc: d.bestPath.join('→ ') });
+    }
+  }
+
+  // P2：Profile决定的时机与方式
+  if (profile && WEALTH_DATA.profile[profile]) {
+    const d = WEALTH_DATA.profile[profile];
+    paths.push({ rank: 2, title: '财运展开方式', desc: d.rhythm || d.core.replace(/<[^>]+>/g, '') });
+  }
+
+  // P3：权威决定的决策过滤器
+  if (authority && WEALTH_DATA.authority[authority]) {
+    const d = WEALTH_DATA.authority[authority];
+    paths.push({ rank: 3, title: '财务决策过滤器', desc: `${d.title}：${d.decisionStyle || d.core.replace(/<[^>]+>/g, '').slice(0, 40) + '…'}` });
+  }
+
+  // 如果不足3条，补充通用建议
+  if (paths.length === 1 && type) {
+    paths.push({ rank: 2, title: '财务决策原则', desc: '在内在信号清晰时才行动，减少头脑分析带来的偏差' });
+  }
+  if (paths.length < 3) {
+    paths.push({ rank: paths.length + 1, title: '普遍财运原则', desc: '顺应自己的设计，阻力最小的路往往也是财富最自然流入的路' });
+  }
+
+  return paths.slice(0, 3);
+}
+
+function buildAvoid(type, profile, authority) {
+  const typeData = WEALTH_DATA.type[type];
+  if (type && typeData && typeData.avoid) {
+    return typeData.avoid;
+  }
+  // 按类型给出通用警示
+  const defaultAvoidsMap = {
+    "生产者": "不要强迫自己做让你感到沮丧的赚钱项目，沮丧感是能量泄漏的警报",
+    "显示生产者": "不要不告而动——突然改变方向而不通知他人，会引发人际摩擦损耗财运",
+    "投射者": "不要在没有邀请的情况下强行推销自己，这会消耗宝贵的能量却没有回报",
+    "显示者": "不要让他人的意见阻止你开始行动，但重要财务决策要主动告知关键人",
+    "反映者": "不要在压抑、低频的环境中勉强自己，环境是你财运的放大镜"
+  };
+  return defaultAvoidsMap[type] || "避免在不清晰、不确定的状态下做重大财务决策";
+}
+
+// ============================================================
+// 渲染逻辑
+// ============================================================
+const activeGates = new Set();
+
+function toggleGate(el) {
+  const gate = el.dataset.gate;
+  if (activeGates.has(gate)) { activeGates.delete(gate); el.classList.remove('active'); }
+  else { activeGates.add(gate); el.classList.add('active'); }
+}
+
+function analyze() {
+  const name = document.getElementById('userName').value.trim() || '你';
+  const type = document.getElementById('type').value;
+  const authority = document.getElementById('authority').value;
+  const profile = document.getElementById('profile').value;
+  const willCenter = document.getElementById('willCenter').value;
+  const gCenter = document.getElementById('gCenter').value;
+
+  if (!type && !authority && !profile) {
+    alert('请至少选择类型、权威或 Profile 中的一项');
+    return;
+  }
+
+  const section = document.getElementById('resultSection');
+  section.classList.add('visible');
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  renderSummary(name, type, authority, profile);
+  renderPortrait(type, authority, profile);
+  renderCards(type, authority, profile, willCenter, gCenter);
+}
+
+function renderSummary(name, type, authority, profile) {
+  const tags = [];
+  if (type) tags.push(type);
+  if (authority) tags.push(authority);
+  if (profile) tags.push('Profile ' + profile);
+  if (activeGates.size > 0) tags.push('财运闸门 ×' + activeGates.size);
+
+  const typeData = WEALTH_DATA.type[type];
+  const headline = typeData ? typeData.title : '你的财运之道';
+
+  document.getElementById('resultSummary').innerHTML = `
+    <div class="name">${name} 的人类图财运分析</div>
+    <div class="title">${headline}</div>
+    <div class="subtitle">以下解读基于你的人类图设计，揭示你最顺遂的财富路径</div>
+    <div class="result-tags">${tags.map(t => `<span class="result-tag">${t}</span>`).join('')}</div>
+  `;
+}
+
+function renderPortrait(type, authority, profile) {
+  const portrait = generatePortrait(type, authority, profile);
+  const container = document.getElementById('portraitContainer');
+  if (!portrait) { container.innerHTML = ''; return; }
+
+  const rankClass = ['r1','r2','r3'];
+  const pathsHtml = portrait.paths.map((p, i) => `
+    <div class="portrait-path">
+      <div class="path-rank ${rankClass[i]}">${i+1}</div>
+      <div class="path-text">
+        <strong>${p.title}</strong>
+        <span>${p.desc}</span>
+      </div>
+    </div>
+  `).join('');
+
+  const timingHtml = portrait.timing
+    ? `<div class="portrait-path" style="margin-top:4px;background:#EDF0E3;">
+        <div class="path-rank" style="background:#A3B06A;color:#fff;min-width:20px;">⏱</div>
+        <div class="path-text"><strong>财运时机</strong><span>${portrait.timing}</span></div>
+       </div>`
+    : '';
+
+  container.innerHTML = `
+    <div class="portrait-card">
+      <div class="portrait-label">综合财富画像</div>
+      <div class="portrait-tagline">${portrait.tagline}</div>
+      <div class="portrait-paths">
+        ${pathsHtml}
+        ${timingHtml}
+      </div>
+      <div class="portrait-avoid">
+        <strong>核心警示</strong>
+        ${portrait.avoid}
+      </div>
+    </div>
+    <div class="section-divider">各维度详细解读</div>
+  `;
+}
+
+function renderCards(type, authority, profile, willCenter, gCenter) {
+  const container = document.getElementById('cardsContainer');
+  container.innerHTML = '';
+  const cards = [];
+
+  if (type && WEALTH_DATA.type[type]) {
+    const d = WEALTH_DATA.type[type];
+    cards.push({ theme: 'purple', icon: d.icon, label: '能量类型', value: type, data: d, renderFn: renderTypeCard });
+  }
+  if (authority && WEALTH_DATA.authority[authority]) {
+    const d = WEALTH_DATA.authority[authority];
+    cards.push({ theme: 'blue', icon: d.icon, label: '内在权威', value: authority, data: d, renderFn: renderAuthorityCard });
+  }
+  if (profile && WEALTH_DATA.profile[profile]) {
+    const d = WEALTH_DATA.profile[profile];
+    cards.push({ theme: 'amber', icon: d.icon, label: 'Profile 人生角色', value: profile + ' ' + getProfileName(profile), data: d, renderFn: renderProfileCard });
+  }
+  if (willCenter || gCenter) {
+    cards.push({ theme: 'green', icon: '⚡', label: '能量中心', value: '意志力 & G 中心', data: { willCenter, gCenter }, renderFn: renderCenterCard });
+  }
+  if (activeGates.size > 0) {
+    cards.push({ theme: 'pink', icon: '🔑', label: '财运闸门', value: '激活 ' + activeGates.size + ' 个', data: [...activeGates], renderFn: renderGatesCard });
+  }
+
+  if (cards.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">🌱</div><div>请在上方填写信息后点击分析</div></div>';
+    return;
+  }
+
+  cards.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.className = `card theme-${card.theme}`;
+    el.innerHTML = `
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-icon">${card.icon}</div>
+        <div class="card-header-text">
+          <div class="dim-label">${card.label}</div>
+          <div class="dim-value">${card.value}</div>
+        </div>
+        <div class="card-arrow">▼</div>
+      </div>
+      <div class="card-body">${card.renderFn(card.data)}</div>
+    `;
+    if (i === 0) el.classList.add('expanded');
+    container.appendChild(el);
+  });
+}
+
+function toggleCard(header) { header.parentElement.classList.toggle('expanded'); }
+
+function renderTypeCard(d) {
+  return `
+    <div class="insight-block">
+      <div class="insight-label">核心财富公式</div>
+      <div class="insight-text">${d.core}</div>
+    </div>
+    <div class="insight-block">
+      <div class="insight-label">财运策略</div>
+      <div class="insight-tips">${d.tips.map(t => `<div class="tip-item"><span class="tip-dot" style="background:${t.color}"></span><span>${t.text}</span></div>`).join('')}</div>
+    </div>
+    <div class="insight-block">
+      <div class="insight-label">注意信号</div>
+      <div class="insight-text">${d.caution}</div>
+    </div>
+  `;
+}
+
+function renderAuthorityCard(d) {
+  return `
+    <div class="insight-block">
+      <div class="insight-label">决策方式</div>
+      <div class="insight-text">${d.core}</div>
+    </div>
+    <div class="insight-block">
+      <div class="insight-label">实操建议</div>
+      <div class="insight-tips">${d.tips.map(t => `<div class="tip-item"><span class="tip-dot" style="background:${t.color}"></span><span>${t.text}</span></div>`).join('')}</div>
+    </div>
+  `;
+}
+
+function renderProfileCard(d) {
+  return `
+    <div class="insight-block">
+      <div class="insight-label">财运故事</div>
+      <div class="insight-text">${d.core}</div>
+    </div>
+    ${d.rhythm ? `<div class="insight-block"><div class="insight-label">财运节奏</div><div class="insight-text">${d.rhythm}</div></div>` : ''}
+    <div class="insight-block">
+      <div class="insight-label">行动建议</div>
+      <div class="insight-tips">${d.tips.map(t => `<div class="tip-item"><span class="tip-dot" style="background:${t.color}"></span><span>${t.text}</span></div>`).join('')}</div>
+    </div>
+  `;
+}
+
+function renderCenterCard(d) {
+  let html = '';
+  if (d.willCenter) {
+    const c = WEALTH_DATA.centers.will[d.willCenter === '定义' ? 'defined' : 'undefined'];
+    html += `<div class="insight-block"><div class="insight-label">${c.title}</div><div class="insight-text">${c.text}</div></div>`;
+  }
+  if (d.gCenter) {
+    const c = WEALTH_DATA.centers.g[d.gCenter === '定义' ? 'defined' : 'undefined'];
+    html += `<div class="insight-block"><div class="insight-label">${c.title}</div><div class="insight-text">${c.text}</div></div>`;
+  }
+  return html;
+}
+
+function renderGatesCard(gates) {
+  // 按分组排列
+  const grouped = {};
+  gates.forEach(gateId => {
+    const g = WEALTH_DATA.gates[gateId];
+    if (!g) return;
+    if (!grouped[g.group]) grouped[g.group] = [];
+    grouped[g.group].push({ id: gateId, ...g });
+  });
+
+  return Object.entries(grouped).map(([group, items]) => `
+    <div class="insight-block">
+      <div class="insight-label">${group}</div>
+      ${items.map(g => `
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:500;color:#2D1F12;margin-bottom:4px;">${g.icon} 闸门${g.id} · ${g.name}</div>
+          <div class="insight-text">${g.text}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function getProfileName(p) {
+  const names = {
+    "1/3":"研究者/烈士","1/4":"研究者/机会主义者","2/4":"隐士/机会主义者","2/5":"隐士/异端",
+    "3/5":"烈士/异端","3/6":"烈士/角色模型","4/6":"机会主义者/角色模型","4/1":"机会主义者/研究者",
+    "5/1":"异端/研究者","5/2":"异端/隐士","6/2":"角色模型/隐士","6/3":"角色模型/烈士"
+  };
+  return names[p] || '';
+}
+</script>
+
+</body>
+</html>

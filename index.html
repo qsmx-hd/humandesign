@@ -545,6 +545,9 @@
   .tool-card.crosses .tool-card-banner {
     background: linear-gradient(135deg, #2D2118 0%, #5C4033 50%, #8B6914 100%);
   }
+  .tool-card.wealth .tool-card-banner {
+    background: linear-gradient(135deg, #2D2118 0%, #8B5E3C 50%, #C9A84C 100%);
+  }
   .tool-card-banner::before {
     content: ''; position: absolute;
     width: 200px; height: 200px; border-radius: 50%;
@@ -624,6 +627,8 @@
   <a href="192-crosses.html" target="_blank">✨ 192交叉</a>
   <div class="nav-divider"></div>
   <a href="genekeys.html" target="_blank">🧬 基因天命</a>
+  <div class="nav-divider"></div>
+  <a href="wealth.html" target="_blank">💰 财运之道</a>
   <div class="nav-divider"></div>
   <a href="chat.html" target="_blank">🤖 AI 聊天</a>
   <div class="nav-divider"></div>
@@ -1257,6 +1262,27 @@
         </div>
       </div>
     </a>
+
+    <a href="wealth.html" target="_blank" class="tool-card wealth">
+      <div class="tool-card-banner">
+        <span class="tool-card-emoji">💰</span>
+        <span class="tool-card-level">财运分析</span>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-title">财运之道</div>
+        <div class="tool-card-desc">基于人类图设计，输入类型/权威/Profile/闸门，生成专属财富路径分析与综合画像</div>
+        <div class="tool-card-topics">
+          <span class="tool-card-topic">能量类型</span>
+          <span class="tool-card-topic">内在权威</span>
+          <span class="tool-card-topic">财运闸门</span>
+          <span class="tool-card-topic">财富路径</span>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-card-meta">人类图财运分析工具</span>
+          <span class="tool-card-link">打开工具 →</span>
+        </div>
+      </div>
+    </a>
   </div>
 </section>
 
@@ -1299,9 +1325,11 @@
   <button class="jump-btn advanced" onclick="document.getElementById('advanced').scrollIntoView({behavior:'smooth'})" title="高阶系列">🌳</button>
   <button class="jump-btn advanced" onclick="window.open('index.html#freetool','_blank')" title="免费出图" style="background:linear-gradient(135deg,#ffd700,#ff8c00);">🔮</button>
   <button class="jump-btn beginner" onclick="window.open('human-design-guide.html','_blank')" title="入门手册">📖</button>
+  <button class="jump-btn" onclick="window.open('36%20Channels/36-channels.html','_blank')" title="36条通道" style="background:linear-gradient(135deg,#6c3fc5,#c94fa0);color:#fff;">🔗</button>
   <button class="jump-btn" onclick="window.open('384-lines.html','_blank')" title="384爻工具" style="background:linear-gradient(135deg,#C4956A,#8B6914);color:#fff;">🔢</button>
   <button class="jump-btn" onclick="window.open('192-crosses.html','_blank')" title="192轮回交叉" style="background:linear-gradient(135deg,#5C4033,#C4956A);color:#fff;">✨</button>
   <button class="jump-btn" onclick="window.open('genekeys.html','_blank')" title="基因天命" style="background:linear-gradient(135deg,#6c3fc5,#c94fa0);color:#fff;">🧬</button>
+  <button class="jump-btn" onclick="window.open('wealth.html','_blank')" title="财运之道" style="background:linear-gradient(135deg,#2D2118,#8B5E3C,#C9A84C);color:#fff;">💰</button>
 </div>
 
 <script>
