@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BG5 团队能量图谱生成器 V13.0</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #F5F0E8; color: #2D2118; min-height: 100vh; }
+
+.top-bar { background: linear-gradient(135deg, #2D2118 0%, #4A3728 100%); padding: 20px 0 16px; text-align: center; }
+.top-bar .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4px; }
+.top-bar .logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
+.top-bar h1 { color: #C4956A; font-size: 22px; font-weight: 500; letter-spacing: 2px; }
+.top-bar p { color: #A08968; font-size: 12px; margin-top: 4px; }
+.top-bar .ver { color: #7A6A52; font-size: 11px; margin-top: 2px; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 20px 16px; }
+
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid #E8DCC8; }
+.section-title { font-size: 16px; font-weight: 500; color: #2D2118; margin-bottom: 16px; padding-left: 12px; border-left: 3px solid #C4956A; }
+
+/* Team name inside section */
+.team-name-group { margin-bottom: 16px; padding: 12px 16px; background: #FDFAF5; border-radius: 10px; border: 1px solid #E8DCC8; }
+.team-name-group label { display: block; font-size: 12px; color: #8B7355; margin-bottom: 6px; }
+.team-name-group input { width: 100%; max-width: 400px; padding: 10px 14px; border: 1px solid #D4C5A9; border-radius: 8px; font-size: 15px; background: #fff; color: #2D2118; outline: none; transition: border 0.2s; }
+.team-name-group input:focus { border-color: #C4956A; box-shadow: 0 0 0 3px rgba(196,149,106,0.15); }
+.team-name-group input::placeholder { color: #B4A58C; }
+
+/* Add member form */
+.add-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.form-group { flex: 1; min-width: 120px; }
+.form-group label { display: block; font-size: 11px; color: #8B7355; margin-bottom: 4px; }
+.form-group input, .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #D4C5A9; border-radius: 8px; font-size: 13px; background: #FDFAF5; color: #2D2118; outline: none; transition: border 0.2s; }
+.form-group input:focus, .form-group select:focus { border-color: #C4956A; }
+.btn-add { padding: 8px 20px; background: #C4956A; color: #fff; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+.btn-add:hover { background: #A87B52; }
+
+/* Validation */
+.validation-error { background: #FAECE7; border: 1px solid #E8A598; color: #993C1D; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 10px; display: none; }
+.validation-error.show { display: block; }
+.form-group select.invalid { border-color: #D84338; background: #FFF5F3; }
+
+/* Channel selector */
+.channel-section { margin-top: 14px; padding: 14px; background: #FDFAF5; border-radius: 10px; border: 1px solid #E8DCC8; }
+.channel-section-title { font-size: 12px; font-weight: 500; color: #5C4A32; margin-bottom: 10px; }
+.channel-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.channel-tag { padding: 4px 10px; border-radius: 16px; font-size: 11px; cursor: pointer; border: 1px solid #D4C5A9; background: #fff; color: #5C4A32; transition: all 0.15s; user-select: none; }
+.channel-tag:hover { border-color: #C4956A; }
+.channel-tag.selected { background: #C4956A; color: #fff; border-color: #C4956A; }
+.channel-custom { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+.channel-custom input { flex: 1; padding: 6px 10px; border: 1px solid #D4C5A9; border-radius: 6px; font-size: 12px; background: #fff; color: #2D2118; }
+.channel-custom input::placeholder { color: #B4A58C; font-size: 11px; }
+.channel-custom .btn-small { padding: 6px 12px; background: #8B7355; color: #fff; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; }
+.channel-custom .btn-small:hover { background: #6B5538; }
+.channel-hint { font-size: 11px; color: #A08968; margin-top: 6px; }
+
+/* Member cards */
+.members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+.member-card { background: #FDFAF5; border-radius: 10px; padding: 14px; border: 1px solid #E8DCC8; position: relative; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+.member-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(45,33,24,0.1); }
+.member-card.editing { border-color: #C4956A; box-shadow: 0 0 0 2px rgba(196,149,106,0.3); }
+.member-card .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 500; font-size: 16px; margin-bottom: 8px; }
+.member-card .name { font-size: 15px; font-weight: 500; color: #2D2118; }
+.member-card .meta-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.member-card .meta-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: #F0E8D8; color: #5C4A32; }
+.member-card .type-label { font-size: 12px; color: #8B7355; margin-top: 4px; }
+.member-card .channels { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 3px; }
+.member-card .ch-tag { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: #E8DCC8; color: #5C4A32; }
+.member-card .btn-remove { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%; border: none; background: transparent; color: #C4B89A; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.member-card .btn-remove:hover { background: #F5EDE0; color: #8B7355; }
+.empty-state { text-align: center; padding: 40px 20px; color: #B4A58C; font-size: 14px; }
+
+/* Chart area */
+.chart-area { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.chart-container { flex: 1; min-width: 240px; max-width: 320px; position: relative; }
+.chart-legend { flex: 1; min-width: 240px; }
+.legend-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F0E8D8; }
+.legend-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+.legend-label { font-size: 14px; color: #2D2118; flex: 1; }
+.legend-count { font-size: 14px; font-weight: 500; color: #C4956A; }
+.legend-pct { font-size: 12px; color: #8B7355; width: 40px; text-align: right; }
+
+/* Blind spots */
+.blind-spot { background: #FFF8F0; border: 1px solid #F0D8B8; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+.blind-spot .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.blind-spot .text { font-size: 13px; color: #5C4A32; line-height: 1.6; }
+.blind-spot .text strong { color: #2D2118; }
+
+/* Penta pillars */
+.penta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+.penta-card { background: #FDFAF5; border-radius: 10px; padding: 14px; border: 1px solid #E8DCC8; }
+.penta-card .penta-title { font-size: 13px; font-weight: 500; color: #2D2118; margin-bottom: 4px; }
+.penta-card .penta-sub { font-size: 11px; color: #A08968; margin-bottom: 6px; }
+.penta-card .penta-body { font-size: 12px; color: #5C4A32; line-height: 1.6; }
+.penta-card .penta-status { display: inline-block; margin-top: 6px; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+.penta-card .status-yes { background: #EAF3DE; color: #3B6D11; }
+.penta-card .status-no { background: #FAECE7; color: #993C1D; }
+.penta-card .penta-contrib { margin-top: 8px; padding: 6px 8px; background: #fff; border-radius: 6px; border: 1px dashed #D4C5A9; }
+.penta-card .penta-contrib-item { font-size: 11px; color: #5C4A32; line-height: 1.8; }
+.penta-card .penta-contrib-label { font-size: 10px; color: #A08968; margin-top: 4px; }
+
+/* Interaction tips */
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+.tip-card { background: #FDFAF5; border-radius: 10px; padding: 14px; border: 1px solid #E8DCC8; }
+.tip-card .tip-title { font-size: 13px; font-weight: 500; color: #2D2118; margin-bottom: 6px; }
+.tip-card .tip-body { font-size: 12px; color: #8B7355; line-height: 1.7; }
+
+/* Type Summary Table */
+.type-summary { margin-top: 12px; overflow-x: auto; }
+.type-summary table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.type-summary th { padding: 10px 8px; text-align: center; font-weight: 500; color: #fff; font-size: 12px; border: 1px solid #ddd; }
+.type-summary th.dim-label { background: #4A3728; color: #C4956A; text-align: left; min-width: 110px; }
+.type-summary td { padding: 8px; text-align: center; border: 1px solid #E8DCC8; line-height: 1.6; color: #2D2118; }
+.type-summary td.dim-name { text-align: left; font-weight: 500; color: #2D2118; background: #FDFAF5; }
+.type-summary tr:nth-child(even) td { background: #FAF6EF; }
+.type-summary tr:nth-child(even) td.dim-name { background: #F5EDE0; }
+.type-summary .type-pct { font-size: 10px; color: #A08968; display: block; margin-top: 2px; }
+
+/* Profile & Definition distribution */
+.dist-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.dist-card { background: #FDFAF5; border-radius: 8px; padding: 12px; border: 1px solid #E8DCC8; display: flex; flex-direction: column; }
+.dist-card .dist-label { font-size: 11px; color: #8B7355; margin-bottom: 4px; }
+.dist-card .dist-items { font-size: 12px; color: #2D2118; line-height: 1.8; }
+.dist-card .dist-desc-wrap { margin-top: auto; padding-top: 8px; border-top: 1px dashed #E8DCC8; }
+.dist-card .dist-desc { font-size: 11px; color: #8B7355; line-height: 1.6; margin-top: 6px; }
+.dist-card .dist-desc:first-child { margin-top: 0; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat-card { background: #FDFAF5; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #E8DCC8; }
+.stat-num { font-size: 24px; font-weight: 500; color: #C4956A; }
+.stat-label { font-size: 11px; color: #8B7355; margin-top: 2px; }
+
+/* Preset button row */
+.presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.btn-preset { padding: 5px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; border: 1px solid #D4C5A9; background: #fff; color: #5C4A32; transition: all 0.2s; }
+.btn-preset:hover { border-color: #C4956A; color: #C4956A; }
+
+/* Print-only helper */
+.print-only { display: none; }
+
+/* Footer */
+.footer { text-align: center; padding: 20px; color: #B4A58C; font-size: 12px; }
+.footer a { color: #C4956A; text-decoration: none; }
+.footer .powered { display: block; margin-top: 4px; font-size: 11px; color: #A08968; }
+
+@media (max-width: 640px) {
+  .add-form { flex-direction: column; }
+  .form-group { min-width: 100%; }
+  .chart-area { flex-direction: column; }
+  .chart-container { max-width: 100%; }
+}
+
+/* Print styles */
+@media print {
+  body { background: #fff; }
+  .top-bar { padding: 12px 0 8px; }
+  .container { padding: 12px 16px; }
+  .section { margin-bottom: 12px; border: 1px solid #ddd; }
+
+  /* Show print-only content */
+  .print-only { display: block !important; }
+
+  /* Hide input form, presets, channel selector, validation error */
+  .team-name-group,
+  .presets,
+  .add-form,
+  .validation-error,
+  .channel-section,
+  .channel-custom,
+  .channel-hint,
+  .btn-add,
+  .btn-small,
+  .btn-preset { display: none !important; }
+
+  /* Hide remove buttons on cards */
+  .member-card .btn-remove { display: none !important; }
+
+  /* Hide "添加" prefix in section title */
+  .no-print { display: none !important; }
+
+  /* Print members: 4 columns, left-to-right, top-to-bottom */
+  .members-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+    page-break-inside: avoid;
+  }
+  .member-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  .member-card .avatar {
+    width: 32px; height: 32px; font-size: 14px;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .member-card .name { font-size: 13px; }
+  .member-card .meta-tag { font-size: 9px; padding: 1px 4px; }
+  .member-card .type-label { font-size: 11px; }
+  .member-card .ch-tag { font-size: 9px; }
+
+  /* Legend dots must keep color */
+  .legend-dot {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Type summary table headers must keep colored backgrounds */
+  .type-summary th {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Channel tags selected state */
+  .channel-tag.selected {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Penta status badges */
+  .status-yes, .status-no {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Member card avatar colors */
+  .member-card .avatar {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Analysis section starts on new page when > 8 members */
+  #analysisSection.force-new-page { page-break-before: always; }
+
+  /* Penta section starts on new page */
+  #pentaSection { page-break-before: always; }
+
+  /* Profile section starts on new page */
+  #profileSection { page-break-before: always; }
+
+  /* Dist grid: 3 columns in print */
+  .dist-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; }
+  .dist-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; padding: 10px; }
+
+  /* Tips section starts on new page */
+  #tipsSection { page-break-before: always; }
+
+  /* Penta cards: 3 columns */
+  .penta-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; }
+  .penta-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; padding: 10px; }
+
+  /* Blind spots: avoid truncation, prefer page break */
+  .blind-spot {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #ddd;
+  }
+
+  /* Tips cards: 2 columns */
+  .tips-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+  .tip-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; }
+
+  /* Stats */
+  .stats-row { gap: 8px; }
+  .stat-card { border: 1px solid #ddd; }
+
+  /* Type summary table */
+  .type-summary table { font-size: 10px; }
+  .type-summary th { padding: 6px 4px; font-size: 10px; }
+  .type-summary td { padding: 5px 4px; font-size: 10px; }
+
+  /* Footer */
+  .footer { padding: 12px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo-wrap">
+    <svg class="logo-icon" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="8" r="4" fill="#C4956A"/>
+      <circle cx="8" cy="26" r="3.5" fill="#8B7355"/>
+      <circle cx="28" cy="26" r="3.5" fill="#8B7355"/>
+      <circle cx="18" cy="28" r="2.8" fill="#A08968"/>
+      <path d="M18 12 L8 22" stroke="#C4956A" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+      <path d="M18 12 L28 22" stroke="#C4956A" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+      <path d="M8 26 L18 28" stroke="#8B7355" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <path d="M28 26 L18 28" stroke="#8B7355" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+      <path d="M8 26 L28 26" stroke="#8B7355" stroke-width="0.8" stroke-linecap="round" opacity="0.35" stroke-dasharray="2 2"/>
+      <circle cx="18" cy="18" r="3" fill="none" stroke="#C4956A" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <h1 id="pageTitle">BG5 团队能量图谱</h1>
+  </div>
+  <p>基于人类图能量类型的团队诊断工具 V13.0</p>
+</div>
+
+<div class="container">
+
+  <!-- Add Member -->
+  <div class="section">
+    <div class="section-title"><span class="no-print">添加</span>团队成员</div>
+
+    <!-- Team name moved here -->
+    <div class="team-name-group">
+      <label>团队名称</label>
+      <input type="text" id="teamName" placeholder="输入团队名称（如：欧莱雅项目部）" onchange="updateTeamName()">
+    </div>
+
+    <div class="presets">
+      <button class="btn-preset" onclick="loadPreset('startup')">示例：创业团队</button>
+      <button class="btn-preset" onclick="loadPreset('corp')">示例：企业部门</button>
+      <button class="btn-preset" onclick="loadPreset('npo')">示例：非盈利组织NPO</button>
+      <button class="btn-preset" onclick="clearAll()">清空全部</button>
+    </div>
+    <div class="add-form">
+      <div class="form-group" style="min-width:100px">
+        <label>成员姓名</label>
+        <input type="text" id="memberName" placeholder="输入姓名" maxlength="10">
+      </div>
+      <div class="form-group" style="min-width:130px">
+        <label>能量类型</label>
+        <select id="memberType" onchange="onTypeChange()">
+          <option value="generator">生产者 (Generator)</option>
+          <option value="manifesting_generator">显示生产者 (MG)</option>
+          <option value="projector">投射者 (Projector)</option>
+          <option value="manifestor">显示者 (Manifestor)</option>
+          <option value="reflector">反映者 (Reflector)</option>
+        </select>
+      </div>
+      <div class="form-group" style="min-width:110px">
+        <label>人生角色 Profile</label>
+        <select id="memberProfile">
+          <option value="1/3">1/3 研究者</option>
+          <option value="1/4">1/4 研究者/机会主义者</option>
+          <option value="2/4">2/4 隐士/机会主义者</option>
+          <option value="2/5">2/5 隐士/异端者</option>
+          <option value="3/5">3/5 烈士/异端者</option>
+          <option value="3/6">3/6 烈士/典范</option>
+          <option value="4/6">4/6 机会主义者/典范</option>
+          <option value="4/1">4/1 机会主义者/研究者</option>
+          <option value="5/1">5/1 异端者/研究者</option>
+          <option value="5/2">5/2 异端者/隐士</option>
+          <option value="6/2">6/2 典范/隐士</option>
+          <option value="6/3">6/3 典范/烈士</option>
+        </select>
+      </div>
+      <div class="form-group" style="min-width:100px">
+        <label>能量定义</label>
+        <select id="memberDefinition" onchange="onDefinitionChange()">
+          <option value="single">一分人</option>
+          <option value="split">二分人</option>
+          <option value="triple">三分人</option>
+          <option value="quad">四分人</option>
+          <option value="none">无定义</option>
+        </select>
+      </div>
+      <div class="form-group" style="min-width:120px">
+        <label>内在权威</label>
+        <select id="memberAuthority" onchange="onAuthorityChange()">
+          <option value="emotional">情绪权威</option>
+          <option value="sacral">荐骨权威</option>
+          <option value="splenic">直觉/脾脏权威</option>
+          <option value="ego">意志力/心脏权威</option>
+          <option value="self_projected">G中心/自我投射权威</option>
+          <option value="environmental">环境/头脑权威</option>
+          <option value="lunar">月循环权威</option>
+        </select>
+      </div>
+      <button class="btn-add" onclick="addMember()">+ 添加</button>
+    </div>
+    <div id="validationError" class="validation-error"></div>
+
+    <!-- Channel Selector -->
+    <div class="channel-section">
+      <div class="channel-section-title">已定义通道 / 闸门（Penta 核心六通道参考）</div>
+      <div class="channel-tags" id="pentaChannelTags">
+        <span class="channel-tag" data-ch="5-15" onclick="toggleChannelTag(this)">5-15 节奏·韵律</span>
+        <span class="channel-tag" data-ch="2-14" onclick="toggleChannelTag(this)">2-14 方向·财富</span>
+        <span class="channel-tag" data-ch="29-46" onclick="toggleChannelTag(this)">29-46 承诺·身体</span>
+        <span class="channel-tag" data-ch="7-31" onclick="toggleChannelTag(this)">7-31 领导·影响</span>
+        <span class="channel-tag" data-ch="1-8" onclick="toggleChannelTag(this)">1-8 创造·灵感</span>
+        <span class="channel-tag" data-ch="13-33" onclick="toggleChannelTag(this)">13-33 见证·记忆</span>
+      </div>
+      <div class="channel-custom">
+        <input type="text" id="customChannels" placeholder="自定义通道，如：16-48, 26-44, 42-53（多个用逗号分隔）">
+        <button class="btn-small" onclick="addCustomChannels()">添加</button>
+      </div>
+      <div class="channel-hint">提示：点击上方标签可快速选择 Penta 六条核心通道；也可在输入框添加其他已定义通道。若只有单个闸门，请直接输入闸门号（如：5 或 15）。</div>
+      <div class="channel-tags" id="selectedChannelsPreview" style="margin-top:8px;"></div>
+    </div>
+
+    <div id="membersArea">
+      <div class="empty-state">尚未添加成员，请在上方输入或加载示例团队</div>
+    </div>
+  </div>
+
+  <!-- Stats + Chart -->
+  <div class="section" id="analysisSection" style="display:none;">
+    <div class="section-title">团队能量分布</div>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="chart-area">
+      <div class="chart-container">
+        <canvas id="teamChart"></canvas>
+      </div>
+      <div class="chart-legend" id="chartLegend"></div>
+    </div>
+  </div>
+
+  <!-- Profile, Definition & Authority -->
+  <div class="section" id="profileSection" style="display:none;">
+    <div class="section-title">人生角色 · 能量定义 · 内在权威分布</div>
+    <div class="dist-grid" id="profileDist"></div>
+  </div>
+
+  <!-- Penta Pillars -->
+  <div class="section" id="pentaSection" style="display:none;">
+    <div class="section-title">Penta 核心六支柱覆盖诊断</div>
+    <div class="penta-grid" id="pentaGrid"></div>
+  </div>
+
+  <!-- Blind Spots -->
+  <div class="section" id="blindSection" style="display:none;">
+    <div class="section-title">能量盲区诊断</div>
+    <div id="blindSpots"></div>
+  </div>
+
+  <!-- Interaction Tips -->
+  <div class="section" id="tipsSection" style="display:none;">
+    <div class="section-title">团队互动建议</div>
+    <div class="type-summary" id="tipsSummary"></div>
+    <div class="tips-grid" id="tipsGrid" style="margin-top:16px;"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  BG5 团队能量图谱生成器 v13.0 | 基于人类图 (Human Design) 体系
+  <span class="powered">Powered By Kan Man Tang</span>
+</div>
+
+<script>
+const TYPE_CONFIG = {
+  generator: { name: '生产者', fullName: 'Generator 生产者', color: '#3B945E', bg: '#E6F4EC', role: '稳定执行者', pct: '37%', desc: '拥有持续稳定的荐骨能量，是团队的核心生产力来源。需要被正确提问/邀请才能释放最大能量。' },
+  manifesting_generator: { name: '显示生产者', fullName: 'MG 显示生产者', color: '#E89A2C', bg: '#FDF3E0', role: '多线程推进者', pct: '33%', desc: '兼具显示者的发起力与生产者的持续力，适合跨职能推进项目。需注意"告知"以减少团队信息断层。' },
+  projector: { name: '投射者', fullName: 'Projector 投射者', color: '#7F77DD', bg: '#EEEDFE', role: '策略顾问 / 导师', pct: '20%', desc: '天生识人辨才的洞察力，适合团队优化与战略指导。精力有限，需被正式邀请认可后才能发挥最大价值。' },
+  manifestor: { name: '显示者', fullName: 'Manifestor 显示者', color: '#D84338', bg: '#FAECE7', role: '开创先行官', pct: '9%', desc: '无需外部许可即可独立发起行动，适合开创新方向。"告知策略"是显示者与团队顺畅合作的关键。' },
+  reflector: { name: '反映者', fullName: 'Reflector 反映者', color: '#6B8EAD', bg: '#EBF0F5', role: '团队镜子 / 温度计', pct: '1%', desc: '极度敏感的环境感受者，像镜子一样反映团队整体健康度。重大决策需等待28天月亮周期。' }
+};
+
+const AUTHORITY_NAMES = {
+  sacral: '荐骨权威', emotional: '情绪权威', splenic: '直觉/脾脏权威',
+  ego: '意志力/心脏权威', self_projected: 'G中心/自我投射权威', environmental: '环境/头脑权威', lunar: '月循环权威'
+};
+
+const AUTHORITY_DESC = {
+  emotional: '情绪中心被定义，情绪是决策的权威。需要时间经历情绪的起伏，在情绪清明时做重要决定。',
+  sacral: '荐骨中心被定义，对问题有即时的是非回应（嗯/嗯哼）。需要被正确提问，身体自然给出答案。',
+  splenic: '脾脏/直觉中心被定义，依赖当下的本能直觉反应。只在当下有效，不会重复。',
+  ego: '意志力/心脏中心被定义，通过承诺和意志力做决策。只说"是"当真心愿意承诺时。',
+  self_projected: 'G中心/自我投射中心被定义，通过言语表达来聆听自己内心的真实方向。需要说出来才知道。',
+  environmental: '环境/头脑中心被定义，通过在正确环境中讨论来理清思路。需要"在正确的地方和正确的人"交谈。',
+  lunar: '没有任何内在权威，依赖28天月亮周期来体验所有可能的定义。重大决策需等待完整周期。'
+};
+
+const DEFINITION_NAMES = { single: '一分人', split: '二分人', triple: '三分人', quad: '四分人', none: '无定义' };
+
+const PROFILE_DESC = {
+  '1/3': '深入钻研，从错误中学习，为团队奠定坚实基础。适合研究员、技术深耕岗位。',
+  '1/4': '深入研究并通过社交网络传播成果。适合知识型管理岗位。',
+  '2/4': '天生有才华，被朋友和网络发现。适合创意、艺术、个人品牌岗位。',
+  '2/5': '有内在天赋，能解决他人问题，但容易被投射过高期望。适合顾问、解决疑难岗位。',
+  '3/5': '通过试错学习，天生具领导气质，常被视为榜样。适合创业、创新、先锋岗位。',
+  '3/6': '从错误中成长，经历人生三阶段后成为榜样。适合经历丰富后转型的角色。',
+  '4/6': '通过社交网络影响他人，最终成为榜样。适合社群运营、关系型领导岗位。',
+  '4/1': '扎根于社交网络中的深度研究者。适合产学研结合、知识社群岗位。',
+  '5/1': '被投射为能解决一切问题的人，同时深入研究底层逻辑。适合战略顾问、系统架构岗位。',
+  '5/2': '被投射为救世主，同时拥有隐藏天赋。适合关键时刻被召唤的专家角色。',
+  '6/2': '经历人生三阶段后成为榜样，天生有才华。适合成熟期的精神领袖、导师角色。',
+  '6/3': '从混乱中成长，最终成为他人榜样的烈士型典范。适合经历过多次起伏的领袖角色。'
+};
+
+const DEFINITION_DESC = {
+  single: '所有能量中心互相连通，决策直接清晰，内心自洽，不容易被外界影响。',
+  split: '有两块独立的能量区域，需要在不同部分之间做出选择，容易感受到内在的拉扯和矛盾。',
+  triple: '三块独立的能量区域，内在决策过程更复杂，需要更多时间整合不同部分的诉求。',
+  quad: '四块独立的能量区域，定义最复杂，内在决策需要大量时间整合，对环境高度敏感。',
+  none: '没有稳定的内在能量中心，高度吸收和放大外界能量，环境适应力强但容易受他人影响。'
+};
+
+const PENTA_PILLARS = [
+  { ch: '5-15', name: '节奏·韵律', desc: '团队是否有共同的呼吸与文化习惯？决定何时冲刺、何时休整。缺失时团队失序忙碌，难以建立凝聚力。' },
+  { ch: '2-14', name: '方向·财富', desc: '群体将生命能量转化为物质成功的能力。缺失时团队很努力但回报不成正比，长期资源焦虑。' },
+  { ch: '29-46', name: '承诺·身体', desc: '成员之间是否给出身心承诺。缺失时"人在心不在"，遇到困难容易作鸟兽散，缺乏同舟共济感。' },
+  { ch: '7-31', name: '领导·影响', desc: '团队如何被引领及对外呈现。缺失时群龙无首或多头马车，决策效率低，对外声音杂乱。' },
+  { ch: '1-8', name: '创造·灵感', desc: '群体的目标感和存在意义。缺失时团队陷入"为做而做"的迷茫，缺乏内在驱动力。' },
+  { ch: '13-33', name: '见证·记忆', desc: '倾听、整合经验并转化为传承智慧。缺失时不断重复同样错误，历史成了无意义的循环。' }
+];
+
+const BLIND_SPOT_DATA = {
+  no_generator: { icon: '\u26A0', text: '团队中没有<strong>生产者/显示生产者</strong>——缺乏持续稳定的执行能量。创意和策略可能难以落地，项目推进容易"有头无尾"。建议引入至少一位生产者类型成员。' },
+  no_mg: { icon: '\u2139', text: '团队缺少<strong>显示生产者</strong>——跨职能推进力偏弱。如果团队需要多线程并行推进，显示生产者是最有效的粘合剂。当前生产者可以覆盖基础执行。' },
+  no_projector: { icon: '\u26A0', text: '团队缺少<strong>投射者</strong>——缺乏战略视角和系统优化能力。全员都在"做"，没人"看见"效率瓶颈。建议引入投射者或定期邀请外部投射者顾问。' },
+  no_manifestor: { icon: '\u2139', text: '团队没有<strong>显示者</strong>——缺乏独立开路者。这不算严重问题，但如果有需要快速突破的新领域，可以考虑引入显示者的冲劲。' },
+  no_reflector: { icon: '\u2139', text: '团队没有<strong>反映者</strong>——缺少组织健康度的"温度计"。反映者仅占人口1%，缺失很常见。可定期做团队氛围复盘来替代这一视角。' },
+  all_generators: { icon: '\u26A0', text: '团队<strong>全部是生产者/显示生产者</strong>——执行能量充沛但严重缺乏战略视角。建议引入投射者做顾问，避免"埋头苦干但方向不明"。' },
+  too_many_projectors: { icon: '\u26A0', text: '投射者占比<strong>超过40%</strong>——"军师"太多，"执行者"不够。投射者精力有限，如果团队中执行人手不足，战略再好也落不了地。' },
+  only_manifestor: { icon: '\u26A0', text: '团队中只有1位<strong>显示者</strong>且没有其他类型——显示者独立运作惯了，容易"闷头干"不告知，导致团队信息断层。需要帮ta建立告知习惯。' }
+};
+
+const TYPE_SUMMARY_DATA = [
+  { dim: '人口比例', values: ['37%', '33%', '9%', '20%', '1%'] },
+  { dim: '能量来源', values: ['持续工作能量', '高速爆发能量', '独立启动能量', '洞见与导引', '环境反映能量'] },
+  { dim: '策略', values: ['等待回应', '等待回应', '告知', '等待邀请', '等待月亮周期'] },
+  { dim: '标志', values: ['满足感', '满足感', '平和', '成功感', '惊喜与愉悦'] },
+  { dim: '不在状态信号', values: ['挫败感', '挫败感', '愤怒', '苦涩', '失望'] },
+  { dim: '天然领导优势', values: ['以身作则、持续输出', '高速执行、多线程突破', '开创启动、战略变革', '系统洞察、人才识别', '组织健康镜像'] },
+  { dim: '核心挑战', values: ['被迫主动发起时挫败', '节奏太快、团队跟不上', '缺少通知、造成阻力', '才华不被看见或苦涩', '失望与能量耗散'] },
+  { dim: '最适合的组织阶段', values: ['稳定执行期', '快速迭代期', '创业突破期', '战略深化期', '文化反思期'] },
+  { dim: '恢复方式', values: ['完全停工的物理休息', '高质量的深度休息', '不被打扰的独处', '零输出的纯放松', '自然环境与安静'] }
+];
+
+const INTERACTION_TIPS = {
+  'generator+projector': { title: '生产者 + 投射者', body: '天然互补：投射者提问引导，生产者回应执行。关键：投射者必须"邀请"而非"命令"，生产者需要感受到被尊重的提问。' },
+  'generator+manifestor': { title: '生产者 + 显示者', body: '显示者发起方向，生产者跟进执行。风险：显示者不告知就行动，生产者感到被动。建议建立"发起前简短告知"的沟通机制。' },
+  'mg+projector': { title: '显示生产者 + 投射者', body: '高效组合：投射者规划最优路径，显示生产者快速推进。注意显示生产者容易跳步，投射者需要温和提醒而非批评。' },
+  'mg+manifestor': { title: '显示生产者 + 显示者', body: '两股发起力碰撞：都想动，节奏可能不同步。建议每周对齐优先级，显示者告知大方向，显示生产者告知执行进展。' },
+  'projector+manifestor': { title: '投射者 + 显示者', body: '投射者看见最优路径，显示者有力量开辟。黄金搭配前提：显示者主动邀请投射者的意见，投射者尊重显示者的独立性。' },
+  'generator+mg': { title: '生产者 + 显示生产者', body: '执行双引擎：生产者深挖一个方向，显示生产者横向铺开。摩擦点在于节奏不同——显示生产者更快，容易觉得生产者慢。互相尊重节奏即可。' },
+  'reflector+any': { title: '反映者与任何类型', body: '反映者需要宽松的工作环境，不要施加急迫决策压力。ta的感受是团队氛围的真实反映——如果反映者不舒服，整个团队可能都有问题。' }
+};
+
+let members = [];
+let chartInstance = null;
+let selectedPentaChannels = [];
+let editingId = null;
+
+/* ---- Validation Rules ---- */
+function validateMember(type, definition, authority) {
+  const errors = [];
+
+  // Type ↔ Authority
+  if (type === 'generator' || type === 'manifesting_generator') {
+    if (authority !== 'sacral' && authority !== 'emotional') {
+      errors.push('生产者/显示生产者必须有定义的荐骨中心，内在权威只能是「荐骨权威」或「情绪权威」。');
+    }
+  }
+  if (type === 'projector' && authority === 'sacral') {
+    errors.push('投射者没有定义的荐骨中心，不可能是「荐骨权威」。');
+  }
+  if (type === 'manifestor' && authority === 'sacral') {
+    errors.push('显示者没有定义的荐骨中心，不可能是「荐骨权威」。');
+  }
+  if (type === 'reflector' && authority !== 'lunar') {
+    errors.push('反映者没有任何定义的内在权威中心，内在权威必须是「月循环权威」。');
+  }
+
+  // Type ↔ Definition
+  if (type === 'reflector' && definition !== 'none') {
+    errors.push('反映者所有能量中心均未定义，能量定义必须是「无定义」。');
+  }
+  if (definition === 'none' && type !== 'reflector') {
+    errors.push('「无定义」只可能出现在反映者身上。');
+  }
+
+  // Definition ↔ Authority
+  if (definition === 'none' && authority !== 'lunar') {
+    errors.push('「无定义」意味着没有定义的内在权威中心，必须是「月循环权威」。');
+  }
+  if (authority === 'lunar' && definition !== 'none') {
+    errors.push('「月循环权威」只可能出现在「无定义」（反映者）身上。');
+  }
+
+  return errors;
+}
+
+function showValidationError(errors) {
+  const el = document.getElementById('validationError');
+  if (errors.length === 0) {
+    el.classList.remove('show');
+    el.textContent = '';
+    return;
+  }
+  el.innerHTML = errors.map(e => '<div>⚠ ' + e + '</div>').join('');
+  el.classList.add('show');
+}
+
+function clearValidationError() {
+  showValidationError([]);
+  document.querySelectorAll('.form-group select').forEach(s => s.classList.remove('invalid'));
+}
+
+function markInvalid(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('invalid');
+  });
+}
+
+/* ---- Dynamic field guidance ---- */
+function onTypeChange() {
+  const type = document.getElementById('memberType').value;
+  const authSel = document.getElementById('memberAuthority');
+  const defSel = document.getElementById('memberDefinition');
+
+  // Auto-correct reflector fields
+  if (type === 'reflector') {
+    defSel.value = 'none';
+    authSel.value = 'lunar';
+  }
+
+  clearValidationError();
+}
+
+function onDefinitionChange() {
+  const def = document.getElementById('memberDefinition').value;
+  const typeSel = document.getElementById('memberType');
+  const authSel = document.getElementById('memberAuthority');
+
+  if (def === 'none') {
+    typeSel.value = 'reflector';
+    authSel.value = 'lunar';
+  }
+
+  clearValidationError();
+}
+
+function onAuthorityChange() {
+  const auth = document.getElementById('memberAuthority').value;
+  const typeSel = document.getElementById('memberType');
+  const defSel = document.getElementById('memberDefinition');
+
+  if (auth === 'lunar') {
+    typeSel.value = 'reflector';
+    defSel.value = 'none';
+  }
+
+  clearValidationError();
+}
+
+function updateTeamName() {
+  const name = document.getElementById('teamName').value.trim();
+  document.getElementById('pageTitle').textContent = name ? name + ' \u2014 团队能量图谱' : 'BG5 团队能量图谱';
+}
+
+function toggleChannelTag(el) {
+  const ch = el.dataset.ch;
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    selectedPentaChannels = selectedPentaChannels.filter(c => c !== ch);
+  } else {
+    el.classList.add('selected');
+    selectedPentaChannels.push(ch);
+  }
+  renderSelectedPreview();
+}
+
+function addCustomChannels() {
+  const input = document.getElementById('customChannels');
+  const raw = input.value.trim();
+  if (!raw) return;
+  const parts = raw.split(/[,\uff0c]/).map(s => s.trim()).filter(s => s);
+  parts.forEach(ch => {
+    if (!selectedPentaChannels.includes(ch)) selectedPentaChannels.push(ch);
+  });
+  input.value = '';
+  renderSelectedPreview();
+}
+
+function renderSelectedPreview() {
+  const container = document.getElementById('selectedChannelsPreview');
+  if (selectedPentaChannels.length === 0) { container.innerHTML = ''; return; }
+  container.innerHTML = selectedPentaChannels.map(ch =>
+    `<span class="channel-tag selected">${ch}</span>`
+  ).join('');
+}
+
+function addMember() {
+  const nameEl = document.getElementById('memberName');
+  const typeEl = document.getElementById('memberType');
+  const profileEl = document.getElementById('memberProfile');
+  const defEl = document.getElementById('memberDefinition');
+  const authEl = document.getElementById('memberAuthority');
+  const name = nameEl.value.trim();
+  if (!name) { nameEl.focus(); return; }
+
+  // Validate cross-field logic
+  clearValidationError();
+  const errors = validateMember(typeEl.value, defEl.value, authEl.value);
+  if (errors.length > 0) {
+    showValidationError(errors);
+    const invalidIds = [];
+    if (errors.some(e => e.includes('荐骨'))) invalidIds.push('memberType', 'memberAuthority');
+    if (errors.some(e => e.includes('投射者') || e.includes('显示者'))) invalidIds.push('memberType', 'memberAuthority');
+    if (errors.some(e => e.includes('反映者'))) invalidIds.push('memberType', 'memberDefinition', 'memberAuthority');
+    if (errors.some(e => e.includes('无定义'))) invalidIds.push('memberType', 'memberDefinition');
+    if (errors.some(e => e.includes('月循环'))) invalidIds.push('memberDefinition', 'memberAuthority');
+    markInvalid([...new Set(invalidIds)]);
+    return;
+  }
+
+  // collect channels
+  const channels = [...selectedPentaChannels];
+  const custom = document.getElementById('customChannels').value.trim();
+  if (custom) {
+    custom.split(/[,\uff0c]/).map(s => s.trim()).filter(s => s).forEach(ch => {
+      if (!channels.includes(ch)) channels.push(ch);
+    });
+  }
+
+  if (editingId) {
+    const idx = members.findIndex(m => m.id === editingId);
+    if (idx !== -1) {
+      members[idx] = { id: editingId, name, type: typeEl.value, profile: profileEl.value, definition: defEl.value, authority: authEl.value, channels };
+    }
+    cancelEdit();
+  } else {
+    members.push({
+      id: Date.now(), name, type: typeEl.value,
+      profile: profileEl.value, definition: defEl.value, authority: authEl.value,
+      channels
+    });
+    nameEl.value = '';
+    selectedPentaChannels = [];
+    document.querySelectorAll('#pentaChannelTags .channel-tag').forEach(el => el.classList.remove('selected'));
+    document.getElementById('customChannels').value = '';
+    renderSelectedPreview();
+    nameEl.focus();
+  }
+
+  render();
+}
+
+document.getElementById('memberName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addMember();
+});
+
+function removeMember(id) {
+  members = members.filter(m => m.id !== id);
+  if (editingId === id) cancelEdit();
+  render();
+}
+
+function editMember(id) {
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  editingId = id;
+  clearValidationError();
+  document.getElementById('memberName').value = m.name;
+  document.getElementById('memberType').value = m.type;
+  document.getElementById('memberProfile').value = m.profile;
+  document.getElementById('memberDefinition').value = m.definition;
+  document.getElementById('memberAuthority').value = m.authority;
+
+  // Restore channels
+  selectedPentaChannels = [];
+  document.querySelectorAll('#pentaChannelTags .channel-tag').forEach(el => el.classList.remove('selected'));
+  document.getElementById('customChannels').value = '';
+  if (m.channels) {
+    m.channels.forEach(ch => {
+      const tag = document.querySelector(`#pentaChannelTags .channel-tag[data-ch="${ch}"]`);
+      if (tag) {
+        tag.classList.add('selected');
+        selectedPentaChannels.push(ch);
+      } else {
+        // Custom channel — put in custom input, comma separated
+        const customInput = document.getElementById('customChannels');
+        customInput.value = customInput.value ? customInput.value + ', ' + ch : ch;
+      }
+    });
+  }
+  renderSelectedPreview();
+
+  // Change button text
+  const btn = document.querySelector('.btn-add');
+  btn.textContent = '更新';
+  btn.style.background = '#8B7355';
+
+  // Scroll to form
+  document.getElementById('memberName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('memberName').focus();
+  renderMembers(); // re-render to show editing highlight
+}
+
+function cancelEdit() {
+  editingId = null;
+  document.getElementById('memberName').value = '';
+  document.getElementById('memberType').selectedIndex = 0;
+  document.getElementById('memberProfile').selectedIndex = 0;
+  document.getElementById('memberDefinition').selectedIndex = 0;
+  document.getElementById('memberAuthority').selectedIndex = 0;
+  selectedPentaChannels = [];
+  document.querySelectorAll('#pentaChannelTags .channel-tag').forEach(el => el.classList.remove('selected'));
+  document.getElementById('customChannels').value = '';
+  renderSelectedPreview();
+  const btn = document.querySelector('.btn-add');
+  btn.textContent = '+ 添加';
+  btn.style.background = '#C4956A';
+}
+
+function clearAll() {
+  members = [];
+  document.getElementById('teamName').value = '';
+  cancelEdit();
+  clearValidationError();
+  updateTeamName();
+  render();
+}
+
+function loadPreset(type) {
+  members = [];
+  cancelEdit();
+  clearValidationError();
+  if (type === 'startup') {
+    document.getElementById('teamName').value = '创业团队示例';
+    members = [
+      { id: 1, name: '张明', type: 'manifesting_generator', profile: '3/5', definition: 'split', authority: 'sacral', channels: ['5-15', '16-48'] },
+      { id: 2, name: '李华', type: 'projector', profile: '5/1', definition: 'single', authority: 'self_projected', channels: ['7-31'] },
+      { id: 3, name: '王芳', type: 'generator', profile: '1/3', definition: 'triple', authority: 'sacral', channels: ['29-46'] },
+      { id: 4, name: '赵强', type: 'generator', profile: '2/4', definition: 'split', authority: 'splenic', channels: ['13-33'] },
+      { id: 5, name: '陈静', type: 'manifesting_generator', profile: '6/2', definition: 'single', authority: 'sacral', channels: ['2-14'] },
+    ];
+  } else if (type === 'corp') {
+    document.getElementById('teamName').value = '企业部门示例';
+    members = [
+      { id: 1, name: '刘总', type: 'manifestor', profile: '4/6', definition: 'single', authority: 'ego', channels: ['5-15', '7-31'] },
+      { id: 2, name: '周敏', type: 'projector', profile: '5/1', definition: 'single', authority: 'self_projected', channels: ['1-8'] },
+      { id: 3, name: '孙磊', type: 'generator', profile: '3/5', definition: 'split', authority: 'sacral', channels: ['29-46'] },
+      { id: 4, name: '吴婷', type: 'generator', profile: '1/3', definition: 'split', authority: 'emotional', channels: ['13-33'] },
+      { id: 5, name: '郑凯', type: 'generator', profile: '2/5', definition: 'triple', authority: 'sacral', channels: [] },
+      { id: 6, name: '黄欣', type: 'manifesting_generator', profile: '4/1', definition: 'split', authority: 'sacral', channels: ['2-14', '5-15'] },
+      { id: 7, name: '林燕', type: 'projector', profile: '6/2', definition: 'single', authority: 'environmental', channels: ['7-31', '1-8'] },
+      { id: 8, name: '何远', type: 'generator', profile: '3/6', definition: 'split', authority: 'sacral', channels: [] },
+    ];
+  } else if (type === 'npo') {
+    document.getElementById('teamName').value = '非盈利组织NPO示例';
+    members = [
+      { id: 1, name: '林主任', type: 'projector', profile: '5/1', definition: 'single', authority: 'self_projected', channels: ['5-15', '2'] },
+      { id: 2, name: '小王', type: 'generator', profile: '3/5', definition: 'split', authority: 'sacral', channels: ['29-46', '14'] },
+      { id: 3, name: '阿美', type: 'manifesting_generator', profile: '2/4', definition: 'split', authority: 'sacral', channels: ['1-8'] },
+      { id: 4, name: '老李', type: 'generator', profile: '1/3', definition: 'triple', authority: 'emotional', channels: ['7'] },
+      { id: 5, name: '阿芳', type: 'reflector', profile: '4/6', definition: 'none', authority: 'lunar', channels: ['13'] },
+    ];
+  }
+  updateTeamName();
+  render();
+}
+
+function render() {
+  renderMembers();
+  if (members.length > 0) {
+    document.getElementById('analysisSection').style.display = '';
+    document.getElementById('profileSection').style.display = '';
+    document.getElementById('pentaSection').style.display = '';
+    document.getElementById('blindSection').style.display = '';
+    document.getElementById('tipsSection').style.display = '';
+    renderStats();
+    // Print: force new page for analysis when team > 8 members
+    document.getElementById('analysisSection').classList.toggle('force-new-page', members.length > 8);
+    renderChart();
+    renderProfileDist();
+    renderPentaPillars();
+    renderBlindSpots();
+    renderTips();
+  } else {
+    document.getElementById('analysisSection').style.display = 'none';
+    document.getElementById('profileSection').style.display = 'none';
+    document.getElementById('pentaSection').style.display = 'none';
+    document.getElementById('blindSection').style.display = 'none';
+    document.getElementById('tipsSection').style.display = 'none';
+  }
+}
+
+function renderMembers() {
+  const area = document.getElementById('membersArea');
+  if (members.length === 0) {
+    area.innerHTML = '<div class="empty-state">尚未添加成员，请在上方输入或加载示例团队</div>';
+    return;
+  }
+  area.innerHTML = '<div class="members-grid">' + members.map(m => {
+    const cfg = TYPE_CONFIG[m.type];
+    const initial = m.name.charAt(0);
+    const chTags = m.channels && m.channels.length > 0
+      ? '<div class="channels">' + m.channels.map(ch => `<span class="ch-tag">${ch}</span>`).join('') + '</div>'
+      : '';
+    return `<div class="member-card ${editingId === m.id ? 'editing' : ''}" onclick="editMember(${m.id})">
+      <button class="btn-remove" onclick="event.stopPropagation(); removeMember(${m.id})" title="移除">&times;</button>
+      <div class="avatar" style="background:${cfg.color}">${initial}</div>
+      <div class="name">${m.name}</div>
+      <div class="meta-row">
+        <span class="meta-tag">${m.profile}</span>
+        <span class="meta-tag">${DEFINITION_NAMES[m.definition]}</span>
+        <span class="meta-tag">${AUTHORITY_NAMES[m.authority]}</span>
+      </div>
+      <div class="type-label">${cfg.name} \u00b7 ${cfg.role}</div>
+      ${chTags}
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function getTypeCounts() {
+  const counts = {};
+  const order = ['generator', 'manifesting_generator', 'manifestor', 'projector', 'reflector'];
+  order.forEach(t => counts[t] = 0);
+  members.forEach(m => counts[m.type]++);
+  return counts;
+}
+
+function renderStats() {
+  const counts = getTypeCounts();
+  const total = members.length;
+  const types = Object.keys(counts).filter(t => counts[t] > 0).length;
+  const maxType = Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">团队成员</div></div>
+    <div class="stat-card"><div class="stat-num">${types}</div><div class="stat-label">类型覆盖</div></div>
+    <div class="stat-card"><div class="stat-num">${TYPE_CONFIG[maxType].name}</div><div class="stat-label">主导类型</div></div>
+    <div class="stat-card"><div class="stat-num">${5 - types}</div><div class="stat-label">缺失类型</div></div>
+  `;
+}
+
+function renderChart() {
+  const counts = getTypeCounts();
+  const total = members.length;
+  const order = ['generator', 'manifesting_generator', 'manifestor', 'projector', 'reflector'];
+  const labels = order.map(t => TYPE_CONFIG[t].name);
+  const data = order.map(t => counts[t]);
+  const colors = order.map(t => TYPE_CONFIG[t].color);
+
+  if (chartInstance) chartInstance.destroy();
+  const ctx = document.getElementById('teamChart').getContext('2d');
+  chartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff', hoverBorderWidth: 3 }] },
+    options: {
+      responsive: true, maintainAspectRatio: true, cutout: '55%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const pct = total > 0 ? Math.round(ctx.parsed / total * 100) : 0;
+              return ` ${ctx.label}: ${ctx.parsed}\u4eba (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  document.getElementById('chartLegend').innerHTML = order.map(t => {
+    const cfg = TYPE_CONFIG[t];
+    const cnt = counts[t];
+    const pct = total > 0 ? Math.round(cnt / total * 100) : 0;
+    return `<div class="legend-item">
+      <div class="legend-dot" style="background:${cfg.color}"></div>
+      <span class="legend-label">${cfg.name} <span style="color:#A08968;font-size:11px">${cfg.pct}</span></span>
+      <span class="legend-count">${cnt}\u4eba</span>
+      <span class="legend-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderProfileDist() {
+  // Profile counts
+  const profileCounts = {};
+  const defCounts = {};
+  const authCounts = {};
+  members.forEach(m => {
+    profileCounts[m.profile] = (profileCounts[m.profile] || 0) + 1;
+    defCounts[m.definition] = (defCounts[m.definition] || 0) + 1;
+    authCounts[m.authority] = (authCounts[m.authority] || 0) + 1;
+  });
+
+  const profileHtml = Object.entries(profileCounts).map(([p, c]) => `${p}\uff1a${c}\u4eba`).join('<br>');
+  const defHtml = Object.entries(defCounts).map(([d, c]) => `${DEFINITION_NAMES[d]}\uff1a${c}\u4eba`).join('<br>');
+  const authHtml = Object.entries(authCounts).map(([a, c]) => `${AUTHORITY_NAMES[a]}\uff1a${c}\u4eba`).join('<br>');
+
+  // Show all profile descriptions (frontend + print)
+  const allProfileDescs = Object.keys(profileCounts).sort().map(p => {
+    const d = PROFILE_DESC[p] || '';
+    return `<div class="dist-desc"><strong>${p}</strong>：${d}</div>`;
+  }).join('');
+
+  // Show all definition descriptions (frontend + print)
+  const allDefDescs = Object.keys(defCounts).sort().map(d => {
+    const text = DEFINITION_DESC[d] || '';
+    return `<div class="dist-desc"><strong>${DEFINITION_NAMES[d]}</strong>：${text}</div>`;
+  }).join('');
+
+  // Show all authority descriptions (frontend + print)
+  const allAuthDescs = Object.keys(authCounts).sort().map(a => {
+    const text = AUTHORITY_DESC[a] || '';
+    return `<div class="dist-desc"><strong>${AUTHORITY_NAMES[a]}</strong>：${text}</div>`;
+  }).join('');
+
+  const wrapDescs = (html) => html ? `<div class="dist-desc-wrap">${html}</div>` : '';
+
+  document.getElementById('profileDist').innerHTML = `
+    <div class="dist-card">
+      <div class="dist-label">人生角色 Profile 分布</div>
+      <div class="dist-items">${profileHtml || '暂无数据'}</div>
+      ${wrapDescs(allProfileDescs)}
+    </div>
+    <div class="dist-card">
+      <div class="dist-label">能量定义 Definition 分布</div>
+      <div class="dist-items">${defHtml || '暂无数据'}</div>
+      ${wrapDescs(allDefDescs)}
+    </div>
+    <div class="dist-card">
+      <div class="dist-label">内在权威 Authority 分布</div>
+      <div class="dist-items">${authHtml || '暂无数据'}</div>
+      ${wrapDescs(allAuthDescs)}
+    </div>
+  `;
+}
+
+function renderPentaPillars() {
+  // For each Penta pillar, find matching members with their channels/gates
+  // A channel like "5-15" is a full channel. A single gate like "5" or "15" is a partial.
+
+  const results = PENTA_PILLARS.map(pillar => {
+    const parts = pillar.ch.split('-'); // e.g. ['5','15']
+    const gateSet = new Set(parts);
+
+    const contributors = [];
+    // Collect all gates from all members for spark channel detection
+    const allTeamGates = new Set();
+
+    members.forEach(m => {
+      if (!m.channels) return;
+      // Check for full channel match
+      const fullMatch = m.channels.find(ch => {
+        const c = ch.replace(/\s/g, '');
+        return c === pillar.ch;
+      });
+      if (fullMatch) {
+        contributors.push({ name: m.name, item: pillar.ch, isFull: true });
+        return;
+      }
+      // Check for partial gate match
+      const partialGates = [];
+      m.channels.forEach(ch => {
+        const c = ch.replace(/\s/g, '');
+        // If this is a single gate number that matches one side
+        if (!c.includes('-') && gateSet.has(c)) {
+          partialGates.push(c);
+          allTeamGates.add(c);
+        }
+        // Also check if a custom channel like "5-16" contains one of our gates
+        if (c.includes('-')) {
+          const subParts = c.split('-');
+          subParts.forEach(sub => {
+            if (gateSet.has(sub) && !partialGates.includes(sub)) {
+              partialGates.push(sub);
+              allTeamGates.add(sub);
+            }
+          });
+        }
+      });
+      if (partialGates.length > 0) {
+        contributors.push({ name: m.name, item: partialGates.join(', '), isFull: false });
+      }
+    });
+
+    // Spark channel: no single member has full channel, but all gates are covered across team
+    const hasSpark = contributors.length > 0 && !contributors.some(c => c.isFull)
+      && parts.every(g => allTeamGates.has(g));
+
+    return { pillar, contributors, hasSpark };
+  });
+
+  document.getElementById('pentaGrid').innerHTML = results.map(r => {
+    const { pillar, contributors, hasSpark } = r;
+    const hasIt = contributors.length > 0;
+
+    let contribHtml = '';
+    if (contributors.length > 0) {
+      const items = contributors.map(c => {
+        const label = c.isFull ? `${c.name}\uff1a${c.item}` : `${c.name}\uff1a${c.item}`;
+        return `<div class="penta-contrib-item">${label}</div>`;
+      }).join('');
+      let note;
+      if (contributors.some(c => c.isFull)) {
+        note = '<div class="penta-contrib-label">\u2705 \u5b8c\u6574\u901a\u9053\u8986\u76d6</div>';
+      } else if (hasSpark) {
+        note = '<div class="penta-contrib-label" style="color:#3B945E">\u2705 \u56e2\u961f\u6210\u5458\u6709\u5355\u4e2a\u95f8\u95e8\uff0c\u5f62\u6210\u706b\u82b1\u901a\u9053\uff0c\u5b8c\u6574\u901a\u9053\u8986\u76d6\u3002</div>';
+      } else {
+        note = '<div class="penta-contrib-label">\u26a0 \u4ec5\u5355\u4e2a\u95f8\u95e8\u8986\u76d6\uff0c\u672a\u5f62\u6210\u5b8c\u6574\u901a\u9053</div>';
+      }
+      contribHtml = `<div class="penta-contrib">${items}${note}</div>`;
+    }
+
+    return `<div class="penta-card">
+      <div class="penta-title">${pillar.ch} ${pillar.name}</div>
+      <div class="penta-sub">${hasIt ? contributors.length + ' \u4f4d\u6210\u5458\u53c2\u4e0e' : '\u56e2\u961f\u4e2d\u65e0\u4eba\u5b9a\u4e49\u6b64\u901a\u9053'}</div>
+      <div class="penta-body">${pillar.desc}</div>
+      ${contribHtml}
+      <span class="penta-status ${hasIt ? 'status-yes' : 'status-no'}">${hasIt ? '\u5df2\u8986\u76d6' : '\u7f3a\u5931'}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderBlindSpots() {
+  const counts = getTypeCounts();
+  const total = members.length;
+  const spots = [];
+  const hasGens = (counts.generator + counts.manifesting_generator) > 0;
+
+  if (counts.generator === 0 && counts.manifesting_generator === 0) spots.push('no_generator');
+  else if (counts.manifesting_generator === 0) spots.push('no_mg');
+  if (counts.projector === 0) spots.push('no_projector');
+  if (counts.manifestor === 0) spots.push('no_manifestor');
+  if (counts.reflector === 0) spots.push('no_reflector');
+
+  if (hasGens && counts.projector === 0 && counts.manifestor === 0) spots.push('all_generators');
+  if (counts.projector / Math.max(total, 1) > 0.4) spots.push('too_many_projectors');
+  if (counts.manifestor === 1 && total > 1 && counts.generator === 0 && counts.manifesting_generator === 0 && counts.projector === 0) spots.push('only_manifestor');
+
+  const unique = [...new Set(spots)];
+
+  if (unique.length === 0) {
+    document.getElementById('blindSpots').innerHTML = `
+      <div class="blind-spot" style="background:#F0F8EE;border-color:#C8E6B8">
+        <div class="icon" style="color:#3B945E">\u2713</div>
+        <div class="text">团队能量类型覆盖良好，未发现严重盲区。继续保持类型多样性！</div>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('blindSpots').innerHTML = unique.map(key => {
+    const d = BLIND_SPOT_DATA[key];
+    if (!d) return '';
+    return `<div class="blind-spot"><div class="icon">${d.icon}</div><div class="text">${d.text}</div></div>`;
+  }).join('');
+}
+
+function renderTipsSummary() {
+  const typeOrder = ['generator', 'manifesting_generator', 'manifestor', 'projector', 'reflector'];
+  const typeLabels = typeOrder.map(t => TYPE_CONFIG[t]);
+
+  const headerCells = typeLabels.map(cfg =>
+    `<th style="background:${cfg.color}">${cfg.name}</th>`
+  ).join('');
+
+  const bodyRows = TYPE_SUMMARY_DATA.map(row => {
+    const cells = row.values.map(v => `<td>${v}</td>`).join('');
+    return `<tr><td class="dim-name">${row.dim}</td>${cells}</tr>`;
+  }).join('');
+
+  document.getElementById('tipsSummary').innerHTML = `
+    <table>
+      <thead>
+        <tr><th class="dim-label">维度</th>${headerCells}</tr>
+      </thead>
+      <tbody>${bodyRows}</tbody>
+    </table>
+  `;
+}
+
+function renderTips() {
+  renderTipsSummary();
+  const counts = getTypeCounts();
+  const tips = [];
+  const present = Object.keys(counts).filter(t => counts[t] > 0);
+
+  if (present.includes('generator') && present.includes('projector')) tips.push(INTERACTION_TIPS['generator+projector']);
+  if (present.includes('generator') && present.includes('manifestor')) tips.push(INTERACTION_TIPS['generator+manifestor']);
+  if (present.includes('manifesting_generator') && present.includes('projector')) tips.push(INTERACTION_TIPS['mg+projector']);
+  if (present.includes('manifesting_generator') && present.includes('manifestor')) tips.push(INTERACTION_TIPS['mg+manifestor']);
+  if (present.includes('projector') && present.includes('manifestor')) tips.push(INTERACTION_TIPS['projector+manifestor']);
+  if (present.includes('generator') && present.includes('manifesting_generator')) tips.push(INTERACTION_TIPS['generator+mg']);
+  if (present.includes('reflector')) tips.push(INTERACTION_TIPS['reflector+any']);
+
+  if (tips.length === 0) {
+    tips.push({ title: '团队互动', body: '当前团队类型较为单一，建议补充不同能量类型以形成互补。每种类型都有其独特的运作方式和贡献。' });
+  }
+
+  document.getElementById('tipsGrid').innerHTML = tips.map(t =>
+    `<div class="tip-card"><div class="tip-title">${t.title}</div><div class="tip-body">${t.body}</div></div>`
+  ).join('');
+}
+</script>
+
+</body>
+</html>
