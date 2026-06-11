@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BG5 团队能量图谱生成器 V13.0</title>
+<title>BG5 团队能量图谱生成器 V15.0</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -100,6 +100,40 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
 .penta-card .penta-contrib { margin-top: 8px; padding: 6px 8px; background: #fff; border-radius: 6px; border: 1px dashed #D4C5A9; }
 .penta-card .penta-contrib-item { font-size: 11px; color: #5C4A32; line-height: 1.8; }
 .penta-card .penta-contrib-label { font-size: 10px; color: #A08968; margin-top: 4px; }
+
+/* ========== BG5 Official Style Penta Grid ========== */
+.penta-skill-grid-title { font-size: 15px; font-weight: 700; color: #2D2118; margin-bottom: 8px; }
+.penta-skill-grid-subtitle { font-size: 12px; color: #8B7355; margin-bottom: 14px; line-height: 1.6; }
+.penta-official-wrapper { display: flex; gap: 6px; margin: 16px 0; align-items: stretch; }
+.penta-official-main { flex: 1; border: 2px solid #C4956A; border-radius: 10px; overflow: hidden; background: #fff; }
+.penta-official-top-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: linear-gradient(180deg, #B8956A, #9A7B52); }
+.penta-official-top-bar > div { padding: 7px 4px; text-align: center; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+.penta-official-body { display: grid; grid-template-rows: repeat(4, 1fr); }
+.penta-official-row { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid #E8DCC8; }
+.penta-official-row:last-child { border-bottom: none; }
+.penta-official-row.yellow-band { background: #FFF8DC; border-top: 2px solid #F1C40F; border-bottom: 2px solid #F1C40F; }
+.penta-official-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px; border-right: 1px solid #E8DCC8; min-height: 76px; gap: 2px; position: relative; }
+.penta-official-cell:last-child { border-right: none; }
+.penta-official-cell .cell-en { font-size: 9px; color: #8B7355; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 500; }
+.penta-official-cell .cell-cn { font-size: 13px; color: #2D2118; font-weight: 600; }
+.penta-official-cell .cell-gate { font-size: 10px; color: #A08968; }
+.penta-official-cell .energy-bar { width: 16px; height: 32px; background: #E8DDD0; border-radius: 8px; position: relative; overflow: hidden; margin-top: 3px; }
+.penta-official-cell .energy-bar-fill { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 0 0 8px 8px; }
+.penta-official-cell.status-native .energy-bar-fill { height: 100%; background: linear-gradient(180deg, #E74C3C, #C0392B); box-shadow: inset 0 0 4px rgba(255,255,255,0.3); }
+.penta-official-cell.status-spark .energy-bar-fill { height: 100%; background: linear-gradient(180deg, #F39C12, #E67E22); }
+.penta-official-cell.status-partial .energy-bar-fill { height: 50%; background: linear-gradient(180deg, #F1C40F, #D4AC0D); }
+.penta-official-cell.status-missing .energy-bar-fill { height: 15%; background: #C8B8A8; }
+.penta-official-bottom-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: linear-gradient(180deg, #C0392B, #993C1D); }
+.penta-official-bottom-bar > div { padding: 7px 4px; text-align: center; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+.penta-side-panel { display: flex; flex-direction: column; justify-content: center; width: 68px; gap: 40px; }
+.penta-side-upper, .penta-side-lower { display: flex; align-items: center; gap: 2px; font-size: 13px; font-weight: 700; }
+.penta-side-upper { color: #8B7355; }
+.penta-side-lower { color: #993C1D; }
+.penta-side-arrow { font-size: 22px; line-height: 1; }
+.penta-grid-legend { display: flex; justify-content: center; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+.penta-grid-legend .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #5C4A32; }
+.penta-grid-legend .legend-bar { width: 10px; height: 16px; border-radius: 5px; }
+.penta-skill-summary { margin-top: 12px; padding: 10px 14px; background: #FDFAF5; border-radius: 8px; border: 1px solid #E8DCC8; font-size: 12px; color: #5C4A32; line-height: 1.8; }
 
 /* Interaction tips */
 .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
@@ -256,6 +290,19 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
   .penta-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; }
   .penta-card { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ddd; padding: 10px; }
 
+  /* Penta official grid print */
+  .penta-official-cell { min-height: 50px; padding: 6px 2px; }
+  .penta-official-cell .cell-en { font-size: 7px; }
+  .penta-official-cell .cell-cn { font-size: 10px; }
+  .penta-official-cell .cell-gate { font-size: 8px; }
+  .penta-official-cell .energy-bar { width: 10px; height: 20px; border-radius: 5px; }
+  .penta-official-top-bar > div, .penta-official-bottom-bar > div { font-size: 8px; padding: 4px 2px; }
+  .penta-side-panel { width: 46px; gap: 30px; }
+  .penta-side-upper, .penta-side-lower { font-size: 9px; }
+  .penta-side-arrow { font-size: 14px; }
+  .penta-grid-legend .legend-item { font-size: 9px; }
+  .penta-skill-summary { font-size: 10px; padding: 8px 10px; }
+
   /* Blind spots: avoid truncation, prefer page break */
   .blind-spot {
     break-inside: avoid;
@@ -299,7 +346,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     </svg>
     <h1 id="pageTitle">BG5 团队能量图谱</h1>
   </div>
-  <p>基于人类图能量类型的团队诊断工具 V13.0</p>
+  <p>基于人类图能量类型的团队诊断工具 V15.0</p>
 </div>
 
 <div class="container">
@@ -423,6 +470,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
   <!-- Penta Pillars -->
   <div class="section" id="pentaSection" style="display:none;">
     <div class="section-title">Penta 核心六支柱覆盖诊断</div>
+    <div id="pentaSkillGrid"></div>
     <div class="penta-grid" id="pentaGrid"></div>
   </div>
 
@@ -442,7 +490,7 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
 </div>
 
 <div class="footer">
-  BG5 团队能量图谱生成器 v13.0 | 基于人类图 (Human Design) 体系
+  BG5 团队能量图谱生成器 v15.0 | 基于人类图 (Human Design) 体系
   <span class="powered">Powered By Kan Man Tang</span>
 </div>
 
@@ -496,12 +544,34 @@ const DEFINITION_DESC = {
 };
 
 const PENTA_PILLARS = [
-  { ch: '5-15', name: '节奏·韵律', desc: '团队是否有共同的呼吸与文化习惯？决定何时冲刺、何时休整。缺失时团队失序忙碌，难以建立凝聚力。' },
-  { ch: '2-14', name: '方向·财富', desc: '群体将生命能量转化为物质成功的能力。缺失时团队很努力但回报不成正比，长期资源焦虑。' },
-  { ch: '29-46', name: '承诺·身体', desc: '成员之间是否给出身心承诺。缺失时"人在心不在"，遇到困难容易作鸟兽散，缺乏同舟共济感。' },
-  { ch: '7-31', name: '领导·影响', desc: '团队如何被引领及对外呈现。缺失时群龙无首或多头马车，决策效率低，对外声音杂乱。' },
-  { ch: '1-8', name: '创造·灵感', desc: '群体的目标感和存在意义。缺失时团队陷入"为做而做"的迷茫，缺乏内在驱动力。' },
-  { ch: '13-33', name: '见证·记忆', desc: '倾听、整合经验并转化为传承智慧。缺失时不断重复同样错误，历史成了无意义的循环。' }
+  { ch: '5-15', name: '节奏·韵律', flow: '磁场流', desc: '团队是否有共同的呼吸与文化习惯？决定何时冲刺、何时休整。缺失时团队失序忙碌，难以建立凝聚力。' },
+  { ch: '2-14', name: '方向·财富', flow: '物质漩涡流', desc: '群体将生命能量转化为物质成功的能力。缺失时团队很努力但回报不成正比，长期资源焦虑。' },
+  { ch: '29-46', name: '承诺·身体', flow: '气场稳定流', desc: '成员之间是否给出身心承诺。缺失时"人在心不在"，遇到困难容易作鸟兽散，缺乏同舟共济感。' },
+  { ch: '7-31', name: '领导·影响', flow: '未来规划流', desc: '团队如何被引领及对外呈现。缺失时群龙无首或多头马车，决策效率低，对外声音杂乱。' },
+  { ch: '1-8', name: '创造·灵感', flow: '市场对接流', desc: '群体的目标感和存在意义。缺失时团队陷入"为做而做"的迷茫，缺乏内在驱动力。' },
+  { ch: '13-33', name: '见证·记忆', flow: '运营监督流', desc: '倾听、整合经验并转化为传承智慧。缺失时不断重复同样错误，历史成了无意义的循环。' }
+];
+
+// BG5商业Penta 12项技能（对应6条通道）
+const PENTA_SKILLS = [
+  // 磁场流 5-15
+  { channel: '5-15', flow: '磁场流', name: '文化', gate: '5', row: 3, col: 0 },
+  { channel: '5-15', flow: '磁场流', name: '可靠性', gate: '15', row: 2, col: 0 },
+  // 物质漩涡流 2-14
+  { channel: '2-14', flow: '物质漩涡流', name: '愿景', gate: '2', row: 2, col: 1 },
+  { channel: '2-14', flow: '物质漩涡流', name: '资源承载力', gate: '14', row: 3, col: 1 },
+  // 气场稳定流 29-46
+  { channel: '29-46', flow: '气场稳定流', name: '协调', gate: '46', row: 2, col: 2 },
+  { channel: '29-46', flow: '气场稳定流', name: '承诺', gate: '29', row: 3, col: 2 },
+  // 未来规划流 7-31
+  { channel: '7-31', flow: '未来规划流', name: '规划', gate: '7', row: 1, col: 0 },
+  { channel: '7-31', flow: '未来规划流', name: '行政管理', gate: '31', row: 0, col: 0 },
+  // 市场对接流 1-8
+  { channel: '1-8', flow: '市场对接流', name: '落地执行', gate: '1', row: 1, col: 1 },
+  { channel: '1-8', flow: '市场对接流', name: '公共关系', gate: '8', row: 0, col: 1 },
+  // 运营监督流 13-33
+  { channel: '13-33', flow: '运营监督流', name: '财务核算', gate: '13', row: 1, col: 2 },
+  { channel: '13-33', flow: '运营监督流', name: '监督', gate: '33', row: 0, col: 2 }
 ];
 
 const BLIND_SPOT_DATA = {
@@ -1022,7 +1092,132 @@ function renderProfileDist() {
   `;
 }
 
+// ========== Penta 12 Skills Grid Visualization (BG5 Official Style) ==========
+function renderPentaSkillGrid() {
+  const SKILL_EN = {
+    '行政管理': 'Administration', '公共关系': 'Public Relations', '监督': 'Oversight',
+    '规划': 'Planning', '落地执行': 'Implementation', '财务核算': 'Accounting',
+    '可靠性': 'Reliability', '愿景': 'Vision', '协调': 'Coordination',
+    '文化': 'Culture', '资源承载力': 'Capacity', '承诺': 'Commitment'
+  };
+
+  // Collect all gates from all members
+  const allTeamGates = new Set();
+  members.forEach(m => {
+    if (!m.channels) return;
+    m.channels.forEach(ch => {
+      const c = ch.replace(/\s/g, '');
+      if (!c.includes('-')) {
+        allTeamGates.add(c);
+      } else {
+        c.split('-').forEach(g => allTeamGates.add(g));
+      }
+    });
+  });
+
+  // Check each skill coverage
+  const skillStatus = PENTA_SKILLS.map(skill => {
+    const covered = allTeamGates.has(String(skill.gate));
+    const [g1, g2] = skill.channel.split('-');
+    let fullChannel = false;
+    let sparkChannel = false;
+    members.forEach(m => {
+      if (!m.channels) return;
+      m.channels.forEach(ch => {
+        const c = ch.replace(/\s/g, '');
+        if (c === skill.channel) fullChannel = true;
+      });
+    });
+    if (!fullChannel && allTeamGates.has(g1) && allTeamGates.has(g2)) {
+      sparkChannel = true;
+    }
+    let status = 'missing';
+    if (fullChannel) status = 'native';
+    else if (sparkChannel) status = 'spark';
+    else if (covered) status = 'partial';
+    return { ...skill, covered, fullChannel, sparkChannel, status };
+  });
+
+  // Build 4x3 grid rows
+  const rows = [
+    ['行政管理', '公共关系', '监督'],
+    ['规划', '落地执行', '财务核算'],
+    ['可靠性', '愿景', '协调'],
+    ['文化', '资源承载力', '承诺']
+  ];
+
+  let bodyHtml = '<div class="penta-official-body">';
+  rows.forEach((row, rowIdx) => {
+    const isYellow = rowIdx === 1 || rowIdx === 2;
+    bodyHtml += `<div class="penta-official-row${isYellow ? ' yellow-band' : ''}">`;
+    row.forEach(skillName => {
+      const skill = skillStatus.find(s => s.name === skillName);
+      if (!skill) return;
+      const statusClass = 'status-' + skill.status;
+      bodyHtml += `
+        <div class="penta-official-cell ${statusClass}">
+          <div class="cell-en">${SKILL_EN[skillName] || ''}</div>
+          <div class="cell-cn">${skill.name}</div>
+          <div class="cell-gate">G.${skill.gate}</div>
+          <div class="energy-bar"><div class="energy-bar-fill"></div></div>
+        </div>
+      `;
+    });
+    bodyHtml += '</div>';
+  });
+  bodyHtml += '</div>';
+
+  // Summary counts
+  const nativeCount = skillStatus.filter(s => s.fullChannel).length;
+  const sparkCount = skillStatus.filter(s => s.sparkChannel).length;
+  const partialCount = skillStatus.filter(s => s.covered && !s.fullChannel && !s.sparkChannel).length;
+  const missingCount = skillStatus.filter(s => !s.covered).length;
+
+  document.getElementById('pentaSkillGrid').innerHTML = `
+    <div class="penta-skill-grid-title">📊 Penta 12 Skills Coverage Grid</div>
+    <div class="penta-skill-grid-subtitle">
+      BG5 商业Penta核心六支柱对应的12项商业技能覆盖状态。
+      上方（UPPER）为外部展示技能，下方（LOWER）为内部运作技能。
+    </div>
+    <div class="penta-official-wrapper">
+      <div class="penta-official-main">
+        <div class="penta-official-top-bar">
+          <div>Administration</div><div>Public Relations</div><div>Oversight</div>
+        </div>
+        ${bodyHtml}
+        <div class="penta-official-bottom-bar">
+          <div>Culture</div><div>Capacity</div><div>Commitment</div>
+        </div>
+      </div>
+      <div class="penta-side-panel">
+        <div class="penta-side-upper">
+          <span>UPPER</span><span class="penta-side-arrow">↩</span>
+        </div>
+        <div class="penta-side-lower">
+          <span>LOWER</span><span class="penta-side-arrow">↩</span>
+        </div>
+      </div>
+    </div>
+    <div class="penta-grid-legend">
+      <div class="legend-item"><div class="legend-bar" style="background:linear-gradient(180deg,#E74C3C,#C0392B);"></div>原生定义</div>
+      <div class="legend-item"><div class="legend-bar" style="background:linear-gradient(180deg,#F39C12,#E67E22);"></div>火花定义</div>
+      <div class="legend-item"><div class="legend-bar" style="background:linear-gradient(180deg,#F1C40F,#D4AC0D);"></div>部分覆盖</div>
+      <div class="legend-item"><div class="legend-bar" style="background:#C8B8A8;"></div>缺失</div>
+    </div>
+    <div class="penta-skill-summary">
+      <strong>12项技能覆盖统计</strong>（来源：iconnectsmart.com）<br>
+      <span style="color:#C0392B;font-weight:600;">${nativeCount} 项原生</span> · 
+      <span style="color:#E67E22;font-weight:600;">${sparkCount} 项火花</span> · 
+      <span style="color:#D4AC0D;font-weight:600;">${partialCount} 项部分</span> · 
+      <span style="color:#8B7355;font-weight:600;">${missingCount} 项缺失</span>
+    </div>
+  `;
+}
+
 function renderPentaPillars() {
+  // Render the 12-skill grid first
+  renderPentaSkillGrid();
+
   // For each Penta pillar, find matching members with their channels/gates
   // A channel like "5-15" is a full channel. A single gate like "5" or "15" is a partial.
 
@@ -1098,12 +1293,19 @@ function renderPentaPillars() {
       contribHtml = `<div class="penta-contrib">${items}${note}</div>`;
     }
 
+    // Get skills for this channel
+    const skills = PENTA_SKILLS.filter(s => s.channel === pillar.ch);
+    const skillsHtml = skills.length > 0
+      ? `<div style="margin-top:6px;font-size:11px;color:#8B7355;">对应技能：${skills.map(s => s.name + '(' + s.gate + ')').join('、')}</div>`
+      : '';
+
     return `<div class="penta-card">
-      <div class="penta-title">${pillar.ch} ${pillar.name}</div>
-      <div class="penta-sub">${hasIt ? contributors.length + ' \u4f4d\u6210\u5458\u53c2\u4e0e' : '\u56e2\u961f\u4e2d\u65e0\u4eba\u5b9a\u4e49\u6b64\u901a\u9053'}</div>
+      <div class="penta-title">${pillar.ch} ${pillar.name} <span style="color:#A08968;font-size:11px;font-weight:400;">· ${pillar.flow}</span></div>
+      <div class="penta-sub">${hasIt ? contributors.length + ' 位成员参与' : '团队中无人定义此通道'}</div>
       <div class="penta-body">${pillar.desc}</div>
+      ${skillsHtml}
       ${contribHtml}
-      <span class="penta-status ${hasIt ? 'status-yes' : 'status-no'}">${hasIt ? '\u5df2\u8986\u76d6' : '\u7f3a\u5931'}</span>
+      <span class="penta-status ${hasIt ? 'status-yes' : 'status-no'}">${hasIt ? '已覆盖' : '缺失'}</span>
     </div>`;
   }).join('');
 }
