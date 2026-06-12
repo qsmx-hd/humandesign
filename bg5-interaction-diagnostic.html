@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BG5 双人互动合图分析 V8.0</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #F5F0E8; color: #2D2118; min-height: 100vh; }
+
+/* Top Bar */
+.top-bar { background: linear-gradient(135deg, #2D2118 0%, #4A3728 100%); padding: 20px 0 16px; text-align: center; }
+.top-bar .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 4px; }
+.top-bar .logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
+.top-bar h1 { color: #C4956A; font-size: 22px; font-weight: 500; letter-spacing: 2px; }
+.top-bar p { color: #A08968; font-size: 12px; margin-top: 4px; }
+.top-bar .ver { color: #7A6A52; font-size: 11px; margin-top: 2px; }
+
+/* Navigation */
+.nav-bar { background: #fff; border-bottom: 1px solid #E8DCC8; padding: 8px 0; text-align: center; }
+.nav-bar a { color: #8B7355; text-decoration: none; font-size: 13px; margin: 0 16px; padding: 6px 12px; border-radius: 6px; transition: background 0.2s; }
+.nav-bar a:hover { background: #F5F0E8; }
+.nav-bar a.active { background: #FDF5EB; color: #C4956A; font-weight: 500; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 20px 16px; }
+
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid #E8DCC8; }
+.section-title { font-size: 16px; font-weight: 500; color: #2D2118; margin-bottom: 16px; padding-left: 12px; border-left: 3px solid #C4956A; }
+
+/* Person input cards */
+.person-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .person-grid { grid-template-columns: 1fr; } }
+.person-card { background: #FDFAF5; border-radius: 12px; padding: 20px; border: 1px solid #E8DCC8; }
+.person-card .person-header { font-size: 15px; font-weight: 500; color: #C4956A; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.person-card .person-header .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: 600; }
+.form-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+.form-row label { font-size: 12px; color: #8B7355; min-width: 70px; text-align: right; }
+.form-row select,
+.form-row input[type="text"] { flex: 1; padding: 7px 10px; border: 1px solid #D4C5A9; border-radius: 7px; font-size: 13px; background: #fff; color: #2D2118; outline: none; }
+.form-row select:focus,
+.form-row input[type="text"]:focus { border-color: #C4956A; }
+
+/* Channel selector (shared with Tool A logic) */
+.channel-section { margin-top: 10px; }
+.channel-section .ch-label { font-size: 12px; color: #8B7355; margin-bottom: 6px; }
+.channel-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+.channel-tag { font-size: 11px; padding: 3px 9px; border-radius: 12px; border: 1px solid #D4C5A9; background: #fff; cursor: pointer; transition: all 0.15s; user-select: none; }
+.channel-tag.selected { background: #C4956A; color: #fff; border-color: #C4956A; }
+
+/* Diagnose button */
+.btn-diagnose { display: block; margin: 24px auto 0; padding: 12px 48px; background: linear-gradient(135deg, #C4956A, #A87B52); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; letter-spacing: 1px; transition: opacity 0.2s; }
+.btn-diagnose:hover { opacity: 0.88; }
+
+/* Report area */
+#reportSection { display: none; }
+#reportSection.show { display: block; }
+
+/* Type interaction card */
+.interaction-card { background: #FDFAF5; border-radius: 10px; padding: 16px; margin-bottom: 14px; border: 1px solid #E8DCC8; }
+.interaction-card .ic-title { font-size: 14px; font-weight: 500; color: #2D2118; margin-bottom: 8px; }
+.interaction-card .ic-subtitle { font-size: 12px; color: #8B7355; margin-bottom: 10px; }
+.interaction-card .ic-body { font-size: 13px; color: #2D2118; line-height: 1.8; }
+.ic-good { color: #2E7D32; }
+.ic-warn { color: #C67B00; }
+.ic-bad { color: #C0392B; }
+
+/* Type colors */
+.type-generator { background: #2E7D32; }
+.type-manifesting_generator { background: #FF8F00; }
+.type-projector { background: #1565C0; }
+.type-manifestor { background: #C62828; }
+.type-reflector { background: #6A1B9A; }
+
+/* Print helpers */
+.print-only { display: none; }
+
+/* Print */
+@media print {
+  .nav-bar, .person-grid, .btn-diagnose, .channel-section, .frontend-only { display: none !important; }
+  .print-only { display: block !important; }
+  .section { break-inside: avoid; page-break-inside: avoid; }
+  .page-break-before { page-break-before: always; break-before: page; }
+  #reportSection { display: block !important; }
+  /* 通道关系模型打印时单独另起一页 */
+  #channelSynergySection { page-break-before: always; break-before: page; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="logo-wrap">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="16" stroke="#C4956A" stroke-width="1.5" fill="#2D2118"/>
+      <circle cx="18" cy="18" r="6" fill="#C4956A" opacity="0.8"/>
+      <circle cx="8" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="28" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="8" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="28" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+      <line x1="18" y1="18" x2="8" y2="10" stroke="#C4956A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="18" y1="18" x2="28" y2="10" stroke="#C4956A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="18" y1="18" x2="8" y2="26" stroke="#C4956A" stroke-width="0.8" opacity="0.4"/>
+      <line x1="18" y1="18" x2="28" y2="26" stroke="#C4956A" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <h1>BG5 双人互动合图分析</h1>
+  </div>
+  <p>基于人类图 (Human Design) 双人能量互动合图分析</p>
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <a href="bg5-team-map.html">← 返回 团队能量图谱</a>
+  <a href="#" class="active">双人互动合图分析</a>
+</div>
+
+<div class="container">
+
+  <!-- Person A & B Input -->
+  <div class="section">
+    <div class="section-title frontend-only">输入两人信息</div>
+    <div class="section-title print-only" id="printPersonTitle"></div>
+    <div class="print-only" id="printPersonInfo" style="display:none; margin-bottom:16px;"></div>
+    <div class="person-grid">
+      <!-- Person A -->
+      <div class="person-card" id="personACard">
+        <div class="person-header">
+          <div class="avatar type-generator" id="avatarA">A</div>
+          <span>成员 A</span>
+        </div>
+        <div class="form-row"><label>姓名</label><input type="text" id="nameA" placeholder="成员A姓名"></div>
+        <div class="form-row">
+          <label>能量类型</label>
+          <select id="typeA" onchange="onPersonTypeChange('A')">
+            <option value="generator">生产者 (Generator)</option>
+            <option value="manifesting_generator">显示生产者 (MG)</option>
+            <option value="projector">投射者 (Projector)</option>
+            <option value="manifestor">显示者 (Manifestor)</option>
+            <option value="reflector">反映者 (Reflector)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>人生角色</label>
+          <select id="profileA">
+            <option value="1/3">1/3 研究者/烈士</option>
+            <option value="1/4">1/4 研究者/机会主义者</option>
+            <option value="2/4">2/4 隐士/机会主义者</option>
+            <option value="2/5">2/5 隐士/异类</option>
+            <option value="3/5">3/5 烈士/异类</option>
+            <option value="3/6">3/6 烈士/角色模型</option>
+            <option value="4/6">4/6 机会主义者/角色模型</option>
+            <option value="4/1">4/1 机会主义者/研究者</option>
+            <option value="5/1">5/1 异类/研究者</option>
+            <option value="5/2">5/2 异类/隐士</option>
+            <option value="6/2">6/2 角色模型/隐士</option>
+            <option value="6/3">6/3 角色模型/烈士</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>能量定义</label>
+          <select id="definitionA">
+            <option value="single">一分人</option>
+            <option value="split">二分人</option>
+            <option value="triple">三分人</option>
+            <option value="quad">四分人</option>
+            <option value="none">无定义</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>内在权威</label>
+          <select id="authorityA">
+            <option value="emotional">情绪权威</option>
+            <option value="sacral">荐骨权威</option>
+            <option value="splenic">直觉/脾脏权威</option>
+            <option value="ego">意志力/心脏权威</option>
+            <option value="self_projected">G中心/自我投射权威</option>
+            <option value="environmental">环境/头脑权威</option>
+            <option value="lunar">月循环权威</option>
+          </select>
+        </div>
+        <!-- Channel selector for Person A -->
+        <div class="channel-section">
+          <div class="ch-label">持有闸门（用于通道互补分析）</div>
+          <div class="channel-grid" id="channelGridA"></div>
+        </div>
+      </div>
+
+      <!-- Person B -->
+      <div class="person-card" id="personBCard">
+        <div class="person-header">
+          <div class="avatar type-generator" id="avatarB">B</div>
+          <span>成员 B</span>
+        </div>
+        <div class="form-row"><label>姓名</label><input type="text" id="nameB" placeholder="成员B姓名"></div>
+        <div class="form-row">
+          <label>能量类型</label>
+          <select id="typeB" onchange="onPersonTypeChange('B')">
+            <option value="generator">生产者 (Generator)</option>
+            <option value="manifesting_generator">显示生产者 (MG)</option>
+            <option value="projector">投射者 (Projector)</option>
+            <option value="manifestor">显示者 (Manifestor)</option>
+            <option value="reflector">反映者 (Reflector)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>人生角色</label>
+          <select id="profileB">
+            <option value="1/3">1/3 研究者/烈士</option>
+            <option value="1/4">1/4 研究者/机会主义者</option>
+            <option value="2/4">2/4 隐士/机会主义者</option>
+            <option value="2/5">2/5 隐士/异类</option>
+            <option value="3/5">3/5 烈士/异类</option>
+            <option value="3/6">3/6 烈士/角色模型</option>
+            <option value="4/6">4/6 机会主义者/角色模型</option>
+            <option value="4/1">4/1 机会主义者/研究者</option>
+            <option value="5/1">5/1 异类/研究者</option>
+            <option value="5/2">5/2 异类/隐士</option>
+            <option value="6/2">6/2 角色模型/隐士</option>
+            <option value="6/3">6/3 角色模型/烈士</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>能量定义</label>
+          <select id="definitionB">
+            <option value="single">一分人</option>
+            <option value="split">二分人</option>
+            <option value="triple">三分人</option>
+            <option value="quad">四分人</option>
+            <option value="none">无定义</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>内在权威</label>
+          <select id="authorityB">
+            <option value="emotional">情绪权威</option>
+            <option value="sacral">荐骨权威</option>
+            <option value="splenic">直觉/脾脏权威</option>
+            <option value="ego">意志力/心脏权威</option>
+            <option value="self_projected">G中心/自我投射权威</option>
+            <option value="environmental">环境/头脑权威</option>
+            <option value="lunar">月循环权威</option>
+          </select>
+        </div>
+        <div class="channel-section">
+          <div class="ch-label">持有闸门（用于通道互补分析）</div>
+          <div class="channel-grid" id="channelGridB"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-diagnose" onclick="runDiagnosis()">开始合图分析</button>
+  </div>
+
+  <!-- Report Section -->
+  <div id="reportSection">
+    <!-- Type Interaction -->
+    <div class="section page-break-before" id="typeInteractionSection">
+      <div class="section-title">类型互动分析</div>
+      <div id="typeInteractionContent"></div>
+    </div>
+
+    <!-- Profile Interaction -->
+    <div class="section" id="profileInteractionSection">
+      <div class="section-title">人生角色互动分析</div>
+      <div id="profileInteractionContent"></div>
+    </div>
+
+    <!-- Definition Interaction -->
+    <div class="section" id="defInteractionSection">
+      <div class="section-title">能量定义互动分析</div>
+      <div id="defInteractionContent"></div>
+    </div>
+
+    <!-- Authority Interaction -->
+    <div class="section" id="authInteractionSection">
+      <div class="section-title">内在权威互动分析</div>
+      <div id="authInteractionContent"></div>
+    </div>
+
+    <!-- Channel Synergy -->
+    <div class="section" id="channelSynergySection">
+      <div class="section-title">通道关系模型分析</div>
+      <div id="channelSynergyContent"></div>
+    </div>
+
+    <!-- Penta 2-person analysis -->
+    <div class="section" id="penta2Section">
+      <div class="section-title">Penta 双人合图分析</div>
+      <div id="penta2Content"></div>
+    </div>
+
+    <!-- Comprehensive Advice -->
+    <div class="section" id="adviceSection">
+      <div class="section-title">综合互动建议</div>
+      <div id="adviceContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div style="text-align:center;padding:18px 0;color:#A08968;font-size:11px;border-top:1px solid #E8DCC8;margin-top:20px;">
+  BG5 双人互动合图分析 v8.0 | 基于人类图 (Human Design) 体系<br>
+  <span style="color:#C4956A;font-size:10px;margin-top:4px;display:inline-block;">Powered By Kan Man Tang</span>
+</div>
+
+<script>
+// ========== Constants ==========
+const TYPE_NAMES = {
+  generator: '生产者', manifesting_generator: '显示生产者',
+  projector: '投射者', manifestor: '显示者', reflector: '反映者'
+};
+const TYPE_COLORS = {
+  generator: '#2E7D32', manifesting_generator: '#FF8F00',
+  projector: '#1565C0', manifestor: '#C62828', reflector: '#6A1B9A'
+};
+const PROFILE_NAMES = {
+  '1/3':'1/3 研究者/烈士','1/4':'1/4 研究者/机会主义者','2/4':'2/4 隐士/机会主义者',
+  '2/5':'2/5 隐士/异类','3/5':'3/5 烈士/异类','3/6':'3/6 烈士/角色模型',
+  '4/1':'4/1 机会主义者/研究者','4/6':'4/6 机会主义者/角色模型',
+  '5/1':'5/1 异类/研究者','5/2':'5/2 异类/隐士',
+  '6/2':'6/2 角色模型/隐士','6/3':'6/3 角色模型/烈士'
+};
+const DEFINITION_NAMES = { single:'一分人', split:'二分人', triple:'三分人', quad:'四分人', none:'无定义' };
+const AUTHORITY_NAMES = {
+  sacral:'荐骨权威', emotional:'情绪权威', splenic:'直觉/脾脏权威',
+  ego:'意志力/心脏权威', self_projected:'G中心/自我投射权威',
+  environmental:'环境/头脑权威', lunar:'月循环权威'
+};
+
+// BG5 Penta channels — 来源：Ra Uru Hu 人类图体系 / BG5 商业人类图 Penta 框架
+// Penta 是 3-5 人团队能量场模型，6 大支柱通道为团队运作的核心能量线
+const PENTA_PILLARS = [
+  { name: '核心通道', channel: '20-34', desc: '核心能量通道，代表行动与执行力', talent: '将当下的想法直接转化为行动，具有极强的执行力与生命力。是团队的推进引擎。' },
+  { name: '电路板通道', channel: '43-23', desc: '洞察与逻辑表达，将内在觉知转化为可被理解的信息', talent: '将内在突变的洞察转化为可被理解的新结构，具有突变性思维。是创新架构师。' },
+  { name: '感应力通道', channel: '39-55', desc: '情绪觉知与情感感染力', talent: '情绪的深度体验与感染力，具有极强的情感创造力与精神动力。是团队的情绪引领者。' },
+  { name: '蜕变通道', channel: '35-36', desc: '变革与不确定性中的成长', talent: '渴望多样化体验与冒险，在变化中感受生命的丰富。是变革推动者与体验催化者。' },
+  { name: '引导通道', channel: '13-33', desc: '聆听与记录，故事传承', talent: '聆听、整合经验并记录传承，是组织的记忆库。善于从历史中学习，避免重复错误。' },
+  { name: '发现通道', channel: '29-46', desc: '坚持与热爱，将平凡转化为神圣', talent: '对体验的全身心投入与承诺，将平凡过程升华为神圣体验。是体验型领袖与热情传递者。' }
+];
+
+// Channel meanings / talents
+const CHANNEL_MEANINGS = {
+  '1-8': { name: '启发的通道', talent: '创意表达与个体化影响力，将独特洞见转化为可被世界看见的形式。具有艺术家的感染力。' },
+  '2-14': { name: '炼金术的通道', talent: '将生命能量转化为物质成功与方向感，拥有化平凡为神奇的转化力。是团队的财富引擎。' },
+  '3-60': { name: '突变的通道', talent: '在压力与限制中激发创新突破，带来颠覆性改变。适合在僵局中开辟新道路。' },
+  '4-63': { name: '逻辑的通道', talent: '将抽象疑问转化为可验证的逻辑模式，拥有质疑与检验真理的本能。适合做模式验证。' },
+  '5-15': { name: '韵律的通道', talent: '建立稳定的生命节奏与文化习惯，让团队拥有可预期的「呼吸」。是组织凝聚力的基础。' },
+  '6-59': { name: '亲密的通道', talent: '生殖与亲密关系的能量，具有极强的情感连接与繁衍创造力。在关系中提供深层亲密感。' },
+  '7-31': { name: '领导的通道', talent: '天生具备引领与影响的能量，能够将愿景有效传达给大众。是天然的组织领袖。' },
+  '9-52': { name: '专注的通道', talent: '长时间专注打磨细节的能力，在重复与坚持中成就卓越。是精益求精的工匠能量。' },
+  '10-20': { name: '觉醒的通道', talent: '当下即是的自我之爱，以真实本我活在当下。具有高频率的存在感染力。' },
+  '10-34': { name: '探索的通道', talent: '以自我为驱动的探索力量，独立自主且充满活力。是开创未知领域的先锋能量。' },
+  '10-57': { name: '完美的通道', talent: '将直觉与自我表达结合，追求外在形式与内在直觉的完美统一。具有审美与生存直觉。' },
+  '11-56': { name: '好奇的通道', talent: '将好奇心转化为故事与探索的驱动力，善于通过叙事传递信息。是天生的讲述者。' },
+  '12-22': { name: '开放的通道', talent: '在情绪起伏中展现社交开放度，具有极强的情感感染力与 Grace（优雅）。适合公共关系。' },
+  '13-33': { name: '见证者的通道', talent: '聆听、整合经验并记录传承，是组织的记忆库。善于从历史中学习，避免重复错误。' },
+  '16-48': { name: '才华的通道', talent: '通过反复练习将才华打磨至精湛，具有深度技能的积累能力。是专家型人才的标志。' },
+  '17-62': { name: '接受的通道', talent: '将组织性的逻辑落地为可操作的细节，善于建立系统化流程。是流程架构师能量。' },
+  '18-58': { name: '判断的通道', talent: '识别模式中的缺陷并推动修正，具有极强的品质敏感度。是品质守护者。' },
+  '19-49': { name: '合成的通道', talent: '敏感于社群需求与原则之间的平衡，具有维护群体和谐的本能。是社群粘合剂。' },
+  '20-34': { name: '魅力的通道', talent: '行动与生命力的直接表达，想到即做到，执行力爆棚。是团队中最直接的推进力量。' },
+  '20-57': { name: '脑波的通道', talent: '将当下直觉转化为即时行动，具有极强的生存直觉与反应力。是危机中的直觉领袖。' },
+  '21-45': { name: '金钱线的通道', talent: '控制与分配物质资源的能量，具有极强的资源管理能力。是团队的财务与资源掌舵者。' },
+  '23-43': { name: '架构的通道', talent: '将内在洞察转化为可被理解的新结构，拥有突变性思维。是创新架构师与思想领袖。' },
+  '24-61': { name: '察觉的通道', talent: '内在神秘觉知与思考的结合，具有深度内在知晓的能力。是灵性觉知者与神秘思想家。' },
+  '25-51': { name: '发起的通道', talent: '爱的冲击与竞争性启动能量，在挑战中激发潜能。是竞技型领袖与爱的勇士。' },
+  '26-44': { name: '传输的通道', talent: '将过往经验包装为可被传播的故事，具有极强的说服力与营销本能。是天生的销售与传播者。' },
+  '27-50': { name: '保存的通道', talent: '照顾与滋养他人的本能，具有强烈的保护与养育责任感。是团队中的「大家长」。' },
+  '28-38': { name: '挣扎的通道', talent: '在逆境中寻找生命意义，具有不屈不挠的战士精神。是困境中的精神支柱。' },
+  '29-46': { name: '发现通道', talent: '对体验的全身心投入与承诺，将平凡过程升华为神圣体验。是体验型领袖与热情传递者。' },
+  '30-41': { name: '想象的通道', talent: '将渴望与压力转化为想象力与愿景，具有极强的梦想驱动力。是愿景家与梦想发起者。' },
+  '32-54': { name: '转化的通道', talent: '将失败经验转化为向上攀升的动力，具有极强的逆境反弹力。是转型驱动者与不屈奋斗者。' },
+  '34-57': { name: '力量的通道', talent: '将荐骨的生命力与直觉的生存智慧完美结合，具有极强的直觉行动力。是身体力行的直觉领袖。' },
+
+  '35-36': { name: '无常的通道', talent: '渴望多样化体验与冒险，在变化中感受生命的丰富。是冒险家与体验收集者。' },
+  '37-40': { name: '家庭的通道', talent: '社群交易与情感契约的能量，善于建立互惠关系。是社群运营者与关系维护者。' },
+  '39-55': { name: '情绪的通道', talent: '情绪的深度体验与感染力，具有极强的情感创造力与精神动力。是艺术家与情绪表达者。' },
+  '42-53': { name: '成熟的通道', talent: '将经验逐步发展为成熟的能力，具有循序渐进的成长本能。是发展型学习者。' },
+  '47-64': { name: '抽象的通道', talent: '将混乱的过去经验提炼为抽象智慧，具有顿悟与整合能力。是哲学思考者与顿悟者。' }
+};
+
+function getChannelInfo(chId) {
+  // Normalize: sort gate numbers for lookup
+  const [a, b] = chId.split('-').map(Number);
+  const norm = a < b ? `${a}-${b}` : `${b}-${a}`;
+  return CHANNEL_MEANINGS[norm] || { name: chId, talent: '这条通道代表着独特的能量主题，建议在人类图学习中深入了解其具体含义。' };
+}
+
+// All 36 channels (deduplicated, g1 < g2)
+const CHANNELS = [
+  { id:'1-8', g1:1, g2:8 },{ id:'2-14', g1:2, g2:14 },{ id:'3-60', g1:3, g2:60 },
+  { id:'4-63', g1:4, g2:63 },{ id:'5-15', g1:5, g2:15 },{ id:'6-59', g1:6, g2:59 },
+  { id:'7-31', g1:7, g2:31 },{ id:'9-52', g1:9, g2:52 },{ id:'10-20', g1:10, g2:20 },
+  { id:'10-34', g1:10, g2:34 },{ id:'10-57', g1:10, g2:57 },{ id:'11-56', g1:11, g2:56 },
+  { id:'12-22', g1:12, g2:22 },{ id:'13-33', g1:13, g2:33 },{ id:'16-48', g1:16, g2:48 },
+  { id:'17-62', g1:17, g2:62 },{ id:'18-58', g1:18, g2:58 },{ id:'19-49', g1:19, g2:49 },
+  { id:'20-34', g1:20, g2:34 },{ id:'20-57', g1:20, g2:57 },{ id:'21-45', g1:21, g2:45 },
+  { id:'23-43', g1:23, g2:43 },{ id:'24-61', g1:24, g2:61 },{ id:'25-51', g1:25, g2:51 },
+  { id:'26-44', g1:26, g2:44 },{ id:'27-50', g1:27, g2:50 },{ id:'28-38', g1:28, g2:38 },
+  { id:'29-46', g1:29, g2:46 },{ id:'30-41', g1:30, g2:41 },{ id:'32-54', g1:32, g2:54 },
+  { id:'34-57', g1:34, g2:57 },{ id:'35-36', g1:35, g2:36 },{ id:'37-40', g1:37, g2:40 },
+  { id:'39-55', g1:39, g2:55 },{ id:'42-53', g1:42, g2:53 },{ id:'47-64', g1:47, g2:64 }
+];
+
+// ========== Initialization ==========
+let gatesA = new Set();
+let gatesB = new Set();
+
+function init() {
+  renderChannelGrid('A');
+  renderChannelGrid('B');
+  // Set initial avatar colors
+  ['A','B'].forEach(p => {
+    updateAvatar(p);
+    validatePerson(p);
+    document.getElementById('definition'+p).addEventListener('change', () => validatePerson(p));
+    document.getElementById('authority'+p).addEventListener('change', () => validatePerson(p));
+  });
+}
+
+function renderChannelGrid(person) {
+  const grid = document.getElementById('channelGrid' + person);
+  let html = '';
+  for (let g = 1; g <= 64; g++) {
+    html += `<span class="channel-tag" data-person="${person}" data-gate="${g}" onclick="toggleGate('${person}',${g})">${g}</span>`;
+  }
+  grid.innerHTML = html;
+}
+
+function toggleGate(person, gate) {
+  const set = person === 'A' ? gatesA : gatesB;
+  if (set.has(gate)) set.delete(gate);
+  else set.add(gate);
+  updateGateUI(person);
+}
+
+function updateGateUI(person) {
+  const set = person === 'A' ? gatesA : gatesB;
+  document.querySelectorAll(`#channelGrid${person} .channel-tag`).forEach(el => {
+    const g = parseInt(el.dataset.gate);
+    el.classList.toggle('selected', set.has(g));
+  });
+}
+
+// ========== Type-aware auto-correction (shared with Tool A) ==========
+function onPersonTypeChange(person) {
+  const type = document.getElementById('type'+person).value;
+  if (type === 'reflector') {
+    document.getElementById('definition'+person).value = 'none';
+    document.getElementById('authority'+person).value = 'lunar';
+  }
+  validatePerson(person);
+  updateAvatar(person);
+}
+
+function updateAvatar(person) {
+  const type = document.getElementById('type'+person).value;
+  const el = document.getElementById('avatar'+person);
+  el.className = 'avatar type-' + type;
+}
+
+// ========== Cross-validation (exact same rules as Tool A) ==========
+function validatePerson(person) {
+  const type = document.getElementById('type'+person).value;
+  const def = document.getElementById('definition'+person).value;
+  const auth = document.getElementById('authority'+person).value;
+  const errors = [];
+
+  // Type ↔ Authority
+  if (type === 'generator' || type === 'manifesting_generator') {
+    if (auth !== 'sacral' && auth !== 'emotional') {
+      errors.push('生产者/显示生产者必须有定义的荐骨中心，内在权威只能是「荐骨权威」或「情绪权威」。');
+    }
+  }
+  if (type === 'projector' && auth === 'sacral') {
+    errors.push('投射者没有定义的荐骨中心，不可能是「荐骨权威」。');
+  }
+  if (type === 'manifestor' && auth === 'sacral') {
+    errors.push('显示者没有定义的荐骨中心，不可能是「荐骨权威」。');
+  }
+  if (type === 'reflector' && auth !== 'lunar') {
+    errors.push('反映者没有任何定义的内在权威中心，内在权威必须是「月循环权威」。');
+  }
+
+  // Type ↔ Definition
+  if (type === 'reflector' && def !== 'none') {
+    errors.push('反映者所有能量中心均未定义，能量定义必须是「无定义」。');
+  }
+  if (def === 'none' && type !== 'reflector') {
+    errors.push('「无定义」只可能出现在反映者身上。');
+  }
+
+  // Definition ↔ Authority
+  if (def === 'none' && auth !== 'lunar') {
+    errors.push('「无定义」意味着没有定义的内在权威中心，必须是「月循环权威」。');
+  }
+  if (auth === 'lunar' && def !== 'none') {
+    errors.push('「月循环权威」只可能出现在「无定义」（反映者）身上。');
+  }
+
+  // Visual feedback
+  const card = document.getElementById('person'+person+'Card');
+  if (errors.length > 0) {
+    card.style.borderColor = '#D84338';
+    card.title = errors.join('；');
+  } else {
+    card.style.borderColor = '#E8DCC8';
+    card.title = '';
+  }
+  return errors;
+}
+
+// ========== Diagnosis Engine ==========
+function runDiagnosis() {
+  const nameA = document.getElementById('nameA').value.trim() || '成员A';
+  const nameB = document.getElementById('nameB').value.trim() || '成员B';
+  const typeA = document.getElementById('typeA').value;
+  const typeB = document.getElementById('typeB').value;
+  const profileA = document.getElementById('profileA').value;
+  const profileB = document.getElementById('profileB').value;
+  const defA = document.getElementById('definitionA').value;
+  const defB = document.getElementById('definitionB').value;
+  const authA = document.getElementById('authorityA').value;
+  const authB = document.getElementById('authorityB').value;
+
+  // Validate both
+  const errA = validatePerson('A');
+  const errB = validatePerson('B');
+  if (errA.length > 0 || errB.length > 0) {
+    alert('请先修正标红的错误后再开始合图分析。');
+    return;
+  }
+
+  // Show report
+  document.getElementById('reportSection').classList.add('show');
+  // Print: fill person info summary on first page (basic info only, no channels)
+  const infoEl = document.getElementById('printPersonInfo');
+  infoEl.innerHTML = buildPrintBasicInfoHtml(nameA, nameB, typeA, typeB, profileA, profileB, defA, defB, authA, authB);
+  infoEl.style.display = 'block';
+  // Print title: show names
+  document.getElementById('printPersonTitle').textContent = `${nameA} × ${nameB} — 两人基本信息`;
+
+  renderTypeInteraction(nameA, nameB, typeA, typeB);
+  renderProfileInteraction(nameA, nameB, profileA, profileB);
+  renderDefInteraction(nameA, nameB, defA, defB);
+  renderAuthInteraction(nameA, nameB, authA, authB);
+  renderChannelSynergy(nameA, nameB);
+  renderPenta2(nameA, nameB, typeA, typeB, defA, defB, gatesA, gatesB);
+  renderAdvice(nameA, nameB, typeA, typeB, profileA, profileB, defA, defB, authA, authB);
+
+  // Scroll to report
+  document.getElementById('reportSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========== Print helper: build simple 2-line basic info for first page ==========
+function buildPrintBasicInfoHtml(nameA, nameB, typeA, typeB, profileA, profileB, defA, defB, authA, authB) {
+  const lineA = TYPE_NAMES[typeA] + ' | ' + PROFILE_NAMES[profileA] + ' | ' + DEFINITION_NAMES[defA] + ' | ' + AUTHORITY_NAMES[authA];
+  const lineB = TYPE_NAMES[typeB] + ' | ' + PROFILE_NAMES[profileB] + ' | ' + DEFINITION_NAMES[defB] + ' | ' + AUTHORITY_NAMES[authB];
+  return '<div style="font-size:14px;line-height:2;">' +
+    '<div><strong style="color:#C4956A;">A</strong>&nbsp;&nbsp;' + nameA + '</div>' +
+    '<div style="color:#8B7355;margin-bottom:10px;">' + lineA + '</div>' +
+    '<div><strong style="color:#3498DB;">B</strong>&nbsp;&nbsp;' + nameB + '</div>' +
+    '<div style="color:#8B7355;">' + lineB + '</div>' +
+    '</div>';
+}
+
+// ========== Print helper: build person channels HTML (used for reference) ==========
+function buildPrintPersonChannelsHtml(nameA, nameB, typeA, typeB, profileA, profileB, defA, defB, authA, authB) {
+  // Collect A/B data
+  const aFullChannels = CHANNELS.filter(ch => gatesA.has(ch.g1) && gatesA.has(ch.g2)).map(ch => ch.id);
+  const aFullGateSet = new Set();
+  aFullChannels.forEach(c => {
+    const [g1, g2] = c.split('-').map(Number);
+    aFullGateSet.add(g1); aFullGateSet.add(g2);
+  });
+  const aSingleGates = [...gatesA].filter(g => !aFullGateSet.has(g)).sort((a, b) => a - b);
+
+  const bFullChannels = CHANNELS.filter(ch => gatesB.has(ch.g1) && gatesB.has(ch.g2)).map(ch => ch.id);
+  const bFullGateSet = new Set();
+  bFullChannels.forEach(c => {
+    const [g1, g2] = c.split('-').map(Number);
+    bFullGateSet.add(g1); bFullGateSet.add(g2);
+  });
+  const bSingleGates = [...gatesB].filter(g => !bFullGateSet.has(g)).sort((a, b) => a - b);
+
+  function personBlock(name, type, profile, def, auth, fullChannels, singleGates) {
+    let h = '<div style="font-size:13px;line-height:1.8;">';
+    h += '<div style="font-weight:600;color:#2D2118;margin-bottom:4px;">' + name + '</div>';
+    h += '<div style="color:#8B7355;margin-bottom:6px;">' + TYPE_NAMES[type] + ' | ' + PROFILE_NAMES[profile] + ' | ' + DEFINITION_NAMES[def] + ' | ' + AUTHORITY_NAMES[auth] + '</div>';
+    if (fullChannels.length > 0) {
+      h += '<div style="margin-bottom:4px;"><strong>完整通道（' + fullChannels.length + '条）：</strong></div>';
+      h += '<ul style="padding-left:18px;margin-bottom:6px;">';
+      fullChannels.forEach(c => {
+        const info = getChannelInfo(c);
+        h += '<li>通道 <strong>' + c + ' ' + info.name + '</strong>：' + info.talent + '</li>';
+      });
+      h += '</ul>';
+    }
+    if (singleGates.length > 0) {
+      h += '<div><strong>单闸门（' + singleGates.length + '个）：</strong> ' + singleGates.join(', ') + '</div>';
+      h += '<div style="font-size:11px;color:#8B7355;">单闸门是通道的「一半」，与合适的人互补可形成完整通道。</div>';
+    }
+    if (fullChannels.length === 0 && singleGates.length === 0) {
+      h += '<div style="color:#8B7355;">未选择任何闸门。</div>';
+    }
+    h += '</div>';
+    return h;
+  }
+
+  return '<div style="padding:16px; background:#FDFAF5; border-radius:8px; border:1px solid #E8DCC8;">' +
+    '<div style="font-weight:600;color:#C4956A;margin-bottom:12px;font-size:14px;">👤 ' + nameA + ' 的通道与闸门</div>' +
+    personBlock(nameA, typeA, profileA, defA, authA, aFullChannels, aSingleGates) +
+    '<div style="border-top:1px dashed #E8DCC8;margin:14px 0;"></div>' +
+    '<div style="font-weight:600;color:#C4956A;margin-bottom:12px;font-size:14px;">👤 ' + nameB + ' 的通道与闸门</div>' +
+    personBlock(nameB, typeB, profileB, defB, authB, bFullChannels, bSingleGates) +
+    '</div>';
+}
+
+// ========== Type Interaction ==========
+const TYPE_INTERACTION = {
+  'generator-generator': { level:'good', text:'两位生产者：互相理解「等待回应」的策略，可以建立稳定高效的合作。注意避免互相等待对方先行动。' },
+  'generator-projector': { level:'good', text:'生产者+投射者：投射者可以精准识别生产者的潜力并给予指引，生产者提供稳定的执行力。投射者需要被「邀请」才能发挥最佳状态。' },
+  'generator-manifestor': { level:'warn', text:'生产者+显示者：显示者需要主动告知（Inform）而非请求许可。生产者需要感受到自己的行动被看见和认可。显示者注意：不要绕过生产者直接下达指令。' },
+  'generator-manifesting_generator': { level:'good', text:'生产者+显示生产者：两者都等待回应，显示生产者可以多任务高速推进，与生产者形成很好的互补。注意显示生产者的节奏可能让生产者感到压力。' },
+  'generator-reflector': { level:'warn', text:'生产者+反映者：反映者需要完整一个月的周期来清晰决策，生产者需要理解反映者的「等待月亮周期」不是犹豫不决，而是必要的决策过程。' },
+  'projector-manifestor': { level:'warn', text:'投射者+显示者：显示者习惯独立启动，容易忽略投射者的洞察。显示者务必「告知」投射者自己的行动计划，投射者需要被邀请参与而非被动接受。' },
+  'projector-reflector': { level:'good', text:'投射者+反映者：两者都不适合持续的主动输出。投射者的观察力可以帮助反映者整合环境信息，反映者的镜像能力可以帮助投射者看到自己的价值。' },
+  'manifestor-reflector': { level:'warn', text:'显示者+反映者：显示者的「告知」对反映者尤为重要，反映者需要充分的信息才能做出反应。显示者需注意不要强势压倒反映者的节奏。' },
+  'reflector-reflector': { level:'good', text:'两位反映者：彼此深刻理解「等待月亮周期」的意义，可以建立非常包容和 mirrors 的关系。注意共同决策需要时间，需提前规划。' }
+};
+
+function getTypeInteractionKey(tA, tB) {
+  const types = [tA, tB].sort();
+  return types.join('-');
+}
+
+function renderTypeInteraction(nameA, nameB, typeA, typeB) {
+  const key = getTypeInteractionKey(typeA, typeB);
+  const data = TYPE_INTERACTION[key] || {
+    level: 'warn',
+    text: `${TYPE_NAMES[typeA]} 与 ${TYPE_NAMES[typeB]} 的组合，建议在互动中保持开放沟通，理解彼此的策略与权威差异。`
+  };
+  const cls = data.level === 'good' ? 'ic-good' : data.level === 'warn' ? 'ic-warn' : 'ic-bad';
+  const icon = data.level === 'good' ? '✅' : data.level === 'warn' ? '⚠️' : '❌';
+
+  document.getElementById('typeInteractionContent').innerHTML = `
+    <div class="interaction-card">
+      <div class="ic-title">${icon} ${nameA}（${TYPE_NAMES[typeA]}） × ${nameB}（${TYPE_NAMES[typeB]}）</div>
+      <div class="ic-subtitle">类型互动评估：<span class="${cls}">${data.level === 'good' ? '良好互补' : data.level === 'warn' ? '需要注意' : '潜在挑战'}</span></div>
+      <div class="ic-body">${data.text}</div>
+    </div>
+  `;
+}
+
+// ========== Profile Interaction ==========
+const PROFILE_INTERACTION = {
+  '1/3': { theme:'扎根与试错', needs:'安全感与实证'},
+  '1/4': { theme:'扎根与人脉', needs:'深度+联结'},
+  '2/4': { theme:'内在召唤与人脉', needs:'被召唤+社群'},
+  '2/5': { theme:'内在召唤与投射', needs:'自由+被理解'},
+  '3/5': { theme:'试错与责任', needs:'容许犯错+清晰期待'},
+  '3/6': { theme:'试错与榜样', needs:'时间+不急于定义'},
+  '4/1': { theme:'人脉与扎根', needs:'社群+深度'},
+  '4/6': { theme:'人脉与榜样', needs:'关系+成长空间'},
+  '5/1': { theme:'投射与扎根', needs:'意义+深度'},
+  '5/2': { theme:'投射与召唤', needs:'被看见+自由'},
+  '6/2': { theme:'榜样与召唤', needs:'时间+内在节奏'},
+  '6/3': { theme:'榜样与试错', needs:'不急于固定+容许混乱'}
+};
+
+function renderProfileInteraction(nameA, nameB, profileA, profileB) {
+  const pA = PROFILE_INTERACTION[profileA] || { theme:'—', needs:'—'};
+  const pB = PROFILE_INTERACTION[profileB] || { theme:'—', needs:'—'};
+  document.getElementById('profileInteractionContent').innerHTML = `
+    <div class="interaction-card">
+      <div class="ic-title">👤 ${nameA}（${PROFILE_NAMES[profileA]}） × ${nameB}（${PROFILE_NAMES[profileB]}）</div>
+      <div class="ic-body">
+        <p><strong>${nameA}</strong>：${pA.theme}，核心需求是「${pA.needs}」</p>
+        <p style="margin-top:8px"><strong>${nameB}</strong>：${pB.theme}，核心需求是「${pB.needs}」</p>
+        <p style="margin-top:12px;color:#8B7355;">💡 互动建议：${profileA === profileB
+          ? '两人人生角色相同，对彼此的需求有天然共鸣，但也可能放大同样的盲点。注意引入外部视角。'
+          : '两人人生角色不同，可以互补彼此的盲点。' + (profileA.startsWith('1') && profileB.startsWith('2') ? ' 1号根的人提供深度，2号召唤的人提供自由节奏，可以形成很好的张力。' : '')
+        }</p>
+      </div>
+    </div>
+  `;
+}
+
+// ========== Definition Interaction ==========
+const DEF_INTERACTION = {
+  'single-single': '两位一分人：能量稳定连续，沟通直接高效。双方都持续拥有能量，可以建立长期的稳定合作。',
+  'single-split': '一分人+二分人：一分人能量连续，二分人能量间歇性流动。二分人需要「恢复周期」，一分人需理解对方的「不在状态」不是懈怠。',
+  'single-none': '一分人+反映者：一分人持续输出，反映者随环境起伏。反映者会 mirror 一分人的状态，一分人需注意自己的情绪对反映者的影响。',
+  'split-split': '两位二分人：都经历能量的高低起伏，可以互相理解「不在状态」的感受。注意双方在低能量期可能同时失去动力。',
+  'split-none': '二分人+反映者：二分人虽有间断的定义能量，反映者完全没有定义能量。反映者的 mirror 效应对二分人既是支持也是挑战。',
+  'none-none': '两位反映者：彼此完全理解「等待月亮周期」和 mirror 环境的特质。在一起时，环境的品质对两人都至关重要。'
+};
+
+function renderDefInteraction(nameA, nameB, defA, defB) {
+  const types = [defA, defB].sort();
+  const key = types.join('-');
+  const text = DEF_INTERACTION[key] || `${DEFINITION_NAMES[defA]} 与 ${DEFINITION_NAMES[defB]} 的组合，注意彼此能量流动方式的差异，在沟通中给予对方足够的空间。`;
+  document.getElementById('defInteractionContent').innerHTML = `
+    <div class="interaction-card">
+      <div class="ic-title">⚡ ${nameA}（${DEFINITION_NAMES[defA]}） × ${nameB}（${DEFINITION_NAMES[defB]}）</div>
+      <div class="ic-body">${text}</div>
+    </div>
+  `;
+}
+
+// ========== Authority Interaction ==========
+function renderAuthInteraction(nameA, nameB, authA, authB) {
+  const same = authA === authB;
+  const aName = AUTHORITY_NAMES[authA];
+  const bName = AUTHORITY_NAMES[authB];
+  let text = '';
+  if (same) {
+    text = `两人都是「${aName}」，决策方式和时机高度相似，可以建立很流畅的决策协作。注意：相同的权威也可能放大共同的盲点。`;
+  } else if (authA === 'lunar' || authB === 'lunar') {
+    const refName = authA === 'lunar' ? nameA : nameB;
+    text = `其中一方是月循环权威（${refName}），需要完整一个月周期来清晰决策。另一方需理解这不是「优柔寡断」，而是必要的决策过程，避免在中间强行推动决定。`;
+  } else if ((authA === 'sacral' && authB === 'emotional') || (authA === 'emotional' && authB === 'sacral')) {
+    text = `荐骨权威（即时清晰）与情绪权威（需要时间沉淀）的组合：荐骨方需理解情绪方「不是现在」不代表「不」，情绪方需理解荐骨方的即时反应是其权威的体现。`;
+  } else {
+    text = `${aName} 与 ${bName} 的决策节奏和方式不同。建议在重要决策时，双方都用自己的权威清晰后，再进行共同讨论。`;
+  }
+  document.getElementById('authInteractionContent').innerHTML = `
+    <div class="interaction-card">
+      <div class="ic-title">🎯 ${nameA}（${aName}） × ${nameB}（${bName}）</div>
+      <div class="ic-body">${text}</div>
+    </div>
+  `;
+}
+
+// ========== Channel Synergy (4 Relationship Models) ==========
+// 相伴Companionship: both have full channel
+// 妥协Compromise: one full, other has exactly 1 gate
+// 主导Dominance: one full, other has 0 gates
+// 电磁效应Electromagnetic: each has 1 gate, together complete the channel
+function renderChannelSynergy(nameA, nameB) {
+  // ===== Step 1: Collect A and B individual channel/gate data =====
+  const aFullChannels = CHANNELS.filter(ch => gatesA.has(ch.g1) && gatesA.has(ch.g2)).map(ch => ch.id);
+  const aFullGateSet = new Set();
+  aFullChannels.forEach(c => {
+    const [g1, g2] = c.split('-').map(Number);
+    aFullGateSet.add(g1);
+    aFullGateSet.add(g2);
+  });
+  const aSingleGates = [...gatesA].filter(g => !aFullGateSet.has(g)).sort((a, b) => a - b);
+
+  const bFullChannels = CHANNELS.filter(ch => gatesB.has(ch.g1) && gatesB.has(ch.g2)).map(ch => ch.id);
+  const bFullGateSet = new Set();
+  bFullChannels.forEach(c => {
+    const [g1, g2] = c.split('-').map(Number);
+    bFullGateSet.add(g1);
+    bFullGateSet.add(g2);
+  });
+  const bSingleGates = [...gatesB].filter(g => !bFullGateSet.has(g)).sort((a, b) => a - b);
+
+  // ===== Step 2: Compute 4 Relationship Models =====
+  const companionship = [];
+  const compromise = [];
+  const dominance = [];
+  const electromagnetic = [];
+
+  CHANNELS.forEach(ch => {
+    const a1 = gatesA.has(ch.g1), a2 = gatesA.has(ch.g2);
+    const b1 = gatesB.has(ch.g1), b2 = gatesB.has(ch.g2);
+    const aFull = a1 && a2;
+    const bFull = b1 && b2;
+    const aPart = a1 || a2;
+    const bPart = b1 || b2;
+
+    if (aFull && bFull) {
+      companionship.push(ch.id);
+    } else if (aFull && !bFull && bPart) {
+      compromise.push({ ch: ch.id, full: nameA, part: nameB });
+    } else if (bFull && !aFull && aPart) {
+      compromise.push({ ch: ch.id, full: nameB, part: nameA });
+    } else if (aFull && !bFull && !bPart) {
+      dominance.push({ ch: ch.id, dom: nameA, sub: nameB });
+    } else if (bFull && !aFull && !aPart) {
+      dominance.push({ ch: ch.id, dom: nameB, sub: nameA });
+    } else if (!aFull && !bFull && aPart && bPart) {
+      const aG = [ch.g1, ch.g2].filter(g => gatesA.has(g));
+      const bG = [ch.g1, ch.g2].filter(g => gatesB.has(g));
+      const combined = new Set([...aG, ...bG]);
+      if (combined.has(ch.g1) && combined.has(ch.g2) && aG.length > 0 && bG.length > 0) {
+        electromagnetic.push(ch.id);
+      }
+    }
+  });
+
+  // Classify Penta pillars with proper const declarations
+  const penta = { companionship: [], compromise: [], dominance: [], electromagnetic: [] };
+  PENTA_PILLARS.forEach(p => {
+    const [g1, g2] = p.channel.split('-').map(Number);
+    const a1 = gatesA.has(g1), a2 = gatesA.has(g2);
+    const b1 = gatesB.has(g1), b2 = gatesB.has(g2);
+    const aFull = a1 && a2;
+    const bFull = b1 && b2;
+    const aPart = a1 || a2;
+    const bPart = b1 || b2;
+
+    if (aFull && bFull) {
+      penta.companionship.push(p);
+    } else if (aFull && !bFull && bPart) {
+      penta.compromise.push({ ...p, full: nameA, part: nameB });
+    } else if (bFull && !aFull && aPart) {
+      penta.compromise.push({ ...p, full: nameB, part: nameA });
+    } else if (aFull && !bFull && !bPart) {
+      penta.dominance.push({ ...p, dom: nameA, sub: nameB });
+    } else if (bFull && !aFull && !aPart) {
+      penta.dominance.push({ ...p, dom: nameB, sub: nameA });
+    } else if (!aFull && !bFull && aPart && bPart) {
+      const aG = [g1, g2].filter(g => gatesA.has(g));
+      const bG = [g1, g2].filter(g => gatesB.has(g));
+      const combined = new Set([...aG, ...bG]);
+      if (combined.has(g1) && combined.has(g2) && aG.length > 0 && bG.length > 0) {
+        penta.electromagnetic.push(p);
+      }
+    }
+  });
+
+  // ===== Step 3: Render =====
+  let html = '';
+
+  // Section 1: Person A's channels and single gates
+  html += '<div class="interaction-card">';
+  html += '<div class="ic-title">👤 ' + nameA + ' 的通道与闸门</div>';
+  html += '<div class="ic-body">';
+  if (aFullChannels.length > 0) {
+    html += '<p><strong>完整通道（' + aFullChannels.length + '条）：</strong></p><ul style="padding-left:20px;">';
+    aFullChannels.forEach(c => {
+      const info = getChannelInfo(c);
+      html += '<li>通道 <strong>' + c + ' ' + info.name + '</strong>：' + info.talent + '</li>';
+    });
+    html += '</ul>';
+  }
+  if (aSingleGates.length > 0) {
+    html += '<p style="margin-top:8px"><strong>单闸门（' + aSingleGates.length + '个）：</strong> ' + aSingleGates.join(', ') + '</p>';
+    html += '<p style="font-size:12px;color:#8B7355;margin-top:2px;">单闸门是通道的「一半」，与合适的人互补可形成完整通道。</p>';
+  }
+  if (aFullChannels.length === 0 && aSingleGates.length === 0) {
+    html += '<p style="color:#8B7355;">' + nameA + ' 未选择任何闸门。</p>';
+  }
+  html += '</div></div>';
+
+  // Section 2: Person B's channels and single gates
+  html += '<div class="interaction-card">';
+  html += '<div class="ic-title">👤 ' + nameB + ' 的通道与闸门</div>';
+  html += '<div class="ic-body">';
+  if (bFullChannels.length > 0) {
+    html += '<p><strong>完整通道（' + bFullChannels.length + '条）：</strong></p><ul style="padding-left:20px;">';
+    bFullChannels.forEach(c => {
+      const info = getChannelInfo(c);
+      html += '<li>通道 <strong>' + c + ' ' + info.name + '</strong>：' + info.talent + '</li>';
+    });
+    html += '</ul>';
+  }
+  if (bSingleGates.length > 0) {
+    html += '<p style="margin-top:8px"><strong>单闸门（' + bSingleGates.length + '个）：</strong> ' + bSingleGates.join(', ') + '</p>';
+    html += '<p style="font-size:12px;color:#8B7355;margin-top:2px;">单闸门是通道的「一半」，与合适的人互补可形成完整通道。</p>';
+  }
+  if (bFullChannels.length === 0 && bSingleGates.length === 0) {
+    html += '<p style="color:#8B7355;">' + nameB + ' 未选择任何闸门。</p>';
+  }
+  html += '</div></div>';
+
+  // Section 3: 4 Relationship Models
+  const hasAny = companionship.length > 0 || compromise.length > 0 || dominance.length > 0 || electromagnetic.length > 0
+    || penta.companionship.length > 0 || penta.compromise.length > 0 || penta.dominance.length > 0 || penta.electromagnetic.length > 0;
+
+  // 如果两人都未输入任何闸门，显示提示
+  if (gatesA.size === 0 && gatesB.size === 0) {
+    html += '<div class="interaction-card"><div class="ic-body" style="color:#8B7355;">两人未选择任何闸门，请在上方选择两人各自的闸门（1-64）以进行通道互补分析。</div></div>';
+  } else {
+    // ===== 1. 相伴（Companionship） — 无论有无结果均显示 =====
+    {
+      let items = companionship.map(c => {
+        const info = getChannelInfo(c);
+        return '<li>通道 <strong>' + c + ' ' + info.name + '</strong>：两人都完整持有。天赋含义：' + info.talent + '</li>';
+      }).join('');
+      if (penta.companionship.length > 0) {
+        items += penta.companionship.map(p => {
+          const info = getChannelInfo(p.channel);
+          return '<li>🔑 Penta支柱 <strong>' + p.channel + ' ' + p.name + '</strong>：两人都完整持有。' + info.talent + '</li>';
+        }).join('');
+      }
+      html += '<div class="interaction-card">';
+      html += '<div class="ic-title">🤝 相伴（Companionship）</div>';
+      html += '<div class="ic-subtitle">两人都拥有完整的同一条通道，对同一主题有完全相同的能量体验，相处轻松、互相理解。</div>';
+      html += '<div class="ic-body">';
+      if (items) {
+        html += '<ul style="padding-left:20px;">' + items + '</ul>';
+      } else {
+        html += '<p style="color:#8B7355;">无。合图中未形成相伴通道。</p>';
+      }
+      html += '</div></div>';
+    }
+    // ===== 2. 妥协（Compromise） — 无论有无结果均显示 =====
+    {
+      let items = compromise.map(x => {
+        const info = getChannelInfo(x.ch);
+        return '<li>通道 <strong>' + x.ch + ' ' + info.name + '</strong>：' + x.part + ' 只有其中一端的闸门，会主动向 ' + x.full + ' 妥协适配。天赋含义：' + info.talent + '</li>';
+      }).join('');
+      if (penta.compromise.length > 0) {
+        items += penta.compromise.map(x => {
+          const info = getChannelInfo(x.channel);
+          return '<li>🔑 Penta支柱 <strong>' + x.channel + ' ' + x.name + '</strong>：' + x.part + ' 只有一端闸门，向 ' + x.full + ' 妥协。' + info.talent + '</li>';
+        }).join('');
+      }
+      html += '<div class="interaction-card">';
+      html += '<div class="ic-title">⚖️ 妥协（Compromise）</div>';
+      html += '<div class="ic-subtitle">其中一方拥有完整通道，另一方只有一端闸门，没有完整定义。有闸门的一方会主动或被动地「妥协」于另一方的能量模式。</div>';
+      html += '<div class="ic-body">';
+      if (items) {
+        html += '<ul style="padding-left:20px;">' + items + '</ul>';
+      } else {
+        html += '<p style="color:#8B7355;">无。合图中未形成妥协通道。</p>';
+      }
+      html += '</div></div>';
+    }
+    // ===== 3. 主导（Dominance） — 无论有无结果均显示 =====
+    {
+      let items = dominance.map(x => {
+        const info = getChannelInfo(x.ch);
+        return '<li>通道 <strong>' + x.ch + ' ' + info.name + '</strong>：' + x.dom + ' 拥有完整通道，' + x.sub + ' 完全没有此通道的闸门，只能接受并臣服于 ' + x.dom + ' 的能量影响。天赋含义：' + info.talent + '</li>';
+      }).join('');
+      if (penta.dominance.length > 0) {
+        items += penta.dominance.map(x => {
+          const info = getChannelInfo(x.channel);
+          return '<li>🔑 Penta支柱 <strong>' + x.channel + ' ' + x.name + '</strong>：' + x.dom + ' 拥有完整通道，' + x.sub + ' 无此闸门，被 ' + x.dom + ' 的能量主导。' + info.talent + '</li>';
+        }).join('');
+      }
+      html += '<div class="interaction-card">';
+      html += '<div class="ic-title">👑 主导（Dominance）</div>';
+      html += '<div class="ic-subtitle">其中一方拥有完整通道，另一方完全没有此通道的任何闸门。无闸门的一方会完全被另一方定义的能量所覆盖，不存在协商空间。</div>';
+      html += '<div class="ic-body">';
+      if (items) {
+        html += '<ul style="padding-left:20px;">' + items + '</ul>';
+      } else {
+        html += '<p style="color:#8B7355;">无。合图中未形成主导通道。</p>';
+      }
+      html += '</div></div>';
+    }
+    // ===== 4. 电磁效应 / 火花（Electromagnetic） — 无论有无结果均显示 =====
+    {
+      let items = electromagnetic.map(c => {
+        const info = getChannelInfo(c);
+        return '<li>通道 <strong>' + c + ' ' + info.name + '</strong>：两人各自持有不同端的闸门，在一起时互补形成完整通道，产生强烈的吸引与张力。天赋含义：' + info.talent + '</li>';
+      }).join('');
+      if (penta.electromagnetic.length > 0) {
+        items += penta.electromagnetic.map(p => {
+          const info = getChannelInfo(p.channel);
+          return '<li>🔑 Penta支柱 <strong>' + p.channel + ' ' + p.name + '</strong>：两人互补形成此支柱通道，共同激活团队核心能量。' + info.talent + '</li>';
+        }).join('');
+      }
+      html += '<div class="interaction-card">';
+      html += '<div class="ic-title">⚡ 电磁效应 / 火花（Electromagnetic）</div>';
+      html += '<div class="ic-subtitle">两人各自拥有同一条通道两端的相反闸门，单独时都不具备此能量，但在一起时共同创造出这条完整的通道。这是合图中吸引力最强的关系动态，同时存在吸引与排斥的张力。</div>';
+      html += '<div class="ic-body">';
+      if (items) {
+        html += '<ul style="padding-left:20px;">' + items + '</ul>';
+      } else {
+        html += '<p style="color:#8B7355;">无。合图中未形成电磁效应（火花）通道。</p>';
+      }
+      html += '</div></div>';
+    }
+  }
+
+  document.getElementById('channelSynergyContent').innerHTML = html;
+}
+
+// ========== Penta 2-person Diagnosis ==========
+function renderPenta2(nameA, nameB, typeA, typeB, defA, defB, ga, gb) {
+  const hasCore = PENTA_PILLARS.map(p => {
+    const [g1, g2] = p.channel.split('-').map(Number);
+    const aFull = ga.has(g1) && ga.has(g2);
+    const bFull = gb.has(g1) && gb.has(g2);
+    const spark = (ga.has(g1) || ga.has(g2)) && (gb.has(g1) || gb.has(g2)) && !aFull && !bFull;
+    return { ...p, aFull, bFull, spark, has: aFull || bFull || spark };
+  });
+
+  let html = '<div class="interaction-card">';
+  html += '<div class="ic-title">🔮 ' + nameA + ' × ' + nameB + ' — Penta 双人合图分析</div>';
+  html += '<div class="ic-body">';
+  html += '<p>以下为两人共同组成的 Penta 能量场分析：</p>';
+  html += '<ul style="margin-top:8px;padding-left:20px;">';
+  hasCore.forEach(p => {
+    const status = p.aFull && p.bFull ? '✅ 双方均持有' : p.aFull ? ('✅ ' + nameA + '持有') : p.bFull ? ('✅ ' + nameB + '持有') : p.spark ? '⚡ 火花通道（互补）' : '— 未持有';
+    html += '<li><strong>' + p.channel + ' ' + p.name + '</strong>：' + status;
+    if (!p.has) {
+      html += ' — 此支柱能量在两人关系中缺失，可能需要在团队中由其他成员补充';
+    }
+    html += '<br><span style="color:#8B7355;font-size:12px;">' + p.talent + '</span>';
+    html += '</li>';
+  });
+  html += '</ul>';
+  html += '<p style="margin-top:12px;color:#8B7355;font-size:12px;">注：Penta 是 BG5 商业人类图团队合图分析的核心框架，由 Ra Uru Hu（1948–2011）创立的人类图体系衍生而来。Ra Uru Hu 于 1987 年接收人类图系统的完整信息，是 Human Design System 的创始人，其商业应用体系 BG5 由其弟子 Karen Curry Parker 等人进一步发展推广。6 大支柱通道的定义与天赋描述参考自《BG5 Business & Career Design》及人类图官方通道数据库（Jovian Archive / IHDS）。两人组合无法覆盖全部 6 大支柱，建议在完整团队中进行 Penta 合图分析。</p>';
+  html += '</div></div>';
+
+  document.getElementById('penta2Content').innerHTML = html;
+}
+
+// ========== Comprehensive Advice ==========
+function renderAdvice(nameA, nameB, typeA, typeB, profileA, profileB, defA, defB, authA, authB) {
+  const tA = TYPE_NAMES[typeA];
+  const tB = TYPE_NAMES[typeB];
+  let html = `<div class="interaction-card">
+    <div class="ic-title">📋 ${nameA} × ${nameB} 综合互动建议</div>
+    <div class="ic-body">
+      <p><strong>1. 理解彼此的策略</strong><br>${tA}的策略是「${getStrategy(typeA)}」，${tB}的策略是「${getStrategy(typeB)}」。在互动中，先确认对方的策略是否被尊重。</p>
+      <p style="margin-top:10px"><strong>2. 决策方式协调</strong><br>${nameA}的权威是${AUTHORITY_NAMES[authA]}，${nameB}的权威是${AUTHORITY_NAMES[authB]}。重要决定给彼此足够的时间按自己的权威清晰。</p>
+      <p style="margin-top:10px"><strong>3. 能量节奏同步</strong><br>${nameA}是${DEFINITION_NAMES[defA]}，${nameB}是${DEFINITION_NAMES[defB]}。理解彼此能量流动的差异，避免用自己的节奏要求对方。</p>
+      <p style="margin-top:10px"><strong>4. 人生角色互补</strong><br>${PROFILE_NAMES[profileA]} 与 ${PROFILE_NAMES[profileB]} 的组合，注意彼此的核心需求（${PROFILE_INTERACTION[profileA]?.needs || '—'} vs ${PROFILE_INTERACTION[profileB]?.needs || '—'}），在互动中互相满足。</p>
+      <p style="margin-top:10px;color:#C4956A;"><strong>💡 核心心法</strong>：差异不是问题，不理解差异才是问题。BG5 双人合图分析的目的不是改变对方，而是理解彼此的能量蓝图，找到最优协作方式。</p>
+    </div>
+  `;
+
+  document.getElementById('adviceContent').innerHTML = html;
+}
+
+function getStrategy(type) {
+  const s = { generator:'等待回应', manifesting_generator:'等待回应', projector:'等待邀请', manifestor:'告知', reflector:'等待月亮周期' };
+  return s[type] || '—';
+}
+
+// Init
+init();
+</script>
+</body>
+</html>
