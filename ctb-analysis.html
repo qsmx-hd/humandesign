@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTB 能量变量分析系统</title>
+<style>
+@page{size:A4;margin:8mm}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F0E8;--card:#FFFCF7;--primary:#C4956A;--primary-light:#D4B08A;
+  --deep:#2D2118;--muted:#8B7355;--border:#E8DCC8;--accent:#B8860B;
+  --section-bg:#EDE6DA;--highlight:#FFF3E0;--success:#6B8E5A;--warn:#C49A3C;--danger:#B85C38;
+}
+body{background:var(--bg);color:var(--deep);font-family:'PingFang SC','Microsoft YaHei',Georgia,serif;line-height:1.8;font-size:14px}
+.wrap{max-width:960px;margin:0 auto;padding:24px 20px}
+h1{font-size:26px;color:var(--deep);text-align:center;margin-bottom:4px;letter-spacing:2px}
+.sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:18px;box-shadow:0 2px 14px rgba(45,33,24,.07)}
+.stit{font-size:17px;font-weight:700;color:var(--primary);border-left:4px solid var(--primary);padding-left:12px;margin-bottom:12px}
+.ptit{font-size:15px;font-weight:600;color:var(--deep);margin:14px 0 6px}
+p{margin-bottom:8px}
+.tag{display:inline-block;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:2px 4px}
+.tag-r{background:rgba(180,92,56,.1);color:#B85C38}
+.tag-l{background:rgba(107,142,90,.1);color:#6B8E5A}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+.arrows{display:flex;justify-content:center;gap:24px;margin:18px 0;flex-wrap:wrap}
+.abox{text-align:center}
+.asym{font-size:34px;font-weight:700;line-height:1.1}
+.asym.r{color:var(--danger)}.asym.l{color:var(--success)}
+.alab{font-size:11px;color:var(--muted);margin-top:3px}
+.itbl{width:100%;border-collapse:collapse;margin:10px 0}
+.itbl th{background:var(--primary);color:#fff;padding:7px 10px;font-size:13px;text-align:left}
+.itbl td{padding:7px 10px;border-bottom:1px solid var(--border);font-size:13px}
+.itbl tr:nth-child(even){background:rgba(196,149,106,.04)}
+.itbl tr:hover{background:rgba(196,149,106,.09)}
+.ifield{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.ig{display:flex;flex-direction:column;gap:3px}
+.ig label{font-size:12px;font-weight:600;color:var(--muted)}
+.ig select,.ig input{padding:7px 11px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--deep);font-size:13px;min-width:100px;outline:none}
+.ig select:focus,.ig input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(196,149,106,.2)}
+.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:10px 26px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:1px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(196,149,106,.4)}
+#rsl{display:none}
+.rcard{background:linear-gradient(135deg,#FFFCF7,#FFF8EF);border:1px solid var(--primary-light);border-radius:12px;padding:20px;margin:12px 0}
+.rcard h4{font-size:14px;color:var(--primary);margin-bottom:8px}
+.rcard p{font-size:13px;line-height:1.9}
+.hl{background:var(--highlight);padding:2px 6px;border-radius:4px;font-weight:600}
+.badge{display:inline-block;padding:2px 9px;border-radius:14px;font-size:11px;font-weight:700}
+.bdg-1{background:#FFEBEE;color:#C62828}.bdg-2{background:#FFF8E1;color:#F57F17}.bdg-3{background:#E8F5E9;color:#2E7D32}
+.bdg-4{background:#E3F2FD;color:#1565C0}.bdg-5{background:#F3E5F5;color:#7B1FA2}.bdg-6{background:#FBE9E7;color:#BF360C}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--primary-light),transparent);margin:16px 0}
+.kpcard{background:var(--section-bg);border-radius:12px;padding:14px;margin:10px 0;border-left:4px solid var(--primary)}
+.kpcard h5{font-size:14px;color:var(--deep);margin-bottom:4px}
+.kpcard p{font-size:13px;color:var(--muted);line-height:1.7}
+.confl{background:rgba(184,92,56,.06);border:1px solid rgba(184,92,56,.2);border-radius:12px;padding:14px;margin:12px 0}
+.confl h5{color:var(--danger);font-size:14px;margin-bottom:4px}
+.fnote{font-size:12px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.8}
+
+/* 层级结构示意图 */
+.hierarchy-diagram{margin:20px 0;display:flex;justify-content:center}
+.hierarchy-svg{max-width:520px;width:100%}
+
+/* 四箭头16组合 4x4 网格 */
+.combo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.combo-item{background:linear-gradient(135deg,var(--card),var(--highlight));border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;transition:transform .2s}
+.combo-item:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(196,149,106,.15)}
+.combo-item .code{font-size:15px;font-weight:700;color:var(--primary);letter-spacing:1.5px;margin-bottom:4px}
+.combo-item .arrow-viz{font-size:11px;color:var(--muted);margin:4px 0;letter-spacing:2px}
+.combo-item .desc{font-size:12px;color:var(--deep);line-height:1.6;margin-top:4px}
+.combo-item .trait{display:inline-block;background:rgba(196,149,106,.12);color:var(--deep);border-radius:8px;padding:2px 7px;font-size:11px;margin:1px}
+
+/* Base 卡片增强样式（V6） */
+.base-card{border-radius:12px;padding:16px;margin:12px 0;border-left:5px solid}
+.base-card h4{font-size:14px;margin-bottom:8px}
+.base-card .b-field{margin:4px 0;font-size:13px;line-height:1.7}
+.base-card .b-label{color:var(--muted);font-weight:600;font-size:12px}
+.base-card .bio-note{font-size:12px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);line-height:1.6}
+.base-card .action-tip{background:rgba(184,140,56,.08);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:12.5px;line-height:1.7}
+
+/* ===== 打印优化 V6 ===== */
+@media print{
+  body{background:#fff!important;font-size:10.5px;line-height:1.55}
+  *{color:#000!important;background:#fff!important;border-color:#ccc!important;box-shadow:none!important}
+  .wrap{max-width:100%;padding:3mm 5mm!important}
+  /* 标题极小化——给内容腾空间 */
+  h1{font-size:16px!important;margin-bottom:0!important;padding-top:0!important}
+  .sub{margin-bottom:4mm!important;font-size:9.5px!important;padding:0!important}
+  .stit{font-size:12px!important;padding-left:6px!important;margin-bottom:6px!important}
+  .ptit{font-size:11px!important;margin:8px 0 3px!important}
+  /* 卡片：极致压缩 + 防截断 */
+  .card{break-inside:avoid!important;page-break-inside:avoid!important;
+    padding:6mm 6mm!important;margin-bottom:5mm!important;border:1px solid #bbb!important;
+    page-break-after:auto!important;border-radius:6px!important}
+  /* 第一个卡片（概述）强制第一页，不前面分页 */
+  .card:nth-of-type(1){page-break-before:avoid!important;page-break-inside:avoid!important}
+  /* 第二个卡片（四转化）也尽量紧跟 */
+  .card:nth-of-type(2){page-break-before:avoid!important;page-break-inside:avoid!important}
+  .card:not(:nth-of-type(1)):not(:nth-of-type(2)){page-break-before:auto!important}
+  /* 表格 */
+  .itbl{font-size:9.5px!important;break-inside:avoid!important}
+  .itbl th{padding:2px 4px!important;font-size:9.5px!important}
+  .itbl td{padding:2px 4px!important;font-size:9.5px!important}
+  /* 网格缩小 */
+  .combo-grid{grid-template-columns:repeat(4,1fr)!important;gap:4px!important;break-inside:avoid!important}
+  .combo-item{padding:5px 3px!important;break-inside:avoid!important}
+  .combo-item .code{font-size:11px!important}
+  .combo-item .desc{font-size:8.5px!important;line-height:1.4!important}
+  .combo-item .trait{font-size:7.5px!important;padding:1px 4px!important}
+  .grid2,.grid3{gap:6px!important}
+  .grid3{grid-template-columns:1fr 1fr 1fr!important}
+  /* SVG层级图大幅缩小 */
+  .hierarchy-svg{max-width:280px!important;width:100%!important;height:auto!important}
+  .hierarchy-diagram{margin:8px 0!important}
+  /* C-T-B三卡片打印时压缩 */
+  .grid3 div{padding:6px!important;border-radius:6px!important}
+  .grid3 div[style*='font-size:24px']{font-size:18px!important}
+  .grid3 div[style*='font-size:15px']{font-size:12px!important;font-weight:700!important}
+  .grid3 div[style*='font-size:12px']{font-size:9px!important;line-height:1.3!important}
+  /* 隐藏按钮 */
+  .btn{display:none!important}
+  /* 分析结果必须显示 */
+  #rsl{display:block!important;page-break-before:auto!important}
+  .rcard,.kpcard,.confl{break-inside:avoid!important;page-break-inside:avoid!important;
+    padding:6mm!important;margin:4mm 0!important;border:1px solid #ccc!important;border-radius:6px!important}
+  .rcard p,.kpcard p,.confl p{font-size:9.5px!important;margin-bottom:3px!important}
+  .rcard h4,.kpcard h5,.confl h5{font-size:11px!important;margin-bottom:3px!important}
+  .base-card{padding:6px!important;margin:5px 0!important;break-inside:avoid!important;border-radius:6px!important}
+  .base-card .b-field{font-size:9.5px!important;margin:2px 0!important}
+  .base-card h4{font-size:11px!important}
+  .base-card .bio-note{font-size:9px!important}
+  .base-card .action-tip{padding:4px 6px!important;font-size:9px!important}
+  /* 分割线和底部 */
+  .divider{margin:6px 0!important}
+  .fnote{margin-top:8px!important;font-size:9px!important}
+  p{margin-bottom:3px!important;font-size:10.5px!important}
+  /* 输入框区域打印时缩小 */
+  .ifield{margin:5px 0!important}
+  .ig label{font-size:9px!important}
+  .ig select,.ig input{padding:3px 5px!important;font-size:9px!important;min-width:60px!important}
+  /* kpcard 在卡片内 */
+  .kpcard{padding:3mm!important;margin:3mm 0!important}
+  /* Tone卡片的两个摘要框打印时极度压缩为单行内联 */
+  .card:nth-of-type(3) .kpcard{display:inline-block!important;width:48%!important;padding:2mm 3mm!important;margin:1mm!important;vertical-align:top;font-size:9px!important;line-height:1.4!important}
+  .card:nth-of-type(3) .kpcard h5{font-size:9px!important;margin-bottom:1px!important}
+  .card:nth-of-type(3) .kpcard p{font-size:8.5px!important;margin-bottom:1px!important;display:none!important}
+  /* Tone每个详情块防截断 */
+  .card:nth-of-type(3) > div[style*="margin:12px"]{break-inside:avoid!important;page-break-inside:avoid!important}
+}
+@media(max-width:800px){.combo-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>CTB 能量变量分析系统</h1>
+<p class="sub">Color · Tone · Base —— 爻线之下的三层能量解码</p>
+
+<!-- ========== 卡片1：系统概述 + 层级图 + CTB介绍 + 指纹说明 ========== -->
+<div class="card">
+<div class="stit">系统概述：爻线之下</div>
+<p>人类图中，每个闸门的激活并非只到「爻」（Line）就结束了。爻只是最表层的行为描述，其下还藏着三层更精微的能量结构——<strong>CTB 变量系统</strong>：</p>
+
+<!-- C-T-B 三卡片 -->
+<div class="grid3" style="margin:14px 0">
+<div style="background:var(--highlight);border-radius:10px;padding:14px;text-align:center">
+<div style="font-size:24px;margin-bottom:3px">🎨</div>
+<div style="font-size:15px;font-weight:700;color:var(--primary)">Color 颜色</div>
+<div style="font-size:12px;color:var(--muted);margin-top:3px">动机 · 身体滋养方式<br>你为什么做？</div>
+</div>
+<div style="background:var(--highlight);border-radius:10px;padding:14px;text-align:center">
+<div style="font-size:24px;margin-bottom:3px">🔊</div>
+<div style="font-size:15px;font-weight:700;color:var(--primary)">Tone 音调</div>
+<div style="font-size:12px;color:var(--muted);margin-top:3px">认知 · 感官接收模式<br>你怎么知道？<br><strong style="color:var(--danger)">← 决定箭头方向的关键层 →</strong></div>
+</div>
+<div style="background:var(--highlight);border-radius:10px;padding:14px;text-align:center">
+<div style="font-size:24px;margin-bottom:3px">⚖️</div>
+<div style="font-size:15px;font-weight:700;color:var(--primary)">Base 基底</div>
+<div style="font-size:12px;color:var(--muted);margin-top:3px">意识底层 · 跨世永恒程序<br>你用什么运行？</div>
+</div>
+</div>
+
+<!-- 层级结构示意图 -->
+<div class="hierarchy-diagram">
+<svg class="hierarchy-svg" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+<text x="30" y="50" font-size="22" fill="#E8DCC8" font-weight="700" font-family="Georgia,serif">Gate</text>
+<text x="25" y="77" font-size="22" fill="#E8DCC8" font-weight="700" font-family="Georgia,serif">Line</text>
+<text x="15" y="107" font-size="22" fill="#E8DCC8" font-weight="700" font-family="Georgia,serif">Color</text>
+<text x="22" y="140" font-size="22" fill="#E8DCC8" font-weight="700" font-family="Georgia,serif">Tone</text>
+<text x="22" y="205" font-size="26" fill="#8B7355" font-weight="700" font-family="Georgia,serif">BASE</text>
+<rect x="130" y="30" width="240" height="28" rx="4" fill="#D4A76A" stroke="#B8860B" stroke-width="1"/>
+<text x="250" y="49" text-anchor="middle" font-size="15" fill="#fff" font-weight="700">64 闸门 Gate</text>
+<rect x="130" y="61" width="240" height="28" rx="4" fill="#E8D45C" stroke="#D4A017" stroke-width="1"/>
+<text x="250" y="80" text-anchor="middle" font-size="15" fill="#fff" font-weight="700">6 爻 Line</text>
+<rect x="130" y="92" width="240" height="28" rx="4" fill="#8FBC5A" stroke="#5A8F3A" stroke-width="1"/>
+<text x="250" y="111" text-anchor="middle" font-size="15" fill="#fff" font-weight="700">6 色 Color</text>
+<rect x="130" y="123" width="240" height="28" rx="4" fill="#5B9BD5" stroke="#3A7BC8" stroke-width="1"/>
+<text x="250" y="142" text-anchor="middle" font-size="15" fill="#fff" font-weight="700">6 音 Tone</text>
+<rect x="130" y="154" width="48" height="68" fill="#E06696" stroke="#C2185B" stroke-width="1"/><text x="154" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">1</text>
+<rect x="179" y="154" width="48" height="68" fill="#E06696" stroke="#C2185B" stroke-width="1"/><text x="203" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">2</text>
+<rect x="228" y="154" width="48" height="68" fill="#E06696" stroke="#C2185B" stroke-width="1"/><text x="252" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">3</text>
+<rect x="277" y="154" width="48" height="68" fill="#E06696" stroke="#C2185B" stroke-width="1"/><text x="301" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">4</text>
+<rect x="326" y="154" width="44" height="68" fill="#E06696" stroke="#C2185B" stroke-width="1"/><text x="348" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="700">5</text>
+<text x="392" y="48" font-size="11" fill="#8B7355">表面印记</text>
+<text x="392" y="78" font-size="11" fill="#8B7355">行为描述</text>
+<text x="392" y="110" font-size="11" fill="#6B8E5A" font-weight="600">动机主题</text>
+<text x="392" y="141" font-size="11" fill="#1565C0" font-weight="600">感官基础</text>
+<text x="392" y="182" font-size="11" fill="#C2185B" font-weight="600">投生根源</text>
+<text x="392" y="202" font-size="10" fill="#999">(共5种)</text>
+<text x="250" y="245" text-anchor="middle" font-size="11" fill="#B8860B" font-weight="600">每深入一层，时间精度要求越高 · Base 是永恒印记点</text>
+<text x="250" y="262" text-anchor="middle" font-size="10" fill="#aaa">数据来源：Jovian Archive / Ra Uru Hu 原始传递</text>
+</svg>
+</div>
+
+<p style="margin-top:12px">这三个变量决定了你的<strong>能量怎么流</strong>（动机方向）、<strong>卡点在哪</strong>（认知偏差）、<strong>潜意识怎么操控你</strong>（底层程序）。它们是真正在底层驱动你做出选择的"隐形操作系统"。如上图所示，从闸门到基底，每一层都是对上一层的一次精微细分——<strong>64×6×6×6×5 = 69,120 种可能的组合</strong>，这就是你独一无二的能量指纹。</p>
+</div>
+
+<!-- ========== 卡片2：四转化与四箭头（独立卡片，确保P2）========== -->
+<div class="card">
+<div class="stit">四转化与四箭头</div>
+<p>CTB 变量通过「四转化」投射到四个生活维度上，构成人类图顶部的<strong>四箭头</strong>：</p>
+<table class="itbl">
+<thead><tr><th>箭头位置</th><th>转化维度</th><th>天体来源</th><th>意识层</th><th>核心问题</th></tr></thead>
+<tbody>
+<tr><td>↗ 左上</td><td>消化 Determination<br><span class="tag tag-r">饮食方案 PHS</span></td><td>Sun &amp; Earth (设计)</td><td><span class="tag tag-r">潜意识</span></td><td>身体如何获得最佳滋养？</td></tr>
+<tr><td>↘ 左下</td><td>环境 Environment<br><span class="tag tag-r">生存空间 PHS</span></td><td>Nodes 交点 (设计)</td><td><span class="tag tag-r">潜意识</span></td><td>什么环境滋养你的神经系统？</td></tr>
+<tr><td>↗ 右上</td><td>动机 Motivation<br><span class="tag tag-l">Rave Psychology</span></td><td>Sun &amp; Earth (个性)</td><td><span class="tag tag-l">显意识</span></td><td>什么驱动你的行动？</td></tr>
+<tr><td>↘ 右下</td><td>视角 Perspective<br><span class="tag tag-l">Rave Psychology</span></td><td>Nodes 交点 (个性)</td><td><span class="tag tag-l">显意识</span></td><td>你通过什么透镜看世界？</td></tr>
+</tbody>
+</table>
+
+<div class="kpcard" style="border-left-color:var(--warn);margin-top:12px">
+<h5>⚠️ 关键修正：箭头方向由 TONE 决定，而非 Color</h5>
+<p><strong>Tone 1·2·3 = 左箭头 ←</strong>（战略性、主动、聚焦、结构化）</p>
+<p><strong>Tone 4·5·6 = 右箭头 →</strong>（接受性、被动、开放、流动）</p>
+<p style="font-size:12px">这是 Ra Uru Hu 原始传递的权威规则。Tone 是认知架构的基础层，它决定了你的心智和身体如何处理信息——这才是箭头方向的根本来源。</p>
+</div>
+</div>
+
+<!-- ========== Color 解码 ========== -->
+<div class="card">
+<div class="stit">Color 颜色解码 —— 你的动机是什么？</div>
+<p>Color 是 CTB 中关键的一层。它决定了你做任何事的<strong>底层动机</strong>，以及你身体需要被怎样滋养。</p>
+<p><strong style="color:var(--warn)">⚠️ 重要说明：Color 的具体定义因四转化的不同而不同。</strong>每个变量（消化/环境/视角/动机）都有自己的 6 色，含义各不相同。以下分别列出：</p>
+
+<div class="divider"></div>
+<p class="ptit">🍽️ 一、消化变量（Determination）—— 饮食方案 Color</p>
+<table class="itbl">
+<thead><tr><th>Color</th><th>名称</th><th>核心含义</th></tr></thead>
+<tbody>
+<tr><td><span class="badge bdg-1">1</span></td><td>食欲 Appetite</td><td>一次只吃一种食物效果最佳。分离进食——先吃面包再吃奶酪，而非三明治。简单与纯净。</td></tr>
+<tr><td><span class="badge bdg-2">2</span></td><td>味觉 Taste</td><td>吃离家近的食物效果最佳——本地简单产品。饮食较固定，吃相同食物身体反而更好。一致性是关键。</td></tr>
+<tr><td><span class="badge bdg-3">3</span></td><td>渴觉 Thirst</td><td>关于摄入物的温度与效应——不仅是物理冷热，也包括食物对身体产生升温或降温的作用。</td></tr>
+<tr><td><span class="badge bdg-4">4</span></td><td>触觉 Touch</td><td>不再关注吃什么，而是<span class="hl">进食环境</span>。左箭头指向平静环境，右箭头指向更有刺激性的环境。</td></tr>
+<tr><td><span class="badge bdg-5">5</span></td><td>声音 Sound</td><td>环境中声音的作用——创造合适的声学环境以实现最佳消化。左=高声环境，右=低声环境。</td></tr>
+<tr><td><span class="badge bdg-6">6</span></td><td>光线 Light</td><td>进食时光线的重要性。左箭头需要日光(daylight)，右箭头不需要日光(no daylight)。</td></tr>
+</tbody>
+</table>
+<p style="font-size:12px;color:var(--muted)">💡 从 Color 4 开始，消化变量的焦点从"吃什么"转向"在什么条件下进食"。</p>
+
+<div class="divider"></div>
+<p class="ptit">🏠 二、环境变量（Environment）—— 生存空间 Color</p>
+<table class="itbl">
+<thead><tr><th>Color</th><th>名称</th><th>核心含义</th></tr></thead>
+<tbody>
+<tr><td><span class="badge bdg-1">1</span></td><td>洞穴 Caves</td><td>安全与控制。最少入口的空间，背靠墙坐，能看到门，对进出有掌控感。</td></tr>
+<tr><td><span class="badge bdg-2">2</span></td><td>市场 Markets</td><td>持续活动与交换——金钱、想法、互动。在行动、运动和动态中茁壮成长。</td></tr>
+<tr><td><span class="badge bdg-3">3</span></td><td>厨房 Kitchens</td><td>事物被转化或创造的地方。在持续变化、实验和新事物中茁壮成长。</td></tr>
+<tr><td><span class="badge bdg-4">4</span></td><td>山脉 Mountains</td><td>更高视角——鸟瞰视野。高层公寓或有开阔视野的地方，看清大局。</td></tr>
+<tr><td><span class="badge bdg-5">5</span></td><td>山谷 Valleys</td><td>能量自由流动、人与人相遇的地方。声音重要——喜欢听到他人交谈或背景音乐包围。</td></tr>
+<tr><td><span class="badge bdg-6">6</span></td><td>海岸 Shores</td><td>两个世界交汇处——边界模糊的地方。同时体验内外，城市与自然交界处。</td></tr>
+</tbody>
+</table>
+
+<div class="divider"></div>
+<p class="ptit">🔥 三、动机变量（Motivation）—— 行动驱动力 Color</p>
+<table class="itbl">
+<thead><tr><th>Color</th><th>名称</th><th>核心含义</th></tr></thead>
+<tbody>
+<tr><td><span class="badge bdg-1">1</span></td><td>对未知的恐惧 Fear of Unknown</td><td>被理解事物的需要驱动。学习、研究、深入钻研以获取全面理解。</td></tr>
+<tr><td><span class="badge bdg-2">2</span></td><td>希望 Hope</td><td>希望的力量。何时不行动、何时不强迫。能看到他人看不到的。信任过程时保持冷静自信。</td></tr>
+<tr><td><span class="badge bdg-3">3</span></td><td>欲望 Desire</td><td>创造运动和组织的需求。激励聚焦并坚定朝目标努力。领导他人朝新方向前进。</td></tr>
+<tr><td><span class="badge bdg-4">4</span></td><td>必要性 Necessity</td><td>被什么是必要的驱动。专注于真正需要关注的，穿透噪音识别本质。</td></tr>
+<tr><td><span class="badge bdg-5">5</span></td><td>修复 Fixing</td><td>被修复事物的驱动——为自己也为他人。"我如何修复这个？"清楚看到有效无效。</td></tr>
+<tr><td><span class="badge bdg-6">6</span></td><td>只是存在 Just Being</td><td>没有议程或目的，从旁边观察。关乎存在而非特定结果。纯粹为了体验而做。</td></tr>
+</tbody>
+</table>
+
+<div class="divider"></div>
+<p class="ptit">👁️ 四、视角变量（Perspective）—— 看世界的透镜 Color</p>
+<table class="itbl">
+<thead><tr><th>Color</th><th>名称</th><th>核心含义</th></tr></thead>
+tbody>
+<tr><td><span class="badge bdg-1">1</span></td><td>生存 Survival</td><td>通过生存镜头看世界。天生能看到自己和他人为生存需要什么——安全、关系、资源。</td></tr>
+<tr><td><span class="badge bdg-2">2</span></td><td>可能性 Possibility</td><td>通过可能性的镜头看世界。在一切事物中看到潜力。帮助他人认识自身潜力。</td></tr>
+<tr><td><span class="badge bdg-3">3</span></td><td>权力 Power</td><td>通过权力镜头看世界。看到谁拥有权力、谁滥用、谁处于自己的权力中。竞争视角。</td></tr>
+<tr><td><span class="badge bdg-4">4</span></td><td>缺失 Lack</td><td>看到缺失什么、缺乏什么、需要什么。意识到不必修复一切——有时只需观察。</td></tr>
+<tr><td><span class="badge bdg-5">5</span></td><td>概率 Probability</td><td>看到可能发生什么。识别趋势走向。务实负责，不陷入幻想。</td></tr>
+<tr><td><span class="badge bdg-6">6</span></td><td>个人化 Personal</td><td>通过自己的维度和过程看世界。可能存在一定天真。一切都经过个人滤镜。</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ========== Tone 解码 ========== -->
+<div class="card">
+<div class="stit">Tone 音调解码 —— 决定你箭头方向的核心层 🔑</div>
+<p><strong style="color:var(--danger)">Tone 是决定左/右箭头方向的关键层级。</strong>你的每个变量位置的 Tone 数值直接决定了该位置箭头的朝向。</p>
+<p>Tone 代表你的<strong>主要认知专业化方式</strong>——不是你怎么思考，而是你的感官系统怎么接收和处理信息。这是比思维更底层的"感官操作系统"，决定了你天然的学习和沟通偏好。</p>
+
+<div class="kpcard"><h5>🔵 Tone 1·2·3 = 左箭头 ← 战略性认知</h5>
+<p>专注、分析、组织世界以支持生存和效率。<br>依赖结构、逻辑和细节——像猎人锁定猎物一样敏锐聚焦。<br>在结构化环境中茁壮成长，受益于清晰的策略。</p></div>
+<div class="kpcard"><h5>🟢 Tone 4·5·6 = 右箭头 → 接受性认知</h5>
+<p>不通过逻辑或策略把握世界，而是接入更广泛的直觉意识——吸收整体图景。<br>艺术性、情感性、敏感性——随环境流动而非控制环境。<br>需要开放性和灵活性，让生活自然来到而非强求结果。</p></div>
+
+<div class="divider"></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-1">Tone 1</span> 嗅觉型 · Smell / Olfactive</h4>
+<p><strong>认知模式：</strong>通过"嗅出真相"来感知——隐喻性的直觉雷达。你的直觉像鼻子一样灵敏，不需要逻辑就能感知"这不对"。</p>
+<p><strong>学习方式：</strong>需要先独处消化信息，不擅长在嘈杂环境中思考。给你的信息要精简、留白，让你自己去"嗅"出含义。</p>
+<p><strong>接收偏好：</strong>偏好直觉性、暗示性的信息，而非明确详细的指令。</p>
+<p><strong>潜在卡点：</strong>可能过度依赖直觉而忽视事实，或因为无法解释"怎么知道的"而不被信任。</p></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-2">Tone 2</span> 味觉型 · Taste / Gustatory</h4>
+<p><strong>认知模式：</strong>通过"尝"来学习——你必须亲口尝一尝。你需要亲身体验、亲自试错，才能"消化"一个概念。</p>
+<p><strong>学习方式：</strong>体验式学习。看再多的说明书不如自己动手。你通过"做"来理解。</p>
+<p><strong>接收偏好：</strong>偏好可以参与、尝试、实验的信息形式。互动式、工作坊式最佳。</p>
+<p><strong>潜在卡点：</strong>可能反复犯同样的错误（因为每次都想自己试试），或不听劝告（"让我自己来"）。</p></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-3">Tone 3</span> 外在视觉型 · Outer Vision</h4>
+<p><strong>认知模式：</strong>通过"看"来理解——你的认知依赖外部视觉信息。你需要亲眼看到，图形、图表、空间布局是你的语言。</p>
+<p><strong>学习方式：</strong>视觉学习。思维导图、信息图、白板画图、实物展示——只要你"看到"就秒懂。</p>
+<p><strong>接收偏好：</strong>偏好视觉化呈现。文字太多会烦，但一张图胜千言。</p>
+<p><strong>潜在卡点：</strong>可能过度依赖外在信息而忽视内在感受，或"看不见"的东西就不信。</p></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-4">Tone 4</span> 内在视觉型 · Inner Vision</h4>
+<p><strong>认知模式：</strong>通过"内在之眼"来感知——你的认知靠想象力、冥想、内在画面。你天生能"看到"尚不存在的事物。</p>
+<p><strong>学习方式：</strong>需要在安静中内在想象。给你一个概念，你闭上眼就能"看见"它的全貌。不适合填鸭式教学。</p>
+<p><strong>接收偏好：</strong>偏好抽象的、有想象空间的信息。不需要每个细节都说清，留白让你自己"看见"。</p>
+<p><strong>潜在卡点：</strong>可能活在内在世界而与外在脱节，或因为别人"看不到你看到的"而感到孤独。</p></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-5">Tone 5</span> 感觉型 · Feeling</h4>
+<p><strong>认知模式：</strong>通过"感受"来理解——你是一个人形情绪雷达，能感知空间中的情绪频率。</p>
+<p><strong>学习方式：</strong>情感式学习。你需要"感觉到"一个知识，与它产生情感连接，才能真正吸收。</p>
+<p><strong>接收偏好：</strong>偏好有温度、有人情味的信息。冰冷的数据和逻辑需要"翻译"成情感语言你才吃得下。</p>
+<p><strong>潜在卡点：</strong>可能被他人的情绪淹没（分不清是自己的还是别人的），或过度共情而耗竭。</p></div>
+
+<div style="margin:12px 0"><h4 style="font-size:14px;margin-bottom:6px"><span class="badge bdg-6">Tone 6</span> 触觉型 · Touch / Tactile</h4>
+<p><strong>认知模式：</strong>通过"触摸/身体"来感知——你需要身体参与、物理接触、动手操作。身体是你的第一个认知器官。</p>
+<p><strong>学习方式：</strong>动觉式学习。坐不住，需要走动、触摸、搭建、拆解。你是"手"的学习者。</p>
+<p><strong>接收偏好：</strong>偏好可以触摸、操作、移动的信息载体。实体书 &gt; 电子书，白板 &gt; 幻灯片。</p>
+<p><strong>潜在卡点：</strong>可能在必须"安静坐着"的环境中表现不佳，或被认为"不够专注"（其实身体动=大脑在学）。</p></div>
+</div>
+
+<!-- ========== Base 解码（V6：融合生物学类比+实用建议）========== -->
+<div class="card">
+<div class="stit">Base 基底解码 —— 跨世不变的底层程序</div>
+<p>Base 是 CTB 最深层的一层，代表差异化的<strong>基本构建块</strong>。它是你人格水晶的永恒面向——从时间之初就伴随你，跨生命周期不变。</p>
+<p style="color:var(--warn);font-size:13px">📌 Base 共有 <strong>5 种</strong>（非2种也非6种）。这是 Ra Uru Hu 原始传递的权威数据。Ra 将每个 Base 与人类受精过程中的生物学阶段对应，赋予其深刻的象征意义。</p>
+
+<!-- Base 1 -->
+<div class="base-card" style="background:linear-gradient(135deg,#FFF8E1,#FFECB3);border-left-color:#F57F17">
+<h4>🔭 <strong>Base 1</strong> 外部观察者 The Outside Observer <small style="font-weight:400;color:var(--muted)">｜精子 Sperm ｜父神 God The Father</small></h4>
+<div class="b-field"><span class="b-label">类型 Type：</span>Reactive 反应型　<span class="b-label">主题 Theme：</span>Movement 运动</div>
+<div class="b-field"><span class="b-label">声明 Declaration：</span>"我定义" I Define　<span class="b-label">阴阳 YinYang：</span>纯阳 Yang/Yang</div>
+<div class="b-field"><span class="b-label">关联感官 Sense：</span>视觉 Seeing　<span class="b-label">核心问题 Question：</span>在哪里？Where?</div>
+<div class="b-field"><span class="b-label">核心 Essence：</span>迁移者、探路者、选址者。具有深刻竞争性——看见差异与非差异。<strong>视觉主导："看见就是一切"</strong>。领地意识的建立者。运动即能量即创造即看见即风景。你的本能是向外探索、标记领地、识别机会。</div>
+<div class="b-field"><span class="b-label">宏观链 Macro：</span>运动→能量→创造→看见→风景→环境</div>
+<div class="b-field"><span class="b-label">微观链 Micro：</span>个性→活动→反应→限制→视角→关系</div>
+<div class="bio-note"><strong>🧬 生物学类比：</strong>平均2.5亿个精子中只有几千个能到达子宫输卵管。那些克服障碍到达的获得了"超活化"能力——你的存在本身就是一场竞争性旅程的胜利。你不是被动的产物，你是<strong>主动抵达</strong>的那个。</div>
+<div class="action-tip"><strong>💡 行动指引：</strong>你需要不断探索新环境才能感到"活着"。不要长期待在同一个封闭空间——定期换路线、换场景、换视野。你的决策应该基于"我看到了什么"而非"我想了什么"。当你感觉迷茫时，走出去，用眼睛重新扫描你的世界。</div>
+</div>
+
+<!-- Base 2 -->
+<div class="base-card" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9);border-left-color:#43A047">
+<h4>🧒 <strong>Base 2</strong> 孩子们 The Children <small style="font-weight:400;color:var(--muted)">｜精子核/线粒体/顶体 ｜莉莉丝/亚当/耶稣 Lilith/Adam/Jesus</small></h4>
+<div class="b-field"><span class="b-label">类型 Type：</span>Integrative 整合型　<span class="b-label">主题 Theme：</span>Evolution 进化</div>
+<div class="b-field"><span class="b-label">声明 Declaration：</span>"我记得" I Remember　<span class="b-label">阴阳 YinYang：</span>阳/阴 Yang/Yin</div>
+<div class="b-field"><span class="b-label">关联感官 Sense：</span>味觉 Taste　<span class="b-label">核心问题 Question：</span>是什么？What?</div>
+<div class="b-field"><span class="b-label">核心 Essence：</span>进化过程的整合型。从经验中学习的<strong>心智开端</strong>。味觉是非常个人化的——除非允许某物进入否则无法品尝。品格与角色认同在这里形成。资源意识强。你是那个"记住教训并传递下去"的角色。</div>
+<div class="b-field"><span class="b-label">宏观链 Macro：</span>进化→重力→记忆→品味→爱→光</div>
+<div class="b-field"><span class="b-label">微观链 Micro：</span>心智→性格→分离→自然→整合→精神</div>
+<div class="bio-note"><strong>🧬 生物学类比：</strong>线粒体提供能量让精子尾部更有力地运动；顶体释放酶来消化卵子外层；最终细胞核融合释放一半遗传物质。这是一个<strong>层层递进的整合过程</strong>——每一层都在为最终的融合做准备。你天然懂得如何将碎片拼成完整图景。</div>
+<div class="action-tip"><strong>💡 行动指引：</strong>你通过"品味"生活来积累智慧。允许自己慢慢体验，不必匆忙下结论。你对人和事有天然的"味道记忆"——相信这种感觉。适合做需要整合多方资源的角色：项目经理、协调者、知识管理者。写下来、记录下来对你特别重要——你的记忆就是团队的财富。</div>
+</div>
+
+<!-- Base 3 -->
+<div class="base-card" style="background:linear-gradient(135deg,#FCE4EC,#F8BBD0);border-left-color:#C2185B">
+<h4>🤱 <strong>Base 3</strong> 母亲/客观 Mother Objective <small style="font-weight:400;color:var(--muted)">｜卵子与极体 Egg & Polar Bodies ｜大地母亲 Mother Earth</small></h4>
+<div class="b-field"><span class="b-label">类型 Type：</span>Objective 客观型　<span class="b-label">主题 Theme：</span>Being 存在</div>
+<div class="b-field"><span class="b-label">声明 Declaration：</span>"我是" I Am　<span class="b-label">阴阳 YinYang：</span>纯阴 Yin/Yin</div>
+<div class="b-field"><span class="b-label">关联感官 Sense：</span>触觉 Touch　<span class="b-label">核心问题 Question：</span>什么时候？When?</div>
+<div class="b-field"><span class="b-label">核心 Essence：</span>纯阴属性——被设计来<strong>滋养</strong>。生存导向。触觉核心：<strong>一切都通过触觉运作，必须靠近</strong>才能发挥作用。天生的合作教导者。终极客观状态——不带偏见的承载者和生命载体。</div>
+<div class="b-field"><span class="b-label">宏观链 Macro：</span>存在→物质→触觉→性→生存</div>
+<div class="b-field"><span class="b-label">微观链 Micro：</span>身体→生物学→化学→客观性→几何→轨迹</div>
+<div class="bio-note"><strong>🧬 生物学类比：</strong>卵子发生过程中，一个细胞分裂产生一个卵子和三个极体——不平等的分裂，卵子获得几乎所有资源。这是一种<strong>纯粹的给予</strong>机制：牺牲多余的部分来确保生命延续。皮质反应保护卵子免受额外侵入。你就是那个承载者、保护者、滋养者。</div>
+<div class="action-tip"><strong>💡 行动指引：</strong>你需要物理上的亲近感和触碰才能正常运作。远程办公、纯线上关系可能让你枯竭。面对面的交流、身体的在场对你至关重要。你天生适合养育、教导、支持类角色——但要注意：你的"给予"需要边界，否则会耗尽自己。设定清晰的物理和心理边界是你的人生课题。</div>
+</div>
+
+<!-- Base 4 -->
+<div class="base-card" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);border-left-color:#1565C0">
+<h4>🌿 <strong>Base 4</strong> 反中微子/精神 Anti-Neutrino Spirit <small style="font-weight:400;color:var(--muted)">｜卵子核 Egg Nucleus ｜蛇/树/苹果 Snake/Tree/Apple</small></h4>
+<div class="b-field"><span class="b-label">类型 Type：</span>Progressive 渐进型　<span class="b-label">主题 Theme：</span>Design 设计</div>
+<div class="b-field"><span class="b-label">声明 Declaration：</span>"我设计" I Design　<span class="b-label">阴阳 YinYang：</span>阴/阳 Yin/Yang</div>
+<div class="b-field"><span class="b-label">关联感官 Sense：</span>嗅觉 Smell　<span class="b-label">核心问题 Question：</span>为什么？Why?</div>
+<div class="b-field"><span class="b-label">核心 Essence：</span>进步与自我设计的基地。<strong>人类的可能性始于阴对阳的主导</strong>——组织性维度命令以支持进步。嗅觉关联——"你必须闻出它"。强大的自我力量和显化力。你是变革的设计者。</div>
+<div class="b-field"><span class="b-label">宏观链 Macro：</span>设计→结构→进步→嗅觉→生命→艺术</div>
+<div class="b-field"><span class="b-label">微观链 Micro：</span>自我→智人→成长→衰败→连续性→显化</div>
+<div class="bio-note"><strong>🧬 生物学类比：</strong>精子和卵子的核膜消失，染色体融合重建完整的46条染色体——这一步完成了受精。这是<strong>从两个到一的创造性合并</strong>，新的完整个体由此诞生。你不是在跟随旧路，你在设计新的可能性。</div>
+<div class="action-tip"><strong>💡 行动指引：</strong>你有强大的"嗅出真相"能力和设计变革的天赋。当你说"这件事不对"时，通常你是对的——即使你还不能完全解释为什么。你适合做战略规划、系统设计、改革推动者。但要小心：你的设计冲动可能让你急于改变尚未成熟的事物。学会等待"嗅觉确认"后再行动，而不是凭冲动去重构一切。</div>
+</div>
+
+<!-- Base 5 -->
+<div class="base-card" style="background:linear-gradient(135deg,#F3E5F5,#E1BEE7);border-left-color:#7B1FA2">
+<h4>🌙 <strong>Base 5</strong> 夏娃/荐骨回应 Eve Sacral Response <small style="font-weight:400;color:var(--muted)">｜合子 Zygote ｜夏娃与堕落 Eve & The Fall</small></h4>
+<div class="b-field"><span class="b-label">类型 Type：</span>Subjective 主观型　<span class="b-label">主题 Theme：</span>Space 空间</div>
+<div class="b-field"><span class="b-label">声明 Declaration：</span>"我思考" I Think　<span class="b-label">阴阳 YinYang：</span>中心整合场 Central Integration</div>
+<div class="b-field"><span class="b-label">关联感官 Sense：</span>听觉 Hearing　<span class="b-label">核心问题 Question：</span>谁？Who?</div>
+<div class="b-field"><span class="b-label">核心 Essence：</span>位于其他四个基础的<strong>中心位置</strong>。处理空间与幻象——最大的幻象就是"谁"。<strong>沟通是最深的突变力量</strong>。主观性的根源所在。存在感(Presence)是你的类型副产品。你连接着所有其他基底。</div>
+<div class="b-field"><span class="b-label">宏观链 Macro：</span>空间→形式→幻象→听觉→音乐→自由</div>
+<div class="b-field"><span class="b-label">微观链 Micro：</span>人格→类型→幻想→主观性→节奏→时机</div>
+<div class="bio-note"><strong>🧬 生物学类比：</strong>合子是受精后形成的第一个细胞，性别在此确定，然后开始快速分裂并下降到子宫。从单细胞变成多细胞囊胚，最终着床引发怀孕。这是<strong>潜能展开的起点</strong>——一切可能性都封装在这个最初的形态之中。你携带着全部的可能性。</div>
+<div class="action-tip"><strong>💡 行动指引：</strong>你是所有Base中最复杂的一个——位于中心，处理"谁"这个终极幻象。沟通和表达是你最深的突变力量：你说话的方式、你发出的声音，能够改变整个场域。你对他人的"存在感"(Presence)有强大影响力。关键行动：多倾听（你的感官是听觉），少急于定义"我是谁"。你的力量在于<strong>不确定中的自在</strong>——当别人需要答案时，你教会他们与未知共处。</div>
+</div>
+</div>
+
+<!-- ========== 四箭头16组合（代码格式：[消][环][动][视]）========== -->
+<div class="card">
+<div class="stit">四箭头 16 种组合全览</div>
+<p>四箭头各有左(L)右(R)两种方向，产生 <strong>2⁴ = 16 种</strong>独特组合。每种组合代表一种独特的"认知操作系统"。</p>
+<p>代码格式：<strong>[消化][环境][动机][视角]</strong>（L=左战略型，R=右接受型；按四箭头标准排列顺序：左上消化→左下环境→右上动机→右下视角）</p>
+
+<div class="combo-grid">
+
+<!-- Row 1: LLLL ~ LLRR -->
+<div class="combo-item"><div class="code">L L L L</div><div class="arrow-viz">← ← ← ←</div><div class="desc"><strong>全左型 · 战略至上</strong><br><span class="trait">极致专注</span> <span class="trait">深度执行</span> <span class="trait">线性思维</span><br>所有四个箭头都是战略性左箭头。天生的规划者和执行者。挑战：可能过度控制，难以放松。</div></div>
+<div class="combo-item"><div class="code">L L L R</div><div class="arrow-viz">← ← ← →</div><div class="desc"><strong>三左潜 + 开放视角</strong><br><span class="trait">战略根基</span> <span class="trait">灵活视野</span><br>潜意识的三个变量+显意识动机都是战略型，唯独看世界的视角是开放型的。"生活严谨但眼光灵活"。</div></div>
+<div class="combo-item"><div class="code">L L R L</div><div class="arrow-viz">← ← → ←</div><div class="desc"><strong>双左潜 + 开放动机</strong><br><span class="trait">内外张力</span> <span class="trait">灵感驱动</span><br>消化和环境是战略型，但行动驱动力来自开放动机。身体需要规律滋养，但行动由灵感触发。</div></div>
+<div class="combo-item"><div class="code">L L R R</div><div class="arrow-viz">← ← → →</div><div class="desc"><strong>双左潜 + 双右显</strong><br><span class="trait">内外平衡</span> <span class="trait">桥梁角色</span><br>潜意识完全战略型（消化+环境），显意识完全开放型（动机+视角）。典型的"身体要规律，灵魂要自由"。</div></div>
+
+<!-- Row 2: LRLL ~ LRRR -->
+<div class="combo-item"><div class="code">L R L L</div><div class="arrow-viz">← → ← ←</div><div class="desc"><strong>开放环境 + 其余左</strong><br><span class="trait">环境敏感</span> <span class="trait">战略主体</span><br>只有环境这一个变量是开放型的。饮食、动机和视角都高度结构化，但生活空间需要流动性和变化。</div></div>
+<div class="combo-item"><div class="code">L R L R</div><div class="arrow-viz">← → ← →</div><div class="desc"><strong>左右 2:2 均衡 A</strong><br><span class="trait">适应力强</span> <span class="trait">切换自如</span><br>消化和动机为左（战略），环境和视角为右（开放）。决策坚定但生活空间和视野灵活。</div></div>
+<div class="combo-item"><div class="code">L R R L</div><div class="arrow-viz">← → → ←</div><div class="desc"><strong>左消化+视角 + 右环境+动机</strong><br><span class="trait">务实梦想家</span><br>饮食和视野需要结构性，但生活空间和行动驱动力来自开放直觉。"有规划的自由人"。</div></div>
+<div class="combo-item"><div class="code">L R R R</div><div class="arrow-viz">← → → →</div><div class="desc"><strong>左消化 + 三右其余</strong><br><span class="trait">规律支撑自由</span><br>只有消化需要结构性（规律饮食），生活的其他所有面向（环境、动机、视角）都是开放接收式的。</div></div>
+
+<!-- Row 3: RLLL ~ RLRR -->
+<div class="combo-item"><div class="code">R L L L</div><div class="arrow-viz">→ ← ← ←</div><div class="desc"><strong>开放动机 + 其余左</strong><br><span class="trait">直觉驱动行动</span> <span class="trait">规律生活框架</span><br>只有动机是开放型（行动由灵感驱动），其余全部战略型。身体和生活需要严格秩序，但行动来自直觉冲动。</div></div>
+<div class="combo-item"><div class="code">R L L R</div><div class="arrow-viz">→ ← ← →</div><div class="desc"><strong>左右 2:2 均衡 B</strong><br><span class="trait">感性理性并存</span><br>动机和环境为右（开放），消化和视角为左（战略）。用直觉选择行动和空间，用逻辑安排饮食和判断。</div></div>
+<div class="combo-item"><div class="code">R L R L</div><div class="arrow-viz">→ ← → ←</div><div class="desc"><strong>开放动机+环境 + 左消化+视角</strong><br><span class="trait">艺术家式配置</span><br>行动和生活空间由灵感驱动，但饮食需要规律、看世界的方式需要结构和确定性。</div></div>
+<div class="combo-item"><div class="code">R L R R</div><div class="arrow-viz">→ ← → →</div><div class="desc"><strong>左消化+视角 + 右动机+环境</strong><br><span class="trait">自由灵魂+稳定基地</span><br>饮食和视野需要结构支撑，但行动驱动力和生活空间全面开放。有根基的自由探索者。</div></div>
+
+<!-- Row 4: RRLL ~ RRRR -->
+<div class="combo-item"><div class="code">R R L L</div><div class="arrow-viz">→ → ← ←</div><div class="desc"><strong>双右潜 + 双左显</strong><br><span class="trait">进化桥梁</span> <span class="trait">变革者</span><br>潜意识完全开放型（动机+环境），显意识完全战略型（消化+视角）。连接新旧两种认知模式的罕见配置。</div></div>
+<div class="combo-item"><div class="code">R R L R</div><div class="arrow-viz">→ → ← →</div><div class="desc"><strong>三右潜 + 左视角</strong><br><span class="trait">未来人设·战略眼</span><br>身体几乎完全是开放接收式的（动机+环境+消化），唯有看世界的眼睛来自战略分析。</div></div>
+<div class="combo-item"><div class="code">R R R L</div><div class="arrow-viz">→ → → ←</div><div class="desc"><strong>三右 + 左视角</strong><br><span class="trait">直觉主导</span> <span class="trait">理性锚点</span><br>几乎所有面向都开放接收（动机+环境+消化），唯独看世界的方式来自战略和目标感。"随心所欲但有方向"。</div></div>
+<div class="combo-item"><div class="code">R R R R</div><div class="arrow-viz">→ → → →</div><div class="desc"><strong>全右型 · 纯粹接收</strong><br><span class="trait">直觉王者</span> <span class="trait">流动自如</span> <span class="trait">创意无限</span><br>四个箭头全部朝右。纯粹接收型认知——不主动追逐，让生活和答案自然来到面前。</div></div>
+
+</div>
+
+<div class="kpcard" style="margin-top:14px;border-left-color:var(--accent)">
+<h5>💡 如何使用这个表格</h5>
+<p><strong>第一步：确定你的代码。</strong>根据四个变量的 Tone 值判断每个箭头的 L/R 方向，按 [消化][环境][动机][视角] 的顺序拼出4字母代码。</p>
+<p><strong>第二步：找到对应的格子。</strong>阅读该组合的核心特征和关键词标签。</p>
+<p><strong>第三步：理解你的"操作系统"。</strong>L多的人擅长执行和深耕，R多的人擅长发现和创新，混合型则是连接两个世界的桥梁。没有好坏之分。</p>
+</div>
+</div>
+
+<!-- ========== 分析器（输入框顺序：动机在视角前面）========== -->
+<div class="card">
+<div class="stit">CTB 能量变量分析器</div>
+<p>输入你四个变量位置的 Color、Tone、Base 数值，获取深度解读。</p>
+<p style="font-size:12px;color:var(--muted)">💡 数值来源：需从专业人类图软件（如 Maia Mechanics Imaging、Jovian Archive）查看精确度数换算，或在出生图中查看 Variable 箭头标注。</p>
+
+<div class="ifield">
+<div class="ig"><label>🍽️ 消化(Design Sun/E) · Color</label><select id="dsc"><option value="">选择</option><option value="1">1-食欲</option><option value="2">2-味觉</option><option value="3">3-渴觉</option><option value="4">4-触觉(环境)</option><option value="5">5-声音</option><option value="6">6-光线</option></select></div>
+<div class="ig"><label>🍽️ 消化 · Tone <small style="color:var(--danger)">→决定方向</small></label><select id="dst"><option value="">选择</option><option value="1">1-嗅觉(L←)</option><option value="2">2-味觉(L←)</option><option value="3">3-外视(L←)</option><option value="4">4-内视(R→)</option><option value="5">5-感觉(R→)</option><option value="6">6-触觉(R→)</option></select></div>
+<div class="ig"><label>🍽️ 消化 · Base</label><select id="dsb"><option value="">选择</option><option value="1">1-外部观察者</option><option value="2">2-孩子们</option><option value="3">3-母亲客观</option><option value="4">4-反中微子精神</option><option value="5">5-夏娃荐骨回应</option></select></div>
+</div>
+
+<div class="ifield">
+<div class="ig"><label>🏠 环境(Design Nodes) · Color</label><select id="dec"><option value="">选择</option><option value="1">1-洞穴</option><option value="2">2-市场</option><option value="3">3-厨房</option><option value="4">4-山脉</option><option value="5">5-山谷</option><option value="6">6-海岸</option></select></div>
+<div class="ig"><label>🏠 环境 · Tone <small style="color:var(--danger)">→决定方向</small></label><select id="det"><option value="">选择</option><option value="1">1-嗅觉(L←)</option><option value="2">2-味觉(L←)</option><option value="3">3-外视(L←)</option><option value="4">4-内视(R→)</option><option value="5">5-感觉(R→)</option><option value="6">6-触觉(R→)</option></select></div>
+<div class="ig"><label>🏠 环境 · Base</label><select id="deb"><option value="">选择</option><option value="1">1-外部观察者</option><option value="2">2-孩子们</option><option value="3">3-母亲客观</option><option value="4">4-反中微子精神</option><option value="5">5-夏娃荐骨回应</option></select></div>
+</div>
+
+<!-- 动机（排在视角前面，对应右上箭头）-->
+<div class="ifield">
+<div class="ig"><label>🔥 动机(Personality S/E) · Color</label><select id="psc"><option value="">选择</option><option value="1">1-恐惧未知</option><option value="2">2-希望</option><option value="3">3-欲望</option><option value="4">4-必要性</option><option value="5">5-修复</option><option value="6">6-只是存在</option></select></div>
+<div class="ig"><label>🔥 动机 · Tone <small style="color:var(--danger)">→决定方向</small></label><select id="pst"><option value="">选择</option><option value="1">1-嗅觉(L←)</option><option value="2">2-味觉(L←)</option><option value="3">3-外视(L←)</option><option value="4">4-内视(R→)</option><option value="5">5-感觉(R→)</option><option value="6">6-触觉(R→)</option></select></div>
+<div class="ig"><label>🔥 动机 · Base</label><select id="psb"><option value="">选择</option><option value="1">1-外部观察者</option><option value="2">2-孩子们</option><option value="3">3-母亲客观</option><option value="4">4-反中微子精神</option><option value="5">5-夏娃荐骨回应</option></select></div>
+</div>
+
+<!-- 视角（排在动机后面，对应右下箭头）-->
+<div class="ifield">
+<div class="ig"><label>👁️ 视角(Personality Nodes) · Color</label><select id="pec"><option value="">选择</option><option value="1">1-生存</option><option value="2">2-可能性</option><option value="3">3-权力</option><option value="4">4-缺失</option><option value="5">5-概率</option><option value="6">6-个人化</option></select></div>
+<div class="ig"><label>👁️ 视角 · Tone <small style="color:var(--danger)">→决定方向</small></label><select id="pet"><option value="">选择</option><option value="1">1-嗅觉(L←)</option><option value="2">2-味觉(L←)</option><option value="3">3-外视(L←)</option><option value="4">4-内视(R→)</option><option value="5">5-感觉(R→)</option><option value="6">6-触觉(R→)</option></select></div>
+<div class="ig"><label>👁️ 视角 · Base</label><select id="peb"><option value="">选择</option><option value="1">1-外部观察者</option><option value="2">2-孩子们</option><option value="3">3-母亲客观</option><option value="4">4-反中微子精神</option><option value="5">5-夏娃荐骨回应</option></select></div>
+</div>
+
+<div style="text-align:center;margin-top:16px">
+<button class="btn" onclick="analyze()">⬡ 开始分析</button>
+</div>
+
+<div id="rsl"></div>
+</div>
+
+<!-- 底部版权 -->
+<p class="fnote" style="margin-top:28px;border-top:1px solid var(--border);padding-top:14px">
+CTB 能量变量分析系统 <strong style="color:var(--primary)">V8</strong><br>
+Based on Human Design Variable Theory by Ra Uru Hu · Jovian Archive<br>
+仅供自我探索参考，不构成专业人类图解读<br>
+<span style="display:block;margin-top:6px;color:var(--primary);font-weight:600">Powered By Kan Man Tang</span>
+</p>
+
+</div>
+
+<script>
+// ========== 数据定义 ==========
+const DC={1:{n:'食欲',e:'Appetite',d:'一次只吃一种食物效果最佳。分离进食，简单纯净。'},2:{n:'味觉',e:'Taste',d:'吃离家近的本地简单产品。饮食固定，一致性是关键。'},3:{n:'渴觉',e:'Thirst',d:'摄入物的温度效应——不仅物理冷热，还有对身体升温降温的影响。'},4:{n:'触觉(环境)',e:'Touch',d:'关注进食环境胜过吃什么。平静 vs 刺激性环境。'},5:{n:'声音',e:'Sound',d:'创造合适的声学环境。高声 vs 低声环境。'},6:{n:'光线',e:'Light',d:'进食时光线的重要影响。日光 vs 无日光的区别。'}};
+const EC={1:{n:'洞穴',e:'Caves',d:'最少入口的安全空间，背靠墙坐，掌控进出。'},2:{n:'市场',e:'Markets',d:'持续活动与交换的动态环境。'},3:{n:'厨房',e:'Kitchens',d:'持续变化、实验新事物的创造性空间。'},4:{n:'山脉',e:'Mountains',d:'鸟瞰视野的高处，看清大局。'},5:{n:'山谷',e:'Valleys',d:'能量自由流动，声音环绕的社交空间。'},6:{n:'海岸',e:'Shores',d:'两个世界交汇的边界地带。'}};
+const MC={1:{n:'对未知的恐惧',e:'Fear of Unknown',d:'被理解事物的需要驱动，深入学习研究。'},2:{n:'希望',e:'Hope',d:'信任过程，何时不行动何时保持冷静。'},3:{n:'欲望',e:'Desire',d:'聚焦目标坚定努力，领导他人朝新方向前进。'},4:{n:'必要性',e:'Necessity',d:'专注真正需要的，穿透噪音识别本质。'},5:{n:'修复',e:'Fixing',d:'为自己和他人改善事物，看清有效无效。'},6:{n:'只是存在',e:'Just Being',d:'无议程目的，纯粹为了体验而做。'}};
+const PC={1:{n:'生存',e:'Survival',d:'通过生存需求看世界——安全、关系、资源。'},2:{n:'可能性',e:'Possibility',d:'在一切中看到潜力，帮助他人认识自身潜力。'},3:{n:'权力',e:'Power',d:'谁拥有/滥用/缺乏权力的竞争视角。'},4:{n:'缺失',e:'Lack',d:'看到缺失什么，不必修复一切，有时只需观察。'},5:{n:'概率',e:'Probability',d:'识别趋势走向，务实负责不陷入幻想。'},6:{n:'个人化',e:'Personal',d:'透过个人滤镜看一切，可能带有天真。'}};
+
+const TN={
+1:{n:`嗅觉型`,e:`Smell/Olfactive`,md:`通过"嗅出真相"来感知——直觉雷达`,lr:`独处消化，精简留白`,pr:`直觉暗示性信息`,kp:`过度依赖直觉忽视事实`,dir:`L`},
+2:{n:`味觉型`,e:`Taste/Gustatory`,md:`通过"亲口尝"来学习——必须亲身体验`,lr:`体验式学习，做中学`,pr:`参与尝试互动式`,kp:`反复犯错不听劝告`,dir:`L`},
+3:{n:`外在视觉型`,e:`Outer Vision`,md:`通过"看"理解——依赖外部视觉信息`,lr:`视觉学习，思维导图最佳`,pr:`视觉化呈现`,kp:`忽视内在感受`,dir:`L`},
+4:{n:`内在视觉型`,e:`Inner Vision`,md:`通过"内在之眼"感知——想象力冥想`,lr:`安静中内在想象，留白自见`,pr:`抽象有想象空间`,kp:`内在世界脱离现实`,dir:`R`},
+5:{n:`感觉型`,e:`Feeling`,md:`人形情绪雷达——感知空间情绪频率`,lr:`情感式学习，建立连接`,pr:`有温度人情味`,kp:`被他人情绪淹没耗竭`,dir:`R`},
+6:{n:`触觉型`,e:`Touch/Tactile`,md:`身体参与物理接触——身体第一认知器官`,lr:`动觉学习，走动触摸操作`,pr:`可触摸操作的载体`,kp:`安静坐着表现不佳（其实身体动=大脑在学）`,dir:`R`}
+};
+
+const BS={
+1:{n:`外部观察者`,e:`The Outside Observer`,decl:`"我定义" I Define`,yy:`纯阳 Yang/Yang`,sns:`视觉 Seeing`,q:`在哪里？Where?`,type:`Reactive 反应型`,theme:`Movement 运动`,macro:`运动→能量→创造→看见→风景→环境`,micro:`个性→活动→反应→限制→视角→关系`,bio:`2.5亿精子中仅数千抵达输卵管，克服障碍获得超活化能力。主动抵达，非被动产物。`,action:`不断探索新环境，定期换路线/场景/视野。决策基于"看到了什么"。迷茫时走出去，用眼睛重新扫描世界。`},
+2:{n:`孩子们`,e:`The Children`,decl:`"我记得" I Remember`,yy:`阳/阴 Yang/Yin`,sns:`味觉 Taste`,q:`是什么？What?`,type:`Integrative 整合型`,theme:`Evolution 进化`,macro:`进化→重力→记忆→品味→爱→光`,micro:`心智→性格→分离→自然→整合→精神`,bio:`线粒体供能、顶体释酶、细胞核融合——层层递进为最终融合做准备。天然整合碎片成完整图景。`,action:`通过"品味"生活积累智慧，允许自己慢慢体验。适合做项目协调/知识管理角色。记录和写下经验——你的记忆是团队财富。`},
+3:{n:`母亲客观`,e:`Mother Objective`,decl:`"我是" I Am`,yy:`纯阴 Yin/Yin`,sns:`触觉 Touch`,q:`什么时候？When?`,type:`Objective 客观型`,theme:`Being 存在`,macro:`存在→物质→触觉→性→生存`,micro:`身体→生物学→化学→客观性→几何→轨迹`,bio:`卵子不平等分裂，牺牲三个极体保全一个卵子。纯粹的给予机制。皮质反应保护免受多重侵入。`,action:`需要物理亲近感和触碰才能正常运作。面对面交流至关重要。适合养育/教导/支持角色。人生课题：设定清晰的身心边界防止耗尽。`},
+4:{n:`反中微子精神`,e:`Anti-Neutrino Spirit`,decl:`"我设计" I Design`,yy:`阴/阳 Yin/Yin`,sns:`嗅觉 Smell`,q:`为什么？Why?`,type:`Progressive 渐进型`,theme:`Design 设计`,macro:`设计→结构→进步→嗅觉→生命→艺术`,micro:`自我→智人→成长→衰败→连续性→显化`,bio:`核膜消失，46条染色体融合重建——从二到一的创造性合并。不是跟随旧路，而是设计新的可能。`,action:`强大的嗅出真相和设计变革天赋。适合战略规划/系统设计/改革推动。警惕：设计冲动可能导致过早改变未成熟的事物。等"嗅觉确认"后再行动。`},
+5:{n:`夏娃荐骨回应`,e:`Eve Sacral Response`,decl:`"我思考" I Think`,yy:`中心整合场`,sns:`听觉 Hearing`,q:`谁？Who?`,type:`Subjective 主观型`,theme:`Space 空间`,macro:`空间→形式→幻象→听觉→音乐→自由`,micro:`人格→类型→幻想→主观性→节奏→时机`,bio:`合子——第一个细胞，性别确定，快速分裂并着床。潜能展开的起点，所有可能性封装于此。`,action:`位于四基中心，处理"谁"这个终极幻象。沟通表达是最深突变力量，对他人存在感有强大影响力。多倾听少急于定义"我是谁"。你的力量：不确定中的自在。`}
+};
+
+// 维度标签（顺序：ps 在 pe 前）
+const DIMS={
+ds:{l:'消化',s:'🍽️',full:'消化 Determination (Design Sun&Earth)',c:'subconscious',d:'身体如何获得最佳滋养？饮食方案——PHS 第一方面'},
+de:{l:'环境',s:'🏠',full:'环境 Environment (Design Nodes)',c:'subconscious',d:'什么环境滋养你的神经系统？——PHS 第二方面'},
+ps:{l:'动机',s:'🔥',full:'动机 Motivation (Personality Sun&Earth)',c:'conscious',d:'什么驱动你的行动？——Rave Psychology 第一方面（右上箭头）'},
+pe:{l:'视角',s:'👁️',full:'视角 Perspective (Personality Nodes)',c:'conscious',d:'你通过什么透镜看世界？——Rave Psychology 第二方面（右下箭头）'}
+};
+
+function v(id){return document.getElementById(id)?document.getElementById(id).value:''}
+
+function analyze(){
+try{
+const inp={
+ ds:{c:v('dsc'),t:v('dst'),b:v('dsb')},
+ de:{c:v('dec'),t:v('det'),b:v('deb')},
+ ps:{c:v('psc'),t:v('pst'),b:v('psb')},
+ pe:{c:v('pec'),t:v('pet'),b:v('peb')}
+};
+let hasAny=false;
+for(let k in inp) for(let j in inp[k]) if(inp[k][j]) hasAny=true;
+if(!hasAny){document.getElementById('rsl').innerHTML=`<p style="color:var(--danger);text-align:center;margin-top:18px">⚠️ 请至少输入一个变量的数值</p>`;document.getElementById('rsl').style.display='block';return}
+
+let h=`<div style="margin-top:24px">`;
+
+// 箭头总览（顺序：ds,de,ps,pe）
+h+=`<div class="rcard"><h4>⬡ 你的四箭头总览（由 Tone 决定方向）</h4>`;
+h+=`<div class="arrows">`;
+for(let k of ['ds','de','ps','pe']){
+ const t=inp[k].t;
+ if(t){
+  const d=TN[t].dir===`L`?`←`:`→`;
+  const cls=TN[t].dir===`L`?`l`:`r`;
+  h+=`<div class="abox"><div class="asym ${cls}">${d}</div><div class="alab">${DIMS[k].s} ${DIMS[k].l}<br><span class="badge bdg-${t}">T${t} ${TN[t].n}</span><br><span style="font-size:10px;color:#aaa">${TN[t].dir===`L`?`+-`:`→+`} ${TN[t].dir===`L`?`左`:`右`}箭头</span></div></div>`;
+ }else{
+  h+=`<div class="abox"><div class="asym" style="color:#ccc">?</div><div class="alab">${DIMS[k].s} ${DIMS[k].l}<br><span style="font-size:11px;color:#aaa">未填写</span></div></div>`;
+ }
+}
+h+=`</div>`;
+
+// 统计
+const tones=Object.keys(inp).map(k=>inp[k].t).filter(Boolean);
+const lCnt=tones.filter(t=>TN[t].dir===`L`).length;
+const rCnt=tones.filter(t=>TN[t].dir===`R`).length;
+if(lCnt+rCnt>0){
+ h+=`<p style="text-align:center;margin:10px 0">`;
+ if(rCnt===4)h+=`<span class="tag tag-r">全右箭头 →→→→</span> 接收性认知主导`;
+ else if(lCnt===4)h+=`<span class="tag tag-l">全左箭头 ←←←←</span> 战略性认知主导`;
+ else h+=`<span class="tag tag-r">右×${rCnt}</span> <span class="tag tag-l">左×${lCnt}</span> 混合型认知架构`;
+ h+=`</p>`;
+}
+h+=`</div>`;
+
+// 各位置详细（顺序：消化→环境→动机→视角）
+for(let k of ['ds','de','ps','pe']){
+ const c=inp[k].c,t=inp[k].t,b=inp[k].b;
+ if(!c&&!t&&!b)continue;
+ const p=DIMS[k];
+ let colorData;
+ if(k===`ds`)colorData=DC; else if(k===`de`)colorData=EC; else if(k===`ps`)colorData=MC; else colorData=PC;
+
+ h+=`<div class="rcard">`;
+ h+=`<h4>${p.s} ${p.l} <span style="font-size:12px;color:var(--muted)">${p.full}</span></h4>`;
+ h+=`<p style="font-size:12px;color:var(--muted);margin-bottom:8px">${p.d}</p>`;
+
+ if(c&&colorData[c]){
+  const d=colorData[c];
+  h+=`<div style="margin:6px 0"><strong>🎨 Color ${c} · ${d.n} (${d.e})</strong></div>`;
+  h+=`<p>${d.d}</p>`;
+ }
+ if(t&&TN[t]){
+  const d=TN[t];
+  const dirTag=d.dir===`L`?`<span class="tag tag-l">← 左箭头 ${d.n}</span>`:`<span class="tag tag-r">→ 右箭头 ${d.n}</span>`;
+  h+=`<div style="margin:8px 0 4px"><strong>🔊 Tone ${t} · ${d.n} (${d.e}) ${dirTag}</strong></div>`;
+  h+=`<p>认知模式：<span class="hl">${d.md}</span></p>`;
+  h+=`<p>学习方式：<span class="hl">${d.lr}</span></p>`;
+  h+=`<p>接收偏好：<span class="hl">${d.pr}</span></p>`;
+  h+=`<p>潜在卡点：<span class="hl">${d.kp}</span></p>`;
+ }
+ if(b&&BS[b]){
+  const d=BS[b];
+  h+=`<div style="margin:8px 0 4px"><strong>⚖️ Base ${b} · ${d.n} (${d.e})</strong></div>`;
+  h+=`<p>类型：<span class="hl">${d.type}</span> | 主题：<span class="hl">${d.theme}</span></p>`;
+  h+=`<p>核心声明：<span class="hl">${d.decl}</span> | 阴阳：<span class="hl">${d.yy}</span></p>`;
+  h+=`<p>关联感官：<span class="hl">${d.sns}</span> | 核心问题：<span class="hl">${d.q}</span></p>`;
+  h+=`<p>本质解读：<span class="hl">${d.d}</span></p>`;
+  if(d.bio)h+=`<div style="margin-top:6px;padding:6px 10px;background:rgba(139,115,85,.06);border-radius:8px;font-size:12px;line-height:1.7"><strong>🧬 生物学隐喻：</strong>${d.bio}</div>`;
+  if(d.action)h+=`<div style="margin-top:6px;padding:8px 12px;background:rgba(184,140,56,.1);border-radius:8px;font-size:12.5px;line-height:1.8"><strong>💡 行动指引：</strong>${d.action}</div>`;
+ }
+ h+=`</div>`;
+}
+
+// ===== 增强版冲突分析 =====
+const conflicts=[];
+if(inp.ps.t&&inp.ds.t){
+ const pt=TN[inp.ps.t],dt=TN[inp.ds.t];
+ if(pt.dir!==dt.dir)conflicts.push({type:`cross`,title:`动机 vs 消化：行动驱动力与身体滋养方向相反`,
+ desc:`你的显意识"想做的"(动机Tone${inp.ps.t} ${pt.n})方向为${pt.dir===`L`?`←左战略`:`→右接收`}，但潜意识"身体需要的"(消化Tone${inp.ds.t} ${dt.n})方向为${dt.dir===`L`?`←左战略`:`→右接收`}。`,
+ impact:`你可能经常感到"脑子说往东、身体想往西"的拉扯。`,
+ advice:`【具体做法】先满足身体需求（正确的饮食/环境条件），再追求目标。身体状态好时再决策，效率和准确性都会提升。`});
+}
+if(inp.pe.t&&inp.de.t){
+ const pt=TN[inp.pe.t],dt=TN[inp.de.t];
+ if(pt.dir!==dt.dir)conflicts.push({type:`cross`,title:`视角 vs 环境：你看世界的方式与所需环境不一致`,
+ desc:`你看世界的方式(视角Tone${inp.pe.t} ${pt.n})方向为${pt.dir===`L`?`←左战略`:`→右接收`}，但你神经系统最舒适的环境(环境Tone${inp.de.t} ${dt.n})方向为${dt.dir===`L`?`←左战略`:`→右接收`}。`,
+ impact:`在你觉得"舒服的环境"里，反而可能看不清楚；或者你能看清的时候，环境又让你不安。`,
+ advice:`【具体做法】创建一个"混合空间"：既有符合环境Tone需求的物理条件（如光线/声音/布局），又有符合视角Tone需要的信息来源（如书籍/屏幕/社交）。`});
+}
+if(inp.ps.t&&inp.ds.t&&inp.ps.t!==inp.ds.t)conflicts.push({type:`mode`,title:`动机与消化：认知模式不同频`,
+ desc:`动机Tone=${TN[inp.ps.t].n}（${TN[inp.ps.t].dir===`L`?`战略`:`接收`}），消化Tone=${TN[inp.ds.t].n}（${TN[inp.ds.t].dir===`L`?`战略`:`接收`}）。两者属于不同的感官认知频道。`,
+ impact:`你的"动力源"和"燃料补给站"说着不同的语言。`,
+ advice:`【具体做法】用你的动机Tone方式（${TN[inp.ps.t].lr}）来做计划和设目标，用你的消化Tone方式（${TN[inp.ds.t].lr}）来安排日常习惯。两套系统并行，不强求统一。`});
+if(inp.pe.t&&inp.de.t&&inp.pe.t!==inp.de.t)conflicts.push({type:`mode`,title:`视角与环境：认知模式不同频`,
+ desc:`视角Tone=${TN[inp.pe.t].n}，环境Tone=${TN[inp.de.t].n}。两者属于不同的感官认知频道。`,
+ impact:`你理解和判断世界的方式与你所处的物理环境之间存在翻译成本。`,
+ advice:`【具体做法】在外出或改变环境前，先用你的视角Tone方式预判一下将要看到什么。到了新环境后给自己15分钟"调频时间"。`});
+
+if(conflicts.length>0){
+ h+=`<div class="confl"><h5>⚡ 能量张力 & 整合要点</h5>`;
+ for(let c of conflicts){
+  h+=`<div style="margin:10px 0;padding:10px 12px;background:rgba(255,255,255,.6);border-radius:8px">`;
+  h+=`<p style="font-size:13px;font-weight:600;color:var(--danger);margin-bottom:4px">🔥 ${c.title}</p>`;
+  h+=`<p style="font-size:12.5px;line-height:1.8;margin-bottom:4px">${c.desc}</p>`;
+  h+=`<p style="font-size:12px;color:var(--warn);margin-bottom:4px"><strong>影响：</strong>${c.impact}</p>`;
+  h+=`<p style="font-size:12.5px;line-height:1.8;color:var(--success)"><strong>✅ 行动方案：</strong>${c.advice}</p>`;
+  h+=`</div>`;
+ }
+ h+=`<p style="font-size:12px;color:var(--muted);margin-top:10px">💡 张力不是缺陷——它是你内在创造力的来源。以上每一条都附带了可执行的整合策略。</p></div>`;
+} else if(tones.length>=2){
+ h+=`<div class="kpcard" style="border-left-color:var(--success)"><h5>✅ 能量一致性良好</h5>`;
+ h+=`<p>你当前填写的各个变量之间没有检测到方向冲突或模式冲突。这意味着你的显意识驱动力与潜意识滋养需求在同一频道上运行。</p>`;
+ h+=`<p>当然这只是基于已有数据的初步检测——完整的四变量分析（全部12个字段填满）能揭示更深层的一致性或张力模式。</p></div>`;
+}
+
+// ===== 增强版整合建议 =====
+h+=`<div class="kpcard" style="border-left-color:var(--accent)"><h5>🌟 整合建议 —— 你的个人行动指南</h5>`;
+if(tones.length>0){
+ if(rCnt===4){
+  h+=`<div style="margin:8px 0;padding:10px;background:rgba(255,255,255,.5);border-radius:8px">`;
+  h+=`<p style="font-weight:600;color:var(--primary)">🌊 全右箭头 →→→→ ｜ 纯粹接收型认知</p>`;
+  h+=`<p><strong>你的优势：</strong>极强的直觉力、创造力、适应能力。你能接收到别人忽略的信息。</p><p><strong>日常实践：</strong></p><ol style="padding-left:18px;font-size:12.5px;line-height:1.8">`;
+  h+=`<li>每天留出"什么都不做"的时间——答案会在放松时来到</li><li>做决定前先睡一觉，让潜意识整理信息</li><li>避免过度计划，信任"当下"的引导</li><li>找一个左箭头的伙伴帮你落实细节</li></ol></div>`;
+ } else if(lCnt===4){
+  h+=`<div style="margin:8px 0;padding:10px;background:rgba(255,255,255,.5);border-radius:8px">`;
+  h+=`<p style="font-weight:600;color:var(--primary)">🎯 全左箭头 ←←←← ｜ 纯粹战略性认知</p>`;
+  h+=`<p><strong>你的优势：</strong>深度聚焦能力、执行力、系统性思维。你是天生的完成者。</p><p><strong>日常实践：</strong></p><ol style="padding-left:18px;font-size:12.5px;line-height:1.8">`;
+  h+=`<li>用清单和日程表来管理生活——这对你来说是享受而非束缚</li><li>设置"强制休息"提醒，避免过度投入单一任务</li><li>每周安排一次"无目的活动"来激活右脑</li><li>大项目拆解成小步骤，一步步推进会让你有持续的成就感</li></ol></div>`;
+ } else {
+  const ratio=rCnt>lCnt?`偏右（接收${rCnt}/${rCnt+lCnt}）`:lCnt>rCnt?`偏左（战略${lCnt}/${rCnt+lCnt}）`:`均衡（${lCnt}:${rCnt}）`;
+  h+=`<p style="font-size:13px"><strong>你的整体认知架构：</strong>${ratio}</p>`;
+  const pT=[inp.ps.t,inp.pe.t].filter(Boolean),dT=[inp.ds.t,inp.de.t].filter(Boolean);
+  const pDir=pT.length>0?(pT.filter(t=>TN[t].dir===`L`).length>pT.filter(t=>TN[t].dir===`R`).length?`L`:pT.filter(t=>TN[t].dir===`L`).length<pT.filter(t=>TN[t].dir===`R`).length?`R`:`X`):``;
+  const dDir=dT.length>0?(dT.filter(t=>TN[t].dir===`L`).length>dT.filter(t=>TN[t].dir===`R`).length?`L`:dT.filter(t=>TN[t].dir===`L`).length<dT.filter(t=>TN[t].dir===`R`).length?`R`:`X`):``;
+  if(pDir&&dDir){
+   if(pDir!==dDir){
+    const pName=pDir===`L`?`战略（聚焦/分析）`:`接收（开放/流动）`;
+    const dName=dDir===`L`?`战略（规律/结构）`:`接收（灵活/变化）`;
+    h+=`<div style="margin:8px 0;padding:10px;background:rgba(255,255,255,.5);border-radius:8px">`;
+    h+=`<p style="font-weight:600;color:var(--warn)">⚡ 内外不同频 —— "自觉行为"和"身体本能"在不同频道运行</p>`;
+    h+=`<p>你的<strong>显意识（动机+视角）</strong>偏向<strong>${pName}</strong>，但你的<strong>潜意识（消化+环境）</strong>偏向<strong>${dName}</strong>。</p>`;
+    h+=`<p><strong>这意味着：</strong>你想做的事情和你的身体真正需要的，可能来自不同的驱动逻辑。这不是矛盾，而是丰富的层次——关键在于识别当前哪个层面在说话。</p><p><strong>行动策略：</strong></p><ul style="padding-left:18px;font-size:12.5px;line-height:1.8">`;
+    h+=`<li>做重大决策前，先检查身体状态——饿了吗？累了？环境舒服吗？</li><li>把身体需求当作"前置条件"：先吃对的东西、在对的环境里，再谈目标和愿景</li><li>记录下哪些时刻你觉得"身心合一"——这些时刻的模式值得复制</li></ul></div>`;
+   } else {
+    const alignName=pDir===`L`?`战略`:`接收`;
+    h+=`<div style="margin:8px 0;padding:10px;background:rgba(107,142,90,.08);border-radius:8px">`;
+    h+=`<p style="font-weight:600;color:var(--success)">✨ 内外同频 —— "想做的"和"身体要做的"在同一频道</p>`;
+    h+=`<p>你的显意识和潜意识都偏向<strong>${alignName}</strong>模式。这是一致性优势！</p><p><strong>行动策略：</strong></p><ul style="padding-left:18px;font-size:12.5px;line-height:1.8">`;
+    h+=`<li>利用这种一致性来建立深度专长——你的身心灵不会互相打架</li><li>注意：一致性强也可能意味着"盲区"——偶尔邀请相反类型的人给你反馈</li></ul></div>`;
+   }
+  }
+  if(rCnt>0&&lCnt>0){
+   h+=`<div style="margin:10px 0;padding:10px;background:rgba(255,255,255,.5);border-radius:8px">`;
+   h+=`<p style="font-weight:600;color:var(--primary)">🔄 混合型认知的平衡艺术</p><p>你同时拥有左箭头（战略）和右箭头（接收）的能力。关键是在对的场景用对的能力：</p>`;
+   h+=`<table style="width:100%;font-size:12px;margin-top:6px"><tr><td style="padding:4px;background:rgba(107,142,90,.1);border-radius:4px;font-weight:600">📋 用左箭头能力处理：</td><td>规划、执行、数据分析、项目管理、学习新技术、建立常规</td></tr>`;
+   h+=`<tr><td style="padding:4px;background:rgba(184,92,56,.1);border-radius:4px;font-weight:600">🎨 用右箭头能力处理：</td><td>创意、人际关系、休息恢复、直觉判断、艺术欣赏、应对变化</td></tr></table>`;
+   h+=`<p style="margin-top:6px;font-size:12px">💡 判断标准：如果任务有明确的"正确答案"→用左箭头模式；如果任务是开放的、需要灵感的→交给右箭头模式。</p></div>`;
+  }
+ }
+}
+
+const filledVars=[];
+for(let k of [`ds`,`de`,`ps`,`pe`]){
+ if(inp[k].t) filledVars.push({key:k,tone:inp[k].t,name:DIMS[k].l});
+}
+if(filledVars.length>=2){
+ h+=`<div style="margin-top:10px;padding:10px;background:rgba(184,140,56,.06);border-radius:8px">`;
+ h+=`<p style="font-weight:600;font-size:13px">📌 基于你的Tone组合的快速参考</p>`;
+ const toneNames=filledVars.map(v=>DIMS[v.key].l+`=`+TN[v.tone].n).join(`、`);
+ h+=`<p style="font-size:12px">你的Tone组合：${toneNames}</p>`;
+ const allLeft=filledVars.every(v=>TN[v.tone].dir===`L`);
+ const allRight=filledVars.every(v=>TN[v.tone].dir===`R`);
+ if(!allLeft&&!allRight){
+  const leftOnes=filledVars.filter(v=>TN[v.tone].dir===`L`);
+  const rightOnes=filledVars.filter(v=>TN[v.tone].dir===`R`);
+  if(leftOnes.length>0&&rightOnes.length>0){
+   h+=`<p style="font-size:12px;margin-top:4px"><strong>战略区（左←）：</strong>${leftOnes.map(v=>v.name).join(`、`)} —— 这些领域需要结构、计划、明确的步骤</p>`;
+   h+=`<p style="font-size:12px"><strong>接收区（右→）：</strong>${rightOnes.map(v=>v.name).join(`、`)} —— 这些领域适合放松、信任直觉、保持灵活</p>`;
+  }
+ }
+ h+=`</div>`;
+}
+
+h+=`</div>`;
+h+=`</div>`;
+document.getElementById(`rsl`).innerHTML=h;
+document.getElementById(`rsl`).style.display=`block`;
+document.getElementById(`rsl`).scrollIntoView({behavior:`smooth`,block:`start`});
+}catch(err){
+console.error(`CTB analyze error:`,err);
+document.getElementById(`rsl`).innerHTML=`<p style="color:red;text-align:center;margin-top:18px;padding:20px">⚠️ 分析出错：${err.message}<br><small style="color:#999">请检查输入值是否完整，或刷新页面重试</small></p>`;
+document.getElementById(`rsl`).style.display=`block`;
+}
+}
+</script>
+</body>
+</html>
