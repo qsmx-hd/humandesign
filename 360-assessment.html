@@ -660,7 +660,7 @@ body {
 /* Print - fix ghosting, blank space & colors */
 @page {
   size: A4;
-  margin: 8mm 8mm;
+  margin: 10mm 8mm 18mm 8mm;
 }
 @media print {
   * {
@@ -722,6 +722,23 @@ body {
     overflow: visible !important;
     height: auto !important;
   }
+
+  /* Print header/footer */
+  .print-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 12px;
+    font-size: 9px;
+    color: #999;
+    border-top: 1px solid #eee;
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+  }
 }
 
 /* ========== FOOTER ========== */
@@ -754,6 +771,11 @@ body {
 }
 .toast.show { opacity: 1; }
 
+/* Print footer - hidden on screen, visible when printing */
+.print-footer {
+  display: none;
+}
+
 /* Progress indicator on sections */
 .section-progress {
   font-size: 12px;
@@ -785,22 +807,22 @@ body {
       <div class="header-logo">
         <!-- 雷达图/评估图标 -->
         <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="24" cy="24" r="20" stroke="#C4956A" stroke-width="1.8" fill="none" opacity="0.5"/>
-          <circle cx="24" cy="24" r="14" stroke="#C4956A" stroke-width="1.5" fill="none" opacity="0.65"/>
-          <circle cx="24" cy="24" r="7" stroke="#C4956A" stroke-width="1.5" fill="none" opacity="0.85"/>
-          <line x1="24" y1="4" x2="24" y2="24" stroke="#C4956A" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="41.5" y2="31" stroke="#C4956A" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="6.5" y2="31" stroke="#C4956A" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="24" y2="38" stroke="#C4956A" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="38" y2="11" stroke="#C4956A" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="10" y2="11" stroke="#C4956A" stroke-width="1.5"/>
-          <circle cx="24" cy="4" r="2.5" fill="#C4956A"/>
-          <circle cx="41.5" cy="31" r="2.5" fill="#C4956A" opacity="0.8"/>
-          <circle cx="6.5" cy="31" r="2.5" fill="#C4956A" opacity="0.8"/>
-          <circle cx="24" cy="38" r="2.5" fill="#C4956A" opacity="0.7"/>
-          <circle cx="38" cy="11" r="2.5" fill="#C4956A" opacity="0.8"/>
-          <circle cx="10" cy="11" r="2.5" fill="#C4956A" opacity="0.8"/>
-          <circle cx="24" cy="24" r="3" fill="#F5E6C8" stroke="#C4956A" stroke-width="1.5"/>
+          <circle cx="24" cy="24" r="20" stroke="#fff" stroke-width="1.8" fill="none" opacity="0.5"/>
+          <circle cx="24" cy="24" r="14" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.65"/>
+          <circle cx="24" cy="24" r="7" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.85"/>
+          <line x1="24" y1="4" x2="24" y2="24" stroke="#fff" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="41.5" y2="31" stroke="#fff" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="6.5" y2="31" stroke="#fff" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="24" y2="38" stroke="#fff" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="38" y2="11" stroke="#fff" stroke-width="1.5"/>
+          <line x1="24" y1="24" x2="10" y2="11" stroke="#fff" stroke-width="1.5"/>
+          <circle cx="24" cy="4" r="2.5" fill="#fff"/>
+          <circle cx="41.5" cy="31" r="2.5" fill="#fff" opacity="0.8"/>
+          <circle cx="6.5" cy="31" r="2.5" fill="#fff" opacity="0.8"/>
+          <circle cx="24" cy="38" r="2.5" fill="#fff" opacity="0.7"/>
+          <circle cx="38" cy="11" r="2.5" fill="#fff" opacity="0.8"/>
+          <circle cx="10" cy="11" r="2.5" fill="#fff" opacity="0.8"/>
+          <circle cx="24" cy="24" r="3" fill="#C4956A" stroke="#fff" stroke-width="1.5"/>
         </svg>
       </div>
       <div>
@@ -1251,12 +1273,18 @@ body {
 
 <!-- FOOTER -->
 <div class="footer">
-  360°评估系统 V2.0<br>
+  360°评估系统 V3.0<br>
   Powered By Kan Man Tang
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- PRINT FOOTER -->
+<div class="print-footer" id="printFooter">
+  <span class="pf-path" id="pfPath"></span>
+  <span class="pf-page" id="pfPage"></span>
+</div>
 
 <script>
 // ============ INITIALIZATION ============
@@ -1713,6 +1741,53 @@ window.addEventListener('DOMContentLoaded', () => {
   autoRestore();
   updateProgress();
 });
+
+// ========== PRINT FOOTER (file path + page numbers) ==========
+(function() {
+  const pfPath = document.getElementById('pfPath');
+  const pfPage = document.getElementById('pfPage');
+  if (!pfPath || !pfPage) return;
+
+  // File path
+  pfPath.textContent = location.href;
+
+  function setupPrintFooter() {
+    // Estimate total pages: content height / usable page height (A4 ≈ 297mm - margins)
+    const pageH = (297 / 25.4) * 96; // A4 height in px at 96dpi ≈ 1123px
+    const marginT = (10 / 25.4) * 96;
+    const marginB = (18 / 25.4) * 96;
+    const usableH = pageH - marginT - marginB;
+    const bodyHeight = document.body.scrollHeight;
+    const totalPages = Math.max(1, Math.ceil(bodyHeight / usableH));
+
+    let currentPage = 1;
+    pfPage.textContent = `${currentPage} / ${totalPages}`;
+
+    // Re-calculate on scroll during print preview
+    const _scrollHandler = function() {
+      currentPage = Math.round(window.scrollY / usableH) + 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      pfPage.textContent = `${currentPage} / ${totalPages}`;
+    };
+
+    window.addEventListener('scroll', _scrollHandler);
+    // Clean up after print
+    setTimeout(() => {
+      window.removeEventListener('scroll', _scrollHandler);
+    }, 30000);
+  }
+
+  // Modern browsers
+  window.addEventListener('beforeprint', setupPrintFooter);
+
+  // Fallback for older browsers
+  if (window.matchMedia) {
+    window.matchMedia('print').addEventListener('change', (e) => {
+      if (e.matches) setupPrintFooter();
+    });
+  }
+})();
 </script>
 
 </body>
