@@ -48,7 +48,7 @@ body {
 
 /* ========== HEADER ========== */
 .header {
-  background: linear-gradient(135deg, #2D2118 0%, #4A3728 50%, #5C4433 100%);
+  background: linear-gradient(135deg, #C4956A 0%, #A87B52 50%, #8B6340 100%);
   color: #fff;
   padding: 0;
   position: sticky;
@@ -73,7 +73,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,7 +234,7 @@ body {
 
 .section-header {
   padding: 15px 24px;
-  background: linear-gradient(135deg, #2D2118, #4A3728);
+  background: linear-gradient(135deg, #C4956A, #A87B52);
   color: #fff;
   display: flex;
   align-items: center;
@@ -250,7 +250,7 @@ body {
   gap: 10px;
 }
 .section-num {
-  background: rgba(196,149,106,0.35);
+  background: rgba(255,255,255,0.22);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -259,7 +259,7 @@ body {
   justify-content: center;
   font-size: 14px;
   font-weight: 700;
-  color: #F5E6C8;
+  color: #fff;
 }
 .section-toggle { font-size: 16px; transition: transform var(--transition); opacity: 0.75; }
 .section-card.collapsed .section-toggle { transform: rotate(-90deg); }
@@ -440,7 +440,7 @@ body {
 .report-section.visible { display: block; }
 
 .report-header {
-  background: linear-gradient(135deg, #2D2118, #4A3728);
+  background: linear-gradient(135deg, #C4956A, #A87B52);
   color: #fff;
   border-radius: var(--radius) var(--radius) 0 0;
   padding: 32px;
@@ -657,22 +657,30 @@ body {
   line-height: 1.6;
 }
 
-/* Print - fix ghosting & right border */
+/* Print - fix ghosting, blank space & colors */
 @page {
   size: A4;
-  margin: 12mm 10mm;
+  margin: 8mm 8mm;
 }
 @media print {
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
   }
   body {
     background: #fff !important;
     -webkit-print-color-adjust: exact !important;
+    font-smooth: always !important;
   }
-  .header { position: static !important; }
+  .header {
+    position: static !important;
+    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
+    -webkit-print-color-adjust: exact !important;
+  }
   .header-actions { display: none !important; }
   .btn-generate, .submit-hint, .section-toggle, .header-actions { display: none !important; }
   .container {
@@ -682,28 +690,38 @@ body {
     overflow: visible !important;
   }
   .intro-card, .section-card, .report-body, .report-section.visible {
-    break-inside: avoid;
-    page-break-inside: avoid;
     overflow: visible !important;
+    box-shadow: none !important;
   }
   .section-card {
     box-shadow: none !important;
     border: 1px solid #ccc !important;
     max-width: 100% !important;
+    page-break-inside: auto;
+    break-inside: auto;
   }
   .section-header {
-    background: #2D2118 !important;
+    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+  .section-progress {
+    opacity: 1 !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+  }
   .report-header {
-    background: #2D2118 !important;
+    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
   .report-section.visible { display: block !important; }
-  /* Fix right border clipping */
-  @page { margin: 12mm 8mm; }
+  /* Ensure no blank space from truncation */
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+  }
 }
 
 /* ========== FOOTER ========== */
@@ -722,7 +740,7 @@ body {
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background: #2D2118;
+  background: #A87B52;
   color: #fff;
   padding: 12px 28px;
   border-radius: 30px;
@@ -739,9 +757,10 @@ body {
 /* Progress indicator on sections */
 .section-progress {
   font-size: 12px;
-  opacity: 0.75;
-  font-weight: 400;
-  color: #F5E6C8;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Responsive */
@@ -1301,7 +1320,7 @@ function updateProgress() {
     const progEl = document.getElementById('prog' + info.secId.slice(3));
     if (progEl) {
       progEl.textContent = `${scored}/${info.items} 完成`;
-      progEl.style.color = scored === info.items ? '#F5E6C8' : '';
+      progEl.style.color = scored === info.items ? '#fff' : 'rgba(255,255,255,0.8)';
     }
   });
 }
@@ -1589,7 +1608,7 @@ function drawRadarChart(dimEntries, dimScores) {
           },
           pointLabels: {
             font: { size: 13, weight: '600' },
-            color: '#2D2118'
+            color: '#5C4A32'
           },
           grid: {
             color: 'rgba(196, 149, 106, 0.15)'
