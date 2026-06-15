@@ -46,27 +46,46 @@
     .nav-bar {
       background: #fff;
       border-bottom: 1px solid #E8DCC8;
-      padding: 8px 0;
-      text-align: center;
+      padding: 0;
       position: sticky;
       top: 0;
       z-index: 100;
+    }
+    .nav-bar-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
     }
     .nav-bar a {
       color: #8B7355;
       text-decoration: none;
       font-size: 13px;
-      margin: 0 12px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: background 0.2s;
+      padding: 10px 14px;
+      border-radius: 0;
+      transition: color 0.2s, background 0.2s;
       display: inline-block;
+      position: relative;
+      white-space: nowrap;
     }
-    .nav-bar a:hover { background: #F5F0E8; }
+    .nav-bar a:hover { background: #F5F0E8; color: #C4956A; }
     .nav-bar a.active {
-      background: #FDF5EB;
+      background: transparent;
       color: #C4956A;
       font-weight: 500;
+    }
+    .nav-bar a.active::after {
+      content: '';
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 0;
+      height: 3px;
+      background: #C4956A;
+      border-radius: 2px 2px 0 0;
     }
 
     /* ===== 主内容区 ===== */
@@ -355,7 +374,9 @@
 
     @media (max-width: 640px) {
       .top-bar h1 { font-size: 18px; }
-      .nav-bar a { margin: 0 6px; padding: 5px 8px; font-size: 12px; }
+      .nav-bar-inner { gap: 0; flex-wrap: wrap; }
+      .nav-bar a { margin: 0 2px; padding: 8px 8px; font-size: 12px; }
+      .nav-bar a.active::after { left: 8px; right: 8px; }
       .card-body, .card-features, .card-actions, .detail-inner { padding-left: 0; }
       .card-header { flex-wrap: wrap; }
       .card-tag { margin-left: 62px; margin-top: 6px; }
@@ -388,11 +409,14 @@
 
   <!-- Navigation -->
   <div class="nav-bar">
-    <a href="bg5-maps.html" class="active">地图总览</a>
-    <a href="wealth.html">个人人类图</a>
-    <a href="bg5-interaction-diagnostic.html">双人互动诊断</a>
-    <a href="bg5-team-map.html">团队能量图谱</a>
-    <a href="oc16-organization-analysis.html">OC16 组织分析</a>
+    <div class="nav-bar-inner">
+      <a href="bg5-maps.html" class="active">地图总览</a>
+      <a href="wealth.html">个人人类图</a>
+      <a href="bg5-interaction-diagnostic.html">双人互动诊断</a>
+      <a href="bg5-team-map.html">团队能量图谱</a>
+      <a href="oc16-organization-analysis.html">OC16 组织分析</a>
+      <a href="360-assessment.html">360° 评估</a>
+    </div>
   </div>
 
   <!-- 主内容 -->
