@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生时校准服务 —— 人类图精确校准系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F0E8;--card-bg:#FFFCF7;--primary:#C4956A;--primary-light:#D4B08A;
+  --deep:#2D2118;--muted:#8B7355;--border:#E8DCC8;--accent:#B8860B;
+  --section-bg:#EDE6DA;--highlight:#FFF3E0;--success:#6B8E5A;--warn:#C49A3C;--danger:#B85C38;
+  --shadow:0 2px 14px rgba(45,33,24,.07);--shadow-lg:0 8px 32px rgba(45,33,24,.12);
+}
+body{
+  background:var(--bg);color:var(--deep);
+  font-family:'PingFang SC','Microsoft YaHei',-apple-system,sans-serif;
+  line-height:1.8;font-size:14px;min-height:100vh;
+}
+
+/* ===== Top Bar ===== */
+.top-bar{
+  background:linear-gradient(135deg,#2D2118 0%,#4A3728 100%);
+  padding:20px 0 16px;text-align:center;
+}
+.top-bar .logo-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px}
+.top-bar .logo-icon{width:36px;height:36px;flex-shrink:0}
+.top-bar h1{color:#C4956A;font-size:22px;font-weight:500;letter-spacing:2px}
+.top-bar p{color:#A08968;font-size:13px;margin-top:4px}
+
+/* ===== Nav ===== */
+.nav-bar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-bar-inner{display:flex;justify-content:center;align-items:center;gap:4px;max-width:960px;margin:0 auto;padding:0 16px}
+.nav-bar a{color:var(--muted);text-decoration:none;font-size:13px;padding:10px 14px;transition:color .2s,background .2s;display:inline-block;position:relative;white-space:nowrap}
+.nav-bar a:hover{background:var(--bg);color:var(--primary)}
+.nav-bar a.active{background:transparent;color:var(--primary);font-weight:500}
+.nav-bar a.active::after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--primary);border-radius:2px 2px 0 0}
+
+/* ===== Container ===== */
+.container{max-width:960px;margin:0 auto;padding:32px 20px 60px}
+
+/* ===== Page Header ===== */
+.page-header{text-align:center;margin-bottom:28px}
+.page-header h2{font-size:22px;font-weight:600;color:var(--deep);margin-bottom:6px}
+.page-header .sub{font-size:14px;color:var(--muted);line-height:1.7}
+.page-header::after{content:'';display:block;width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:16px auto 0}
+
+/* ===== Card ===== */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:26px 30px;margin-bottom:18px;box-shadow:var(--shadow)}
+.card .stit{font-size:17px;font-weight:700;color:var(--primary);border-left:4px solid var(--primary);padding-left:12px;margin-bottom:14px}
+
+/* ===== Step Wizard ===== */
+.step-indicator{display:flex;justify-content:center;gap:0;margin-bottom:32px;position:relative}
+.step-dot-wrap{display:flex;align-items:center;gap:0}
+.step-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;background:#fff;border:2px solid var(--border);color:var(--muted);transition:all .3s;position:relative;z-index:2}
+.step-dot.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 0 0 6px rgba(196,149,106,.15)}
+.step-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+.step-line{width:80px;height:2px;background:var(--border);position:relative;z-index:1}
+.step-line.done{background:var(--success)}
+.step-label-group{text-align:center;margin-top:8px}
+.step-label-group .step-num{font-size:12px;color:var(--muted);font-weight:600}
+.step-label-group .step-name{font-size:13px;color:var(--deep);font-weight:500}
+.step-item{display:flex;flex-direction:column;align-items:center;min-width:90px}
+
+/* ===== Form ===== */
+.form-group{margin:16px 0}
+.form-label{font-size:14px;font-weight:600;color:var(--deep);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.form-label .icon{font-size:18px}
+.form-hint{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.6}
+.input-row{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+.input-field{display:flex;flex-direction:column;gap:4px}
+.input-field label{font-size:13px;font-weight:600;color:var(--muted)}
+.input-field input,.input-field select{padding:9px 14px;border:1px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--deep);font-size:14px;min-width:120px;outline:none;font-family:inherit}
+.input-field input:focus,.input-field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(196,149,106,.15)}
+.input-field input::placeholder{color:#C4B8A8;font-size:13px}
+
+.time-range-box{background:var(--highlight);border:1px solid rgba(196,149,106,.2);border-radius:12px;padding:18px 20px;margin:14px 0}
+.time-range-box .range-label{font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px}
+
+/* ===== Life Event Cards ===== */
+.event-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:12px 0;position:relative;transition:all .2s}
+.event-card:hover{border-color:var(--primary-light);box-shadow:0 2px 8px rgba(196,149,106,.08)}
+.event-card .event-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.event-card .event-num{font-size:15px;font-weight:700;color:var(--primary)}
+.event-card .event-remove{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;transition:all .2s}
+.event-card .event-remove:hover{color:var(--danger);border-color:var(--danger)}
+.event-card .event-row{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0}
+.event-card select,.event-card input{padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--deep);font-size:13px;font-family:inherit;outline:none}
+.event-card select:focus,.event-card input:focus{border-color:var(--primary)}
+.event-card input{min-width:140px}
+
+/* ===== Buttons ===== */
+.btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;padding:11px 28px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:1px;font-family:inherit}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(196,149,106,.4)}
+.btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
+.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary);padding:9px 24px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
+.btn-outline:hover{background:var(--highlight);border-color:var(--accent)}
+.btn-small{padding:7px 18px;font-size:13px}
+.btn-row{display:flex;gap:12px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+
+/* ===== Info Boxes ===== */
+.info-box{background:linear-gradient(135deg,#FDF8F0,#FFF5E8);border:1px solid rgba(196,149,106,.15);border-radius:12px;padding:18px 22px;margin:14px 0}
+.info-box .info-title{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.info-box p{font-size:13px;color:var(--muted);line-height:1.8}
+
+.warn-box{background:rgba(196,154,60,.06);border:1px solid rgba(196,154,60,.2);border-radius:12px;padding:16px 20px;margin:14px 0}
+.warn-box p{font-size:13px;color:var(--warn);line-height:1.8}
+.warn-box strong{color:var(--danger)}
+
+/* ===== Results ===== */
+#results{display:none}
+.result-header{text-align:center;margin-bottom:24px}
+.result-header h2{font-size:20px;color:var(--deep);margin-bottom:6px}
+.result-header p{font-size:14px;color:var(--muted)}
+
+.candidate-card{background:var(--card-bg);border:2px solid var(--border);border-radius:14px;padding:22px 26px;margin:16px 0;position:relative;transition:all .2s}
+.candidate-card.best{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary),var(--shadow-lg)}
+.candidate-card:hover{box-shadow:var(--shadow-lg)}
+.candidate-card .match-badge{position:absolute;top:-12px;right:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:4px 16px;border-radius:16px;font-size:13px;font-weight:700}
+.candidate-card.best .match-badge{background:linear-gradient(135deg,var(--success),#4A7A3A)}
+.candidate-card .candidate-time{font-size:18px;font-weight:700;color:var(--deep);margin-bottom:4px}
+.candidate-card .candidate-sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+.candidate-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.candidate-detail .detail-item{background:var(--bg);border-radius:8px;padding:10px 14px;font-size:13px;line-height:1.7}
+.candidate-detail .d-label{font-size:12px;color:var(--muted);font-weight:600}
+.candidate-detail .d-value{font-size:14px;font-weight:600;color:var(--deep)}
+
+.candidate-changes{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.candidate-changes .ch-title{font-size:14px;font-weight:600;color:var(--primary);margin-bottom:8px}
+.change-item{display:inline-flex;align-items:center;gap:6px;background:var(--highlight);border-radius:8px;padding:5px 12px;font-size:13px;margin:3px 4px}
+.change-item.add{border-left:3px solid var(--success)}
+.change-item.remove{border-left:3px solid var(--danger);text-decoration:line-through;opacity:.7}
+.change-item.modify{border-left:3px solid var(--warn)}
+
+/* ===== Explanation ===== */
+.explain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0}
+.explain-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.explain-card .e-icon{font-size:32px;margin-bottom:8px}
+.explain-card h4{font-size:15px;color:var(--deep);margin-bottom:4px}
+.explain-card p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ===== Footer ===== */
+.footer-note{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;line-height:2;border-top:1px solid var(--border);margin-top:20px}
+.footer-note .credit{color:var(--primary);font-weight:600;margin-top:8px;display:block}
+
+/* ===== Responsive ===== */
+@media(max-width:700px){
+  .top-bar h1{font-size:18px}
+  .nav-bar-inner{gap:0;flex-wrap:wrap}
+  .nav-bar a{padding:8px 8px;font-size:12px}
+  .nav-bar a.active::after{left:8px;right:8px}
+  .step-line{width:40px}
+  .container{padding:20px 12px}
+  .card{padding:18px 16px}
+  .input-row{flex-direction:column}
+  .candidate-detail{grid-template-columns:1fr}
+  .event-card .event-row{flex-direction:column}
+}
+
+@media print{
+  body{background:#fff!important;font-size:11px;line-height:1.6}
+  *{color:#000!important;background:#fff!important;border-color:#ccc!important;box-shadow:none!important}
+  .top-bar,.nav-bar,.btn-row,.event-remove{display:none!important}
+  .container{padding:10px!important;max-width:100%!important}
+  .card{padding:12px!important;margin-bottom:10px!important}
+  #results{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Top Bar ===== -->
+<div class="top-bar">
+  <div class="logo-wrap">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="16" stroke="#C4956A" stroke-width="1.5" fill="#2D2118"/>
+      <circle cx="18" cy="18" r="6" fill="#C4956A" opacity="0.8"/>
+      <circle cx="8" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="28" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="8" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="28" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+      <circle cx="18" cy="18" r="12" fill="none" stroke="#A08968" stroke-width="0.5" stroke-dasharray="4 3"/>
+    </svg>
+    <h1>人类图 · 生时校准服务</h1>
+  </div>
+  <p>当出生时间不精确时，人类图需要校准 —— 让你的图表回归真实</p>
+  <p style="font-size:11px;color:#A08968;opacity:0.7;margin-top:2px">V5 · 全行星引擎 · UI布局优化</p>
+</div>
+
+<!-- ===== Nav ===== -->
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="index.html">首页</a>
+    <a href="human-design-guide.html">入门手册</a>
+    <a href="36 Channels/36-channels.html">36通道</a>
+    <a href="384-lines.html">384爻</a>
+    <a href="192-crosses.html">192交叉</a>
+    <a href="genekeys.html">基因天命</a>
+    <a href="wealth.html">财运之道</a>
+    <a href="bg5-maps.html">BG5商业</a>
+    <a href="ctb-analysis.html">CTB变量</a>
+    <a href="hd_birth_time_calibration.html" class="active">生时校准</a>
+  </div>
+</div>
+
+<!-- ===== Main Content ===== -->
+<div class="container">
+
+<div class="page-header">
+  <h2>⏱️ 生时校准服务</h2>
+  <p class="sub">出生时间误差几分钟，图表差异可翻天覆地<br>—— 用你的人生事件，反推出最可能的出生时间</p>
+</div>
+
+<!-- ===== 为什么需要校准 ===== -->
+<div class="card">
+  <div class="stit">为什么出生时间如此关键？</div>
+  <p>人类图中，每个闸门对应黄道带约 <strong>5°37'30"</strong>，每个爻对应约 <strong>56'15"</strong>——而太阳每天移动约 <strong>1°</strong>。这意味着：</p>
+
+  <div class="explain-grid">
+    <div class="explain-card">
+      <div class="e-icon">⏰</div>
+      <h4>差 4 分钟</h4>
+      <p>部分边界闸门的爻可能改变<br>影响通道含义的微调</p>
+    </div>
+    <div class="explain-card">
+      <div class="e-icon">🔄</div>
+      <h4>差 15 分钟</h4>
+      <p>Profile（人生角色）<br>可能从 1/3 变成 1/4</p>
+    </div>
+    <div class="explain-card">
+      <div class="e-icon">⚡</div>
+      <h4>差 60 分钟</h4>
+      <p>边界闸门完全切换<br>通道可能激活或断开</p>
+    </div>
+    <div class="explain-card">
+      <div class="e-icon">🎯</div>
+      <h4>差 3 小时</h4>
+      <p>四箭头方向大面积改变<br>CTB 变量全面不同</p>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px">
+    <div class="info-title">📌 中国用户的普遍困境</div>
+    <p>很多人的出生时间只有模糊记忆——"大概是上午""好像是下午三四点""听我妈说天刚亮"。在中国传统中，精确到分钟的时间记录并不普遍。而这些模糊的时间，可能导致你手中的那张人类图与真实的你相差甚远。</p>
+    <p style="margin-top:8px">生时校准服务，就是用你人生中的 <strong>重大事件</strong>（结婚、工作变动、大病、迁居、生育等），反推最可能对应的精确出生时间。</p>
+  </div>
+</div>
+
+<!-- ===== 服务模式 ===== -->
+<div class="card">
+  <div class="stit">服务流程与定价</div>
+  <table style="width:100%;border-collapse:collapse;margin:10px 0">
+    <thead>
+      <tr style="background:var(--primary);color:#fff">
+        <th style="padding:10px 14px;font-size:14px;text-align:left;font-weight:600">服务级别</th>
+        <th style="padding:10px 14px;font-size:14px;text-align:center;font-weight:600">适用场景</th>
+        <th style="padding:10px 14px;font-size:14px;text-align:center;font-weight:600">产出</th>
+        <th style="padding:10px 14px;font-size:14px;text-align:right;font-weight:600">参考价格</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:12px 14px;font-size:14px;font-weight:600">🆓 自助试用</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">初步探索 · 在线工具</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">2 候选时间 + 简要差异</td>
+        <td style="padding:12px 14px;font-size:14px;text-align:right;font-weight:600;color:var(--success)">免费</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:12px 14px;font-size:14px;font-weight:600">⭐ 标准校准</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">系统推算 + PDF 报告</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">3 候选 + 全图差异对比</td>
+        <td style="padding:12px 14px;font-size:14px;text-align:right;font-weight:600">¥299</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:12px 14px;font-size:14px;font-weight:600">👑 深度解读</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">校准 + 1v1 60分钟解读</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">精确时间 + 解读视频</td>
+        <td style="padding:12px 14px;font-size:14px;text-align:right;font-weight:600">¥799</td>
+      </tr>
+      <tr>
+        <td style="padding:12px 14px;font-size:14px;font-weight:600">🏢 企业团队</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">批量团队成员校准</td>
+        <td style="padding:12px 14px;font-size:13px;text-align:center;color:var(--muted)">团队能量报告</td>
+        <td style="padding:12px 14px;font-size:14px;text-align:right;font-weight:600">按人头定制</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 自助校准工具 ===== -->
+<div class="card">
+  <div class="stit">🆓 自助校准工具（免费试用）</div>
+  <p style="font-size:14px;color:var(--deep);margin-bottom:4px">输入你的出生日期、时间范围和 3-5 个人生重大事件，系统将自动扫描并计算最可能的出生时间。</p>
+  <p style="font-size:13px;color:var(--muted)">💡 数据不会上传，所有计算在你的浏览器中完成。结果仅供参考，深度校准建议选择人工解读服务。</p>
+</div>
+
+<!-- ===== Step Wizard ===== -->
+<div class="card" id="step-card">
+  <div class="stit">校准向导</div>
+
+  <!-- Step Indicator -->
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step-item"><div class="step-dot active" id="sd1">1</div><div class="step-label-group"><div class="step-num">步骤一</div><div class="step-name">出生信息</div></div></div>
+    <div style="display:flex;align-items:center;padding:0 4px"><div class="step-line" id="sl1"></div></div>
+    <div class="step-item"><div class="step-dot" id="sd2">2</div><div class="step-label-group"><div class="step-num">步骤二</div><div class="step-name">人生事件</div></div></div>
+    <div style="display:flex;align-items:center;padding:0 4px"><div class="step-line" id="sl2"></div></div>
+    <div class="step-item"><div class="step-dot" id="sd3">3</div><div class="step-label-group"><div class="step-num">步骤三</div><div class="step-name">校准结果</div></div></div>
+  </div>
+
+  <!-- ===== STEP 1: Birth Info ===== -->
+  <div id="step1">
+    <div class="form-group">
+      <div class="form-label"><span class="icon">📅</span> 出生日期</div>
+      <div class="form-hint">请填写你记得的、最可能的出生日期。如果日期也不确定，请选择最接近的。</div>
+      <div class="input-row">
+        <div class="input-field"><label>年份</label><input type="number" id="birthYear" placeholder="如 1990" min="1900" max="2030" value="1990"></div>
+        <div class="input-field"><label>月份</label><select id="birthMonth"><option value="1">1月</option><option value="2">2月</option><option value="3">3月</option><option value="4">4月</option><option value="5">5月</option><option value="6" selected>6月</option><option value="7">7月</option><option value="8">8月</option><option value="9">9月</option><option value="10">10月</option><option value="11">11月</option><option value="12">12月</option></select></div>
+        <div class="input-field"><label>日期</label><select id="birthDay"></select></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label"><span class="icon">⏰</span> 出生时间范围</div>
+      <div class="form-hint">选择你大致记得的时间段。如果不确定，可以选一个更宽的范围（如 "上午 6:00 - 12:00"）。范围越小，校准精度越高。</div>
+      <div class="time-range-box">
+        <div class="range-label">你大约在什么时间出生？</div>
+        <div class="input-row">
+          <div class="input-field"><label>时间段</label>
+            <select id="timeRange" onchange="updateTimeRange()">
+              <option value="custom">自定义精确范围</option>
+              <option value="early_morning">清晨 (4:00 - 8:00)</option>
+              <option value="morning" selected>上午 (8:00 - 12:00)</option>
+              <option value="noon">中午 (12:00 - 14:00)</option>
+              <option value="afternoon">下午 (14:00 - 18:00)</option>
+              <option value="evening">傍晚 (18:00 - 22:00)</option>
+              <option value="night">深夜 (22:00 - 4:00)</option>
+              <option value="whole_day">全天 (0:00 - 24:00)</option>
+            </select>
+          </div>
+          <div class="input-field"><label>起始时间</label><input type="time" id="timeFrom" value="08:00"></div>
+          <div class="input-field"><label>结束时间</label><input type="time" id="timeTo" value="12:00"></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">📌 扫描步长：<strong id="scanStepDisplay">15 分钟</strong>（时间段内每隔此间隔计算一次人类图）</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label"><span class="icon">📍</span> 出生地点</div>
+      <div class="form-hint">出生城市。用于计算准确的地方恒星时（影响上升点对应的人格闸门）。</div>
+      <div class="input-row">
+        <div class="input-field"><label>国家/地区</label><select id="birthCountry" style="min-width:140px">
+          <option value="CN" selected>中国</option><option value="HK">中国香港</option><option value="TW">中国台湾</option>
+          <option value="US">美国</option><option value="GB">英国</option><option value="JP">日本</option>
+          <option value="KR">韩国</option><option value="SG">新加坡</option><option value="OTHER">其他</option>
+        </select></div>
+        <div class="input-field"><label>城市（拼音）</label><input type="text" id="birthCity" placeholder="如 Beijing / Shanghai" value="Beijing" style="min-width:160px"></div>
+        <div class="input-field"><label>时区偏移</label><select id="timezone">
+          <option value="8" selected>UTC+8 (北京时间)</option>
+          <option value="7">UTC+7</option>
+          <option value="9">UTC+9</option>
+          <option value="5.5">UTC+5:30 (印度)</option>
+          <option value="0">UTC+0 (伦敦)</option>
+          <option value="-5">UTC-5 (美东)</option>
+          <option value="-8">UTC-8 (美西)</option>
+        </select></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="goToStep(2)">下一步：输入人生事件 →</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: Life Events ===== -->
+  <div id="step2" style="display:none">
+    <div class="form-group">
+      <div class="form-label"><span class="icon">📋</span> 你的人生重大事件</div>
+      <div class="form-hint">请至少填写 <strong>3 个</strong>重要事件。越详细、日期越精确，校准结果越准确。事件应当是对人生有显著影响的转折点。</div>
+    </div>
+
+    <div class="warn-box">
+      <p><strong>⚠️ 重要提示：</strong>事件的 <strong>年份 + 月份</strong> 是校准的关键输入。不需要精确到日（如果记得更好）。系统通过对比不同出生时间对应的事件年份星象触发模式，找出最匹配的候选时间。</p>
+    </div>
+
+    <div id="eventContainer">
+      <!-- Events will be rendered here -->
+    </div>
+
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn-outline btn-small" onclick="addEvent()">+ 添加一个事件</button>
+      <span style="font-size:13px;color:var(--muted);align-self:center" id="eventCount">已填 0 个事件</span>
+    </div>
+
+    <div class="info-box" style="margin-top:16px">
+      <div class="info-title">💡 什么样的事件效果好？</div>
+      <p>• <strong>最佳：</strong>结婚/离婚、生育、重大疾病/事故、跨国迁居、创业/职业剧变、重要关系开始/结束<br>
+      • <strong>一般：</strong>高考/升学、换工作、买房<br>
+      • <strong>较差：</strong>日常小事、模糊记忆（"大概是2010年左右"）</p>
+      <p style="margin-top:6px">每个事件请尽量提供具体年份。月份记忆模糊可以选择"不确定"。日期的精确度加分但不必须。</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-outline" onclick="goToStep(1)">← 上一步</button>
+      <button class="btn" onclick="startCalibration()">🔍 开始校准分析</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== STEP 3: Results ===== -->
+<div id="results" class="card" style="min-height:200px">
+  <div style="text-align:center;padding:40px 0">
+    <div style="font-size:48px;margin-bottom:12px">🔍</div>
+    <p style="font-size:15px;color:var(--muted)">校准结果将在此显示</p>
+    <p style="font-size:13px;color:var(--muted)">请完成前两步后点击"开始校准分析"</p>
+  </div>
+</div>
+
+<!-- ===== Footer ===== -->
+<div class="footer-note">
+  <p>生时校准基于人类图天文计算原理与人生事件星象对照<br>
+  校准结果是概率性的"最可能时间"，并非绝对确定<br>
+  仅供自我探索参考，不构成专业人类图解读</p>
+  <span class="credit">Powered By Kan Man Tang</span>
+</div>
+
+</div>
+
+<script>
+// ========== GLOBAL STATE ==========
+let currentStep = 1;
+let events = [];
+let eventCounter = 0;
+const MAX_EVENTS = 8;
+
+// ========== INIT ==========
+function init(){
+  populateDays();
+  renderEvents();
+  updateEventCount();
+}
+
+function populateDays(){
+  const sel = document.getElementById('birthDay');
+  const m = parseInt(document.getElementById('birthMonth').value);
+  const days = m===2 ? 29 : [4,6,9,11].includes(m) ? 30 : 31;
+  sel.innerHTML = '';
+  for(let i=1;i<=days;i++){
+    sel.innerHTML += `<option value="${i}" ${i===15?'selected':''}>${i}日</option>`;
+  }
+}
+document.getElementById('birthMonth').addEventListener('change', populateDays);
+document.getElementById('birthYear').addEventListener('change', updateScanStep);
+
+// ========== TIME RANGE ==========
+function updateTimeRange(){
+  const v = document.getElementById('timeRange').value;
+  const ranges = {
+    early_morning:['04:00','08:00'],
+    morning:['08:00','12:00'],
+    noon:['12:00','14:00'],
+    afternoon:['14:00','18:00'],
+    evening:['18:00','22:00'],
+    night:['22:00','04:00'],
+    whole_day:['00:00','24:00']
+  };
+  if(ranges[v]){
+    document.getElementById('timeFrom').value = ranges[v][0];
+    document.getElementById('timeTo').value = ranges[v][1];
+  }
+  updateScanStep();
+}
+document.getElementById('timeFrom').addEventListener('change', updateScanStep);
+document.getElementById('timeTo').addEventListener('change', updateScanStep);
+
+function updateScanStep(){
+  const from = document.getElementById('timeFrom').value;
+  const to = document.getElementById('timeTo').value;
+  if(!from||!to) return;
+  const diff = timeDiffMinutes(from, to);
+  let step;
+  if(diff <= 120) step = 5;
+  else if(diff <= 240) step = 10;
+  else if(diff <= 480) step = 15;
+  else if(diff <= 720) step = 20;
+  else step = 30;
+  document.getElementById('scanStepDisplay').textContent = step + ' 分钟';
+}
+
+function timeDiffMinutes(t1, t2){
+  const [h1,m1] = t1.split(':').map(Number);
+  const [h2,m2] = t2.split(':').map(Number);
+  let d = (h2*60+m2) - (h1*60+m1);
+  if(d <= 0) d += 24*60;
+  return d;
+}
+
+function getScanStep(){
+  const from = document.getElementById('timeFrom').value;
+  const to = document.getElementById('timeTo').value;
+  if(!from||!to) return 15;
+  const diff = timeDiffMinutes(from, to);
+  if(diff <= 120) return 5;
+  if(diff <= 240) return 10;
+  if(diff <= 480) return 15;
+  if(diff <= 720) return 20;
+  return 30;
+}
+
+// ========== DATE HELPERS ==========
+function getDateParts(){
+  const y = parseInt(document.getElementById('birthYear').value) || 1990;
+  const m = parseInt(document.getElementById('birthMonth').value) || 1;
+  const d = parseInt(document.getElementById('birthDay').value) || 1;
+  return {y,m,d};
+}
+
+function getTimeParts(timeStr){
+  const [h,m] = timeStr.split(':').map(Number);
+  return {h: h||0, m: m||0};
+}
+
+// ========== JULIAN DAY ==========
+function julianDay(y, m, d, hour, minute){
+  if(m <= 2){ y--; m += 12; }
+  const A = Math.floor(y/100);
+  const B = 2 - A + Math.floor(A/4);
+  const jd = Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+  return jd + (hour + minute/60)/24;
+}
+
+// ========== IMPROVED SUN LONGITUDE (VSOP87-like) ==========
+function meanSolarLongitude(jd){
+  const T = (jd - 2451545.0) / 36525; // Julian centuries from J2000.0
+  // Mean longitude of Sun
+  let L0 = 280.46646 + 36000.76983*T + 0.0003032*T*T;
+  // Mean anomaly of Sun
+  let M = 357.52911 + 35999.05029*T - 0.0001537*T*T;
+  M = M * Math.PI / 180;
+
+  // Sun's equation of center (VSOP87 truncated series)
+  const C = (1.914602 - 0.004817*T - 0.000014*T*T) * Math.sin(M)
+          + (0.019993 - 0.000101*T) * Math.sin(2*M)
+          + 0.000289 * Math.sin(3*M);
+
+  // Additional planetary perturbations for improved accuracy
+  const M_venus = (200.0 + 58517.815*T) * Math.PI / 180;
+  const M_jupiter = (20.0 + 3034.906*T) * Math.PI / 180;
+  const pert = 0.0013 * Math.sin(M + M_venus)
+             + 0.0016 * Math.sin(M - M_jupiter);
+
+  let L = L0 + C + pert;
+  return ((L % 360) + 360) % 360;
+}
+
+// ========== PLANET GEOCENTRIC LONGITUDE (Simplified VSOP87 / Meeus) ==========
+// Computes geocentric (Earth-centered) ecliptic longitude for each planet
+// Accuracy: ±0.5° inner planets, ±0.1° outer — sufficient for HD gate mapping (5.625°/gate)
+function planetGeocentricLon(planetName, jd){
+  const T = (jd - 2451545.0) / 36525;
+  const toRad = Math.PI / 180;
+  const toDeg = 180 / Math.PI;
+
+  // --- Earth's heliocentric position (for helio→geo conversion) ---
+  const M_earth = (357.52911 + 35999.05029*T - 0.0001537*T*T) * toRad;
+  const earthC = (1.914602 - 0.004817*T - 0.000014*T*T) * Math.sin(M_earth)
+               + (0.019993 - 0.000101*T) * Math.sin(2*M_earth)
+               + 0.000289 * Math.sin(3*M_earth)
+               + 0.0013 * Math.sin(M_earth + (200.0 + 58517.815*T) * toRad)
+               + 0.0016 * Math.sin(M_earth - (20.0 + 3034.906*T) * toRad);
+  const earthLon0 = (280.46646 + 36000.76983*T + 0.0003032*T*T) % 360;
+  const earthHelioLon = ((earthLon0 + earthC + 180) % 360 + 360) % 360;
+  const earthR = 1.000001018 * (1 - 0.016708*Math.cos(M_earth) - 0.000139*Math.cos(2*M_earth));
+
+  // --- Moon (already geocentric) ---
+  if(planetName === 'moon'){
+    const L0 = ((218.316 + 481267.881*T) % 360 + 360) % 360;
+    const M = (134.963 + 477198.867*T) * toRad;
+    const Dl = (297.850 + 445267.111*T) * toRad;
+    const F = (93.272 + 483202.017*T) * toRad;
+    const Ms = (357.529 + 35999.050*T) * toRad;
+    const dl = 6.289 * Math.sin(M) + 1.274 * Math.sin(2*Dl - M) + 0.658 * Math.sin(2*Dl)
+             + 0.214 * Math.sin(2*M) - 0.186 * Math.sin(Ms) - 0.114 * Math.sin(2*F);
+    return ((L0 + dl) % 360 + 360) % 360;
+  }
+
+  // --- Heliocentric planet positions ---
+  let helioLon, helioR;
+  switch(planetName){
+  case 'mercury': {
+    const M = (168.656 + 149472.672*T) * toRad;
+    const L0 = ((252.251 + 149472.674*T) % 360 + 360) % 360;
+    const C = 23.44 * Math.sin(M) + 2.98 * Math.sin(2*M) + 0.53 * Math.sin(3*M);
+    helioLon = L0 + C;
+    helioR = 0.38710 * (1 - 0.2056 * Math.cos(M) - 0.0205 * Math.cos(2*M));
+    break;
+  }
+  case 'venus': {
+    const M = (50.4161 + 58517.8479*T) * toRad;
+    const L0 = ((181.979 + 58517.815*T) % 360 + 360) % 360;
+    const C = 0.776 * Math.sin(M) + 0.003 * Math.sin(2*M);
+    helioLon = L0 + C;
+    helioR = 0.723332 * (1 - 0.006773 * Math.cos(M));
+    break;
+  }
+  case 'mars': {
+    const M = (19.387 + 19140.303*T) * toRad;
+    const L0 = ((355.453 + 19140.302*T) % 360 + 360) % 360;
+    const C = 10.691 * Math.sin(M) + 0.623 * Math.sin(2*M) + 0.050 * Math.sin(3*M);
+    helioLon = L0 + C;
+    helioR = 1.52368 * (1 - 0.0934 * Math.cos(M));
+    break;
+  }
+  case 'jupiter': {
+    const M = (20.020 + 3034.906*T) * toRad;
+    const L0 = ((34.351 + 3034.906*T) % 360 + 360) % 360;
+    const C = 5.555 * Math.sin(M) + 0.155 * Math.sin(2*M);
+    helioLon = L0 + C;
+    helioR = 5.2026 * (1 - 0.0485 * Math.cos(M));
+    break;
+  }
+  case 'saturn': {
+    const M = (317.017 + 1222.114*T) * toRad;
+    const L0 = ((50.077 + 1222.114*T) % 360 + 360) % 360;
+    const C = 6.367 * Math.sin(M) + 0.206 * Math.sin(2*M);
+    helioLon = L0 + C;
+    helioR = 9.5549 * (1 - 0.0555 * Math.cos(M));
+    break;
+  }
+  case 'uranus': {
+    const M = (142.956 + 429.864*T) * toRad;
+    const L0 = ((314.055 + 429.864*T) % 360 + 360) % 360;
+    const C = 5.305 * Math.sin(M) + 0.123 * Math.sin(2*M);
+    helioLon = L0 + C;
+    helioR = 19.2184 * (1 - 0.0463 * Math.cos(M));
+    break;
+  }
+  case 'neptune': {
+    const M = (267.767 + 218.487*T) * toRad;
+    const L0 = ((304.349 + 218.487*T) % 360 + 360) % 360;
+    const C = 1.032 * Math.sin(M);
+    helioLon = L0 + C;
+    helioR = 30.1104 * (1 - 0.0090 * Math.cos(M));
+    break;
+  }
+  case 'pluto': {
+    const M = (241.575 + 141.577*T) * toRad;
+    const L0 = ((241.575 + 141.577*T) % 360 + 360) % 360;
+    const C = 28.6 * Math.sin(M);
+    helioLon = L0 + C;
+    helioR = 39.445 * (1 - 0.25 * Math.cos(M));
+    break;
+  }
+  default: return 0;
+  }
+
+  // --- Heliocentric → Geocentric conversion ---
+  const dx = helioR * Math.cos(helioLon * toRad) - earthR * Math.cos(earthHelioLon * toRad);
+  const dy = helioR * Math.sin(helioLon * toRad) - earthR * Math.sin(earthHelioLon * toRad);
+  let geoLon = Math.atan2(dy, dx) * toDeg;
+  return ((geoLon % 360) + 360) % 360;
+}
+
+// ========== GATE & LINE COMPUTATION ==========
+// Each gate = 360/64 = 5.625 degrees
+// Each line = gate/6 = 0.9375 degrees = 56'15"
+const GATE_DEG = 360/64;
+const LINE_DEG = GATE_DEG/6;
+
+// Human Design zodiac: Gate 41 starts at ~Aries point (0°), but there's an offset
+// The traditional mapping starts Gate 41 at approximately 02° Aries
+// Gate 41 = Sun at ~0°00' - 5°37'30" Aries (tropical)
+// But actual mapping: Gate 1 starts at ~0° tropical (vernal equinox)
+const GATE_NAMES = {
+  1:'自我表达·创造',2:'接纳·方向',3:'突变·秩序',4:'公式·解答',5:'节奏·等待',6:'冲突·摩擦',
+  7:'军队·自我',8:'贡献·凝聚',9:'细节·专注',10:'自我行为·爱己',11:'想法·和平',12:'谨慎·静止',
+  13:'聆听者·同伴',14:'赋能·技能',15:'极端·人性',16:'技能·热情',17:'意见·跟随',18:'修正·改进',
+  19:'需要·敏感',20:'当下·沉思',21:'控制·猎人',22:'优雅·开放',23:'同化·解释',24:'合理化·回归',
+  25:'天真·精神',26:'利己主义·积累',27:'关怀·滋养',28:'奋斗·冒险',29:'深渊·承诺',30:'渴望·感觉',
+  31:'领导·影响',32:'持续·转化',33:'隐私·撤退',34:'力量·伟大',35:'改变·进步',36:'危机·新体验',
+  37:'友谊·家庭',38:'战士·对抗',39:'挑衅·精神',40:'解放·独处',41:'幻想·收缩',42:'成长·完成',
+  43:'洞察·突破',44:'警觉·模式',45:'聚集·拥有',46:'身体之爱·决心',47:'实现·压抑',48:'深度·品味',
+  49:'革命·原则',50:'价值·平衡',51:'震惊·唤醒',52:'静止·保持',53:'发展·开始',54:'野心·少女',
+  55:'精神·丰盛',56:'刺激·流浪',57:'直觉·洞察',58:'活力·喜悦',59:'性·亲密',60:'限制·接受',
+  61:'神秘·内在真实',62:'细节·表达',63:'怀疑·完成',64:'困惑·转变'
+};
+
+function sunToGateLine(sunLon){
+  // Human Design Rave Mandala — correct gate order around the tropical zodiac
+  // Starting from 0° Aries (March equinox), going clockwise:
+  const HD_GATE_ORDER = [
+    25, 17, 21, 51, 42, 3, 27, 24, 2, 23, 8, 20, 16, 35, 45, 12,
+    15, 52, 39, 53, 62, 56, 31, 33, 7, 4, 29, 59, 40, 64, 47, 6,
+    46, 18, 48, 57, 32, 50, 28, 44, 1, 43, 14, 34, 9, 5, 26, 11,
+    10, 58, 38, 54, 61, 60, 41, 19, 13, 49, 30, 55, 37, 63, 22, 36
+  ];
+
+  // Normalize solar longitude to 0-360
+  let lon = ((sunLon % 360) + 360) % 360;
+
+  // Rave Mandala offset: Gate 25 starts at Pisces 28°15' = 358.25° tropical
+  // Uniform 5.625° grid index 0 would be at 0° tropical
+  // But the Mandala is shifted so Gate 25 aligns with the equinox point
+  // Offset = 358.25° → adjust by adding 1.75° to align uniform grid with actual boundaries
+  const MANDALA_OFFSET = 1.75; // degrees
+
+  const adjustedLon = ((lon + MANDALA_OFFSET) % 360 + 360) % 360;
+  const gateIndex = Math.floor(adjustedLon / GATE_DEG) % 64;
+  const gate = HD_GATE_ORDER[gateIndex];
+  const posInGate = adjustedLon - gateIndex * GATE_DEG;
+  const line = Math.min(6, Math.floor(posInGate / LINE_DEG) + 1);
+
+  return {gate, line, gateName: GATE_NAMES[gate] || '未知', degInGate: posInGate};
+}
+
+// ========== COMPUTE CHART FOR A GIVEN TIME ==========
+function computeChartForTime(y, m, d, hour, minute, tzOffset){
+  const utcHour = hour - tzOffset;
+  const jd = julianDay(y, m, d, utcHour, minute);
+  const sunLon = meanSolarLongitude(jd);
+
+  // Personality Sun/Earth
+  const pSun = sunToGateLine(sunLon);
+  const pEarth = sunToGateLine(sunLon + 180);
+
+  // Design Sun/Earth — exactly 88° solar arc before birth
+  // NOT 88 days (variable sun speed would introduce ~4° error = ~4 lines)
+  const dSunLon = ((sunLon - 88) % 360 + 360) % 360;
+  const dSun = sunToGateLine(dSunLon);
+  const dEarth = sunToGateLine(dSunLon + 180);
+
+  // Prenatal JD: find exact moment when Sun was at dSunLon (iterative convergence)
+  // Start from ~88 days before, refine with solar motion ~0.9856°/day
+  let prenatalJD = jd - 88;
+  for(let iter = 0; iter < 12; iter++){
+    const testSun = meanSolarLongitude(prenatalJD);
+    let diff = testSun - dSunLon;
+    // Normalize to -180..+180
+    diff = ((diff + 540) % 360) - 180;
+    if(Math.abs(diff) < 0.0001) break;
+    prenatalJD -= diff / 0.9856;
+  }
+
+  // Lunar Nodes (simplified mean node)
+  const nodeLon = meanNodeLongitude(jd);
+  const pNorthNode = sunToGateLine(nodeLon);
+  const pSouthNode = sunToGateLine(nodeLon + 180);
+
+  const preNodeLon = meanNodeLongitude(prenatalJD);
+  const dNorthNode = sunToGateLine(preNodeLon);
+  const dSouthNode = sunToGateLine(preNodeLon + 180);
+
+  // --- Personality Planets (at birth JD) ---
+  const pMercury = sunToGateLine(planetGeocentricLon('mercury', jd));
+  const pVenus   = sunToGateLine(planetGeocentricLon('venus', jd));
+  const pMars    = sunToGateLine(planetGeocentricLon('mars', jd));
+  const pJupiter = sunToGateLine(planetGeocentricLon('jupiter', jd));
+  const pSaturn  = sunToGateLine(planetGeocentricLon('saturn', jd));
+  const pUranus  = sunToGateLine(planetGeocentricLon('uranus', jd));
+  const pNeptune = sunToGateLine(planetGeocentricLon('neptune', jd));
+  const pPluto   = sunToGateLine(planetGeocentricLon('pluto', jd));
+  const pMoon    = sunToGateLine(planetGeocentricLon('moon', jd));
+
+  // --- Design Planets (at prenatal JD, when Sun = sunLon - 88°) ---
+  const dMercury = sunToGateLine(planetGeocentricLon('mercury', prenatalJD));
+  const dVenus   = sunToGateLine(planetGeocentricLon('venus', prenatalJD));
+  const dMars    = sunToGateLine(planetGeocentricLon('mars', prenatalJD));
+  const dJupiter = sunToGateLine(planetGeocentricLon('jupiter', prenatalJD));
+  const dSaturn  = sunToGateLine(planetGeocentricLon('saturn', prenatalJD));
+  const dUranus  = sunToGateLine(planetGeocentricLon('uranus', prenatalJD));
+  const dNeptune = sunToGateLine(planetGeocentricLon('neptune', prenatalJD));
+  const dPluto   = sunToGateLine(planetGeocentricLon('pluto', prenatalJD));
+  const dMoon    = sunToGateLine(planetGeocentricLon('moon', prenatalJD));
+
+  return {
+    jd, sunLon, prenatalJD,
+    pSun, pEarth, dSun, dEarth,
+    pNorthNode, pSouthNode, dNorthNode, dSouthNode,
+    pMercury, pVenus, pMars, pJupiter, pSaturn, pUranus, pNeptune, pPluto, pMoon,
+    dMercury, dVenus, dMars, dJupiter, dSaturn, dUranus, dNeptune, dPluto, dMoon,
+    timeStr: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`
+  };
+}
+
+function meanNodeLongitude(jd){
+  const T = (jd - 2451545.0) / 36525;
+
+  // Mean longitude of ascending node (Meeus Chap. 45)
+  let node = 125.04452 - 1934.136261*T + 0.0020708*T*T + T*T*T/450000;
+
+  // --- True node corrections (Meeus Chap. 45, p.314) ---
+  // Mean anomalies and arguments
+  const M_sun  = (357.52911 + 35999.05029*T) * Math.PI / 180;    // Sun mean anomaly
+  const M_moon = (134.96341 + 477198.86763*T) * Math.PI / 180;   // Moon mean anomaly
+  const D      = (297.85020 + 445267.11152*T) * Math.PI / 180;   // Moon mean elongation
+  const F      = ( 93.27210 + 483202.01753*T) * Math.PI / 180;   // Moon argument of latitude
+
+  // Main periodic terms for true node (in degrees)
+  const corr = -1.497 * Math.sin(2*D - 2*F)   // dominant term
+               - 0.002 * Math.sin(2*D)
+               + 0.002 * Math.sin(M_moon)
+               + 0.0016 * Math.sin(M_sun)
+               - 0.0012 * Math.sin(2*D + 2*M_moon)
+               + 0.0005 * Math.sin(2*D - M_moon);
+
+  node += corr;
+  return ((node % 360) + 360) % 360;
+}
+
+// ========== COLLECT ALL GATES FROM A CHART ==========
+function collectGates(chart){
+  const gates = new Set();
+  const sources = [chart.pSun, chart.pEarth, chart.dSun, chart.dEarth,
+                   chart.pNorthNode, chart.pSouthNode, chart.dNorthNode, chart.dSouthNode,
+                   chart.pMercury, chart.pVenus, chart.pMars, chart.pJupiter, chart.pSaturn,
+                   chart.pUranus, chart.pNeptune, chart.pPluto, chart.pMoon,
+                   chart.dMercury, chart.dVenus, chart.dMars, chart.dJupiter, chart.dSaturn,
+                   chart.dUranus, chart.dNeptune, chart.dPluto, chart.dMoon];
+  for(const s of sources){
+    if(!s) continue;
+    gates.add(s.gate);
+    gates.add(`${s.gate}.${s.line}`);
+  }
+  return gates;
+}
+
+// ========== EVENT ANALYSIS ==========
+// Score how well an event matches a given birth chart (candidate time)
+function scoreEvent(candidateChart, eventYear, eventMonth){
+  // Compute the transiting sun position at the event date
+  const eventJD = julianDay(eventYear, eventMonth||6, 15, 12, 0);
+  const eventSunLon = meanSolarLongitude(eventJD);
+  const eventGate = sunToGateLine(eventSunLon);
+
+  // Collect all gates from the CANDIDATE's birth chart (not a fixed noon chart!)
+  const birthGates = collectGates(candidateChart);
+
+  // Compare: does the event's sun gate match any birth gate?
+  let score = 0;
+  if(birthGates.has(eventGate.gate)) score += 3;
+  if(birthGates.has(`${eventGate.gate}.${eventGate.line}`)) score += 5;
+
+  // Age-based weighting (midlife events weighted higher)
+  const birthYear = parseInt(document.getElementById('birthYear').value)||1990;
+  const age = eventYear - birthYear;
+  if(age >= 28 && age <= 60) score += 2; // Saturn return to second Saturn return
+
+  // Seasonal resonance (same month as birth = higher weight)
+  const birthMonth = parseInt(document.getElementById('birthMonth').value)||1;
+  if(eventMonth && eventMonth === birthMonth) score += 1;
+
+  return score;
+}
+
+// ========== CALIBRATION ENGINE ==========
+function startCalibration(){
+  // Validation
+  if(events.length < 2){
+    alert('请至少填写 2 个人生事件以获得有意义的校准结果。建议 3-5 个。');
+    return;
+  }
+
+  const from = document.getElementById('timeFrom').value;
+  const to = document.getElementById('timeTo').value;
+  if(!from || !to){
+    alert('请填写出生时间范围。');
+    goToStep(1);
+    return;
+  }
+
+  const {y,m,d} = getDateParts();
+  const tzOffset = parseFloat(document.getElementById('timezone').value)||8;
+  const scanStep = getScanStep();
+  const fromMin = getTimeParts(from);
+  const toMin = getTimeParts(to);
+  const totalMinutes = timeDiffMinutes(from, to);
+
+  // Generate candidate times
+  const candidates = [];
+  let currentMin = fromMin.h*60 + fromMin.m;
+  const endMin = totalMinutes + currentMin;
+
+  let iterCount = 0;
+  while(currentMin < endMin && iterCount < 1000){
+    const hour = Math.floor(currentMin / 60) % 24;
+    const minute = currentMin % 60;
+
+    const chart = computeChartForTime(y, m, d, hour, minute, tzOffset);
+
+    // Score against events using candidate chart
+    let totalScore = 0;
+    let matchDetails = [];
+    for(const evt of events){
+      if(!evt.year) continue;
+      const s = scoreEvent(chart, evt.year, evt.month);
+      totalScore += s;
+      if(s > 0) matchDetails.push({event:evt, score:s});
+    }
+
+    // Type consistency bonus (Profile changed? Type stable?)
+    const gates = collectGates(chart);
+    totalScore += gates.size * 0.1; // Slight bonus for more differentiated charts
+
+    candidates.push({
+      hour, minute,
+      score: totalScore,
+      chart: {
+        pSun: chart.pSun, dSun: chart.dSun,
+        pEarth: chart.pEarth, dEarth: chart.dEarth,
+        pNorthNode: chart.pNorthNode, dNorthNode: chart.dNorthNode,
+        pSouthNode: chart.pSouthNode, dSouthNode: chart.dSouthNode,
+        pMoon: chart.pMoon, dMoon: chart.dMoon,
+        pMercury: chart.pMercury, dMercury: chart.dMercury,
+        pVenus: chart.pVenus, dVenus: chart.dVenus,
+        pMars: chart.pMars, dMars: chart.dMars,
+        pJupiter: chart.pJupiter, dJupiter: chart.dJupiter,
+        pSaturn: chart.pSaturn, dSaturn: chart.dSaturn,
+        pUranus: chart.pUranus, dUranus: chart.dUranus,
+        pNeptune: chart.pNeptune, dNeptune: chart.dNeptune,
+        pPluto: chart.pPluto, dPluto: chart.dPluto
+      },
+      matchDetails,
+      timeStr: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`,
+      gates
+    });
+
+    currentMin += scanStep;
+    iterCount++;
+  }
+
+  // Sort by score descending
+  candidates.sort((a,b) => b.score - a.score);
+
+  // Take top 3
+  const top3 = candidates.slice(0, 3);
+
+  // Display results
+  displayResults(top3, {y,m,d}, totalMinutes, scanStep);
+  goToStep(3);
+}
+
+// ========== DISPLAY RESULTS ==========
+function displayResults(topCandidates, birthDate, span, step){
+  const {y,m,d} = birthDate;
+  let h = '';
+
+  h += `<div class="result-header">`;
+  h += `<h2>🔍 校准分析完成</h2>`;
+  h += `<p>扫描范围：${y}年${m}月${d}日 · 共扫描 <strong>${Math.ceil(span/step)}</strong> 个时间节点（每 ${step} 分钟一次）</p>`;
+  h += `<p style="font-size:13px;color:var(--muted);margin-top:4px">以下为匹配度最高的 <strong>${topCandidates.length}</strong> 个候选出生时间</p>`;
+  h += `</div>`;
+
+  topCandidates.forEach((c, idx) => {
+    const isBest = idx === 0;
+    const matchPct = topCandidates.length > 1
+      ? Math.round(c.score / Math.max(1, topCandidates[0].score) * 100)
+      : 100;
+
+    h += `<div class="candidate-card ${isBest?'best':''}">`;
+    h += `<div class="match-badge">${isBest?'🏆 最佳匹配':'⭐ 候选 '+(idx+1)} · ${matchPct}%</div>`;
+
+    h += `<div class="candidate-time">🕐 ${c.timeStr}（UTC+8 北京时间）</div>`;
+    h += `<div class="candidate-sub">匹配分数：${c.score.toFixed(1)} | 事件命中数：${c.matchDetails.length}/${events.length}</div>`;
+
+    h += `<div class="candidate-detail">`;
+    // Core 4 gates: Design Sun (top-left), Personality Sun (top-right), Design North Node (bottom-left), Personality Earth (bottom-right)
+    h += `<div class="detail-item">`;
+    h += `<div class="d-label">🧬 设计太阳（潜意识）</div>`;
+    h += `<div class="d-value">闸门 ${c.chart.dSun.gate} · 爻 ${c.chart.dSun.line}</div>`;
+    h += `<div style="font-size:12px;color:var(--muted);margin-top:2px">${GATE_NAMES[c.chart.dSun.gate]||''}</div>`;
+    h += `</div>`;
+    h += `<div class="detail-item">`;
+    h += `<div class="d-label">🎭 个性太阳（显意识）</div>`;
+    h += `<div class="d-value">闸门 ${c.chart.pSun.gate} · 爻 ${c.chart.pSun.line}</div>`;
+    h += `<div style="font-size:12px;color:var(--muted);margin-top:2px">${GATE_NAMES[c.chart.pSun.gate]||''}</div>`;
+    h += `</div>`;
+    h += `<div class="detail-item">`;
+    h += `<div class="d-label">🌑 北交点（设计）</div>`;
+    h += `<div class="d-value">闸门 ${c.chart.dNorthNode.gate} · 爻 ${c.chart.dNorthNode.line}</div>`;
+    h += `<div style="font-size:12px;color:var(--muted);margin-top:2px">${GATE_NAMES[c.chart.dNorthNode.gate]||''}</div>`;
+    h += `</div>`;
+    h += `<div class="detail-item">`;
+    h += `<div class="d-label">🌍 个性地球（显意识）</div>`;
+    h += `<div class="d-value">闸门 ${c.chart.pEarth.gate} · 爻 ${c.chart.pEarth.line}</div>`;
+    h += `<div style="font-size:12px;color:var(--muted);margin-top:2px">${GATE_NAMES[c.chart.pEarth.gate]||''}</div>`;
+    h += `</div>`;
+    // Planets: Venus, Mars, Mercury, Jupiter, Saturn
+    h += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">`;
+    h += `<div style="font-size:13px;font-weight:600;color:var(--deep);margin-bottom:6px">🪐 全行星激活</div>`;
+    h += `<table style="width:100%;font-size:13px;border-collapse:collapse">`;
+    h += `<tr style="background:rgba(196,149,106,0.1);font-weight:600;font-size:12px;color:var(--muted)"><td>行星</td><td>🧬 设计</td><td>🎭 个性</td></tr>`;
+    const planetLabels = [
+      ['☀️ 太阳', 'dSun','pSun'],
+      ['🌍 地球', 'dEarth','pEarth'],
+      ['🌙 月亮', 'dMoon','pMoon'],
+      ['☊ 北交', 'dNorthNode','pNorthNode'],
+      ['☋ 南交', 'dSouthNode','pSouthNode'],
+      ['☿ 水星', 'dMercury','pMercury'],
+      ['♀ 金星', 'dVenus','pVenus'],
+      ['♂ 火星', 'dMars','pMars'],
+      ['♃ 木星', 'dJupiter','pJupiter'],
+      ['♄ 土星', 'dSaturn','pSaturn'],
+      ['♅ 天王', 'dUranus','pUranus'],
+      ['♆ 海王', 'dNeptune','pNeptune'],
+      ['♇ 冥王', 'dPluto','pPluto']
+    ];
+    for(const [label, dKey, pKey] of planetLabels){
+      const dVal = c.chart[dKey];
+      const pVal = c.chart[pKey];
+      h += `<tr style="border-bottom:1px solid rgba(232,220,200,0.5)">`;
+      h += `<td style="padding:3px 6px;font-weight:500">${label}</td>`;
+      h += `<td style="padding:3px 6px">${dVal?`${dVal.gate}.${dVal.line}`:'-'}</td>`;
+      h += `<td style="padding:3px 6px">${pVal?`${pVal.gate}.${pVal.line}`:'-'}</td>`;
+      h += `</tr>`;
+    }
+    h += `</table></div>`;
+    h += `</div>`;
+
+    // Show differences from best match for non-best candidates
+    if(idx > 0){
+      const best = topCandidates[0];
+      h += `<div class="candidate-changes">`;
+      h += `<div class="ch-title">📊 与最佳匹配的图表差异</div>`;
+
+      // Compare sun gates
+      if(best.chart.pSun.gate !== c.chart.pSun.gate){
+        h += `<span class="change-item modify">☀️ P-Sun: 闸门${best.chart.pSun.gate}→闸门${c.chart.pSun.gate}</span>`;
+      } else if(best.chart.pSun.line !== c.chart.pSun.line){
+        h += `<span class="change-item modify">☀️ P-Sun: 爻${best.chart.pSun.line}→爻${c.chart.pSun.line}</span>`;
+      }
+      if(best.chart.dSun.gate !== c.chart.dSun.gate){
+        h += `<span class="change-item modify">🧬 D-Sun: 闸门${best.chart.dSun.gate}→闸门${c.chart.dSun.gate}</span>`;
+      } else if(best.chart.dSun.line !== c.chart.dSun.line){
+        h += `<span class="change-item modify">🧬 D-Sun: 爻${best.chart.dSun.line}→爻${c.chart.dSun.line}</span>`;
+      }
+      if(best.chart.pEarth.gate !== c.chart.pEarth.gate){
+        h += `<span class="change-item modify">🌍 P-Earth: 闸门${best.chart.pEarth.gate}→闸门${c.chart.pEarth.gate}</span>`;
+      }
+      h += `</div>`;
+    }
+
+    // Event match details
+    if(c.matchDetails.length > 0){
+      h += `<div class="candidate-changes">`;
+      h += `<div class="ch-title">🎯 命中的人生事件</div>`;
+      for(const md of c.matchDetails){
+        h += `<span class="change-item add">${md.event.type || '事件'}(${md.event.year}${md.event.month?'/'+md.event.month:''}) · +${md.score}</span>`;
+      }
+      h += `</div>`;
+    }
+
+    h += `</div>`;
+  });
+
+  // Disclaimer
+  h += `<div class="info-box" style="margin-top:20px">`;
+  h += `<div class="info-title">📌 重要说明</div>`;
+  h += `<p>以上结果为基于天文计算和事件匹配的 <strong>概率性推断</strong>，并非绝对确定的出生时间。</p>`;
+  h += `<p style="margin-top:6px">• 本自助工具使用简化天文模型，精度约 ±5分钟（太阳位置）<br>• 完整的校准需要考虑所有行星位置、上升点、房屋系统<br>• 建议以第一候选时间为基础，结合人工解读进行最终确认</p>`;
+  h += `<p style="margin-top:6px;color:var(--primary);font-weight:600">需要更精确的校准？选择「标准校准」或「深度解读」服务 →</p>`;
+  h += `</div>`;
+
+  // Action buttons
+  h += `<div class="btn-row" style="margin-top:20px">`;
+  h += `<button class="btn-outline" onclick="goToStep(2)">← 返回修改事件</button>`;
+  h += `<button class="btn" onclick="window.print()">🖨️ 打印结果</button>`;
+  h += `</div>`;
+
+  document.getElementById('results').innerHTML = h;
+  document.getElementById('results').style.display = 'block';
+
+  // Scroll to results
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ========== STEP NAVIGATION ==========
+function goToStep(step){
+  currentStep = step;
+  document.getElementById('step1').style.display = step===1?'block':'none';
+  document.getElementById('step2').style.display = step===2?'block':'none';
+  if(step!==3){
+    document.getElementById('results').style.display = 'none';
+  } else if(document.getElementById('results').style.display === 'none'){
+    // Already has results
+  }
+
+  // Update step indicator
+  for(let i=1;i<=3;i++){
+    const dot = document.getElementById('sd'+i);
+    const line = i<3?document.getElementById('sl'+i):null;
+    dot.classList.remove('active','done');
+    if(line) line.classList.remove('done');
+
+    if(i < step){
+      dot.classList.add('done');
+      if(line) line.classList.add('done');
+    } else if(i === step){
+      dot.classList.add('active');
+    }
+  }
+
+  // Scroll to form
+  document.getElementById('step-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ========== EVENT MANAGEMENT ==========
+const EVENT_TYPES = [
+  {value:'marriage', label:'💍 结婚'},
+  {value:'divorce', label:'💔 离婚/分手'},
+  {value:'childbirth', label:'👶 生育（自己或伴侣）'},
+  {value:'illness', label:'🏥 重大疾病/事故'},
+  {value:'relocation', label:'✈️ 跨国/跨省迁居'},
+  {value:'career', label:'💼 创业/职业剧变'},
+  {value:'education', label:'🎓 升学/毕业'},
+  {value:'loss', label:'🕯️ 亲人离世'},
+  {value:'relationship', label:'💕 重要关系开始'},
+  {value:'windfall', label:'💰 重大财务变动'},
+  {value:'other', label:'📌 其他重要事件'}
+];
+
+function addEvent(){
+  if(events.length >= MAX_EVENTS){
+    alert('最多添加 '+MAX_EVENTS+' 个事件。');
+    return;
+  }
+  events.push({
+    id: ++eventCounter,
+    type: 'marriage',
+    year: null,
+    month: null,
+    day: null,
+    note: ''
+  });
+  renderEvents();
+  updateEventCount();
+}
+
+function removeEvent(id){
+  events = events.filter(e => e.id !== id);
+  renderEvents();
+  updateEventCount();
+}
+
+function updateEventField(id, field, value){
+  const evt = events.find(e => e.id === id);
+  if(evt){
+    if(field === 'year' || field === 'month' || field === 'day'){
+      evt[field] = value ? parseInt(value) : null;
+    } else {
+      evt[field] = value;
+    }
+  }
+}
+
+function renderEvents(){
+  const container = document.getElementById('eventContainer');
+  if(events.length === 0){
+    container.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted);font-size:14px">
+      还没有添加人生事件<br>
+      <button class="btn-outline btn-small" style="margin-top:12px" onclick="addEvent()">+ 添加第一个事件</button>
+    </div>`;
+    return;
+  }
+
+  let h = '';
+  for(const evt of events){
+    h += `<div class="event-card">`;
+    h += `<div class="event-header">`;
+    h += `<div class="event-num">📋 事件 #${evt.id}</div>`;
+    h += `<button class="event-remove" onclick="removeEvent(${evt.id})">✕ 删除</button>`;
+    h += `</div>`;
+
+    h += `<div class="event-row">`;
+    h += `<div class="input-field"><label>事件类型</label>`;
+    h += `<select onchange="updateEventField(${evt.id},'type',this.value)">`;
+    for(const t of EVENT_TYPES){
+      h += `<option value="${t.value}" ${evt.type===t.value?'selected':''}>${t.label}</option>`;
+    }
+    h += `</select></div>`;
+
+    h += `<div class="input-field"><label>年份</label>`;
+    h += `<input type="number" placeholder="如 2015" value="${evt.year||''}" onchange="updateEventField(${evt.id},'year',this.value)" style="width:100px" min="1900" max="2030"></div>`;
+
+    h += `<div class="input-field"><label>月份（可选）</label>`;
+    h += `<select onchange="updateEventField(${evt.id},'month',this.value)">`;
+    h += `<option value="">不确定</option>`;
+    for(let i=1;i<=12;i++){
+      h += `<option value="${i}" ${evt.month===i?'selected':''}>${i}月</option>`;
+    }
+    h += `</select></div>`;
+
+    h += `<div class="input-field"><label>日期（可选）</label>`;
+    h += `<input type="number" placeholder="日" value="${evt.day||''}" onchange="updateEventField(${evt.id},'day',this.value)" style="width:70px" min="1" max="31"></div>`;
+    h += `</div>`;
+
+    h += `<div style="margin-top:8px">`;
+    h += `<div class="input-field" style="flex:1"><label>简要描述（可选）</label>`;
+    h += `<input type="text" placeholder="简要说明这个事件…" value="${evt.note||''}" onchange="updateEventField(${evt.id},'note',this.value)" style="min-width:300px"></div>`;
+    h += `</div>`;
+
+    h += `</div>`;
+  }
+  container.innerHTML = h;
+}
+
+function updateEventCount(){
+  document.getElementById('eventCount').textContent = '已填 '+events.length+' 个事件'+(events.length<3?'（建议至少 3 个）':'');
+}
+
+// ========== INIT ==========
+window.addEventListener('DOMContentLoaded', init);
+updateScanStep();
+</script>
+
+</body>
+</html>
