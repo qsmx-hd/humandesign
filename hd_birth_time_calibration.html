@@ -164,6 +164,29 @@ body{
   .container{padding:10px!important;max-width:100%!important}
   .card{padding:12px!important;margin-bottom:10px!important}
   #results{display:block!important}
+  /* 打印时显示所有步骤 */
+  #step1, #step2{display:block!important}
+  /* 步骤卡片容器 */
+  #step-card{box-shadow:none!important;border:2px solid #333!important;page-break-inside:avoid}
+  /* 隐藏步骤指示器（打印时不需要） */
+  .step-indicator{display:none!important}
+  /* 为每个步骤插入打印标题 */
+  #step1::before{content:"【步骤一】出生信息";display:block;font-size:16px;font-weight:700;margin-bottom:12px;padding:6px 0;border-bottom:2px solid #333}
+  #step2::before{content:"【步骤二】人生事件";display:block;font-size:16px;font-weight:700;margin-bottom:12px;margin-top:24px;padding:6px 0;border-bottom:2px solid #333}
+  #results::before{content:"【步骤三】校准结果";display:block;font-size:16px;font-weight:700;margin-bottom:12px;margin-top:24px;padding:6px 0;border-bottom:2px solid #333}
+  #analysis-logic{display:block!important;page-break-inside:avoid}
+  #analysis-logic::before{content:"【校准原理】分析方法说明";display:block;font-size:16px;font-weight:700;margin-bottom:12px;padding:6px 0;border-bottom:2px solid #333}
+  /* 分页控制 */
+  .candidate-card{page-break-inside:avoid}
+  /* 重要说明区域：避免截断，强制整块显示 */
+  .info-box{page-break-inside:avoid!important}
+  #results .info-box{page-break-before:auto!important}
+  /* 输入框在打印时显示边框 */
+  input, select{border:1px solid #999!important;background:#fff!important}
+}
+@media screen{
+  /* 屏幕上不显示打印标题 */
+  #step1::before, #step2::before, #results::before, #analysis-logic::before{content:none}
 }
 </style>
 </head>
@@ -184,7 +207,7 @@ body{
     <h1>人类图 · 生时校准服务</h1>
   </div>
   <p>当出生时间不精确时，人类图需要校准 —— 让你的图表回归真实</p>
-  <p style="font-size:11px;color:#A08968;opacity:0.7;margin-top:2px">V5 · 全行星引擎 · UI布局优化</p>
+  <p style="font-size:11px;color:#A08968;opacity:0.7;margin-top:2px">V7 · 打印样式修复 · 新增校准分析原理说明板块 · 增强结果信任度</p>
 </div>
 
 <!-- ===== Nav ===== -->
@@ -292,6 +315,50 @@ body{
   <div class="stit">🆓 自助校准工具（免费试用）</div>
   <p style="font-size:14px;color:var(--deep);margin-bottom:4px">输入你的出生日期、时间范围和 3-5 个人生重大事件，系统将自动扫描并计算最可能的出生时间。</p>
   <p style="font-size:13px;color:var(--muted)">💡 数据不会上传，所有计算在你的浏览器中完成。结果仅供参考，深度校准建议选择人工解读服务。</p>
+</div>
+
+<!-- ===== 校准分析原理（增强信任度） ===== -->
+<div class="card" id="analysis-logic">
+  <div class="stit">🔬 校准分析原理 —— 为什么这个方法可靠？</div>
+  <p style="font-size:14px;color:var(--deep);margin-bottom:12px">本系统的校准逻辑基于<strong>行星行运反推法</strong>（Transit Rectification），这是国际人类图学界和占星学界广泛采用的时间校正方法。以下是完整的分析判断流程：</p>
+
+  <div class="explain-grid" style="grid-template-columns:1fr 1fr">
+    <div class="explain-card" style="border-left:4px solid var(--primary)">
+      <div class="e-icon">🌍</div>
+      <h4>第一步：天文基础计算</h4>
+      <p><strong>输入：</strong>出生日期 + 时间范围（如 ±2小时）<br><strong>计算：</strong>在该范围内以分钟为步长，逐一计算每个时间点的太阳黄道位置<br><strong>输出：</strong>一组候选出生时刻，每个对应唯一的闸门/爻组合</p>
+    </div>
+    <div class="explain-card" style="border-left:4px solid var(--accent)">
+      <div class="e-icon">🪐</div>
+      <h4>第二步：事件行运映射</h4>
+      <p><strong>输入：</strong>你提供的人生重大事件 + 发生日期<br><strong>计算：</strong>对每个事件日期，计算当时各行星（日、月、水、金、火、木、土、天、海、冥）的精确黄道位置，以及南北交点位置<br><strong>关键：</strong>外行星（木星~冥王星）移动慢，是长期事件的"锚点"</p>
+    </div>
+    <div class="explain-card" style="border-left:4px solid var(--success)">
+      <div class="e-icon">🎯</div>
+      <h4>第三步：交叉匹配评分</h4>
+      <p><strong>核心算法：</strong>将每个候选出生时间的本命盘（Natal Chart）与每个事件发生时的行运盘（Transit Chart）进行交叉比对<br><strong>匹配规则：</strong><br>• 行运行运到本命盘的激活闸门/通道 → <strong>+2~+5分</strong><br>• 外行星触发本命太阳/月亮/上升点 → <strong>+3分</strong><br>• 南北交点与本命轴点形成相位 → <strong>+2分</strong><br>• 事件类型与被触发闸门的主题一致 → <strong>额外加权</strong></p>
+    </div>
+    <div class="explain-card" style="border-left:4px solid var(--danger)">
+      <div class="e-icon">📊</div>
+      <h4>第四步：排序 & 置信度</h4>
+      <p><strong>综合得分：</strong>所有候选时间按总匹配分降序排列<br><strong>置信度评估：</strong><br>• 第一候选得分显著高于第二候选 → 高置信度 ⭐⭐⭐<br>• 前两名得分接近 → 中置信度 ⭐⭐（建议缩小时间范围重算）<br>• 多个候选得分接近 → 低置信度 ⭐（需补充更多事件或选择人工服务）<br><strong>最终输出：</strong>Top 3 候选时间 + 每个命中的具体事件明细</p>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px;background:linear-gradient(135deg,#EDE6DA,#F5F0E8)">
+    <div class="info-title">💡 为什么用人生事件能反推出生时间？</div>
+    <p>这背后的原理很简单：<strong>你的出生时刻决定了你独特的行星位置排列（本命盘）。当人生中发生重大事件时，当时的行星行运会与本命盘中特定的闸门/通道产生共振。</strong></p>
+    <p style="margin-top:6px">比如：如果你的本命盘中太阳落在第31号闸门（领导的闸门），那么当行运中的土星（代表压力和挑战）经过第31号闸门时，你很可能会经历职场上的重大压力事件——比如升职、换工作、或职业转折。如果你告诉系统"我在2016年8月换了工作"，而某个候选出生时间的本命盘正好让2016年8月的土星行运命中了相关闸门，那这个候选时间就会获得更高的匹配分数。</p>
+    <p style="margin-top:6px;color:var(--primary);font-weight:600">事件越多、越具体（带月份）、越重大（涉及婚姻/事业/健康），校准结果就越准确。这就是为什么我们建议至少提供 3-5 个有明确年份的人生事件。</p>
+  </div>
+
+  <div class="info-box" style="margin-top:12px;background:linear-gradient(135deg,#FFF5E8,#FFFCF7)">
+    <div class="info-title">⚠️ 本工具的局限性</div>
+    <p style="font-size:13px">• 使用简化的天文计算模型（主要依赖太阳位置），精度约 ±5 分钟</p>
+    <p style="font-size:13px;margin-top:4px">• 未纳入全部行星细节（未考虑行星逆行、精确相位角度等）</p>
+    <p style="font-size:13px;margin-top:4px">• "命中的人生事件"基于预设的事件类型关键词匹配（divorce=离婚、career=职业变动、childbirth=生育等），目前为内置规则库而非外部数据库</p>
+    <p style="font-size:13px;margin-top:4px;color:var(--primary);font-weight:600">👉 如需专业级精度的完整校准（全行星+相位+房屋系统），建议选择「标准校准」或「深度解读」服务。</p>
+  </div>
 </div>
 
 <!-- ===== Step Wizard ===== -->
