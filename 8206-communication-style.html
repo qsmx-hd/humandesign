@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>了解你的沟通风格 — 自我评估</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+  /* Style colors */
+  --color-direct: #A6192E;
+  --color-initiating: #C4952E;
+  --color-supportive: #2D7D46;
+  --color-analytical: #3B6FB6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--primary); font-weight: 700;
+}
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn {
+  padding: 9px 20px; border: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all var(--transition); display: inline-flex;
+  align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit;
+}
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* ========== CONTAINER ========== */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* ========== INTRO CARD ========== */
+.intro-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+}
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+  padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gold);
+}
+
+/* ========== FORM FIELDS ========== */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.info-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 14px; font-family: inherit; color: var(--text); background: #fff;
+  transition: border-color var(--transition);
+}
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* ========== SECTION CARD ========== */
+.section-card {
+  background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden;
+}
+.section-header {
+  padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num {
+  background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+}
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 24px; }
+
+/* ========== ASSESSMENT ITEM ========== */
+.assessment-item {
+  padding: 18px 0; border-bottom: 1px solid var(--border-light);
+}
+.assessment-item:last-child { border-bottom: none; }
+.item-question {
+  font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6;
+}
+.item-number { color: var(--primary); font-weight: 700; margin-right: 6px; }
+
+/* Option buttons (A/B/C/D) */
+.option-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+@media (max-width: 640px) { .option-grid { grid-template-columns: 1fr; } }
+.option-item { position: relative; }
+.option-item input { display: none; }
+.option-item label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px; color: var(--text); background: #fff;
+  transition: all var(--transition); user-select: none; line-height: 1.5;
+}
+.option-item label:hover { border-color: var(--primary); background: rgba(119,36,50,0.03); }
+.option-item .option-letter {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+  background: var(--bg-section); color: var(--text-secondary); flex-shrink: 0;
+  transition: all var(--transition);
+}
+.option-item input:checked + label {
+  border-color: var(--primary); background: rgba(119,36,50,0.06);
+}
+.option-item input:checked + label .option-letter {
+  background: var(--primary); color: #fff;
+}
+
+/* ========== SUBMIT ========== */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate {
+  padding: 14px 48px; font-size: 16px; border-radius: 30px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit;
+}
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* ========== REPORT ========== */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+
+.report-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center;
+}
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+
+.report-body {
+  background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius);
+  padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none;
+}
+
+/* Primary style highlight */
+.primary-style-card {
+  text-align: center; padding: 28px 20px; margin-bottom: 28px;
+  border-radius: var(--radius); border: 3px solid var(--primary);
+  background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08));
+}
+.primary-style-card .style-badge {
+  display: inline-block; padding: 8px 28px; border-radius: 30px;
+  font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px;
+}
+.primary-style-card .style-score { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+.primary-style-card .style-desc { font-size: 14px; color: var(--text); max-width: 600px; margin: 0 auto; line-height: 1.8; }
+
+/* Radar chart */
+.chart-container {
+  max-width: 500px; margin: 0 auto 28px; padding: 20px;
+  background: var(--bg-section); border-radius: var(--radius);
+}
+.chart-container h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 16px; }
+
+/* Style detail cards */
+.style-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .style-cards { grid-template-columns: 1fr; } }
+.style-card {
+  padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);
+  background: var(--bg-section);
+}
+.style-card .style-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+.style-card .style-name { font-size: 14px; font-weight: 700; }
+.style-card .style-score-val { font-size: 20px; font-weight: 800; }
+.style-card .style-bar-bg { height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.style-card .style-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.style-card .style-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Style description section */
+.style-desc-full { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.style-desc-full h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+.style-desc-block {
+  padding: 18px; border-radius: var(--radius-sm); margin-bottom: 14px;
+  border-left: 4px solid var(--primary);
+  background: var(--bg-section);
+}
+.style-desc-block h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.style-desc-block p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Print */
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+  .report-section.visible { display: block !important; }
+}
+
+/* Footer */
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--primary-dark); color: #fff; padding: 12px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">TI</div>
+      <div>
+        <div class="header-title">了解你的沟通风格</div>
+        <div class="header-subtitle">Toastmasters International · 项目 CS8206 · 2 级项目</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">项目 CS8206 · 了解你的沟通风格 · 发现你的沟通风格调查问卷</div>
+    <h1>发现你的沟通风格</h1>
+    <div class="instruction">
+      <strong>目的：</strong>了解不同的沟通风格并确认你的主要风格。<br><br>
+      <strong>说明：</strong>请阅读以下每项陈述，从 4 个选项中选择最符合你的答案。每道题必选且仅选一个答案。请凭第一感觉作答，不要过多思考。完成后系统将自动分析你的沟通风格类型。
+    </div>
+    <div class="info-grid">
+      <div class="form-group">
+        <label>你的姓名</label>
+        <input type="text" id="userName" placeholder="输入你的姓名">
+      </div>
+      <div class="form-group">
+        <label>评估日期</label>
+        <input type="date" id="evalDate">
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONNAIRE -->
+  <div class="section-card" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <h2><span class="section-num">1</span> 发现你的沟通风格 — 调查问卷</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="questionnaireBody"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-generate" onclick="generateReport()">📊 生成分析报告</button>
+    <div class="submit-hint">完成所有 12 道题后点击上方按钮，系统将自动分析你的沟通风格</div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 沟通风格分析报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <!-- Primary Style -->
+      <div class="primary-style-card" id="primaryStyleCard"></div>
+
+      <!-- Radar Chart -->
+      <div class="chart-container">
+        <h3>沟通风格分布雷达图</h3>
+        <canvas id="radarChart" width="400" height="400"></canvas>
+      </div>
+
+      <!-- Style Cards -->
+      <h3 style="font-size:16px;margin-bottom:14px;color:var(--text);">各沟通风格评分详情</h3>
+      <div class="style-cards" id="styleCards"></div>
+
+      <!-- Style Descriptions -->
+      <div class="style-desc-full">
+        <h3>四种沟通风格详解</h3>
+        <div id="styleDescriptions"></div>
+      </div>
+
+      <!-- Adaptation Tips -->
+      <div class="style-desc-full">
+        <h3>适应其他沟通风格的建议</h3>
+        <div id="adaptationTips"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  基于 Toastmasters International「了解你的沟通风格」项目 CS8206<br>
+  © 2016 Toastmasters International. 版权所有。Rev. 11/2016 书目编号 CS8206
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA ============
+const QUESTIONS = [
+  { num: 1, text: '我希望别人眼里的我是这样的：', options: [
+    { letter: 'A', text: '和蔼可亲', style: 'supportive' },
+    { letter: 'B', text: '坚定果断', style: 'direct' },
+    { letter: 'C', text: '小心谨慎', style: 'analytical' },
+    { letter: 'D', text: '有耐心', style: 'supportive' }
+  ]},
+  { num: 2, text: '与他人合作时，我：', options: [
+    { letter: 'A', text: '竞争性强', style: 'direct' },
+    { letter: 'B', text: '触景而发', style: 'initiating' },
+    { letter: 'C', text: '善于合作', style: 'supportive' },
+    { letter: 'D', text: '一丝不苟', style: 'analytical' }
+  ]},
+  { num: 3, text: '与他人分享感受时，我：', options: [
+    { letter: 'A', text: '不拘谨', style: 'direct' },
+    { letter: 'B', text: '有同情心', style: 'supportive' },
+    { letter: 'C', text: '不喜欢谈及私事', style: 'analytical' },
+    { letter: 'D', text: '自信', style: 'initiating' }
+  ]},
+  { num: 4, text: '他人通常这样看我：', options: [
+    { letter: 'A', text: '温和有礼', style: 'supportive' },
+    { letter: 'B', text: '风趣幽默', style: 'initiating' },
+    { letter: 'C', text: '注重结果', style: 'direct' },
+    { letter: 'D', text: '自律', style: 'analytical' }
+  ]},
+  { num: 5, text: '我喜欢我的外表为：', options: [
+    { letter: 'A', text: '正式', style: 'analytical' },
+    { letter: 'B', text: '休闲', style: 'supportive' },
+    { letter: 'C', text: '时尚', style: 'initiating' },
+    { letter: 'D', text: '商务', style: 'direct' }
+  ]},
+  { num: 6, text: '我希望在以下方面获得支持：', options: [
+    { letter: 'A', text: '目标', style: 'direct' },
+    { letter: 'B', text: '观点', style: 'initiating' },
+    { letter: 'C', text: '感受', style: 'supportive' },
+    { letter: 'D', text: '想法', style: 'analytical' }
+  ]},
+  { num: 7, text: '做项目时，我：', options: [
+    { letter: 'A', text: '充满热情', style: 'initiating' },
+    { letter: 'B', text: '雄心勃勃', style: 'direct' },
+    { letter: 'C', text: '坚定果断', style: 'supportive' },
+    { letter: 'D', text: '持之以恒', style: 'analytical' }
+  ]},
+  { num: 8, text: '有些人会消极地看待我，认为我：', options: [
+    { letter: 'A', text: '优柔寡断', style: 'supportive' },
+    { letter: 'B', text: '过于追求完美', style: 'analytical' },
+    { letter: 'C', text: '意气用事', style: 'initiating' },
+    { letter: 'D', text: '刚愎自用', style: 'direct' }
+  ]},
+  { num: 9, text: '作为领导者，人们认为我：', options: [
+    { letter: 'A', text: '专心致志', style: 'direct' },
+    { letter: 'B', text: '喜欢冒险', style: 'initiating' },
+    { letter: 'C', text: '值得信任', style: 'supportive' },
+    { letter: 'D', text: '善于解决问题', style: 'analytical' }
+  ]},
+  { num: 10, text: '处于新环境中时，我：', options: [
+    { letter: 'A', text: '认真负责', style: 'analytical' },
+    { letter: 'B', text: '大胆无畏', style: 'direct' },
+    { letter: 'C', text: '积极乐观', style: 'initiating' },
+    { letter: 'D', text: '亲切友善', style: 'supportive' }
+  ]},
+  { num: 11, text: '一份完美的职业会给予我：', options: [
+    { letter: 'A', text: '成就感', style: 'direct' },
+    { letter: 'B', text: '愉悦感', style: 'initiating' },
+    { letter: 'C', text: '认可感', style: 'supportive' },
+    { letter: 'D', text: '精致感', style: 'analytical' }
+  ]},
+  { num: 12, text: '我最喜欢的工作方式是：', options: [
+    { letter: 'A', text: '交际', style: 'initiating' },
+    { letter: 'B', text: '集体研讨', style: 'supportive' },
+    { letter: 'C', text: '委派', style: 'direct' },
+    { letter: 'D', text: '独立工作', style: 'analytical' }
+  ]}
+];
+
+const STYLES = {
+  direct: {
+    name: '直接型', color: '#A6192E', icon: '🎯',
+    score: 0, maxScore: 12,
+    description: '该风格坚定果断、求胜心切、独立自信。具有直接沟通风格的人专心致志、雄心勃勃、注重目标、有紧迫感，人们可能会觉得她刚愎自用或要求苛刻。她喜欢掌控一切，通过成就和成功来衡量进步，不畏挑战。工作时更注重结果而不是关系，不轻易分享感受。她性子急，坚定果断，喜欢忙碌、高效、结构化的正规环境。',
+    shortDesc: '坚定果断，注重结果，独立自信，目标导向'
+  },
+  initiating: {
+    name: '主动型', color: '#C4952E', icon: '🌟',
+    score: 0, maxScore: 12,
+    description: '这种风格和蔼可亲，富有热情，充满活力，自然风趣。具有主动型沟通风格的人爱好交际，人们可能会觉得他讲述多于倾听。他往往被认为自信、富有创新精神、具有说服力。他渴望被认可，看重关系，极其能够接受赞扬和肯定。他性子急，有时容易冲动。他喜欢鼓舞人、关系紧密、和睦的工作环境。',
+    shortDesc: '热情洋溢，善于交际，富有创意，感染力强'
+  },
+  supportive: {
+    name: '支持型', color: '#2D7D46', icon: '🤝',
+    score: 0, maxScore: 12,
+    description: '这种风格沉着稳重，平易近人，真诚温和。具有支持型沟通风格的人不喜欢变化，有时看起来优柔寡断。大多数时候，她细致、友善、有耐心。由于她具备主动倾听的技巧，他人会认为她具有合作精神、值得信任、忠诚。她常常保持谦恭，更喜欢私下接受赞扬。她有耐心，是个慢性子，因此喜欢关系紧密、放松、没有压力的环境。她看重亲密关系，不喜欢与他人起冲突，但在需要时会发挥调解作用。',
+    shortDesc: '沉着稳重，真诚温和，善于倾听，值得信赖'
+  },
+  analytical: {
+    name: '分析型', color: '#3B6FB6', icon: '📊',
+    score: 0, maxScore: 12,
+    description: '这种风格一丝不苟，要求精确，善于分析，讲究逻辑性。具有分析型沟通风格的人做事有条理，以任务为中心，他有时会被认为是完美主义者。他做事有条理，依靠自己，坚定果断，讲究策略。他日常行事往往基于对所要处理事务的确定性，如果不被问及，很少发表意见。他生性缓慢谨慎，喜欢结构化、有序的功能性环境。由于他需要确信自己的状况和他人的期望，他很少谈及私人信息，不轻易表达情感。',
+    shortDesc: '精确严谨，逻辑清晰，注重数据，深思熟虑'
+  }
+};
+
+const ADAPTATION_TIPS = [
+  { title: '与直接沟通者交流', content: '直接沟通者喜好你简练地快速切入重点。切记要具体，同时避免赘述或重复叙述。专注于解决方案，同时只在对方要求时才提供细节。' },
+  { title: '与主动型沟通者交流', content: '主动型沟通者重视与他人的互动和故事分享。在开会之前腾出时间交流，营造友好、没有威胁的氛围。为他们腾出时间，好让他们表达感受和观点。' },
+  { title: '与支持型沟通者交流', content: '支持型沟通者更青睐沉着稳重的沟通方式。通过向他们适时保证及认可来赢得信任。征求他们的意见和想法时，鼓励他们表达自己的看法并给他们留出做决定的时间。' },
+  { title: '与分析型沟通者交流', content: '分析型沟通者喜欢事实和数据。有条理地向他们传达信息，并做好解答疑问的准备。当他们仔细思考和处理新信息时，要有耐心。' }
+];
+
+// ============ BUILD QUESTIONNAIRE ============
+function buildQuestionnaire() {
+  let html = '';
+  QUESTIONS.forEach((q, i) => {
+    html += `<div class="assessment-item">
+      <div class="item-question"><span class="item-number">${q.num}.</span>${q.text}</div>
+      <div class="option-grid">`;
+    q.options.forEach((opt, j) => {
+      html += `<div class="option-item">
+        <input type="radio" name="q${i}" value="${j}" id="q${i}_${j}" onchange="checkAllAnswered()">
+        <label for="q${i}_${j}">
+          <span class="option-letter">${opt.letter}</span>
+          <span>${opt.text}</span>
+        </label>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('questionnaireBody').innerHTML = html;
+}
+
+// ============ INIT ============
+document.getElementById('evalDate').valueAsDate = new Date();
+buildQuestionnaire();
+
+// ============ SECTION TOGGLE ============
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+// ============ CHECK ALL ANSWERED ============
+function checkAllAnswered() {
+  const total = QUESTIONS.length;
+  let answered = 0;
+  QUESTIONS.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) answered++;
+  });
+  return answered;
+}
+
+// ============ GENERATE REPORT ============
+function generateReport() {
+  const userName = document.getElementById('userName').value.trim();
+  const answered = checkAllAnswered();
+  
+  if (answered < QUESTIONS.length) {
+    showToast(`请完成所有 ${QUESTIONS.length} 道题目后再生成报告（当前已完成 ${answered} 题）`);
+    return;
+  }
+
+  // Calculate scores
+  const styleScores = { direct: 0, initiating: 0, supportive: 0, analytical: 0 };
+  QUESTIONS.forEach((q, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) {
+      const optIdx = parseInt(selected.value);
+      const style = q.options[optIdx].style;
+      styleScores[style]++;
+    }
+  });
+
+  // Find primary style
+  let maxScore = 0;
+  let primaryStyle = 'direct';
+  Object.entries(styleScores).forEach(([style, score]) => {
+    if (score > maxScore) { maxScore = score; primaryStyle = style; }
+  });
+
+  // Update meta
+  const evalDate = document.getElementById('evalDate').value;
+  let meta = '';
+  if (userName) meta += `评估人：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // Primary style card
+  const ps = STYLES[primaryStyle];
+  document.getElementById('primaryStyleCard').innerHTML = `
+    <div class="style-badge" style="background:${ps.color};">${ps.icon} 你的主要沟通风格：${ps.name}</div>
+    <div class="style-score">得分：${styleScores[primaryStyle]} / ${QUESTIONS.length} 题</div>
+    <div class="style-desc">${ps.description}</div>
+  `;
+
+  // Radar chart
+  drawRadarChart(styleScores);
+
+  // Style detail cards
+  let cardsHTML = '';
+  const sortedStyles = Object.entries(styleScores).sort((a, b) => b[1] - a[1]);
+  sortedStyles.forEach(([style, score]) => {
+    const s = STYLES[style];
+    const pct = (score / QUESTIONS.length) * 100;
+    const isPrimary = style === primaryStyle;
+    cardsHTML += `<div class="style-card" style="${isPrimary ? 'border:2px solid ' + s.color + ';' : ''}">
+      <div class="style-header">
+        <span class="style-name" style="color:${s.color};">${s.icon} ${s.name}${isPrimary ? ' ⬅ 主要风格' : ''}</span>
+        <span class="style-score-val" style="color:${s.color};">${score}</span>
+      </div>
+      <div class="style-bar-bg"><div class="style-bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
+      <div class="style-detail">${s.shortDesc}</div>
+    </div>`;
+  });
+  document.getElementById('styleCards').innerHTML = cardsHTML;
+
+  // Full style descriptions
+  let descHTML = '';
+  const styleOrder = ['direct', 'initiating', 'supportive', 'analytical'];
+  styleOrder.forEach(style => {
+    const s = STYLES[style];
+    const isPrimary = style === primaryStyle;
+    descHTML += `<div class="style-desc-block" style="border-left-color:${s.color};${isPrimary ? 'background:rgba(' + hexToRgb(s.color) + ',0.08);' : ''}">
+      <h4 style="color:${s.color};">${s.icon} ${s.name}${isPrimary ? '（你的主要风格）' : ''}</h4>
+      <p>${s.description}</p>
+    </div>`;
+  });
+  document.getElementById('styleDescriptions').innerHTML = descHTML;
+
+  // Adaptation tips
+  let tipsHTML = '';
+  ADAPTATION_TIPS.forEach(tip => {
+    tipsHTML += `<div class="style-desc-block">
+      <h4>${tip.title}</h4>
+      <p>${tip.content}</p>
+    </div>`;
+  });
+  document.getElementById('adaptationTips').innerHTML = tipsHTML;
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✅ 沟通风格分析报告已生成！');
+}
+
+// ============ RADAR CHART ============
+let radarChartInstance = null;
+
+function drawRadarChart(styleScores) {
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const labels = ['直接型', '主动型', '支持型', '分析型'];
+  const data = [styleScores.direct, styleScores.initiating, styleScores.supportive, styleScores.analytical];
+  const maxVal = QUESTIONS.length;
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '得分',
+        data: data,
+        backgroundColor: 'rgba(119, 36, 50, 0.12)',
+        borderColor: '#772432',
+        borderWidth: 2.5,
+        pointBackgroundColor: data.map((v, i) => ['#A6192E', '#C4952E', '#2D7D46', '#3B6FB6'][i]),
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: maxVal,
+          min: 0,
+          ticks: { stepSize: 2, font: { size: 11 }, backdropColor: 'transparent', color: '#5C4A3A' },
+          pointLabels: { font: { size: 13, weight: '600' }, color: '#2D2118' },
+          grid: { color: 'rgba(119, 36, 50, 0.1)' },
+          angleLines: { color: 'rgba(119, 36, 50, 0.1)' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ============ HEX TO RGB helper ============
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1],16)},${parseInt(result[2],16)},${parseInt(result[3],16)}` : '119,36,50';
+}
+
+// ============ UTILITIES ============
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Auto-save to localStorage
+function autoSave() {
+  const state = {};
+  QUESTIONS.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) state[`q${i}`] = selected.value;
+  });
+  state.userName = document.getElementById('userName').value;
+  state.evalDate = document.getElementById('evalDate').value;
+  localStorage.setItem('cs8206_state', JSON.stringify(state));
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cs8206_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key === 'userName') document.getElementById('userName').value = value;
+      else if (key === 'evalDate') { if (value) document.getElementById('evalDate').value = value; }
+      else {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) radio.checked = true;
+      }
+    });
+  } catch(e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>

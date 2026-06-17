@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>360° 评估</title>
+<title>360° 评估 — 带领志愿者组织</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --primary: #A87B52;
-  --primary-light: #C4956A;
-  --primary-dark: #8B6340;
-  --gold: #D4A843;
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
   --gold-light: #F5E6C8;
-  --bg: #F5F0E8;
+  --bg: #FDFAF5;
   --bg-card: #FFFFFF;
-  --bg-section: #FDFAF5;
+  --bg-section: #F9F4EA;
   --text: #2D2118;
-  --text-secondary: #5C4A32;
-  --border: #E8DCC8;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
   --border-light: #E8DCC8;
   --success: #2D7D46;
   --warning: #C4952E;
@@ -28,8 +28,8 @@
   --score-3: #C4952E;
   --score-2: #D4956A;
   --score-1: #A6192E;
-  --shadow: 0 2px 12px rgba(45,33,24,0.06);
-  --shadow-lg: 0 8px 32px rgba(45,33,24,0.10);
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
   --radius: 10px;
   --radius-sm: 6px;
   --transition: 0.2s ease;
@@ -48,13 +48,13 @@ body {
 
 /* ========== HEADER ========== */
 .header {
-  background: linear-gradient(135deg, #C4956A 0%, #A87B52 50%, #8B6340 100%);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
   color: #fff;
   padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
 }
 .header-inner {
   max-width: 960px;
@@ -62,7 +62,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px;
+  padding: 12px 24px;
 }
 .header-brand {
   display: flex;
@@ -73,27 +73,24 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.18);
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-.header-logo svg {
-  width: 26px;
-  height: 26px;
+  font-size: 22px;
+  color: var(--primary);
+  font-weight: 700;
 }
 .header-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 .header-subtitle {
   font-size: 12px;
-  opacity: 0.65;
+  opacity: 0.8;
   font-weight: 400;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 .header-actions { display: flex; gap: 8px; }
 
@@ -112,20 +109,21 @@ body {
   font-family: inherit;
 }
 .btn-primary {
-  background: linear-gradient(135deg, #C4956A, #A87B52);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(196,149,106,0.3);
+  background: var(--gold);
+  color: var(--primary-dark);
+  box-shadow: 0 2px 8px rgba(196,149,46,0.3);
 }
 .btn-primary:hover {
-  box-shadow: 0 4px 16px rgba(196,149,106,0.4);
+  background: #D4A640;
+  box-shadow: 0 4px 16px rgba(196,149,46,0.4);
   transform: translateY(-1px);
 }
 .btn-outline {
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.85);
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
 }
-.btn-outline:hover { background: rgba(255,255,255,0.18); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
 .btn-sm { padding: 6px 14px; font-size: 12px; }
 
 /* ========== CONTAINER ========== */
@@ -145,37 +143,42 @@ body {
   border: 1px solid var(--border-light);
 }
 .intro-card h1 {
-  font-size: 22px;
-  color: var(--primary-dark);
+  font-size: 20px;
+  color: var(--primary);
   margin-bottom: 8px;
   font-weight: 700;
+}
+.intro-card .breadcrumb {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
 }
 .intro-card .instruction {
   font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.9;
-  padding: 16px 20px;
+  line-height: 1.8;
+  padding: 14px 18px;
   background: var(--bg-section);
   border-radius: var(--radius-sm);
-  border-left: 3px solid var(--primary-light);
+  border-left: 3px solid var(--gold);
 }
 
 /* ========== FORM FIELDS ========== */
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 22px;
+  gap: 14px;
+  margin-top: 20px;
 }
 .info-grid.full { grid-template-columns: 1fr; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group label {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
 }
 .form-group input, .form-group textarea, .form-group select {
-  padding: 11px 14px;
+  padding: 10px 14px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 14px;
@@ -186,8 +189,8 @@ body {
 }
 .form-group input:focus, .form-group textarea:focus {
   outline: none;
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(196,149,106,0.08);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(119,36,50,0.08);
 }
 .form-group textarea { resize: vertical; min-height: 70px; }
 
@@ -196,13 +199,13 @@ body {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  padding: 14px 18px;
+  padding: 12px 16px;
   background: var(--bg-section);
   border-radius: var(--radius-sm);
-  margin: 18px 0;
+  margin: 16px 0;
   align-items: center;
 }
-.scale-legend .label { font-size: 13px; color: var(--text-secondary); margin-right: 8px; font-weight: 600; }
+.scale-legend .label { font-size: 12px; color: var(--text-secondary); margin-right: 8px; font-weight: 600; }
 .scale-item {
   display: flex;
   align-items: center;
@@ -233,8 +236,8 @@ body {
 .section-card:hover { box-shadow: var(--shadow-lg); }
 
 .section-header {
-  padding: 15px 24px;
-  background: linear-gradient(135deg, #C4956A, #A87B52);
+  padding: 16px 24px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   color: #fff;
   display: flex;
   align-items: center;
@@ -250,7 +253,7 @@ body {
   gap: 10px;
 }
 .section-num {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.2);
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -259,9 +262,8 @@ body {
   justify-content: center;
   font-size: 14px;
   font-weight: 700;
-  color: #fff;
 }
-.section-toggle { font-size: 16px; transition: transform var(--transition); opacity: 0.75; }
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
 .section-card.collapsed .section-toggle { transform: rotate(-90deg); }
 .section-card.collapsed .section-body { display: none; }
 
@@ -307,21 +309,21 @@ body {
   user-select: none;
 }
 .score-option label:hover {
-  border-color: var(--primary-light);
+  border-color: var(--primary);
   color: var(--primary);
-  background: rgba(196,149,106,0.04);
+  background: rgba(119,36,50,0.04);
 }
 .score-option input:checked + label {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(168,123,82,0.3);
+  box-shadow: 0 2px 8px rgba(119,36,50,0.25);
 }
-.score-option input:checked + label.score-5 { background: var(--score-5); border-color: var(--score-5); box-shadow: 0 2px 8px rgba(45,125,70,0.3); }
-.score-option input:checked + label.score-4 { background: var(--score-4); border-color: var(--score-4); box-shadow: 0 2px 8px rgba(90,158,111,0.3); }
-.score-option input:checked + label.score-3 { background: var(--score-3); border-color: var(--score-3); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
-.score-option input:checked + label.score-2 { background: var(--score-2); border-color: var(--score-2); box-shadow: 0 2px 8px rgba(212,149,106,0.3); }
-.score-option input:checked + label.score-1 { background: var(--score-1); border-color: var(--score-1); box-shadow: 0 2px 8px rgba(166,25,46,0.3); }
+.score-option input:checked + label.score-5 { background: var(--score-5); border-color: var(--score-5); }
+.score-option input:checked + label.score-4 { background: var(--score-4); border-color: var(--score-4); }
+.score-option input:checked + label.score-3 { background: var(--score-3); border-color: var(--score-3); }
+.score-option input:checked + label.score-2 { background: var(--score-2); border-color: var(--score-2); }
+.score-option input:checked + label.score-1 { background: var(--score-1); border-color: var(--score-1); }
 
 .score-na { margin-left: 10px; }
 .score-na label {
@@ -362,8 +364,8 @@ body {
 }
 .item-comment textarea:focus {
   outline: none;
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(196,149,106,0.06);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(119,36,50,0.06);
 }
 .item-comment-label {
   font-size: 12px;
@@ -398,33 +400,32 @@ body {
 }
 .open-question textarea:focus {
   outline: none;
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(196,149,106,0.06);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(119,36,50,0.06);
 }
 
 /* ========== SUBMIT SECTION ========== */
 .submit-section {
   text-align: center;
-  padding: 36px 0;
+  padding: 32px 0;
 }
 .btn-generate {
-  padding: 15px 52px;
+  padding: 14px 48px;
   font-size: 16px;
   border-radius: 30px;
-  background: linear-gradient(135deg, #C4956A, #A87B52);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: #fff;
   border: none;
   cursor: pointer;
   font-weight: 700;
   letter-spacing: 1px;
-  box-shadow: 0 4px 18px rgba(168,123,82,0.35);
+  box-shadow: 0 4px 20px rgba(119,36,50,0.3);
   transition: all 0.3s;
   font-family: inherit;
 }
 .btn-generate:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(168,123,82,0.45);
-  background: linear-gradient(135deg, #D4A574, #B88762);
+  box-shadow: 0 8px 28px rgba(119,36,50,0.4);
 }
 .submit-hint {
   font-size: 13px;
@@ -440,7 +441,7 @@ body {
 .report-section.visible { display: block; }
 
 .report-header {
-  background: linear-gradient(135deg, #C4956A, #A87B52);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   color: #fff;
   border-radius: var(--radius) var(--radius) 0 0;
   padding: 32px;
@@ -453,7 +454,7 @@ body {
 }
 .report-header .report-meta {
   font-size: 13px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .report-body {
@@ -485,13 +486,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 6px solid var(--primary-light);
+  border: 6px solid var(--primary);
   background: var(--bg-section);
 }
 .score-circle .big-num {
   font-size: 42px;
   font-weight: 800;
-  color: var(--primary-dark);
+  color: var(--primary);
   line-height: 1;
 }
 .score-circle .big-label {
@@ -502,7 +503,7 @@ body {
 .score-summary-text { max-width: 350px; }
 .score-summary-text h3 {
   font-size: 16px;
-  color: var(--primary-dark);
+  color: var(--primary);
   margin-bottom: 8px;
 }
 .score-summary-text p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
@@ -542,7 +543,7 @@ body {
 .dim-card .dim-score {
   font-size: 22px;
   font-weight: 800;
-  color: var(--primary-dark);
+  color: var(--primary);
 }
 .dim-card .dim-bar-bg {
   height: 8px;
@@ -643,12 +644,12 @@ body {
   border-radius: var(--radius-sm);
   padding: 14px 18px;
   margin-bottom: 10px;
-  border-left: 3px solid var(--primary-light);
+  border-left: 3px solid var(--primary);
 }
 .comment-block .comment-q {
   font-size: 13px;
   font-weight: 600;
-  color: var(--primary-dark);
+  color: var(--primary);
   margin-bottom: 4px;
 }
 .comment-block .comment-a {
@@ -657,88 +658,14 @@ body {
   line-height: 1.6;
 }
 
-/* Print - fix ghosting, blank space & colors */
-@page {
-  size: A4;
-  margin: 10mm 8mm 18mm 8mm;
-}
+/* Print */
 @media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    -webkit-text-stroke: 0 !important;
-    text-shadow: none !important;
-    opacity: 1 !important;
-  }
-  body {
-    background: #fff !important;
-    -webkit-print-color-adjust: exact !important;
-    font-smooth: always !important;
-  }
-  .header {
-    position: static !important;
-    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-  .header-actions { display: none !important; }
-  .btn-generate, .submit-hint, .section-toggle, .header-actions { display: none !important; }
-  .container {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
-  }
-  .intro-card, .section-card, .report-body, .report-section.visible {
-    overflow: visible !important;
-    box-shadow: none !important;
-  }
-  .section-card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-    max-width: 100% !important;
-    page-break-inside: auto;
-    break-inside: auto;
-  }
-  .section-header {
-    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  .section-progress {
-    opacity: 1 !important;
-    color: #fff !important;
-    font-weight: 500 !important;
-    text-shadow: none !important;
-  }
-  .report-header {
-    background: linear-gradient(135deg, #C4956A, #A87B52) !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
+  .header, .btn-generate, .submit-hint, .section-toggle { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
   .report-section.visible { display: block !important; }
-  /* Ensure no blank space from truncation */
-  html, body {
-    overflow: visible !important;
-    height: auto !important;
-  }
-
-  /* Print header/footer */
-  .print-footer {
-    display: block !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 4px 12px;
-    font-size: 9px;
-    color: #999;
-    border-top: 1px solid #eee;
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-  }
 }
 
 /* ========== FOOTER ========== */
@@ -748,8 +675,8 @@ body {
   font-size: 12px;
   color: var(--text-secondary);
   border-top: 1px solid var(--border-light);
-  line-height: 1.9;
 }
+.footer a { color: var(--primary); text-decoration: none; }
 
 /* Toast notification */
 .toast {
@@ -757,7 +684,7 @@ body {
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background: #A87B52;
+  background: var(--primary-dark);
   color: #fff;
   padding: 12px 28px;
   border-radius: 30px;
@@ -771,30 +698,11 @@ body {
 }
 .toast.show { opacity: 1; }
 
-/* Print footer - hidden on screen, visible when printing */
-.print-footer {
-  display: none;
-}
-
 /* Progress indicator on sections */
 .section-progress {
   font-size: 12px;
-  font-weight: 500;
-  color: #fff;
-  text-shadow: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .header-inner { padding: 10px 16px; }
-  .header-title { font-size: 15px; }
-  .info-grid { grid-template-columns: 1fr; gap: 12px; }
-  .container { padding: 16px 12px 40px; }
-  .intro-card { padding: 20px 18px; }
-  .section-body { padding: 16px; }
-  .scale-legend { gap: 4px; }
-  .summary-score { gap: 20px; flex-direction: column; }
+  opacity: 0.85;
+  font-weight: 400;
 }
 </style>
 </head>
@@ -804,29 +712,10 @@ body {
 <header class="header">
   <div class="header-inner">
     <div class="header-brand">
-      <div class="header-logo">
-        <!-- 雷达图/评估图标 -->
-        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="24" cy="24" r="20" stroke="#fff" stroke-width="1.8" fill="none" opacity="0.5"/>
-          <circle cx="24" cy="24" r="14" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.65"/>
-          <circle cx="24" cy="24" r="7" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.85"/>
-          <line x1="24" y1="4" x2="24" y2="24" stroke="#fff" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="41.5" y2="31" stroke="#fff" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="6.5" y2="31" stroke="#fff" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="24" y2="38" stroke="#fff" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="38" y2="11" stroke="#fff" stroke-width="1.5"/>
-          <line x1="24" y1="24" x2="10" y2="11" stroke="#fff" stroke-width="1.5"/>
-          <circle cx="24" cy="4" r="2.5" fill="#fff"/>
-          <circle cx="41.5" cy="31" r="2.5" fill="#fff" opacity="0.8"/>
-          <circle cx="6.5" cy="31" r="2.5" fill="#fff" opacity="0.8"/>
-          <circle cx="24" cy="38" r="2.5" fill="#fff" opacity="0.7"/>
-          <circle cx="38" cy="11" r="2.5" fill="#fff" opacity="0.8"/>
-          <circle cx="10" cy="11" r="2.5" fill="#fff" opacity="0.8"/>
-          <circle cx="24" cy="24" r="3" fill="#C4956A" stroke="#fff" stroke-width="1.5"/>
-        </svg>
-      </div>
+      <div class="header-logo">TI</div>
       <div>
         <div class="header-title">360° 评估</div>
+        <div class="header-subtitle">带领志愿者组织 · Toastmasters International</div>
       </div>
     </div>
     <div class="header-actions">
@@ -841,12 +730,13 @@ body {
 
   <!-- INTRO -->
   <div class="intro-card">
+    <div class="breadcrumb">项目 CS8505 · 带领志愿者组织 · 第 19-24 页</div>
     <h1>360° 评估</h1>
     <div class="instruction">
       请结合自己与所评估的领导者共事的经历，对于此处列出的所有问题，提供经过深思熟虑的答复。如果你尚未观察特定行为或品质，请在评估时选择"不适用"。尽可能花些时间想些例子。
     </div>
 
-    <!-- Basic Info - 清空默认数据，只保留提示词 -->
+    <!-- Basic Info -->
     <div class="info-grid">
       <div class="form-group">
         <label>领导者姓名（被评估者）*</label>
@@ -854,7 +744,7 @@ body {
       </div>
       <div class="form-group">
         <label>角色 / 职位</label>
-        <input type="text" id="leaderRole" placeholder="例如：总监 / 部门经理 / 项目经理">
+        <input type="text" id="leaderRole" placeholder="例如：俱乐部主席">
       </div>
       <div class="form-group">
         <label>评估员姓名 *</label>
@@ -1219,7 +1109,7 @@ body {
   <!-- REPORT -->
   <div class="report-section" id="reportSection">
     <div class="report-header">
-      <h2>📋 360° 评估分析报告</h2>
+      <h2>📋 360° 评估报告</h2>
       <div class="report-meta" id="reportMeta"></div>
     </div>
     <div class="report-body">
@@ -1273,18 +1163,12 @@ body {
 
 <!-- FOOTER -->
 <div class="footer">
-  360°评估系统 V3.0<br>
-  Powered By Kan Man Tang
+  基于 Toastmasters International「带领志愿者组织」项目 CS8505 · 360° 评估材料<br>
+  © 2016 Toastmasters International. 版权所有。Rev. 11/2016 书目编号 CS8000
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- PRINT FOOTER -->
-<div class="print-footer" id="printFooter">
-  <span class="pf-path" id="pfPath"></span>
-  <span class="pf-page" id="pfPage"></span>
-</div>
 
 <script>
 // ============ INITIALIZATION ============
@@ -1312,7 +1196,7 @@ const DIMENSIONS = {
 document.querySelectorAll('.assessment-item').forEach((item, i) => {
   const container = document.getElementById('score-' + i);
   if (!container) return;
-
+  
   let html = '';
   SCORE_OPTIONS.forEach(opt => {
     const isNA = opt.value === 'NA';
@@ -1331,6 +1215,9 @@ document.querySelectorAll('.assessment-item').forEach((item, i) => {
   container.innerHTML = html;
 });
 
+// Set default date
+document.getElementById('evalDate').valueAsDate = new Date();
+
 // ============ SECTION TOGGLE ============
 function toggleSection(id) {
   document.getElementById(id).classList.toggle('collapsed');
@@ -1348,7 +1235,7 @@ function updateProgress() {
     const progEl = document.getElementById('prog' + info.secId.slice(3));
     if (progEl) {
       progEl.textContent = `${scored}/${info.items} 完成`;
-      progEl.style.color = scored === info.items ? '#fff' : 'rgba(255,255,255,0.8)';
+      progEl.style.color = scored === info.items ? '#fff' : '';
     }
   });
 }
@@ -1371,10 +1258,10 @@ function collectData() {
     const dim = item.dataset.dim;
     if (!data.scores[dim]) data.scores[dim] = [];
     if (!data.comments[dim]) data.comments[dim] = [];
-
+    
     const selected = item.querySelector('input[type="radio"]:checked');
     data.scores[dim].push(selected ? selected.value : null);
-
+    
     const comment = item.querySelector('textarea')?.value.trim() || '';
     data.comments[dim].push(comment);
   });
@@ -1416,7 +1303,7 @@ function generateReport() {
   // Calculate dimension scores
   const dimScores = {};
   const allValidScores = [];
-
+  
   Object.entries(DIMENSIONS).forEach(([dim, info]) => {
     const scores = data.scores[dim] || [];
     const validScores = scores.filter(s => s !== null && s !== 'NA').map(Number);
@@ -1430,27 +1317,27 @@ function generateReport() {
     allValidScores.push(...validScores);
   });
 
-  const overallAvg = allValidScores.length > 0
-    ? allValidScores.reduce((a, b) => a + b, 0) / allValidScores.length
+  const overallAvg = allValidScores.length > 0 
+    ? allValidScores.reduce((a, b) => a + b, 0) / allValidScores.length 
     : 0;
 
   // Determine level
   let levelText, levelDesc;
   if (overallAvg >= 4.5) {
-    levelText = '🏆 卓越领导者';
-    levelDesc = '该领导者各方面均表现卓越，展现出高水平的领导能力，可作为团队榜样。';
+    levelText = '🏆 模范领导者';
+    levelDesc = '该领导者在带领志愿者组织方面表现卓越，几乎所有维度都展现出高水平的领导能力。其作为组织中的榜样，值得广泛学习和效仿。';
   } else if (overallAvg >= 3.5) {
     levelText = '👏 精通的领导者';
-    levelDesc = '该领导者在多数维度表现出扎实的领导技能，具备有效带领团队的能力。个别领域仍有提升空间。';
+    levelDesc = '该领导者在多数维度表现出扎实的领导技能，具备有效带领志愿者团队的能力。在个别领域仍有提升空间，建议重点关注相对薄弱的维度。';
   } else if (overallAvg >= 2.5) {
     levelText = '📈 成长中的领导者';
-    levelDesc = '该领导者已具备基本的领导素质，某些方面表现良好，但仍有多个领域需要系统性地提升。';
+    levelDesc = '该领导者已具备基本的领导素质，在某些方面表现良好，但仍有多个领域需要系统性地提升。建议制定针对性的发展计划并寻求指导。';
   } else if (overallAvg >= 1.5) {
     levelText = '🌱 初级领导者';
-    levelDesc = '该领导者处于领导力发展的早期阶段，多个维度需要显著提升。建议从基础开始逐步积累经验。';
+    levelDesc = '该领导者处于领导力发展的早期阶段，多个维度需要显著提升。建议从基础领导技能开始，逐步积累经验并接受更多培训和支持。';
   } else if (overallAvg > 0) {
     levelText = '🔍 有待发展';
-    levelDesc = '各项领导技能均有较大提升空间，建议系统性学习并实践领导技能。';
+    levelDesc = '评估结果显示该领导者在各项领导技能方面均有较大提升空间。建议从基础开始，系统性地学习和实践领导技能。';
   } else {
     levelText = '暂无数据';
     levelDesc = '请完成更多评分项以获得准确的评估结果。';
@@ -1475,21 +1362,21 @@ function generateReport() {
   // Dimension cards
   let dimCardsHTML = '';
   const dimEntries = Object.entries(dimScores);
-
+  
   // Sort by score (highest first)
   const sortedDims = [...dimEntries].sort((a, b) => b[1].avg - a[1].avg);
-
+  
   sortedDims.forEach(([dim, info]) => {
     const pct = info.count > 0 ? (info.avg / 5) * 100 : 0;
-    let barColor = '#C4956A';
+    let barColor = '#C4952E';
     if (info.avg >= 4.5) barColor = 'var(--score-5)';
     else if (info.avg >= 3.5) barColor = 'var(--score-4)';
     else if (info.avg >= 2.5) barColor = 'var(--score-3)';
     else if (info.avg >= 1.5) barColor = 'var(--score-2)';
     else if (info.avg > 0) barColor = 'var(--score-1)';
-
+    
     const level = info.avg >= 4.5 ? '模范' : info.avg >= 3.5 ? '精通' : info.avg >= 2.5 ? '熟练' : info.avg >= 1.5 ? '能力初显' : info.avg > 0 ? '有待提高' : '未评分';
-
+    
     dimCardsHTML += `
       <div class="dim-card">
         <div class="dim-header">
@@ -1536,6 +1423,7 @@ function generateReport() {
     if (hasComments) {
       itemComments.forEach((c, i) => {
         if (c) {
+          // Find the question text
           const secId = info.secId;
           const items = document.querySelectorAll(`#${secId} .assessment-item`);
           const qText = items[i]?.querySelector('.item-question')?.textContent || `项目 ${i+1}`;
@@ -1609,10 +1497,10 @@ function drawRadarChart(dimEntries, dimScores) {
       datasets: [{
         label: '评分',
         data: data,
-        backgroundColor: 'rgba(196, 149, 106, 0.15)',
-        borderColor: '#C4956A',
+        backgroundColor: 'rgba(119, 36, 50, 0.15)',
+        borderColor: '#772432',
         borderWidth: 2.5,
-        pointBackgroundColor: '#A87B52',
+        pointBackgroundColor: '#772432',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
         pointRadius: 5,
@@ -1632,17 +1520,17 @@ function drawRadarChart(dimEntries, dimScores) {
             stepSize: 1,
             font: { size: 11 },
             backdropColor: 'transparent',
-            color: '#5C4A32'
+            color: '#5C4A3A'
           },
           pointLabels: {
             font: { size: 13, weight: '600' },
-            color: '#5C4A32'
+            color: '#2D2118'
           },
           grid: {
-            color: 'rgba(196, 149, 106, 0.15)'
+            color: 'rgba(119, 36, 50, 0.12)'
           },
           angleLines: {
-            color: 'rgba(196, 149, 106, 0.15)'
+            color: 'rgba(119, 36, 50, 0.12)'
           }
         }
       },
@@ -1670,6 +1558,7 @@ function resetForm() {
     document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
     document.querySelectorAll('textarea').forEach(ta => ta.value = '');
     document.querySelectorAll('input[type="text"], input[type="date"]').forEach(i => i.value = '');
+    document.getElementById('evalDate').valueAsDate = new Date();
     document.getElementById('reportSection').classList.remove('visible');
     if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
     updateProgress();
@@ -1689,11 +1578,13 @@ function showToast(msg) {
 // Auto-save to localStorage
 function autoSave() {
   const data = collectData();
+  // Save scores
   const scoreState = {};
   document.querySelectorAll('.assessment-item input[type="radio"]:checked').forEach(r => {
     scoreState[r.name] = r.value;
   });
-  localStorage.setItem('assess360_scores', JSON.stringify(scoreState));
+  localStorage.setItem('tm360_scores', JSON.stringify(scoreState));
+  // Save text fields
   const textState = {};
   document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => {
     if (el.id || el.dataset.field) {
@@ -1702,24 +1593,24 @@ function autoSave() {
   });
   textState['leaderRole'] = document.getElementById('leaderRole').value;
   textState['evalPeriod'] = document.getElementById('evalPeriod').value;
-  localStorage.setItem('assess360_text', JSON.stringify(textState));
+  localStorage.setItem('tm360_text', JSON.stringify(textState));
 }
 
 // Restore from localStorage
 function autoRestore() {
   try {
-    const scoreState = JSON.parse(localStorage.getItem('assess360_scores') || '{}');
+    const scoreState = JSON.parse(localStorage.getItem('tm360_scores') || '{}');
     Object.entries(scoreState).forEach(([name, value]) => {
       const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
       if (radio) radio.checked = true;
     });
-
-    const textState = JSON.parse(localStorage.getItem('assess360_text') || '{}');
+    
+    const textState = JSON.parse(localStorage.getItem('tm360_text') || '{}');
     Object.entries(textState).forEach(([key, value]) => {
       const el = document.getElementById(key) || document.querySelector(`[data-field="${key}"]`);
       if (el && value) el.value = value;
     });
-
+    
     updateProgress();
   } catch(e) { /* ignore */ }
 }
@@ -1741,53 +1632,6 @@ window.addEventListener('DOMContentLoaded', () => {
   autoRestore();
   updateProgress();
 });
-
-// ========== PRINT FOOTER (file path + page numbers) ==========
-(function() {
-  const pfPath = document.getElementById('pfPath');
-  const pfPage = document.getElementById('pfPage');
-  if (!pfPath || !pfPage) return;
-
-  // File path
-  pfPath.textContent = location.href;
-
-  function setupPrintFooter() {
-    // Estimate total pages: content height / usable page height (A4 ≈ 297mm - margins)
-    const pageH = (297 / 25.4) * 96; // A4 height in px at 96dpi ≈ 1123px
-    const marginT = (10 / 25.4) * 96;
-    const marginB = (18 / 25.4) * 96;
-    const usableH = pageH - marginT - marginB;
-    const bodyHeight = document.body.scrollHeight;
-    const totalPages = Math.max(1, Math.ceil(bodyHeight / usableH));
-
-    let currentPage = 1;
-    pfPage.textContent = `${currentPage} / ${totalPages}`;
-
-    // Re-calculate on scroll during print preview
-    const _scrollHandler = function() {
-      currentPage = Math.round(window.scrollY / usableH) + 1;
-      if (currentPage > totalPages) currentPage = totalPages;
-      if (currentPage < 1) currentPage = 1;
-      pfPage.textContent = `${currentPage} / ${totalPages}`;
-    };
-
-    window.addEventListener('scroll', _scrollHandler);
-    // Clean up after print
-    setTimeout(() => {
-      window.removeEventListener('scroll', _scrollHandler);
-    }, 30000);
-  }
-
-  // Modern browsers
-  window.addEventListener('beforeprint', setupPrintFooter);
-
-  // Fallback for older browsers
-  if (window.matchMedia) {
-    window.matchMedia('print').addEventListener('change', (e) => {
-      if (e.matches) setupPrintFooter();
-    });
-  }
-})();
 </script>
 
 </body>

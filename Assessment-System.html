@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测评系统 — Assessment System</title>
+<style>
+/* ========== CSS VARIABLES (same as individual assessments) ========== */
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.25s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--primary); font-weight: 700;
+}
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+
+/* ========== HERO ========== */
+.hero {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #6B1E30 100%);
+  color: #fff;
+  padding: 60px 28px 52px;
+  text-align: center;
+}
+.hero-inner { max-width: 700px; margin: 0 auto; }
+.hero h1 { font-size: 30px; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
+.hero h1 .en { font-size: 16px; font-weight: 400; opacity: 0.75; display: block; margin-top: 4px; letter-spacing: 0.5px; }
+.hero p { font-size: 15px; opacity: 0.85; line-height: 1.8; margin-top: 12px; }
+
+/* ========== MAIN ========== */
+.main { max-width: 1100px; margin: 0 auto; padding: 40px 28px 80px; }
+
+.section-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 22px;
+  padding-left: 14px;
+  border-left: 3px solid var(--gold);
+}
+
+/* ========== CARD GRID ========== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+/* ========== ASSESSMENT CARD ========== */
+.assess-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.assess-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.assess-card .card-badge {
+  height: 6px;
+  background: var(--primary);
+}
+.assess-card .card-badge.badge-360     { background: linear-gradient(90deg, var(--primary), var(--gold)); }
+.assess-card .card-badge.badge-8206    { background: linear-gradient(90deg, #3B6FB6, #2D7D46); }
+.assess-card .card-badge.badge-8207    { background: linear-gradient(90deg, var(--gold), var(--primary)); }
+.assess-card .card-badge.badge-coming  { background: linear-gradient(90deg, var(--border), var(--border-light)); }
+
+.assess-card .card-body {
+  padding: 24px 26px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.assess-card .card-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--gold-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+.assess-card .card-tag.tag-coming {
+  color: var(--text-secondary);
+  background: var(--bg-section);
+}
+
+.assess-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.assess-card h3 .en {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  display: block;
+}
+.assess-card .card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 12px 0 18px;
+  flex: 1;
+}
+.assess-card .card-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.assess-card .card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+  width: 100%;
+  letter-spacing: 0.3px;
+}
+.assess-card .card-btn.btn-active {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+}
+.assess-card .card-btn.btn-active:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+.assess-card .card-btn.btn-disabled {
+  background: var(--bg-section);
+  color: var(--text-secondary);
+  border: 1px dashed var(--border);
+  cursor: default;
+}
+
+/* ========== COMING SOON CARD ========== */
+.assess-card.coming-soon .card-body {
+  opacity: 0.65;
+}
+
+/* ========== ABOUT SECTION ========== */
+.about-section {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  padding: 28px 32px;
+  margin-top: 8px;
+}
+.about-section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+.about-section p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background: var(--primary-dark);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 20px 28px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+  .hero { padding: 40px 20px 36px; }
+  .hero h1 { font-size: 22px; }
+  .main { padding: 28px 16px 60px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">A</div>
+      <div>
+        <div class="header-title">测评系统</div>
+        <div class="header-subtitle">Assessment System · Toastmasters International</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>测评系统<span class="en">Assessment System</span></h1>
+    <p>基于 Toastmasters International 官方评估材料，帮助你深入了解自己的沟通风格、领导力风格与多维表现。选择下方测评开始。</p>
+  </div>
+</section>
+
+<!-- ========== MAIN ========== -->
+<main class="main">
+
+  <div class="section-heading">全部测评</div>
+
+  <div class="card-grid">
+
+    <!-- Card 1: 沟通风格 (CS8206) -->
+    <div class="assess-card">
+      <div class="card-badge badge-8206"></div>
+      <div class="card-body">
+        <span class="card-tag">CS8206 · 2 级项目</span>
+        <h3>了解你的沟通风格<span class="en">Discover Your Communication Style</span></h3>
+        <p class="card-desc">通过 12 道情境题，识别你的主导沟通风格（直接型、主动型、支持型、分析型），并提供针对性的适应建议。</p>
+        <div class="card-meta">12 题 · 自评 · 含雷达图报告</div>
+        <a href="8206-communication-style.html" class="card-btn btn-active">开始测评 →</a>
+      </div>
+    </div>
+
+    <!-- Card 2: 领导力风格 (CS8207) -->
+    <div class="assess-card">
+      <div class="card-badge badge-8207"></div>
+      <div class="card-body">
+        <span class="card-tag">CS8207 · 2 级项目</span>
+        <h3>了解你的领导力风格<span class="en">Discover Your Leadership Style</span></h3>
+        <p class="card-desc">通过 37 道情境题，评估你在指导型、参与型、授权型、情境型四种领导力风格上的倾向，助力领导力发展。</p>
+        <div class="card-meta">37 题 · 自评 · 含风格分析</div>
+        <a href="8207-leadership-style.html" class="card-btn btn-active">开始测评 →</a>
+      </div>
+    </div>
+
+    <!-- Card 3: 360° 评估 (CS8505) -->
+    <div class="assess-card">
+      <div class="card-badge badge-360"></div>
+      <div class="card-body">
+        <span class="card-tag">CS8505 · 带领志愿者组织</span>
+        <h3>360° 评估<span class="en">360° Assessment</span></h3>
+        <p class="card-desc">通过多维度反馈（上级、同事、下属、自我）全面评估你的领导力表现，生成详细报告，帮助你发现盲点与优势。</p>
+        <div class="card-meta">37 题 · 自评 + 他评 · 含报告</div>
+        <a href="360-assessment.html" class="card-btn btn-active">开始测评 →</a>
+      </div>
+    </div>
+
+    <!-- Card 4: 预留扩展位（Coming Soon） -->
+    <div class="assess-card coming-soon">
+      <div class="card-badge badge-coming"></div>
+      <div class="card-body">
+        <span class="card-tag tag-coming">即将上线</span>
+        <h3>更多测评开发中<span class="en">More Assessments Coming Soon</span></h3>
+        <p class="card-desc">后续将持续上线更多基于 Toastmasters 官方材料的专业测评工具，敬请期待。</p>
+        <div class="card-meta">预留扩展区域</div>
+        <span class="card-btn btn-disabled">即将上线</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- About -->
+  <div class="about-section">
+    <h2>关于本系统</h2>
+    <p>
+      本测评系统基于 <strong>Toastmasters International</strong> 官方路径教育（Pathways）项目材料制作，所有测评内容均已获得合理使用授权。系统支持移动端和桌面端访问，测评结果仅保存在本地浏览器中，不会上传任何个人数据。<br><br>
+      如需添加新的测评项目，请联系系统管理员。
+    </p>
+  </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  测评系统 Assessment System &nbsp;·&nbsp;
+  Based on Toastmasters International Pathways Projects<br>
+  © 2026 &nbsp;·&nbsp; 本地运行 · 数据不离开浏览器<br>
+  Powered By Kan Man Tang
+</footer>
+
+</body>
+</html>

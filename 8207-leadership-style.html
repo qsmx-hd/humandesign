@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>了解你的领导力风格 — 自我评估</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff; padding: 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; }
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary); font-weight: 700; }
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn { padding: 9px 20px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit; }
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* CONTAINER */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* INTRO */
+.intro-card { background: var(--bg-card); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction { font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
+
+/* FORM */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.info-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text); background: #fff; transition: border-color var(--transition); }
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* SCALE LEGEND */
+.scale-legend { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-section); border-radius: var(--radius-sm); margin: 16px 0; align-items: center; }
+.scale-legend .label { font-size: 13px; color: var(--text-secondary); margin-right: 8px; font-weight: 600; }
+.scale-item { display: flex; align-items: center; gap: 4px; font-size: 13px; padding: 4px 10px; border-radius: 20px; background: #fff; border: 1px solid var(--border-light); }
+.scale-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* SECTION CARD */
+.section-card { background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden; }
+.section-card:hover { box-shadow: var(--shadow-lg); }
+.section-header { padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num { background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+.section-progress { font-size: 13px; opacity: 0.9; font-weight: 400; }
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 24px; }
+
+/* ASSESSMENT ITEM */
+.assessment-item { padding: 18px 0; border-bottom: 1px solid var(--border-light); }
+.assessment-item:last-child { border-bottom: none; }
+.item-question { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
+
+/* Score buttons 0-3 */
+.score-options { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.score-option { position: relative; }
+.score-option input { display: none; }
+.score-option label {
+  display: flex; align-items: center; justify-content: center;
+  width: 52px; height: 38px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--text-secondary);
+  background: #fff; transition: all var(--transition); user-select: none;
+}
+.score-option label:hover { border-color: var(--primary); color: var(--primary); background: rgba(119,36,50,0.04); }
+.score-option input:checked + label { color: #fff; }
+.score-option input:checked + label.score-3 { background: #2D7D46; border-color: #2D7D46; box-shadow: 0 2px 8px rgba(45,125,70,0.25); }
+.score-option input:checked + label.score-2 { background: #5A9E6F; border-color: #5A9E6F; }
+.score-option input:checked + label.score-1 { background: #C4952E; border-color: #C4952E; }
+.score-option input:checked + label.score-0 { background: #A6192E; border-color: #A6192E; }
+
+.score-label-text { font-size: 12px; color: var(--text-secondary); margin-left: 2px; }
+
+/* SUBMIT */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate { padding: 14px 48px; font-size: 16px; border-radius: 30px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit; }
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* REPORT */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+.report-header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center; }
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+.report-body { background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius); padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none; }
+
+/* Primary style */
+.primary-style-card { text-align: center; padding: 28px 20px; margin-bottom: 28px; border-radius: var(--radius); border: 3px solid var(--primary); background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08)); }
+.primary-style-card .style-badge { display: inline-block; padding: 8px 28px; border-radius: 30px; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.primary-style-card .style-score { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+.primary-style-card .style-desc { font-size: 14px; color: var(--text); max-width: 650px; margin: 0 auto; line-height: 1.8; }
+
+/* Radar */
+.chart-container { max-width: 560px; margin: 0 auto 28px; padding: 20px; background: var(--bg-section); border-radius: var(--radius); }
+.chart-container h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 16px; }
+
+/* Style cards */
+.style-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .style-cards { grid-template-columns: 1fr; } }
+.style-card { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: var(--bg-section); }
+.style-card .style-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.style-card .style-name { font-size: 14px; font-weight: 700; }
+.style-card .style-score-val { font-size: 18px; font-weight: 800; }
+.style-card .style-bar-bg { height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+.style-card .style-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.style-card .style-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Full descriptions */
+.style-desc-full { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.style-desc-full h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+.style-desc-block { padding: 18px; border-radius: var(--radius-sm); margin-bottom: 14px; border-left: 4px solid var(--primary); background: var(--bg-section); }
+.style-desc-block h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.style-desc-block p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Ranking box */
+.ranking-box { padding: 20px; margin-bottom: 28px; background: var(--bg-section); border-radius: var(--radius-sm); border: 1px solid var(--border-light); }
+.ranking-box h3 { font-size: 15px; margin-bottom: 14px; }
+.ranking-item { display: flex; align-items: center; gap: 14px; padding: 10px 14px; margin-bottom: 6px; background: #fff; border-radius: var(--radius-sm); border: 1px solid var(--border-light); }
+.ranking-item .rank-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.ranking-item .rank-name { font-size: 14px; font-weight: 600; flex: 1; }
+.ranking-item .rank-score { font-size: 14px; font-weight: 700; color: var(--primary); }
+
+/* Style usage tips */
+.usage-tips { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.usage-tips h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+
+/* Score summary after ranking */
+.score-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+.score-table th, .score-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border-light); }
+.score-table th { background: var(--primary); color: #fff; font-weight: 600; font-size: 13px; }
+.score-table tr:nth-child(even) td { background: var(--bg-section); }
+.score-table .highlight-row td { background: rgba(196,149,46,0.12); font-weight: 600; }
+
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+  .report-section.visible { display: block !important; }
+}
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-dark); color: #fff; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">TI</div>
+      <div>
+        <div class="header-title">了解你的领导力风格</div>
+        <div class="header-subtitle">Toastmasters International · 项目 CS8207 · 2 级项目</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">项目 CS8207 · 了解你的领导力风格 · 发现你的领导风格调查问卷</div>
+    <h1>发现你的领导风格</h1>
+    <div class="instruction">
+      <strong>目的：</strong>确认你的主要领导风格。<br><br>
+      <strong>说明：</strong>请根据你对每项陈述的认可度进行评分。如果你的经验不足以回答给定叙述，请选择你认为最能代表自己的答案。
+    </div>
+    <div class="info-grid">
+      <div class="form-group"><label>你的姓名</label><input type="text" id="userName" placeholder="输入你的姓名"></div>
+      <div class="form-group"><label>评估日期</label><input type="date" id="evalDate"></div>
+    </div>
+    <div class="scale-legend">
+      <span class="label">评分级别：</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#2D7D46"></span> 3 完全</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#5A9E6F"></span> 2 一般</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#C4952E"></span> 1 略微</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#A6192E"></span> 0 完全不</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Questions 1-24 -->
+  <div class="section-card" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <h2><span class="section-num">1</span> 第 1-24 题</h2>
+      <span class="section-progress" id="prog1">0/24 完成</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="body1"></div>
+  </div>
+
+  <!-- SECTION 2: Questions 25-48 -->
+  <div class="section-card" id="sec2">
+    <div class="section-header" onclick="toggleSection('sec2')">
+      <h2><span class="section-num">2</span> 第 25-48 题</h2>
+      <span class="section-progress" id="prog2">0/24 完成</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="body2"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-generate" onclick="generateReport()">📊 生成分析报告</button>
+    <div class="submit-hint">完成所有 48 道题后点击上方按钮，系统将自动分析你的领导力风格</div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 领导力风格分析报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <div class="primary-style-card" id="primaryStyleCard"></div>
+
+      <div class="ranking-box" id="rankingBox"></div>
+
+      <div class="chart-container">
+        <h3>领导力风格评分雷达图</h3>
+        <canvas id="radarChart" width="450" height="450"></canvas>
+      </div>
+
+      <h3 style="font-size:16px;margin-bottom:14px;color:var(--text);">各领导风格评分详情</h3>
+      <div class="style-cards" id="styleCards"></div>
+
+      <div class="style-desc-full">
+        <h3>八种领导风格详解</h3>
+        <div id="styleDescriptions"></div>
+      </div>
+
+      <div class="usage-tips">
+        <h3>有效使用你的领导风格</h3>
+        <div id="usageTips"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  基于 Toastmasters International「了解你的领导力风格」项目 CS8207<br>
+  © 2016 Toastmasters International. 版权所有。Rev. 11/2016 书目编号 CS8207
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA ============
+const QUESTIONS = [
+  '我注重他人的职业发展。',
+  '相对我领导下的人，我拥有更丰富的经验和信息。',
+  '我允许每名利益相关者在制定决策时发言。',
+  '为了实现目标，我必须掌控全局。',
+  '我提倡以创新的方式解决问题。',
+  '快速、高效地完成事情比强求完美无缺更重要。',
+  '我始终为他人提供积极反馈。',
+  '在领导时，我严密安排和监控任务。',
+  '我为自己的团队选拔技艺精湛的有主见的员工。',
+  '在进行重大决策前，我会询问他人的意见。',
+  '我希望别人更关注我的努力，而不是我取得的成果。',
+  '如果投入额外的时间可以获得更好的结果，可以不遵守交付日期。',
+  '保持团队融洽和谐与取得成果同等重要。',
+  '我通过优先关注团队以及服务对象的需求来获得成果。',
+  '投入时间来帮助员工充分培养个人技能非常重要。',
+  '我积极乐观地看待组织目标。',
+  '我向我的团队明确表达我的期望。',
+  '我营造可让他人以不用遵守常规方式思考的氛围。',
+  '我最适应习惯和传统。',
+  '我清晰阐述取得成功的途径。',
+  '对待自己的团队，我以身作则。',
+  '我善于与群体达成共识。',
+  '我有责任协助解决团队成员之间的冲突。',
+  '我营造能够满足情感需求的协作环境。',
+  '当我的价值观和信念遭受挑战时，我会坚持我的信念。',
+  '我乐于冒险。',
+  '当个人不断重复任务并力求完美时，团队表现最佳。',
+  '激励他人的最佳方式是为其投入时间。',
+  '我清楚自己所领导人员的独特情感需求。',
+  '我致力于打造社区。',
+  '我明确地表述期望的愿景。',
+  '团队的知识与专业技术相结合可取得最好的结果。',
+  '除了从员工那里获得最好的结果，我别无他求。',
+  '我接受和认同员工的独特性。',
+  '我喜欢思考未来。',
+  '每个人都应该严格遵守政策和规程。',
+  '我给予他人鼓舞人心的反馈。',
+  '我全权负责团队的行动。',
+  '我通过设定高绩效标准来激励他人。',
+  '我热衷于追求卓越。',
+  '我花费时间了解他人对我的期望。',
+  '我接受偶尔让他人领导。',
+  '我给于他人参与制定决策过程的权力和机会。',
+  '我为自己拥有让员工满意的能力为荣。',
+  '我倡导并支持他人成功。',
+  '每位团队成员都需要倾听和尊重。',
+  '我不会让他人去做我自己尚未准备好的任务。',
+  '我希望员工在任何情况下都做到完美。'
+];
+
+// Style definitions with questions mapping
+const STYLES = {
+  bureaucratic: {
+    name: '官僚型', color: '#8B6914', icon: '📋',
+    questions: [4, 8, 19, 27, 33, 36], maxScore: 18,
+    description: '这种领导者严格制定并执行规定。领导者的决策具有绝对性。这种领导者以纪律激发积极性且要求立即遵从。采用自上而下的沟通方式。在领导高技术员工时，这种风格不适用，因为这些员工往往比较反感微观管理模式。当需要在很短时间内作出决策时，这种风格最有效。',
+    shortDesc: '严格制定并执行规定，决策具有绝对性，以纪律激发遵从'
+  },
+  authoritative: {
+    name: '权威型', color: '#772432', icon: '👑',
+    questions: [2, 17, 20, 25, 31, 38], maxScore: 18,
+    description: '这种领导者提供长期方向并且专注于最终目标。领导者的经验和知识往往比被领导者更丰富。通过激起他人对使命的热情来激发其积极性。给予明确的方向并设定标准。当需要明确具体的指导时，这种风格的效率较低。当需要改变方向或愿景时，这种风格最有效。',
+    shortDesc: '提供长期方向，专注于最终目标，以使命热情激励他人'
+  },
+  innovative: {
+    name: '创新型', color: '#C4952E', icon: '💡',
+    questions: [5, 12, 18, 26, 35, 40], maxScore: 18,
+    description: '这种领导者会分享对未来的愿景，追求卓越。鼓励创新思想。通过提倡尊重团队成员的创意来激发其积极性。鼓励协调合作性的对话。如果所冒风险使团队成员忧虑重重，则这种风格的效率较低。解决复杂问题时，这种风格最有效。',
+    shortDesc: '分享未来愿景，鼓励创新思想，尊重团队创意'
+  },
+  pacesetting: {
+    name: '带头型', color: '#A6192E', icon: '🏃',
+    questions: [6, 9, 21, 39, 47, 48], maxScore: 18,
+    description: '这种领导者希望被领导者支持新项目且快速行动。看重工作效率。通过设定高绩效标准并以身作则来激发他人积极性。认为不必讲述过多的具体指示。这种风格不适合长期使用。如果团队成员自觉性高且技艺精湛，这种风格很有效。',
+    shortDesc: '快速行动，看重效率，以身作则，设定高绩效标准'
+  },
+  democratic: {
+    name: '民主型', color: '#2D7D46', icon: '🤝',
+    questions: [3, 10, 32, 42, 43, 46], maxScore: 18,
+    description: '这种风格依赖于共识决策的达成。接受偶尔让他人带头。通过提供参与机会来激发他人积极性。通过协作和沟通来了解团队成员的意见。如果时间有限或团队成员的知识或技术水平不足以高质量完成任务，则这种风格不适用。当需要依靠整个团队的知识来解决问题或找到方向时，这种方式最有效。',
+    shortDesc: '依赖共识决策，提供参与机会，注重协作和沟通'
+  },
+  affiliative: {
+    name: '亲和型', color: '#5A9E6F', icon: '❤️',
+    questions: [1, 13, 23, 24, 29, 44], maxScore: 18,
+    description: '这种领导者的目标在于通过强调团队合作和融洽和谐，打造具有凝聚力的集体。注重协作和情感需求。通常，亲和型风格与愿景型领导风格结合使用效率最高。建立积极的私人关系并避免冲突，从而激发他人的积极性。这种风格对于提升士气、重建信任以及在高压环境的工作中很有效。',
+    shortDesc: '打造凝聚力集体，注重情感需求，建立积极私人关系'
+  },
+  coaching: {
+    name: '教练型', color: '#3B6FB6', icon: '🎓',
+    questions: [7, 15, 28, 37, 41, 45], maxScore: 18,
+    description: '这种领导者重点培养技能，使个人做好应对未来的准备。善于应对尚未完全挖掘其潜力的个人或团体。通过挑战个人激发其积极性。传达积极的反馈，以提高个人的满足感。如果领导下的人员排斥变化，则这种风格效率较低。在一对一场景中，当领导下的人员接受辅导时乐于接受这种领导风格的密切合作关系时，这种风格最有效。',
+    shortDesc: '重点培养技能，传达积极反馈，通过挑战激发积极性'
+  },
+  altruistic: {
+    name: '无私型', color: '#7B4FBF', icon: '🌿',
+    questions: [11, 14, 16, 22, 30, 34], maxScore: 18,
+    description: '这种领导者采用个性化方法，以满足团队的个性化需求。发挥带头作用，以便更好地服务于他人。通过赋予他人权力以及道德的方式激发他人积极性。注重主动倾听和感同身受，致力于打造社区。如果没有足够的时间来保证长远展望，这种风格没有效果。这种风格对于创造积极的文化和提升士气很有效。',
+    shortDesc: '个性化服务他人，赋予权力，主动倾听，打造社区'
+  }
+};
+
+// ============ BUILD QUESTIONNAIRE ============
+function buildSection(containerId, startNum, endNum) {
+  let html = '';
+  for (let i = startNum; i <= endNum; i++) {
+    const qIdx = i - 1;
+    html += `<div class="assessment-item">
+      <div class="item-question">${i}. ${QUESTIONS[qIdx]}</div>
+      <div class="score-options" id="score-${qIdx}">
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="3" id="q${qIdx}_3" onchange="updateProgress()"><label for="q${qIdx}_3" class="score-3" title="完全">3</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="2" id="q${qIdx}_2" onchange="updateProgress()"><label for="q${qIdx}_2" class="score-2" title="一般">2</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="1" id="q${qIdx}_1" onchange="updateProgress()"><label for="q${qIdx}_1" class="score-1" title="略微">1</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="0" id="q${qIdx}_0" onchange="updateProgress()"><label for="q${qIdx}_0" class="score-0" title="完全不">0</label></span>
+        <span class="score-label-text">0=完全不 &nbsp; 1=略微 &nbsp; 2=一般 &nbsp; 3=完全</span>
+      </div>
+    </div>`;
+  }
+  document.getElementById(containerId).innerHTML = html;
+}
+
+// ============ INIT ============
+document.getElementById('evalDate').valueAsDate = new Date();
+buildSection('body1', 1, 24);
+buildSection('body2', 25, 48);
+
+// ============ TOGGLE ============
+function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// ============ PROGRESS ============
+function updateProgress() {
+  for (let section = 1; section <= 2; section++) {
+    const start = (section - 1) * 24 + 1;
+    const end = section * 24;
+    let answered = 0;
+    for (let i = start; i <= end; i++) {
+      const qIdx = i - 1;
+      if (document.querySelector(`input[name="q${qIdx}"]:checked`)) answered++;
+    }
+    const progEl = document.getElementById('prog' + section);
+    if (progEl) progEl.textContent = `${answered}/24 完成`;
+  }
+}
+
+function countAllAnswered() {
+  let answered = 0;
+  for (let i = 0; i < 48; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  return answered;
+}
+
+// ============ GENERATE REPORT ============
+function generateReport() {
+  const userName = document.getElementById('userName').value.trim();
+  const answered = countAllAnswered();
+  
+  if (answered < 48) {
+    showToast(`请完成所有 48 道题目后再生成报告（当前已完成 ${answered} 题）`);
+    return;
+  }
+
+  // Calculate style scores
+  const styleScores = {};
+  Object.entries(STYLES).forEach(([key, style]) => {
+    let total = 0;
+    style.questions.forEach(qNum => {
+      const qIdx = qNum - 1;
+      const selected = document.querySelector(`input[name="q${qIdx}"]:checked`);
+      if (selected) total += parseInt(selected.value);
+    });
+    styleScores[key] = total;
+  });
+
+  // Sort and rank
+  const sortedStyles = Object.entries(styleScores).sort((a, b) => b[1] - a[1]);
+  const primaryKey = sortedStyles[0][0];
+  const primary = STYLES[primaryKey];
+  const maxPossible = 18; // 6 questions * 3 points
+
+  // Meta
+  const evalDate = document.getElementById('evalDate').value;
+  let meta = '';
+  if (userName) meta += `评估人：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // Primary style card
+  document.getElementById('primaryStyleCard').innerHTML = `
+    <div class="style-badge" style="background:${primary.color};">${primary.icon} 你的主要领导风格：${primary.name}</div>
+    <div class="style-score">得分：${sortedStyles[0][1]} / ${maxPossible} 分</div>
+    <div class="style-desc">${primary.description}</div>
+  `;
+
+  // Ranking box
+  let rankingHTML = '<h3>领导风格排名</h3>';
+  sortedStyles.forEach(([key, score], idx) => {
+    const s = STYLES[key];
+    const rankColors = ['#772432', '#A6192E', '#C4952E', '#5A9E6F', '#2D7D46', '#3B6FB6', '#7B4FBF', '#8B6914'];
+    rankingHTML += `<div class="ranking-item">
+      <span class="rank-num" style="background:${rankColors[idx]};">${idx + 1}</span>
+      <span class="rank-name">${s.icon} ${s.name}${idx === 0 ? ' ⬅ 主要风格' : ''}</span>
+      <span class="rank-score">${score} / ${maxPossible}</span>
+    </div>`;
+  });
+  document.getElementById('rankingBox').innerHTML = rankingHTML;
+
+  // Radar chart
+  drawRadarChart(styleScores);
+
+  // Style detail cards
+  let cardsHTML = '';
+  sortedStyles.forEach(([key, score]) => {
+    const s = STYLES[key];
+    const pct = (score / maxPossible) * 100;
+    const isPrimary = key === primaryKey;
+    cardsHTML += `<div class="style-card" style="${isPrimary ? 'border:2px solid ' + s.color + ';' : ''}">
+      <div class="style-header">
+        <span class="style-name" style="color:${s.color};">${s.icon} ${s.name}${isPrimary ? ' ⬅' : ''}</span>
+        <span class="style-score-val" style="color:${s.color};">${score}</span>
+      </div>
+      <div class="style-bar-bg"><div class="style-bar-fill" style="width:${pct}%;background:${s.color};"></div></div>
+      <div class="style-detail">${s.shortDesc}</div>
+    </div>`;
+  });
+  document.getElementById('styleCards').innerHTML = cardsHTML;
+
+  // Full descriptions
+  let descHTML = '';
+  sortedStyles.forEach(([key, score]) => {
+    const s = STYLES[key];
+    const isPrimary = key === primaryKey;
+    descHTML += `<div class="style-desc-block" style="border-left-color:${s.color};${isPrimary ? 'background:rgba(' + hexToRgb(s.color) + ',0.08);' : ''}">
+      <h4 style="color:${s.color};">${s.icon} ${s.name}（${score}/${maxPossible} 分）${isPrimary ? ' — 你的主要风格' : ''}</h4>
+      <p>${s.description}</p>
+    </div>`;
+  });
+  document.getElementById('styleDescriptions').innerHTML = descHTML;
+
+  // Usage tips
+  document.getElementById('usageTips').innerHTML = `
+    <div class="style-desc-block">
+      <h4>灵活运用领导风格</h4>
+      <p>查看得分后，你的主要风格已经确定。你可能在多方面的得分都比较高。记录这些特质在你日常生活中的具体体现。了解你的个人优势与偏好有助于你调整自己的领导风格，从而高效应对各种环境中的不同个人与团队。这种灵活性使你可以在任何情况下领导他人并取得预期的效果。</p>
+      <p style="margin-top:10px;">得分较低的特质可能仍需发展和培养。寻找机会对自己日常领导风格以外的特质进行练习。留意自己的选择，培养技能和更广泛的领导特质。通过留意和评估结果，你可以评估自己的风格是否有效或采用其它领导风格对于你目前的情况是否更有帮助。对个人风格理解越透彻，领导便越高效。</p>
+    </div>
+  `;
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✅ 领导力风格分析报告已生成！');
+}
+
+// ============ RADAR CHART ============
+let radarChartInstance = null;
+
+function drawRadarChart(styleScores) {
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const styleKeys = ['bureaucratic', 'authoritative', 'innovative', 'pacesetting', 'democratic', 'affiliative', 'coaching', 'altruistic'];
+  const labels = styleKeys.map(k => STYLES[k].name);
+  const data = styleKeys.map(k => styleScores[k]);
+  const colors = ['#8B6914', '#772432', '#C4952E', '#A6192E', '#2D7D46', '#5A9E6F', '#3B6FB6', '#7B4FBF'];
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '得分',
+        data: data,
+        backgroundColor: 'rgba(119, 36, 50, 0.08)',
+        borderColor: '#772432',
+        borderWidth: 2,
+        pointBackgroundColor: colors,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 18,
+          min: 0,
+          ticks: { stepSize: 3, font: { size: 10 }, backdropColor: 'transparent', color: '#5C4A3A' },
+          pointLabels: { font: { size: 12, weight: '600' }, color: '#2D2118' },
+          grid: { color: 'rgba(119, 36, 50, 0.08)' },
+          angleLines: { color: 'rgba(119, 36, 50, 0.08)' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ============ HELPERS ============
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1],16)},${parseInt(result[2],16)},${parseInt(result[3],16)}` : '119,36,50';
+}
+
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Auto-save
+function autoSave() {
+  const state = {};
+  for (let i = 0; i < 48; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) state[`q${i}`] = selected.value;
+  }
+  state.userName = document.getElementById('userName').value;
+  state.evalDate = document.getElementById('evalDate').value;
+  localStorage.setItem('cs8207_state', JSON.stringify(state));
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cs8207_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key === 'userName') document.getElementById('userName').value = value;
+      else if (key === 'evalDate') { if (value) document.getElementById('evalDate').value = value; }
+      else {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) radio.checked = true;
+      }
+    });
+    updateProgress();
+  } catch(e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>
