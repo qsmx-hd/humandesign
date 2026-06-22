@@ -227,8 +227,8 @@ function foot(gate) {
 
 <!-- 页脚 -->
 <footer class="site-footer">
-  <p>内容参考：Ra Uru Hu · Chetan Parkyn · Alokanand Diaz · Karen Curry</p>
-  <p style="margin-top:4px">数据来源：<a href="https://lighteden.one/human-design-gates/" target="_blank">lighteden.one</a> · 中文整理整合版</p>
+  <p>内容参考：Ra Uru Hu · Mary Ann Winiger · Chetan Parkyn · Karen Curry Parker · John Cole</p>
+  <p style="margin-top:4px">Powered By Kan Man Tang</p>
 </footer>
 
 </body>
@@ -475,50 +475,32 @@ function genGatePage(gate) {
   </div>
 
   <!-- 理解与应用 -->
+  ${gate.deepUnderstand ? `
   <div class="section">
     <div class="section-title"><span class="section-icon">💎</span> 深入理解</div>
-    <div class="insight-card">
-      <div class="insight-title">定义中心 vs 未定义中心</div>
-      <div class="insight-text">
-        <strong>定义中心：</strong>这股能量稳定、持续，是你与生俱来的恒定特质。即使不刻意行动，它仍在默默地运作，成为你生命中的稳定元素。<br><br>
-        <strong>未定义中心：</strong>这股能量受环境影响，是不稳定的放大器。你会感受到周遭人的同类能量并放大它，需要觉察这不是你的恒定状态。智慧在于观察和体验，而非认同。
-      </div>
-    </div>
-    <div class="insight-card">
-      <div class="insight-title">实践建议</div>
-      <div class="insight-text">
-        1. <strong>觉察能量节奏</strong>：留意何时你感到这股能量处于\"开启\"状态，何时处于\"关闭\"状态。<br>
-        2. <strong>不做过度努力</strong>：当你强行用意志来催生这股能量时，结果往往是挫败的。观察并信任它的自然脉动。<br>
-        3. <strong>在正确时机表达</strong>：${gate.center.includes('喉轮') ? '当能量开启时，清晰有力地表达；当能量关闭时，安静地观察。' : '等待内在的正确信号再行动，而非被外在压力驱使。'}
-      </div>
-    </div>
-  </div>
+    ${gate.deepUnderstand}
+  </div>` : ''}
 
   <!-- 常见误解 -->
+  ${gate.misconceptions && gate.misconceptions.length > 0 ? `
   <div class="section">
     <div class="section-title"><span class="section-icon">⚠️</span> 常见误解</div>
+    ${gate.misconceptions.map(m => `
     <div class="misconception">
       <div class="miscon-icon">❌</div>
       <div class="miscon-body">
-        <span class="miscon-wrong">\"拥有这个闸门就代表我就是这样\"</span>
-        <span class="miscon-correct">每个闸门都是潜在的，它的表现方式取决于是否定义、连接了什么通道、处在什么环境。同一个闸门在定义中心与未定义中心表现出完全不同特质。</span>
+        <span class="miscon-wrong">${m.wrong}</span>
+        <span class="miscon-correct">${m.correct}</span>
       </div>
-    </div>
-    <div class="misconception">
-      <div class="miscon-icon">❌</div>
-      <div class="miscon-body">
-        <span class="miscon-wrong">\"我可以持续保持这股能量\"</span>
-        <span class="miscon-correct">${clos === 'individual' ? '个体回路以脉冲方式运作，有On就有Off。Off不是失败，而是为下一次突变积蓄能量的必要过程。' : '能量的流动受多种因素影响（交通、流日、阶段），不可能一直处于高峰状态。关键是与自然节奏共舞而不是对抗。'}</span>
-      </div>
-    </div>
-  </div>
+    </div>`).join('')}
+  </div>` : ''}
 
   <!-- 本闸门通道 -->
   ${gate.channel ? `
   <div class="section">
     <div class="section-title"><span class="section-icon">🔗</span> 相关通道</div>
     <div class="section-content">
-      <p><strong>${gate.channel}</strong> —— 本闸门可参与形成的通道。通道是人类图中连接两个中心的能量管道，每条通道都代表着特定的生命主题与天赋特质。了解通道的完整运作，需要同时理解通道两端闸门的能量特质如何互补与整合。</p>
+      ${gate.channel.split('/').map(c => renderChannelItem(c.trim())).join('')}
     </div>
   </div>` : ''}
 
@@ -536,8 +518,30 @@ function genGatePage(gate) {
 }
 
 // 生成所有页面
-const GATES_DATA = require('./gates-data.js').GATES_DATA;
+const { GATES_DATA, CHANNEL_DESCRIPTIONS } = require('./gates-data.js');
 const outDir = __dirname;
+
+// 规范化通道key（提取闸门号，小号在前）
+function getChannelKey(channelName) {
+  const nums = (channelName.match(/\d+/g) || []).map(Number);
+  if (nums.length < 2) return null;
+  return nums.sort((a, b) => a - b).join('-');
+}
+
+// 生成单条通道的HTML
+function renderChannelItem(channelName) {
+  const key = getChannelKey(channelName);
+  const desc = key && CHANNEL_DESCRIPTIONS ? CHANNEL_DESCRIPTIONS[key] : null;
+  if (desc) {
+    return `<div class="channel-item" style="margin-bottom:14px;">
+      <p style="margin:0 0 4px 0;"><strong>${channelName}</strong></p>
+      <p style="margin:0;color:#5C4A3A;font-size:13px;line-height:1.7;">${desc}</p>
+    </div>`;
+  }
+  return `<div class="channel-item" style="margin-bottom:14px;">
+    <p style="margin:0;"><strong>${channelName}</strong></p>
+  </div>`;
+}
 
 console.log(`开始生成 ${GATES_DATA.length} 个闸门详情页...`);
 
