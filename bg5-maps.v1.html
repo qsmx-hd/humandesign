@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BG5 四大地图体系</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #F5F0E8;
+      color: #2D2118;
+      min-height: 100vh;
+    }
+
+    /* ===== Top Bar（与其他页面统一） ===== */
+    .top-bar {
+      background: linear-gradient(135deg, #2D2118 0%, #4A3728 100%);
+      padding: 20px 0 16px;
+      text-align: center;
+    }
+    .top-bar .logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .top-bar .logo-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+    }
+    .top-bar h1 {
+      color: #C4956A;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 2px;
+    }
+    .top-bar p {
+      color: #A08968;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* ===== Navigation Bar（与其他页面统一） ===== */
+    .nav-bar {
+      background: #fff;
+      border-bottom: 1px solid #E8DCC8;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-bar-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .nav-bar a {
+      color: #8B7355;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 0;
+      transition: color 0.2s, background 0.2s;
+      display: inline-block;
+      position: relative;
+      white-space: nowrap;
+    }
+    .nav-bar a:hover { background: #F5F0E8; color: #C4956A; }
+    .nav-bar a.active {
+      background: transparent;
+      color: #C4956A;
+      font-weight: 500;
+    }
+    .nav-bar a.active::after {
+      content: '';
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 0;
+      height: 3px;
+      background: #C4956A;
+      border-radius: 2px 2px 0 0;
+    }
+
+    /* ===== 主内容区 ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 16px 60px;
+    }
+
+    /* 页面标题 */
+    .page-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .page-header h2 {
+      font-size: 20px;
+      font-weight: 500;
+      color: #2D2118;
+      margin-bottom: 8px;
+    }
+    .page-header .sub {
+      font-size: 14px;
+      color: #8B7355;
+    }
+    .page-header::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #C4956A, transparent);
+      margin: 16px auto 0;
+    }
+
+    /* ===== 金字塔层级 ===== */
+    .pyramid-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .map-layer {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    /* ===== 卡片（统一宽度，白色背景） ===== */
+    .map-card {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #E8DCC8;
+      border-radius: 14px;
+      padding: 26px 30px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 2px 12px rgba(45,33,24,0.06);
+      overflow: hidden;
+    }
+    /* 层级左边框颜色区分 */
+    .map-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      transition: width 0.3s;
+    }
+    .layer-org   .map-card::before { background: linear-gradient(180deg, #D4A843, #B8860B); }
+    .layer-penta .map-card::before { background: linear-gradient(180deg, #C4956A, #A87B52); }
+    .layer-partner .map-card::before { background: linear-gradient(180deg, #A08060, #8B7355); }
+    .layer-individual .map-card::before { background: linear-gradient(180deg, #8B7355, #6B5538); }
+
+    .map-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(45,33,24,0.12);
+      border-color: #D4C5A9;
+    }
+    .map-card:hover::before { width: 6px; }
+
+    /* 卡片头部 */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .icon-org        { background: linear-gradient(135deg, #D4A843, #B8860B); }
+    .icon-penta      { background: linear-gradient(135deg, #C4956A, #A87B52); }
+    .icon-partner    { background: linear-gradient(135deg, #A08060, #8B7355); }
+    .icon-individual { background: linear-gradient(135deg, #8B7355, #6B5538); }
+
+    .card-title-group { flex: 1; min-width: 0; }
+    .card-title-group h2 {
+      font-size: 17px;
+      color: #2D2118;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .card-title-group .en-name {
+      font-size: 13px;
+      color: #A08968;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .card-tag {
+      background: #FDFAF5;
+      color: #8B7355;
+      font-size: 12px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid #E8DCC8;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #5C4A32;
+      padding-left: 62px;
+    }
+    .card-body strong { color: #2D2118; font-weight: 600; }
+
+    .card-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding-left: 62px;
+    }
+    .feature-tag {
+      background: #FDFAF5;
+      border: 1px solid #E8DCC8;
+      color: #8B7355;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 16px;
+    }
+
+    /* 操作按钮区 */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding-left: 62px;
+    }
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 20px;
+      background: linear-gradient(135deg, #C4956A, #A87B52);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+    .btn-enter:hover { opacity: 0.88; }
+    .btn-enter.disabled {
+      background: #E8DCC8;
+      color: #A08968;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .expand-btn {
+      background: none;
+      border: 1px solid #D4C5A9;
+      color: #8B7355;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .expand-btn:hover {
+      border-color: #C4956A;
+      color: #C4956A;
+      background: #FDF5EB;
+    }
+
+    /* 展开详情 */
+    .card-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.35s ease;
+      opacity: 0;
+    }
+    .card-detail.open {
+      max-height: 420px;
+      opacity: 1;
+      margin-top: 14px;
+    }
+    .detail-inner {
+      border-top: 1px solid #F0E8D8;
+      padding-top: 16px;
+      padding-left: 62px;
+      font-size: 13px;
+      color: #5C4A32;
+      line-height: 1.9;
+    }
+    .detail-inner strong { color: #2D2118; }
+
+    /* 连接线 */
+    .connector {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 4px;
+      height: 20px;
+    }
+    .connector-line {
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(180deg, #D4C5A9, rgba(212,197,169,0.3));
+    }
+
+    /* 底部说明 */
+    .footer-note {
+      text-align: center;
+      padding: 40px 20px 20px;
+      color: #8B7355;
+      font-size: 14px;
+      line-height: 2;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .footer-note .highlight {
+      color: #C4956A;
+      font-weight: 600;
+    }
+    .footer-credit {
+      text-align: center;
+      font-size: 12px;
+      color: #B4A58C;
+      padding-bottom: 40px;
+    }
+
+    /* 装饰粒子（浅色适配） */
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(196, 149, 106, 0.12);
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .content-wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 640px) {
+      .top-bar h1 { font-size: 18px; }
+      .nav-bar-inner { gap: 0; flex-wrap: wrap; }
+      .nav-bar a { margin: 0 2px; padding: 8px 8px; font-size: 12px; }
+      .nav-bar a.active::after { left: 8px; right: 8px; }
+      .card-body, .card-features, .card-actions, .detail-inner { padding-left: 0; }
+      .card-header { flex-wrap: wrap; }
+      .card-tag { margin-left: 62px; margin-top: 6px; }
+      .card-actions { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 背景粒子 -->
+<div class="particles" id="particles"></div>
+
+<div class="content-wrap">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="logo-wrap">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="16" stroke="#C4956A" stroke-width="1.5" fill="#2D2118"/>
+        <circle cx="18" cy="18" r="6" fill="#C4956A" opacity="0.8"/>
+        <circle cx="8" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+        <circle cx="28" cy="10" r="3" fill="#C4956A" opacity="0.5"/>
+        <circle cx="8" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+        <circle cx="28" cy="26" r="3" fill="#C4956A" opacity="0.5"/>
+      </svg>
+      <h1>BG5 商业人类图系统</h1>
+    </div>
+    <p>从个人天赋到组织能量，层层递进的商业地图体系</p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    <div class="nav-bar-inner">
+      <a href="bg5-maps.html" class="active">地图总览</a>
+      <a href="wealth.html">个人人类图</a>
+      <a href="bg5-interaction-diagnostic.html">双人互动诊断</a>
+      <a href="bg5-team-map.html">团队能量图谱</a>
+      <a href="oc16-organization-analysis.html">OC16 组织分析</a>
+      <a href="360-assessment.html">360° 评估</a>
+      <a href="hd_birth_time_calibration.html">生时校准</a>
+    </div>
+  </div>
+
+  <!-- 主内容 -->
+  <div class="container">
+
+    <div class="page-header">
+      <h2>四大地图体系</h2>
+      <p class="sub">从个人到组织，逐级扩展的分析维度</p>
+    </div>
+
+    <!-- 金字塔结构 -->
+    <div class="pyramid-section">
+
+      <!-- 第1层：大型组织 -->
+      <div class="map-layer layer-org">
+        <div class="map-card" onclick="event.stopPropagation(); toggleDetail('d1')">
+          <div class="card-header">
+            <div class="card-icon icon-org">🏢</div>
+            <div class="card-title-group">
+              <h2>WA / OC16 大型团体图</h2>
+              <div class="en-name">Whole Authority / OC16 Chart</div>
+            </div>
+            <div class="card-tag">组织级 · 16+ 人</div>
+          </div>
+          <div class="card-body">
+            BG5 系统的<strong>顶层视角</strong>，揭示整个组织的灵魂使命、生存主题与发展方向。适用于企业、机构等大型团体，帮助领导者理解组织的<strong>集体能量场</strong>。
+          </div>
+          <div class="card-features">
+            <span class="feature-tag">组织灵魂使命</span>
+            <span class="feature-tag">生存主题</span>
+            <span class="feature-tag">发展方向</span>
+            <span class="feature-tag">集体能量场</span>
+          </div>
+          <div class="card-actions">
+            <a href="oc16-organization-analysis.html" class="btn-enter">进入系统 →</a>
+            <button class="expand-btn" id="btn-d1" onclick="event.stopPropagation(); toggleDetail('d1')">展开详情 ▼</button>
+          </div>
+          <div class="card-detail" id="d1">
+            <div class="detail-inner">
+              <strong>OC16</strong> 是由最多16个人的人类图合成的团体图，代表一个大型组织的能量场。它能够揭示：<br><br>
+              • <strong>组织的灵魂使命</strong>——这个组织来到这个世界要完成什么<br>
+              • <strong>生存主题</strong>——组织在商业世界中如何生存与发展<br>
+              • <strong>环境需求</strong>——什么样的环境最适合这个组织<br>
+              • <strong>角色分配</strong>——谁最适合担任领导者、管理者、执行者<br><br>
+              WA（Whole Authority）是将 OC16 进一步扩展，适用于更大规模的组织分析。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector"><div class="connector-line"></div></div>
+
+      <!-- 第2层：Penta -->
+      <div class="map-layer layer-penta">
+        <div class="map-card" onclick="event.stopPropagation(); toggleDetail('d2')">
+          <div class="card-header">
+            <div class="card-icon icon-penta">👥</div>
+            <div class="card-title-group">
+              <h2>Penta 小型团体图</h2>
+              <div class="en-name">Penta / Unified Group Chart</div>
+            </div>
+            <div class="card-tag">团体级 · 3-5 人</div>
+          </div>
+          <div class="card-body">
+            适用于<strong>3-5人的小团队</strong>，揭示团队中自然形成的角色分工、能量流动模式，以及团队成员之间的<strong>深层互动动态</strong>。
+          </div>
+          <div class="card-features">
+            <span class="feature-tag">团队角色</span>
+            <span class="feature-tag">能量流动</span>
+            <span class="feature-tag">互补分析</span>
+            <span class="feature-tag">团队动态</span>
+          </div>
+          <div class="card-actions">
+            <a href="bg5-team-map.html" class="btn-enter">进入系统 →</a>
+            <button class="expand-btn" id="btn-d2" onclick="event.stopPropagation(); toggleDetail('d2')">展开详情 ▼</button>
+          </div>
+          <div class="card-detail" id="d2">
+            <div class="detail-inner">
+              Penta 是 BG5 系统中非常独特的一个概念，它揭示了一个<strong>3-5人小组</strong>所形成的"第五个元素"——即团体本身拥有的能量场，这股能量不同于任何个体的能量。<br><br>
+              • <strong>自然角色分工</strong>——谁是指挥者、谁是推动者、谁是关键决策者<br>
+              • <strong>能量流动方向</strong>——团队中信息与能量的传递路径<br>
+              • <strong>盲点识别</strong>——团队整体缺少哪些能量，需要外部补充<br>
+              • <strong>决策质量</strong>——团队做决策的优势与风险点<br><br>
+              Unified Group Chart 是 Penta 的另一种呈现形式，适用于对企业内部小组的分析。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector"><div class="connector-line"></div></div>
+
+      <!-- 第3层：Partner -->
+      <div class="map-layer layer-partner">
+        <div class="map-card" onclick="event.stopPropagation(); toggleDetail('d3')">
+          <div class="card-header">
+            <div class="card-icon icon-partner">🤝</div>
+            <div class="card-title-group">
+              <h2>Partner Chart 伙伴合图</h2>
+              <div class="en-name">Partner Penta / Composite Chart</div>
+            </div>
+            <div class="card-tag">双人 · 搭档</div>
+          </div>
+          <div class="card-body">
+            将<strong>两个人的人类图</strong>合并分析，揭示搭档之间的互补性、潜在摩擦点，以及这段合作关系中<strong>自然涌现的第三能量场</strong>。
+          </div>
+          <div class="card-features">
+            <span class="feature-tag">互补分析</span>
+            <span class="feature-tag">合作盲点</span>
+            <span class="feature-tag">第三能量场</span>
+            <span class="feature-tag">亲密联结</span>
+          </div>
+          <div class="card-actions">
+            <a href="bg5-interaction-diagnostic.html" class="btn-enter">进入系统 →</a>
+            <button class="expand-btn" id="btn-d3" onclick="event.stopPropagation(); toggleDetail('d3')">展开详情 ▼</button>
+          </div>
+          <div class="card-detail" id="d3">
+            <div class="detail-inner">
+              伙伴关系图不是简单看两个人的差异，而是看<strong>两个人合在一起产生了什么新能量</strong>。<br><br>
+              • <strong>通道互补</strong>——一个人缺少的通道，另一个人是否具备<br>
+              • <strong>定义区域</strong>——合图中新形成的能量中心（新出现的"固定特质"）<br>
+              • <strong>摩擦点</strong>——两人能量场中可能产生张力的地方<br>
+              • <strong>最佳合作模式</strong>——这段关系最适合做什么类型的工作<br><br>
+              Partner Penta 还进一步揭示两人合作关系中"浮现的第三个人"——即这段关系本身所拥有的独特能量场。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="connector"><div class="connector-line"></div></div>
+
+      <!-- 第4层：个人 -->
+      <div class="map-layer layer-individual">
+        <div class="map-card" onclick="event.stopPropagation(); toggleDetail('d4')">
+          <div class="card-header">
+            <div class="card-icon icon-individual">👤</div>
+            <div class="card-title-group">
+              <h2>个人人类图</h2>
+              <div class="en-name">Career Design / Individual Chart</div>
+            </div>
+            <div class="card-tag">个人 · 基础</div>
+          </div>
+          <div class="card-body">
+            BG5 系统的<strong>起点与根基</strong>。通过个人的人类图，了解自己在职场中的<strong>天赋定位、决策方式、能量类型</strong>，找到最适合自己的工作方式。
+          </div>
+          <div class="card-features">
+            <span class="feature-tag">天赋定位</span>
+            <span class="feature-tag">决策权威</span>
+            <span class="feature-tag">能量类型</span>
+            <span class="feature-tag">职业方向</span>
+          </div>
+          <div class="card-actions">
+            <a href="wealth.html" class="btn-enter">进入系统 →</a>
+            <button class="expand-btn" id="btn-d4" onclick="event.stopPropagation(); toggleDetail('d4')">展开详情 ▼</button>
+          </div>
+          <div class="card-detail" id="d4">
+            <div class="detail-inner">
+              个人类图是 BG5 一切分析的基础，它将传统人类图的64个闸门简化为<strong>BG5 的4个主要维度</strong>：<br><br>
+              • <strong>能量类型（Type）</strong>——你在职场中如何正确地使用能量<br>
+              • <strong>人生角色（Profile）</strong>——你在职业中扮演的角色与风格<br>
+              • <strong>决策权威（Authority）</strong>——你做正确商业决策的方式<br>
+              • <strong>天赋通道（Defined Channels）</strong>——你稳定拥有的能力与资源<br><br>
+              BG5 与传统人类图的主要区别在于：它<strong>专注于商业与职场场景</strong>，将复杂的256种人类图类型简化为更实用的 BG5 分类体系，更易在商业环境中应用。
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 底部说明 -->
+    <div class="footer-note">
+      <p>
+        BG5 系统帮助你看到<strong class="highlight">内在设计上与谁更亲密联结</strong>，<br>
+        揭示在<strong class="highlight">意识和潜意识层面</strong>的深层能力，<br>
+        最终帮助你在<strong class="highlight">职场和商场上生存发展</strong>，实现<strong class="highlight">灵魂使命</strong>。
+      </p>
+    </div>
+    <div class="footer-credit">
+      基于人类图 (Human Design)<br>
+      Based on the BG5 System by Chetan Parkyn & Carola Eastwood<br>
+      Powered By Kan Man Tang
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // 背景粒子
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 5 + 2;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 12 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(p);
+  }
+
+  // 展开/收起详情
+  function toggleDetail(id) {
+    const el = document.getElementById(id);
+    const btn = document.getElementById('btn-' + id);
+    const isOpen = el.classList.contains('open');
+    // 先关闭所有
+    document.querySelectorAll('.card-detail.open').forEach(d => {
+      d.classList.remove('open');
+    });
+    document.querySelectorAll('.expand-btn').forEach(b => {
+      if (b.id !== 'btn-' + id) b.textContent = '展开详情 ▼';
+    });
+    // 切换当前
+    if (!isOpen) {
+      el.classList.add('open');
+      btn.textContent = '收起详情 ▲';
+    } else {
+      btn.textContent = '展开详情 ▼';
+    }
+  }
+</script>
+
+</body>
+</html>
