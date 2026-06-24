@@ -1,0 +1,3014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量子人类设计专家认证课程 · 完整课件</title>
+<style>
+/* ========== 全局变量 ========== */
+:root {
+  --bg: #F5F0E8;
+  --bg-card: #FFFBF5;
+  --bg-sidebar: #2D2118;
+  --bg-sidebar-hover: #3D3128;
+  --primary: #C4956A;
+  --primary-light: #D8B898;
+  --primary-dark: #A87B52;
+  --gold: #D4A843;
+  --gold-light: #E8C868;
+  --dark: #2D2118;
+  --dark-soft: #4A3D32;
+  --text: #3D3530;
+  --text-light: #6B5D52;
+  --text-sidebar: #D8C8B8;
+  --text-sidebar-active: #F5E6D3;
+  --border: #E8DCC8;
+  --border-dark: #D4C4B0;
+  --shadow: 0 2px 8px rgba(45, 33, 24, 0.08);
+  --shadow-md: 0 4px 16px rgba(45, 33, 24, 0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Georgia", "Noto Serif SC", "Songti SC", "STSong", serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.85;
+  min-height: 100vh;
+}
+
+/* ========== 布局 ========== */
+.app { display: flex; min-height: 100vh; }
+
+/* ========== 侧边栏 ========== */
+.sidebar {
+  width: 300px;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(196, 149, 106, 0.2);
+  text-align: center;
+}
+
+.sidebar-header .logo {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.sidebar-header h1 {
+  font-size: 19px;
+  color: var(--text-sidebar-active);
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+.sidebar-header .subtitle {
+  font-size: 12px;
+  color: var(--primary-light);
+  margin-top: 8px;
+}
+
+/* 课程级别导航 */
+.level-nav { flex: 1; padding: 12px 0; }
+
+.level-section { margin-bottom: 4px; }
+
+.level-title {
+  padding: 12px 20px 8px;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.level-title:hover { color: var(--gold-light); }
+
+.level-title .arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+  margin-left: auto;
+}
+
+.level-title.collapsed .arrow { transform: rotate(-90deg); }
+
+.level-lessons { overflow: hidden; transition: max-height 0.3s ease; }
+
+.level-title.collapsed + .level-lessons { max-height: 0 !important; }
+
+.lesson-item {
+  padding: 10px 20px 10px 36px;
+  font-size: 13.5px;
+  color: var(--text-sidebar);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  line-height: 1.5;
+}
+
+.lesson-item:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--text-sidebar-active);
+}
+
+.lesson-item.active {
+  background: rgba(196, 149, 106, 0.12);
+  color: var(--gold);
+  border-left-color: var(--gold);
+}
+
+.lesson-item .lesson-num {
+  font-size: 11px;
+  color: var(--primary);
+  margin-right: 6px;
+}
+
+/* 进度区 */
+.sidebar-progress {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(196, 149, 106, 0.2);
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-sidebar);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(196, 149, 106, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ========== 主内容区 ========== */
+.main {
+  flex: 1;
+  margin-left: 300px;
+  padding: 0;
+}
+
+/* 顶部栏 */
+.topbar {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 240, 232, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+
+.topbar .menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--dark);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.breadcrumb span { color: var(--primary); }
+
+.topbar-right { display: flex; gap: 12px; }
+
+.nav-btn {
+  padding: 8px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* 内容容器 */
+.content { padding: 40px; max-width: 900px; margin: 0 auto; }
+
+/* 课程封面页 */
+.cover-page {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.cover-page .cover-ornament {
+  font-size: 28px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  letter-spacing: 8px;
+}
+
+.cover-page h1 {
+  font-size: 32px;
+  color: var(--dark);
+  font-weight: normal;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.cover-page .cover-subtitle {
+  font-size: 16px;
+  color: var(--primary);
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.cover-page .cover-desc {
+  font-size: 15px;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 2;
+}
+
+.course-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.meta-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.meta-card .meta-icon { font-size: 24px; margin-bottom: 8px; }
+
+.meta-card .meta-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+
+.meta-card .meta-value { font-size: 14px; color: var(--dark); font-weight: bold; }
+
+/* 级别概览卡片 */
+.level-overview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: left;
+}
+
+.overview-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.overview-card .ov-level {
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.overview-card .ov-title {
+  font-size: 16px;
+  color: var(--dark);
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.overview-card .ov-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.overview-card .ov-lessons {
+  font-size: 12px;
+  color: var(--primary);
+  margin-top: 12px;
+}
+
+/* ========== 课程内容样式 ========== */
+.lesson-header { margin-bottom: 32px; }
+
+.lesson-header .lesson-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.lesson-header h2 {
+  font-size: 26px;
+  color: var(--dark);
+  font-weight: normal;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.lesson-header .lesson-subtitle {
+  font-size: 14px;
+  color: var(--primary);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.lesson-header .lesson-quote {
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 14px;
+  color: var(--dark-soft);
+  font-style: italic;
+  line-height: 1.8;
+}
+
+/* 章节标题 */
+.section-title {
+  font-size: 19px;
+  color: var(--dark);
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title .section-icon { color: var(--gold); font-size: 18px; }
+
+/* 子标题 */
+.subsection-title {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin: 24px 0 12px;
+  font-weight: bold;
+}
+
+/* 正文段落 */
+.content p {
+  margin-bottom: 14px;
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.content p strong { color: var(--dark); }
+
+/* 信息卡片 */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+}
+
+.info-card .card-title {
+  font-size: 15px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-card .card-icon { font-size: 18px; }
+
+/* 类型卡片网格 */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.type-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: all 0.3s;
+  border-top: 3px solid var(--primary);
+}
+
+.type-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.type-card .type-name {
+  font-size: 15px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.type-card .type-qhd {
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.type-card .type-desc { font-size: 13.5px; color: var(--text); line-height: 1.7; }
+
+.type-card .type-gifts {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-dark);
+  font-size: 12.5px;
+  color: var(--text-light);
+}
+
+.type-card .type-gifts strong { color: var(--primary-dark); }
+
+/* 中心卡片 */
+.center-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.center-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.center-card .center-shape {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+}
+
+.center-card .center-info { flex: 1; }
+
+.center-card .center-name {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.center-card .center-theme {
+  font-size: 12.5px;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+
+.center-card .center-detail { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+/* 回路卡片 */
+.circuit-block {
+  margin: 20px 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.circuit-header {
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.circuit-body { background: var(--bg-card); padding: 16px 20px; }
+
+.circuit-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border-dark);
+}
+
+.circuit-item:last-child { border-bottom: none; }
+
+.circuit-item .ci-name {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.circuit-item .ci-channels {
+  font-size: 12.5px;
+  color: var(--primary);
+  font-family: "Courier New", monospace;
+}
+
+.circuit-item .ci-desc { font-size: 13px; color: var(--text); margin-top: 4px; }
+
+/* 表格 */
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.content-table th {
+  background: var(--primary);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.content-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.content-table tr:last-child td { border-bottom: none; }
+
+.content-table tr:hover td { background: rgba(196, 149, 106, 0.05); }
+
+/* 要点列表 */
+.key-points {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.key-points .kp-title {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.key-points ul { list-style: none; }
+
+.key-points li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.key-points li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 12px;
+  top: 7px;
+}
+
+/* 提示框 */
+.callout {
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  border-left: 4px solid;
+}
+
+.callout.tip { background: #F0F5E8; border-color: #8BA855; color: #3D4A2E; }
+.callout.warn { background: #FDF5E8; border-color: var(--gold); color: #5A4A2D; }
+.callout.insight { background: #F5EDE8; border-color: var(--primary); color: var(--dark-soft); }
+.callout.practice { background: #E8F0F5; border-color: #5588A8; color: #2E4A5A; }
+
+.callout .callout-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+/* 爻线卡片 */
+.line-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.line-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.line-card .line-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+}
+
+.line-card .line-name { font-size: 13px; color: var(--dark); font-weight: bold; margin-bottom: 4px; }
+
+.line-card .line-desc { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+
+/* 轮廓卡片 */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.profile-card .profile-num {
+  font-size: 18px;
+  color: var(--gold);
+  font-weight: bold;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+.profile-card .profile-info { flex: 1; }
+
+.profile-card .profile-name { font-size: 13px; color: var(--dark); font-weight: bold; margin-bottom: 2px; }
+
+.profile-card .profile-desc { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+
+/* 课时小结 */
+.lesson-summary {
+  background: linear-gradient(135deg, var(--bg-card), #F0E8D8);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 32px 0 16px;
+}
+
+.lesson-summary .summary-title {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lesson-summary p { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  padding: 24px 40px;
+  font-size: 12px;
+  color: var(--text-light);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .topbar .menu-btn { display: block; }
+  .content { padding: 24px 16px; }
+  .type-grid, .center-grid, .profile-grid, .line-grid, .level-overview, .course-meta {
+    grid-template-columns: 1fr;
+  }
+  .cover-page { padding: 30px 20px; }
+  .cover-page h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ========== 侧边栏 ========== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">Quantum Human Design</div>
+    <h1>量子人类设计<br>专家认证课程</h1>
+    <div class="subtitle">基于 Dr. Karen Parker 课程体系</div>
+  </div>
+
+  <div class="level-nav" id="levelNav">
+    <!-- 导航由JS生成 -->
+  </div>
+
+  <div class="sidebar-progress">
+    <div class="progress-label">
+      <span>学习进度</span>
+      <span id="progressText">0 / 23</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</nav>
+
+<!-- ========== 主内容区 ========== -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="breadcrumb" id="breadcrumb">课程首页</div>
+    </div>
+    <div class="topbar-right">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">← 上一课</button>
+      <button class="nav-btn" id="nextBtn" onclick="navigate(1)">下一课 →</button>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+    <!-- 内容由JS渲染 -->
+  </div>
+
+  <div class="footer">
+    量子人类设计专家认证课程 · 课件基于 Quantum Human Design™ 认证体系开发<br>
+    课程创始人：Dr. Karen Parker · 课件仅供学习参考<br>
+    <span style="margin-top:8px;display:inline-block;">Powered By Kan Man Tang</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ========== 课程数据 ==========
+const courseData = [
+  // ===== Level 1 =====
+  {
+    level: 1,
+    levelTitle: "Level 1 · 量子人类设计基础",
+    lessons: [
+      {
+        title: "课程导论：量子人类设计概述",
+        subtitle: "Introduction to Quantum Human Design",
+        badge: "Level 1 · 第1课",
+        quote: "量子人类设计是一次神圣的邀请——帮助你重新发现在条件化与期望层层包裹之下的真实本质。",
+        sections: [
+          {
+            title: "什么是量子人类设计？",
+            icon: "✦",
+            body: `<p><strong>量子人类设计（Quantum Human Design™，简称QHD）</strong>是由 Dr. Karen Parker 创立的一套人类设计现代诠释体系。它在传统人类设计系统的基础上，融入了更现代、更赋能的语言框架，将原本带有宿命论色彩的术语转化为充满可能性和成长视角的描述。</p>
+            <p>QHD 的核心理念是：你的能量蓝图不是一种"命运判决"，而是一份<strong>邀请</strong>——邀请你重新记起真实的自己，释放那些不属于你的条件化模式，并以更真实的方式生活。</p>`
+          },
+          {
+            title: "传统人类设计 vs 量子人类设计",
+            icon: "⟷",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>维度</th><th>传统人类设计</th><th>量子人类设计</th></tr>
+                <tr><td>语言风格</td><td>宿命论倾向</td><td>赋能、可能性导向</td></tr>
+                <tr><td>类型命名</td><td>Manifestor / Generator 等</td><td>Initiator / Alchemist 等</td></tr>
+                <tr><td>解读视角</td><td>强调"正确"与"不正确"</td><td>强调对齐与成长</td></tr>
+                <tr><td>目的</td><td>理解能量运作</td><td>活出真实自我</td></tr>
+                <tr><td>态度</td><td>规则导向</td><td>爱与可能性为基础</td></tr>
+              </table>
+            </div>
+            <p>QHD 同时教授传统语言和量子语言，让学员既能理解经典人类设计体系，又能以更积极的视角来应用和传播。</p>`
+          },
+          {
+            title: "课程体系总览",
+            icon: "◈",
+            body: `<div class="level-overview">
+              <div class="overview-card" onclick="goToLesson(0)">
+                <div class="ov-level">LEVEL 1</div>
+                <div class="ov-title">量子人类设计基础</div>
+                <div class="ov-desc">重新记起真实的自己。学习条件化、五大类型、权威与骶骨会话。</div>
+                <div class="ov-lessons">5 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(5)">
+                <div class="ov-level">LEVEL 2</div>
+                <div class="ov-title">照亮灵魂蓝图</div>
+                <div class="ov-desc">深入探索6条爻线、12个轮廓与九大能量中心。</div>
+                <div class="ov-lessons">5 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(10)">
+                <div class="ov-level">LEVEL 3</div>
+                <div class="ov-title">能量交响乐</div>
+                <div class="ov-desc">理解个体、部落、集体三大回路系统及其能量流动。</div>
+                <div class="ov-lessons">5 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(15)">
+                <div class="ov-level">LEVEL 4</div>
+                <div class="ov-title">解读图表的艺术</div>
+                <div class="ov-desc">化身十字、转化周期、生命目的与综合图表解读。</div>
+                <div class="ov-lessons">6 节课 →</div>
+              </div>
+            </div>`
+          },
+          {
+            title: "学习成果与课程配套",
+            icon: "✦",
+            body: `<div class="key-points">
+              <div class="kp-title">✦ 完成全部培训后你将能够：</div>
+              <ul>
+                <li>在深层次上理解自己的能量与生命目的</li>
+                <li>帮助他人释放限制性信念，更真实地生活</li>
+                <li>使用升级后的 QHD 词汇自信地解读图表</li>
+                <li>通过设计视角驾驭健康、金钱、职业和关系模式</li>
+                <li>支持朋友、亲人或客户做出清晰、对齐的决策</li>
+                <li>以诚信和轻松的方式建立或扩展基于人类设计的业务</li>
+              </ul>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">📚</span>课程配套资源</div>
+              <p style="font-size:13.5px;line-height:1.8;color:var(--text);">视频模块与幻灯片 · 可下载参考指南 · Level 1-2 配套日志（实体版+PDF版）· 练习与应用资源库 · 私人学习社区（Circle平台）· 每周直播QHD论坛与答疑</p>
+            </div>`
+          }
+        ],
+        summary: "本课介绍了量子人类设计的核心理念——它是一套以爱与可能性为基础的能量蓝图解读系统。QHD 在传统人类设计基础上，用更赋能的语言帮助我们重新认识真实的自己。四个级别的课程将带我们从基础认知走向专业的图表解读艺术。"
+      },
+      {
+        title: "条件化的本质",
+        subtitle: "The Nature of Conditioning",
+        badge: "Level 1 · 第2课",
+        quote: "你不是你的条件化。你不是别人告诉你的那个你。你是那个在所有这些声音之下安静呼吸的存在。",
+        sections: [
+          {
+            title: "什么是条件化？",
+            icon: "✦",
+            body: `<p><strong>条件化（Conditioning）</strong>是指我们从出生以来，通过家庭、文化、教育、社会期望等渠道，逐渐接受并内化的信念、行为模式和自我认知。这些模式像一层层外衣，将我们真实的能量本质包裹起来。</p>
+            <p>在量子人类设计的视角下，条件化不是"错误"或"需要修复的问题"，而是一种<strong>自然的人类体验</strong>。我们在成长过程中不可避免地会被条件化——但当我们开始觉察这些模式时，就拥有了选择是否继续穿着这些"外衣"的自由。</p>`
+          },
+          {
+            title: "条件化如何运作",
+            icon: "⟳",
+            body: `<div class="info-card">
+              <div class="card-title"><span class="card-icon">🔍</span>条件化的主要来源</div>
+              <p style="font-size:13.5px;line-height:1.8;">• <strong>家庭条件化</strong>——父母的期望、家庭角色、童年经历<br>
+              • <strong>文化条件化</strong>——社会对成功、价值、性别等的定义<br>
+              • <strong>教育条件化</strong>——学校系统对学习方式和能力的评判<br>
+              • <strong>关系条件化</strong>——伴侣、朋友、同事对我们的投射<br>
+              • <strong>开放中心的条件化</strong>——图中未定义（白色）的能量中心容易吸收并放大他人的能量</p>
+            </div>
+            <p>在人类设计的身体图中，<strong>开放中心</strong>（白色的中心）是我们最容易受到条件化的地方。这些中心没有固定的能量运作方式，因此会像海绵一样吸收周围环境的能量。这既是我们的脆弱之处，也是我们最大的智慧来源——当我们学会不被开放中心的能量所定义，反而能从中获得深刻的理解。</p>`
+          },
+          {
+            title: "识别你的条件化模式",
+            icon: "◈",
+            body: `<div class="callout insight">
+              <span class="callout-label">💡 核心洞察</span>
+              条件化最常见的表现是"我不够好"的感觉——不够聪明、不够成功、不够有魅力。这种感觉几乎总是来自将他人的标准内化为我们自己的标准。量子人类设计告诉你：你的设计本身就是完整的，不需要变成另一种类型才算"正确"。
+            </div>
+            <div class="key-points">
+              <div class="kp-title">◆ 条件化的常见信号</div>
+              <ul>
+                <li>持续做"应该"做的事，而非"想要"做的事</li>
+                <li>在关系中感到能量耗竭而非充盈</li>
+                <li>对自己的类型和能量感到羞耻或不接受</li>
+                <li>试图用意志力强迫自己改变自然能量节奏</li>
+                <li>在开放中心领域过度认同——如"我就是个情绪化的人"（但情绪中心是开放的）</li>
+                <li>不断寻求外界认可来确定自己的价值</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: "去条件化的路径",
+            icon: "✦",
+            body: `<p>去条件化不是一次性的事件，而是一个<strong>持续的觉察过程</strong>。量子人类设计提供了具体的工具来支持这个过程：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>步骤</th><th>实践</th><th>说明</th></tr>
+                <tr><td>1. 觉察</td><td>识别条件化模式</td><td>注意到"这不是我的能量"的时刻</td></tr>
+                <tr><td>2. 接纳</td><td>不以批判的态度看待</td><td>条件化不是错误，是人类体验的一部分</td></tr>
+                <tr><td>3. 区分</td><td>区分"我的"与"不是我的"</td><td>通过类型和策略来验证能量来源</td></tr>
+                <tr><td>4. 选择</td><td>运用策略和权威</td><td>以自己的能量做决策，而非惯性模式</td></tr>
+                <tr><td>5. 释放</td><td>逐步放下不属于你的</td><td>随着实践，条件化模式自然松动</td></tr>
+              </table>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              花一周时间观察你的开放中心。每天晚上回顾：今天在哪个开放中心你吸收了别人的能量？那个能量是"你的"还是"别人的"？只需观察，不需评判。这是去条件化的第一步。
+            </div>`
+          }
+        ],
+        summary: "条件化是我们从环境中内化的信念和模式，它包裹着我们真实的能量本质。开放中心是最容易被条件化的地方，但也是智慧的来源。去条件化是一个觉察—接纳—区分—选择—释放的持续过程，核心是运用你的人类设计策略和权威来做决策。"
+      },
+      {
+        title: "五大能量类型",
+        subtitle: "The Five Energy Types & Their Quantum Names",
+        badge: "Level 1 · 第3课",
+        quote: "每种类型都是宇宙交响乐中不可或缺的音符。没有哪种类型比另一种更好——它们只是以不同的方式参与生命的创造。",
+        sections: [
+          {
+            title: "类型概述",
+            icon: "✦",
+            body: `<p>在量子人类设计中，<strong>五大能量类型</strong>描述了每个人与生命能量互动的基本方式。QHD 为每种类型赋予了全新的"量子名称"，这些名称更具赋能感，帮助我们从"我是谁"的视角而非"我能做什么"的视角来理解自己。</p>
+            <p>每种类型都有自己的<strong>能量天赋</strong>、<strong>挑战</strong>和<strong>智慧</strong>，以及与之对齐的<strong>策略</strong>。理解类型不是要把自己框住，而是找到最自然的能量流动方式。</p>`
+          },
+          {
+            title: "五大类型详解",
+            icon: "◈",
+            body: `<div class="type-grid">
+              <div class="type-card" style="border-top-color:#E8744C;">
+                <div class="type-name">Manifestor · 显示者</div>
+                <div class="type-qhd">→ Initiator（发起者）</div>
+                <div class="type-desc">能量的发起者，拥有强大的启动力量。独立、行动力强，天生就是为了开启新事物、打破旧格局而存在。</div>
+                <div class="type-gifts"><strong>策略：</strong>告知（Inform）<br><strong>天赋：</strong> initiating · 独立行动 · 影响他人</div>
+              </div>
+              <div class="type-card" style="border-top-color:#E85A3C;">
+                <div class="type-name">Generator · 生产者</div>
+                <div class="type-qhd">→ Alchemist（炼金术士）</div>
+                <div class="type-desc">生命的炼金术士，拥有持续的工作能量和创造力。通过与让自己满足的事物连接来转化生命能量。</div>
+                <div class="type-gifts"><strong>策略：</strong>回应（Respond）<br><strong>天赋：</strong> 持续能量 · 满足感 · 掌握技艺</div>
+              </div>
+              <div class="type-card" style="border-top-color:#D49855;">
+                <div class="type-name">Manifesting Generator · 显示生产者</div>
+                <div class="type-qhd">→ Time Bender（时间弯曲者）</div>
+                <div class="type-desc">时间弯曲者，同时拥有发起和回应的能量。效率极高，能以非线性方式完成事情，快速跳过步骤。</div>
+                <div class="type-gifts"><strong>策略：</strong>回应 + 告知<br><strong>天赋：</strong> 多任务 · 高效率 · 快速学习</div>
+              </div>
+              <div class="type-card" style="border-top-color:#7AA8E0;">
+                <div class="type-name">Projector · 投射者</div>
+                <div class="type-qhd">→ Orchestrator（编排者）</div>
+                <div class="type-desc">能量的编排者，天生擅长看见他人、理解系统并引导能量。不是为了持续工作，而是为了引导和管理。</div>
+                <div class="type-gifts"><strong>策略：</strong>等待邀请（Wait for Invitation）<br><strong>天赋：</strong> 深刻洞察 · 引导他人 · 系统思维</div>
+              </div>
+              <div class="type-card" style="border-top-color:#C0C0C0;">
+                <div class="type-name">Reflector · 反映者</div>
+                <div class="type-qhd">→ Calibrator（校准者）</div>
+                <div class="type-desc">环境的校准者，所有中心都开放。像一面镜子反射社区的健康发展，需要28天的月亮周期来做决策。</div>
+                <div class="type-gifts"><strong>策略：</strong>等待28天月亮周期<br><strong>天赋：</strong> 全局视角 · 反射真相 · 社区诊断</div>
+              </div>
+            </div>`
+          },
+          {
+            title: "各类型的挑战与智慧",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>类型</th><th>核心挑战</th><th>深层智慧</th></tr>
+                <tr><td>Initiator 发起者</td><td>他人的阻力与控制感</td><td>启动的力量在于自由的行动</td></tr>
+                <tr><td>Alchemist 炼金术士</td><td>挫败感——做不满足的事</td><td>满足感是生命力的指南针</td></tr>
+                <tr><td>Time Bender 时间弯曲者</td><td>跳过步骤导致失误</td><td>效率与灵活并存的力量</td></tr>
+                <tr><td>Orchestrator 编排者</td><td>苦涩——未被看见和认可</td><td>成功在于被正确邀请</td></tr>
+                <tr><td>Calibrator 校准者</td><td>失望——环境不对齐</td><td>在正确的环境中反射真相</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "类型策略：能量的对齐方式",
+            icon: "✦",
+            body: `<p>每种类型都有特定的<strong>策略（Strategy）</strong>——与生命能量对齐的方式。策略不是规则，而是一种能量运作的自然法则。</p>
+            <div class="callout tip">
+              <span class="callout-label">✓ 核心原则</span>
+              <strong>Initiator（发起者）</strong>：行动前告知相关人等，减少阻力<br>
+              <strong>Alchemist（炼金术士）</strong>：等待身体的骶骨回应，而非主动发起<br>
+              <strong>Time Bender（时间弯曲者）</strong>：先回应，然后告知，行动<br>
+              <strong>Orchestrator（编排者）</strong>：等待生命中的重要邀请——工作、关系、项目<br>
+              <strong>Calibrator（校准者）</strong>：等待完整的28天月亮周期来做重要决定
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              QHD 将传统术语升级为更赋能的名称：不是"你只能回应"，而是"你的炼金术士能量通过回应来转化"。策略是<strong>赋能的工具</strong>，不是限制的规则。
+            </div>`
+          }
+        ],
+        summary: `量子人类设计将五大类型重新命名为更具赋能感的量子名称：Initiator、Alchemist、Time Bender、Orchestrator、Calibrator。每种类型都有独特的能量天赋、挑战和策略。理解你的类型不是设限，而是找到最自然的能量流动方式，从"挣扎"转向"对齐"。`
+      },
+      {
+        title: "权威：内在指南针",
+        subtitle: "Authority — Your Inner Compass",
+        badge: "Level 1 · 第4课",
+        quote: "权威不是头脑的决定。它是你身体深处那个安静而确知的指引——你的内在指南针。",
+        sections: [
+          {
+            title: "什么是权威？",
+            icon: "✦",
+            body: `<p><strong>权威（Authority）</strong>是你内在做决策的指南针。在量子人类设计中，权威指的是你身体中那个最能给你正确指引的能量中心。这与"用头脑思考做决定"完全不同——头脑擅长分析信息，但它不是做生命决策的正确工具。</p>
+            <p>QHD 的核心教导之一是：<strong>策略告诉你"如何"与能量对齐，权威告诉你"何时"行动</strong>。两者配合使用，就是与你的设计完全对齐的决策方式。</p>`
+          },
+          {
+            title: "权威的类型",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>权威类型</th><th>决策中心</th><th>运作方式</th></tr>
+                <tr><td>情绪权威（Emotional）</td><td>情绪太阳神经丛</td><td>等待情绪波通过，在平静中决定</td></tr>
+                <tr><td>骶骨权威（Sacral）</td><td>骶骨中心</td><td>身体的即时回应——"嗯哼"/"嗯嗯"</td></tr>
+                <tr><td>脾脏权威（Splenic）</td><td>脾脏中心</td><td>瞬间的直觉，转瞬即逝</td></tr>
+                <tr><td>意志力权威（Ego/Heart）</td><td>意志力中心</td><td>"我要"的力量——承诺和意志</td></tr>
+                <tr><td>G中心权威（Self-Projected）</td><td>G中心</td><td>说出真相——通过言语听到自己</td></tr>
+                <tr><td>无内在权威（Mental Projector）</td><td>头脑</td><td>通过环境和他人来听到自己</td></tr>
+                <tr><td>月亮权威（Lunar）</td><td>无（反映者）</td><td>等待28天月亮周期</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "如何运用你的权威",
+            icon: "⟳",
+            body: `<div class="info-card">
+              <div class="card-title"><span class="card-icon">🌙</span>情绪权威——约50%的人口</div>
+              <p style="font-size:13.5px;line-height:1.8;">你的情绪像波浪一样运作。在波峰时一切看起来很棒，在波谷时一切看起来很糟。<strong>关键：永远不要在情绪波中做决定。</strong>等待情绪平静下来，在稳定状态中再做选择。这通常需要睡一觉，有时需要更长时间。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">⚡</span>骶骨权威——生产者类型</div>
+              <p style="font-size:13.5px;line-height:1.8;">你的骶骨中心通过声音和身体感觉即时回应。当问到你"要不要做这个？"时，身体会发出"嗯哼"（要）或"嗯嗯"（不要）的声音。<strong>关键：不要用头脑覆盖身体的回应。</strong>骶骨回应是即时的，不需要思考。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">✨</span>脾脏权威——少数投射者</div>
+              <p style="font-size:13.5px;line-height:1.8;">你的直觉以瞬间的闪现出现——一种"这样不对"或"这样做"的感觉。<strong>关键：直觉只说一次。</strong>如果你错过了那一瞬间的感觉，头脑就会接管。学会捕捉并信任那第一直觉。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🔥</span>意志力权威</div>
+              <p style="font-size:13.5px;line-height:1.8;">你的决策来自意志力中心的"我要"。这不是头脑分析的结论，而是一种深层的、基于承诺和力量的确知。<strong>关键：这是关于"我要"的力量，不是"我必须"。</strong></p>
+            </div>`
+          },
+          {
+            title: "权威与策略的配合",
+            icon: "✦",
+            body: `<div class="callout insight">
+              <span class="callout-label">💡 核心公式</span>
+              <strong>策略 + 权威 = 与设计对齐的决策</strong><br><br>
+              • <strong>Alchemist/Time Bender + 骶骨权威</strong>：等待回应 → 骶骨回应 → 行动<br>
+              • <strong>Alchemist/Time Bender + 情绪权威</strong>：等待回应 → 等待情绪波通过 → 行动<br>
+              • <strong>Orchestrator + 脾脏权威</strong>：等待邀请 → 直觉确认 → 接受<br>
+              • <strong>Initiator + 情绪权威</strong>：告知 → 等待情绪波通过 → 行动<br>
+              • <strong>Calibrator + 月亮权威</strong>：等待28天 → 与他人交谈 → 决定
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 常见误区</span>
+              许多人试图用头脑来"计算"正确的决定。但头脑永远无法知道什么对你真正正确——它只能分析利弊。真正的决策权威住在你的身体里，不在你的头脑里。
+            </div>`
+          }
+        ],
+        summary: `权威是你内在做决策的指南针，它住在你的身体里而非头脑中。主要的权威类型包括情绪权威（等待波平静）、骶骨权威（即时身体回应）、脾脏权威（瞬间直觉）、意志力权威（"我要"的力量）等。策略与权威的配合使用，是与你的能量设计完全对齐的决策方式。`
+      },
+      {
+        title: "神圣骶骨会话",
+        subtitle: "Sacral Sessions — Reconnecting with Body Truth",
+        badge: "Level 1 · 第5课",
+        quote: "骶骨不会说谎。它不会说'应该'，也不会说'也许'。它只说'是'或'不是'——纯粹的、未经加工的生命力。",
+        sections: [
+          {
+            title: "什么是神圣骶骨会话？",
+            icon: "✦",
+            body: `<p><strong>神圣骶骨会话（Sacral Sessions）</strong>是量子人类设计中专为 Alchemist（炼金术士）和 Time Bender（时间弯曲者）设计的实践方法。它的目的是帮助你<strong>重新连接骶骨中心的身体真相</strong>——那个在头脑分析之前就已经知道答案的内在智慧。</p>
+            <p>骶骨中心是生产者类型的核心能量中心，它携带着生命力和创造力。但大多数人由于长期的条件化，已经学会了用头脑来覆盖身体的回应。骶骨会话就是重新训练这种连接的过程。</p>`
+          },
+          {
+            title: "骶骨的运作方式",
+            icon: "◈",
+            body: `<p>骶骨中心以<strong>声音</strong>和<strong>身体感觉</strong>来回应。当你问一个是非题时，骶骨会在头脑介入之前自动回应：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>回应</th><th>声音</th><th>含义</th></tr>
+                <tr><td>肯定</td><td>"嗯哼"（上扬音）</td><td>是的，这个对我来说是对的</td></tr>
+                <tr><td>否定</td><td>"嗯嗯"（下沉音）</td><td>不，这个对我来说不对</td></tr>
+                <tr><td>不确定</td><td>沉默 / 迟疑</td><td>现在不是时候 / 信息不够</td></tr>
+              </table>
+            </div>
+            <p>骶骨回应是<strong>非语言的、即时的、不可控的</strong>。你无法"制造"一个骶骨回应——它就是发生了。这就像膝跳反射一样自然。</p>`
+          },
+          {
+            title: "如何进行骶骨会话",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 骶骨会话的步骤</div>
+              <ul>
+                <li><strong>1. 找一个伙伴</strong>——骶骨会话最好由另一个人来提问，因为自己问自己容易让头脑介入</li>
+                <li><strong>2. 设置空间</strong>——安静、舒适的环境，放松身体</li>
+                <li><strong>3. 只问是非题</strong>——骶骨只能回答"是"或"不是"，不能回答开放式问题</li>
+                <li><strong>4. 快速提问</strong>——不要给头脑时间思考，一个问题接一个问题</li>
+                <li><strong>5. 注意第一个声音</strong>——骶骨回应是自动发出的，通常在问题结束前就出现了</li>
+                <li><strong>6. 记录回应</strong>——不要分析或评判，只需记录"嗯哼"或"嗯嗯"</li>
+                <li><strong>7. 尊重回应</strong>——即使回应不符合逻辑，也要尊重它</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: "骶骨会话的问题示例",
+            icon: "◈",
+            body: `<div class="info-card">
+              <div class="card-title"><span class="card-icon">📋</span>可以问的问题类型</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              <strong>日常生活：</strong>"你想现在吃饭吗？""你想去散步吗？""你想看这本书吗？"<br><br>
+              <strong>工作方向：</strong>"你喜欢现在的工作吗？""你想换工作吗？""你想学习这个新技能吗？"<br><br>
+              <strong>关系：</strong>"你想和这个人在一起吗？""你想给这个人打电话吗？"<br><br>
+              <strong>健康：</strong>"你的身体想去运动吗？""你想现在休息吗？"<br><br>
+              <strong>创造力：</strong>"你想开始这个项目吗？""你想用这种方式创作吗？"</p>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 注意事项</span>
+              • 不要问"为什么"或"怎么做"的问题——骶骨无法回答<br>
+              • 不要在情绪低落时强行做骶骨会话<br>
+              • 骶骨回应可能与你"认为应该的"答案不同——这正是它的价值<br>
+              • 刚开始可能不太容易听到骶骨回应，需要练习和耐心
+            </div>`
+          },
+          {
+            title: "骶骨会话与创造力流动",
+            icon: "✦",
+            body: `<p>当你开始信任骶骨的回应，你的<strong>创造力流动</strong>会自然打开。骶骨中心不仅告诉你"要做"或"不要做"，它还携带着<strong>生命力的能量</strong>——当你说"是"给那些让你兴奋的事情，你的能量会自然涌出，不需要意志力的推动。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              作为炼金术士或时间弯曲者，你的满足感不来自"完成了什么"，而来自"你的骶骨是否说了是"。当骶骨说是，即使是最简单的任务也充满生命力。当骶骨说不，即使是最"重要"的任务也会耗尽你。这就是炼金术——将生命能量转化为满足感。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 本周练习</span>
+              每天早上醒来后，躺在床上问自己一系列简单的是非题："你的身体想起床吗？""你想喝温水吗？""你想先做什么？"记录你的骶骨回应，并尝试跟随它行动。一周后回顾：这些"是"的回应带给了你什么样的感受？
+            </div>`
+          }
+        ],
+        summary: `神圣骶骨会话是专为炼金术士和时间弯曲者设计的实践方法，通过是非题来重新连接骶骨中心的身体真相。骶骨以声音和身体感觉即时回应——"嗯哼"表示是，"嗯嗯"表示不。当你学会信任并跟随骶骨的回应，创造力和生命力会自然流动，将日常体验转化为满足感的炼金术。`
+      }
+    ]
+  },
+  // ===== Level 2 =====
+  {
+    level: 2,
+    levelTitle: "Level 2 · 照亮灵魂蓝图",
+    lessons: [
+      {
+        title: "六条爻线",
+        subtitle: "The Six Lines — Subtle Energies of Expression",
+        badge: "Level 2 · 第1课",
+        quote: "六条爻线像是六种不同的光，穿过同一个棱镜折射出不同的色彩——同样的生命能量，以六种微妙而独特的方式表达。",
+        sections: [
+          {
+            title: "什么是爻线？",
+            icon: "✦",
+            body: `<p>在人类设计系统中，<strong>爻线（Lines）</strong>是构成轮廓（Profile）的基本单位。每条爻线代表一种特定的能量表达方式和互动模式。你的轮廓由两条爻线组成——一条来自你的个性（意识），一条来自你的设计（无意识）。</p>
+            <p>六条爻线源自古老的<strong>易经六爻</strong>，每条爻线都有独特的主题、阴影面和成长路径。在量子人类设计中，我们以赋能的视角来理解这些爻线——不是"你会是什么样的人"，而是"你的能量如何自然表达"。</p>`
+          },
+          {
+            title: "六条爻线详解",
+            icon: "◈",
+            body: `<div class="line-grid">
+              <div class="line-card">
+                <div class="line-num">1</div>
+                <div class="line-name">研究者</div>
+                <div class="line-desc">需要深入理解事物的本质。独立研究，内在安全感来自"知道"。</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">2</div>
+                <div class="line-name">隐士</div>
+                <div class="line-desc">天然天赋，自己常不自知。需要被"叫出来"，独立与社交之间需要平衡。</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">3</div>
+                <div class="line-name">探索者</div>
+                <div class="line-desc">通过试错来学习。每一次"失败"都是发现什么有效的过程。实践出真知。</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">4</div>
+                <div class="line-name">机会主义者</div>
+                <div class="line-desc">通过社交网络获取机会。关系是核心，"朋友的朋友"带来最重要的机遇。</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">5</div>
+                <div class="line-name">普世化者</div>
+                <div class="line-desc">投射的磁场——别人会将拯救者的期望投射到你身上。需要谨慎给出建议。</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">6</div>
+                <div class="line-name">人生榜样</div>
+                <div class="line-desc">人生分三个阶段：尝试（0-30岁）→ 退隐（30-50岁）→ 榜样（50岁+）。超越性的视角。</div>
+              </div>
+            </div>`
+          },
+          {
+            title: "爻线的深层理解",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>爻线</th><th>核心主题</th><th>阴影面</th><th>成长路径</th></tr>
+                <tr><td>1爻</td><td>探索与自我研究</td><td>不安全感、过度研究</td><td>信任内在的知道</td></tr>
+                <tr><td>2爻</td><td>自然天赋与被召唤</td><td>逃避、否认天赋</td><td>接受被"叫出来"</td></tr>
+                <tr><td>3爻</td><td>通过实践发现真相</td><td>自责、害怕失败</td><td>拥抱试错为成长工具</td></tr>
+                <tr><td>4爻</td><td>关系网络与机会</td><td>孤立、过度付出</td><td>滋养核心关系圈</td></tr>
+                <tr><td>5爻</td><td>投射场域与领导力</td><td>被误解、不堪重负</td><td>管理投射、谨慎承诺</td></tr>
+                <tr><td>6爻</td><td>超越与榜样</td><td>悲观、过早退隐</td><td>经历三阶段、成为榜样</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "爻线在轮廓中的运作",
+            icon: "✦",
+            body: `<p>你的轮廓由<strong>两条爻线</strong>组成，例如 3/5、1/3、6/2 等。第一条线来自你的<strong>个性太阳/地球</strong>（你有意识的部分），第二条线来自你的<strong>设计太阳/地球</strong>（你无意识的部分）。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 理解方式</span>
+              <strong>第一条线（个性）</strong>是你自己认识的自己——"我觉得我是这样的人"。<br>
+              <strong>第二条线（设计）</strong>是别人在你身上看到的——"你可能没意识到，但你确实是这样的人"。<br><br>
+              两条线的组合创造了一个独特的能量互动——有时互补，有时张力。理解这两条线如何在你体内协作，是深入理解自己行为模式的关键。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 反思练习</span>
+              查看你的轮廓的两条爻线。问自己：<br>
+              1. 我的第一条线——我自己认为我是这样的吗？<br>
+              2. 我的第二条线——别人是否经常这样描述我？<br>
+              3. 这两条线在我生活中是如何互补或产生张力的？
+            </div>`
+          }
+        ],
+        summary: "六条爻线代表六种不同的能量表达和互动模式：研究者、隐士、探索者、机会主义者、普世化者、人生榜样。你的轮廓由个性爻线（你有意识的部分）和设计爻线（无意识的部分）组成。理解这两条线如何互动，可以深入洞察你的行为模式和成长路径。"
+      },
+      {
+        title: "十二个轮廓",
+        subtitle: "The Twelve Profiles — The Narrative of Your Soul",
+        badge: "Level 2 · 第2课",
+        quote: "轮廓是你灵魂的叙事——它不是你的故事内容，而是故事被讲述的方式。",
+        sections: [
+          {
+            title: "什么是轮廓？",
+            icon: "✦",
+            body: `<p><strong>轮廓（Profile）</strong>由你的个性爻线（意识）和设计爻线（无意识）组合而成。共有6×6=36种组合，但人类设计聚焦于<strong>12个主要轮廓</strong>——那些由相同或相邻爻线组成的组合。</p>
+            <p>轮廓描述了你的<strong>灵魂叙事</strong>——你如何在生命中成长、贡献和找到目的。它像是一个角色原型，为你的生命故事提供了基本的框架和主题。</p>`
+          },
+          {
+            title: "12个轮廓详解",
+            icon: "◈",
+            body: `<div class="profile-grid">
+              <div class="profile-card">
+                <div class="profile-num">1/3</div>
+                <div class="profile-info">
+                  <div class="profile-name">研究者 · 探索者</div>
+                  <div class="profile-desc">深入研究并通过试错来建立稳固的基础。生命是不断发现和修正的过程。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">1/4</div>
+                <div class="profile-info">
+                  <div class="profile-name">研究者 · 机会主义者</div>
+                  <div class="profile-desc">深入研究并通过社交网络分享知识。稳固的基础加温暖的关系。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">2/4</div>
+                <div class="profile-info">
+                  <div class="profile-name">隐士 · 机会主义者</div>
+                  <div class="profile-desc">天赋被关系网络中的朋友叫出来。自然能力与社交连接的结合。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">2/5</div>
+                <div class="profile-info">
+                  <div class="profile-name">隐士 · 普世化者</div>
+                  <div class="profile-desc">天赋加上投射场域。被叫出来解决他人的问题，需要管理期望。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">3/5</div>
+                <div class="profile-info">
+                  <div class="profile-name">探索者 · 普世化者</div>
+                  <div class="profile-desc">通过试错找到可行的解决方案，然后被他人投射为解决者。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">3/6</div>
+                <div class="profile-info">
+                  <div class="profile-name">探索者 · 人生榜样</div>
+                  <div class="profile-desc">前半生不断试错，后半生成为他人效仿的榜样。超越性的视角。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">4/6</div>
+                <div class="profile-info">
+                  <div class="profile-name">机会主义者 · 人生榜样</div>
+                  <div class="profile-desc">通过关系网络成长，最终成为社交圈中的榜样。稳定的关系是关键。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">4/1</div>
+                <div class="profile-info">
+                  <div class="profile-name">机会主义者 · 研究者</div>
+                  <div class="profile-desc">关系网络与固定研究的结合。一旦认准方向，非常坚定。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">5/1</div>
+                <div class="profile-info">
+                  <div class="profile-name">普世化者 · 研究者</div>
+                  <div class="profile-desc">被投射为解决者，需要深入的基础研究来支撑自己的建议。神秘而实际。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">5/2</div>
+                <div class="profile-info">
+                  <div class="profile-name">普世化者 · 隐士</div>
+                  <div class="profile-desc">投射场域加上隐藏的天赋。需要在服务他人和个人空间之间平衡。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">6/2</div>
+                <div class="profile-info">
+                  <div class="profile-name">人生榜样 · 隐士</div>
+                  <div class="profile-desc">三阶段人生加自然天赋。退隐后以自然能力被召唤出来成为榜样。</div>
+                </div>
+              </div>
+              <div class="profile-card">
+                <div class="profile-num">6/3</div>
+                <div class="profile-info">
+                  <div class="profile-name">人生榜样 · 探索者</div>
+                  <div class="profile-desc">三阶段人生，每个阶段都通过试错来学习。最终成为有实践经验的智慧榜样。</div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: "轮廓的三个维度",
+            icon: "◈",
+            body: `<div class="info-card">
+              <div class="card-title"><span class="card-icon">🌱</span>成长维度</div>
+              <p style="font-size:13.5px;line-height:1.8;">轮廓描述了你灵魂的成长路径——你通过什么方式学习和成熟。3爻轮廓的人通过试错成长，1爻轮廓的人通过深入研究成长，6爻轮廓的人通过人生三阶段的经历成长。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🤝</span>贡献维度</div>
+              <p style="font-size:13.5px;line-height:1.8;">轮廓揭示了你如何向世界贡献自己的能量。4爻轮廓通过关系网络贡献，5爻轮廓通过解决他人问题贡献，2爻轮廓通过被叫出来的天赋贡献。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🎯</span>目的维度</div>
+              <p style="font-size:13.5px;line-height:1.8;">轮廓指向你的生命目的。1爻找到内在安全感，3爻发现什么有效，6爻成为超越的榜样。你的轮廓不是你要成为什么，而是你自然而然会走的路。</p>
+            </div>`
+          },
+          {
+            title: "右角度、左角度与并列轮廓",
+            icon: "✦",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>类型</th><th>爻线组合</th><th>主题</th></tr>
+                <tr><td>右角度（Right Angle）</td><td>1/3, 1/4, 2/4, 2/5, 3/5, 3/6, 4/6</td><td>个人命运——"我做我的事"</td></tr>
+                <tr><td>并列（Juxtaposition）</td><td>4/1</td><td>固定的命运——独特的角色</td></tr>
+                <tr><td>左角度（Left Angle）</td><td>5/1, 5/2, 6/2, 6/3</td><td>跨个人命运——"我为他人的转变而存在"</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              右角度轮廓的人聚焦于个人成长和自我发现——"我的旅程是什么？"。左角度轮廓的人聚焦于服务他人和集体转变——"我如何能帮助他人？"。并列轮廓是两者之间的桥梁——一个独特的角色，既有个人的深度又有对他人的影响。
+            </div>`
+          }
+        ],
+        summary: "12个轮廓由个性爻线和设计爻线组合而成，每个轮廓描述了灵魂的成长、贡献和目的的叙事方式。右角度轮廓聚焦个人命运，左角度轮廓聚焦服务他人，并列轮廓是独特的桥梁角色。理解你的轮廓不是定义你是谁，而是理解你自然而然的生命路径。"
+      },
+      {
+        title: "九大能量中心（上）：认知与表达",
+        subtitle: "The Nine Centers Part 1 — Cognition & Expression",
+        badge: "Level 2 · 第3课",
+        quote: "每个能量中心都是宇宙的一个维度在你体内的驻扎地。当你理解了它们如何运作，你就理解了你自己。",
+        sections: [
+          {
+            title: "能量中心概述",
+            icon: "✦",
+            body: `<p>人类设计的身体图（BodyGraph）包含<strong>九大能量中心</strong>，每个中心对应身体的一个能量枢纽，掌管特定的生命主题。每个中心可以是<strong>定义的</strong>（有颜色——固定能量）或<strong>开放的</strong>（白色——可变能量）。</p>
+            <p>定义的中心代表你<strong>稳定、可靠</strong>的能量表达方式——这是你"带给世界"的能量。开放的中心代表你<strong>灵活、敏感</strong>的能量——这是你从世界"接收"和"学习"的地方。</p>
+            <p>本课聚焦前四个中心——与<strong>认知和表达</strong>相关的中心。</p>`
+          },
+          {
+            title: "头脑中心与直觉中心",
+            icon: "◈",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#E8D55C;">💭</div>
+                <div class="center-info">
+                  <div class="center-name">头脑中心 Head</div>
+                  <div class="center-theme">灵感与可能性</div>
+                  <div class="center-detail"><strong>定义：</strong>固定的灵感来源，持续思考特定类型的问题。<br><strong>开放：</strong>会吸收并放大他人的压力和灵感，容易过度思考。<br><strong>智慧：</strong>认识到不是每个想法都需要付诸行动。</div>
+                </div>
+              </div>
+              <div class="center-card">
+                <div class="center-shape" style="background:#7AB0C8;">🧠</div>
+                <div class="center-info">
+                  <div class="center-name">直觉中心 Ajna</div>
+                  <div class="center-theme">理解与概念化</div>
+                  <div class="center-detail"><strong>定义：</strong>固定的思考方式，以特定方式理解世界。<br><strong>开放：</strong>能从多角度理解事物，但容易不确定"自己的观点是什么"。<br><strong>智慧：</strong>灵活性——能理解不同观点，不执着于单一真相。</div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: "喉咙中心",
+            icon: "◈",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#8B6B9C;">🗣️</div>
+                <div class="center-info">
+                  <div class="center-name">喉咙中心 Throat</div>
+                  <div class="center-theme">沟通与显化</div>
+                  <div class="center-detail"><strong>定义：</strong>固定的表达方式，能够持续说出和做出。<br><strong>开放：</strong>能以多种方式表达，但容易"急于说话"以引起注意。<br><strong>智慧：</strong>认识到不必急于表达——你的声音不需要被强迫才能被听见。<br><strong>注意：</strong>喉咙中心是连接行动和表达的枢纽，渴望被听见是它的核心驱动力。</div>
+                </div>
+              </div>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 认知与表达的能量流</span>
+              能量从<strong>头脑中心</strong>（灵感）流向<strong>直觉中心</strong>（理解），然后通过<strong>喉咙中心</strong>（表达/显化）流向世界。这条线路是"思考→理解→表达"的认知路径。如果你的这三个中心都是开放的，你是一个极佳的倾听者和多角度思考者——但需要警惕过度思考和不确定自己观点的倾向。
+            </div>`
+          },
+          {
+            title: "G中心",
+            icon: "✦",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#D4A843; width:54px; height:54px; border-radius:50%;">❤️</div>
+                <div class="center-info">
+                  <div class="center-name">G中心 G/Identity</div>
+                  <div class="center-theme">自我感 · 方向 · 爱</div>
+                  <div class="center-detail"><strong>定义：</strong>稳定的自我感和方向感——知道自己是谁，要去哪里。自然散发爱。<br><strong>开放：</strong>自我感和方向随环境和关系变化。在不同场合展现不同面向是自然的。<br><strong>智慧：</strong>认识到"我是谁"不是一个固定的答案——你是流动的、多面的存在。<br><strong>位置：</strong>身体图正中央，连接爱与方向、自我与命运。</div>
+                </div>
+              </div>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 实用指南</span>
+              <strong>开放G中心</strong>的人：选择正确的环境至关重要。你会在不同的地方展现不同的自己。去那些让你感觉"对"的地方，避免那些让你感觉"不是自己"的环境。你的方向感来自环境，不是来自内在——所以选对环境就是选对方向。
+            </div>`
+          },
+          {
+            title: "定义 vs 开放：深层理解",
+            icon: "✦",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>维度</th><th>定义中心（有色）</th><th>开放中心（白色）</th></tr>
+                <tr><td>能量性质</td><td>固定、可靠、一致</td><td>可变、灵活、敏感</td></tr>
+                <tr><td>运作方式</td><td>你稳定地"给予"这种能量</td><td>你"接收"和放大这种能量</td></tr>
+                <tr><td>条件化风险</td><td>较低——能量是固定的</td><td>较高——容易吸收他人能量</td></tr>
+                <tr><td>智慧来源</td><td>深入了解自己固定的能量</td><td>从多元体验中学习灵活的智慧</td></tr>
+                <tr><td>自我认同</td><td>"这就是我"</td><td>"这不一定是我的"——需要区分</td></tr>
+              </table>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 关键提醒</span>
+              开放中心不是"缺陷"或"弱点"——它们是你<strong>最大的学习领域和智慧来源</strong>。当你不再被开放中心的条件化所控制，你就能在那些领域获得深刻的理解和共情能力，成为帮助他人的智慧资源。
+            </div>`
+          }
+        ],
+        summary: "九大能量中心掌管不同的生命主题。本课聚焦认知与表达的中心：头脑中心（灵感）、直觉中心（理解）、喉咙中心（沟通显化）、G中心（自我感与方向）。定义中心给予你稳定的能量，开放中心带来灵活性和智慧。开放中心不是弱点，而是最大的学习领域。"
+      },
+      {
+        title: "九大能量中心（下）：动力与觉知",
+        subtitle: "The Nine Centers Part 2 — Motor & Awareness",
+        badge: "Level 2 · 第4课",
+        quote: "你的身体是一座能量的庙宇。每个中心都是一盏灯——定义的灯持续发光，开放的灯折射周围的光。所有这些光，构成了你。",
+        sections: [
+          {
+            title: "动力中心：意志力、情绪、骶骨、根部",
+            icon: "✦",
+            body: `<p>动力中心是能量的<strong>发动机</strong>——它们产生驱动生命运作的能量。四大动力中心分别是：意志力中心、情绪太阳神经丛、骶骨中心和根部中心。</p>`
+          },
+          {
+            title: "意志力中心与情绪中心",
+            icon: "◈",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#E85A3C; width:54px; height:36px; border-radius:50%;">🔥</div>
+                <div class="center-info">
+                  <div class="center-name">意志力中心 Will/Ego</div>
+                  <div class="center-theme">承诺 · 勇气 · 界限 · 价值</div>
+                  <div class="center-detail"><strong>定义：</strong>稳定的意志力和自我价值感。说到做到，有自然的领导力。<br><strong>开放：</strong>意志力波动，容易过度承诺或低估自己价值。<br><strong>智慧：</strong>不依赖意志力来"推"自己前进——学会说"不"是保护这个中心的关键。<br><strong>条件化信号：</strong>"我不够好""我需要证明自己"</div>
+                </div>
+              </div>
+              <div class="center-card">
+                <div class="center-shape" style="background:#5C9C8B; width:36px; height:54px; border-radius:50%;">🌊</div>
+                <div class="center-info">
+                  <div class="center-name">情绪太阳神经丛 Emotional Solar Plexus</div>
+                  <div class="center-theme">情绪智慧 · 情感 · 欲望</div>
+                  <div class="center-detail"><strong>定义：</strong>情绪波是固定的——有自己的情绪节奏。需要等待情绪波通过再做决定。<br><strong>开放：</strong>极度敏感于他人情绪，容易放大和吸收周围的情绪。<br><strong>智慧：</strong>情绪不是真相——学会不被情绪波控制，在平静中做决定。<br><strong>条件化信号：</strong>"我太情绪化了""我需要避免冲突"</div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: "骶骨中心与脾脏中心",
+            icon: "◈",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#E8744C; width:36px; height:36px; border-radius:50%;">⚡</div>
+                <div class="center-info">
+                  <div class="center-name">骶骨中心 Sacral</div>
+                  <div class="center-theme">生命力 · 创造力 · 生育力</div>
+                  <div class="center-detail"><strong>定义：</strong>持续的生命力和工作能量。通过骶骨回应来做决定。生产者类型的核心。<br><strong>开放：</strong>非生产者类型（Initiator/Orchestrator/Calibrator）没有定义的骶骨——不是为持续工作而设计的。<br><strong>智慧：</strong>骶骨回应是身体真相——学习倾听"嗯哼/嗯嗯"的声音。<br><strong>条件化信号：</strong>"我应该更努力工作""我不够有生产力"</div>
+                </div>
+              </div>
+              <div class="center-card">
+                <div class="center-shape" style="background:#8B6B9C;">🛡️</div>
+                <div class="center-info">
+                  <div class="center-name">脾脏中心 Spleen</div>
+                  <div class="center-theme">直觉 · 健康 · 生存本能</div>
+                  <div class="center-detail"><strong>定义：</strong>稳定的直觉系统，瞬间的"这样做/不要这样做"的感觉。<br><strong>开放：</strong>对健康和安全极度敏感，容易持有不属于你的恐惧。<br><strong>智慧：</strong>直觉只说一次——学习捕捉那第一直觉的闪现。<br><strong>条件化信号：</strong>莫名的不安和恐惧，往往不是"你的"恐惧</div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: "根部中心",
+            icon: "◈",
+            body: `<div class="center-grid">
+              <div class="center-card">
+                <div class="center-shape" style="background:#8B6B6B; width:54px; height:36px; border-radius:50%;">🌳</div>
+                <div class="center-info">
+                  <div class="center-name">根部中心 Root</div>
+                  <div class="center-theme">驱动力 · 压力 · 接地</div>
+                  <div class="center-detail"><strong>定义：</strong>稳定的肾上腺素驱动和压力处理能力。自然的"做"的能量。<br><strong>开放：</strong>对压力极度敏感，容易在压力下焦虑或过度加速。<br><strong>智慧：</strong>压力不是敌人——它是一种自然的驱动力。学会不被压力催促，以自己的节奏行动。<br><strong>条件化信号：</strong>"我必须赶紧""时间不够了"——往往是吸收了别人的紧迫感</div>
+                </div>
+              </div>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 动力中心的能量流</span>
+              四大动力中心（意志力、情绪、骶骨、根部）是能量的<strong>源头</strong>。能量从动力中心出发，通过喉咙中心显化为行动和表达。<br><br>
+              <strong>关键理解：</strong>不是所有类型都有直接连接到喉咙中心的动力通道。这就是为什么不同类型有不同的"策略"——有些类型可以直接行动（Initiator），有些需要等待回应（Alchemist），有些需要等待邀请（Orchestrator）。
+            </div>`
+          },
+          {
+            title: "九大中心整体整合",
+            icon: "✦",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>中心</th><th>类型</th><th>主题</th><th>定义时的礼物</th></tr>
+                <tr><td>头脑</td><td>压力</td><td>灵感</td><td>持续探索特定问题</td></tr>
+                <tr><td>直觉</td><td>认知</td><td>理解</td><td>固定的思维模式</td></tr>
+                <tr><td>喉咙</td><td>表达</td><td>沟通</td><td>稳定的表达方式</td></tr>
+                <tr><td>G中心</td><td>身份</td><td>自我/方向</td><td>稳定的自我感</td></tr>
+                <tr><td>意志力</td><td>动力</td><td>意志/价值</td><td>可靠的承诺力</td></tr>
+                <tr><td>情绪</td><td>动力+觉知</td><td>情感</td><td>深刻的情感智慧</td></tr>
+                <tr><td>骶骨</td><td>动力</td><td>生命力</td><td>持续的工作能量</td></tr>
+                <tr><td>脾脏</td><td>觉知</td><td>直觉/生存</td><td>可靠的直觉系统</td></tr>
+                <tr><td>根部</td><td>动力+压力</td><td>驱动力</td><td>稳定的行动力</td></tr>
+              </table>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 整合练习</span>
+              查看你的身体图，标记出哪些中心是定义的，哪些是开放的。对于每个开放中心，问自己：<br>
+              1. 我在什么情况下会在这个中心被条件化？<br>
+              2. 这个开放中心给我带来了什么样的智慧？<br>
+              3. 我如何能在保持开放的同时，不被条件化所控制？
+            </div>`
+          }
+        ],
+        summary: "本课深入探索五大动力与觉知中心：意志力中心（承诺与价值）、情绪太阳神经丛（情感智慧）、骶骨中心（生命力）、脾脏中心（直觉与生存）、根部中心（驱动力与压力）。四大动力中心是能量的发动机，觉知中心提供生存和情绪的智慧。定义中心给予稳定，开放中心带来灵活与学习。"
+      },
+      {
+        title: "整合你的完整设计",
+        subtitle: "Integrating Your Complete Design",
+        badge: "Level 2 · 第5课",
+        quote: "你不是你的类型，不是你的权威，不是你的轮廓——你是所有这些要素交织而成的独一无二的能量场。",
+        sections: [
+          {
+            title: "从碎片到整体",
+            icon: "✦",
+            body: `<p>在前面几课中，我们分别学习了类型、权威、爻线、轮廓和九大能量中心。但这些要素从来不是孤立运作的——它们在你的能量场中<strong>交织、互动、共振</strong>，构成了一个完整的、活生生的你。</p>
+            <p>本课的目标是将所有这些要素<strong>融合为对能量蓝图的整体理解</strong>——从"知道各个部分"到"看见完整的自己"。</p>`
+          },
+          {
+            title: "设计的核心要素整合",
+            icon: "◈",
+            body: `<div class="info-card">
+              <div class="card-title"><span class="card-icon">🧩</span>你的设计包含以下要素</div>
+              <p style="font-size:13.5px;line-height:2;">
+              <strong>类型</strong>——你与能量互动的基本方式（5种）<br>
+              <strong>策略</strong>——你的类型对齐能量的方式<br>
+              <strong>权威</strong>——你做决策的内在指南针<br>
+              <strong>轮廓</strong>——你灵魂的叙事方式（12种）<br>
+              <strong>定义的中心</strong>——你稳定给予世界的能量<br>
+              <strong>开放的中心</strong>——你学习和智慧的领域<br>
+              <strong>通道</strong>——连接中心的能量高速公路<br>
+              <strong>闸门</strong>——特定的能量频率（64个）</p>
+            </div>`
+          },
+          {
+            title: "如何阅读你的身体图",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 图表阅读步骤</div>
+              <ul>
+                <li><strong>1. 看类型</strong>——你的能量场是什么类型？这决定了你的基本策略</li>
+                <li><strong>2. 看权威</strong>——哪个中心是你的决策权威？这决定了你如何做决定</li>
+                <li><strong>3. 看轮廓</strong>——你的两条爻线是什么？这揭示了你的灵魂叙事</li>
+                <li><strong>4. 看定义的中心</strong>——哪些中心有颜色？这是你稳定给予的能量</li>
+                <li><strong>5. 看开放的中心</strong>——哪些中心是白色的？这是你的敏感和学习领域</li>
+                <li><strong>6. 看通道</strong>——哪些通道是定义的？这些是能量的高速公路</li>
+                <li><strong>7. 整合</strong>——所有这些要素如何在你身上共同运作？</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: "整合的关键原则",
+            icon: "✦",
+            body: `<div class="callout insight">
+              <span class="callout-label">💡 原则一：类型是骨架，中心是血肉</span>
+              类型由你定义的中心和它们之间的连接决定的。但你的独特性来自<strong>哪些中心是开放的</strong>——开放中心创造了你与世界的互动方式，让你成为独一无二的个体。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 原则二：策略和权威是基础</span>
+              无论你的其他设计要素是什么，<strong>策略和权威永远是最重要的实践工具</strong>。当你用正确的策略和权威做决定，其他所有要素都会自然对齐。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 原则三：开放中心是成长之地</span>
+              你最大的挑战和最深的智慧都来自<strong>开放中心</strong>。不要试图"修复"它们——学会在开放中保持觉察，不被条件化控制。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 原则四：你的设计是完整的</span>
+              没有哪种设计比另一种"更好"。你的设计<strong>本身就是完整的</strong>——不需要变成另一种类型，不需要添加你没有的通道。你唯一需要做的，是活出你本来的设计。
+            </div>`
+          },
+          {
+            title: "开始支持他人",
+            icon: "✦",
+            body: `<p>完成 Level 2 后，你已经有能力<strong>解读和诠释自己的设计</strong>，并开始以敬畏、洞察和对齐的方式<strong>支持他人</strong>。</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 支持他人的基本原则</div>
+              <ul>
+                <li>以<strong>敬畏</strong>对待每个人的设计——它是独特的能量杰作</li>
+                <li>用<strong>赋能的语言</strong>——帮助对方看到自己设计的礼物，而非缺陷</li>
+                <li>引导对方向自己的<strong>策略和权威</strong>，而非给出"建议"</li>
+                <li>在开放中心领域，帮助对方<strong>区分</strong>"我的"和"不是我的"</li>
+                <li>以<strong>对齐</strong>为目标——不是改变设计，而是与设计合作</li>
+                <li>承认你还在学习中——保持谦逊，持续深化理解</li>
+              </ul>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 整合练习</span>
+              为自己写一段"设计整合描述"：<br>
+              1. 我是___类型，通过___策略与能量对齐<br>
+              2. 我的权威是___，我通过___来做决定<br>
+              3. 我的轮廓是___/_，我灵魂的叙事是___<br>
+              4. 我定义的中心给予我___的能量<br>
+              5. 我开放的中心让我学会___<br>
+              6. 整合所有这些，我的独特设计让我成为___<br>
+              把这段话读给自己听，感受它是否与你的真实体验共鸣。
+            </div>`
+          }
+        ],
+        summary: `整合你的完整设计意味着从"知道各个部分"到"看见完整的自己"。类型是骨架，中心是血肉，策略和权威是基础实践，开放中心是成长之地。你的设计本身就是完整的——不需要成为另一种设计。完成Level 2后，你可以开始以敬畏和赋能的方式支持他人，引导他们找到自己的策略和权威。`
+      }
+    ]
+  },
+  // ===== Level 3 =====
+  {
+    level: 3,
+    levelTitle: "Level 3 · 能量交响乐",
+    lessons: [
+      {
+        title: "回路系统概述",
+        subtitle: "Overview of the Circuitry",
+        badge: "Level 3 · 第1课",
+        quote: "每个人都是交响乐中的一个音符。回路系统就是乐谱——它告诉我们，每个音符如何与其他音符一起创造出和谐的音乐。",
+        sections: [
+          {
+            title: "什么是回路系统？",
+            icon: "✦",
+            body: `<p>在人类设计中，<strong>通道（Channels）</strong>连接不同的能量中心，形成能量的高速公路。这些通道按照其能量性质被归类为三大<strong>回路（Circuitry）</strong>系统：</p>
+            <p>回路系统描述了能量如何在人类集体中流动——它将你的理解从<strong>个体自我</strong>扩展到<strong>连接所有人的活生生的能量网络</strong>。</p>`
+          },
+          {
+            title: "三大回路系统",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#4A7AB5,#5A8AC5);">🔵 个体回路 Individual Circuitry</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：创新与自我转化</div>
+                  <div class="ci-desc">个体回路携带<strong>突变</strong>的能量——新的想法、行为和可能性。它关乎个人独特性的表达和自我赋能。当个体回路的人活出自己，他们会自然地<strong>赋能周围的人</strong>——"如果我能做到，你也能。"</div>
+                </div>
+              </div>
+            </div>
+            <div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#C0504D,#D0605D);">🔴 部落回路 Tribal Circuitry</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：社区、支持与忠诚</div>
+                  <div class="ci-desc">部落回路携带<strong>连接和支持</strong>的能量——家庭、社区、共同价值观。它关乎人与人之间的契约、忠诚和物质支持。部落能量通过<strong>触碰</strong>（物理或情感）来传递——一个拥抱、一份礼物、一个承诺。</div>
+                </div>
+              </div>
+            </div>
+            <div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#5A9C5A,#6AAC6A);">🟢 集体回路 Collective Circuitry</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：分享经验与理解</div>
+                  <div class="ci-desc">集体回路携带<strong>分享</strong>的能量——将个人经验转化为集体智慧。它分为<strong>逻辑回路</strong>（基于规律和预测）和<strong>感知回路</strong>（基于体验和回忆）。集体能量是"我从经验中学到了什么，我要分享给所有人。"</div>
+                </div>
+              </div>
+            </div>`
+          },
+          {
+            title: "回路的互动关系",
+            icon: "⟳",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>维度</th><th>个体回路</th><th>部落回路</th><th>集体回路</th></tr>
+                <tr><td>核心驱动力</td><td>自我赋能</td><td>支持与忠诚</td><td>分享与理解</td></tr>
+                <tr><td>时间观</td><td>当下</td><td>过去→未来</td><td>过去（感知）→未来（逻辑）</td></tr>
+                <tr><td>交流方式</td><td>"我能做到"</td><td>"我们一起来"</td><td>"我告诉你我学到的"</td></tr>
+                <tr><td>能量传递</td><td>赋能（耳语）</td><td>触碰（支持）</td><td>声音（分享）</td></tr>
+                <tr><td>条件化方向</td><td>不被理解→自我怀疑</td><td>不被支持→背叛感</td><td>不被听见→挫败</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 回路的交响乐</span>
+              每个人都同时拥有三种回路的通道（虽然比例不同）。理解回路系统让你看到：你不是孤立的个体，而是<strong>人类能量网络的一部分</strong>。你的通道决定了你在网络中的角色——你是创新者、支持者，还是分享者？你的能量如何与他人的能量交织，共同创造出人类集体的交响乐？
+            </div>`
+          },
+          {
+            title: "从个体到集体的觉醒",
+            icon: "✦",
+            body: `<p>Level 3 的旅程是从<strong>个体自我</strong>扩展到<strong>集体能量网络</strong>的理解。当你开始看到回路系统如何运作，你的分析将从"这个人是什么"升华为"这个人在人类能量网络中扮演什么角色"。</p>
+            <div class="callout tip">
+              <span class="callout-label">✓ 学习方法</span>
+              在接下来的课程中，我们将深入每个回路的具体通道。建议你同时查看自己的身体图，找出你拥有哪些回路的通道，感受这些能量在你生活中的表达方式。理解回路不仅是知识——它是一种<strong>感受</strong>，一种对能量流动的深层感知。
+            </div>`
+          }
+        ],
+        summary: `回路系统将通道按能量性质分为三大类：个体回路（创新与突变）、部落回路（社区与支持）、集体回路（分享经验与理解）。每种回路有不同的驱动力、时间观和交流方式。理解回路让你从"个体自我"扩展到"人类能量网络"的视角——你的分析将升华为艺术，实践将转化为神圣的服务。`
+      },
+      {
+        title: "个体回路：创新与转化",
+        subtitle: "Individual Circuitry — Innovation & Transformation",
+        badge: "Level 3 · 第2课",
+        quote: "个体回路的能量是一场耳语——当一个人真正活出自己的独特性，周围的人会被赋能去寻找自己的。",
+        sections: [
+          {
+            title: "个体回路的本质",
+            icon: "✦",
+            body: `<p><strong>个体回路</strong>是关于<strong>个人独特性的表达和自我赋能</strong>。它携带"突变"的能量——新的想法、行为模式和可能性。个体回路的人天生就是要做"不一样的事"，他们的存在本身就在推动人类进化。</p>
+            <p>个体回路的能量传递方式是<strong>耳语</strong>——不是大声宣传，而是在活出自己时自然地影响周围的人。当一个人真正活出个体回路的能量，他说的话不需要被所有人理解，但他的存在会<strong>赋能</strong>他人去寻找自己的独特性。</p>`
+          },
+          {
+            title: "整合回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#4A7AB5,#5A8AC5);">整合回路 Integration Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：自我赋权与生存能力</div>
+                  <div class="ci-channels">通道：57-34, 57-10, 34-20, 10-20</div>
+                  <div class="ci-desc">整合回路是最古老的回路，关乎<strong>个体的生存和自我赋权</strong>。它让人能够在当下做出直觉性的行动，不需要外部的支持或确认。拥有整合回路通道的人是天生的"独行侠"——他们自己就能搞定一切。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>57-34</td><td>力量的直觉</td><td>直觉驱动的行动力——"我直觉知道该做什么"</td></tr>
+                <tr><td>57-10</td><td>形式的直觉</td><td>直觉指引的自我表达——"我知道如何做自己"</td></tr>
+                <tr><td>34-20</td><td>魅力的通道</td><td>持续的行动力——"我一直在做"</td></tr>
+                <tr><td>10-20</td><td>觉醒的通道</td><td>自我之爱的表达——"我爱我正在成为的自己"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "定心回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#4A7AB5,#5A8AC5);">定心回路 Centering Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：自我中心与方向</div>
+                  <div class="ci-channels">通道：34-10, 51-25</div>
+                  <div class="ci-desc">定心回路关乎<strong>找到自己的中心并以此为方向行动</strong>。它让人能够以自我为中心（正向意义）来行动，不被外界动摇。这是关于"我知道我是谁，我要去哪里"的能量。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>34-10</td><td>探索的通道</td><td>通过行动来探索自我——"做就是发现我是谁"</td></tr>
+                <tr><td>51-25</td><td>发起的通道</td><td>勇气驱动的精神之旅——"我敢于成为自己"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "知晓回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#4A7AB5,#5A8AC5);">知晓回路 Knowing Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：个体知道与突变</div>
+                  <div class="ci-channels">通道：61-24, 43-23, 38-28, 57-20, 60-3, 14-2, 1-8, 39-55, 22-12</div>
+                  <div class="ci-desc">知晓回路是最广阔的个体回路，关乎<strong>个体性的深度认知和突变性转化</strong>。它涵盖从灵性洞见到情感深度、从方向找到生命意义的全方位个体能量。知晓回路的通道往往带有"我就是知道"的特质——一种难以解释的内在确知。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>61-24</td><td>觉知的通道</td><td>神秘主义的思考——"我必须知道真相"</td></tr>
+                <tr><td>43-23</td><td>架构的通道</td><td>个体洞见的表达——"我知道，但要解释清楚很难"</td></tr>
+                <tr><td>38-28</td><td>挣扎的通道</td><td>为意义而战——"这值得我为之奋斗吗？"</td></tr>
+                <tr><td>57-20</td><td>大脑的通道</td><td>当下的直觉行动——"此时此刻，这样对"</td></tr>
+                <tr><td>60-3</td><td>能量的通道</td><td>在限制中找到新秩序——"突破带来突变"</td></tr>
+                <tr><td>14-2</td><td>脉搏的通道</td><td>方向性的生命力——"我知道方向，我有能量"</td></tr>
+                <tr><td>1-8</td><td>灵感的通道</td><td>创意的自我表达——"这是我的独特贡献"</td></tr>
+                <tr><td>39-55</td><td>情绪的通道</td><td>情绪波中找到精神——"在情感深处找到意义"</td></tr>
+                <tr><td>22-12</td><td>开放的通道</td><td>情绪性的表达——"以热情说出真相"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "个体回路的条件化与智慧",
+            icon: "✦",
+            body: `<div class="callout warn">
+              <span class="callout-label">⚠️ 个体回路的条件化</span>
+              个体回路最常见的条件化是<strong>"我不被理解"</strong>的感觉。因为个体能量天然是非主流的、突变的，拥有大量个体回路通道的人往往在成长中感到自己是"异类"。这种"不被理解"可能导致自我怀疑、试图融入、或压抑自己的独特性。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 个体回路的智慧</span>
+              个体回路的智慧在于：<strong>你的独特性不是缺陷，而是礼物</strong>。当你停止试图被理解，而是简单地活出自己，你就完成了你的使命——赋能他人去寻找自己的独特性。个体回路的突变不需要所有人理解——它只需要被活出来。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 反思练习</span>
+              检查你的身体图中有哪些个体回路的通道。问自己：<br>
+              1. 我是否经常感到"不被理解"？<br>
+              2. 我是否在压抑自己的独特性以融入群体？<br>
+              3. 如果我完全活出这些通道的能量，会给周围的人带来什么影响？<br>
+              4. 我是否愿意成为那个"耳语"——通过活出自己来赋能他人？
+            </div>`
+          }
+        ],
+        summary: `个体回路关乎个人独特性的表达和自我赋能，包括整合回路（生存与自我赋权）、定心回路（找到自己的中心）和知晓回路（个体认知与突变）。个体回路的能量传递方式是"耳语"——通过活出自己来赋能他人。最常见的条件化是"不被理解"，而智慧在于认识到独特性是礼物而非缺陷。`
+      },
+      {
+        title: "部落回路：社区与忠诚",
+        subtitle: "Tribal Circuitry — Community & Loyalty",
+        badge: "Level 3 · 第3课",
+        quote: "部落能量通过触碰来传递——一个拥抱、一份食物、一个承诺。它说的是：你不是一个人，我们在一起。",
+        sections: [
+          {
+            title: "部落回路的本质",
+            icon: "✦",
+            body: `<p><strong>部落回路</strong>是关于<strong>社区、家庭、忠诚和物质支持</strong>的能量。它是人类社会的基础——将个体连接成群体，通过契约和承诺建立共同的生活。</p>
+            <p>部落回路的能量传递方式是<strong>触碰</strong>——不仅是物理的触碰，更是情感的触碰。一个拥抱、一份食物、一个礼物、一个承诺——这些都是部落能量的表达。部落能量说："我照顾你，你照顾我，我们是一个整体。"</p>`
+          },
+          {
+            title: "防御回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#C0504D,#D0605D);">防御回路 Defense Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：保护与照顾</div>
+                  <div class="ci-channels">通道：27-50, 59-6</div>
+                  <div class="ci-desc">防御回路关乎<strong>保护社区的健康和延续</strong>。它包含照顾他人的能量（27-50）和亲密关系的能量（59-6）。拥有这些通道的人天生擅长照料他人、建立亲密连接、保护群体的福祉。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>27-50</td><td>保存的通道</td><td>照顾与被照顾——"我要确保每个人都得到需要的"</td></tr>
+                <tr><td>59-6</td><td>亲密的通道</td><td>建立亲密关系——"我能打破壁垒，与你真正连接"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "自我回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#C0504D,#D0605D);">自我回路 Ego Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：社区建设与物质支持</div>
+                  <div class="ci-channels">通道：54-32, 44-26, 19-49, 37-40, 21-45</div>
+                  <div class="ci-desc">自我回路关乎<strong>通过意志力和契约来建设社区</strong>。它包含从物质转型到社区领导的全方位能量。拥有这些通道的人天生擅长商业、领导、建立规则和确保物质丰裕。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>54-32</td><td>转化的通道</td><td>从底层到顶层的驱动力——"我要让我们都成功"</td></tr>
+                <tr><td>44-26</td><td>投降的通道</td><td>传递热情来影响他人——"我知道你需要什么"</td></tr>
+                <tr><td>19-49</td><td>敏感的通道</td><td>基本需求与原则的契约——"我们的价值观是否对齐？"</td></tr>
+                <tr><td>37-40</td><td>社区的通道</td><td>社区中的公平交易——"我付出，你也付出"</td></tr>
+                <tr><td>21-45</td><td>金钱线的通道</td><td>物质管理——"我管理资源，确保大家都有"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "部落回路的运作方式",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 部落回路的核心特征</div>
+              <ul>
+                <li><strong>契约式运作</strong>——部落能量基于"我给你，你给我"的互惠契约</li>
+                <li><strong>支持与忠诚</strong>——核心价值是对群体的忠诚和相互支持</li>
+                <li><strong>物质导向</strong>——关注实际的物质需求：食物、住所、金钱、安全</li>
+                <li><strong>触碰传递</strong>——通过物理和情感的接触来传递能量</li>
+                <li><strong>规则与界限</strong>——通过共同规则和价值观来维持群体 cohesion</li>
+                <li><strong>过去→未来</strong>——从过去的经验中学习，为未来做准备</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: "部落回路的条件化与智慧",
+            icon: "✦",
+            body: `<div class="callout warn">
+              <span class="callout-label">⚠️ 部落回路的条件化</span>
+              部落回路最常见的条件化是<strong>背叛感和不被支持</strong>的感觉。当部落契约被破坏时——无论是被伴侣"抛弃"、被朋友"背叛"、还是被社区"排斥"——拥有大量部落回路的人会深感痛苦。这种条件化可能导致过度付出（以换取忠诚）或封闭自我（避免被伤害）。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 部落回路的智慧</span>
+              部落回路的智慧在于：<strong>真正的支持是双向的</strong>。不是一个人不断付出而另一个人不断接受——而是公平的交易。学会辨别哪些人值得你的忠诚，哪些契约是健康的。当你只将部落能量投资在对的人和社区中，你的付出会得到等价的回报，形成真正的共生关系。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 反思练习</span>
+              检查你的身体图中有哪些部落回路的通道。问自己：<br>
+              1. 我是否经常过度付出而没有得到对等的回报？<br>
+              2. 我是否对"背叛"特别敏感？这种敏感是否来自条件化？<br>
+              3. 我的社区中，哪些关系是真正的互惠契约？<br>
+              4. 我如何更好地通过"触碰"（物理或情感）来传递支持？
+            </div>`
+          }
+        ],
+        summary: `部落回路关于社区、家庭、忠诚和物质支持，包括防御回路（保护与照顾）和自我回路（社区建设与物质管理）。部落能量通过"触碰"传递，基于互惠契约运作。最常见的条件化是背叛感和不被支持，而智慧在于认识到真正的支持是双向的公平交易。`
+      },
+      {
+        title: "集体回路：分享与理解",
+        subtitle: "Collective Circuitry — Sharing & Understanding",
+        badge: "Level 3 · 第4课",
+        quote: `集体能量是"我学到了什么，我要告诉所有人"。它不是关于"我"，而是关于"我们"——我们如何一起进化。`,
+        sections: [
+          {
+            title: "集体回路的本质",
+            icon: "✦",
+            body: `<p><strong>集体回路</strong>是关于<strong>将个人经验转化为集体智慧并分享给所有人</strong>的能量。它分为两个子回路：<strong>逻辑回路</strong>（基于规律、预测和未来）和<strong>感知回路</strong>（基于体验、回忆和过去）。</p>
+            <p>集体回路的能量传递方式是<strong>声音</strong>——通过说、写、演来分享。拥有大量集体回路通道的人天生就是教师、讲述者、研究者——他们将个人体验提炼成模式或故事，然后分享给集体。</p>`
+          },
+          {
+            title: "逻辑回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#5A9C5A,#6AAC6A);">逻辑回路 Logic Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：模式、预测与未来</div>
+                  <div class="ci-channels">通道：63-4, 17-62, 16-48, 18-58, 52-9, 5-15, 7-31</div>
+                  <div class="ci-desc">逻辑回路关乎<strong>通过分析模式来预测未来</strong>。它是科学的、数学的、逻辑的能量。拥有这些通道的人天生擅长分析、建立系统、发现规律、改进流程。他们通过"这样做了会怎样"的预测来服务集体。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>63-4</td><td>逻辑的通道</td><td>通过提问找到答案——"为什么？逻辑是什么？"</td></tr>
+                <tr><td>17-62</td><td>接受的通道</td><td>概念的表达——"我看到了模式，让我告诉你"</td></tr>
+                <tr><td>16-48</td><td>才能的通道</td><td>掌握技艺——"通过反复练习达到卓越"</td></tr>
+                <tr><td>18-58</td><td>评判的通道</td><td>发现并修正错误——"什么不对？如何改进？"</td></tr>
+                <tr><td>52-9</td><td>专注的通道</td><td>聚焦的细节——"我能长时间专注于一件事"</td></tr>
+                <tr><td>5-15</td><td>节奏的通道</td><td>自然节奏——"万物有自己的时间"</td></tr>
+                <tr><td>7-31</td><td>领导的通道</td><td>逻辑领导——"我知道我们应该往哪走"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "感知回路",
+            icon: "◈",
+            body: `<div class="circuit-block">
+              <div class="circuit-header" style="background:linear-gradient(135deg,#5A9C5A,#6AAC6A);">感知回路 Sensing Circuit</div>
+              <div class="circuit-body">
+                <div class="circuit-item">
+                  <div class="ci-name">核心主题：体验、回忆与过去</div>
+                  <div class="ci-channels">通道：64-47, 11-56, 41-30, 36-35, 53-42, 29-46, 13-33</div>
+                  <div class="ci-desc">感知回路关乎<strong>通过体验来收集智慧并分享回忆</strong>。它是艺术的、叙事的、情感的能量。拥有这些通道的人天生擅长讲故事、创造体验、从生活中提取意义。他们通过"我经历了什么，让我告诉你"的叙事来服务集体。</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-table">
+              <table>
+                <tr><th>通道</th><th>名称</th><th>能量主题</th></tr>
+                <tr><td>64-47</td><td>抽象的通道</td><td>从混乱中找到意义——"我回头看，一切都讲得通了"</td></tr>
+                <tr><td>11-56</td><td>好奇心的通道</td><td>通过故事传递智慧——"让我告诉你一个故事"</td></tr>
+                <tr><td>41-30</td><td>认可的通道</td><td>情感欲望的释放——"我想要那个体验"</td></tr>
+                <tr><td>36-35</td><td>过渡的通道</td><td>通过体验找到连接——"我经历过了，我理解了"</td></tr>
+                <tr><td>53-42</td><td>成熟的通道</td><td>完成循环——"我有始有终"</td></tr>
+                <tr><td>29-46</td><td>发现的通道</td><td>承诺体验——"我全身心投入这个体验"</td></tr>
+                <tr><td>13-33</td><td>见证的通道</td><td>聆听秘密并分享——"我听你说，然后分享智慧"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "逻辑 vs 感知：两种集体智慧",
+            icon: "⟳",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>维度</th><th>逻辑回路</th><th>感知回路</th></tr>
+                <tr><td>时间观</td><td>未来——"将会怎样"</td><td>过去——"曾经怎样"</td></tr>
+                <tr><td>认知方式</td><td>分析模式</td><td>体验回忆</td></tr>
+                <tr><td>表达方式</td><td>数据、图表、系统</td><td>故事、艺术、情感</td></tr>
+                <tr><td>验证标准</td><td>可重复性——"每次都这样"</td><td>个人真实性——"我真的经历了"</td></tr>
+                <tr><td>条件化信号</td><td>怀疑——"我的分析对吗？"</td><td>空虚——"我的经历有意义吗？"</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 两种智慧的互补</span>
+              逻辑回路和感知回路是人类集体智慧的<strong>两个互补面向</strong>。逻辑说"通过分析过去，我们可以预测未来"，感知说"通过体验生活，我们可以理解意义"。两者都是必要的——没有逻辑的感知是混乱的，没有感知的逻辑是冰冷的。完整的集体需要两者并存。
+            </div>`
+          },
+          {
+            title: "集体回路的条件化与智慧",
+            icon: "✦",
+            body: `<div class="callout warn">
+              <span class="callout-label">⚠️ 集体回路的条件化</span>
+              集体回路最常见的条件化是<strong>"不被听见"</strong>的挫败感。拥有大量集体回路通道的人天生需要分享——他们的能量就是"我必须说出来"。当这种分享被忽视、打断或不被重视时，他们会感到深深的挫败。这可能导致过度说话（急于被听见）或沉默（放弃被听见）。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 集体回路的智慧</span>
+              集体回路的智慧在于：<strong>不是所有人都要听你说</strong>。你的分享需要找到正确的听众——那些真正需要你的模式分析或你的体验故事的人。当你不再试图让所有人听你说，而是将分享给予对的人，你的声音会自然被听见。记住：你分享的价值不在于被所有人接受，而在于触达需要它的人。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 反思练习</span>
+              检查你的身体图中有哪些集体回路的通道。问自己：<br>
+              1. 我的通道是偏逻辑还是偏感知？<br>
+              2. 我是否经常感到"不被听见"？<br>
+              3. 我的分享最适合什么形式的表达？（演讲？写作？教学？艺术？）<br>
+              4. 谁是我分享的正确听众？我如何找到他们？
+            </div>`
+          }
+        ],
+        summary: `集体回路关于将个人经验转化为集体智慧，分为逻辑回路（模式、预测、未来）和感知回路（体验、回忆、过去）。逻辑通过分析服务集体，感知通过叙事服务集体。最常见的条件化是"不被听见"的挫败感，而智慧在于找到正确的听众——不是所有人都要听你说，而是对的人需要你的分享。`
+      },
+      {
+        title: "行星、闸门与太阳神经丛突变",
+        subtitle: "Planets, Gates & The Solar Plexus Mutation",
+        badge: "Level 3 · 第5课",
+        quote: "我们正站在人类进化的门槛上——从头脑意识走向情绪智慧。太阳神经丛的突变不是一个未来事件，它正在此刻发生。",
+        sections: [
+          {
+            title: "行星与闸门",
+            icon: "✦",
+            body: `<p>在人类设计中，每个闸门不仅有一个编号（1-64），还与一个<strong>行星</strong>相关联。行星位置决定了闸门的<strong>表达方式</strong>——同一个闸门在不同的行星上会表现出不同的能量色彩。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>行星</th><th>能量主题</th><th>表达特征</th></tr>
+                <tr><td>太阳☉</td><td>核心自我/生命力量</td><td>这是"你是谁"的核心表达</td></tr>
+                <tr><td>地球⊕</td><td>根基/ grounded</td><td>与太阳互补——你的存在基础</td></tr>
+                <tr><td>月亮☽</td><td>驱动/无意识</td><td>你内在的驱动力和日常运作模式</td></tr>
+                <tr><td>北交点☊</td><td>未来方向/进化</td><td>你在这个阶段正在走向的方向</td></tr>
+                <tr><td>南交点☋</td><td>过去/惯性模式</td><td>你需要超越的旧有模式</td></tr>
+                <tr><td>水星☿</td><td>沟通/思维</td><td>你如何思考和表达这个闸门的能量</td></tr>
+                <tr><td>金星♀</td><td>价值观/关系</td><td>你在关系中重视什么</td></tr>
+                <tr><td>火星♂</td><td>行动力/能量</td><td>你如何采取行动</td></tr>
+                <tr><td>木星♃</td><td>扩展/法律</td><td>你的成长领域和内在规则</td></tr>
+                <tr><td>土星♄</td><td>限制/责任</td><td>你需要面对的挑战和责任</td></tr>
+                <tr><td>天王星♅</td><td>突变/觉醒</td><td>突发的觉醒和更高的秩序</td></tr>
+                <tr><td>海王星♆</td><td>幻象/灵性</td><td>灵性体验和需要超越的幻象</td></tr>
+                <tr><td>冥王星♇</td><td>转化/真相</td><td>深层转化和终极真相</td></tr>
+              </table>
+            </div>
+            <p>在你的身体图中，每个激活的闸门都标注了它所在的行星。理解行星帮助你<strong>细化</strong>闸门的表达——同样是43号闸门（洞见），在太阳上和在火星上会以不同方式表达。</p>`
+          },
+          {
+            title: "闸门在线条中的表达",
+            icon: "◈",
+            body: `<p>每个闸门有6条爻线，所以同一个闸门有6种不同的表达方式。例如，如果你的太阳在<strong>43号闸门第4爻</strong>，你的洞见表达会带有4爻（机会主义者）的色彩——通过社交网络来表达你的独特观点。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 行星 × 闸门 × 爻线</span>
+              这三者构成了你图表中每个激活点的<strong>精确表达</strong>。行星告诉你"什么能量"，闸门告诉你"什么主题"，爻线告诉你"什么方式"。这种多层细化让每个人的图表成为独一无二的能量蓝图——即使两个人有相同的闸门，不同的行星和爻线也会产生完全不同的表达。
+            </div>`
+          },
+          {
+            title: "太阳神经丛突变",
+            icon: "✦",
+            body: `<p>这是量子人类设计中最重要的进化主题之一——<strong>太阳神经丛突变（Solar Plexus Mutation）</strong>。Dr. Karen Parker 和其他人类设计学者认为，人类正在经历一次重大的能量进化。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🧬</span>突变的本质</div>
+              <p style="font-size:13.5px;line-height:1.8;">太阳神经丛中心正在经历一次<strong>能量升级</strong>。目前，大多数人的情绪太阳神经丛以<strong>情绪波</strong>的形式运作——从希望到痛苦、从快乐到悲伤的波动循环。但随着突变的推进，太阳神经丛正在向<strong>情绪智慧/灵性觉知</strong>的频率进化。</p>
+              <p style="font-size:13.5px;line-height:1.8;">这意味着人类正在从<strong>头脑驱动的意识</strong>走向<strong>情绪驱动的觉知</strong>。这不是头脑变得不重要了，而是情绪中心将成为新的<strong>认知器官</strong>——一种超越逻辑分析的深层"知道"。</p>
+            </div>`
+          },
+          {
+            title: "进化的身体图",
+            subtitle: "",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 突变的阶段与表现</div>
+              <ul>
+                <li><strong>当前阶段</strong>——大多数人仍在情绪波中运作，但越来越多的人开始体验到突变的早期迹象</li>
+                <li><strong>突变迹象</strong>——突然的情绪觉知、无法解释的"知道"、对情绪的深层理解</li>
+                <li><strong>过渡期症状</strong>——情绪波动加剧、对旧模式的不满、对真相的深层渴望</li>
+                <li><strong>未来方向</strong>——情绪中心将成为觉知中心，情绪波将被稳定的情绪智慧取代</li>
+                <li><strong>集体影响</strong>——随着越来越多人经历突变，人类集体意识将发生质变</li>
+              </ul>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 对你个人的意义</span>
+              如果你有定义的情绪太阳神经丛，这个突变对你特别重要。你的情绪波正在<strong>进化</strong>——你可能会发现自己在情绪波中越来越能保持觉察，越来越能在波动中"看到"真相。这不是你"修"出来的——这是能量本身的进化。你能做的是<strong>与这个过程合作</strong>：不抗拒情绪波，而是在其中保持觉察。
+            </div>`
+          },
+          {
+            title: "从分析到艺术：回路系统的整合",
+            icon: "✦",
+            body: `<p>完成 Level 3 后，你将开始将人类设计视为一部<strong>活生生的交响乐</strong>——不是孤立的通道和中心，而是相互连接的<strong>能量杰作</strong>。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 分析的升华</span>
+              当你理解了回路系统，你的图表分析从"这个通道是什么意思"升华为"这个人在人类能量网络中扮演什么角色"。你开始看到：<br>
+              • 个体回路的人如何推动突变和创新<br>
+              • 部落回路的人如何建设社区和支持<br>
+              • 集体回路的人如何分享智慧和经验<br>
+              • 三种回路如何在一个人身上交织成独特的角色<br><br>
+              你的分析将成为<strong>艺术</strong>，你的实践将转化为<strong>神圣的服务</strong>。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 Level 3 整合练习</span>
+              重新审视你的完整身体图：<br>
+              1. 标记你拥有的所有通道，按回路分类（个体/部落/集体）<br>
+              2. 你最主导的回路是什么？它如何在你生活中表达？<br>
+              3. 你最弱的回路是什么？你在哪些方面需要其他回路的人来互补？<br>
+              4. 想象人类能量网络——你在其中扮演什么角色？<br>
+              5. 你的情绪太阳神经丛是定义的还是开放的？你如何体验情绪波的进化？
+            </div>`
+          }
+        ],
+        summary: "行星、闸门和爻线共同构成了图表中每个激活点的精确表达。太阳神经丛突变是人类正在经历的重大能量进化——从头脑意识走向情绪智慧。理解回路系统让你将人类设计视为活生生的交响乐，你的分析升华为艺术，实践转化为神圣的服务。完成Level 3后，你开始看到每个人在人类能量网络中的独特角色。"
+      }
+    ]
+  },
+  // ===== Level 4 =====
+  {
+    level: 4,
+    levelTitle: "Level 4 · 解读图表的艺术",
+    lessons: [
+      {
+        title: "转化周期",
+        subtitle: "Cycles of Transformation",
+        badge: "Level 4 · 第1课",
+        quote: "生命不是一条直线，而是一个螺旋。每个周期都是一次归来——你回到同一个主题，但在更高的层次上。",
+        sections: [
+          {
+            title: "什么是转化周期？",
+            icon: "✦",
+            body: `<p><strong>转化周期（Cycles of Transformation）</strong>描述了生命中成长与进化的节律。在人类设计中，这些周期由行星的运转决定——当外行星（木星、土星、天王星、海王星、冥王星）移动到新的位置时，它们会激活你的图表中新的闸门，带来新的生命主题。</p>
+            <p>理解转化周期让你能够<strong>与生命的节奏合作</strong>，而非对抗它。每个周期都有它的主题、挑战和礼物——当你知道"我在哪个周期"，你就能更好地理解当下的体验，并做出对齐的选择。</p>`
+          },
+          {
+            title: "主要生命周期",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>年龄</th><th>周期</th><th>主题</th></tr>
+                <tr><td>0-7岁</td><td>月亮返回</td><td>建立根基——身体和情感的安全感</td></tr>
+                <tr><td>7-14岁</td><td>水星返回</td><td>心智发展——学习、沟通、社交</td></tr>
+                <tr><td>14-21岁</td><td>金星返回</td><td>价值观与关系——爱、美、自我价值</td></tr>
+                <tr><td>21-30岁</td><td>火星返回</td><td>行动力与成熟——独立、事业方向</td></tr>
+                <tr><td>30-40岁</td><td>木星返回</td><td>社会成熟——事业巅峰、社会责任</td></tr>
+                <tr><td>40-50岁</td><td>土星返回</td><td>中年审判——重新评估、放下不属于你的</td></tr>
+                <tr><td>50岁+</td><td>天王星对分</td><td>觉醒与自由——活出真实的自己</td></tr>
+                <tr><td>60-70岁</td><td>凯龙返回</td><td>疗愈与智慧——整合一生的经验</td></tr>
+                <tr><td>70-85岁</td><td>海王星对分</td><td>灵性深化——与更大的存在连接</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "土星返回：关键转折点",
+            icon: "◈",
+            body: `<p><strong>土星返回</strong>（约28-30岁）是人类设计中最被关注的周期之一。当土星回到你出生时的位置，它带来一次<strong>深刻的生命评估</strong>：</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 土星返回的主题</div>
+              <ul>
+                <li><strong>评估</strong>——"我至今为止的人生是真实的我吗？"</li>
+                <li><strong>剥离</strong>——放下不属于你的条件化模式</li>
+                <li><strong>承诺</strong>——决定接下来的人生要投入什么</li>
+                <li><strong>成熟</strong>——从"应该"走向"我要"</li>
+                <li><strong>结构化</strong>——为真正重要的事情建立结构</li>
+              </ul>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 实用指导</span>
+              如果你正在经历土星返回（28-30岁），不要急于做重大决定。这个周期是一个<strong>过程</strong>，不是一个瞬间。允许自己质疑、探索、甚至"崩溃"——这是土星在做它的工作。关键是：什么是真正"你的"？什么是条件化的？用你的策略和权威来做决定。
+            </div>`
+          },
+          {
+            title: "天王星对分：中年觉醒",
+            icon: "✦",
+            body: `<p><strong>天王星对分</strong>（约38-44岁，常被称为"中年危机"）是一次<strong>觉醒的邀请</strong>。天王星带来突变、自由和更高的秩序——在这个周期，你会突然意识到"我不能再这样活下去了"。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              量子人类设计不将天王星对分视为"危机"，而视为<strong>觉醒的机会</strong>。这个周期让你看到：哪些是你真正想活的？哪些是你"为了别人"活的？天王星的能量支持你做出突变性的改变——换工作、结束关系、搬去新地方。关键是：这些改变应该是<strong>你的策略和权威</strong>引导的，而非冲动。
+            </div>`
+          },
+          {
+            title: "如何与周期合作",
+            icon: "✦",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 与转化周期合作的要点</div>
+              <ul>
+                <li><strong>了解你当前的周期</strong>——什么行星正在影响你的图表？</li>
+                <li><strong>识别周期主题</strong>——这个周期在问你什么问题？</li>
+                <li><strong>不抗拒变化</strong>——每个周期都带来变化，抗拒只会延长痛苦</li>
+                <li><strong>用策略和权威导航</strong>——周期提供背景，但决策仍然通过你的权威</li>
+                <li><strong>耐心</strong>——每个周期都有自己的节奏，不要急于"完成"它</li>
+                <li><strong>回顾</strong>——周期结束后回顾你学到了什么</li>
+              </ul>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              查看你的图表，确定你当前处于哪个主要周期。问自己：<br>
+              1. 这个周期的主题是什么？<br>
+              2. 我在这个周期中经历了什么挑战？<br>
+              3. 这个周期想让我放下什么？<br>
+              4. 这个周期想让我拥抱什么？
+            </div>`
+          }
+        ],
+        summary: "转化周期描述了生命中成长与进化的节律，由行星运转决定。主要周期包括土星返回（28-30岁的生命评估）和天王星对分（38-44岁的中年觉醒）。理解周期让你与生命节奏合作而非对抗。每个周期都有主题、挑战和礼物——用策略和权威导航，耐心等待周期的自然展开。"
+      },
+      {
+        title: "困境",
+        subtitle: "Conundrums — Navigating Complexity",
+        badge: "Level 4 · 第2课",
+        quote: "困境不是问题需要被解决——它是一个邀请，让你以更深的智慧和慈悲来拥抱复杂性。",
+        sections: [
+          {
+            title: "什么是困境？",
+            icon: "✦",
+            body: `<p>在量子人类设计中，<strong>困境（Conundrums）</strong>指的是图表中那些看似矛盾或冲突的能量配置。这些不是"错误"——它们是设计中的<strong>创造性张力</strong>，推动深刻的成长和独特的表达。</p>
+            <p>困境通常出现在：两个定义中心通过不同通道连接到同一个中心、对立的回路能量共存、或者权威与类型之间存在张力。这些困境不是需要"修复"的——它们是你独特设计的<strong>核心特征</strong>。</p>`
+          },
+          {
+            title: "常见的困境类型",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>困境类型</th><th>描述</th><th>体验</th></tr>
+                <tr><td>回路冲突</td><td>个体回路与部落/集体回路共存</td><td>"我要做自己" vs "我要归属"</td></tr>
+                <tr><td>权威竞争</td><td>多个定义中心竞争决策权</td><td>"心说要 vs 情绪说要等"</td></tr>
+                <tr><td>定义/开放张力</td><td>强定义中心与多个开放中心共存</td><td>稳定的自我感 vs 敏感于环境</td></tr>
+                <tr><td>类型/通道张力</td><td>通道能量与类型策略不完全对齐</td><td>"我的能量想做A，但我的策略说等"</td></tr>
+                <tr><td>个性/设计分裂</td><td>个性（意识）与设计（无意识）差异大</td><td>"我以为我是这样的，但别人不这么看"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "如何驾驭困境",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 驾驭困境的原则</div>
+              <ul>
+                <li><strong>不解决，而是拥抱</strong>——困境不是问题，是创造性张力</li>
+                <li><strong>识别张力来源</strong>——哪个能量在"拉"哪个方向？</li>
+                <li><strong>回到策略和权威</strong>——在困境中，策略和权威是最可靠的导航</li>
+                <li><strong>允许矛盾存在</strong>——不需要让所有能量"一致"</li>
+                <li><strong>寻找创造性表达</strong>——困境往往是最独特的天赋来源</li>
+                <li><strong>以慈悲对待自己</strong>——困境带来的内在冲突是痛苦的，对自己温柔</li>
+              </ul>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              拥有困境的人往往是<strong>最有深度的解读者和实践者</strong>。因为他们在自己的设计中经历了内在的张力，他们对能量的理解比"顺畅"的人更深。困境不是你的弱点——它是你独特智慧和共情能力的来源。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              审视你的图表，找出一个让你感到"矛盾"的地方。问自己：<br>
+              1. 这两个能量分别在"说"什么？<br>
+              2. 它们如何在你的生活中制造张力？<br>
+              3. 如果你不试图"解决"这个矛盾，而是让它共存，会怎样？<br>
+              4. 这个困境是否给了你某种独特的视角或天赋？
+            </div>`
+          }
+        ],
+        summary: "困境是图表中看似矛盾的能量配置——回路冲突、权威竞争、定义/开放张力等。困境不是需要解决的问题，而是创造性张力，推动深刻成长。驾驭困境的关键是不解决而是拥抱，回到策略和权威，允许矛盾存在。拥有困境的人往往是最有深度的解读者和实践者。"
+      },
+      {
+        title: "匹配对",
+        subtitle: "Matched Pairs — Complementary Energies",
+        badge: "Level 4 · 第3课",
+        quote: "每一对匹配的闸门都是一面镜子——它们彼此映照，揭示你意识与无意识深处的对话。",
+        sections: [
+          {
+            title: "什么是匹配对？",
+            icon: "✦",
+            body: `<p><strong>匹配对（Matched Pairs）</strong>是图表中自然对应的闸门配对——它们在能量轮上位于对称或互补的位置。这些配对形成了<strong>化身十字</strong>的基础结构，揭示互补或对比能量如何在你内部协同运作。</p>
+            <p>理解匹配对让你看到：你的<strong>意识模式</strong>（个性）与<strong>无意识模式</strong>（设计）如何互动，以及你的<strong>生命目的</strong>如何在两种能量的对话中展开。</p>`
+          },
+          {
+            title: "八组匹配对",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>配对</th><th>闸门</th><th>主题</th><th>能量对话</th></tr>
+                <tr><td>1</td><td>1 ↔ 2</td><td>自我表达 ↔ 方向</td><td>"我是谁" ↔ "我要去哪"</td></tr>
+                <tr><td>2</td><td>3 ↔ 50</td><td>突变 ↔ 保存</td><td>"新秩序" ↔ "维护既有"</td></tr>
+                <tr><td>3</td><td>6 ↔ 36</td><td>亲密 ↔ 情感体验</td><td>"连接的深度" ↔ "情感的强度"</td></tr>
+                <tr><td>4</td><td>7 ↔ 13</td><td>领导 ↔ 见证</td><td>"带领方向" ↔ "聆听秘密"</td></tr>
+                <tr><td>5</td><td>14 ↔ 8</td><td>资源 ↔ 贡献</td><td>"我有能量" ↔ "我来贡献"</td></tr>
+                <tr><td>6</td><td>15 ↔ 10</td><td>节奏 ↔ 自我</td><td>"自然时间" ↔ "做我自己"</td></tr>
+                <tr><td>7</td><td>16 ↔ 9</td><td>技艺 ↔ 专注</td><td>"精通能力" ↔ "细节聚焦"</td></tr>
+                <tr><td>8</td><td>17 ↔ 18</td><td>视觉 ↔ 评判</td><td>"看到模式" ↔ "发现缺陷"</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "匹配对的运作方式",
+            icon: "⟳",
+            body: `<p>匹配对在你的图表中可能以下列方式出现：</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 匹配对的表现形式</div>
+              <ul>
+                <li><strong>两边都定义</strong>——这种能量对话在你内部持续活跃，是你核心的内在动态</li>
+                <li><strong>一边定义一边开放</strong>——定义的一侧给予稳定能量，开放的一侧从环境接收互补能量</li>
+                <li><strong>两边都开放</strong>——这个配对是你最大的学习领域，你会通过他人来体验这种对话</li>
+                <li><strong>一个在个性一个在设计</strong>——意识与无意识的对话，你"知道的自己"和"实际的自己"之间的张力</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: "匹配对与生命目的",
+            icon: "✦",
+            body: `<p>匹配对揭示了你能量在世界中独特的表达方式——它们是<strong>化身十字</strong>的基础。当四个匹配对的闸门在你的太阳/地球（个性+设计）上激活时，它们形成了你的<strong>化身十字</strong>——你生命的签名。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 核心理解</span>
+              匹配对不是静态的"特征"——它们是一种<strong>动态对话</strong>。你的生命目的就在这些对话的交汇处展开。当你理解了匹配对如何在你内部运作，你就开始看到：你的设计不是随机组合，而是一个精密的<strong>能量几何</strong>——每个部分都在与其他部分对话，共同编织你的生命叙事。
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              查看你的图表，找出你的太阳/地球激活的四个闸门。它们属于哪组匹配对？<br>
+              1. 这些配对在你内部如何对话？<br>
+              2. 你是否能在生活中感受到这种对话？<br>
+              3. 这些配对如何共同指向你的生命目的？
+            </div>`
+          }
+        ],
+        summary: "匹配对是图表中自然对应的闸门配对，共8组，揭示互补或对比能量如何在内部协同运作。它们形成化身十字的基础结构，照亮意识与无意识模式、生命目的和能量在世界中的独特表达。理解匹配对让你看到设计是精密的能量几何，每个部分都在与其他部分对话。"
+      },
+      {
+        title: "化身十字",
+        subtitle: "The Incarnation Cross — Your Life's Signature",
+        badge: "Level 4 · 第4课",
+        quote: "化身十字不是你要完成的任务——它是你存在本身散发出的频率。当你活出你的设计，十字架自然显现。",
+        sections: [
+          {
+            title: "什么是化身十字？",
+            icon: "✦",
+            body: `<p><strong>化身十字（Incarnation Cross）</strong>由你的<strong>个性太阳/地球</strong>和<strong>设计太阳/地球</strong>的四个闸门组成。这四个闸门形成一个"十字"，代表你在这个化身中的<strong>核心频率</strong>——你生命的签名。</p>
+            <p>每个人类设计图表都有一个化身十字。它是你的设计中最高层次的表达——不是你"要做"什么，而是当你活出真实设计时<strong>自然散发</strong>的能量。你的十字架不需要被"实现"——它只需要被活出来。</p>`
+          },
+          {
+            title: "十字架的类型",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>类型</th><th>角度</th><th>占比</th><th>主题</th></tr>
+                <tr><td>右角度十字架</td><td>1/3, 1/4, 2/4, 2/5, 3/5, 3/6, 4/6</td><td>~70%</td><td>个人命运——"我的旅程"</td></tr>
+                <tr><td>并列十字架</td><td>4/1</td><td>~5%</td><td>固定命运——"独特的角色"</td></tr>
+                <tr><td>左角度十字架</td><td>5/1, 5/2, 6/2, 6/3</td><td>~25%</td><td>跨个人命运——"为他人的转变而存在"</td></tr>
+              </table>
+            </div>
+            <p>共有<strong>192个基本化身十字</strong>（加上6条爻线的变化，共有768种变体）。每个十字架都有一个独特的名称和主题，描述了你的核心生命频率。</p>`
+          },
+          {
+            title: "如何理解你的十字架",
+            icon: "⟳",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 理解十字架的步骤</div>
+              <ul>
+                <li><strong>1. 找到你的四个太阳/地球闸门</strong>——个性太阳、个性地球、设计太阳、设计地球</li>
+                <li><strong>2. 了解每个闸门的主题</strong>——每个闸门携带什么能量？</li>
+                <li><strong>3. 看四者的组合</strong>——这四个能量如何共同表达？</li>
+                <li><strong>4. 找到十字架名称</strong>——参考人类设计资料查找你的十字架名称</li>
+                <li><strong>5. 不要过度分析</strong>——十字架是"活出来的"，不是"想出来的"</li>
+              </ul>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              Dr. Karen Parker 强调：化身十字不是你<strong>需要达到的目标</strong>。它是你已经拥有的<strong>核心频率</strong>。当你用正确的策略和权威生活，放下条件化，你的十字架会自然显现。你不需要"找到"你的生命目的——你只需要<strong>成为</strong>你自己，目的会自动展开。
+            </div>`
+          },
+          {
+            title: "十字架与方向力量",
+            icon: "✦",
+            body: `<p>化身十字描述了你在世界中的<strong>方向力量</strong>——你自然影响环境和他人的方式。这不是关于"做什么"（那是职业/工作的问题），而是关于<strong>"你的存在本身在说什么"</strong>。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🧭</span>十字架的方向力量示例</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              • <strong>计划的十字架</strong>——自然地为未来制定计划，引导他人看到可能性<br>
+              • <strong>服务的十字架</strong>——天生服务于社区，通过照料他人来表达<br>
+              • <strong>分离的十字架</strong>——自然的独立者，通过不依赖来展示自由<br>
+              • <strong>统治的十字架</strong>——天生的领导力，自然地组织和管理<br>
+              • <strong>矫正的十字架</strong>——发现什么不对并修正，推动改善<br>
+              • <strong>混沌的十字架</strong>——在混乱中找到秩序，推动转化
+              </p>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              查找你的化身十字名称和主题。问自己：<br>
+              1. 这个十字架的描述是否与我的生命体验共鸣？<br>
+              2. 我的十字架在什么情况下最自然地表达？<br>
+              3. 我的十字架如何与我周围的十字架互动？<br>
+              4. 我是否在"试图成为"某种东西，还是允许十字架自然显现？
+            </div>`
+          }
+        ],
+        summary: "化身十字由个性太阳/地球和设计太阳/地球的四个闸门组成，代表生命的核心频率和方向力量。分为右角度（个人命运）、并列（独特角色）和左角度（跨个人命运）。十字架不是需要实现的目标，而是活出设计时自然散发的频率。理解十字架让你看到你的存在本身就在表达生命目的。"
+      },
+      {
+        title: "生命与灵魂目的",
+        subtitle: "Life & Soul Purpose — Your Deepest Calling",
+        badge: "Level 4 · 第5课",
+        quote: "你的灵魂目的不是一份工作清单——它是一个频率。当你振动在那个频率上，正确的人和机会会被吸引过来。",
+        sections: [
+          {
+            title: "生命目的 vs 灵魂目的",
+            icon: "✦",
+            body: `<p>在量子人类设计中，目的有两个层次：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>维度</th><th>生命目的</th><th>灵魂目的</th></tr>
+                <tr><td>层次</td><td>这一生的显化层面</td><td>超越这一生的进化层面</td></tr>
+                <tr><td>表达</td><td>你做什么、创造什么、贡献什么</td><td>你的存在本身代表什么</td></tr>
+                <tr><td>参考</td><td>化身十字、类型、通道</td><td>太阳/地球的深层频率</td></tr>
+                <tr><td>验证</td><td>满足感、成就感</td><td>深层的确知、回家的感觉</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "从图表中读出目的",
+            icon: "◈",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 解读目的的关键要素</div>
+              <ul>
+                <li><strong>化身十字</strong>——你的核心生命频率和方向力量</li>
+                <li><strong>类型</strong>——你与能量互动的基本方式（炼金术士/编排者/...）</li>
+                <li><strong>轮廓</strong>——你灵魂的成长和贡献叙事</li>
+                <li><strong>主导通道</strong>——你最强烈的能量表达</li>
+                <li><strong>个性太阳的闸门和爻线</strong>——你有意识的核心表达</li>
+                <li><strong>设计太阳的闸门和爻线</strong>——你无意识的核心频率</li>
+                <li><strong>北交点</strong>——你进化方向的闸门</li>
+              </ul>
+            </div>`
+          },
+          {
+            title: `目的不是"找到"的`,
+            icon: "✦",
+            body: `<div class="callout insight">
+              <span class="callout-label">💡 核心教导</span>
+              量子人类设计最重要的教导之一：<strong>目的不是你"找到"的东西，而是你"成为"的状态</strong>。你不是去"寻找"你的目的——你是<strong>活出你的设计</strong>，目的就会自然展开。<br><br>
+              这意味着：用你的策略和权威做决定、放下条件化、接纳你的类型和能量。当你这样生活，你的化身十字和生命目的会自然显现。你不需要"做"什么来"实现"目的——你只需要<strong>是你自己</strong>。
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 实用指南</span>
+              <strong>如何"成为"而非"寻找"目的：</strong><br>
+              1. 每天用你的策略和权威做决定<br>
+              2. 观察什么活动让你感到"满足"（炼金术士）/"成功"（编排者）/"平静"（发起者）/"惊喜"（校准者）<br>
+              3. 注意什么主题在你的生命中反复出现<br>
+              4. 信任你的设计正在引导你走向正确的方向<br>
+              5. 不要"试图"找到目的——活出设计，目的来找你
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 深度反思</span>
+              回顾你的生命，找出那些你感到"最像自己"的时刻。问自己：<br>
+              1. 那些时刻有什么共同点？<br>
+              2. 那些时刻是否与你的设计要素（类型、通道、十字架）一致？<br>
+              3. 你是否在"寻找"目的，还是允许目的通过你展开？<br>
+              4. 如果你停止寻找，开始成为，你的生活会怎样变化？
+            </div>`
+          }
+        ],
+        summary: "目的分为生命目的（这一生的显化）和灵魂目的（超越这一生的进化）。从图表中读出目的的关键要素包括化身十字、类型、轮廓、主导通道等。核心教导是：目的不是找到的，而是成为的——活出你的设计，目的自然展开。不需要寻找目的，只需用策略和权威生活，成为你自己。"
+      },
+      {
+        title: "金钱、职业与健康标记",
+        subtitle: "Money, Career & Health Markers",
+        badge: "Level 4 · 第6课",
+        quote: "你的图表不是命运的判决——它是一张地图。金钱、职业和健康的线索都藏在你的能量设计中，等待你用正确的策略去发现。",
+        sections: [
+          {
+            title: "金钱标记",
+            icon: "💰",
+            body: `<p>在量子人类设计中，金钱不是"赚来的"——它是你<strong>对齐设计时自然流动</strong>的能量。你的图表包含了关于你与金钱关系的重要线索。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>图表要素</th><th>金钱线索</th></tr>
+                <tr><td>意志力中心定义</td><td>自然的物质管理能力，通过承诺和契约获得金钱</td></tr>
+                <tr><td>意志力中心开放</td><td>不需要通过意志力"推"来赚钱——通过正确策略吸引</td></tr>
+                <tr><td>21-45通道</td><td>"金钱线"——天然的物质管理和资源分配能力</td></tr>
+                <tr><td>32-54通道</td><td>从底层转型的驱动力——通过持续努力获得物质成功</td></tr>
+                <tr><td>部落回路主导</td><td>通过社区和关系网络获得金钱机会</td></tr>
+                <tr><td>个体回路主导</td><td>通过独特性和创新获得金钱——"没人做过的方式"</td></tr>
+                <tr><td>集体回路主导</td><td>通过分享知识和经验获得金钱——教学、咨询</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 金钱的量子视角</span>
+              QHD 不将金钱视为"需要追求的东西"，而是<strong>对齐的自然结果</strong>。当你活出设计，正确的金钱机会会通过你的策略和权威来到。这不是"不努力"——而是"以正确的方式努力"。对于炼金术士，金钱通过满足感的工作流动；对于编排者，金钱通过被正确邀请来流动；对于发起者，金钱通过独立行动来流动。
+            </div>`
+          },
+          {
+            title: "职业标记",
+            icon: "💼",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 各类型的职业方向</div>
+              <ul>
+                <li><strong>发起者</strong>——独立创业、发起新项目、变革推动者、不需要持续管理的角色</li>
+                <li><strong>炼金术士</strong>——需要持续投入的技艺、通过满足感验证的工作、手工/创意/服务类</li>
+                <li><strong>时间弯曲者</strong>——多任务环境、快速变化的领域、效率优化、跨领域整合</li>
+                <li><strong>编排者</strong>——咨询、指导、管理、顾问——通过"看见他人"来引导的角色</li>
+                <li><strong>校准者</strong>——评估、诊断、社区工作——需要多样性和灵活性的角色</li>
+              </ul>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 职业选择的关键</span>
+              不是"什么工作适合我的类型"，而是<strong>"我的策略如何引导我走向正确的职业"</strong>。炼金术士通过骶骨回应找到工作（"嗯哼"=做这个）；编排者等待邀请（被邀请的工作才是对的）；发起者通过告知后行动来创造机会。让策略和权威来导航职业选择，而不是头脑分析。
+            </div>`
+          },
+          {
+            title: "健康标记",
+            icon: "🏥",
+            body: `<p>人类设计图表也包含健康相关的线索——主要是通过<strong>开放中心</strong>和<strong>脾脏中心</strong>来识别。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>图表要素</th><th>健康线索</th></tr>
+                <tr><td>脾脏中心开放</td><td>需要特别注意健康直觉——学会倾听身体的信号</td></tr>
+                <tr><td>根部中心开放</td><td>容易在压力下出现身体症状——学会管理压力</td></tr>
+                <tr><td>情绪中心开放</td><td>容易吸收他人情绪导致身体不适——需要情绪释放</td></tr>
+                <tr><td>G中心开放</td><td>环境对健康影响大——选择正确的居住环境</td></tr>
+                <tr><td>喉咙中心开放</td><td>甲状腺和代谢相关——注意表达压抑的影响</td></tr>
+                <tr><td>定义的中心</td><td>过度使用定义中心也可能耗竭——即使是"稳定的"能量也需要休息</td></tr>
+              </table>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 重要提醒</span>
+              人类设计图表<strong>不是医学诊断工具</strong>。它提供的是能量层面的洞察，不能替代专业医疗建议。如果你有健康问题，请咨询合格的医疗专业人员。图表可以提供<strong>补充性的自我理解</strong>——帮助你看到可能需要关注的能量领域。
+            </div>`
+          },
+          {
+            title: "整合：以设计导航生活",
+            icon: "✦",
+            body: `<div class="callout insight">
+              <span class="callout-label">💡 金钱、职业、健康的共同原则</span>
+              这三个领域都有一个共同的核心：<strong>对齐你的设计</strong>。<br><br>
+              • 金钱：当你活出设计，金钱自然流动<br>
+              • 职业：当你的策略引导你，正确的职业自然出现<br>
+              • 健康：当你尊重你的能量，健康自然维持<br><br>
+              <strong>不需要"强行"让生活符合某种模式——只需要活出你的设计，生活自然对齐。</strong>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 整合练习</span>
+              审视你的图表，问自己：<br>
+              1. <strong>金钱</strong>——我是否在"追"钱，还是让钱通过对齐来流动？<br>
+              2. <strong>职业</strong>——我的工作是否与我的类型和策略对齐？<br>
+              3. <strong>健康</strong>——我的开放中心在什么情况下让我"不舒服"？我如何更好地照顾这些领域？<br>
+              4. 这三个领域是否在我活出设计时自然改善？
+            </div>`
+          }
+        ],
+        summary: "金钱、职业和健康标记都藏在你的能量设计中。金钱通过对齐自然流动而非强行追求；职业由策略和权威引导而非头脑分析；健康线索主要通过开放中心来识别。三个领域的共同原则是对齐设计——活出你的设计，生活自然对齐。注意：图表不是医学诊断工具，只是能量层面的补充理解。"
+      },
+      {
+        title: "关系中的共鸣与和谐",
+        subtitle: "Resonance & Harmony in Relationships",
+        badge: "Level 4 · 第7课",
+        quote: "两个能量场的相遇不是简单的加法——它是一门化学反应。有些组合产生和谐，有些产生火花，有些产生成长。",
+        sections: [
+          {
+            title: "关系动力学",
+            icon: "✦",
+            body: `<p>在量子人类设计中，<strong>关系</strong>是两个能量场的互动。当你将两个人的图表放在一起，你会看到<strong>电磁（Electromagnetism）</strong>——一个人定义的闸门与另一个人开放的同一通道另一端闸门的连接。这种连接产生了<strong>吸引力</strong>和<strong>能量流动</strong>。</p>
+            <p>理解关系动力学让你能够：<strong>看见</strong>为什么某些关系让你感到充盈，某些让你感到耗竭；<strong>理解</strong>关系中的条件化如何运作；<strong>导航</strong>关系中的挑战和成长。</p>`
+          },
+          {
+            title: "关系的能量机制",
+            icon: "◈",
+            body: `<div class="content-table">
+              <table>
+                <tr><th>机制</th><th>描述</th><th>体验</th></tr>
+                <tr><td>电磁连接</td><td>一方定义通道的一端，另一方定义另一端</td><td>强烈的吸引力和能量流动——"我们一起创造了某种东西"</td></tr>
+                <tr><td>共同定义</td><td>双方定义了同一个中心或通道</td><td>在这个能量上有共鸣——"我们在这个方面很像"</td></tr>
+                <tr><td>互补定义</td><td>一方定义某中心，另一方开放</td><td>一方给予，一方接收——需注意条件化</td></tr>
+                <tr><td>投射</td><td>一方开放的中心被另一方定义的中心"填充"</td><td>"我在你身上看到了某东西"——可能是礼物或条件化</td></tr>
+                <tr><td>分离</td><td>双方在某些能量上都没有定义</td><td>这个领域是关系中"空白的"——需要外部来补充</td></tr>
+              </table>
+            </div>`
+          },
+          {
+            title: "通过爻线理解连接",
+            icon: "◈",
+            body: `<p>除了中心的互动，<strong>爻线</strong>也在关系中扮演重要角色。你的个性爻线和设计爻线决定了你在关系中的<strong>互动模式</strong>。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>爻线组合</th><th>关系动态</th></tr>
+                <tr><td>1爻 ↔ 1爻</td><td>共同的探索需求——一起深入研究</td></tr>
+                <tr><td>2爻 ↔ 5爻</td><td>隐士与普世化者——天然的被叫出来与投射关系</td></tr>
+                <tr><td>3爻 ↔ 3爻</td><td>共同试错——一起经历、一起发现</td></tr>
+                <tr><td>4爻 ↔ 4爻</td><td>关系网络——通过朋友建立连接</td></tr>
+                <tr><td>5爻 ↔ 2爻</td><td>普世化者与隐士——投射与天赋的互补</td></tr>
+                <tr><td>6爻 ↔ 3爻</td><td>人生榜样与探索者——6爻提供超越视角，3爻提供实践经验</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 量子视角</span>
+              QHD 不评判关系"好不好"——每种组合都有其<strong>礼物和挑战</strong>。关键是：双方是否各自活出自己的设计？当两个人都用正确的策略和权威生活，关系中的条件化和投射会自然减少，真正的<strong>共鸣</strong>会出现。关系不是"努力让两个人匹配"——而是"各自活出自己，看能量如何互动"。
+            </div>`
+          },
+          {
+            title: "关系中的条件化",
+            icon: "⚠️",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 关系条件化的常见模式</div>
+              <ul>
+                <li><strong>"你让我成为更好的人"</strong>——可能是健康的成长，也可能是你在开放中心被条件化</li>
+                <li><strong>"没有你我活不了"</strong>——通常是你开放中心依赖对方定义中心的能量</li>
+                <li><strong>"你变了"</strong>——当条件化效应消退时，真实的能量开始显现</li>
+                <li><strong>"我们总是吵架"</strong>——可能是电磁张力——既可以是创造力也可以是冲突</li>
+                <li><strong>"我感觉不到自己"</strong>——开放中心被对方的能量"覆盖"</li>
+              </ul>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 健康关系的指南</span>
+              <strong>1. 各自活出设计</strong>——双方都用正确的策略和权威生活<br>
+              <strong>2. 尊重差异</strong>——不同类型有不同的能量运作方式<br>
+              <strong>3. 觉察条件化</strong>——在开放中心领域，区分"我的"和"你的"<br>
+              <strong>4. 给予空间</strong>——特别是对需要独处的类型（发起者、6爻）<br>
+              <strong>5. 不"修复"对方</strong>——对方的开放中心不是需要你"填充"的<br>
+              <strong>6. 一起用策略和权威</strong>——关系决策也需要尊重双方的策略
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              如果你有伴侣/密友，比较你们两张图表：<br>
+              1. 哪些中心是互补的（一方定义，一方开放）？<br>
+              2. 哪些中心你们都有定义？这些是你们的共鸣区。<br>
+              3. 在哪些开放中心你最容易被对方条件化？<br>
+              4. 你们的类型策略是否不同？如何尊重彼此的策略？<br>
+              5. 这段关系在你活出设计时如何变化？
+            </div>`
+          }
+        ],
+        summary: `关系是两个能量场的互动，通过电磁连接、共同定义、互补定义等机制运作。爻线也在关系中扮演重要角色。关系条件化常见模式包括"你让我成为更好的人"和"没有你我活不了"等。健康关系的关键是各自活出设计、尊重差异、觉察条件化、给予空间。关系不是努力匹配，而是各自活出自己看能量如何互动。`
+      },
+      {
+        title: "变革性生命事件",
+        subtitle: "Transformative Life Events",
+        badge: "Level 4 · 第8课",
+        quote: "变革性事件不是对生命的打断——它们是生命最深刻的邀请，让你超越已知的自己。",
+        sections: [
+          {
+            title: "什么是变革性生命事件？",
+            icon: "✦",
+            body: `<p><strong>变革性生命事件</strong>是那些深刻改变你能量运作方式的经验。它们不是普通的生命起伏——而是那些让你"不再是同一个人"的时刻。在量子人类设计中，这些事件被视为<strong>进化的催化剂</strong>——它们重新配置你的能量场，开启新的可能性。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">⚡</span>变革性事件的类型</div>
+              <p style="font-size:13.5px;line-height:2;">
+              • <strong>濒死体验（NDE）</strong>——与死亡的近距离接触，常常开启灵性觉知<br>
+              • <strong>生命周期转折</strong>——土星返回、天王星对分等行星周期<br>
+              • <strong>昆达里尼觉醒</strong>——生命能量的剧烈上升，开启深层转化<br>
+              • <strong>灵性觉醒</strong>——意识状态的质变，从头脑主导走向能量觉知<br>
+              • <strong>深度创伤</strong>——虽然痛苦，但可能成为最大的成长催化剂<br>
+              • <strong>重大失去</strong>——亲人离世、关系结束、事业崩溃<br>
+              • <strong>奇迹般的疗愈</strong>——身体或情绪的突然好转<br>
+              • <strong>神圣相遇</strong>——遇到改变生命轨迹的人或灵性体验</p>
+            </div>`
+          },
+          {
+            title: "濒死体验与能量重组",
+            icon: "◈",
+            body: `<p><strong>濒死体验（Near-Death Experience, NDE）</strong>是最剧烈的变革性事件之一。在人类设计视角下，NDE可以被理解为一次<strong>能量场的重组</strong>——当物理身体接近死亡，能量场经历了一次"重置"。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 NDE后常见的变化</span>
+              • 对死亡的恐惧大大减少<br>
+              • 直觉/灵性感知力增强<br>
+              • 对"什么真正重要"的深层确知<br>
+              • 开放中心可能变得更"通透"——更容易感知能量<br>
+              • 对不再服务于你的关系/工作失去容忍力<br>
+              • 可能感到"不再是同一个人"——因为能量场确实改变了
+            </div>`
+          },
+          {
+            title: "昆达里尼觉醒",
+            icon: "🔥",
+            body: `<p><strong>昆达里尼觉醒</strong>是一种生命能量的剧烈上升。在人类设计视角下，这可以被理解为<strong>能量通道的突然激活</strong>——即使你图表中没有定义的通道，也可能在昆达里尼觉醒期间临时"亮起来"。</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 昆达里尼觉醒的特征</div>
+              <ul>
+                <li><strong>身体症状</strong>——自发的身体运动、热感、能量震动</li>
+                <li><strong>情绪释放</strong>——深层的哭泣、愤怒或喜悦</li>
+                <li><strong>感知改变</strong>——看到光、听到声音、感知能量场</li>
+                <li><strong>意识扩展</strong>——超越普通意识的体验</li>
+                <li><strong>生活重组</strong>——觉醒后可能需要完全重新调整生活</li>
+              </ul>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 整合的重要性</span>
+              昆达里尼觉醒后，<strong>整合</strong>是最关键的工作。不要试图"加速"或"放大"觉醒——而是让能量稳定下来，与你的设计对齐。用你的策略和权威来导航觉醒后的生活。如果需要，寻求有经验的导师帮助。<strong>觉醒不是"成就"——它是一种需要被妥善整合的能量事件。</strong>
+            </div>`
+          },
+          {
+            title: "灵性觉醒与人类设计",
+            icon: "✨",
+            body: `<p><strong>灵性觉醒</strong>是从头脑主导的意识状态走向<strong>能量觉知</strong>的过程。这与量子人类设计的核心教导完全一致——从"用头脑分析来生活"走向"用策略和权威来生活"。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 人类设计作为觉醒工具</span>
+              量子人类设计本身就是一种<strong>灵性觉醒的路径</strong>。当你开始：<br>
+              • 用策略而非头脑来做决定 → 你在觉醒<br>
+              • 觉察条件化而非被它控制 → 你在觉醒<br>
+              • 接纳你的设计而非试图改变它 → 你在觉醒<br>
+              • 信任身体而非头脑 → 你在觉醒<br><br>
+              <strong>人类设计不要求你"开悟"——它要求你活出你的设计。活出设计本身就是觉醒。</strong>
+            </div>`
+          },
+          {
+            title: "整合与赋权",
+            icon: "✦",
+            body: `<div class="key-points">
+              <div class="kp-title">◆ 变革性事件的整合路径</div>
+              <ul>
+                <li><strong>1. 不急于"理解"</strong>——变革性体验往往超越头脑的理解力</li>
+                <li><strong>2. 回到基础</strong>——策略和权威在变革后更加重要</li>
+                <li><strong>3. 允许重新配置</strong>——你的能量场在变化，给它时间</li>
+                <li><strong>4. 寻找支持</strong>——有经验的导师、社区、专业帮助</li>
+                <li><strong>5. 不执着于"特殊"</strong>——变革性体验不是"成就"，是生命的一部分</li>
+                <li><strong>6. 在日常生活中锚定</strong>——将变革的能量带回日常</li>
+                <li><strong>7. 以新的方式服务</strong>——变革往往带来新的服务能力</li>
+              </ul>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 赋权的路径</span>
+              变革性生命事件的最终目的不是让你"与众不同"——而是让你<strong>更真实地成为你自己</strong>。无论经历了什么，你回到同一个核心：<strong>活出你的设计</strong>。变革性事件只是加速了条件化的释放，让你更快地接近真实的自己。你的力量不在"经历了什么"——而在"你选择如何整合"。
+            </div>`
+          }
+        ],
+        summary: "变革性生命事件包括濒死体验、昆达里尼觉醒、灵性觉醒、深度创伤等——它们重新配置能量场，开启新的可能性。NDE带来能量场重组，昆达里尼觉醒激活能量通道，灵性觉醒从头脑主导走向能量觉知。整合的关键是不急于理解、回到策略和权威、允许重新配置、在日常生活中锚定。变革的最终目的是让你更真实地成为自己——活出你的设计。"
+      }
+    ]
+  }
+];
+
+// ========== 渲染逻辑 ==========
+let currentLesson = -1; // -1 = 封面页
+let completedLessons = new Set();
+
+// 生成导航
+function buildNav() {
+  const nav = document.getElementById('levelNav');
+  let html = '';
+  courseData.forEach((level, li) => {
+    const lessons = level.lessons;
+    const lessonItems = lessons.map((lesson, lei) => {
+      const globalIdx = getGlobalLessonIndex(li, lei);
+      return `<div class="lesson-item ${currentLesson === globalIdx ? 'active' : ''}" onclick="goToLesson(${globalIdx})">
+        <span class="lesson-num">L${level.level}.${lei + 1}</span>${lesson.title}
+      </div>`;
+    }).join('');
+    html += `
+      <div class="level-section">
+        <div class="level-title" onclick="toggleLevel(this)">
+          ${level.levelTitle}
+          <span class="arrow">▼</span>
+        </div>
+        <div class="level-lessons" style="max-height:1000px;">
+          ${lessonItems}
+        </div>
+      </div>`;
+  });
+  nav.innerHTML = html;
+}
+
+function getGlobalLessonIndex(levelIdx, lessonIdx) {
+  let count = 0;
+  for (let i = 0; i < levelIdx; i++) {
+    count += courseData[i].lessons.length;
+  }
+  return count + lessonIdx;
+}
+
+function toggleLevel(el) {
+  el.classList.toggle('collapsed');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// 渲染封面页
+function renderCover() {
+  const totalLessons = courseData.reduce((sum, l) => sum + l.lessons.length, 0);
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="cover-page">
+      <div class="cover-ornament">✦ ◆ ✦</div>
+      <h1>量子人类设计专家认证课程</h1>
+      <div class="cover-subtitle">Quantum Human Design Specialist Certification</div>
+      <div class="cover-desc">
+        基于 Dr. Karen Parker 的 Quantum Human Design™ 认证课程体系开发。
+        从基础认知到专业图表解读，四个级别二十节课，带你走进人类设计的能量世界——
+        不是作为一套"规则系统"，而是作为一条活出真实自我的路径。
+      </div>
+      <div class="course-meta">
+        <div class="meta-card">
+          <div class="meta-icon">📚</div>
+          <div class="meta-label">课程级别</div>
+          <div class="meta-value">4 个级别</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-icon">📖</div>
+          <div class="meta-label">课程节数</div>
+          <div class="meta-value">${totalLessons} 节课</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-icon">🌱</div>
+          <div class="meta-label">学习方式</div>
+          <div class="meta-value">自主学习</div>
+        </div>
+      </div>
+      <div class="section-title"><span class="section-icon">◈</span>课程结构总览</div>
+      <div class="level-overview">
+        ${courseData.map((level, li) => `
+          <div class="overview-card" onclick="goToLesson(${getGlobalLessonIndex(li, 0)})">
+            <div class="ov-level">LEVEL ${level.level}</div>
+            <div class="ov-title">${level.levelTitle.split('·')[1].trim()}</div>
+            <div class="ov-desc">${level.lessons[0].quote.substring(0, 80)}...</div>
+            <div class="ov-lessons">${level.lessons.length} 节课 →</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  updateBreadcrumb('课程首页');
+}
+
+// 渲染课程内容
+function renderLesson(globalIdx) {
+  let levelIdx = 0, lessonIdx = 0;
+  let count = 0;
+  for (let i = 0; i < courseData.length; i++) {
+    if (count + courseData[i].lessons.length > globalIdx) {
+      levelIdx = i;
+      lessonIdx = globalIdx - count;
+      break;
+    }
+    count += courseData[i].lessons.length;
+  }
+
+  const level = courseData[levelIdx];
+  const lesson = level.lessons[lessonIdx];
+
+  let sectionsHtml = '';
+  lesson.sections.forEach(sec => {
+    sectionsHtml += `
+      <div class="section-title"><span class="section-icon">${sec.icon}</span>${sec.title}</div>
+      <div class="content-body">${sec.body}</div>`;
+  });
+
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="lesson-header">
+      <span class="lesson-badge">${lesson.badge}</span>
+      <h2>${lesson.title}</h2>
+      <div class="lesson-subtitle">${lesson.subtitle}</div>
+      <div class="lesson-quote">"${lesson.quote}"</div>
+    </div>
+    ${sectionsHtml}
+    <div class="lesson-summary">
+      <div class="summary-title"><span>📖</span>本课小结</div>
+      <p>${lesson.summary}</p>
+    </div>
+  `;
+
+  updateBreadcrumb(`${level.levelTitle} → 第${lessonIdx + 1}课`);
+  completedLessons.add(globalIdx);
+  updateProgress();
+  window.scrollTo(0, 0);
+}
+
+function updateBreadcrumb(text) {
+  document.getElementById('breadcrumb').innerHTML = `<span>${text}</span>`;
+}
+
+function updateProgress() {
+  const total = courseData.reduce((sum, l) => sum + l.lessons.length, 0);
+  const done = completedLessons.size;
+  document.getElementById('progressText').textContent = `${done} / ${total}`;
+  document.getElementById('progressFill').style.width = (done / total * 100) + '%';
+}
+
+function goToLesson(idx) {
+  currentLesson = idx;
+  renderLesson(idx);
+  buildNav();
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+function navigate(dir) {
+  if (currentLesson === -1) {
+    if (dir > 0) goToLesson(0);
+    return;
+  }
+  const total = courseData.reduce((sum, l) => sum + l.lessons.length, 0);
+  const next = currentLesson + dir;
+  if (next < 0) {
+    currentLesson = -1;
+    renderCover();
+    buildNav();
+  } else if (next >= total) {
+    return;
+  } else {
+    goToLesson(next);
+  }
+  updateNavButtons();
+}
+
+function updateNavButtons() {
+  const total = courseData.reduce((sum, l) => sum + l.lessons.length, 0);
+  document.getElementById('prevBtn').disabled = currentLesson === -1;
+  document.getElementById('nextBtn').disabled = currentLesson === total - 1;
+}
+
+// 键盘导航
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+});
+
+// 初始化
+buildNav();
+renderCover();
+updateNavButtons();
+</script>
+</body>
+</html>
