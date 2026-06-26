@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>占星人类图 · 整合课程体系</title>
+<style>
+/* ========== 全局变量 ========== */
+:root {
+  --bg: #F5F0E8;
+  --bg-card: #FFFBF5;
+  --bg-sidebar: #2D2118;
+  --bg-sidebar-hover: #3D3128;
+  --primary: #C4956A;
+  --primary-light: #D8B898;
+  --primary-dark: #A87B52;
+  --gold: #D4A843;
+  --gold-light: #E8C868;
+  --dark: #2D2118;
+  --dark-soft: #4A3D32;
+  --text: #3D3530;
+  --text-light: #6B5D52;
+  --text-sidebar: #D8C8B8;
+  --text-sidebar-active: #F5E6D3;
+  --border: #E8DCC8;
+  --border-dark: #D4C4B0;
+  --shadow: 0 2px 8px rgba(45, 33, 24, 0.08);
+  --shadow-md: 0 4px 16px rgba(45, 33, 24, 0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Georgia", "Noto Serif SC", "Songti SC", "STSong", serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.85;
+  min-height: 100vh;
+}
+
+/* ========== 布局 ========== */
+.app { display: flex; min-height: 100vh; }
+
+/* ========== 侧边栏 ========== */
+.sidebar {
+  width: 300px;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(196, 149, 106, 0.2);
+  text-align: center;
+}
+
+.sidebar-header .logo {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.sidebar-header h1 {
+  font-size: 19px;
+  color: var(--text-sidebar-active);
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+.sidebar-header .subtitle {
+  font-size: 12px;
+  color: var(--primary-light);
+  margin-top: 8px;
+}
+
+.level-nav { flex: 1; padding: 12px 0; }
+
+.level-section { margin-bottom: 4px; }
+
+.level-title {
+  padding: 12px 20px 8px;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.level-title:hover { color: var(--gold-light); }
+
+.level-title .arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+  margin-left: auto;
+}
+
+.level-title.collapsed .arrow { transform: rotate(-90deg); }
+
+.level-lessons { overflow: hidden; transition: max-height 0.3s ease; }
+
+.level-title.collapsed + .level-lessons { max-height: 0 !important; }
+
+.lesson-item {
+  padding: 7px 16px 7px 28px;
+  font-size: 12px;
+  color: var(--text-sidebar);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-item:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--text-sidebar-active);
+}
+
+.lesson-item.active {
+  background: rgba(196, 149, 106, 0.12);
+  color: var(--gold);
+  border-left-color: var(--gold);
+}
+
+.lesson-item .lesson-num {
+  font-size: 10px;
+  color: var(--primary);
+  margin-right: 5px;
+}
+
+/* 进度区 */
+.sidebar-progress {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(196, 149, 106, 0.2);
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-sidebar);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(196, 149, 106, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ========== 主内容区 ========== */
+.main {
+  flex: 1;
+  margin-left: 300px;
+  padding: 0;
+}
+
+/* 顶部栏 */
+.topbar {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 240, 232, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+
+.topbar .menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--dark);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.breadcrumb span { color: var(--primary); }
+
+.topbar-right { display: flex; gap: 12px; }
+
+.nav-btn {
+  padding: 8px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.nav-btn:hover:not(:disabled):not(.disabled) {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* 内容容器 */
+.content { padding: 40px; max-width: 900px; margin: 0 auto; }
+
+/* 课程封面页 */
+.cover-page {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.cover-page .cover-ornament {
+  font-size: 28px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  letter-spacing: 8px;
+}
+
+.cover-page h1 {
+  font-size: 32px;
+  color: var(--dark);
+  font-weight: normal;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.cover-page .cover-subtitle {
+  font-size: 16px;
+  color: var(--primary);
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.cover-page .cover-desc {
+  font-size: 15px;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 2;
+}
+
+.course-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.meta-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.meta-card .meta-icon { font-size: 24px; margin-bottom: 8px; }
+
+.meta-card .meta-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+
+.meta-card .meta-value { font-size: 14px; color: var(--dark); font-weight: bold; }
+
+/* 级别概览卡片 */
+.level-overview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: left;
+}
+
+.overview-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.overview-card .ov-level {
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.overview-card .ov-title {
+  font-size: 16px;
+  color: var(--dark);
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.overview-card .ov-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.overview-card .ov-lessons {
+  font-size: 12px;
+  color: var(--primary);
+  margin-top: 12px;
+}
+
+/* ========== 课程内容样式 ========== */
+.lesson-header { margin-bottom: 32px; }
+
+.lesson-header .lesson-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.lesson-header h2 {
+  font-size: 26px;
+  color: var(--dark);
+  font-weight: normal;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.lesson-header .lesson-subtitle {
+  font-size: 14px;
+  color: var(--primary);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.lesson-header .lesson-quote {
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 14px;
+  color: var(--dark-soft);
+  font-style: italic;
+  line-height: 1.8;
+}
+
+/* 章节标题 */
+.section-title {
+  font-size: 19px;
+  color: var(--dark);
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title .section-icon { color: var(--gold); font-size: 18px; }
+
+/* 子标题 */
+.subsection-title {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin: 24px 0 12px;
+  font-weight: bold;
+}
+
+/* 正文段落 */
+.content p {
+  margin-bottom: 14px;
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.content p strong { color: var(--dark); }
+
+/* 信息卡片 */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+}
+
+.info-card .card-title {
+  font-size: 15px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-card .card-icon { font-size: 18px; }
+
+/* 行星卡片网格 */
+.planet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.planet-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: all 0.3s;
+  border-top: 3px solid var(--primary);
+}
+
+.planet-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.planet-card .planet-symbol {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.planet-card .planet-name {
+  font-size: 15px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.planet-card .planet-role {
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.planet-card .planet-desc { font-size: 13.5px; color: var(--text); line-height: 1.7; }
+
+/* 表格 */
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.content-table th {
+  background: var(--primary);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.content-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.content-table tr:last-child td { border-bottom: none; }
+
+.content-table tr:hover td { background: rgba(196, 149, 106, 0.05); }
+
+/* 要点列表 */
+.key-points {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.key-points .kp-title {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.key-points ul { list-style: none; }
+
+.key-points li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.key-points li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 12px;
+  top: 7px;
+}
+
+/* 提示框 */
+.callout {
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  border-left: 4px solid;
+}
+
+.callout.tip { background: #F0F5E8; border-color: #8BA855; color: #3D4A2E; }
+.callout.warn { background: #FDF5E8; border-color: var(--gold); color: #5A4A2D; }
+.callout.insight { background: #F5EDE8; border-color: var(--primary); color: var(--dark-soft); }
+.callout.practice { background: #E8F0F5; border-color: #5588A8; color: #2E4A5A; }
+
+.callout .callout-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+/* 交叉卡片 */
+.cross-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.cross-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.cross-card .cross-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+}
+
+.cross-card .cross-info { flex: 1; }
+
+.cross-card .cross-name {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.cross-card .cross-theme {
+  font-size: 12.5px;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+
+.cross-card .cross-detail { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+/* 爻线卡片 */
+.line-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.line-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.line-card .line-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+}
+
+.line-card .line-name { font-size: 13px; color: var(--dark); font-weight: bold; margin-bottom: 4px; }
+
+.line-card .line-desc { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+
+/* 步骤卡片 */
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+}
+
+.step-card .step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.step-card .step-title {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.step-card .step-desc { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+
+/* 课时小结 */
+.lesson-summary {
+  background: linear-gradient(135deg, var(--bg-card), #F0E8D8);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 32px 0 16px;
+}
+
+.lesson-summary .summary-title {
+  font-size: 16px;
+  color: var(--dark);
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lesson-summary p { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  padding: 24px 40px;
+  font-size: 12px;
+  color: var(--text-light);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .topbar .menu-btn { display: block; }
+  .content { padding: 24px 16px; }
+  .planet-grid, .cross-grid, .line-grid, .step-grid,
+  .level-overview, .course-meta {
+    grid-template-columns: 1fr;
+  }
+  .cover-page { padding: 30px 20px; }
+  .cover-page h1 { font-size: 24px; }
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+
+<!-- ========== 侧边栏 ========== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">Astro Human Design</div>
+    <h1>占星人类图<br>整合课程体系</h1>
+    <div class="subtitle">基于 Ra Uru Hu 原始教学 · 占星与人类图深度整合</div>
+  </div>
+
+  <div class="level-nav" id="levelNav">
+<div class="level-section">
+  <div class="level-title">Level 1 · 占星人类图基础 <span class="arrow">▾</span></div>
+  <div class="level-lessons" style="max-height:2000px">
+    <a href="#lesson-0" class="lesson-item"><span class="lesson-num">01</span>占星与人类图：同一个天空，两套地图</a>
+    <a href="#lesson-1" class="lesson-item"><span class="lesson-num">02</span>黄道360°到64闸门：精密的转译系统</a>
+    <a href="#lesson-2" class="lesson-item"><span class="lesson-num">03</span>两张星盘：人格面与设计面的天文学</a>
+    <a href="#lesson-3" class="lesson-item"><span class="lesson-num">04</span>13颗天体的原型语言</a>
+  </div>
+</div>
+<div class="level-section">
+  <div class="level-title">Level 2 · 行星激活与闸门能量 <span class="arrow">▾</span></div>
+  <div class="level-lessons" style="max-height:2000px">
+    <a href="#lesson-4" class="lesson-item"><span class="lesson-num">01</span>太阳与地球：生命的核心轴线</a>
+    <a href="#lesson-5" class="lesson-item"><span class="lesson-num">02</span>月亮、水星、金星、火星：个人行星的激活</a>
+    <a href="#lesson-6" class="lesson-item"><span class="lesson-num">03</span>世代行星：木星到冥王星的深层编码</a>
+    <a href="#lesson-7" class="lesson-item"><span class="lesson-num">04</span>月球交点与凯龙星：业力轨迹与疗愈之路</a>
+  </div>
+</div>
+<div class="level-section">
+  <div class="level-title">Level 3 · 轮回交叉与生命目的 <span class="arrow">▾</span></div>
+  <div class="level-lessons" style="max-height:2000px">
+    <a href="#lesson-8" class="lesson-item"><span class="lesson-num">01</span>轮回交叉的天文学根源</a>
+    <a href="#lesson-9" class="lesson-item"><span class="lesson-num">02</span>太阳/地球极性与人生角色的爻线</a>
+    <a href="#lesson-10" class="lesson-item"><span class="lesson-num">03</span>192个轮回交叉的占星人类图索引</a>
+  </div>
+</div>
+<div class="level-section">
+  <div class="level-title">Level 4 · 占星人类图综合解读 <span class="arrow">▾</span></div>
+  <div class="level-lessons" style="max-height:2000px">
+    <a href="#lesson-11" class="lesson-item"><span class="lesson-num">01</span>过境分析：当天空激活你的身体图</a>
+    <a href="#lesson-12" class="lesson-item"><span class="lesson-num">02</span>合图解读：两个人的星空对话</a>
+    <a href="#lesson-13" class="lesson-item"><span class="lesson-num">03</span>生时校准：用行星精确锚定出生时刻</a>
+    <a href="#lesson-14" class="lesson-item"><span class="lesson-num">04</span>从占星师到人类图分析师：双系统视角</a>
+  </div>
+</div>
+  </div>
+
+  <div class="sidebar-progress">
+    <div class="progress-label">
+      <span>学习进度</span>
+      <span id="progressText">15 节课</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</nav>
+
+<!-- ========== 主内容区 ========== -->
+<div class="main">
+  <div class="content" id="content">
+<div class="sticky-topbar" id="stickyTopbar">
+  <div class="topbar-breadcrumb">
+    <span id="topbarLevel">Level 1</span>
+    <span class="topbar-sep">▸</span>
+    <span id="topbarProgress">第 1/15 课</span>
+  </div>
+  <div class="topbar-nav">
+    <a href="#cover" class="topbar-btn topbar-prev" id="topbarPrev">← 上一课</a>
+    <a href="#lesson-1" class="topbar-btn topbar-next" id="topbarNext">下一课 →</a>
+  </div>
+</div>
+<div id="cover" class="lesson-section" style="display:block">
+      <div class="cover-page">
+        <div class="cover-ornament">✦ ☉ ☽ ♃ ♄ ✦</div>
+        <h1>占星人类图整合课程体系</h1>
+        <div class="cover-subtitle">Astro Human Design · 回归天文学根源</div>
+        <div class="cover-desc">
+          这不是“占星学加上人类图”，而是<strong>回到人类设计的底层天文学根源</strong>——同一个黄道360°、同一套行星系统、两套互补的解读语言。本课程带你从行星到闸门、从星座到能量中心、从星盘到身体图，建立起完整的双系统解读能力。
+        </div>
+        <div class="course-meta">
+          <div class="meta-card"><div class="meta-icon">📚</div><div class="meta-label">课程级别</div><div class="meta-value">4 Levels</div></div>
+          <div class="meta-card"><div class="meta-icon">📖</div><div class="meta-label">课程总数</div><div class="meta-value">15 节课</div></div>
+          <div class="meta-card"><div class="meta-icon">🎯</div><div class="meta-label">学习方向</div><div class="meta-value">整合&amp;实践</div></div>
+        </div>
+        <div class="level-overview">
+          <a href="#lesson-0" class="overview-card" style="text-decoration:none;color:inherit">
+            <div class="ov-level">LEVEL 1</div>
+            <div class="ov-title">占星人类图基础</div>
+            <div class="ov-desc">理解两套系统的底层天文学根基。黄道360°如何映射到64闸门？两张星盘如何构成一张身体图？</div>
+            <div class="ov-lessons">4 节课 →</div>
+          </a>
+          <a href="#lesson-4" class="overview-card" style="text-decoration:none;color:inherit">
+            <div class="ov-level">LEVEL 2</div>
+            <div class="ov-title">行星激活与闸门能量</div>
+            <div class="ov-desc">深入13颗天体在人类图中的角色。太阳的生命主题、水星的沟通编码、土星的业力课题。</div>
+            <div class="ov-lessons">4 节课 →</div>
+          </a>
+          <a href="#lesson-8" class="overview-card" style="text-decoration:none;color:inherit">
+            <div class="ov-level">LEVEL 3</div>
+            <div class="ov-title">轮回交叉与生命目的</div>
+            <div class="ov-desc">四大太阳/地球闸门如何构成你的轮回交叉。从占星学视角理解人生目的的坐标。</div>
+            <div class="ov-lessons">3 节课 →</div>
+          </a>
+          <a href="#lesson-11" class="overview-card" style="text-decoration:none;color:inherit">
+            <div class="ov-level">LEVEL 4</div>
+            <div class="ov-title">占星人类图综合解读</div>
+            <div class="ov-desc">过境分析、合图解读、生时校准。占星师与人类图分析师的双重视角。</div>
+            <div class="ov-lessons">4 节课 →</div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="lesson-0" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 1 · 第1课</div>
+        <h2>占星与人类图：同一个天空，两套地图</h2>
+        <div class="lesson-subtitle">Astrology & Human Design — One Sky, Two Maps</div>
+        <div class="lesson-quote">真正的“占星人类图“不是一个系统去证明另一个，而是让古老的天空智慧与身体图精密的语言彼此照亮——这是两条通向同一个真相的不同路径。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>什么是占星人类图？</div>
+      <p><strong>占星人类图（Astro Human Design）</strong>不是在传统人类设计系统之外另起炉灶，而是返回到人类设计的<strong>底层天文学根源</strong>，将占星学与人类图做深度融合。Ra Uru Hu 在1987年接收的人类设计系统本身就建立在占星的天文学基础之上——出生时刻的行星位置被投射到64个闸门上，构成"人格图"；出生前约88天的行星位置构成"设计图"。</p>
+            <p>本课程体系的目标是：<strong>让你同时掌握两套语言，并能用它们进行交叉验证和深度解读</strong>。你的占星星盘揭示了你的太阳落座、月亮相位；你的身体图揭示了你的类型、权威和闸门激活。当你把这两者放在一起解读时，每个人的人生故事都会被立体地展开。</p>
+      <div class="section-title"><span class="section-icon">⟷</span>占星 vs 人类图：共用与分歧</div>
+      <div class="content-table">
+              <table>
+                <tr><th>维度</th><th>占星学</th><th>人类图</th></tr>
+                <tr><td>黄道系统</td><td>热带黄道 360°</td><td>同一个热带黄道 360°</td></tr>
+                <tr><td>天体</td><td>10大行星 + 小行星 + 虚点</td><td>13个天体（含地球和节点）</td></tr>
+                <tr><td>能量单位</td><td>12星座（每星座30°）</td><td>64闸门（每闸门约5.625°）</td></tr>
+                <tr><td>出生数据</td><td>出生时间 — 1张星盘</td><td>出生时间 + 出生前88天 — 2张图叠加</td></tr>
+                <tr><td>结构框架</td><td>宫位、相位、格局</td><td>能量中心、通道、回路</td></tr>
+                <tr><td>核心用途</td><td>心理深度、时机预测</td><td>日常决策、能量对齐</td></tr>
+                <tr><td>解读语言</td><td>行星落座 = "你的太阳在狮子座"</td><td>行星激活闸门 = "你的太阳在第7闸门"</td></tr>
+              </table>
+            </div>
+            <p>核心理解：人类图<strong>保留</strong>了占星的天文学和行星，<strong>替换</strong>了宫位、相位和12星座，并用能量中心、通道和64闸门代替了传统的占星结构。但底层数据——行星在黄道上的精确位置——<strong>完全一致</strong>。这就是为什么这两个系统从不矛盾。</p>
+      <div class="section-title"><span class="section-icon">◈</span>为什么需要学习占星人类图整合？</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 五个关键理由</div>
+              <ul>
+                <li><strong>理解底层逻辑</strong>——知道行星位置如何变成闸门激活，才能真正读懂身体图</li>
+                <li><strong>交叉验证</strong>——占星的太阳落座与人类图的太阳闸门相互印证，增强解读可信度</li>
+                <li><strong>丰富解读维度</strong>——占星给心理深度和人生周期，人类图给能量策略和日常决策</li>
+                <li><strong>独立排盘能力</strong>——不依赖在线工具，理解天文学计算原理</li>
+                <li><strong>生时校准</strong>——当出生时间不确定时，用两个系统的交叉验证来精确定位</li>
+              </ul>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>课程体系总览</div>
+      <div class="level-overview">
+              <div class="overview-card" onclick="goToLesson(0)">
+                <div class="ov-level">LEVEL 1</div>
+                <div class="ov-title">占星人类图基础</div>
+                <div class="ov-desc">理解两套系统的底层天文学根基。黄道360°如何映射到64闸门？两张星盘如何构成一张身体图？</div>
+                <div class="ov-lessons">4 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(4)">
+                <div class="ov-level">LEVEL 2</div>
+                <div class="ov-title">行星激活与闸门能量</div>
+                <div class="ov-desc">深入13颗天体在人类图中的角色。太阳的生命主题、水星的沟通编码、土星的业力课题。</div>
+                <div class="ov-lessons">4 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(8)">
+                <div class="ov-level">LEVEL 3</div>
+                <div class="ov-title">轮回交叉与生命目的</div>
+                <div class="ov-desc">四大太阳/地球闸门如何构成你的轮回交叉。从占星学视角理解人生目的的坐标。</div>
+                <div class="ov-lessons">3 节课 →</div>
+              </div>
+              <div class="overview-card" onclick="goToLesson(11)">
+                <div class="ov-level">LEVEL 4</div>
+                <div class="ov-title">占星人类图综合解读</div>
+                <div class="ov-desc">过境分析、合图解读、生时校准。占星师与人类图分析师的双重视角。</div>
+                <div class="ov-lessons">4 节课 →</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>学习配套与成果</div>
+      <div class="info-card">
+              <div class="card-title"><span class="card-icon">📚</span>课程配套资源</div>
+              <p style="font-size:13.5px;line-height:1.8;color:var(--text);">360°黄道-64闸门对照表 · 13行星角色速查卡 · 轮回交叉分类手册 · 过境分析工作表 · 生时校准操作指南 · 行星-闸门爻线解读词典</p>
+            </div>
+            <div class="key-points">
+              <div class="kp-title">✦ 完成全部课程后你将能够：</div>
+              <ul>
+                <li>理解人类图与占星学的底层天文学对应关系</li>
+                <li>独立使用占星学语言解读身体图中的行星激活</li>
+                <li>用双系统交叉验证生成更有深度的个人解读</li>
+                <li>分析过境对人类图能量中心的影响</li>
+                <li>运用行星位置进行生时校准</li>
+                <li>以占星+人类图整合视角服务客户</li>
+              </ul>
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>占星人类图整合课程回归人类设计的底层天文学根源。同一个黄道360°，同一个行星系统——两套解读语言，彼此印证、互相深化。四个级别的课程将带你从基础的天文学转译，到行星激活、轮回交叉，最终掌握双系统整合解读的能力。</p>
+      </div>
+    </div>
+    <div id="lesson-1" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 1 · 第2课</div>
+        <h2>黄道360°到64闸门：精密的转译系统</h2>
+        <div class="lesson-subtitle">Zodiac 360° → 64 Gates — The Precision Translation</div>
+        <div class="lesson-quote">每一个度数都可以同时被两种语言描述：占星语言说“这是狮子座15°”，人类图语言说“这是第7闸门第4爻“。它们在说同一个天空的不同层次。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>黄道划分：12星座 vs 64闸门</div>
+      <p>西方占星将360°的黄道分成<strong>12个星座，每个30°</strong>。人类图将<strong>同一个360°</strong>分成<strong>64个闸门，每个约5.625°</strong>——即排布在黄道轮上的易经64卦。每个闸门再细分为<strong>6条爻线</strong>（每条约0.9375°）。</p>
+            <p>这意味着：<strong>单个黄道星座横跨多个闸门</strong>。比如白羊座（0°-30°）覆盖闸门25、17、21、51、42等。这解释了为什么同样是"白羊座太阳"的人，在人类图中可能有完全不同的太阳闸门——取决于具体出生日期和度数。</p>
+      <div class="section-title"><span class="section-icon">◈</span>星座与闸门的对应关系</div>
+      <div class="content-table">
+              <table>
+                <tr><th>黄道位置</th><th>星座</th><th>大致覆盖的闸门</th></tr>
+                <tr><td>0° - 30°</td><td>♈ 白羊座</td><td>25, 17, 21, 51, 42, 3, 27</td></tr>
+                <tr><td>30° - 60°</td><td>♉ 金牛座</td><td>24, 2, 23, 8, 20, 16</td></tr>
+                <tr><td>60° - 90°</td><td>♊ 双子座</td><td>35, 45, 12, 15, 52, 39</td></tr>
+                <tr><td>90° - 120°</td><td>♋ 巨蟹座</td><td>53, 62, 56, 31, 33, 7</td></tr>
+                <tr><td>120° - 150°</td><td>♌ 狮子座</td><td>4, 29, 59, 40, 64, 47</td></tr>
+                <tr><td>150° - 180°</td><td>♍ 处女座</td><td>6, 46, 18, 48, 57, 32</td></tr>
+                <tr><td>180° - 210°</td><td>♎ 天秤座</td><td>50, 28, 44, 1, 43, 14</td></tr>
+                <tr><td>210° - 240°</td><td>♏ 天蝎座</td><td>34, 9, 5, 26, 11, 10</td></tr>
+                <tr><td>240° - 270°</td><td>♐ 射手座</td><td>58, 38, 54, 61, 60, 41</td></tr>
+                <tr><td>270° - 300°</td><td>♑ 摩羯座</td><td>19, 13, 49, 30, 55, 37</td></tr>
+                <tr><td>300° - 330°</td><td>♒ 水瓶座</td><td>63, 22, 36, 25, 17, 21</td></tr>
+                <tr><td>330° - 360°</td><td>♓ 双鱼座</td><td>51, 42, 3, 27, 24, 2</td></tr>
+              </table>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 实用技巧</span>
+              你可以用这张表快速定位——如果知道一个人的太阳在狮子座15°，查看狮子座覆盖的闸门范围（120°-150°），再精确计算黄经度数对应的闸门。狮子座15° = 135°黄经，对应的闸门需要通过具体的闸门-度数映射表来确定。
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>爻线：比星座更精微的能量刻度</div>
+      <p>每个闸门下方有<strong>6条爻线</strong>，将约5.625°的闸门范围细分为6份。爻线给出了同一闸门能量的不同表达方式。在占星中，度数决定了星座内的"Decan"（10°三分）；在人类图中，爻线决定了闸门内能量表达的具体<strong>"怎么做"</strong>。</p>
+            <div class="line-grid">
+              <div class="line-card">
+                <div class="line-num">1</div>
+                <div class="line-name">研究者</div>
+                <div class="line-desc">深入根本，追问答案</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">2</div>
+                <div class="line-name">隐士</div>
+                <div class="line-desc">自然天赋，等待召唤</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">3</div>
+                <div class="line-name">探索者</div>
+                <div class="line-desc">试错成长，发现可行</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">4</div>
+                <div class="line-name">机会主义者</div>
+                <div class="line-desc">关系网络，渠道机会</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">5</div>
+                <div class="line-name">普世化者</div>
+                <div class="line-desc">被投射解决者，需谨慎</div>
+              </div>
+              <div class="line-card">
+                <div class="line-num">6</div>
+                <div class="line-name">人生榜样</div>
+                <div class="line-desc">三阶段人生，超越视角</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>为什么精确出生时间至关重要</div>
+      <p>由于每个闸门仅约5.625°，每条爻线约0.9375°，<strong>几分钟的差异就可能让行星从一个爻线滑到下一个爻线</strong>。移动较快的天体（尤其是月亮，每小时移动约0.5°）对时间的敏感度最高。</p>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 精度要求</span>
+              <strong>月亮</strong>：每2小时可能跨越1条爻线<br>
+              <strong>上升点/下降点</strong>：每4分钟移动1°<br>
+              <strong>太阳</strong>：每天约移动1°（约6天跨越1个闸门）<br>
+              <strong>水星</strong>：每天约1-2°<br><br>
+              这就是为什么在人类图中，<strong>准确的出生时间</strong>比在占星中更为关键。如果你的出生时间只有"上午"而没有精确到分钟，月亮、水星和上升点的闸门激活可能不准确。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>12星座 × 30° = 360° = 64闸门 × 约5.625°。同一个黄道，不同的划分精度。每个星座横跨多个闸门，每个闸门内的6条爻线进一步定义了能量的表达方式。理解这个转译系统是占星人类图整合的第一块基石。精确的出生时间对闸门和爻线的准确度至关重要。</p>
+      </div>
+    </div>
+    <div id="lesson-2" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 1 · 第3课</div>
+        <h2>两张星盘：人格面与设计面的天文学</h2>
+        <div class="lesson-subtitle">Two Charts — Personality & Design Astronomy</div>
+        <div class="lesson-quote">你的出生星盘是你选择记住的自己。你的产前星盘是你抵达时携带的身体。两者叠加，构成你完整的能量存在。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>人类图为什么有两张星盘？</div>
+      <p>这是人类图与标准占星最大的分歧之处，而它纯粹基于<strong>天文学</strong>。Ra Uru Hu 通过"声音"接收到一个关键信息：中微子不仅在出生瞬间穿过行星磁场携带信息进入人体，<strong>在出生前约88-89天</strong>——当太阳处于当前位置前88°时——中微子也携带了"设计层面"的信息进入发育中的胎儿大脑皮层。</p>
+            <p>因此人类图计算<strong>两个时间点的行星位置</strong>：</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">●</span>人格面 Personality（黑色/有意识）</div>
+              <p style="font-size:13.5px;line-height:1.8;">你<strong>出生那一刻</strong>的行星位置。这就是占星师熟悉的那张星盘——"你以为的自己"。你对此有意识觉察。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">●</span>设计面 Design（红色/无意识）</div>
+              <p style="font-size:13.5px;line-height:1.8;">大约<strong>出生前88天</strong>的行星位置——太阳处于出生位置前88°的那一刻。这是你的遗传/身体层面——你并未选择的基因编码。别人往往比你更早注意到这些特质。</p>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>88°的科学依据：中微子印刻</div>
+      <p>88°的选择并非随意。在人类设计理论中，中微子是携带信息的亚原子粒子，它们穿过行星磁场后被"着色"，然后穿过人体。两个关键的中微子流：</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 两条中微子流</div>
+              <ul>
+                <li><strong>太阳中微子流</strong>——直接来自太阳，占约70%的能量影响。在出生时穿过身体，形成"人格面"</li>
+                <li><strong>地球过滤的中微子流</strong>——太阳中微子穿过地球磁场后被"过滤"，携带了地球的印记。在出生前88天穿过发育中的胎儿大脑皮层，形成"设计面"</li>
+              </ul>
+            </div>
+            <p>占星师有时研究产前食相或受孕盘，但<strong>没有任何主流占星系统使用这种精确的"出生前88°"双重印记</strong>。这使人类图在机制上区别于传统占星。</p>
+      <div class="section-title"><span class="section-icon">◈</span>两张图的叠加：黑与红的艺术</div>
+      <p>两张星盘的行星位置被转换为闸门和爻线后，<strong>叠加在同一张身体图上</strong>。这就是为什么你的每颗行星在身体图中有两个激活（黑色和红色的数字标记）：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>特征</th><th>人格面（黑色）</th><th>设计面（红色）</th></tr>
+                <tr><td>行星数据</td><td>出生时刻</td><td>出生前约88天</td></tr>
+                <tr><td>意识层面</td><td>有意识觉察</td><td>无意识/身体层面</td></tr>
+                <tr><td>你感知到</td><td>"我就是这样的"</td><td>"别人说我这样，但我自己不太觉得"</td></tr>
+                <tr><td>对应的占星</td><td>出生星盘（Natal Chart）</td><td>无直接对应（独有机制）</td></tr>
+                <tr><td>人生角色</td><td>Profile第一条爻线来源</td><td>Profile第二条爻线来源</td></tr>
+                <tr><td>定义的能量</td><td>有意识主题（70%来自太阳）</td><td>无意识主题</td></tr>
+              </table>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 核心洞察</span>
+              当你做人类图解读时，如果只用"人格面"的黑字数据，你实际上就是做了一个标准占星解读的闸门版本。真正让人类图区别于占星的，恰恰是<strong>设计面（红色）数据</strong>的加入——它从占星框架中独立出来，形成了另一层完全不同的能量语言。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>人类图的革命性在于使用两个时间点的行星数据——出生时（人格面）和出生前约88天（设计面）——叠加在一张图里。88°的选择基于中微子印刻理论。黑红双色标记是理解人类图深层结构的关键：黑色代表你有意识的表达，红色代表身体的、无意识的编码。两张图结合才构成完整的能量蓝图。</p>
+      </div>
+    </div>
+    <div id="lesson-3" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 1 · 第4课</div>
+        <h2>13颗天体的原型语言</h2>
+        <div class="lesson-subtitle">The 13 Celestial Bodies — Archetypal Language</div>
+        <div class="lesson-quote">每一颗行星在黄道上的位置，都通过中微子流将特定的原型信息编码进你的能量场。学会阅读这些天体的语言，你就学会了阅读宇宙写在你身上的诗。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>13颗天体速览</div>
+      <p>人类图使用<strong>13个天体位置</strong>来计算激活：太阳、地球、月亮、北交点、南交点、水星、金星、火星、木星、土星、天王星、海王星、冥王星。其中<strong>地球的位置永远与太阳正好相对</strong>（180°对冲），不是独立计算的。</p>
+            <p>每个天体在人类图中都代表一种<strong>原型力量</strong>，激活它所在的闸门和爻线。天体提供"影响的类别"，闸门和爻线提供"具体的表达方式"。</p>
+      <div class="section-title"><span class="section-icon">◈</span>核心天体（太阳-地球-月亮-节点）</div>
+      <div class="planet-grid">
+              <div class="planet-card">
+                <div class="planet-symbol">☉</div>
+                <div class="planet-name">太阳 Sun</div>
+                <div class="planet-role">生命主题 · 核心表达</div>
+                <div class="planet-desc">承载你约70%的意识表达，是人类图中最重要的激活。太阳闸门是"你的光"——你在生命中最响亮表达的能量。人格太阳 + 设计太阳共同决定你的轮回交叉。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">🜨</div>
+                <div class="planet-name">地球 Earth</div>
+                <div class="planet-role">扎根 · 平衡 · 接地</div>
+                <div class="planet-desc">永远与太阳正好相对。太阳是你的表达，地球是你的根基——两者构成极性。太阳+地球（各×2）= 你的轮回交叉，即生命目的主题。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">☽</div>
+                <div class="planet-name">月亮 Moon</div>
+                <div class="planet-role">驱动力 · 情感模式</div>
+                <div class="planet-desc">展示是什么在驱动你、推动你的能量进入运动。与关系、情感模式、内在的"吸引力"相关。月亮闸门指向你的深层动机和下意识推动力。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">☊☋</div>
+                <div class="planet-name">月球节点 Nodes</div>
+                <div class="planet-role">环境 · 轨迹 · 人生方向</div>
+                <div class="planet-desc">南交点（☋）指向早期生活背景和熟悉模式。北交点（☊）指向后期人生方向和成长轨迹。约35岁左右发生节点转移（Chiron Return前后），北交点主题开始主导。</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>个人行星（水星-金星-火星）</div>
+      <div class="planet-grid">
+              <div class="planet-card">
+                <div class="planet-symbol">☿</div>
+                <div class="planet-name">水星 Mercury</div>
+                <div class="planet-role">沟通 · 表达 · 信息</div>
+                <div class="planet-desc">揭示你在此生需要<strong>说什么、教什么、表达什么</strong>。意识水星是你"想要"分享的，无意识水星是你"需要"分享的。水星闸门通常是你自然持续谈论的话题。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♀</div>
+                <div class="planet-name">金星 Venus</div>
+                <div class="planet-role">价值观 · 美感 · 关系</div>
+                <div class="planet-desc">指向你在深层次上<strong>看重什么</strong>——你的价值观、道德标准、美的准则、关系的核心需求。金星闸门是你"过不去的底线"所在。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♂</div>
+                <div class="planet-name">火星 Mars</div>
+                <div class="planet-role">成长 · 不成熟 · 转化</div>
+                <div class="planet-desc">代表你生命中的"成长边缘"——不成熟的、需要时间磨练的能量。火星闸门往往是你面临最大挑战、也经历最深成长的地方。无意识火星常指向核心创伤和使命。</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>世代行星（木星-土星-天海冥）</div>
+      <div class="planet-grid">
+              <div class="planet-card">
+                <div class="planet-symbol">♃</div>
+                <div class="planet-name">木星 Jupiter</div>
+                <div class="planet-role">扩张 · 祝福 · 法则</div>
+                <div class="planet-desc">显示当你的原则对齐时，<strong>支持和扩张从哪里来</strong>。木星闸门通常与"幸运"和"自然扩张"相关联。在基因天命系统中，意识木星对应"珍珠"领域。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♄</div>
+                <div class="planet-name">土星 Saturn</div>
+                <div class="planet-role">纪律 · 考验 · 结构</div>
+                <div class="planet-desc">生命要求你<strong>展现成熟和纪律</strong>的地方。土星闸门是严肃的课题——通过耐心和坚持来克服、成长的领域。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♅</div>
+                <div class="planet-name">天王星 Uranus</div>
+                <div class="planet-role">独特性 · 创新 · 颠覆</div>
+                <div class="planet-desc">揭示你<strong>不走寻常路</strong>的地方——你与众不同之处。天王星闸门是你的"freak flag"——不需要为你的独特之处道歉。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♆</div>
+                <div class="planet-name">海王星 Neptune</div>
+                <div class="planet-role">神秘 · 幻象 · 灵性</div>
+                <div class="planet-desc">携带神秘和灵性的能量。常与祖先模式（尤其是祖母血脉）相关联。海王星闸门可能一开始难以捉摸，需要时间才能清晰。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♇</div>
+                <div class="planet-name">冥王星 Pluto</div>
+                <div class="planet-role">真相 · 转化 · 重生</div>
+                <div class="planet-desc">指向需要<strong>深度真实和长期转化</strong>的领域。冥王星是缓慢移动的世代行星，代表通过黑暗走向重生的旅程。</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">⟳</span>阅读行星激活的三步法</div>
+      <div class="step-grid">
+              <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-title">识别天体</div>
+                <div class="step-desc">在身体图侧面栏找到行星符号，确认是哪颗天体在激活哪个闸门/爻线</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-title">理解原型</div>
+                <div class="step-desc">思考该行星代表什么样的生命主题——太阳=核心表达，月亮=驱动力，土星=考验</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-title">整合闸门</div>
+                <div class="step-desc">将行星原型与闸门的易经主题结合——"你的太阳在第7闸门"意味着核心表达与"领导力/军队"主题相关</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">4</div>
+                <div class="step-title">核对双面</div>
+                <div class="step-desc">比较人格面（黑色）和设计面（红色）的同一行星激活——意识与无意识的互补或张力</div>
+              </div>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 练习</span>
+              打开你的身体图，找出你的<strong>人格太阳闸门</strong>（黑色太阳的数字）。用占星语言说出它在哪个星座（参考第2课的星座-闸门对应表），然后用人类图语言理解这个闸门的含义。你能感受到两种描述在说你身上的同一件事吗？
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>13颗天体在人类图中各有明确的角色分工：太阳是生命主题，地球是平衡根基，月亮是驱动力，水星是沟通编码，金星是价值系统，火星是成长边缘，木星是扩张法则，土星是考验结构，天王星是独特性，海王星是灵性深度，冥王星是转化之旅。阅读每个激活需要结合行星原型+闸门含义+人格/设计双面。</p>
+      </div>
+    </div>
+    <div id="lesson-4" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 2 · 第1课</div>
+        <h2>太阳与地球：生命的核心轴线</h2>
+        <div class="lesson-subtitle">Sun & Earth — The Core Axis of Life</div>
+        <div class="lesson-quote">太阳是你向外表达的光，地球是你向内扎根的土。一个说“我在这里“，一个说“我属于这里“。两者共同构成了你生命故事的第一章。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>太阳：70%的能量表达</div>
+      <p>在人类图中，太阳是所有行星激活中<strong>最重要的一颗</strong>。Ra Uru Hu 说太阳承载约70%的有意识表达。太阳闸门是你在生命中最"响亮"表达的能量——不需要刻意努力，它自然地通过你的存在被表达出来。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">☉</span>太阳激活告诉你的</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              <strong>人格太阳（黑色）</strong>——你意识中的核心主题，你以为的"我是谁"<br>
+              <strong>设计太阳（红色）</strong>——你身体层面的核心主题，你的遗传编码<br>
+              <strong>太阳闸门</strong>——"你的光"在哪个频率带？<br>
+              <strong>太阳爻线</strong>——你的光以什么方式（爻线风格）表达？<br>
+              <strong>合在一起</strong>——太阳闸门 + 太阳爻线 = 你的人生角色（Profile）的前半部分</p>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>太阳/地球的永恒极性</div>
+      <p>在人类图中，地球的位置<strong>永远与太阳正好相对</strong>（相距180°）。这不是因为地球自身有什么特殊性，而是因为从地球视角看，太阳在某个位置时，地球就在它的对面。这是一个位置关系，不是两个独立的数据。</p>
+            <p>太阳闸门与地球闸门形成一对极性——太阳向"外"表达，地球向"内"扎根。这种极性关系在所有文化中都有呼应：中国的阴阳、西方的阳极/阴极。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>维度</th><th>太阳闸门</th><th>地球闸门</th></tr>
+                <tr><td>方向</td><td>向外表达 —— 散发能量</td><td>向内扎根 —— 接收能量</td></tr>
+                <tr><td>意识</td><td>"我是这样的"</td><td>"我需要这样的基础"</td></tr>
+                <tr><td>功能</td><td>生命主题的表达者</td><td>生命主题的平衡者</td></tr>
+                <tr><td>感受</td><td>自然、外显、容易被注意</td><td>低调、基础、容易被忽略</td></tr>
+                <tr><td>失衡时的表现</td><td>过度表现、太过耀眼</td><td>缺乏根基、不稳定感</td></tr>
+              </table>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>四重太阳-地球与轮回交叉</div>
+      <p>你的身体图中有四个太阳/地球激活，它们共同构成你的<strong>轮回交叉（Incarnation Cross）</strong>：</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 轮回交叉的四根柱子</span>
+              <strong>1. 人格太阳（黑色☉）</strong>——你有意识表达的主题，Profile第一条爻线的来源<br>
+              <strong>2. 人格地球（黑色🜨）</strong>——你有意识的平衡力量<br>
+              <strong>3. 设计太阳（红色☉）</strong>——你无意识的核心主题，Profile第二条爻线的来源<br>
+              <strong>4. 设计地球（红色🜨）</strong>——你无意识的根基<br><br>
+              这四个闸门共同回答了一个问题：<strong>"你此生来做什么？"</strong>它们构成了你生命目的的星座坐标。
+            </div>
+            <p>在占星传统中，太阳落座是最被关注的"性格描述"。在人类图中，太阳闸门是最核心的能量标识。但人类图通过加入地球闸门和双面数据，给出了比占星太阳落座更立体的生命目的描述。</p>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>太阳是人类图中最重要的行星，承载约70%的意识表达。太阳闸门和爻线共同构成你人生角色的前半部分。地球永远与太阳相对，提供平衡和扎根的力量。四个太阳/地球激活（人格+设计）共同构成轮回交叉——你生命目的的星座坐标。</p>
+      </div>
+    </div>
+    <div id="lesson-5" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 2 · 第2课</div>
+        <h2>月亮、水星、金星、火星：个人行星的激活</h2>
+        <div class="lesson-subtitle">Personal Planets: Moon, Mercury, Venus, Mars</div>
+        <div class="lesson-quote">如果说太阳是你生命的主题曲，那么月亮是节奏，水星是歌词，金星是和声，火星是变奏。个人行星让你的生命故事变得有血有肉。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>月亮：驱动力的编码</div>
+      <p>月亮在人类图中代表<strong>驱动力（Drive）</strong>——是什么推动你的能量进入运动。与占星中月亮象征情感和内在安全类似，人类图的月亮闸门指向你的深层动机、情感模式和吸引力来源。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">☽</span>月亮的关键问题</div>
+              <p style="font-size:13.5px;line-height:1.8;">"什么让你早上起床？"<br>"什么在无意识层面推动你行动？"<br>"你在关系中自然被什么吸引？"<br>月亮闸门揭示了这些问题的答案。<strong>理解月亮激活对于理解人的行为驱动力和关系模式至关重要。</strong></p>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 高敏感度</span>
+              月亮每2.5天跨过一个闸门，移动最快的行星之一。如果你的出生时间不确定，月亮闸门可能不准确。这是生时校准中最需要精确确认的激活之一。
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>水星：沟通与表达的编码</div>
+      <p>水星在人类图中代表<strong>沟通（Communication）</strong>——你在此生需要说什么、表达什么、教导什么。与占星中水星掌管理智和沟通一致，人类图的水星闸门告诉你<strong>你的声音的自然频率</strong>。</p>
+            <div class="key-points">
+              <div class="kp-title">◆ 水星激活的解读要点</div>
+              <ul>
+                <li><strong>意识水星（黑色）</strong>：你想要分享的主题——你主动选择谈论的领域</li>
+                <li><strong>无意识水星（红色）</strong>：你需要分享的主题——你的身体自然在表达的，即便你未察觉</li>
+                <li>许多人发现自己<strong>自然会持续谈论</strong>水星闸门对应的话题——不需要刻意准备</li>
+                <li>水星闸门 + 喉咙中心定义的双重影响，决定了沟通风格的清晰度</li>
+              </ul>
+            </div>
+            <p>例如：水星在第16闸门（技能/热情）的人，自然地会不断谈论技能提升、热情和精进——这就是他们被编码来分享的内容。</p>
+      <div class="section-title"><span class="section-icon">✦</span>金星：价值系统的编码</div>
+      <p>金星在人类图中代表<strong>价值观（Values）</strong>——你在深层次上看重什么。与占星中金星掌管爱和美一致，人类图的金星闸门指向你的道德底线、美学标准和关系核心需求。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 金星的关键角色</span>
+              金星在人类图中承担了一个独特角色——它是你<strong>"过不去的底线"</strong>的来源。当某事触碰了你的金星闸门对应的领域，你不会妥协。这也是为什么金星解读对于理解关系冲突和价值观矛盾非常有帮助。
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>火星：成长边缘的编码</div>
+      <p>火星在人类图中代表<strong>成长边缘（Immaturity/Growth）</strong>——你生命中不成熟的、需要时间磨练的能量。与占星中火星代表行动力和攻击性不同，人类图更强调火星作为"还在发育中的能量"。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">♂</span>火星的特别解读</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              <strong>无意识火星（红色）</strong>尤其重要——Ra Uru Hu 说它经常指向<strong>核心创伤（Core Wound）和使命（Vocation）</strong>。<br><br>
+              你的火星闸门所在之处，就是你面临最大挑战同时也经历最深成长的地方。它像一片需要终身耕耘的土地——早期显得笨拙或挣扎，但随时间和觉察，这片土地能产出最丰盛的果实。
+              </p>
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>个人行星（月亮、水星、金星、火星）为人类图提供了丰富的细节维度。月亮编码了驱动力和情感模式；水星编码了沟通和表达的内容；金星编码了价值观和关系核心；火星编码了成长边缘和使命。正确理解这些编码需要结合行星原型、闸门含义和爻线风格三个层次。</p>
+      </div>
+    </div>
+    <div id="lesson-6" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 2 · 第3课</div>
+        <h2>世代行星：木星到冥王星的深层编码</h2>
+        <div class="lesson-subtitle">Generational Planets — Jupiter to Pluto</div>
+        <div class="lesson-quote">慢速行星写的是史诗，不是短篇。它们的编码不是关于你今天如何行动，而是关于你这一代人共享的生命课题，以及你个人如何在这个课题中找到自己的位置。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>木星与土星：法则与考验</div>
+      <div class="info-card">
+              <div class="card-title"><span class="card-icon">♃</span>木星——内在发展法则</div>
+              <p style="font-size:13.5px;line-height:1.8;">木星代表你的<strong>扩张与支持系统</strong>。当你的原则和生活对齐时，木星闸门对应的领域会出现自然的扩张和"好运"。在基因天命中，意识木星对应"珍珠（Pearl）"领域——个人成长序列的顶点。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">♄</span>土星——纪律与考验之地</div>
+              <p style="font-size:13.5px;line-height:1.8;">土星代表<strong>考验与结构</strong>——生命中需要你展现成熟和纪律的领域。Ra Uru Hu 将土星称为"惩罚叛教的老师"——当你不遵循自己的设计时，土星闸门所在的领域最容易出现"被现实打脸"的体验。但对齐时，土星也提供最稳固的结构。</p>
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 木星-土星轴</span>
+              在传统占星中，木星和土星是"社会行星"，代表个人与社会结构的互动。在人类图中，木星指向"当对齐时什么会自然扩张"，土星指向"需要通过纪律来克服什么"。两者共同描述了你的<strong>社会角色和个人成长路径</strong>。
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>天王星、海王星、冥王星：超越个人的编码</div>
+      <div class="planet-grid">
+              <div class="planet-card">
+                <div class="planet-symbol">♅</div>
+                <div class="planet-name">天王星 Uranus</div>
+                <div class="planet-role">独特性 · 颠覆 · 创新</div>
+                <div class="planet-desc">揭示你<strong>与众不同之处</strong>——不怕"不合群"的地方。天王星闸门是你的"freak flag"——在你所携带的基因编码中，天王星让你在特定领域天然不愿走寻常路。这就是你的独特性，不需要隐藏。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♆</div>
+                <div class="planet-name">海王星 Neptune</div>
+                <div class="planet-role">灵性 · 幻象 · 祖先</div>
+                <div class="planet-desc">携带神秘和灵性的能量。与祖先模式（尤其是祖母血脉）相关联。海王星的激活可能一开始难以捉摸——它的真相需要时间和直觉的成熟才能完全清晰。</div>
+              </div>
+              <div class="planet-card">
+                <div class="planet-symbol">♇</div>
+                <div class="planet-name">冥王星 Pluto</div>
+                <div class="planet-role">真相 · 转化 · 重生</div>
+                <div class="planet-desc">代表<strong>深层转化</strong>——通常通过面对真相和穿越黑暗来实现。冥王星是一颗缓慢移动的世代行星，同一代人共享相似的冥王星闸门。你的冥王星闸门指向你需要深度真实和彻底转化的领域。</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>世代行星的解读策略</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 解读世代行星的要点</div>
+              <ul>
+                <li><strong>移动慢 → 世代共享</strong>——木星12年一轮、土星29年、天王星84年、海王星165年、冥王星248年。同一时代出生的人，这些行星的闸门往往相同或相邻</li>
+                <li><strong>解读重心在爻线而非闸门</strong>——因为闸门是共享的，爻线（更精细的区分）才是你个人化的部分</li>
+                <li><strong>它们描述深层、长期的课题</strong>——不是一个月或一年的问题，而是一生的旅程</li>
+                <li><strong>结合人格/设计双面</strong>——意识面的世代行星是你"知道"的课题，无意识面的是你"身体携带"的课题</li>
+              </ul>
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>从木星到冥王星，世代行星编码了你最深层的生命课题。它们的共同特征是移动缓慢、世代共享、描述长期旅程。解读世代行星的关键在于关注爻线（个人化的细节）而非闸门（同代人共享），同时结合人格/设计双面的差异来理解你是如何承载这些课题的。</p>
+      </div>
+    </div>
+    <div id="lesson-7" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 2 · 第4课</div>
+        <h2>月球交点与凯龙星：业力轨迹与疗愈之路</h2>
+        <div class="lesson-subtitle">Nodes & Chiron — Karmic Path & Healing Journey</div>
+        <div class="lesson-quote">南交点是你来的地方，北交点是你要去的地方。两者之间是你用一生去走的桥——而凯龙星，是你走桥途中被刺中、然后学会疗愈自己的那一步。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>月球节点：人生轨迹的方向</div>
+      <p>在人类图中，月球节点（North & South Nodes）代表<strong>环境主题和生命轨迹</strong>——而非占星中常见的"业力/前世"。南交点（☋）指向你早期生命中熟悉的背景和模式；北交点（☊）指向后期人生的发展方向。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">☋</span>南交点——你来的地方</div>
+              <p style="font-size:13.5px;line-height:1.8;">描述出生时的环境和早期生活背景。这不是"业力债务"，而是<strong>你已经熟悉的地形</strong>——你的舒适区。南交点的闸门可能是你最初的本能反应模式。</p>
+            </div>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">☊</span>北交点——你要去的地方</div>
+              <p style="font-size:13.5px;line-height:1.8;">描述后期人生的成长方向和轨迹。约在35岁左右（土星回归之后、天王星对冲之时），北交点的主题开始变得更重要。<strong>这不是"你应该去"的地方，而是自然展开的生命弧线。</strong></p>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 节点转捩点</span>
+              人类设计的节点在约38-43岁经历"节点回归"（Nodal Return）——南北交点回到出生时的位置。这是重要的人生转折，通常伴随着对方向的重新评估。这与占星中的"中年危机"（40岁前后）高度吻合。
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>凯龙星：受伤的疗愈者</div>
+      <p>凯龙星（Chiron）在占星和人类图中都被称为<strong>"受伤的疗愈者"</strong>。它指向你携带深层个人创伤的地方——但这个创伤会成为你最大的<strong>同理心、教导能力和帮助他人的源泉</strong>。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 凯龙星的悖论</span>
+              你无法"修复"凯龙星的创伤——就像神话中半人马的伤口永不愈合。但正是这个不愈合的伤口，让你能够理解他人的痛苦。凯龙星闸门和爻线描述了<strong>一个你将用一生来穿越的主题</strong>——在这个过程中，你不仅疗愈自己，也成为他人的疗愈者。
+            </div>
+            <p>在解读凯龙星时，需要特别关注爻线——同样的闸门在不同的爻线上，表达了完全不同的受伤和疗愈方式。1爻可能通过深入研究来疗愈，3爻通过试错，4爻通过关系网络。</p>
+            <div class="callout practice">
+              <span class="callout-label">🧘 整合练习</span>
+              查看你图表中的<strong>南交点闸门</strong>和<strong>北交点闸门</strong>。用占星语言问自己：<br>
+              1. 南交点闸门——这个能量在你早期生活中有多熟悉？<br>
+              2. 北交点闸门——这个能量在最近几年是否变得越来越重要？<br>
+              3. 凯龙星闸门——你在这个领域有什么"永久的敏感"？你如何将它转化为对他人的帮助？
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>月球节点描述了人生轨迹的方向——南交点是熟悉的起点，北交点是指引的方向，约35-43岁是节点能量转换的时期。凯龙星则是永久的敏感地带——携带着创伤的编码，但正是这个编码让你成为他人的疗愈者。理解节点和凯龙星，是理解人生宏观轨迹和深层转化课题的关键。</p>
+      </div>
+    </div>
+    <div id="lesson-8" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 3 · 第1课</div>
+        <h2>轮回交叉的天文学根源</h2>
+        <div class="lesson-subtitle">Incarnation Cross — Astronomical Foundations</div>
+        <div class="lesson-quote">轮回交叉不是神秘的命运宣判，而是精确的行星位置组合。你的生命目的被写在出生时刻的天空里——用四个闸门，两个太阳，两个地球。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>什么是轮回交叉？</div>
+      <p><strong>轮回交叉（Incarnation Cross）</strong>由四个闸门构成：人格太阳、人格地球、设计太阳、设计地球。这是人类图中最接近"生命目的"描述的结构。</p>
+            <p>从占星学视角看，轮回交叉本质上是：<strong>出生时刻的太阳位置 + 出生时刻的地球位置（太阳对面）+ 出生前88天的太阳位置 + 出生前88天的地球位置</strong>——四个黄道点映射到四个闸门上。</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 占星对应</span>
+              如果说占星的太阳落座告诉你"你的性格特质是什么"，轮回交叉告诉你"你的生命目的是什么"。前者描述<strong>存在状态</strong>，后者描述<strong>运动方向</strong>。两者结合，才构成对一个人的完整描述。
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>轮回交叉的天文学计算</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 四个点的天文学来源</div>
+              <ul>
+                <li><strong>人格太阳</strong>——出生时刻太阳在黄道上的度数 → 映射到对应闸门</li>
+                <li><strong>人格地球</strong>——出生时刻地球在黄道上的度数（= 太阳度数 + 180°）→ 映射到对应闸门</li>
+                <li><strong>设计太阳</strong>——出生前88天太阳在黄道上的度数 → 映射到对应闸门</li>
+                <li><strong>设计地球</strong>——出生前88天地球在黄道上的度数 → 映射到对应闸门</li>
+              </ul>
+            </div>
+            <p>四个闸门按特定顺序排列（人格太阳·人格地球·设计太阳·设计地球），构成一个特定的交叉。每个交叉都有一个独特的名称（如"玛雅交叉"、"伊甸园交叉"、"斯芬克斯交叉"等）。</p>
+      <div class="section-title"><span class="section-icon">◈</span>交叉的三个层级</div>
+      <div class="content-table">
+              <table>
+                <tr><th>类型</th><th>特征</th><th>命运性质</th><th>占星类比</th></tr>
+                <tr><td><strong>右角度交叉</strong><br>Right Angle Cross</td><td>约64%的人口<br>4个闸门都在相同角度类型</td><td>个人命运——"这是我自己的人生"<br>关注个人旅程和自我实现</td><td>个人行星主导型（太阳、月亮、上升为主）</td></tr>
+                <tr><td><strong>左角度交叉</strong><br>Left Angle Cross</td><td>约34%的人口<br>4个闸门在左角度类型</td><td>跨个人命运——"我为他人的转变而存在"<br>关注集体和他人的命运</td><td>社会/世代行星主导型（土星、天王星、海王星、冥王星突出）</td></tr>
+                <tr><td><strong>并列交叉</strong><br>Juxtaposition Cross</td><td>约2%的人口<br>混合角度</td><td>固定命运——独特的个体角色<br>既有个人的深度又有对他人的影响</td><td>混合型——独特的星盘配置</td></tr>
+              </table>
+            </div>
+            <p>右角度交叉的人聚焦于个人成长——"我的旅程是什么？"左角度交叉的人聚焦于服务他人——"我如何帮助集体？"并列交叉是两者之间的桥梁，持有一种独特的固定角色。</p>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>轮回交叉由四个太阳/地球闸门构成，是生命目的的精确坐标。它基于天文学计算：出生时刻和出生前88天的太阳-地球位置。右角度交叉聚焦个人命运，左角度交叉聚焦集体服务，并列交叉是独特的桥梁角色。理解轮回交叉的天文学根源，才能理解为什么精确的出生时间对生命目的解读如此关键。</p>
+      </div>
+    </div>
+    <div id="lesson-9" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 3 · 第2课</div>
+        <h2>太阳/地球极性与人生角色的爻线</h2>
+        <div class="lesson-subtitle">Sun/Earth Polarity & Profile Lines</div>
+        <div class="lesson-quote">你的Profile不是附加在你身上的标签——它是从你的太阳和地球位置中自然长出来的。就像一棵树，太阳告诉它向上长，地球告诉它向下扎根。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>Profile的天文学来源</div>
+      <p>在Level 2我们已经知道，人生角色（Profile）的<strong>第一条爻线来自人格太阳/地球</strong>，<strong>第二条爻线来自设计太阳/地球</strong>。这意味着你的Profile不是随机分配的——它直接来自你的行星位置。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🔗</span>Profile的双重根源</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              <strong>第一条爻线（意识）</strong>——人格太阳或地球的爻线。这是你意识中认知的自我表达方式。<br>
+              <strong>第二条爻线（无意识）</strong>——设计太阳或地球的爻线。这是你身体无意识携带的表达方式。<br><br>
+              两条爻线的组合创造了12个主要Profile，每个Profile代表一种独特的能量叙事方式。
+              </p>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>爻线与占星元素的对应探索</div>
+      <p>虽然没有官方的爻线-星座对应，但从原型能量角度可以做有趣的交叉观察：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>爻线</th><th>名称</th><th>核心能量</th><th>占星原型共鸣</th></tr>
+                <tr><td>1爻</td><td>研究者</td><td>深入根本、寻求安全</td><td>土星+处女座——需要稳固基础</td></tr>
+                <tr><td>2爻</td><td>隐士</td><td>自然天赋、等待召唤</td><td>月亮+双鱼座——内向、需要被"叫出来"</td></tr>
+                <tr><td>3爻</td><td>探索者</td><td>试错、发现可行</td><td>火星+白羊座——通过行动来学习</td></tr>
+                <tr><td>4爻</td><td>机会主义者</td><td>关系网络、渠道</td><td>金星+天秤座——通过关系起作用</td></tr>
+                <tr><td>5爻</td><td>普世化者</td><td>投射场、领导</td><td>太阳+狮子座——被他人投射和期待</td></tr>
+                <tr><td>6爻</td><td>人生榜样</td><td>三阶段、超越</td><td>天王星+水瓶座——超越的视角</td></tr>
+              </table>
+            </div>
+            <div class="callout warn">
+              <span class="callout-label">⚠️ 注意</span>
+              这些对应是原型层面的大致共鸣，不是官方的对应关系。它们可以帮助占星师快速"feel"各条爻线的能量质感，但不应该被当作精确的映射来使用。
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>太阳-地球极性的爻线表达</div>
+      <p>同一行星（太阳或地球）的爻线定义了你是<strong>以什么风格</strong>在表达你的能量。同一个人格太阳闸门，在不同爻线上表达方式完全不同：</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 实例</span>
+              一个人格太阳在第7闸门（领导力/军队）<br>
+              <strong>1爻</strong>——通过深入研究领导力来获得内在安全感<br>
+              <strong>2爻</strong>——有自然的领导力天赋，自己不一定意识到<br>
+              <strong>3爻</strong>——通过试错来学习如何做领导<br>
+              <strong>4爻</strong>——通过关系网络来发挥领导力<br>
+              <strong>5爻</strong>——被他人投射为"天生的领导者"<br>
+              <strong>6爻</strong>——经历三个阶段的领导力成长<br><br>
+              同一个闸门，六种完全不同的表达路径。这解释了为什么两个人的太阳都在狮子座/第7闸门，却可能有完全不同的"领导风格"。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>人生角色（Profile）直接来自太阳和地球位置的爻线——它不是附加标签，而是行星位置的自然产物。爻线与占星原型在能量层面有有趣的共鸣（1爻-土星/处女，5爻-太阳/狮子等），但这是原型层面的参考，不是精确映射。同一个闸门在不同爻线上有六种截然不同的表达风格——爻线是从"什么能量"到"怎么表达"的关键桥梁。</p>
+      </div>
+    </div>
+    <div id="lesson-10" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 3 · 第3课</div>
+        <h2>192个轮回交叉的占星人类图索引</h2>
+        <div class="lesson-subtitle">192 Incarnation Crosses — An Astro-HD Index</div>
+        <div class="lesson-quote">宇宙不会用一句话回答'我人生的目的是什么'——它用四个闸门回答。而这些闸门在被解开之前，看起来只是一个充满数字的身体图。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>轮回交叉的分类体系</div>
+      <p>Ra Uru Hu 体系中共有<strong>192个轮回交叉</strong>（有说法是768个，因为每个交叉有4个闸门排列的不同变体）。这些交叉被分为三大类：<strong>右角度交叉</strong>（约120个）、<strong>左角度交叉</strong>（约64个）和<strong>并列交叉</strong>（约8个）。</p>
+            <p>每个交叉都有独特的名称和核心主题。以下是部分代表性交叉：</p>
+            <div class="content-table">
+              <table>
+                <tr><th>交叉名称</th><th>类型</th><th>核心主题</th><th>关键闸门</th></tr>
+                <tr><td>玛雅交叉</td><td>右角度</td><td>通过幻象与智慧来导航人生</td><td>61-62-32-42</td></tr>
+                <tr><td>伊甸园交叉</td><td>右角度</td><td>回归本源，寻找纯真</td><td>11-12-36-6</td></tr>
+                <tr><td>斯芬克斯交叉</td><td>右角度</td><td>提供方向，引领他人</td><td>7-13-2-1</td></tr>
+                <tr><td>规划交叉</td><td>右角度</td><td>设计未来的蓝图</td><td>16-9-37-40</td></tr>
+                <tr><td>张力交叉</td><td>左角度</td><td>在张力中找到突破和变革</td><td>48-21-39-38</td></tr>
+                <tr><td>轮回交叉</td><td>左角度</td><td>转化与重生，周而复始</td><td>19-33-25-46</td></tr>
+                <tr><td>面具交叉</td><td>左角度</td><td>揭示隐藏的真相</td><td>13-7-33-19</td></tr>
+                <tr><td>治疗交叉</td><td>左角度</td><td>通过体验不完整来疗愈集体</td><td>25-46-18-17</td></tr>
+              </table>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>如何阅读轮回交叉</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 解读轮回交叉的步骤</div>
+              <ul>
+                <li><strong>第1步：确定交叉类型</strong>——右角度（个人旅程）、左角度（集体服务）还是并列（独特角色）</li>
+                <li><strong>第2步：阅读人格太阳闸门</strong>——你意识中的核心表达主题</li>
+                <li><strong>第3步：阅读人格地球闸门</strong>——你如何平衡和扎根这个表达</li>
+                <li><strong>第4步：阅读设计太阳闸门</strong>——你身体无意识携带的目的主题</li>
+                <li><strong>第5步：阅读设计地球闸门</strong>——你身体层面的平衡根基</li>
+                <li><strong>第6步：整合</strong>——四个闸门如何共同讲述你的生命目的故事</li>
+              </ul>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 综合练习</span>
+              找到你的四个交叉闸门。用占星语言确定每个闸门大致落在哪个星座区域（参考Level 1第2课的对应表），然后用人类图语言理解每个闸门的核心含义。最后问自己：这四个主题在我的生命中是如何交织的？我能否在不同人生阶段看到它们的显现？
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>Ra Uru Hu 体系包含192个轮回交叉，分为右角度（个人旅程）、左角度（集体服务）和并列（独特角色）三大类。每个交叉有独特的名称和核心主题。解读轮回交叉需要依次阅读四个太阳/地球闸门，然后将它们整合成一个生命目的叙事。将占星的星座对应和人类图的闸门含义结合起来，可以对生命目的形成更立体的理解。</p>
+      </div>
+    </div>
+    <div id="lesson-11" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 4 · 第1课</div>
+        <h2>过境分析：当天空激活你的身体图</h2>
+        <div class="lesson-subtitle">Transit Analysis — When the Sky Activates Your BodyGraph</div>
+        <div class="lesson-quote">你的身体图是固定的，但天空一直在动。当行星经过你的闸门时，就像有人走进了你的房间——有些是客人，有些是老师，有些会搅动你下面的水。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>什么是人类图过境？</div>
+      <p>在人类图中，<strong>过境（Transit）</strong>指的是当前天空中行星的位置对你的身体图产生的临时激活。当一颗行星经过你的开放中心中的某个闸门时，它会<strong>临时"定义"那个闸门</strong>——给你带来短暂的、不属于你的能量体验。</p>
+            <p>这与占星中的行运（Transit）概念高度相似——但人类图过境更关注<strong>能量层面的临时定义/条件化</strong>，而非事件预测。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🌍</span>过境分析的三层意义</div>
+              <p style="font-size:13.5px;line-height:1.8;">
+              <strong>1. 天空的"天气"</strong>——就像天气预报，过境告诉你今天宇宙在"散发什么能量"。每个路过你开放中心的行星都是临时的条件化来源。<br>
+              <strong>2. 学习的窗口</strong>——当一个行星经过你开放中心的闸门时，你可以短暂体验"有定义的人是如何运作这个闸门的"。这是学习的机会。<br>
+              <strong>3. 觉察的试金石</strong>——过境让你有机会练习"这是天空的能量，不是我的能量"的区分力。<br>
+              </p>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>关键过境事件</div>
+      <div class="content-table">
+              <table>
+                <tr><th>过境事件</th><th>占星对应</th><th>人类图中的影响</th></tr>
+                <tr><td>太阳回归 Solar Return</td><td>太阳回归（生日）</td><td>人格太阳闸门被重新激活——年度主题重置</td></tr>
+                <tr><td>土星回归 Saturn Return</td><td>约29岁土星回归</td><td>土星闸门被过境定义——重大的成熟考验</td></tr>
+                <tr><td>天王星对冲 Uranus Opposition</td><td>约42岁天王星对冲</td><td>中年转化——对生命方向的深层重审</td></tr>
+                <tr><td>凯龙回归 Chiron Return</td><td>约50岁凯龙回归</td><td>深层疗愈——接受"受伤的疗愈者"身份</td></tr>
+                <tr><td>节点回归 Nodal Return</td><td>约38-43岁</td><td>环境/方向主题的重置——人生篇章的转换</td></tr>
+                <tr><td>月亮过境 Daily Moon</td><td>每日月亮行运</td><td>每天临时激活不同闸门——情绪和驱动力的波动</td></tr>
+                <tr><td>水星逆行 Mercury Rx</td><td>每年3-4次水逆</td><td>水星闸门的能量向内翻转——沟通和反思期</td></tr>
+              </table>
+            </div>
+      <div class="section-title"><span class="section-icon">⟳</span>过境分析的实操方法</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 过境解读步骤</div>
+              <ul>
+                <li><strong>1. 获取当前行星位置</strong>——使用天文计算或在线工具获取当前行星的黄道度数</li>
+                <li><strong>2. 转换为闸门/爻线</strong>——将度数映射到64闸门系统</li>
+                <li><strong>3. 对比你的身体图</strong>——标记哪些过境行星落在你的定义中心（强化），哪些落在开放中心（条件化）</li>
+                <li><strong>4. 优先关注慢速行星</strong>——冥王星在一个闸门停留数月，土星停留数周，太阳停留约6天。慢速行星的过境影响更深</li>
+                <li><strong>5. 关注通道的临时定义</strong>——当过境行星与你的固定闸门形成通道时，能量会尤其强烈</li>
+                <li><strong>6. 觉察而非反应</strong>——过境的目的是觉察，不是"应对"。知道今天的天空在激活什么，就能更好地理解自己的能量波动</li>
+              </ul>
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 每日练习</span>
+              每天早晨查看当天的行星过境。记录今天哪颗过境行星在你的开放中心的某个闸门上。一天结束后回顾：你有没有"穿上"过境的能量？你在什么时候意识到"这不是我的能量"？
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>过境分析是人类图版的"行运占星"——当天空的行星经过你身体图的闸门时，会产生临时的能量激活。关键过境事件（土星回归、天王星对冲、节点回归等）与占星的生命周期高度对应。过境分析的核心是觉察：区分"天空的能量"和"我的能量"，把每次过境当作学习和觉察的窗口，而非被其定义。</p>
+      </div>
+    </div>
+    <div id="lesson-12" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 4 · 第2课</div>
+        <h2>合图解读：两个人的星空对话</h2>
+        <div class="lesson-subtitle">Composite Reading — Two People's Celestial Dialogue</div>
+        <div class="lesson-quote">当两个人的身体图放在一起，有些通道突然被连接，有些中心突然被定义。这不是随机发生的——天空早就把这两张图叠在一起看过。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>人类图的合图原理</div>
+      <p>在人类图中，当两个人的身体图叠加在一起时，会产生<strong>新的临时定义</strong>——一方的闸门与另一方的闸门可能形成新的通道，连接原本开放的中心。这就是为什么有些人在某些关系中感到"能量充沛"，在另一些关系中感到"能量耗竭"。</p>
+            <p>从占星视角看，这类似于<strong>合盘（Synastry）</strong>——两个人的行星之间形成的相位关系。</p>
+            <div class="content-table">
+              <table>
+                <tr><th>维度</th><th>占星合盘 Synastry</th><th>人类图合图 Composite</th></tr>
+                <tr><td>分析对象</td><td>行星之间的相位（合、冲、刑等）</td><td>闸门与闸门之间的通道形成</td></tr>
+                <tr><td>核心视角</td><td>"你们之间发生了什么化学反应？"</td><td>"你们的能量中心如何互相影响？"</td></tr>
+                <tr><td>优势</td><td>描述关系动力和心理层面</td><td>描述能量流动和条件化模式</td></tr>
+                <tr><td>互补</td><td>占星给关系"故事"</td><td>人类图给关系"机制"</td></tr>
+              </table>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>合图的关键观察点</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 合图解读的四个层次</div>
+              <ul>
+                <li><strong>层次1：新定义的通道</strong>——两人各自携带的闸门在合图中形成通道。这是最强烈的连接——"你有的正是我缺的"</li>
+                <li><strong>层次2：开放中心的填补</strong>——一方的定义中心填补了另一方的开放中心。这会产生强烈的吸引力，但也容易产生条件化——"和你在一起我感觉完整"</li>
+                <li><strong>层次3：权威的影响</strong>——两人的权威类型是否兼容？情绪权威 + 骶骨权威的组合需要特别注意等待和节奏</li>
+                <li><strong>层次4：类型策略的互动</strong>——发起者+投射者的关系需要前者主动告知，后者等待邀请。不遵循策略的关系容易产生能量冲突</li>
+              </ul>
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>双系统解读的优势</div>
+      <p>当你同时使用占星和人类图来解读关系时，你获得了两层互补的视角：</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 双系统关系解读</span>
+              占星告诉你：为什么你们有"化学反应"（相位）和什么"故事"在演绎（宫位）。<br>
+              人类图告诉你：为什么你和ta在一起时能量充沛/耗竭（通道定义），以及你们如何做出共同决定（权威类型）。<br><br>
+              <strong>案例</strong>：占星看到两人的金星对冲——在关系中有强烈的吸引力但也容易产生价值观冲突。人类图看到ta的设计太阳闸门正好在你的开放G中心——ta的自我感填补了你的开放G中心，让你"在关系中找到方向感"。两种解读完全互补，互相印证。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>人类图的合图解读类似于占星的合盘分析——通过两人的身体图叠加来理解能量互动。核心观察点包括新定义的通道、开放中心的填补、权威类型的兼容性。占星+人类图双系统解读为关系提供了两套互补的视角：占星给"化学反应和故事"，人类图给"能量机制和决策方式"。</p>
+      </div>
+    </div>
+    <div id="lesson-13" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 4 · 第3课</div>
+        <h2>生时校准：用行星精确锚定出生时刻</h2>
+        <div class="lesson-subtitle">Birth Time Rectification — Pinpointing with Planets</div>
+        <div class="lesson-quote">如果你的出生时间不准确——不论是记不清几点、还是只知道日期——行星的位置可以帮你'倒推'出正确的时刻。这是占星和人类图共同的精确科学。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>为什么出生时间如此重要？</div>
+      <p>在Level 1第2课我们已看到：月亮约2小时跨1条爻线，水星每天约1-2°，太阳约6天跨1个闸门。如果出生时间只有"上午"而没有精确到分钟，以下激活可能不准确：<strong>月亮闸门、水星闸门、上升点在占星中的度数、以及人格太阳的爻线</strong>（如果出生在闸门边界附近）。</p>
+            <p>生时校准的目的：通过<strong>已知的生命事件</strong>（人生重大转折、性格特征等）来反向验证和精确出生时间。</p>
+      <div class="section-title"><span class="section-icon">◈</span>双系统校准法</div>
+      <div class="step-grid">
+              <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-title">收集事件</div>
+                <div class="step-desc">列出5-10个确定日期的重要人生事件（搬家、换工作、结婚、重大转变等）</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-title">占星验证</div>
+                <div class="step-desc">用事件日期倒推行运、太阳弧、次限等占星指标——检查哪种出生时间能让事件与关键行星相位对得上</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-title">人类图验证</div>
+                <div class="step-desc">用候选出生时间生成身体图——检查类型、权威、Profile是否符合个人性格特征？</div>
+              </div>
+              <div class="step-card">
+                <div class="step-num">4</div>
+                <div class="step-title">交叉比对</div>
+                <div class="step-desc">占星验证结果与人类图验证结果是否一致？双系统一致的时间窗口最有可能是准确的出生时间</div>
+              </div>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>关键校验点</div>
+      <div class="content-table">
+              <table>
+                <tr><th>校验指标</th><th>占星视角</th><th>人类图视角</th></tr>
+                <tr><td>上升点</td><td>上升星座和第一宫行星——外貌、气场</td><td>不直接使用上升点，但影响闸门映射</td></tr>
+                <tr><td>月亮位置</td><td>月亮落座——情感本质和母性模式</td><td>月亮闸门——驱动力和关系模式</td></tr>
+                <tr><td>水星位置</td><td>水星落座——思维和沟通风格</td><td>水星闸门——表达和教导的内容</td></tr>
+                <tr><td>类型+策略</td><td>无直接对应</td><td>类型和策略是否与个人核心模式一致？</td></tr>
+                <tr><td>轮回交叉</td><td>无直接对应</td><td>四个交叉闸门是否与人生主线吻合？</td></tr>
+              </table>
+            </div>
+            <div class="callout tip">
+              <span class="callout-label">✓ 双系统校准的优势</span>
+              占星的行运和向运提供了大量可验证的"命中点"，人类图的类型/权威/策略提供了稳定的"性格锚"。两者结合校验，比单一系统校准更可靠。特别是在出生时间有争议的情况下，两套独立的验证体系给出的一致性结果极具说服力。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>生时校准是占星和人类图共同的精确科学。通过已知的重要生命事件，用占星的行运/太阳弧分析和人类图的类型/权威/Profile验证来反向确定出生时间。双系统交叉验证比单一系统更可靠——两套独立的天文学框架在同一时间窗口上给出的一致性结果，是最有力的证据。</p>
+      </div>
+    </div>
+    <div id="lesson-14" class="lesson-section">
+<div class="lesson-header">
+        <div class="lesson-badge">Level 4 · 第4课</div>
+        <h2>从占星师到人类图分析师：双系统视角</h2>
+        <div class="lesson-subtitle">Dual-System Practitioner — Astrologer & HD Analyst</div>
+        <div class="lesson-quote">一个工具让你看见天空，一个工具让你看见身体。当你同时拥有这两个视角，你不只是'更会解读'——你开始在解读别人的同时，也校准自己的能量。</div>
+      </div>
+      <div class="section-title"><span class="section-icon">✦</span>双系统解读的整合框架</div>
+      <p>作为一名占星人类图分析师，你不需要在两种语言之间"选一个"。相反，你需要发展出<strong>一套整合的解读框架</strong>，让两个系统在不同的层面发挥各自的优势。</p>
+            <div class="info-card">
+              <div class="card-title"><span class="card-icon">🌟</span>推荐的解读层次</div>
+              <p style="font-size:13.5px;line-height:2;">
+              <strong>第一层：结构认同</strong>——类型、策略、权威——"你是如何与能量对齐的？"<br>
+              <strong>第二层：太阳核心</strong>——太阳闸门 + 太阳落座 = "你的光在什么频率上？"<br>
+              <strong>第三层：轮回交叉</strong>——生命目的主题——"你此生来做什么？"<br>
+              <strong>第四层：行星层次</strong>——月亮驱动力、水星表达、金星价值、火星成长——"你的能量细节"<br>
+              <strong>第五层：开放中心</strong>——条件化和智慧领域——"你在哪里学习？"<br>
+              <strong>第六层：时间层</strong>——占星行运 + 人类图过境——"现在天空在激活你的什么？"<br>
+              <strong>第七层：关系层</strong>——占星合盘 + 人类图合图——"你和ta的能量如何互动？"
+              </p>
+            </div>
+      <div class="section-title"><span class="section-icon">◈</span>占星师转型的关键跨越</div>
+      <div class="key-points">
+              <div class="kp-title">◆ 五个心态转换</div>
+              <ul>
+                <li><strong>从"预测"到"赋能"</strong>——人类图不预测事件，而是帮助你理解能量定律。转型意味着你从"告诉你什么会发生"转向"告诉你如何与自己的能量对齐"</li>
+                <li><strong>从"星盘解读"到"策略实验"</strong>——人类图的核心不是解读，而是实验。你的客户需要的是"试试用你的策略做决定"，而非"我知道你是什么样的人了"</li>
+                <li><strong>从"12宫"到"9个能量中心"</strong>——学会用能量中心的语言思考：定义=固定的给予，开放=灵活的学习</li>
+                <li><strong>从"相位"到"通道"</strong>——行星间的互动从"角度关系"变为"能量的高速公路"</li>
+                <li><strong>从"单一维度"到"双重时间"</strong>——接受并理解人格面+设计面两张图叠加的逻辑</li>
+              </ul>
+            </div>
+      <div class="section-title"><span class="section-icon">✦</span>构建你的解读方法论</div>
+      <p>最终，你需要发展出你自己独特的解读风格。以下是一些方向参考：</p>
+            <div class="callout insight">
+              <span class="callout-label">💡 风格A：占星主导型</span>
+              以占星为解读骨架，用人类图补充能量层面的信息。适合已经有深厚占星背景的从业者。先给出传统占星解读，再引入人类图的类型/策略/权威，最后用双系统交叉验证关键主题。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 风格B：人类图主导型</span>
+              以人类图为解读骨架，用占星补充心理深度和时机信息。先从类型/策略/权威开始，再引入太阳闸门和轮回交叉，最后用占星的太阳落座和月亮位置来丰富人格描述。
+            </div>
+            <div class="callout insight">
+              <span class="callout-label">💡 风格C：平等整合型</span>
+              两个系统平等对话。每个层面都同时提供占星和人类图视角。适合有概念整合能力的从业者。例如："你的太阳在狮子座（占星），对应的太阳闸门是第7闸门（人类图）。两者一起描述了你作为天然领导者的核心表达——狮子座给你气场和魅力，第7闸门给你'带领队伍'的具体方向。"
+            </div>
+            <div class="callout practice">
+              <span class="callout-label">🧘 最终练习</span>
+              为自己做一次完整的双系统解读。写下来，读给自己听。哪些部分让你感觉"对了"？哪些部分让你感觉"这就是我但我说不清楚"？这份自我解读就是你未来为客户服务的原型——不是模板，而是你亲身体验过的、真实的交叉验证过程。
+            </div>
+      <div class="lesson-summary">
+        <div class="summary-title">📝 本课小结</div>
+        <p>从占星师到占星人类图分析师，核心是发展一套整合的解读框架——让两个系统在不同层面发挥各自优势。七个解读层次从结构认同到关系分析，逐层深入。三种解读风格（占星主导/人类图主导/平等整合）给出了不同的实践路径。真正的整合不是背诵对应关系，而是通过亲身体验来验证两个系统在你自己身上的共鸣。</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    占星人类图整合课程体系 · 基于 Ra Uru Hu 原始人类设计系统教学框架<br>
+    融合西方占星学与人类图能量蓝图 · 课件仅供学习参考<br>
+    <span style="margin-top:8px;display:inline-block;">Powered By Kan Man Tang</span>
+  </div>
+</div>
+
+</div>
+
+<style>
+.lesson-section { display: none; }
+.lesson-section:target { display: block; }
+#cover { display: block; }
+#content:has(.lesson-section:target) #cover { display: none; }
+.level-nav a.lesson-item {
+  display: block;
+  text-decoration: none;
+  color: var(--text-sidebar);
+}
+.level-nav a.lesson-item:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--text-sidebar-active);
+}
+.level-nav a.lesson-item.active {
+  background: rgba(196, 149, 106, 0.18);
+  color: var(--gold);
+  border-left-color: var(--gold);
+  font-weight: bold;
+}
+.nav-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: rgba(196, 149, 106, 0.12);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+.nav-btn:hover::after {
+  width: 300px; height: 300px;
+}
+.nav-btn:hover:not([disabled]):not(.disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(196,149,106,0.25);
+}
+.nav-btn[disabled], .nav-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: none;
+}
+.nav-btn[disabled]::after, .nav-btn.disabled::after {
+  display: none;
+}
+html { scroll-behavior: smooth; }
+
+/* ========== 课程导航栏 ========== */
+.lesson-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 14px 0;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.lesson-nav-bar .lnb-center {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-direction: row;
+}
+
+.lnb-badge {
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.lnb-badge::after {
+  content: ' ▸ ';
+  color: var(--text-light);
+  font-weight: normal;
+  font-size: 11px;
+}
+
+.lnb-progress {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.lnb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 16px;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.lnb-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(196, 149, 106, 0.2);
+}
+
+.lnb-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(196,149,106,0.3); border-radius: 2px; }
+
+/* ========== 固定顶部导航条 ========== */
+.sticky-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: rgba(255, 250, 245, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e0d5c5;
+  box-shadow: 0 1px 8px rgba(45, 33, 24, 0.06);
+  margin-bottom: 28px;
+  transition: box-shadow 0.3s;
+}
+.sticky-topbar.hidden { display: none; }
+
+.topbar-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.topbar-breadcrumb .topbar-sep {
+  color: #c4a46a;
+  font-size: 11px;
+}
+
+#topbarLevel {
+  color: #c4956a;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#topbarProgress {
+  color: #2d2118;
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 14px;
+  font-family: -apple-system, 'Microsoft YaHei', sans-serif;
+  font-size: 12.5px;
+  color: #c4956a;
+  background: transparent;
+  border: 1px solid #d4c4a8;
+  border-radius: 16px;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.topbar-btn:hover {
+  background: #c4956a;
+  border-color: #c4956a;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(196, 149, 106, 0.2);
+}
+
+.topbar-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+</style>
+
+<script>
+(function(){
+var L=['cover','lesson-0','lesson-1','lesson-2','lesson-3','lesson-4','lesson-5','lesson-6','lesson-7','lesson-8','lesson-9','lesson-10','lesson-11','lesson-12','lesson-13','lesson-14'];
+function gi(){var h=window.location.hash.slice(1)||'cover';var i=L.indexOf(h);return i>=0?i:0;}
+function up(){
+var idx=gi();
+var items=document.querySelectorAll('.level-nav .lesson-item');
+for(var i=0;i<items.length;i++)items[i].classList.remove('active');
+if(idx>0){
+var link=document.querySelector('.level-nav a[href="#'+L[idx]+'"]');
+if(link){
+link.classList.add('active');
+var sec=link.closest('.level-section');
+if(sec){
+var t=sec.querySelector('.level-title');
+if(t)t.classList.remove('collapsed');
+var ll=sec.querySelector('.level-lessons');
+if(ll)ll.style.maxHeight='2000px';
+}
+setTimeout(function(){link.scrollIntoView({block:'nearest',behavior:'smooth'});},150);
+}
+}
+// 更新进度条
+var pt=document.getElementById('progressText');
+var pf=document.getElementById('progressFill');
+if(idx===0){pt.textContent='15 节课';pf.style.width='0%';}
+else{pt.textContent=idx+' / 15';pf.style.width=(idx/15*100)+'%';}
+// 更新顶部导航条
+updateTopbar(idx);
+}
+
+function updateTopbar(idx){
+var tb=document.getElementById('stickyTopbar');
+if(!tb)return;
+if(idx===0){tb.classList.add('hidden');return;}
+tb.classList.remove('hidden');
+// 课程编号: lesson-0 对应全局第1课, lesson-14 对应第15课
+var globalNum=idx; // idx is the position in L array, L[0]='cover', L[1]='lesson-0', etc.
+// 计算 Level
+var ln=globalNum-1; // 0-indexed lesson number (0..14)
+var levelNum, levelLabel;
+if(ln<4){levelNum=1;levelLabel='Level 1';}
+else if(ln<8){levelNum=2;levelLabel='Level 2';}
+else if(ln<11){levelNum=3;levelLabel='Level 3';}
+else{levelNum=4;levelLabel='Level 4';}
+document.getElementById('topbarLevel').textContent=levelLabel;
+document.getElementById('topbarProgress').textContent='第 '+globalNum+'/15 课';
+// 更新按钮
+var prevBtn=document.getElementById('topbarPrev');
+var nextBtn=document.getElementById('topbarNext');
+if(globalNum<=1){
+prevBtn.href='#cover';prevBtn.textContent='← 返回首页';prevBtn.classList.remove('disabled');
+}else{
+prevBtn.href='#'+L[globalNum-1];prevBtn.textContent='← 上一课';prevBtn.classList.remove('disabled');
+}
+if(globalNum>=15){
+nextBtn.href='#'+L[15];nextBtn.textContent='下一课 →';nextBtn.classList.add('disabled');
+}else{
+nextBtn.href='#'+L[globalNum+1];nextBtn.textContent='下一课 →';nextBtn.classList.remove('disabled');
+}
+}
+var ts=document.querySelectorAll('.level-title');
+for(var i=0;i<ts.length;i++){
+ts[i].addEventListener('click',function(){
+this.classList.toggle('collapsed');
+var ll=this.nextElementSibling;
+if(ll&&ll.classList.contains('level-lessons')){
+ll.style.maxHeight=this.classList.contains('collapsed')?'0px':'2000px';
+}
+});
+}
+document.addEventListener('keydown',function(e){
+if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable)return;
+if(e.key==='ArrowLeft'){e.preventDefault();var idx=gi();if(idx>0)window.location.hash=L[idx-1];}
+if(e.key==='ArrowRight'){e.preventDefault();var idx=gi();if(idx<L.length-1)window.location.hash=L[idx+1];}
+});
+up();
+updateTopbar(gi());
+window.addEventListener('hashchange',up);
+document.querySelectorAll('.level-nav .lesson-item').forEach(function(item){
+item.addEventListener('click',function(){
+if(window.innerWidth<=900)document.getElementById('sidebar').classList.remove('open');
+});
+});
+var mb=document.querySelector('.menu-btn');
+if(mb){mb.addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>
