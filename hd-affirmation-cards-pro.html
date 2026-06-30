@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人类图肯定语句 · 每日抽卡</title>
+  <style>
+    /* ========== 全局变量 ========== */
+    :root {
+      --bg-dark: #2D2118;
+      --bg-card: #3A2D20;
+      --bg-card-light: #4A3828;
+      --gold: #C4956A;
+      --gold-light: #D4A57E;
+      --gold-dark: #A67C52;
+      --text-primary: #F5E6D3;
+      --text-secondary: #C4A882;
+      --text-muted: #8A7560;
+      --border: #5A4530;
+      --shadow: rgba(0,0,0,0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========== 背景装饰 ========== */
+    .bg-decoration {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(circle at 20% 15%, rgba(196,149,106,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 85%, rgba(196,149,106,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(196,149,106,0.03) 0%, transparent 70%);
+    }
+
+    /* ========== 容器 ========== */
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ========== 头部 ========== */
+    header {
+      text-align: center;
+      padding: 20px 0 28px;
+    }
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    header .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+    header .version {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      opacity: 0.6;
+    }
+
+    /* ========== 维度选择栏 ========== */
+    .dim-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .dim-tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      background: transparent;
+      white-space: nowrap;
+    }
+    .dim-tab.active {
+      background: var(--gold-dark);
+      color: #fff;
+      font-weight: 600;
+    }
+    .dim-tab:not(.active):hover {
+      color: var(--gold-light);
+      background: rgba(196,149,106,0.1);
+    }
+
+    /* ========== 选择区 ========== */
+    .selector-area {
+      margin-bottom: 20px;
+    }
+    .selector-area label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+    }
+    .option-btn {
+      padding: 12px 8px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+    .option-btn .opt-icon {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+    .option-btn .opt-name {
+      font-size: 0.75rem;
+    }
+    .option-btn.active {
+      border-color: var(--gold);
+      background: rgba(196,149,106,0.15);
+      color: var(--gold-light);
+    }
+    .option-btn:hover:not(.active) {
+      border-color: var(--gold-dark);
+      color: var(--gold-light);
+    }
+
+    /* 中心状态切换 */
+    .center-state-toggle {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .center-state-toggle button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .center-state-toggle button.active {
+      border-color: var(--gold);
+      background: rgba(196,149,106,0.15);
+      color: var(--gold-light);
+    }
+
+    /* 闸门网格 */
+    .gate-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+    }
+    .gate-btn {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .gate-btn.active {
+      background: var(--gold-dark);
+      color: #fff;
+      border-color: var(--gold);
+    }
+    .gate-btn:hover:not(.active) {
+      border-color: var(--gold-dark);
+      color: var(--gold-light);
+    }
+
+    /* ========== 抽卡按钮 ========== */
+    .draw-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(196,149,106,0.3);
+    }
+    .draw-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(196,149,106,0.4);
+    }
+    .draw-btn:active {
+      transform: translateY(0);
+    }
+    .draw-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ========== 卡片展示区 ========== */
+    .card-area {
+      perspective: 1000px;
+      margin-bottom: 24px;
+    }
+    .card-placeholder {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .card-placeholder .ph-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    .affirmation-card {
+      background: linear-gradient(145deg, var(--bg-card-light), var(--bg-card));
+      border: 1.5px solid var(--gold-dark);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 8px 32px var(--shadow);
+      animation: cardReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes cardReveal {
+      0% { opacity: 0; transform: rotateY(90deg) scale(0.8); }
+      100% { opacity: 1; transform: rotateY(0) scale(1); }
+    }
+
+    .card-corner {
+      position: absolute;
+      width: 24px; height: 24px;
+      border: 2px solid var(--gold);
+      opacity: 0.4;
+    }
+    .card-corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+    .card-corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
+    .card-corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
+    .card-corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .card-title {
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .card-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold-dark);
+      margin: 0 auto 20px;
+      opacity: 0.5;
+    }
+    .card-affirmation {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      font-weight: 500;
+      letter-spacing: 1px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+
+    /* ========== 卡片操作按钮 ========== */
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .action-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(196,149,106,0.1);
+    }
+    .action-btn.primary {
+      background: rgba(196,149,106,0.15);
+      border-color: var(--gold-dark);
+      color: var(--gold-light);
+    }
+
+    /* ========== 历史记录 ========== */
+    .history-section {
+      margin-top: 28px;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .history-header h3 {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+    }
+    .history-header button {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .history-header button:hover { color: var(--gold); }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .history-item .h-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .history-item .h-content { flex: 1; }
+    .history-item .h-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .history-item .h-text {
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .history-empty {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ========== 收藏列表 ========== */
+    .fav-section { margin-top: 20px; }
+    .fav-section h3 {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    /* ========== Toast ========== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card-light);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ========== 底部 ========== */
+    footer {
+      text-align: center;
+      padding: 24px 0 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* ========== 响应式 ========== */
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.4rem; }
+      .gate-grid { grid-template-columns: repeat(6, 1fr); }
+      .option-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+      .card-affirmation { font-size: 1.05rem; }
+    }
+
+    /* 打印样式 */
+    @media print {
+      body { background: #fff; color: #000; }
+      .dim-tabs, .selector-area, .draw-btn, .card-actions, .history-section, .fav-section, .bg-decoration { display: none !important; }
+      .affirmation-card { border: 2px solid #C4956A; box-shadow: none; }
+      .card-affirmation { color: #2D2118; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-decoration"></div>
+
+  <div class="container">
+    <!-- 头部 -->
+    <header>
+      <h1>🃏 人类图肯定语句</h1>
+      <div class="subtitle">每 日 抽 卡 · 回 到 自 己</div>
+      <div class="version">V1.0 · 604条肯定语句</div>
+    </header>
+
+    <!-- 维度选择 -->
+    <div class="dim-tabs">
+      <button class="dim-tab active" data-dim="type">类型</button>
+      <button class="dim-tab" data-dim="authority">权威</button>
+      <button class="dim-tab" data-dim="center">中心</button>
+      <button class="dim-tab" data-dim="gate">闸门</button>
+    </div>
+
+    <!-- 选择区 -->
+    <div class="selector-area" id="selectorArea">
+      <!-- 动态生成 -->
+    </div>
+
+    <!-- 抽卡按钮 -->
+    <button class="draw-btn" id="drawBtn" onclick="drawCard()">✨ 抽 取 今 日 卡 牌 ✨</button>
+
+    <!-- 卡片展示 -->
+    <div class="card-area" id="cardArea">
+      <div class="card-placeholder">
+        <div class="ph-icon">🃏</div>
+        <div>选择维度后点击上方按钮抽取卡牌</div>
+      </div>
+    </div>
+
+    <!-- 收藏列表 -->
+    <div class="fav-section" id="favSection" style="display:none;">
+      <h3>⭐ 我的收藏</h3>
+      <div class="history-list" id="favList"></div>
+    </div>
+
+    <!-- 历史记录 -->
+    <div class="history-section">
+      <div class="history-header">
+        <h3>📋 抽卡记录</h3>
+        <button onclick="clearHistory()">清空</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">暂无记录，开始抽卡吧</div>
+      </div>
+    </div>
+
+    <footer>
+      人类图肯定语句抽卡 · 基于人类图四大维度<br>
+      类型 · 权威 · 中心 · 闸门<br>
+      Powered By Kan Man Tang
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== 数据 ========== -->
+  <script>
+    // ====== 数据将被注入此处 ======
+    // 维度一：类型肯定语句（5种类型 × 12条 = 60条）
+const typeAffirmations = {
+  generator: {
+    name: "生产者",
+    nameEn: "Generator",
+    icon: "🔋",
+    color: "#C4956A",
+    affirmations: [
+      "我信任身体荐骨的回应，它是我最可靠的指南针。",
+      "每一个令我怦然心动的「是」，都在带我走向正确的方向。",
+      "我不需要追逐，只需等待生命来触碰我，然后回应。",
+      "我的能量是丰盛的，当我做热爱的事，满足感自然涌现。",
+      "我允许自己在不再 resonates 的事物前说「不」，这是对自己的尊重。",
+      "疲惫不是我的敌人，它提醒我回到真正点燃我的事物上。",
+      "我不急于发起，因为我知道回应中蕴含着更大的力量。",
+      "每一天，我都在学习更深的聆听——聆听身体的智慧。",
+      "满足感是我的衡量尺，不是成就，不是速度，而是内心的充实。",
+      "我的生命节奏由荐骨掌舵，我放手让它引导我。",
+      "当我回应了正确的邀请，整个宇宙都会为我开路。",
+      "我感恩这具充满生命力的身体，它是我的天赋所在。"
+    ]
+  },
+  manifestingGenerator: {
+    name: "显示生产者",
+    nameEn: "Manifesting Generator",
+    icon: "⚡",
+    color: "#E8A87C",
+    affirmations: [
+      "我天生高效，跳过步骤是我的天赋，不是我的缺陷。",
+      "我允许自己同时热爱多件事，多元正是我的力量所在。",
+      "我的能量像闪电一样迅猛，我信任这种速度。",
+      "回应，然后行动——这是我的自然节奏。",
+      "当方向需要调整，我毫不犹豫地转向，灵活性是我的超能力。",
+      "我不需要按照别人的步骤走，我走的是自己的捷径。",
+      "荐骨的回应是我的起点，行动力是我的引擎。",
+      "我可以在做的过程中修正，不必等到完美才出发。",
+      "我的多任务能力不是分心，而是生命力的多元绽放。",
+      "当我告知他人我的行动，阻力化为助力。",
+      "我信任身体的节奏：快的时候全速前进，慢的时候坦然休息。",
+      "我是行动与回应的结合体，这让我成为不可阻挡的力量。"
+    ]
+  },
+  projector: {
+    name: "投射者",
+    nameEn: "Projector",
+    icon: "🎯",
+    color: "#A67C52",
+    affirmations: [
+      "我的洞见是一份礼物，它值得被正确的人看见。",
+      "等待邀请不是被动，而是对自我价值的深刻尊重。",
+      "我天生擅长看见系统的运作方式，这份能力无需强加于人。",
+      "当我被真正邀请，我的智慧才能完整地流淌出来。",
+      "我不需要证明自己有用，我的存在本身就有价值。",
+      "休息是我的生产力，疲惫的投射者无法照亮任何人。",
+      "我学习系统的目的，是为了更好地引导，而非操控。",
+      "成功不是我的定义，被认可才是我的频率校准信号。",
+      "我信任邀请的时机，早一步是干预，晚一步是遗憾，恰好是命运。",
+      "我的能量不属于持续的输出，而属于精准的点亮。",
+      "我允许自己停下来说「我需要休息」，这是投射者的智慧。",
+      "我是系统的设计者、引导者，不是流水线上的齿轮。"
+    ]
+  },
+  manifestor: {
+    name: "显示者",
+    nameEn: "Manifestor",
+    icon: "🔥",
+    color: "#D4756B",
+    affirmations: [
+      "我天生拥有发起的力量，这是我的权利，也是我的礼物。",
+      "当我告知，世界为我让路；当我沉默，世界为我设障。",
+      "我不需要等待允许，我的能量就是行动的许可。",
+      "我的影响力来自行动，不是请求。",
+      "我允许自己先行动，再解释——这就是我的方式。",
+      "告知不是请示，而是给予周围人准备的空间，这是我的智慧。",
+      "我的内心有一团火，它驱动我去创造、去启动、去改变。",
+      "和平是我的内在主题，当我告知，冲突自然减少。",
+      "我不必为别人的反应负责，我只需为自己的行动负责。",
+      "我是打破静止的那阵风，世界因我的行动而转动。",
+      "我信任自己的冲动，那是生命通过我在发声。",
+      "自由是我的燃料，当我被束缚，能量就会枯竭。"
+    ]
+  },
+  reflector: {
+    name: "反映者",
+    nameEn: "Reflector",
+    icon: "🌙",
+    color: "#9B8C7A",
+    affirmations: [
+      "我是月亮的镜子，28天的周期是我的自然节律。",
+      "我允许自己慢慢来，重大决定值得一个完整的月亮周期。",
+      "我的敏感不是脆弱，而是品尝生命味道的能力。",
+      "环境定义我的体验，所以我选择让自己感到舒适的地方。",
+      "我不急于定义自己，我的身份在流动中展现。",
+      "今天感受为真的事，明天可能不同——这完全正常。",
+      "我是社区的温度计，我反映着周围的能量品质。",
+      "我允许自己成为空白的画布，这不是缺失，是可能性。",
+      "与不同的人交谈，让我的真知从对话中浮现。",
+      "我信任月亮的智慧，她告诉我何时该等待，何时该行动。",
+      "惊喜是我的滋养，当我放下期待，生命给我最好的礼物。",
+      "我不需要被填满，我的空旷本身就是一种圆满。"
+    ]
+  }
+};
+
+// 维度二：权威肯定语句（7种权威 × 10条 = 70条）
+const authorityAffirmations = {
+  emotional: {
+    name: "情绪权威",
+    nameEn: "Emotional Authority",
+    icon: "🌊",
+    affirmations: [
+      "我允许情绪的波浪完整地流过，不在波峰做决定，也不在波谷。",
+      "清晰来自等待，我信任时间会告诉我答案。",
+      "我的情绪不是障碍，它是我的决策气候表。",
+      "今天感觉对的，明天可能不同——我给决定足够的时间成熟。",
+      "我不再急于在情绪高涨时承诺，平静中的答案最真实。",
+      "等待不是浪费时间，而是让真相浮出水面的过程。",
+      "我的情绪波动是自然的潮汐，我学会在浪上冲浪。",
+      "当情绪平稳时，我知道那是做决定的最佳时刻。",
+      "我尊重自己的情绪周期，不让任何人催促我。",
+      "我信任经过时间检验的答案，它比一时的冲动更可靠。"
+    ]
+  },
+  sacral: {
+    name: "荐骨权威",
+    nameEn: "Sacral Authority",
+    icon: "🟤",
+    affirmations: [
+      "我的身体知道答案，在头脑思考之前，荐骨已经回应。",
+      "我信任那个来自腹部的声音——它简单、直接、从不出错。",
+      "「嗯哼」是，「嗯…」不是，我学会读懂身体的语言。",
+      "我不需要理由来支持我的选择，身体的回应就是理由。",
+      "当我的身体说「是」，整个存在都在支持我。",
+      "我放下头脑的分析，回到腹部的感觉。",
+      "荐骨的回应不需要逻辑，它需要的是被听见。",
+      "我的身体是诚实的，它不会欺骗我。",
+      "每一个来自荐骨的回应，都是生命在对我说「走这条路」。",
+      "我练习每天问自己简单的是/否问题，保持与身体的连接。"
+    ]
+  },
+  splenic: {
+    name: "脾脏权威",
+    nameEn: "Splenic Authority",
+    icon: "🛡️",
+    affirmations: [
+      "我的直觉在当下说话，轻柔、快速、只说一次——我学会聆听。",
+      "安全感的信号来自身体深处，我信任那个瞬间的知道。",
+      "直觉不会重复，所以我训练自己在第一刻就留意。",
+      "我的直觉像一只安静的鸟，只有静下来才能听见它的歌声。",
+      "恐惧有时是直觉的伪装，我学会分辨保护性的警觉和限制性的恐惧。",
+      "此刻就是我的指南针，我不需要翻找过去的记忆。",
+      "脾脏的智慧古老而深，它比我以为的知道得更多。",
+      "我不需要解释为什么知道，知道本身就够了。",
+      "当我感到不安，那是直觉在提醒我注意。",
+      "我感恩身体这层保护，它一直在无声地守护着我。"
+    ]
+  },
+  ego: {
+    name: "意志力权威",
+    nameEn: "Ego Authority",
+    icon: "❤️",
+    affirmations: [
+      "我的心知道我真正想要什么，我学会从这里出发做决定。",
+      "我不再为别人牺牲自己的渴望，我的意愿值得被尊重。",
+      "意志力说「我要」，我信任这股来自心底的力量。",
+      "我的承诺是神圣的，我只对自己真正想做的事说「是」。",
+      "诚实面对自己的欲望，这是意志力权威的起点。",
+      "我不需要说服自己应该想要什么，我只需承认我真的想要什么。",
+      "当我从心出发，整个世界都在支持我的意志。",
+      "我值得拥有我想要的，这个「值得」不需要证明。",
+      "我的承诺有重量，所以我不轻易许诺，一旦许诺就全力以赴。",
+      "心的声音可能很小，但它从不说谎。"
+    ]
+  },
+  selfProjected: {
+    name: "自我投射权威",
+    nameEn: "Self-Projected Authority",
+    icon: "🗣️",
+    affirmations: [
+      "真理藏在我的声音里，我通过说话听见自己的答案。",
+      "当我开口讲述，真知从我的喉咙自然流淌。",
+      "我找信任的人对话，不是为了建议，而是为了听见自己。",
+      "我的声音是通往内在真理的桥梁。",
+      "在表达之前，我不完全知道自己知道什么。",
+      "我学会在重要决定前，找一个人坐下来，让嘴巴说出心里的答案。",
+      "G中心的声音不会骗我，它只会说出我真正的方向。",
+      "我不是在找别人的认可，我是在找自己声音中的确定感。",
+      "当我听到自己说出答案，整个身体都会放松。",
+      "真理不在我的脑袋里，它在我的声音里。"
+    ]
+  },
+  mental: {
+    name: "心智权威",
+    nameEn: "Mental / Environmental Authority",
+    icon: "🧠",
+    affirmations: [
+      "我的答案不在头脑的内部，它在与正确环境的互动中浮现。",
+      "我需要一个安全的空间来思考，环境是我的决策盟友。",
+      "正确的人、正确的地方——我的答案在对话中成形。",
+      "我不急于在脑子里转圈，我把想法说出来，让真相呈现。",
+      "我的身体没有固定的内在权威，所以我格外珍视外在的镜子。",
+      "我选择让自己感到放松的环境，因为那是答案浮现的土壤。",
+      "心智的清晰来自外部的回响，不是内部的反复咀嚼。",
+      "我信任在与对的人交谈时，那个「啊，原来如此」的瞬间。",
+      "我不需要在独处时做重大决定，我需要声音和空间。",
+      "环境对了，答案就对了。"
+    ]
+  },
+  lunar: {
+    name: "月亮权威",
+    nameEn: "Lunar Authority",
+    icon: "🌕",
+    affirmations: [
+      "月亮是我的老师，28天是她教我的一个完整课程。",
+      "我让月亮走完一整圈，再做出重要的决定。",
+      "每一天我都在收集不同的视角，月亮会替我拼成完整的图。",
+      "我不急于定义真相，因为我的真相在月光下慢慢显影。",
+      "我和不同的人交谈，每一次对话都是月亮的一个相位。",
+      "我的答案不在内在的某个中心，它在月亮运行的轨迹里。",
+      "等待是我的策略，不是因为我慢，而是因为月亮需要时间。",
+      "我信任这个过程：困惑——收集——等待——清晰。",
+      "当月亮走完一圈，答案自然像满月一样圆满。",
+      "我是月亮的孩子，我的节奏与潮汐同频。"
+    ]
+  }
+};
+
+// 维度三：9大中心肯定语句（9中心 × 2态 × 5条 = 90条）
+const centerAffirmations = {
+  head: {
+    name: "头脑中心",
+    nameEn: "Head Center",
+    icon: "💭",
+    defined: [
+      "我的灵感是稳定的泉源，它持续地激发我思考生命的终极问题。",
+      "我信任自己内在的疑问，每个问题都通往更深的觉知。",
+      "我存在的意义感不依赖外在，它从我的头顶源源不断地涌出。",
+      "我是那个常常提出启发性问题的人，我的疑问照亮他人。",
+      "灵感的压力是我的天赋，我学会将它转化为创造的动力。"
+    ],
+    undefined: [
+      "我分辨哪些疑问真正属于我，哪些是吸收了别人的困惑。",
+      "我不需要解答所有问题，有些疑问本身就是智慧。",
+      "我觉察自己何时被他人的问题所压迫，然后温柔地放下。",
+      "灵感的来源多元而丰富，我像海绵一样吸收，也像筛子一样过滤。",
+      "我给头脑留出空白的时间，那是灵感真正降临的时刻。"
+    ]
+  },
+  ajna: {
+    name: "逻辑中心",
+    nameEn: "Ajna Center",
+    icon: "🧩",
+    defined: [
+      "我的思维方式是固定而可靠的，这是我贡献世界的独特视角。",
+      "我信任自己的概念化能力，把复杂转化为清晰是我的天赋。",
+      "我的观点不需要所有人都认同，它本身就是完整的。",
+      "研究、分析、结构化——这是我的自然领域。",
+      "我感恩拥有一颗能持续思考的大脑，它是我认识世界的工具。"
+    ],
+    undefined: [
+      "我灵活地切换不同的思维视角，这是我的优势。",
+      "我不需要固守一个观点，开放本身就是智慧。",
+      "我觉察何时在试图证明自己「聪明」，然后回到自然。",
+      "我能理解多种思维方式，这让我成为好的沟通桥梁。",
+      "我给大脑休息的时间，不思考也是完整的一部分。"
+    ]
+  },
+  throat: {
+    name: "喉咙中心",
+    nameEn: "Throat Center",
+    icon: "🗣️",
+    defined: [
+      "我的声音稳定而有力，我能持续地表达自己。",
+      "我信任自己说话和行动的能力，它是可靠的。",
+      "我的表达有自己独特的节奏，我不急于被听见。",
+      "我通过语言、声音、行动与世界沟通，这是我的天赋。",
+      "我的声音承载着使命，每一次表达都是一次贡献。"
+    ],
+    undefined: [
+      "我觉察何时在为了说话而说话，然后回到沉默。",
+      "我不需要通过表达来证明自己的存在。",
+      "正确的表达时机自然会出现，我学会等待。",
+      "我能吸收并模仿各种表达风格，这是我的灵活性。",
+      "沉默也是我的声音，它同样有力量。"
+    ]
+  },
+  g: {
+    name: "G中心",
+    nameEn: "G Center",
+    icon: "🧭",
+    defined: [
+      "我的身份和方向是稳定的，我知道自己是谁。",
+      "爱从我的内在自然涌出，我不需要从外在寻找。",
+      "我信任自己的人生方向，它像内置的罗盘。",
+      "我的存在本身就是一种爱的表达。",
+      "我在任何地方都能保持自我，因为方向在我之内。"
+    ],
+    undefined: [
+      "我允许身份在不同环境中流动，这是我的灵活性。",
+      "我在对的环境中自然找到正确的方向。",
+      "爱不需要从我内在涌出，我可以在各处发现爱。",
+      "我通过与人互动来认识自己，每面镜子都有价值。",
+      "身份不是固定的点，而是一条流动的河。"
+    ]
+  },
+  heart: {
+    name: "意志力中心",
+    nameEn: "Heart / Ego Center",
+    icon: "❤️",
+    defined: [
+      "我的意志力是稳定的，我知道自己要什么。",
+      "我值得拥有我渴望的一切，这份「值得」从心底涌出。",
+      "我的承诺有分量，我言出必行。",
+      "我信任自己的欲望，它是通向正确行动的路标。",
+      "我有勇气为自己争取，这是我的天赋。"
+    ],
+    undefined: [
+      "我不需要证明自己的价值，我本身就已经足够。",
+      "我觉察何时在试图通过意志来补偿，然后放下。",
+      "我不轻易承诺，因为我知道承诺的重量。",
+      "我不需要在比较中确认自己，我是完整的。",
+      "自我价值不来自成就，它来自存在本身。"
+    ]
+  },
+  splenic: {
+    name: "脾脏中心",
+    nameEn: "Splenic Center",
+    icon: "🛡️",
+    defined: [
+      "我的直觉是稳定的内置雷达，它时刻守护着我。",
+      "我信任那一刻的知道，它快速、安静、从不出错。",
+      "安全感从我的内在涌现，我不需要向外寻找。",
+      "我的生存本能灵敏而精准，我感恩这层保护。",
+      "直觉是我最古老的朋友，我学会越来越信任它。"
+    ],
+    undefined: [
+      "我学会辨认直觉的信号，即使它只出现一瞬间。",
+      "我觉察何时在忽略身体的警告，然后停下来聆听。",
+      "恐惧有时是直觉的提醒，我学会尊重它。",
+      "我可以在不同时刻接收不同类型的直觉信号。",
+      "我给身体创造安静的空间，让直觉得以被听见。"
+    ]
+  },
+  solarPlexus: {
+    name: "情绪中心",
+    nameEn: "Solar Plexus Center",
+    icon: "🌊",
+    defined: [
+      "我的情绪有自然的波浪，我学会在浪上冲浪。",
+      "我允许情绪完整地流过，不压抑，不放大。",
+      "清晰来自等待，我在波峰和波谷之间找到中点。",
+      "我的情绪深度是我的礼物，它让我能感受生命的全部。",
+      "我不再在情绪高涨时做重大决定，平静中的答案最真。"
+    ],
+    undefined: [
+      "我分辨哪些情绪真正属于我，哪些是我吸收的。",
+      "我不需要成为别人情绪的容器，我可以温柔地放下。",
+      "我觉察何时被他人的情绪所影响，然后回到自己。",
+      "我可以与各种情绪共振，这是我的敏感天赋。",
+      "在情绪激烈的场域中，我给自己留出退出的空间。"
+    ]
+  },
+  sacral: {
+    name: "荐骨中心",
+    nameEn: "Sacral Center",
+    icon: "🟤",
+    defined: [
+      "我的生命能源充沛，我信任荐骨的回应。",
+      "身体的「嗯哼」和「嗯…」是我最可靠的指南针。",
+      "我通过做热爱的事来点燃自己，满足感是我的标志。",
+      "我的能量是可持续的，当我回应了正确的事。",
+      "我感恩这具充满生命力的身体，它是我最大的天赋。"
+    ],
+    undefined: [
+      "我学会在疲惫时休息，不必强迫自己持续输出。",
+      "我觉察何时不顾身体的信号在硬撑，然后停下来。",
+      "我不需要成为永动机，休息也是正确的行动。",
+      "我可以吸收和放大各种能量，所以选择正确的场域。",
+      "我尊重身体的节奏，它比头脑更诚实。"
+    ]
+  },
+  root: {
+    name: "根部中心",
+    nameEn: "Root Center",
+    icon: "🌳",
+    defined: [
+      "我的肾上腺素是稳定的燃料，我知道何时加压、何时释放。",
+      "压力是我的动力，不是我的敌人。",
+      "我信任自己处理压力的能力，它是内置的。",
+      "我从底层推动事物前进，这是我的天赋。",
+      "我能在压力下保持镇定，因为燃料在我之内。"
+    ],
+    undefined: [
+      "我觉察何时在无意识地制造压力，然后深呼吸。",
+      "我不需要通过忙碌来证明自己有价值。",
+      "我学会在完成任务后真正放松，不必立刻找下一件事。",
+      "我分辨哪些压力真正属于我，哪些是环境的。",
+      "我给自己安排空白时间，没有压力也是正常状态。"
+    ]
+  }
+};
+
+// 维度四：64闸门肯定语句（64闸门 × 6条 = 384条）
+const gateAffirmations = {
+  1: {
+    name: "自我表达",
+    nameEn: "Self-Expression",
+    hexagram: "乾",
+    center: "G中心",
+    affirmations: [
+      "我的创造力是独一无二的，我允许它自由流淌。",
+      "表达真实的我，就是我对世界最大的贡献。",
+      "我不需要模仿任何人，我的独特就是我的力量。",
+      "创造冲动来自内在深处，我信任它并跟随它。",
+      "我的自我表达值得被看见，即使只是被自己看见。",
+      "我放下对认可的执着，创造本身就是奖赏。"
+    ]
+  },
+  2: {
+    name: "自我方向",
+    nameEn: "Direction of Self",
+    hexagram: "坤",
+    center: "G中心",
+    affirmations: [
+      "我信任内在的方向感，它像一只看不见的手在引领我。",
+      "我保持开放和接纳，正确的方向自然显现。",
+      "我不急于寻找方向，方向会找到我。",
+      "我的生命有更高层次的指引，我学会臣服。",
+      "作为司机，我引领他人前行，但首先我信任自己的路。",
+      "方向感是女性能量的礼物，我温柔地跟随它。"
+    ]
+  },
+  3: {
+    name: "秩序",
+    nameEn: "Ordering",
+    hexagram: "屯",
+    center: "荐骨中心",
+    affirmations: [
+      "混乱是创造的前奏，我允许自己在混沌中摸索。",
+      "每一个开始都是笨拙的，我对自己温柔。",
+      "突变和革新从试错中诞生，我不害怕犯错。",
+      "我在无序中寻找新的秩序，这是我的天赋。",
+      "困难只是暂时的，突破正在酝酿。",
+      "我信任生命自我组织的能力。"
+    ]
+  },
+  4: {
+    name: "公式化",
+    nameEn: "Formulization",
+    hexagram: "蒙",
+    center: "逻辑中心",
+    affirmations: [
+      "我天生寻找答案，这份好奇心是我的礼物。",
+      "逻辑思考让我把复杂化为清晰，我信任这个过程。",
+      "我不需要立刻有答案，问题本身就是通往理解的路。",
+      "我的分析能力帮助他人看见结构，这是我的贡献。",
+      "我放下「必须知道」的压力，允许答案自然浮现。",
+      "每一个公式背后，是对世界运作方式的好奇。"
+    ]
+  },
+  5: {
+    name: "固定节律",
+    nameEn: "Fixed Rhythms",
+    hexagram: "需",
+    center: "荐骨中心",
+    affirmations: [
+      "我信任自己内在的节律，它比时钟更准确。",
+      "等待不是浪费时间，而是让事物在正确的时刻成熟。",
+      "我的日常仪式给我稳定感，我珍视它们。",
+      "耐心是我的力量，我知道好东西需要时间。",
+      "我与自然的节律同步，春种秋收，不疾不徐。",
+      "固定的节律带给我自由，因为它承载了基础。"
+    ]
+  },
+  6: {
+    name: "摩擦",
+    nameEn: "Friction",
+    hexagram: "讼",
+    center: "情绪中心",
+    affirmations: [
+      "我学会在亲密与距离之间找到平衡。",
+      "摩擦不是冲突，它让关系更深一层。",
+      "我的情绪波动是自然的，我不再为此自责。",
+      "脆弱是通往真正亲密的钥匙，我有勇气打开。",
+      "我尊重自己和他人的边界，在边界处相遇。",
+      "情绪的pH值在波动中找到平衡，我信任这个过程。"
+    ]
+  },
+  7: {
+    name: "自我角色",
+    nameEn: "Role of Self",
+    hexagram: "师",
+    center: "G中心",
+    affirmations: [
+      "我天生适合引领方向，这是我的角色。",
+      "领导不在于命令，而在于看见未来的方向。",
+      "我在后台也能施加影响力，无声的引导同样有力。",
+      "我信任自己判断局势的能力。",
+      "我的角色是舵手，不需要站在甲板上。",
+      "民主式的领导是我的天赋，我引导而不控制。"
+    ]
+  },
+  8: {
+    name: "贡献",
+    nameEn: "Contribution",
+    hexagram: "比",
+    center: "喉咙中心",
+    affirmations: [
+      "我通过做真实的自己来贡献世界。",
+      "我的存在本身就是一种示范，不需要说教。",
+      "我找到自己的独特方式来贡献，不照搬他人。",
+      "当我活出真实，他人受到鼓舞。",
+      "贡献不需要宏大，小小的真实也是力量。",
+      "我是那个把创意带入现实的人。"
+    ]
+  },
+  9: {
+    name: "专注",
+    nameEn: "Focus",
+    hexagram: "小畜",
+    center: "荐骨中心",
+    affirmations: [
+      "我能深入细节，这是我的超能力。",
+      "专注让我看见别人忽略的精微之处。",
+      "我信任「小就是美」的智慧。",
+      "我不需要做大事，把小事做到极致就是伟大。",
+      "持之以恒的专注让我突破障碍。",
+      "我感恩能在细节中找到喜悦的能力。"
+    ]
+  },
+  10: {
+    name: "自我行为",
+    nameEn: "Behavior of Self",
+    hexagram: "履",
+    center: "G中心",
+    affirmations: [
+      "爱自己是一切行为的起点。",
+      "我活出真实的自己，不为他人的期待而扭曲。",
+      "自我接纳是我每天练习的功课。",
+      "我的行为与内在价值观一致，这给我平静。",
+      "爱自己不是自私，而是能真正爱他人的前提。",
+      "我善待自己，像对待最好的朋友。"
+    ]
+  },
+  11: {
+    name: "想法",
+    nameEn: "Ideas",
+    hexagram: "泰",
+    center: "逻辑中心",
+    affirmations: [
+      "我的脑海充满想法，每一个都是创造的种子。",
+      "我不需要实现所有想法，分享它们本身就是贡献。",
+      "灵感源源不断，我感恩这份丰盛。",
+      "我学会筛选想法，让真正对的想法落地。",
+      "教学和分享是我的天赋，我把概念传递给他人。",
+      "和平来自内心的丰盛，想法就是我的丰盛。"
+    ]
+  },
+  12: {
+    name: "谨慎",
+    nameEn: "Caution",
+    hexagram: "否",
+    center: "喉咙中心",
+    affirmations: [
+      "我谨慎地选择言语，因为言辞有力量。",
+      "我的表达跟随情绪，在对的时刻才开口。",
+      "谨慎不是犹豫，是对语言力量的尊重。",
+      "我允许自己在不适时不说话，沉默也是一种表达。",
+      "当我终于开口，每个字都有分量。",
+      "我学会在社交中保护自己的能量。"
+    ]
+  },
+  13: {
+    name: "聆听者",
+    nameEn: "The Listener",
+    hexagram: "同人",
+    center: "G中心",
+    affirmations: [
+      "我天生善于倾听，这是给他人最珍贵的礼物。",
+      "我保守秘密，这份信任是我与他人的纽带。",
+      "每个人的故事在我这里都是安全的。",
+      "通过聆听，我见证他人的真相。",
+      "我听见的不仅是言语，更是言语背后的灵魂。",
+      "我的同理心让我成为他人的港湾。"
+    ]
+  },
+  14: {
+    name: "力量技能",
+    nameEn: "Power Skills",
+    hexagram: "大有",
+    center: "荐骨中心",
+    affirmations: [
+      "我拥有将想法变为现实的力量和技能。",
+      "丰盛是我的自然状态，我信任它流向我的方向。",
+      "我赋能他人，因为我的力量是充足的。",
+      "财富和资源通过我的技能自然累积。",
+      "我用在正确方向上的力量带来自由。",
+      "我感恩生命中的一切资源，我善用它们。"
+    ]
+  },
+  15: {
+    name: "极端",
+    nameEn: "Extremes",
+    hexagram: "谦",
+    center: "G中心",
+    affirmations: [
+      "我在极端之间找到自然的节律。",
+      "我拥抱人类的各种面貌，多样性是我的爱。",
+      "我的节奏可能不同寻常，但它属于我。",
+      "谦逊中蕴含着接纳一切极端的勇气。",
+      "我流向生命的每个角落，不带偏见。",
+      "极端之间的摆动让我看见完整的真相。"
+    ]
+  },
+  16: {
+    name: "技能",
+    nameEn: "Skills",
+    hexagram: "豫",
+    center: "喉咙中心",
+    affirmations: [
+      "我的技能是多年热情和练习的结晶。",
+      "我对自己热爱的事物充满热情，这驱动我精进。",
+      "精通来自专注，我信任这个过程。",
+      "我的天赋需要被认可才能绽放，我等待对的人。",
+      "我通过技能与世界连接，这是我的表达方式。",
+      "热忱是我的燃料，我保护它不被消耗。"
+    ]
+  },
+  17: {
+    name: "意见",
+    nameEn: "Opinions",
+    hexagram: "随",
+    center: "逻辑中心",
+    affirmations: [
+      "我看见事物应该如何运作，这是我的天赋。",
+      "我的意见建立在逻辑之上，它有建设性。",
+      "我学会在对的时机分享意见，不是每个时候都适合。",
+      "我尊重他人的视角，同时保持自己的。",
+      "视觉化让我能预见可能性，这是我的贡献。",
+      "我的意见不是评判，而是改善的提议。"
+    ]
+  },
+  18: {
+    name: "纠正",
+    nameEn: "Correction",
+    hexagram: "蛊",
+    center: "脾脏中心",
+    affirmations: [
+      "我天生能看见什么需要被纠正，这是我的礼物。",
+      "我学会带着爱而非批评来指出问题。",
+      "挑战权威是我的本能，我信任它背后的直觉。",
+      "纠正不是攻击，而是为了更好的可能性。",
+      "我警觉于模式和制度的漏洞，这是保护性的力量。",
+      "我勇敢地说出真相，即使它不受欢迎。"
+    ]
+  },
+  19: {
+    name: "想要",
+    nameEn: "Wanting",
+    hexagram: "临",
+    center: "根部中心",
+    affirmations: [
+      "我敏感于他人的需要，这是我的天赋。",
+      "我学会分辨哪些需要真正属于我，哪些是吸收的。",
+      "我允许自己表达想要，不必总是满足他人。",
+      "我的敏感是资源，不是负担。",
+      "我在群体中找到归属，同时也保持自己。",
+      "接触和连结是我最深的渴望。"
+    ]
+  },
+  20: {
+    name: "当下",
+    nameEn: "The Now",
+    hexagram: "观",
+    center: "喉咙中心",
+    affirmations: [
+      "我活在当下，这一刻就是一切。",
+      "当下是行动的唯一时刻，我抓住它。",
+      "我不沉浸于过去，不焦虑于未来，我在此刻。",
+      "存在性的表达从当下自然涌出。",
+      "我看着生命展开，觉知就是我的行动。",
+      "当下的力量让我无所畏惧。"
+    ]
+  },
+  21: {
+    name: "猎取",
+    nameEn: "Huntress",
+    hexagram: "噬嗑",
+    center: "意志力中心",
+    affirmations: [
+      "我有能力为自己和家人争取所需。",
+      "我掌控自己的领地，这是我的权利。",
+      "我的意志力让我跨越障碍，达成目标。",
+      "我学会在控制与放手之间找到平衡。",
+      "猎取不是掠夺，而是为集体的丰盛。",
+      "我值得拥有我争取到的一切。"
+    ]
+  },
+  22: {
+    name: "优雅",
+    nameEn: "Grace",
+    hexagram: "贲",
+    center: "情绪中心",
+    affirmations: [
+      "我的情绪深度赋予我独特的魅力。",
+      "我学会在情绪的波涛中保持优雅。",
+      "倾听是我的天赋，我以开放的心聆听。",
+      "优雅不是完美，而是在不完美中保持从容。",
+      "我的情感让世界更丰富。",
+      "我在对的时刻展现对的魅力。"
+    ]
+  },
+  23: {
+    name: "同化",
+    nameEn: "Assimilation",
+    hexagram: "剥",
+    center: "喉咙中心",
+    affirmations: [
+      "我把复杂的真相转化为简单的语言。",
+      "我信任内在的知道，即使别人不理解。",
+      "同化让我能吸收万物，然后提炼出本质。",
+      "我表达真理，不担心是否被接受。",
+      "简化是深刻的智慧，我以此为荣。",
+      "我的声音承载着经过提炼的真知。"
+    ]
+  },
+  24: {
+    name: "理性化",
+    nameEn: "Rationalization",
+    hexagram: "复",
+    center: "逻辑中心",
+    affirmations: [
+      "我在静默中等待灵感闪现的那一刻。",
+      "反复思考是我的方式，我学会信任它的节奏。",
+      "突破总在放下思考的瞬间到来。",
+      "我重新构思旧问题，找到新的答案。",
+      "我不再强求答案，让它自己来找我。",
+      "灵感的闪电照亮了困惑的角落。"
+    ]
+  },
+  25: {
+    name: "天真",
+    nameEn: "Innocence",
+    hexagram: "无妄",
+    center: "G中心",
+    affirmations: [
+      "我以孩童般的天真面对世界。",
+      "宇宙的爱流经我，我让它无碍地流淌。",
+      "我放下算计，信任生命的本来面目。",
+      "疗愈发生在我接纳一切的此刻。",
+      "我的纯真不是无知，而是阅尽千帆后的澄澈。",
+      "在简单中，我找到了最深的智慧。"
+    ]
+  },
+  26: {
+    name: "驯服",
+    nameEn: "The Tamer",
+    hexagram: "大畜",
+    center: "意志力中心",
+    affirmations: [
+      "我驯服内在的野性，将它化为力量。",
+      "我信任自己的意志力能驾驭任何挑战。",
+      "我记住过去的教训，不让同样的错误重演。",
+      "大力量需要大责任，我承担得起。",
+      "驯服不是压制，而是与本能合作。",
+      "我感恩生命中磨砺我的人和事。"
+    ]
+  },
+  27: {
+    name: "滋养",
+    nameEn: "Nourishment",
+    hexagram: "颐",
+    center: "荐骨中心",
+    affirmations: [
+      "我照顾他人，这是我的天赋和使命。",
+      "我学会在给予和接收之间找到平衡。",
+      "我滋养自己的身体和灵魂，才能滋养他人。",
+      "我分辨哪些照顾是真正的爱，哪些是控制。",
+      "滋养不仅是食物，更是关怀和陪伴。",
+      "我的照顾让生命得以延续和茁壮。"
+    ]
+  },
+  28: {
+    name: "玩家",
+    nameEn: "The Player",
+    hexagram: "大过",
+    center: "逻辑中心",
+    affirmations: [
+      "我以游戏者的心态面对生命，发现其中的意义。",
+      "我敢于冒险，因为我知道生命本身就是一场游戏。",
+      "我在无常中找到目的，这就是我的天赋。",
+      "我不害怕打破常规，在边缘处发现真相。",
+      "死亡提醒我活出每一刻的深度。",
+      "我用幽默和轻松化解生命的沉重。"
+    ]
+  },
+  29: {
+    name: "坚持",
+    nameEn: "Perseverance",
+    hexagram: "坎",
+    center: "荐骨中心",
+    affirmations: [
+      "我承诺于正确的事，然后坚持到底。",
+      "我的毅力让我穿越最深的深渊。",
+      "我学会对不正确的事说「不」，保护我的承诺。",
+      "坚持不是固执，而是对内在真相的忠诚。",
+      "我说「是」的时候，整个宇宙支持我。",
+      "深度来自于不放弃的坚持。"
+    ]
+  },
+  30: {
+    name: "感受",
+    nameEn: "Feelings",
+    hexagram: "离",
+    center: "情绪中心",
+    affirmations: [
+      "我拥抱强烈的渴望，它是创造力的燃料。",
+      "我学会与欲望共处，不被它控制。",
+      "情感的火焰让我体验生命的深度。",
+      "我在激情和冷静之间找到平衡。",
+      "我感恩能如此深刻地感受一切。",
+      "欲望是通往体验的门，我勇敢地走进去。"
+    ]
+  },
+  31: {
+    name: "引领",
+    nameEn: "Leading",
+    hexagram: "咸",
+    center: "喉咙中心",
+    affirmations: [
+      "我的声音天然带有影响力。",
+      "我以民主的方式引领，而非独裁。",
+      "我信任自己被选举到正确位置的时机。",
+      "影响力不是权力，而是服务的工具。",
+      "我代表集体发声，这是我的使命。",
+      "我引领的方式是让他人也找到自己的声音。"
+    ]
+  },
+  32: {
+    name: "延续",
+    nameEn: "Continuity",
+    hexagram: "恒",
+    center: "脾脏中心",
+    affirmations: [
+      "我本能地知道什么能长久，什么会消逝。",
+      "我守护价值的延续，不追逐短暂的风潮。",
+      "我耐心地等待，让正确的事物自然存留。",
+      "延续不是守旧，而是保全真正的精华。",
+      "我的直觉帮我过滤掉不持久的诱惑。",
+      "我感恩生命中那些历久弥新的关系和事物。"
+    ]
+  },
+  33: {
+    name: "退隐",
+    nameEn: "Retreat",
+    hexagram: "遁",
+    center: "喉咙中心",
+    affirmations: [
+      "退隐是我的力量源泉，我在独处中充电。",
+      "我守护自己的隐私，它不是秘密，而是尊重。",
+      "我在退隐中反思，然后带着智慧归来。",
+      "我的故事需要时间酝酿，我不急于分享。",
+      "退隐不是逃避，而是为下一次出发做准备。",
+      "我信任沉默中蕴含的力量。"
+    ]
+  },
+  34: {
+    name: "力量",
+    nameEn: "Power",
+    hexagram: "大壮",
+    center: "荐骨中心",
+    affirmations: [
+      "我的生命力是巨大的力量，我善用它。",
+      "我以独立的力量行动，不需要外部许可。",
+      "力量用于赋能，不是用于控制。",
+      "我让生命通过我表达它的壮丽。",
+      "我的能量是鲜活的、不可阻挡的。",
+      "我感恩这具充满力量的身体。"
+    ]
+  },
+  35: {
+    name: "改变",
+    nameEn: "Change",
+    hexagram: "晋",
+    center: "喉咙中心",
+    affirmations: [
+      "我渴望体验一切，生命是用来经历的。",
+      "每一次体验都带来改变，我拥抱它。",
+      "我分享我的体验，这是给世界的礼物。",
+      "我不满足于停滞，进步是我的天性。",
+      "冒险是我的语言，我在未知中成长。",
+      "我感恩生命中丰富多彩的经历。"
+    ]
+  },
+  36: {
+    name: "危机",
+    nameEn: "Crisis",
+    hexagram: "明夷",
+    center: "情绪中心",
+    affirmations: [
+      "我在危机中保持镇定，这是我的天赋。",
+      "挑战让我更深地体验人性的脆弱和坚韧。",
+      "我学会在动荡中找到内在的平静。",
+      "每一次危机都是成长的契机。",
+      "我不再害怕未知，因为我知道如何穿越。",
+      "我感恩那些磨炼我的困难时刻。"
+    ]
+  },
+  37: {
+    name: "友谊",
+    nameEn: "Friendship",
+    hexagram: "家人",
+    center: "情绪中心",
+    affirmations: [
+      "我珍视家庭和友谊，这是我的根基。",
+      "我在关系中找到归属感。",
+      "我以公平和正义维系每一段关系。",
+      "我学会在亲密和独立之间找到平衡。",
+      "友谊不是交易，而是真正的连接。",
+      "我感恩生命中的每一份真挚的情谊。"
+    ]
+  },
+  38: {
+    name: "对抗",
+    nameEn: "The Fighter",
+    hexagram: "睽",
+    center: "根部中心",
+    affirmations: [
+      "我为内心的真相而战，这是我的使命。",
+      "我反对不公，即使需要独自站立。",
+      "对抗不是攻击，而是捍卫价值。",
+      "我在混乱中找到自己的立足点。",
+      "我信任内在的火焰，它不会熄灭。",
+      "我的斗志让世界更公正。"
+    ]
+  },
+  39: {
+    name: "阻碍",
+    nameEn: "Obstruction",
+    hexagram: "蹇",
+    center: "根部中心",
+    affirmations: [
+      "我的挑战激发他人的深度。",
+      "我学会以建设性的方式表达异议。",
+      "阻碍不是终点，而是深化的起点。",
+      "我的能量在阻碍中变得更加聚焦。",
+      "我不再害怕面对困难，它是成长的催化剂。",
+      "我以幽默化解紧张，这是我的天赋。"
+    ]
+  },
+  40: {
+    name: "独自",
+    nameEn: "Aloneness",
+    hexagram: "解",
+    center: "意志力中心",
+    affirmations: [
+      "我在独处中找到力量和平静。",
+      "我承担自己的重担，也允许自己休息。",
+      "独处不是孤独，是与自己深度连接的时刻。",
+      "我为家庭和社区提供支持，也需要自己的空间。",
+      "我学会在给予和保护自己之间找到平衡。",
+      "我感恩能享受自己的陪伴。"
+    ]
+  },
+  41: {
+    name: "收缩",
+    nameEn: "Contraction",
+    hexagram: "损",
+    center: "根部中心",
+    affirmations: [
+      "我的想象力是创造的起点。",
+      "我学会在梦想和现实之间架起桥梁。",
+      "收缩是为了更好地扩张，我信任这个节奏。",
+      "我减少不必要的，为真正重要的腾出空间。",
+      "我的幻想是未来的种子。",
+      "我感恩能如此生动地想象可能性。"
+    ]
+  },
+  42: {
+    name: "成长",
+    nameEn: "Growth",
+    hexagram: "益",
+    center: "荐骨中心",
+    affirmations: [
+      "我完成我开始的每一件事，这是我的天赋。",
+      "成长来自完成的过程，不只是开始。",
+      "我信任生长的节奏，不急于收获。",
+      "每一份投入都会带来回报。",
+      "我在成熟中找到满足。",
+      "我感恩生命中持续的扩展。"
+    ]
+  },
+  43: {
+    name: "洞见",
+    nameEn: "Insight",
+    hexagram: "夬",
+    center: "逻辑中心",
+    affirmations: [
+      "我的洞见来自内在的知道，不需要外在验证。",
+      "我信任那一刻的突破，它改变了视角。",
+      "我学会在沉默中等待清晰。",
+      "内在的真理可能孤独，但它是真实的。",
+      "我的洞见是突变性的，它带来新的可能。",
+      "我感恩能看透表象的能力。"
+    ]
+  },
+  44: {
+    name: "警觉",
+    nameEn: "Alertness",
+    hexagram: "姤",
+    center: "脾脏中心",
+    affirmations: [
+      "我从过去中提取智慧，指引现在。",
+      "我的直觉帮我认出模式和机遇。",
+      "我敏锐于能量的变化，这是保护性的天赋。",
+      "我学会信任那一刻的警觉。",
+      "历史是老师，我从中学习。",
+      "我感恩能嗅到看不见的真相。"
+    ]
+  },
+  45: {
+    name: "聚集",
+    nameEn: "The Gatherer",
+    hexagram: "萃",
+    center: "喉咙中心",
+    affirmations: [
+      "我聚集资源和人才，共创丰盛。",
+      "我以国王/女王的风范分发财富。",
+      "我学会在聚集中保持公平。",
+      "我的领导让每个人都感到被包含。",
+      "聚集是为了更大的善。",
+      "我感恩能成为众人之间的纽带。"
+    ]
+  },
+  46: {
+    name: "自我决心",
+    nameEn: "Determination of Self",
+    hexagram: "升",
+    center: "G中心",
+    affirmations: [
+      "我信任身体的智慧，它知道方向。",
+      "爱与身体相连，我善待这具躯体。",
+      "偶然中藏着命运的安排。",
+      "我决心活出真实的自己。",
+      "身体的体验是灵魂的课堂。",
+      "我感恩能与身体合作前行。"
+    ]
+  },
+  47: {
+    name: "领悟",
+    nameEn: "Realization",
+    hexagram: "困",
+    center: "逻辑中心",
+    affirmations: [
+      "我在困惑中等待，领悟自会降临。",
+      "每一个困境都藏着一份领悟。",
+      "我学会信任「啊哈」到来的时刻。",
+      "放下思考，答案反而浮现。",
+      "困惑是清晰的前奏。",
+      "我感恩那些突然亮起的瞬间。"
+    ]
+  },
+  48: {
+    name: "深度",
+    nameEn: "Depth",
+    hexagram: "井",
+    center: "脾脏中心",
+    affirmations: [
+      "我挖掘事物底层的真相，这是我的天赋。",
+      "深度比广度更有价值，我信任这一点。",
+      "我不满足于表面，我深入探索。",
+      "我的智慧来自持续的学习和体验。",
+      "深度让我成为可靠的顾问。",
+      "我感恩能触碰到存在的深层。"
+    ]
+  },
+  49: {
+    name: "原则",
+    nameEn: "Principles",
+    hexagram: "革",
+    center: "情绪中心",
+    affirmations: [
+      "我以清晰的原则做决定，不被情绪左右。",
+      "变革是我天性，我相信转化的力量。",
+      "我学会在拒绝和接纳中找到平衡。",
+      "我的敏感帮我分辨什么需要改变。",
+      "我坚持自己的标准，不轻易妥协。",
+      "我感恩拥有变革的勇气。"
+    ]
+  },
+  50: {
+    name: "价值",
+    nameEn: "Values",
+    hexagram: "鼎",
+    center: "脾脏中心",
+    affirmations: [
+      "我以清晰的价值观导航人生。",
+      "我守护责任的火焰，这是我的天赋。",
+      "我分辨哪些责任真正属于我。",
+      "我的直觉帮我判断对错。",
+      "我以正直维护内在的秩序。",
+      "我感恩那些塑造我价值观的体验。"
+    ]
+  },
+  51: {
+    name: "震惊",
+    nameEn: "Shock",
+    hexagram: "震",
+    center: "意志力中心",
+    affirmations: [
+      "我以勇气面对生命的震撼。",
+      "震惊唤醒我更深的觉知。",
+      "我信任自己在突发状况中的反应。",
+      "每一次震撼都是一次重生。",
+      "我以意志力稳住自己。",
+      "我感恩生命以各种方式提醒我醒来。"
+    ]
+  },
+  52: {
+    name: "静止",
+    nameEn: "Stillness",
+    hexagram: "艮",
+    center: "根部中心",
+    affirmations: [
+      "我学会在静止中积蓄力量。",
+      "静坐山岳，我等待正确的行动时机。",
+      "静止不是无为，而是高度的觉察。",
+      "我给思想和身体留出安静的空间。",
+      "在静默中，真相自然呈现。",
+      "我感恩能享受独处的宁静。"
+    ]
+  },
+  53: {
+    name: "开始",
+    nameEn: "Beginnings",
+    hexagram: "渐",
+    center: "根部中心",
+    affirmations: [
+      "我信任每一个新开始的种子。",
+      "我以渐进的方式发展，不急于求成。",
+      "每一个开始都包含着完整的潜能。",
+      "我学会在适当的时候收束。",
+      "成长需要时间，我给它。",
+      "我感恩生命中不断循环的新起点。"
+    ]
+  },
+  54: {
+    name: "雄心",
+    nameEn: "Ambition",
+    hexagram: "归妹",
+    center: "根部中心",
+    affirmations: [
+      "我的雄心驱动我向上成长。",
+      "我信任从基层到巅峰的旅程。",
+      "我以精神的提升为最终目标。",
+      "雄心不只是物质，更是意识的扩展。",
+      "我学会在追求中保持真实。",
+      "我感恩那股推动我前行的火焰。"
+    ]
+  },
+  55: {
+    name: "丰盛",
+    nameEn: "Abundance",
+    hexagram: "丰",
+    center: "情绪中心",
+    affirmations: [
+      "我信任情绪的波动中蕴含着灵性的礼物。",
+      "丰盛是我的自然状态，我允许它流入。",
+      "我从情绪的梦中醒来，走向真正的自由。",
+      "我相信信仰的力量胜过恐惧。",
+      "丰盛不只是物质，更是精神的充实。",
+      "我感恩能体验生命如此丰富。"
+    ]
+  },
+  56: {
+    name: "刺激",
+    nameEn: "Stimulation",
+    hexagram: "旅",
+    center: "喉咙中心",
+    affirmations: [
+      "我是故事的讲述者，我用语言激发想象。",
+      "我以新的体验滋养自己和他人。",
+      "我信任内在的流浪者，它带我走向未知。",
+      "我的表达充满画面和情感。",
+      "我在旅途中收集故事。",
+      "我感恩生命这场壮丽的旅行。"
+    ]
+  },
+  57: {
+    name: "温和",
+    nameEn: "The Gentle",
+    hexagram: "巽",
+    center: "脾脏中心",
+    affirmations: [
+      "我的直觉清晰而温和，我学会聆听它。",
+      "我以柔克刚，这是我的力量。",
+      "直觉像风一样轻柔，但无处不在。",
+      "我信任那一刻的知道。",
+      "温和的触碰比强力更有效。",
+      "我感恩能如此敏感于真相。"
+    ]
+  },
+  58: {
+    name: "喜悦",
+    nameEn: "Joy",
+    hexagram: "兑",
+    center: "根部中心",
+    affirmations: [
+      "我的喜悦来自生命的活力。",
+      "我为改善事物而感到快乐。",
+      "我以笑声和乐观感染他人。",
+      "喜悦是我的评判尺——对的事让我快乐。",
+      "我学会在简单中找到喜悦。",
+      "我感恩能如此鲜活地感受快乐。"
+    ]
+  },
+  59: {
+    name: "亲密",
+    nameEn: "Sexuality",
+    hexagram: "涣",
+    center: "荐骨中心",
+    affirmations: [
+      "我与他人建立深层的连接。",
+      "我信任亲密的力量，它能消融障碍。",
+      "我的性力是创造和连结的能量。",
+      "我学会在亲密中保持自我。",
+      "我以真实的自己吸引对的人。",
+      "我感恩能体验如此深层的连接。"
+    ]
+  },
+  60: {
+    name: "接纳",
+    nameEn: "Acceptance",
+    hexagram: "节",
+    center: "根部中心",
+    affirmations: [
+      "我接纳生命中的限制，它们是成长的框架。",
+      "在限制中，我找到创造的自由。",
+      "我学会与「不能」共处，然后发现「能」。",
+      "接纳不是放弃，而是找到新的路径。",
+      "限制是宇宙给我的礼物，让我聚焦。",
+      "我感恩那些教我接纳的经历。"
+    ]
+  },
+  61: {
+    name: "神秘",
+    nameEn: "Mystery",
+    hexagram: "中孚",
+    center: "头脑中心",
+    affirmations: [
+      "我拥抱生命的神秘，不急于解答一切。",
+      "内在的真理不需要外在的证据。",
+      "我在静默中聆听宇宙的低语。",
+      "有些事就是奥秘，我以敬畏面对。",
+      "我的灵感来自更高的维度。",
+      "我感恩能感知看不见的真相。"
+    ]
+  },
+  62: {
+    name: "细节",
+    nameEn: "Details",
+    hexagram: "小过",
+    center: "喉咙中心",
+    affirmations: [
+      "我善于处理细节，这是我的天赋。",
+      "我以精准的表达传递真相。",
+      "我给事物命名，让它们被理解。",
+      "细节中藏着全局的真相。",
+      "我以事实为基础做判断。",
+      "我感恩能看见微小事物的价值。"
+    ]
+  },
+  63: {
+    name: "怀疑",
+    nameEn: "Doubt",
+    hexagram: "既济",
+    center: "逻辑中心",
+    affirmations: [
+      "我的怀疑是通往确信的桥梁。",
+      "我以逻辑验证每一个想法。",
+      "我学会信任验证的过程。",
+      "怀疑不是不信任，而是负责任。",
+      "每一个问题最终都会找到答案。",
+      "我感恩拥有一颗善于质疑的头脑。"
+    ]
+  },
+  64: {
+    name: "混乱",
+    nameEn: "Confusion",
+    hexagram: "未济",
+    center: "头脑中心",
+    affirmations: [
+      "在混乱的思绪中，我等待清晰的浮现。",
+      "我信任困惑是领悟的前奏。",
+      "我放下对确定性的执着。",
+      "每一团乱麻最终会解开。",
+      "我学会在不确定中保持平静。",
+      "我感恩能同时容纳多种可能性。"
+    ]
+  }
+};
+  </script>
+
+  <!-- ========== 逻辑 ========== -->
+  <script>
+    // ========== 状态管理 ==========
+    let currentDim = 'type';
+    let currentSelection = null;
+    let currentCard = null;
+
+    // ========== 维度配置 ==========
+    const dimConfig = {
+      type: {
+        label: '选择你的类型',
+        data: typeAffirmations,
+        renderOptions: () => renderTypeOptions()
+      },
+      authority: {
+        label: '选择你的权威',
+        data: authorityAffirmations,
+        renderOptions: () => renderAuthorityOptions()
+      },
+      center: {
+        label: '选择中心与状态',
+        data: centerAffirmations,
+        renderOptions: () => renderCenterOptions()
+      },
+      gate: {
+        label: '选择闸门（1-64）',
+        data: gateAffirmations,
+        renderOptions: () => renderGateOptions()
+      }
+    };
+
+    // ========== 渲染选择区 ==========
+    function renderSelector() {
+      const area = document.getElementById('selectorArea');
+      const config = dimConfig[currentDim];
+      area.innerHTML = `<label>${config.label}</label>`;
+      config.renderOptions();
+    }
+
+    function renderTypeOptions() {
+      const area = document.getElementById('selectorArea');
+      let html = '<div class="option-grid">';
+      for (const [key, val] of Object.entries(typeAffirmations)) {
+        const active = currentSelection === key ? 'active' : '';
+        html += `<button class="option-btn ${active}" data-key="${key}" onclick="selectOption('${key}')">
+          <span class="opt-icon">${val.icon}</span>
+          <span class="opt-name">${val.name}</span>
+        </button>`;
+      }
+      html += '</div>';
+      area.insertAdjacentHTML('beforeend', html);
+    }
+
+    function renderAuthorityOptions() {
+      const area = document.getElementById('selectorArea');
+      let html = '<div class="option-grid">';
+      for (const [key, val] of Object.entries(authorityAffirmations)) {
+        const active = currentSelection === key ? 'active' : '';
+        html += `<button class="option-btn ${active}" data-key="${key}" onclick="selectOption('${key}')">
+          <span class="opt-icon">${val.icon}</span>
+          <span class="opt-name">${val.name}</span>
+        </button>`;
+      }
+      html += '</div>';
+      area.insertAdjacentHTML('beforeend', html);
+    }
+
+    function renderCenterOptions() {
+      const area = document.getElementById('selectorArea');
+      // 默认选中已定义
+      if (!currentSelection) currentSelection = { center: 'head', state: 'defined' };
+      let html = '<div class="option-grid">';
+      for (const [key, val] of Object.entries(centerAffirmations)) {
+        const active = currentSelection.center === key ? 'active' : '';
+        html += `<button class="option-btn ${active}" data-key="${key}" onclick="selectCenter('${key}')">
+          <span class="opt-icon">${val.icon}</span>
+          <span class="opt-name">${val.name}</span>
+        </button>`;
+      }
+      html += '</div>';
+      // 状态切换
+      html += `<div class="center-state-toggle">
+        <button class="${currentSelection.state === 'defined' ? 'active' : ''}" onclick="selectCenterState('defined')">已定义</button>
+        <button class="${currentSelection.state === 'undefined' ? 'active' : ''}" onclick="selectCenterState('undefined')">未定义</button>
+      </div>`;
+      area.insertAdjacentHTML('beforeend', html);
+    }
+
+    function renderGateOptions() {
+      const area = document.getElementById('selectorArea');
+      let html = '<div class="gate-grid">';
+      for (let i = 1; i <= 64; i++) {
+        const val = gateAffirmations[i];
+        const active = currentSelection === String(i) ? 'active' : '';
+        html += `<button class="gate-btn ${active}" onclick="selectOption('${i}')">${i}</button>`;
+      }
+      html += '</div>';
+      // 显示选中闸门信息
+      if (currentSelection && gateAffirmations[currentSelection]) {
+        const g = gateAffirmations[currentSelection];
+        html += `<div style="margin-top:12px; padding:12px; background:var(--bg-card); border-radius:10px; font-size:0.82rem; color:var(--text-secondary);">
+          <span style="color:var(--gold);">闸门 ${currentSelection}</span> · ${g.name} · ${g.hexagram} · ${g.center}
+        </div>`;
+      }
+      area.insertAdjacentHTML('beforeend', html);
+    }
+
+    // ========== 选择操作 ==========
+    function selectOption(key) {
+      currentSelection = key;
+      renderSelector();
+    }
+
+    function selectCenter(key) {
+      if (!currentSelection || typeof currentSelection === 'string') {
+        currentSelection = { center: key, state: 'defined' };
+      } else {
+        currentSelection.center = key;
+      }
+      renderSelector();
+    }
+
+    function selectCenterState(state) {
+      if (!currentSelection || typeof currentSelection === 'string') {
+        currentSelection = { center: 'head', state: state };
+      } else {
+        currentSelection.state = state;
+      }
+      renderSelector();
+    }
+
+    // ========== 维度切换 ==========
+    document.querySelectorAll('.dim-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.dim-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentDim = tab.dataset.dim;
+        currentSelection = null;
+        if (currentDim === 'center') currentSelection = { center: 'head', state: 'defined' };
+        renderSelector();
+        resetCardArea();
+      });
+    });
+
+    // ========== 抽卡 ==========
+    function drawCard() {
+      let pool = [];
+      let cardInfo = {};
+
+      if (currentDim === 'type') {
+        if (!currentSelection) { showToast('请先选择类型'); return; }
+        const data = typeAffirmations[currentSelection];
+        pool = data.affirmations;
+        cardInfo = { icon: data.icon, label: '类型', title: data.name, meta: data.nameEn };
+      } else if (currentDim === 'authority') {
+        if (!currentSelection) { showToast('请先选择权威'); return; }
+        const data = authorityAffirmations[currentSelection];
+        pool = data.affirmations;
+        cardInfo = { icon: data.icon, label: '权威', title: data.name, meta: data.nameEn };
+      } else if (currentDim === 'center') {
+        if (!currentSelection) { showToast('请先选择中心'); return; }
+        const data = centerAffirmations[currentSelection.center];
+        const stateLabel = currentSelection.state === 'defined' ? '已定义' : '未定义';
+        pool = currentSelection.state === 'defined' ? data.defined : data.undefined;
+        cardInfo = { icon: data.icon, label: stateLabel + '中心', title: data.name, meta: data.nameEn };
+      } else if (currentDim === 'gate') {
+        if (!currentSelection) { showToast('请先选择闸门'); return; }
+        const gateNum = Number(currentSelection);
+        if (!gateAffirmations[gateNum]) { showToast('无效闸门'); return; }
+        const data = gateAffirmations[gateNum];
+        pool = data.affirmations;
+        cardInfo = { icon: '🚪', label: '闸门 ' + currentSelection, title: data.name, meta: data.hexagram + ' · ' + data.center };
+      }
+
+      // 随机抽取
+      const affirmation = pool[Math.floor(Math.random() * pool.length)];
+      currentCard = { ...cardInfo, text: affirmation, dim: currentDim, selection: currentSelection };
+
+      // 渲染卡片
+      renderCard(currentCard);
+
+      // 保存历史
+      saveHistory(currentCard);
+
+      // 检查是否已收藏
+      updateFavButton();
+    }
+
+    function renderCard(card) {
+      const area = document.getElementById('cardArea');
+      area.innerHTML = `
+        <div class="affirmation-card">
+          <div class="card-corner tl"></div>
+          <div class="card-corner tr"></div>
+          <div class="card-corner bl"></div>
+          <div class="card-corner br"></div>
+          <div class="card-icon">${card.icon}</div>
+          <div class="card-label">${card.label}</div>
+          <div class="card-title">${card.title}</div>
+          <div class="card-divider"></div>
+          <div class="card-affirmation">${card.text}</div>
+          <div class="card-meta">${card.meta}</div>
+        </div>
+        <div class="card-actions">
+          <button class="action-btn" onclick="copyCard()">📋 复制文字</button>
+          <button class="action-btn primary" id="favBtn" onclick="toggleFav()">⭐ 收藏</button>
+          <button class="action-btn" onclick="drawCard()">🔄 再抽一张</button>
+        </div>
+      `;
+    }
+
+    function resetCardArea() {
+      document.getElementById('cardArea').innerHTML = `
+        <div class="card-placeholder">
+          <div class="ph-icon">🃏</div>
+          <div>选择维度后点击上方按钮抽取卡牌</div>
+        </div>
+      `;
+    }
+
+    // ========== 复制 ==========
+    function copyCard() {
+      if (!currentCard) return;
+      const text = `${currentCard.text}\n\n—— ${currentCard.label} · ${currentCard.title}`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('已复制到剪贴板');
+      }).catch(() => {
+        showToast('复制失败，请手动选择文字');
+      });
+    }
+
+    // ========== 收藏 ==========
+    function getFavs() {
+      try { return JSON.parse(localStorage.getItem('hd_favs') || '[]'); }
+      catch(e) { return []; }
+    }
+
+    function toggleFav() {
+      if (!currentCard) return;
+      const favs = getFavs();
+      const cardId = JSON.stringify({ dim: currentCard.dim, selection: currentCard.selection, text: currentCard.text });
+      const existIdx = favs.findIndex(f => JSON.stringify({ dim: f.dim, selection: f.selection, text: f.text }) === cardId);
+
+      if (existIdx >= 0) {
+        favs.splice(existIdx, 1);
+        showToast('已取消收藏');
+      } else {
+        favs.unshift({ ...currentCard, time: Date.now() });
+        showToast('已加入收藏 ⭐');
+      }
+      localStorage.setItem('hd_favs', JSON.stringify(favs));
+      renderFavs();
+      updateFavButton();
+    }
+
+    function updateFavButton() {
+      const btn = document.getElementById('favBtn');
+      if (!btn || !currentCard) return;
+      const favs = getFavs();
+      const isFav = favs.some(f =>
+        f.dim === currentCard.dim &&
+        JSON.stringify(f.selection) === JSON.stringify(currentCard.selection) &&
+        f.text === currentCard.text
+      );
+      btn.innerHTML = isFav ? '✅ 已收藏' : '⭐ 收藏';
+    }
+
+    function renderFavs() {
+      const favs = getFavs();
+      const section = document.getElementById('favSection');
+      const list = document.getElementById('favList');
+      if (favs.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = 'block';
+      list.innerHTML = favs.map((f, i) => `
+        <div class="history-item">
+          <span class="h-icon">${f.icon}</span>
+          <div class="h-content">
+            <div class="h-meta">${f.label} · ${f.title} · ${f.meta}</div>
+            <div class="h-text">${f.text}</div>
+          </div>
+          <button onclick="removeFav(${i})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:4px;">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function removeFav(idx) {
+      const favs = getFavs();
+      favs.splice(idx, 1);
+      localStorage.setItem('hd_favs', JSON.stringify(favs));
+      renderFavs();
+      updateFavButton();
+      showToast('已移除');
+    }
+
+    // ========== 历史记录 ==========
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem('hd_history') || '[]'); }
+      catch(e) { return []; }
+    }
+
+    function saveHistory(card) {
+      let history = getHistory();
+      history.unshift({ ...card, time: Date.now() });
+      if (history.length > 50) history = history.slice(0, 50);
+      localStorage.setItem('hd_history', JSON.stringify(history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      const list = document.getElementById('historyList');
+      if (history.length === 0) {
+        list.innerHTML = '<div class="history-empty">暂无记录，开始抽卡吧</div>';
+        return;
+      }
+      list.innerHTML = history.map(h => {
+        const time = new Date(h.time);
+        const timeStr = `${time.getMonth()+1}/${time.getDate()} ${String(time.getHours()).padStart(2,'0')}:${String(time.getMinutes()).padStart(2,'0')}`;
+        return `
+          <div class="history-item">
+            <span class="h-icon">${h.icon}</span>
+            <div class="h-content">
+              <div class="h-meta">${timeStr} · ${h.label} · ${h.title}</div>
+              <div class="h-text">${h.text}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function clearHistory() {
+      if (!confirm('确定清空所有抽卡记录？')) return;
+      localStorage.removeItem('hd_history');
+      renderHistory();
+      showToast('已清空记录');
+    }
+
+    // ========== Toast ==========
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ========== 初始化 ==========
+    renderSelector();
+    renderHistory();
+    renderFavs();
+  </script>
+</body>
+</html>

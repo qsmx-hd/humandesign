@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人类图 · 抽卡中心</title>
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --card-bg: #FDF9F2;
+      --gold: #C4956A;
+      --dark: #2D2118;
+      --border: #E8DCC8;
+      --text: #3A2A1A;
+      --text-light: #6B5D4F;
+      --accent: #D4A574;
+      --shadow: 0 4px 20px rgba(45,33,24,0.12);
+      --shadow-lg: 0 8px 40px rgba(45,33,24,0.18);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Noto Sans SC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(196,149,106,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(196,149,106,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(196,149,106,0.03) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .header .subtitle {
+      font-size: 15px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      font-weight: 400;
+    }
+
+    .header .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 20px auto 0;
+      border-radius: 1px;
+    }
+
+    /* Navigation Grid */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .nav-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .nav-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .nav-card .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .nav-card .title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .nav-card .desc {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .nav-card .tag {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-card:hover .tag {
+      background: var(--gold);
+      color: white;
+    }
+
+    /* Placeholder cards */
+    .nav-card.placeholder {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .nav-card.placeholder:hover {
+      transform: none;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-card.placeholder::before {
+      display: none;
+    }
+
+    .nav-card.placeholder .tag {
+      border-color: var(--border);
+      color: var(--text-light);
+    }
+
+    .nav-card.placeholder:hover .tag {
+      background: transparent;
+      color: var(--text-light);
+    }
+
+    /* Coming soon badge */
+    .coming-soon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 11px;
+      color: var(--gold);
+      background: rgba(196,149,106,0.1);
+      padding: 2px 10px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 50px 0 20px;
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    footer .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      margin: 0 auto 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 24px;
+      }
+      .nav-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .nav-card {
+        padding: 28px 24px;
+      }
+      .nav-card .icon {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>人类图 · 抽卡中心</h1>
+      <p class="subtitle">每日能量指引 · 肯定语句 · 自我觉察</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="nav-grid">
+      <!-- 已有程序 -->
+      <a href="hd-affirmation-cards-pro.html" class="nav-card">
+        <span class="icon">🃏</span>
+        <div class="title">肯定语句抽卡</div>
+        <div class="desc">四大维度深度抽卡：类型、权威、中心、闸门，每日能量指引与自我觉察</div>
+        <span class="tag">立即体验</span>
+      </a>
+
+      <a href="hd-affirmation-cards-64-gates.html" class="nav-card">
+        <span class="icon">🔮</span>
+        <div class="title">64 闸门能量抽卡</div>
+        <div class="desc">基于易经 64 卦与人类图闸门，抽取今日能量关键词与行动指引</div>
+        <span class="tag">立即体验</span>
+      </a>
+
+      <a href="hd-moon-cycle.html" class="nav-card">
+        <span class="icon">🌙</span>
+        <div class="title">月亮周期抽卡</div>
+        <div class="desc">跟随 28 天月亮周期，每日接收与月相共振的能量指引</div>
+        <span class="tag">立即体验</span>
+      </a>
+
+      <a href="hd-year-transit.html" class="nav-card">
+        <span class="icon">🌟</span>
+        <div class="title">流年运势抽卡</div>
+        <div class="desc">基于人类图流年分析，抽取年度主题与季度能量指引</div>
+        <span class="tag">立即体验</span>
+      </a>
+
+      <a href="hd-relationship.html" class="nav-card">
+        <span class="icon">💫</span>
+        <div class="title">关系合盘抽卡</div>
+        <div class="desc">双人关系能量解读，抽取关系中的成长主题与互动建议</div>
+        <span class="tag">立即体验</span>
+      </a>
+
+      <!-- 预留扩展区域 -->
+      <div class="nav-card placeholder">
+        <span class="coming-soon">开发中</span>
+        <span class="icon">🚀</span>
+        <div class="title">更多抽卡</div>
+        <div class="desc">更多人类图抽卡程序正在开发中，敬请期待</div>
+        <span class="tag">敬请期待</span>
+      </div>
+    </div>
+
+    <footer>
+      <div class="divider"></div>
+      人类图肯定语句抽卡 · 基于人类图四大维度<br>
+      类型 · 权威 · 中心 · 闸门<br>
+      Powered By Kan Man Tang
+    </footer>
+  </div>
+</body>
+</html>

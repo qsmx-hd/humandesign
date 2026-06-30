@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图肯定语 · 能量抽卡 | Human Design Affirmation Cards</title>
+<style>
+:root {
+  --bg: #F5F0E8;
+  --card-bg: #FDF9F2;
+  --gold: #C4956A;
+  --dark: #2D2118;
+  --border: #E8DCC8;
+  --text: #3A2A1A;
+  --text-light: #6B5D4F;
+  --accent: #D4A574;
+  --shadow: 0 4px 20px rgba(45,33,24,0.12);
+  --shadow-lg: 0 8px 40px rgba(45,33,24,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Background Pattern ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(196,149,106,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(196,149,106,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(196,149,106,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+
+.header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.header .subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.header .version-badge {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-light);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+/* ── Main Card Area ── */
+.card-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 30px;
+  min-height: 420px;
+  justify-content: center;
+}
+
+/* ── Deck Display ── */
+.deck-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.deck-visual {
+  position: relative;
+  width: 260px;
+  height: 360px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.deck-visual:hover {
+  transform: translateY(-4px);
+}
+
+.deck-visual:active {
+  transform: scale(0.97);
+}
+
+.deck-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.deck-card:nth-child(1) {
+  background: linear-gradient(145deg, #C4956A 0%, #A67B55 100%);
+  top: 0; left: 0;
+  z-index: 3;
+  box-shadow: var(--shadow-lg);
+}
+
+.deck-card:nth-child(2) {
+  background: linear-gradient(145deg, #D4A574 0%, #B88560 100%);
+  top: 6px; left: 6px;
+  z-index: 2;
+  box-shadow: var(--shadow);
+}
+
+.deck-card:nth-child(3) {
+  background: linear-gradient(145deg, #E0B88A 0%, #C89570 100%);
+  top: 12px; left: 12px;
+  z-index: 1;
+}
+
+.deck-card-front {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #C4956A 0%, #A67B55 100%);
+  border: 3px solid rgba(255,255,255,0.25);
+}
+
+.deck-card-front .deck-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.deck-card-front .deck-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 3px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.deck-card-front .deck-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+/* ── Draw Button ── */
+.draw-hint {
+  font-size: 14px;
+  color: var(--text-light);
+  text-align: center;
+  letter-spacing: 1px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ── Result Card ── */
+.result-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--border);
+  position: relative;
+  animation: cardReveal 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardReveal {
+  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.result-card .gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #2D2118 0%, #4A3828 100%);
+  color: #FFF;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.result-card .gate-badge .gate-num {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.result-card .gate-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+.result-card .gate-iching {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.result-card .affirmation-label {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.result-card .affirmation-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.6;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(196,149,106,0.08), rgba(196,149,106,0.03));
+  border-left: 4px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.result-card .gate-center {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--text-light);
+  background: #F5F0E8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+.result-card .gate-description {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-top: 16px;
+  line-height: 1.6;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Action Buttons ── */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s;
+  font-family: inherit;
+}
+
+.btn-draw {
+  background: linear-gradient(135deg, #C4956A, #A67B55);
+  color: #FFF;
+  box-shadow: 0 4px 16px rgba(196,149,106,0.35);
+}
+
+.btn-draw:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(196,149,106,0.45);
+}
+
+.btn-draw:active {
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+}
+
+.btn-outline:hover {
+  background: rgba(196,149,106,0.08);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--text-light);
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+/* ── History ── */
+.history-section {
+  margin-top: 40px;
+}
+
+.history-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.history-header h3 {
+  margin-bottom: 0;
+}
+
+.btn-clear {
+  background: transparent;
+  color: #c97a6a;
+  border: 1px solid #e0c0b8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-family: inherit;
+  transition: all 0.25s;
+}
+
+.btn-clear:hover {
+  background: rgba(200, 100, 80, 0.08);
+  border-color: #c97a6a;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.history-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.history-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--gold);
+}
+
+.history-card .h-gate-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.history-card .h-gate-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-top: 6px;
+}
+
+.history-card .h-time {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* ── Share Toast ── */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2D2118;
+  color: #FFF;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  z-index: 100;
+  animation: toastIn 0.3s ease;
+  pointer-events: none;
+}
+
+@keyframes toastIn {
+  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+/* ── Confetti ── */
+.confetti-container {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  animation: confettiFall 1.8s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% { opacity: 1; transform: translateY(-100%) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+}
+
+/* ── Print ── */
+@media print {
+  body { background: white; }
+  .btn, .deck-area, .draw-hint, .history-section, .footer, .action-buttons { display: none !important; }
+  .result-card { box-shadow: none; border: 1px solid #ccc; }
+  .card-stage { min-height: auto; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .container { padding: 12px 16px 30px; }
+  .header h1 { font-size: 22px; }
+  .result-card { padding: 24px 20px; }
+  .result-card .affirmation-text { font-size: 16px; padding: 16px; }
+  .history-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .deck-visual { width: 200px; height: 280px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>人类图肯定语 · 能量抽卡</h1>
+    <p class="subtitle">Human Design Affirmation Oracle</p>
+    <span class="version-badge">V4 · 64 Gates</span>
+  </div>
+
+  <!-- Main Card Stage -->
+  <div class="card-stage" id="cardStage">
+    <!-- Deck Display -->
+    <div class="deck-area" id="deckArea">
+      <div class="deck-visual" onclick="drawCard()" title="点击抽卡">
+        <div class="deck-card">
+          <div class="deck-card-front">
+            <span class="deck-icon">🃏</span>
+            <span class="deck-label">能量抽卡</span>
+            <span class="deck-sub">64 Gates · Affirmations</span>
+          </div>
+        </div>
+        <div class="deck-card"></div>
+        <div class="deck-card"></div>
+      </div>
+      <p class="draw-hint">✨ 点击卡牌，抽取今日肯定语 ✨</p>
+    </div>
+
+    <!-- Result Area -->
+    <div id="resultArea"></div>
+  </div>
+
+  <!-- History -->
+  <div class="history-section" id="historySection">
+    <div class="history-header">
+      <h3>📜 抽卡记录</h3>
+      <button class="btn-clear" id="btnClear" onclick="clearHistory()" style="display:none">🗑️ 清空记录</button>
+    </div>
+    <div class="history-grid" id="historyGrid"></div>
+    <div class="empty-state" id="emptyHistory">尚未抽卡，点击上方卡牌开始你的能量之旅 🌟</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    人类图肯定语能量抽卡 V4 · 基于 Human Design 64闸门体系 · 仅供灵性探索参考<br>Powered By Kan Man Tang
+  </div>
+</div>
+
+<!-- Confetti Container -->
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  64 Gates Affirmation Data
+// ═══════════════════════════════════════════
+const gatesData = [
+  {
+    gate: 1, name: '乾', nameCN: '创造之门',
+    iChing: '乾 · The Creative',
+    center: 'G中心',
+    description: '自我表达与创造性个体性',
+    affirmation: '我勇敢地表达真实的自己，我的创造力是献给世界的礼物。每一个当下，我都在创造崭新的生命体验。'
+  },
+  {
+    gate: 2, name: '坤', nameCN: '接受之门',
+    iChing: '坤 · The Receptive',
+    center: 'G中心',
+    description: '接受性与对方向的高层认知',
+    affirmation: '我信任生命自然的流动与方向。在宁静中，我聆听到内在智慧的指引，一切都在完美的时机中展开。'
+  },
+  {
+    gate: 3, name: '屯', nameCN: '初始之门',
+    iChing: '屯 · Difficulty at the Beginning',
+    center: '荐骨中心',
+    description: '通过突变进行秩序化和创新',
+    affirmation: '我拥抱变化带来的新秩序。混乱只是创造的序章，我拥有将无序转化为创新的天赋力量。'
+  },
+  {
+    gate: 4, name: '蒙', nameCN: '公式之门',
+    iChing: '蒙 · Youthful Folly',
+    center: '逻辑中心',
+    description: '心智公式化与寻找答案',
+    affirmation: '我信任自己的心智有能力找到答案。每一个疑问都是通往更深理解的入口，我享受探索未知的过程。'
+  },
+  {
+    gate: 5, name: '需', nameCN: '节奏之门',
+    iChing: '需 · Waiting',
+    center: '荐骨中心',
+    description: '固定节奏、模式与自然时机',
+    affirmation: '我尊重生命中自然的节奏和韵律。不必急于求成，在等待中我积蓄能量，一切都在完美的时机到来。'
+  },
+  {
+    gate: 6, name: '讼', nameCN: '摩擦之门',
+    iChing: '讼 · Conflict',
+    center: '情绪中心',
+    description: '情绪摩擦与通过边界实现亲密',
+    affirmation: '我接纳情绪的起伏与摩擦。每一次情绪波动都是通往更深亲密与理解的门户，我拥有健康的情感边界。'
+  },
+  {
+    gate: 7, name: '师', nameCN: '领导之门',
+    iChing: '师 · The Army',
+    center: 'G中心',
+    description: '领导力与自我在互动中的角色',
+    affirmation: '我以服务之心引领他人。真正的领导力源于对自我的深刻认知，我自然而然地影响和启发周围的人。'
+  },
+  {
+    gate: 8, name: '比', nameCN: '贡献之门',
+    iChing: '比 · Holding Together',
+    center: '喉咙中心',
+    description: '通过真实的个体表达做出贡献',
+    affirmation: '我以独特的方式为世界做出贡献。我的表达是独一无二的礼物，当我分享真实的自己，我就在服务整体。'
+  },
+  {
+    gate: 9, name: '小畜', nameCN: '专注之门',
+    iChing: '小畜 · The Taming Power of the Small',
+    center: '荐骨中心',
+    description: '专注的决心与对细节的关注',
+    affirmation: '我拥有聚焦于细节并完成任务的强大能力。专注是我天生的力量，每一步精进都带来成长的喜悦。'
+  },
+  {
+    gate: 10, name: '履', nameCN: '自爱之门',
+    iChing: '履 · Treading',
+    center: 'G中心',
+    description: '自爱与真实行为',
+    affirmation: '我深深地爱着并接纳全部的自己。当我真实地做自己，我就在用生命展现最纯粹的美丽与力量。'
+  },
+  {
+    gate: 11, name: '泰', nameCN: '灵感之门',
+    iChing: '泰 · Peace',
+    center: '逻辑中心',
+    description: '想法的丰富与概念化',
+    affirmation: '我的内心充满无限的灵感与创意。每一个想法都是神圣的种子，我允许它们在合适的时刻绽放。'
+  },
+  {
+    gate: 12, name: '否', nameCN: '谨慎之门',
+    iChing: '否 · Standstill',
+    center: '喉咙中心',
+    description: '个体情感的谨慎表达',
+    affirmation: '我懂得在恰当的时刻表达自己的情感。沉默不等于缺席，我的话语如精心酿造的美酒，在成熟时自然流露。'
+  },
+  {
+    gate: 13, name: '同人', nameCN: '倾听之门',
+    iChing: '同人 · Fellowship with Men',
+    center: 'G中心',
+    description: '倾听与收集他人的经历',
+    affirmation: '我以开放的心倾听他人的故事。每一次倾听都是灵魂之间的相遇，我在其中收获智慧与连接。'
+  },
+  {
+    gate: 14, name: '大有', nameCN: '赋能之门',
+    iChing: '大有 · Possession in Great Measure',
+    center: '荐骨中心',
+    description: '权力技能与资源管理',
+    affirmation: '我拥有赋能他人的天赋。我所掌握的资源与技能，是用来服务生命、创造丰盛的礼物。'
+  },
+  {
+    gate: 15, name: '谦', nameCN: '博爱之门',
+    iChing: '谦 · Modesty',
+    center: 'G中心',
+    description: '对人类的热爱与拥抱行为的极端',
+    affirmation: '我以无条件的爱拥抱人性的所有面向。每一种生命表达都是完美的，我在多样性中看到完整的美。'
+  },
+  {
+    gate: 16, name: '豫', nameCN: '热忱之门',
+    iChing: '豫 · Enthusiasm',
+    center: '喉咙中心',
+    description: '对技能精通的热忱与选择性表达',
+    affirmation: '我全情投入于我所热爱的事物。热忱是我生命中最明亮的火焰，当我追随热情，一切皆有可能。'
+  },
+  {
+    gate: 17, name: '随', nameCN: '见解之门',
+    iChing: '随 · Following',
+    center: '逻辑中心',
+    description: '逻辑见解与模式识别',
+    affirmation: '我拥有敏锐的洞察力，能在复杂中发现模式与秩序。我的见解是照亮前行道路的明灯。'
+  },
+  {
+    gate: 18, name: '蛊', nameCN: '改进之门',
+    iChing: '蛊 · Work on What Has Been Spoiled',
+    center: '脾脏中心',
+    description: '纠正与改进模式的驱动力',
+    affirmation: '我看见需要改善之处，并拥有为之贡献的天赋。改进不是批判，而是对生命更深层的爱与关怀。'
+  },
+  {
+    gate: 19, name: '临', nameCN: '需求之门',
+    iChing: '临 · Approach',
+    center: '根部中心',
+    description: '对需求的敏感性与接近资源的方式',
+    affirmation: '我对需求有着敏锐的感知力。我有权利表达自己的需求，也有能力靠近和获取我所需的资源。'
+  },
+  {
+    gate: 20, name: '观', nameCN: '当下之门',
+    iChing: '观 · Contemplation',
+    center: '喉咙中心',
+    description: '当下觉知与存在性表达',
+    affirmation: '我全然活在当下这一刻。每一次呼吸都是新的开始，在当下的觉知中，我连接到无限的力量。'
+  },
+  {
+    gate: 21, name: '噬嗑', nameCN: '掌控之门',
+    iChing: '噬嗑 · Biting Through',
+    center: '意志力中心',
+    description: '资源管理中的控制力与意志力',
+    affirmation: '我理解并尊重一切资源的价值。我控制我能控制的，放下我无法控制的，在平衡中展现真正的力量。'
+  },
+  {
+    gate: 22, name: '贲', nameCN: '优雅之门',
+    iChing: '贲 · Grace',
+    center: '情绪中心',
+    description: '互动中的情感开放与优雅',
+    affirmation: '我在人际互动中保持优雅与开放。我的情感流动如水，柔和而有力量，在连接中展现灵魂的美丽。'
+  },
+  {
+    gate: 23, name: '剥', nameCN: '洞见之门',
+    iChing: '剥 · Splitting Apart',
+    center: '喉咙中心',
+    description: '个体洞见的同化与表达',
+    affirmation: '我敢于说出内在的真实洞见。即使与众不同，我的声音也有被听见的权利，我的认知是珍贵的贡献。'
+  },
+  {
+    gate: 24, name: '复', nameCN: '回归之门',
+    iChing: '复 · Return',
+    center: '逻辑中心',
+    description: '理性化与回归沉思',
+    affirmation: '我在沉思中回归内在的智慧。循环往复的思考不是徒劳，每一次回归都带来更深的理解与领悟。'
+  },
+  {
+    gate: 25, name: '无妄', nameCN: '纯真之门',
+    iChing: '无妄 · Innocence',
+    center: 'G中心',
+    description: '普遍之爱与自我之灵',
+    affirmation: '我以赤子之心面对世界。纯真不是无知，而是对生命本质最深的信任——爱是宇宙中唯一真实的力量。'
+  },
+  {
+    gate: 26, name: '大畜', nameCN: '感召之门',
+    iChing: '大畜 · The Taming Power of the Great',
+    center: '意志力中心',
+    description: '说服力与记忆的驯服力量',
+    affirmation: '我的诚信是我最宝贵的资产。当我为所有人的利益服务时，推广与分享便成为最纯粹的爱的行动。'
+  },
+  {
+    gate: 27, name: '颐', nameCN: '滋养之门',
+    iChing: '颐 · The Corners of the Mouth',
+    center: '荐骨中心',
+    description: '关怀、滋养与维护生命',
+    affirmation: '我天生拥有滋养和关怀他人的能力。我的关怀是温暖的光，在给予中我也同时被生命深深滋养。'
+  },
+  {
+    gate: 28, name: '大过', nameCN: '意义之门',
+    iChing: '大过 · Preponderance of the Great',
+    center: '脾脏中心',
+    description: '为生命中的目的和意义而奋斗',
+    affirmation: '我的生命拥有深远的意义。每一次追寻都是灵魂的旅程，我信任生命会揭示属于我的独特目的。'
+  },
+  {
+    gate: 29, name: '坎', nameCN: '毅力之门',
+    iChing: '坎 · The Abysmal',
+    center: '荐骨中心',
+    description: '毅力与对体验的投入',
+    affirmation: '我拥有面对深渊依然前行的毅力。每一次全然的投入都是对生命的深爱，坚持本身就是最强大的力量。'
+  },
+  {
+    gate: 30, name: '离', nameCN: '渴望之门',
+    iChing: '离 · The Clinging Fire',
+    center: '情绪中心',
+    description: '情感渴望与感受之火',
+    affirmation: '我允许自己去渴望、去感受生命的热度。情感之火不是毁灭，而是照亮灵魂最深处渴望的光芒。'
+  },
+  {
+    gate: 31, name: '咸', nameCN: '影响之门',
+    iChing: '咸 · Influence',
+    center: '喉咙中心',
+    description: '民主领导与言语影响力',
+    affirmation: '我的言语拥有影响他人的力量。我用这力量激发集体中的美好，以民主和尊重引领，而非控制。'
+  },
+  {
+    gate: 32, name: '恒', nameCN: '持久之门',
+    iChing: '恒 · Duration',
+    center: '脾脏中心',
+    description: '对持久价值和连续性的本能识别',
+    affirmation: '我本能地识别出真正持久而有价值的事物。在变幻的世界中，我连接到永恒不变的真理。'
+  },
+  {
+    gate: 33, name: '遁', nameCN: '退隐之门',
+    iChing: '遁 · Retreat',
+    center: '喉咙中心',
+    description: '隐私、退隐与经验的故事讲述',
+    affirmation: '我尊重自己需要独处和退隐的时刻。在宁静中沉淀的智慧，终将化为最动人的故事与世界分享。'
+  },
+  {
+    gate: 34, name: '大壮', nameCN: '力量之门',
+    iChing: '大壮 · The Power of the Great',
+    center: '荐骨中心',
+    description: '纯粹的力量与个体赋能',
+    affirmation: '我内在蕴藏着纯粹而强大的力量。这股力量是为了自我赋能，而非凌驾他人，我以爱与觉知驾驭它。'
+  },
+  {
+    gate: 35, name: '晋', nameCN: '进步之门',
+    iChing: '晋 · Progress',
+    center: '喉咙中心',
+    description: '通过体验性变化和冒险实现进步',
+    affirmation: '我拥抱变化与冒险中的成长。每一次新的体验都是进步的机会，我勇敢地走向未知，收获丰盛。'
+  },
+  {
+    gate: 36, name: '明夷', nameCN: '危机之门',
+    iChing: '明夷 · Darkening of the Light',
+    center: '情绪中心',
+    description: '通过危机和体验进行情感探索',
+    affirmation: '我在危机中看见成长的契机。暗夜终将过去，情感深处的探索让我更加完整和充满智慧。'
+  },
+  {
+    gate: 37, name: '家人', nameCN: '家庭之门',
+    iChing: '家人 · The Family',
+    center: '情绪中心',
+    description: '友谊、社区纽带与部落协议',
+    affirmation: '我珍视生命中的每一份连接与归属。家庭不限于血缘，而是所有以爱为纽带的灵魂之间的约定。'
+  },
+  {
+    gate: 38, name: '睽', nameCN: '战斗之门',
+    iChing: '睽 · Opposition',
+    center: '根部中心',
+    description: '为个体目的和意义而战',
+    affirmation: '我有勇气为我的信念和生命意义而战斗。反抗不是对抗，而是对真实自我的坚定守护。'
+  },
+  {
+    gate: 39, name: '蹇', nameCN: '挑衅之门',
+    iChing: '蹇 · Obstruction',
+    center: '根部中心',
+    description: '挑衅与测试情感精神',
+    affirmation: '我的挑衅精神是为了唤醒更深层的情感真实。每一次挑战都是在测试和淬炼灵魂的纯度。'
+  },
+  {
+    gate: 40, name: '解', nameCN: '解脱之门',
+    iChing: '解 · Deliverance',
+    center: '意志力中心',
+    description: '为社区服务的意志力与必要的独处之间的平衡',
+    affirmation: '我在服务他人与照顾自己之间找到美丽的平衡。我的独处不是自私，而是让爱更纯净地流动的前提。'
+  },
+  {
+    gate: 41, name: '损', nameCN: '想象之门',
+    iChing: '损 · Decrease',
+    center: '根部中心',
+    description: '想象力、幻想与新体验的启动',
+    affirmation: '我的想象力是启动新现实的种子。每一次幻想都是灵魂在预告未来，我信任内在图景的指引。'
+  },
+  {
+    gate: 42, name: '益', nameCN: '成长之门',
+    iChing: '益 · Increase',
+    center: '荐骨中心',
+    description: '通过完成体验周期实现成长',
+    affirmation: '我在每一个完成的体验周期中获得成长。每一次结束都是新开始的序曲，我庆祝生命中的每一个圆满。'
+  },
+  {
+    gate: 43, name: '夬', nameCN: '突破之门',
+    iChing: '夬 · Breakthrough',
+    center: '逻辑中心',
+    description: '个体洞察与心智突破',
+    affirmation: '我在恰当的时刻获得心智的突破。我的洞见或许超前于时代，但它正是这个世界现在最需要的启迪。'
+  },
+  {
+    gate: 44, name: '姤', nameCN: '警觉之门',
+    iChing: '姤 · Coming to Meet',
+    center: '脾脏中心',
+    description: '对模式和机会的本能警觉',
+    affirmation: '我拥有对机遇和模式的天然警觉。本能引导我识别真正重要的人和事，我信任这份直觉的智慧。'
+  },
+  {
+    gate: 45, name: '萃', nameCN: '聚集之门',
+    iChing: '萃 · Gathering Together',
+    center: '喉咙中心',
+    description: '聚集资源与通过拥有实现部落领导',
+    affirmation: '我天生懂得如何聚集资源和人心。富足不是为了囤积，而是为了更慷慨地分享与滋养整个群体。'
+  },
+  {
+    gate: 46, name: '升', nameCN: '推进之门',
+    iChing: '升 · Pushing Upward',
+    center: 'G中心',
+    description: '通过体现和偶然机缘实现自我决心',
+    affirmation: '我在对的时间遇到对的人和事。生命中每一次偶然的相遇都是神圣的安排，推动我走向更高的自我。'
+  },
+  {
+    gate: 47, name: '困', nameCN: '领悟之门',
+    iChing: '困 · Oppression',
+    center: '逻辑中心',
+    description: '通过解决心智压力实现领悟',
+    affirmation: '我的心智压力是领悟的催化剂。在困境中酝酿的智慧，终将如黎明破晓般照亮我前行的路。'
+  },
+  {
+    gate: 48, name: '井', nameCN: '深度之门',
+    iChing: '井 · The Well',
+    center: '脾脏中心',
+    description: '知识的深度与对不足的恐惧',
+    affirmation: '我拥有的知识深度如古井般深远。我不需要知晓一切——我所知道的已经足够，并且在需要的时刻，智慧自会涌现。'
+  },
+  {
+    gate: 49, name: '革', nameCN: '革命之门',
+    iChing: '革 · Revolution',
+    center: '情绪中心',
+    description: '情感原则与革命的能量',
+    affirmation: '我以爱的原则引领变革。革命不始于刀剑，而始于一颗坚守真理的心——我以情感智慧重塑现实。'
+  },
+  {
+    gate: 50, name: '鼎', nameCN: '价值之门',
+    iChing: '鼎 · The Cauldron',
+    center: '脾脏中心',
+    description: '部落价值观、责任与法律的建立',
+    affirmation: '我承载着滋养群体的价值观与责任。如同大鼎，我将传统智慧与现代觉知融合，为世界提供精神的滋养。'
+  },
+  {
+    gate: 51, name: '震', nameCN: '唤醒之门',
+    iChing: '震 · The Arousing',
+    center: '意志力中心',
+    description: '震惊、启蒙与竞争的勇气',
+    affirmation: '我对生命怀有根本的信任。每一次震撼都是唤醒的契机，我有勇气依照内在的指引而活。'
+  },
+  {
+    gate: 52, name: '艮', nameCN: '静止之门',
+    iChing: '艮 · Keeping Still',
+    center: '根部中心',
+    description: '静止、专注与聚焦的克制',
+    affirmation: '我在静止中找到无限的力量。不行动不代表无所作为，专注的静止是酝酿伟大行动的土壤。'
+  },
+  {
+    gate: 53, name: '渐', nameCN: '发展之门',
+    iChing: '渐 · Development',
+    center: '根部中心',
+    description: '新开始和发展周期的压力',
+    affirmation: '我拥抱每一个新开始的压力作为成长的动力。发展是循序渐进的旅程，每一步都在孕育更丰盛的未来。'
+  },
+  {
+    gate: 54, name: '归妹', nameCN: '野心之门',
+    iChing: '归妹 · The Marrying Maiden',
+    center: '根部中心',
+    description: '野心与对物质和灵性提升的驱动力',
+    affirmation: '我的野心是灵魂向上的驱动力。我既追求物质的丰盛也渴望灵性的提升，两者和谐共存于我的生命旅程。'
+  },
+  {
+    gate: 55, name: '丰', nameCN: '丰盛之门',
+    iChing: '丰 · Abundance',
+    center: '情绪中心',
+    description: '情感灵性与丰盛的潜力',
+    affirmation: '我是无限丰盛的通道。情绪的深度是我的灵性天赋，在感受的海洋中，我连接到宇宙无尽的爱与丰盛。'
+  },
+  {
+    gate: 56, name: '旅', nameCN: '故事之门',
+    iChing: '旅 · The Wanderer',
+    center: '喉咙中心',
+    description: '通过讲故事和体验性表达进行刺激',
+    affirmation: '我是一个天生的故事讲述者。我的经历和见闻是点燃他人心灵的星火，在分享中我找到生命的意义与快乐。'
+  },
+  {
+    gate: 57, name: '巽', nameCN: '直觉之门',
+    iChing: '巽 · The Gentle',
+    center: '脾脏中心',
+    description: '直觉清明与穿透性觉知',
+    affirmation: '我的直觉如清风般穿透一切迷雾。在当下这一刻，我知道什么是对的——我信任这份穿透一切的清明觉知。'
+  },
+  {
+    gate: 58, name: '兑', nameCN: '喜悦之门',
+    iChing: '兑 · The Joyous',
+    center: '根部中心',
+    description: '活力、喜悦与改善生活的驱动力',
+    affirmation: '喜悦是我生命最本真的状态。我拥有让生活变得更好的内在驱动力，在改善世界的过程中我找到了最深的满足。'
+  },
+  {
+    gate: 59, name: '涣', nameCN: '亲密之门',
+    iChing: '涣 · Dispersion',
+    center: '荐骨中心',
+    description: '性欲、亲密与障碍的溶解',
+    affirmation: '我拥有融化人与人之间隔阂的能力。真正的亲密是灵魂的融合，我以敞开的心迎接深层连接的礼物。'
+  },
+  {
+    gate: 60, name: '节', nameCN: '限制之门',
+    iChing: '节 · Limitation',
+    center: '根部中心',
+    description: '接受限制与突变的脉动',
+    affirmation: '我拥抱生命中的限制，因为它们是突变的摇篮。每一道边界都是能量积累的空间，在限制中我孕育着质的飞跃。'
+  },
+  {
+    gate: 61, name: '中孚', nameCN: '奥秘之门',
+    iChing: '中孚 · Inner Truth',
+    center: '头部中心',
+    description: '奥秘、灵感与认知内在真理的压力',
+    affirmation: '我被生命的奥秘深深吸引，并在这探索中找到意义。每一次追问都是与内在真理相遇的契机。'
+  },
+  {
+    gate: 62, name: '小过', nameCN: '细节之门',
+    iChing: '小过 · Preponderance of the Small',
+    center: '喉咙中心',
+    description: '细节和事实的精确沟通',
+    affirmation: '我注重细节，用精准的语言传达事实。每一个看似微小的信息，都在构建世界的完整拼图。'
+  },
+  {
+    gate: 63, name: '既济', nameCN: '怀疑之门',
+    iChing: '既济 · After Completion',
+    center: '头部中心',
+    description: '逻辑怀疑与对证据的压力',
+    affirmation: '我的怀疑是追求真理的燃料。每一个问题都是走向更深理解的一步，在追问中我靠近真相。'
+  },
+  {
+    gate: 64, name: '未济', nameCN: '困惑之门',
+    iChing: '未济 · Before Completion',
+    center: '头部中心',
+    description: '心智困惑与抽象思维的解决',
+    affirmation: '我接纳困惑是通向领悟的必经之路。混乱之中孕育着创世之光，当我穿越思维的迷雾，意义自然显现。'
+  }
+];
+
+// ═══════════════════════════════════════════
+//  State Management
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'hd-affirmation-history';
+let history = [];
+
+function loadHistory() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) history = JSON.parse(saved);
+  } catch(e) {
+    history = [];
+  }
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 64)));
+  } catch(e) {}
+}
+
+function clearHistory() {
+  if (history.length === 0) return;
+  if (!confirm('确定要清空所有抽卡记录吗？此操作不可撤销。')) return;
+  history = [];
+  localStorage.removeItem(STORAGE_KEY);
+  renderHistory();
+  showToast('✅ 抽卡记录已清空');
+}
+
+function addToHistory(gateData) {
+  const entry = {
+    gate: gateData.gate,
+    name: gateData.name,
+    nameCN: gateData.nameCN,
+    affirmation: gateData.affirmation,
+    timestamp: new Date().toISOString()
+  };
+  // Remove if already exists, then prepend
+  history = history.filter(h => h.gate !== entry.gate);
+  history.unshift(entry);
+  // Keep max 64
+  if (history.length > 64) history = history.slice(0, 64);
+  saveHistory();
+  renderHistory();
+}
+
+// ═══════════════════════════════════════════
+//  Card Draw Logic
+// ═══════════════════════════════════════════
+function drawCard() {
+  const deckArea = document.getElementById('deckArea');
+  const resultArea = document.getElementById('resultArea');
+
+  // Random pick
+  const idx = Math.floor(Math.random() * gatesData.length);
+  const gate = gatesData[idx];
+
+  // Confetti!
+  spawnConfetti();
+
+  // Hide deck, show result
+  deckArea.style.display = 'none';
+  resultArea.innerHTML = renderResultCard(gate);
+  resultArea.style.display = 'block';
+
+  // Add to history
+  addToHistory(gate);
+
+  // Scroll to result
+  setTimeout(() => {
+    resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function renderResultCard(gate) {
+  return `
+    <div class="result-card">
+      <div class="gate-badge">
+        <span class="gate-num">${gate.gate}</span>
+        <span>${gate.iChing}</span>
+      </div>
+      <div class="gate-name">${gate.name} · ${gate.nameCN}</div>
+      <div class="gate-iching">易经 ${gate.iChing}</div>
+      <div class="affirmation-label">✦ 今日肯定语</div>
+      <div class="affirmation-text">${gate.affirmation}</div>
+      <span class="gate-center">${gate.center}</span>
+      <div class="gate-description">${gate.description}</div>
+      <div class="action-buttons">
+        <button class="btn btn-draw" onclick="drawCard()">🎴 再抽一张</button>
+        <button class="btn btn-outline" onclick="shareCard(${gate.gate})">📤 分享肯定语</button>
+        <button class="btn btn-text" onclick="resetCards()">↩ 返回卡组</button>
+      </div>
+    </div>
+  `;
+}
+
+function resetCards() {
+  document.getElementById('deckArea').style.display = 'flex';
+  document.getElementById('resultArea').innerHTML = '';
+  document.getElementById('resultArea').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function shareCard(gateNum) {
+  const gate = gatesData.find(g => g.gate === gateNum);
+  if (!gate) return;
+  const text = `🔮 人类图肯定语抽卡 · 第${gate.gate}闸门\n【${gate.name}·${gate.nameCN}】\n${gate.iChing}\n\n"${gate.affirmation}"\n\n—— 人类图肯定语能量抽卡 V4`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('✅ 已复制肯定语到剪贴板，可以分享给朋友啦~');
+    }).catch(() => {
+      showToast('📋 分享文本：' + text.substring(0, 50) + '...');
+    });
+  } else {
+    showToast('📋 分享文本已准备好，请手动复制');
+  }
+}
+
+// ═══════════════════════════════════════════
+//  History Rendering
+// ═══════════════════════════════════════════
+function renderHistory() {
+  const grid = document.getElementById('historyGrid');
+  const empty = document.getElementById('emptyHistory');
+  const btnClear = document.getElementById('btnClear');
+  if (history.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    btnClear.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  btnClear.style.display = 'inline-block';
+  grid.innerHTML = history.map(h => {
+    const d = new Date(h.timestamp);
+    const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    return `
+      <div class="history-card" onclick="revisitCard(${h.gate})">
+        <div class="h-gate-num">${h.gate}</div>
+        <div class="h-gate-name">${h.name}·${h.nameCN}</div>
+        <div class="h-time">${timeStr}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function revisitCard(gateNum) {
+  const gate = gatesData.find(g => g.gate === gateNum);
+  if (!gate) return;
+  const deckArea = document.getElementById('deckArea');
+  const resultArea = document.getElementById('resultArea');
+  deckArea.style.display = 'none';
+  resultArea.innerHTML = renderResultCard(gate);
+  resultArea.style.display = 'block';
+  resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ═══════════════════════════════════════════
+//  Confetti Animation
+// ═══════════════════════════════════════════
+function spawnConfetti() {
+  const container = document.getElementById('confetti');
+  const colors = ['#C4956A', '#D4A574', '#E8DCC8', '#A67B55', '#2D2118', '#F5D6A8', '#B88560'];
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.top = -(Math.random() * 40 + 10) + 'px';
+    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.6 + 's';
+    piece.style.animationDuration = (Math.random() * 1.2 + 1.2) + 's';
+    piece.style.width = (Math.random() * 8 + 6) + 'px';
+    piece.style.height = (Math.random() * 8 + 6) + 'px';
+    fragment.appendChild(piece);
+  }
+  container.appendChild(fragment);
+  setTimeout(() => {
+    container.innerHTML = '';
+  }, 2500);
+}
+
+// ═══════════════════════════════════════════
+//  Toast
+// ═══════════════════════════════════════════
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2800);
+}
+
+// ═══════════════════════════════════════════
+//  Init
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadHistory();
+  renderHistory();
+});
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ' || e.code === 'Space') {
+    e.preventDefault();
+    const resultVisible = document.getElementById('resultArea').style.display !== 'none';
+    if (resultVisible) {
+      drawCard();
+    } else {
+      drawCard();
+    }
+  }
+});
+</script>
+</body>
+</html>

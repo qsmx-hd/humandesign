@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图 · 关系合盘抽卡 | Human Design Relationship</title>
+<style>
+:root {
+  --bg: #F5F0E8;
+  --card-bg: #FDF9F2;
+  --gold: #C4956A;
+  --dark: #2D2118;
+  --border: #E8DCC8;
+  --text: #3A2A1A;
+  --text-light: #6B5D4F;
+  --accent: #D4A574;
+  --shadow: 0 4px 20px rgba(45,33,24,0.12);
+  --shadow-lg: 0 8px 40px rgba(45,33,24,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(196,149,106,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(196,149,106,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(196,149,106,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+
+.header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.header .subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--gold);
+  text-decoration: none;
+  border: 1px solid var(--gold);
+  padding: 4px 14px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover { background: var(--gold); color: white; }
+
+/* Dim Selector */
+.dim-selector {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.dim-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.dim-btn:hover { border-color: var(--gold); }
+.dim-btn.active {
+  background: var(--gold);
+  color: white;
+  border-color: var(--gold);
+}
+
+/* Option Grid */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.option-btn:hover { border-color: var(--gold); transform: translateY(-2px); }
+.option-btn.active {
+  border-color: var(--gold);
+  background: rgba(196,149,106,0.1);
+  box-shadow: 0 0 0 2px rgba(196,149,106,0.2);
+}
+
+.option-btn .opt-icon { font-size: 24px; }
+.option-btn .opt-name { font-size: 13px; }
+
+/* Card Stage */
+.card-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 30px;
+  min-height: 400px;
+  justify-content: center;
+}
+
+.deck-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.deck-visual {
+  position: relative;
+  width: 260px;
+  height: 360px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.deck-visual:hover { transform: translateY(-4px); }
+.deck-visual:active { transform: scale(0.97); }
+
+.deck-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.deck-card:nth-child(1) {
+  background: linear-gradient(145deg, #C4956A 0%, #A67B55 100%);
+  top: 0; left: 0;
+  z-index: 3;
+  box-shadow: var(--shadow-lg);
+}
+
+.deck-card:nth-child(2) {
+  background: linear-gradient(145deg, #D4A574 0%, #B88560 100%);
+  top: 6px; left: 6px;
+  z-index: 2;
+  box-shadow: var(--shadow);
+}
+
+.deck-card:nth-child(3) {
+  background: linear-gradient(145deg, #E0B88A 0%, #C89570 100%);
+  top: 12px; left: 12px;
+  z-index: 1;
+}
+
+.deck-card-front {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #C4956A 0%, #A67B55 100%);
+  border: 3px solid rgba(255,255,255,0.25);
+}
+
+.deck-card-front .deck-icon { font-size: 56px; margin-bottom: 16px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+.deck-card-front .deck-label { font-size: 18px; font-weight: 700; color: #FFF; letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.deck-card-front .deck-sub { font-size: 12px; color: rgba(255,255,255,0.75); letter-spacing: 2px; margin-top: 8px; }
+
+.draw-hint {
+  font-size: 14px;
+  color: var(--text-light);
+  text-align: center;
+  letter-spacing: 1px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+/* Result Card */
+.result-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  animation: fadeInUp 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--gold);
+}
+
+.card-icon {
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.card-label {
+  font-size: 13px;
+  color: var(--gold);
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.card-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--gold);
+  margin: 0 auto 20px;
+  border-radius: 1px;
+}
+
+.card-affirmation {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+  text-align: center;
+  padding: 0 8px;
+  margin-bottom: 20px;
+}
+
+.card-guidance {
+  background: rgba(196,149,106,0.08);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.card-guidance-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.card-guidance-text {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.action-btn:hover { background: var(--bg); border-color: var(--gold); }
+.action-btn.primary { background: var(--gold); color: white; border-color: var(--gold); }
+.action-btn.primary:hover { background: var(--dark); }
+
+.card-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.card-placeholder .ph-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+/* History */
+.history-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.history-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark);
+  letter-spacing: 1px;
+}
+
+.history-clear {
+  font-size: 12px;
+  color: var(--text-light);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.history-clear:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.history-item:hover {
+  border-color: var(--gold);
+  transform: translateX(4px);
+}
+
+.history-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.history-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.history-item-time {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.history-item-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.history-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+footer {
+  text-align: center;
+  padding: 30px 0 20px;
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--dark);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 22px; }
+  .result-card { padding: 28px 20px; }
+  .card-affirmation { font-size: 15px; }
+  .option-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>💫 关系合盘抽卡</h1>
+    <p class="subtitle">双人关系能量解读，抽取关系中的成长主题与互动建议</p>
+    <a href="hd-affirmation-cards.html" class="back-link">← 返回抽卡中心</a>
+  </div>
+
+  <div class="dim-selector" id="dimSelector">
+    <button class="dim-btn active" data-dim="attraction" onclick="selectDim('attraction')">吸引力</button>
+    <button class="dim-btn" data-dim="challenge" onclick="selectDim('challenge')">挑战</button>
+    <button class="dim-btn" data-dim="growth" onclick="selectDim('growth')">共同成长</button>
+    <button class="dim-btn" data-dim="interaction" onclick="selectDim('interaction')">互动建议</button>
+  </div>
+
+  <div id="selectorArea"></div>
+
+  <div class="card-stage" id="cardStage">
+    <div class="deck-area" id="deckArea">
+      <div class="deck-visual" onclick="drawCard()">
+        <div class="deck-card"></div>
+        <div class="deck-card"></div>
+        <div class="deck-card">
+          <div class="deck-card-front">
+            <div class="deck-icon">💫</div>
+            <div class="deck-label">关系合盘</div>
+            <div class="deck-sub">点击抽取</div>
+          </div>
+        </div>
+      </div>
+      <div class="draw-hint">选择维度后点击卡牌抽取关系指引</div>
+    </div>
+  </div>
+
+  <footer>
+    人类图关系合盘抽卡 · 基于双人关系能量动态<br>
+    Powered By Kan Man Tang
+  </footer>
+
+  <div class="history-section" id="historySection" style="display:none;">
+    <div class="history-header">
+      <span class="history-title">📜 抽卡记录</span>
+      <button class="history-clear" onclick="clearHistory()">🗑️ 清空</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== 数据 ======
+const attractionThemes = [
+  {
+    key: 'electromagnetic',
+    name: "电磁连接",
+    icon: "⚡",
+    affirmations: [
+      "我们之间存在着一种天然的电磁吸引，那是我们闸门之间的对话。",
+      "我被你身上我所缺失的部分吸引，那是我们互补的天赋。",
+      "这种吸引力不是选择，而是设计——我们的身体比头脑更先知道。",
+      "当我与你在一起，我感到一种能量的充电，这是电磁连接的证明。",
+      "我们的吸引力是宇宙精心设计的，让我们彼此完整。"
+    ],
+    guidance: "注意你们彼此缺失的闸门被对方的定义所填补。这种互补带来强烈的吸引力，但也可能带来依赖。学习在连接中保持独立。"
+  },
+  {
+    key: 'dominance',
+    name: "主导连接",
+    icon: "👑",
+    affirmations: [
+      "在关系中，我学习如何接受或给予引导。",
+      "我允许自己在你的能量中被提升，也允许你因我而成长。",
+      "主导不是控制，而是一种能量流动的自然方向。",
+      "我尊重你在关系中的主导地位，同时不失去自己的声音。",
+      "当主导与臣服平衡，关系才能深入。"
+    ],
+    guidance: "注意谁在关系中自然主导。这不是权力问题，而是能量流动的方向。被主导的一方需要学会信任和臣服，主导方需要学习责任和觉察。"
+  },
+  {
+    key: 'companionship',
+    name: "伴侣连接",
+    icon: "🤝",
+    affirmations: [
+      "我们是彼此最好的伴侣，相同的定义让我们深深共鸣。",
+      "我们理解彼此，因为我们在相似的能量中运作。",
+      "这种连接带来舒适和熟悉，像遇到了另一个自己。",
+      "我们在伴侣关系中学习如何与自己相处。",
+      "我们的相似是礼物，也是镜子——映照出我们的光与影。"
+    ],
+    guidance: "相似的定义带来深刻的理解和共鸣，但也可能放大相同的盲点。在舒适中保持觉察，不要让相似成为停滞的理由。"
+  },
+  {
+    key: 'mystery',
+    name: "神秘连接",
+    icon: "🔮",
+    affirmations: [
+      "我们之间的吸引力来自未知，那正是它的魅力所在。",
+      "我被你身上我无法理解的部分吸引，那是我的扩展。",
+      "神秘连接邀请我放下控制，臣服于未知。",
+      "我不需要理解一切，有些连接超越解释。",
+      "正是这种神秘，让我们的关系保持活力和深度。"
+    ],
+    guidance: "你们之间的差异带来不可预测的化学反应。这种连接可能令人不安，但也充满潜力。拥抱未知，让关系自然展开。"
+  },
+  {
+    key: 'karma',
+    name: "业力连接",
+    icon: "🔄",
+    affirmations: [
+      "我们的相遇不是偶然，而是灵魂层面的约定。",
+      "你带来我需要面对的功课，我也为你提供你的。",
+      "业力连接是深度的，它不总是轻松，但总是有意义。",
+      "我在这个关系中疗愈过去的模式，创造新的可能。",
+      "我们共同选择的灵魂课题，正在被这个关系激活。"
+    ],
+    guidance: "这种连接可能感觉命中注定，既有强烈的吸引力也有挑战。注意重复出现的模式，它们携带了深层疗愈的信息。"
+  }
+];
+
+const challengeThemes = [
+  {
+    key: 'authority',
+    name: "权威冲突",
+    icon: "⚔️",
+    affirmations: [
+      "我们的权威不同，但这正是我们互相学习的机会。",
+      "我尊重你的决策方式，即使它与我的完全不同。",
+      "当权威冲突时，我选择理解而非争论。",
+      "不同的权威带来不同的智慧，我们彼此补充。",
+      "我学习在你的权威中找到平衡，也邀请你理解我的。"
+    ],
+    guidance: "不同类型的权威（情绪、荐骨、直觉等）带来不同的决策方式。注意你们如何在重要决定上协调。理解比改变更重要。"
+  },
+  {
+    key: 'type',
+    name: "类型差异",
+    icon: "🎭",
+    affirmations: [
+      "我们是不同的类型，但这正是我们的力量所在。",
+      "我学习以你的方式理解世界，即使它与我相反。",
+      "生产者与投射者（或显示者、反映者）之间，需要彼此的理解。",
+      "我们的类型差异不是障碍，而是互补的礼物。",
+      "当我理解你的类型，我就能真正支持你的设计。"
+    ],
+    guidance: "不同类型（生产者、投射者、显示者、反映者）有不同的能量运作方式。最大的挑战往往来自对彼此类型的误解。学习欣赏差异。"
+  },
+  {
+    key: 'center',
+    name: "中心张力",
+    icon: "💢",
+    affirmations: [
+      "我们未定义的中心互动，带来放大的体验。",
+      "我觉察在你面前的放大反应，它来自我的开放性。",
+      "当我的未定义中心被你的定义中心影响，我学习觉察。",
+      "我不把放大的反应当作真相，我知道它是条件作用。",
+      "我们的中心互动是动态的，我选择在其中保持觉知。"
+    ],
+    guidance: "未定义的中心容易被对方的定义中心所放大。注意你在哪里感到被过度影响，学会区分你的能量和他人的能量。"
+  },
+  {
+    key: 'conditioning',
+    name: "条件作用",
+    icon: "🔗",
+    affirmations: [
+      "我觉察关系中彼此的条件作用，我选择有意识地回应。",
+      "你的闸门激活我的条件作用，这是我的觉察机会。",
+      "我不怪你让我感觉某种方式，我为自己的反应负责。",
+      "条件作用不是爱的敌人，它是理解的桥梁。",
+      "当我看见条件作用，我就有了选择的自由。"
+    ],
+    guidance: "关系中最大的挑战往往来自无意识的条件作用。注意你在哪里感到被触发，这些触发点携带了深层的信息。觉察是自由的第一步。"
+  },
+  {
+    key: 'communication',
+    name: "沟通模式",
+    icon: "💬",
+    affirmations: [
+      "我们学习用对方能理解的方式沟通。",
+      "我的沟通方式不是唯一的方式，我扩展我的频道。",
+      "当沟通困难时，我回到身体，而非只依赖头脑。",
+      "我倾听你的身体语言，就像我倾听你的话语。",
+      "真正的沟通是能量的对话，不只是言语。"
+    ],
+    guidance: "注意你们的沟通风格差异。有些人需要告知，有些人需要被邀请，有些人需要回应。理解彼此的沟通需求，而不是假设对方和你一样。"
+  }
+];
+
+const growthThemes = [
+  {
+    key: 'shared',
+    name: "共同使命",
+    icon: "🌟",
+    affirmations: [
+      "我们来到一起，是为了完成一个更大的使命。",
+      "我们的关系是服务世界的载体，我们共同创造。",
+      "当我们一起工作时，我们成为比个体更大的存在。",
+      "我们的共同使命需要我们一起成长才能实现。",
+      "我感恩这个共同使命，它让我们的关系有了更深的意义。"
+    ],
+    guidance: "注意你们关系中是否有共同的目标或使命。这可能是创造性的、灵性的、或服务性的。共同使命给关系带来方向和意义。"
+  },
+  {
+    key: 'mirror',
+    name: "镜像成长",
+    icon: "🪞",
+    affirmations: [
+      "你是我的镜子，映照出我尚未整合的部分。",
+      "我在你身上看见我的光，也看见我的影。",
+      "关系中的挑战，是我内在功课的外在投射。",
+      "我感谢你给我机会，让我看见自己。",
+      "当我们都在镜中看见真相，我们就一起自由了。"
+    ],
+    guidance: "关系是最强大的镜子。注意你对他人的反应，特别是强烈的反应。它们指向你尚未整合的部分。用这个关系作为自我认识的机会。"
+  },
+  {
+    key: 'support',
+    name: "支持系统",
+    icon: "🤗",
+    affirmations: [
+      "我们是彼此的支持系统，在对方需要时提供力量。",
+      "我知道如何支持你的设计，而不是我希望你成为的样子。",
+      "真正的支持是看见对方的真实，并爱那个真实。",
+      "我们在支持中学习给予，也学习接受。",
+      "当我支持你的成长，我也在成长。"
+    ],
+    guidance: "注意你们如何支持彼此。真正的支持是基于对方的设计，而不是你的期望。学习用对方需要的方式支持，而不是你想给的方式。"
+  },
+  {
+    key: 'alchemy',
+    name: "炼金转化",
+    icon: "⚗️",
+    affirmations: [
+      "我们的关系是一场炼金术，将平凡转化为非凡。",
+      "在彼此的陪伴中，我们经历的困难被转化为智慧。",
+      "炼金转化需要时间和耐心，我信任这个过程。",
+      "我们的关系是一个坩埚，在这里我们都变得更纯净。",
+      "每一次转化，我们都更接近自己本质的黄金。"
+    ],
+    guidance: "关系有转化力。注意你们如何一起经历了改变和成长。挑战不是障碍，而是转化的原料。信任这个炼金过程。"
+  },
+  {
+    key: 'soul',
+    name: "灵魂契约",
+    icon: "✨",
+    affirmations: [
+      "我们在灵魂层面约定，此生一起学习和进化。",
+      "我们的关系超越此生，它是灵魂之旅的一部分。",
+      "我尊重这个灵魂契约，无论它带给我什么。",
+      "我们的相遇是注定，我们的选择是自由。",
+      "在灵魂契约中，每一次互动都是神圣的。"
+    ],
+    guidance: "有些关系感觉命中注定，携带了深层的灵魂意义。注意关系中的同步性和巧合。它们可能是灵魂层面的信息。信任这个更深的连接。"
+  }
+];
+
+const interactionThemes = [
+  {
+    key: 'space',
+    name: "空间尊重",
+    icon: "🏠",
+    affirmations: [
+      "我尊重你需要空间的时候，就像我尊重我需要空间的时候。",
+      "空间不是距离，它是关系呼吸所需的空气。",
+      "我学会在你需要独处时，优雅地退后。",
+      "我们的关系需要共同空间，也需要个人空间。",
+      "当空间被尊重，相聚才更加珍贵。"
+    ],
+    guidance: "不同类型的关系需要不同的空间。注意你们各自需要多少独处时间和共同时间。尊重彼此的空间需求，不要将其误解为拒绝。"
+  },
+  {
+    key: 'intimacy',
+    name: "亲密层次",
+    icon: "💗",
+    affirmations: [
+      "我允许自己在你面前的脆弱，那是真正的亲密。",
+      "亲密不是身体的接近，而是心灵的敞开。",
+      "我分享我的真实感受，即使它们不总是美好。",
+      "我在亲密中保持我的边界，同时向你敞开。",
+      "真正的亲密是两个人都能做自己，仍然选择在一起。"
+    ],
+    guidance: "注意你们如何建立和维持亲密。亲密需要信任，需要时间。不要急于推进，让亲密自然生长。在亲密中保持自我。"
+  },
+  {
+    key: 'decision',
+    name: "共同决策",
+    icon: "⚖️",
+    affirmations: [
+      "我们在决策中平衡彼此的需求，找到共赢的方案。",
+      "我尊重你的权威，同时也表达我的需要。",
+      "共同决策不是妥协，而是创造第三种可能。",
+      "当我们用各自的方式参与决策，结果总是更好。",
+      "我在决策中练习耐心，给彼此足够的时间。"
+    ],
+    guidance: "注意你们如何做决定。尊重彼此的权威，学习协调不同的决策方式。有些决定需要等待，有些需要立即行动。找到你们的节奏。"
+  },
+  {
+    key: 'conflict',
+    name: "冲突转化",
+    icon: "🔥",
+    affirmations: [
+      "我把冲突看作理解彼此更深的机会，而非关系的威胁。",
+      "在冲突中，我选择倾听而非防御。",
+      "冲突不是敌人，它是关系的免疫系统。",
+      "我表达我的需求，同时尊重你的不同。",
+      "当冲突被转化，关系变得更强大。"
+    ],
+    guidance: "冲突是不可避免的，但如何处理冲突是选择。注意你们在冲突中的模式。学习把冲突转化为理解的机会，而不是逃避或攻击。"
+  },
+  {
+    key: 'ritual',
+    name: "共同仪式",
+    icon: "🕯️",
+    affirmations: [
+      "我们创造属于我们的仪式，它们成为关系的锚。",
+      "共同仪式让我们在忙碌中重新连接。",
+      "我珍惜我们一起做的每一件小事，它们构成了我们。",
+      "仪式不需要宏大，重要的是我们一起做的承诺。",
+      "我们的仪式是关系的记忆，它们提醒我们为何在一起。"
+    ],
+    guidance: "共同仪式给关系带来稳定性和意义。注意你们已经有的仪式，以及可以创造的新仪式。这些仪式成为关系的锚点。"
+  },
+  {
+    key: 'evolution',
+    name: "关系进化",
+    icon: "🌱",
+    affirmations: [
+      "我们的关系在进化，我允许它改变形态。",
+      "进化不是背叛，而是成长的自然结果。",
+      "我在关系的每个阶段中找到它的礼物。",
+      "我们不害怕关系改变，因为我们相信更深的连接。",
+      "关系的进化让我成为更完整的自己。"
+    ],
+    guidance: "关系不是静止的，它在进化。注意关系如何随时间改变。有些关系深化，有些改变形态，有些完成它们的使命。允许进化，不要抗拒。"
+  }
+];
+
+// ====== 状态 ======
+let currentDim = 'attraction';
+let currentSelection = null;
+
+function selectDim(dim) {
+  currentDim = dim;
+  currentSelection = null;
+  document.querySelectorAll('.dim-btn').forEach(b => b.classList.toggle('active', b.dataset.dim === dim));
+  renderSelector();
+  resetCardStage();
+}
+
+function renderSelector() {
+  const area = document.getElementById('selectorArea');
+  let data;
+  switch (currentDim) {
+    case 'attraction': data = attractionThemes; break;
+    case 'challenge': data = challengeThemes; break;
+    case 'growth': data = growthThemes; break;
+    case 'interaction': data = interactionThemes; break;
+  }
+
+  let html = '<div class="option-grid">';
+  for (const item of data) {
+    const active = currentSelection === item.key ? 'active' : '';
+    html += `<button class="option-btn ${active}" data-key="${item.key}" onclick="selectOption('${item.key}')">
+      <span class="opt-icon">${item.icon}</span>
+      <span class="opt-name">${item.name}</span>
+    </button>`;
+  }
+  html += '</div>';
+  area.innerHTML = html;
+}
+
+function selectOption(key) {
+  currentSelection = key;
+  renderSelector();
+  drawCard();
+}
+
+function resetCardStage() {
+  document.getElementById('cardStage').innerHTML = `
+    <div class="deck-area" id="deckArea">
+      <div class="deck-visual" onclick="drawCard()">
+        <div class="deck-card"></div>
+        <div class="deck-card"></div>
+        <div class="deck-card">
+          <div class="deck-card-front">
+            <div class="deck-icon">💫</div>
+            <div class="deck-label">关系合盘</div>
+            <div class="deck-sub">点击抽取</div>
+          </div>
+        </div>
+      </div>
+      <div class="draw-hint">选择维度后点击卡牌抽取关系指引</div>
+    </div>
+  `;
+}
+
+function drawCard() {
+  if (!currentSelection) {
+    showToast('请先选择一个主题');
+    return;
+  }
+
+  let data;
+  switch (currentDim) {
+    case 'attraction': data = attractionThemes; break;
+    case 'challenge': data = challengeThemes; break;
+    case 'growth': data = growthThemes; break;
+    case 'interaction': data = interactionThemes; break;
+  }
+
+  const item = data.find(d => d.key === currentSelection);
+  if (!item) return;
+
+  const pool = item.affirmations;
+  const affirmation = pool[Math.floor(Math.random() * pool.length)];
+  currentCard = { ...item, text: affirmation, dim: currentDim };
+  renderCard(currentCard);
+  saveHistory(currentCard);
+}
+
+function renderCard(card) {
+  const stage = document.getElementById('cardStage');
+  stage.innerHTML = `
+    <div class="result-card">
+      <div class="card-icon">${card.icon}</div>
+      <div class="card-label">关系维度</div>
+      <div class="card-title">${card.name}</div>
+      <div class="card-divider"></div>
+      <div class="card-affirmation">${card.text}</div>
+      <div class="card-guidance">
+        <div class="card-guidance-title">关系指引</div>
+        <div class="card-guidance-text">${card.guidance}</div>
+      </div>
+      <div class="card-actions">
+        <button class="action-btn" onclick="copyCard()">📋 复制文字</button>
+        <button class="action-btn primary" onclick="drawCard()">🔄 再抽一张</button>
+      </div>
+    </div>
+  `;
+}
+
+function copyCard() {
+  if (!currentCard) return;
+  const text = `💫 ${currentCard.name} · 关系合盘\n\n${currentCard.text}\n\n关系指引：${currentCard.guidance}`;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制到剪贴板');
+  }).catch(() => {
+    showToast('复制失败，请手动选择文字');
+  });
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// ====== 抽卡记录 ======
+const HISTORY_KEY = 'hd_relationship_history';
+const MAX_HISTORY = 20;
+
+function saveHistory(card) {
+  let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  const record = {
+    name: card.name,
+    icon: card.icon,
+    dim: card.dim,
+    text: card.text,
+    time: new Date().toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+  history.unshift(record);
+  if (history.length > MAX_HISTORY) history = history.slice(0, MAX_HISTORY);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  const section = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+
+  if (history.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  list.innerHTML = history.map(item => `
+    <div class="history-item">
+      <div class="history-item-header">
+        <span class="history-item-title">${item.icon} ${item.name}</span>
+        <span class="history-item-time">${item.time}</span>
+      </div>
+      <div class="history-item-text">${item.text}</div>
+    </div>
+  `).join('');
+}
+
+function clearHistory() {
+  if (!confirm('确定要清空所有抽卡记录吗？')) return;
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistory();
+  showToast('已清空记录');
+}
+
+// 初始化
+renderSelector();
+renderHistory();
+</script>
+</body>
+</html>
