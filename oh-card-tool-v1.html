@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OH卡 · 潜意识投射卡抽卡工具</title>
+<style>
+/* ==================== 基础变量 ==================== */
+:root {
+  --bg: #F5F0E8;
+  --bg-card: #FAF6EF;
+  --bg-deep: #2D2118;
+  --primary: #C4956A;
+  --primary-dark: #A07850;
+  --primary-light: #DDB99A;
+  --border: #E8DCC8;
+  --border-dark: #C9B89A;
+  --text-dark: #2D2118;
+  --text-medium: #5C4A38;
+  --text-light: #8A7560;
+  --white: #FFFFFF;
+  --shadow: 0 4px 20px rgba(45, 33, 24, 0.12);
+  --shadow-hover: 0 8px 30px rgba(45, 33, 24, 0.2);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  line-height: 1.7;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+/* ==================== 顶部导航 ==================== */
+.navbar {
+  background: var(--bg-deep);
+  padding: 18px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 15px rgba(45, 33, 24, 0.15);
+}
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navbar-logo {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--bg-deep);
+}
+.navbar-title {
+  color: var(--white);
+  font-size: 20px; font-weight: 600;
+  letter-spacing: 1px;
+}
+.navbar-subtitle {
+  color: var(--primary-light);
+  font-size: 13px;
+  margin-top: 2px;
+}
+.navbar-nav {
+  display: flex; gap: 8px;
+}
+.nav-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(196, 149, 106, 0.3);
+  background: transparent;
+  color: var(--primary-light);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.nav-btn:hover { background: rgba(196, 149, 106, 0.15); }
+.nav-btn.active {
+  background: var(--primary);
+  color: var(--bg-deep);
+  border-color: var(--primary);
+}
+
+/* ==================== 主容器 ==================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+.section { display: none; }
+.section.active { display: block; }
+
+/* ==================== 抽卡区 ==================== */
+.draw-section {
+  text-align: center;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 36px;
+}
+
+/* 卡片区 */
+.cards-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+  perspective: 1200px;
+}
+.card-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.slot-label {
+  font-size: 14px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+}
+
+/* 卡牌翻转 */
+.card-3d {
+  width: 220px;
+  height: 320px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.card-3d.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.card-back {
+  background: linear-gradient(135deg, var(--bg-deep) 0%, #3D2E22 50%, var(--bg-deep) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--primary);
+}
+.card-back-pattern {
+  width: 80%; height: 80%;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.card-back-text {
+  color: var(--primary);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+.card-back-sub {
+  color: var(--primary-light);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+.card-front {
+  transform: rotateY(180deg);
+  background: var(--bg-card);
+  border: 3px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 图像卡正面 */
+.image-card-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--white);
+}
+.image-card-content svg {
+  width: 100%; height: 100%;
+  border-radius: 8px;
+}
+.image-card-number {
+  padding: 8px;
+  font-size: 12px;
+  color: var(--text-light);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+/* 文字卡正面 */
+.text-card-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--white) 100%);
+}
+.text-card-word {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+  letter-spacing: 4px;
+  line-height: 1.4;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  max-height: 240px;
+}
+.text-card-number {
+  padding: 8px;
+  font-size: 12px;
+  color: var(--text-light);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+/* 卡牌动画 */
+.card-3d:not(.flipped):hover {
+  transform: translateY(-6px) rotateZ(-2deg);
+}
+.card-3d.flipped:hover {
+  transform: rotateY(180deg) translateY(-6px);
+}
+.card-3d.drawing {
+  animation: cardDraw 0.6s ease-out;
+}
+@keyframes cardDraw {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.92) rotateZ(3deg); }
+  100% { transform: scale(1); }
+}
+
+/* 抽卡按钮 */
+.draw-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.btn {
+  padding: 14px 36px;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 1px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(196, 149, 106, 0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(196, 149, 106, 0.5);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--border-dark);
+  color: var(--text-medium);
+}
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(196, 149, 106, 0.05);
+}
+
+/* 解读记录区 */
+.reflection-area {
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: left;
+  display: none;
+}
+.reflection-area.show { display: block; }
+.reflection-area h3 {
+  font-size: 17px;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.reflection-prompt {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: rgba(196, 149, 106, 0.08);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary);
+}
+.reflection-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  background: var(--white);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+.reflection-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(196, 149, 106, 0.15);
+}
+.reflection-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+.btn-sm {
+  padding: 10px 24px;
+  font-size: 14px;
+}
+
+/* ==================== OH卡介绍区 ==================== */
+.intro-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.intro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.intro-card h2 {
+  font-size: 20px;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.intro-card h2 .icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.intro-card h3 {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin: 20px 0 10px;
+}
+.intro-card p {
+  font-size: 14px;
+  color: var(--text-medium);
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+.intro-card ul, .intro-card ol {
+  margin: 10px 0 12px 20px;
+}
+.intro-card li {
+  font-size: 14px;
+  color: var(--text-medium);
+  margin-bottom: 6px;
+  line-height: 1.8;
+}
+.intro-card strong { color: var(--text-dark); }
+.intro-card .highlight {
+  background: rgba(196, 149, 106, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.intro-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin: 2px;
+}
+.tag-theory { background: rgba(196, 149, 106, 0.15); color: var(--primary-dark); }
+.tag-spirit { background: rgba(45, 33, 24, 0.08); color: var(--text-medium); }
+
+/* 原理图示 */
+.principle-diagram {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.principle-box {
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  text-align: center;
+}
+.principle-box .num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.principle-box h4 {
+  font-size: 15px;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.principle-box p {
+  font-size: 13px;
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* ==================== 记录区 ==================== */
+.records-section { max-width: 1000px; margin: 0 auto; }
+.records-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.records-count {
+  font-size: 14px;
+  color: var(--text-light);
+}
+.records-count strong { color: var(--text-dark); font-size: 18px; }
+.records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.record-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  gap: 20px;
+  transition: var(--transition);
+}
+.record-item:hover { box-shadow: var(--shadow); border-color: var(--border-dark); }
+.record-cards {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.record-mini-card {
+  width: 56px; height: 80px;
+  border-radius: 6px;
+  border: 2px solid var(--primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.record-mini-image {
+  flex: 1;
+  background: var(--white);
+}
+.record-mini-image svg { width: 100%; height: 100%; }
+.record-mini-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: linear-gradient(180deg, var(--bg-card), var(--white));
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+.record-mini-num {
+  font-size: 9px;
+  color: var(--text-light);
+  text-align: center;
+  padding: 2px;
+  border-top: 1px solid var(--border);
+}
+.record-content { flex: 1; }
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.record-date {
+  font-size: 13px;
+  color: var(--text-light);
+}
+.record-delete {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.record-delete:hover { color: #c44; background: rgba(204,68,68,0.08); }
+.record-words {
+  font-size: 15px;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.record-words .word-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-right: 6px;
+}
+.word-tag.image-tag { background: rgba(196,149,106,0.15); color: var(--primary-dark); }
+.word-tag.text-tag { background: rgba(45,33,24,0.08); color: var(--text-medium); }
+.record-note {
+  font-size: 14px;
+  color: var(--text-medium);
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  line-height: 1.7;
+}
+.record-note-label {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+.empty-records {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-light);
+}
+.empty-records .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+/* ==================== 弹窗 ==================== */
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-deep);
+  color: var(--white);
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 14px;
+  box-shadow: var(--shadow-hover);
+  z-index: 200;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+  .cards-stage { gap: 20px; }
+  .card-3d { width: 160px; height: 240px; }
+  .text-card-word { font-size: 28px; }
+  .card-back-text { font-size: 22px; }
+  .navbar-nav { flex-wrap: wrap; }
+  .nav-btn { padding: 6px 14px; font-size: 13px; }
+  .record-item { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 顶部导航 ==================== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-brand">
+      <div class="navbar-logo">OH</div>
+      <div>
+        <div class="navbar-title">OH卡 · 潜意识投射卡</div>
+        <div class="navbar-subtitle">88图像卡 + 88文字卡 · 自我探索工具V1· 几何抽象版</div>
+      </div>
+    </div>
+    <div class="navbar-nav">
+      <button class="nav-btn active" data-section="draw">抽卡</button>
+      <button class="nav-btn" data-section="intro">OH卡介绍</button>
+      <button class="nav-btn" data-section="records">我的记录 <span id="navRecordCount" style="opacity:0.6"></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ==================== 主容器 ==================== -->
+<div class="container">
+
+  <!-- ==================== 抽卡区 ==================== -->
+  <div class="section active" id="section-draw">
+    <div class="draw-section">
+      <h1 class="section-title">静心 · 抽卡 · 观照内心</h1>
+      <p class="section-desc">深呼吸，在心中默念你的问题，然后点击抽卡</p>
+
+      <div class="cards-stage">
+        <!-- 图像卡 -->
+        <div class="card-slot">
+          <div class="slot-label">图 像 卡</div>
+          <div class="card-3d" id="imageCard" onclick="flipCard('image')">
+            <div class="card-face card-back">
+              <div class="card-back-pattern">
+                <div class="card-back-text">OH</div>
+                <div class="card-back-sub">IMAGE</div>
+              </div>
+            </div>
+            <div class="card-face card-front">
+              <div class="image-card-content" id="imageCardContent"></div>
+              <div class="image-card-number" id="imageCardNumber">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 文字卡 -->
+        <div class="card-slot">
+          <div class="slot-label">文 字 卡</div>
+          <div class="card-3d" id="textCard" onclick="flipCard('text')">
+            <div class="card-face card-back">
+              <div class="card-back-pattern">
+                <div class="card-back-text">OH</div>
+                <div class="card-back-sub">WORD</div>
+              </div>
+            </div>
+            <div class="card-face card-front">
+              <div class="text-card-content">
+                <div class="text-card-word" id="textCardWord">—</div>
+              </div>
+              <div class="text-card-number" id="textCardNumber">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="draw-actions">
+        <button class="btn btn-primary" id="drawBtn" onclick="drawCards()">抽 卡</button>
+        <button class="btn btn-outline" onclick="resetCards()">重置</button>
+      </div>
+
+      <!-- 解读记录区 -->
+      <div class="reflection-area" id="reflectionArea">
+        <h3>✎ 记录你的感受</h3>
+        <div class="reflection-prompt" id="reflectionPrompt">
+          看到这组卡片，你的第一直觉是什么？它让你联想到了什么？
+        </div>
+        <textarea class="reflection-textarea" id="reflectionText" placeholder="在这里写下你的感受、联想和领悟..."></textarea>
+        <div class="reflection-actions">
+          <button class="btn btn-outline btn-sm" onclick="saveReflection(true)">保存并查看记录</button>
+          <button class="btn btn-primary btn-sm" onclick="saveReflection(false)">保存记录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== OH卡介绍区 ==================== -->
+  <div class="section" id="section-intro">
+    <div class="intro-section">
+
+      <!-- 起源 -->
+      <div class="intro-card">
+        <h2><span class="icon">起</span>OH卡的起源</h2>
+        <p>OH卡（OH Cards），全称"OH Cards潜意识投射卡"，是由<strong>德国人本心理学硕士莫里茨·埃格迈尔（Moritz Egetmeyer）</strong>与<strong>墨西哥裔加拿大艺术家埃利·拉曼（Ely Raman）</strong>于1982年共同研发的心理学工具。</p>
+        <p>1982年，Egetmeyer在加拿大攻读人本心理学硕士时，结识了艺术家Ely Raman。Raman创作了一组描绘生活各层面的水彩画卡片，Egetmeyer敏锐地发现这些图像可以作为心理投射的媒介，于是两人合作，将88张图像卡与88张文字卡组合，创造出了OH卡系统。</p>
+        <p>OH卡之所以叫"OH"，是因为当人们翻开卡片看到图像与文字的组合时，常常会发出"OH！"的惊叹——那是潜意识被照见的瞬间。至今OH卡已发展为<strong>22种语言版本</strong>，遍布全球50多个国家，被广泛应用于心理咨询、自我探索、团体活动和教育培训等领域。</p>
+        <p style="margin-top:16px;padding:12px 16px;background:rgba(196,149,106,0.08);border-radius:10px;border-left:3px solid var(--primary);font-size:13px;">
+          <strong>注意：</strong>OH卡不是塔罗牌，不用于占卜预测。它是一面心理镜子，帮助使用者照见潜意识中的真实想法和情感。
+        </p>
+      </div>
+
+      <!-- 科学原理 -->
+      <div class="intro-card">
+        <h2><span class="icon">理</span>科学原理与心理学基础</h2>
+        <p>OH卡的核心机制是<strong>投射技术（Projective Technique）</strong>，它建立在多个心理学理论之上：</p>
+
+        <div class="principle-diagram">
+          <div class="principle-box">
+            <div class="num">1</div>
+            <h4>冰山理论</h4>
+            <p>意识只是冰山一角，水面之下是庞大的潜意识。OH卡帮助将潜意识内容浮出水面。</p>
+          </div>
+          <div class="principle-box">
+            <div class="num">2</div>
+            <h4>情绪ABC理论</h4>
+            <p>事件(A)本身不直接导致情绪(C)，而是信念(B)在起作用。OH卡帮助觉察内在信念。</p>
+          </div>
+          <div class="principle-box">
+            <div class="num">3</div>
+            <h4>投射与移情</h4>
+            <p>人会将自己内在的情感、冲突和需求投射到模糊的图像上，从而暴露真实的心理状态。</p>
+          </div>
+        </div>
+
+        <h3>四大投射技术</h3>
+        <p>OH卡运用了心理测量学中的四种经典投射技术：</p>
+        <ul>
+          <li><strong>联想法：</strong>依据图像凭直觉联想到某些人物或场景。与<span class="highlight">罗夏墨迹测验</span>同源——由瑞士精神科医生Hermann Rorschach创立，通过模糊墨迹图引发被试者的投射反应。</li>
+          <li><strong>构造法：</strong>依据图像编一个故事，扩展思路，重新构造表达。与<span class="highlight">主题统觉测验（TAT）</span>类似——通过图像激发被试者构造叙事，从而揭示内在动机和情感。</li>
+          <li><strong>完成法：</strong>依据图像和文字快速补充完成一句话或一个情节，捕捉内在需求与冲突。类似于<span class="highlight">句子完成测验</span>。</li>
+          <li><strong>转念法：</strong>运用OH卡进行逆境对话，发现限制性信念，通过转念练习将旧模式替换为积极信念。</li>
+        </ul>
+
+        <h3>为什么有效？</h3>
+        <p>OH卡的图像具有<strong>模糊性</strong>和<strong>开放性</strong>——同一张卡片，不同的人看到不同的内容；同一个人在不同时间看到的也不同。这种模糊性正是投射技术发挥作用的关键：当图像不够明确时，大脑会自动用自身的经验、情感和期望去"填补"意义，而这个"填补"的过程就暴露了潜意识的内容。</p>
+        <p>当88张图像卡与88张文字卡组合时，会产生<strong>7744种不同的可能性</strong>，每种组合都能激发独特的联想链条，帮助使用者从多个维度审视自己的内心世界。</p>
+      </div>
+
+      <!-- OH卡精神 -->
+      <div class="intro-card">
+        <h2><span class="icon">心</span>OH卡精神与礼仪</h2>
+        <h3>六大精神</h3>
+        <div>
+          <span class="intro-tag tag-spirit">没有牌意 — 自由联想与创造</span>
+          <span class="intro-tag tag-spirit">没有对错 — 如实呈现，放下评判</span>
+          <span class="intro-tag tag-spirit">没有输赢 — 接纳一切安排</span>
+          <span class="intro-tag tag-spirit">案主为大 — 尊重使用者的独特性</span>
+          <span class="intro-tag tag-spirit">开放性问题 — 引导而非封闭</span>
+          <span class="intro-tag tag-spirit">直觉展现 — 信任直觉，照见潜意识</span>
+        </div>
+
+        <h3>五大礼仪</h3>
+        <ul>
+          <li><strong>尊重隐私：</strong>可以选择是否解释、是否描述、是否透露自己的图卡。</li>
+          <li><strong>尊重时间：</strong>不打断他人，让他人有充足时间完成描述。</li>
+          <li><strong>尊重见解：</strong>不重新解释他人对图卡的理解。</li>
+          <li><strong>尊重完整性：</strong>不反驳或争论他人的解读，没有所谓"正确"解释。</li>
+          <li><strong>尊重独特性：</strong>不假定他人看到的就是自己看到的。</li>
+        </ul>
+      </div>
+
+      <!-- 使用方法 -->
+      <div class="intro-card">
+        <h2><span class="icon">用</span>使用方法与引导技巧</h2>
+        <h3>基本步骤</h3>
+        <ol>
+          <li><strong>准备：</strong>找一个安静舒适的环境，静心冥想，集中意念观想想要探索的问题。</li>
+          <li><strong>洗卡：</strong>像洗扑克牌一样打乱卡牌顺序。</li>
+          <li><strong>抽卡：</strong>建议用左手（代表潜意识）在背面朝上的卡牌中随机抽取。</li>
+          <li><strong>翻卡：</strong>翻开图像卡和文字卡，仔细观察。</li>
+          <li><strong>解读：</strong>围绕以下五个问题展开探索。</li>
+        </ol>
+
+        <h3>五大探索问题</h3>
+        <ol>
+          <li>图卡中你看到了什么？</li>
+          <li>在这个画面中，你在哪里？（或画面中的人或物是谁？）</li>
+          <li>画面中的人或物跟你有什么联系？跟文字有什么联系？</li>
+          <li>以"我"开头说一段话或编一个故事，把画面内容和文字内容串在里面。</li>
+          <li>这幅画面和文字跟你的困惑有什么联系？</li>
+        </ol>
+
+        <h3>引导提问技巧</h3>
+        <ul>
+          <li>你的第一直觉是什么？你看到什么？感觉到什么？</li>
+          <li>这是你生活里曾经见过的场景吗？有熟悉的感觉吗？</li>
+          <li>这是你想要的状态吗？你觉得卡给你的指引是什么？</li>
+          <li>你现在身处正确的位置吗？你想继续这样的模式吗？</li>
+          <li>想做些改变吗？要做什么样的改变呢？</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== 记录区 ==================== -->
+  <div class="section" id="section-records">
+    <div class="records-section">
+      <div class="records-toolbar">
+        <div class="records-count">共 <strong id="recordCount">0</strong> 条记录</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline btn-sm" onclick="exportRecords()">导出记录</button>
+          <button class="btn btn-outline btn-sm" onclick="confirmClearRecords()" style="color:#c44;border-color:#c44;">清空全部</button>
+        </div>
+      </div>
+      <div class="records-list" id="recordsList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== OH卡数据 ====================
+
+// 88张文字卡（标准中文版词表）
+const TEXT_CARDS = [
+  "羞辱","分享","等候","停止","攫取","恐吓","裸体",
+  "梦想","游戏","诙谐","聪明","道歉","孤独","哀伤",
+  "丢脸","前进","色情","危险","上司","父亲","丑陋",
+  "受害者","敌对","违背","亏欠","付出","生气",
+  "憎恶","厌烦","破坏","女人","腐朽","罪恶感",
+  "疲惫","强迫","喜悦","循环","姿态","消除",
+  "憎恨","依赖","羞愧","尴尬","放开","坚定",
+  "执着","习惯","焦虑","权力游戏","吸引","犹豫",
+  "退省","不喜欢","压抑","幻想","感情","混乱",
+  "愚蠢","男性","顺应","专家","威胁","孩童",
+  "成功","开始","母亲","家","弄巧成拙","爱情",
+  "外表","奇妙","改变","失败","错误","欢笑",
+  "攻击","恐惧","希望","痛苦","同性恋","固执",
+  "奴隶","谎言","应该","夸赞","躲藏","陌生人","抗拒"
+];
+
+// ==================== 图像卡生成器 ====================
+// 为88张图像卡生成独特的抽象艺术SVG
+function generateImageSVG(seed) {
+  const hue1 = (seed * 137.508) % 360;           // 黄金角旋转
+  const hue2 = (hue1 + 60) % 360;
+  const hue3 = (hue1 + 180) % 360;
+  const style = seed % 8;                          // 8种艺术风格
+  const sat = 45 + (seed % 20);
+  const light1 = 55 + (seed % 15);
+  const light2 = 35 + (seed % 20);
+
+  let svg = `<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">`;
+  svg += `<defs>`;
+  svg += `<linearGradient id="bg${seed}" x1="0%" y1="0%" x2="100%" y2="100%">`;
+  svg += `<stop offset="0%" style="stop-color:hsl(${hue1},${sat}%,${light1}%)"/>`;
+  svg += `<stop offset="100%" style="stop-color:hsl(${hue2},${sat}%,${light2}%)"/>`;
+  svg += `</linearGradient>`;
+  svg += `<radialGradient id="rg${seed}" cx="50%" cy="50%" r="50%">`;
+  svg += `<stop offset="0%" style="stop-color:hsl(${hue3},${sat}%,70%);stop-opacity:0.6"/>`;
+  svg += `<stop offset="100%" style="stop-color:hsl(${hue1},${sat}%,30%);stop-opacity:0"/>`;
+  svg += `</radialGradient>`;
+  svg += `</defs>`;
+  svg += `<rect width="200" height="280" fill="url(#bg${seed})"/>`;
+
+  // 伪随机函数
+  const rng = mulberry32(seed * 1000);
+
+  switch(style) {
+    case 0: // 流动曲线
+      svg += drawFlowingCurves(seed, rng, hue1, hue2, hue3);
+      break;
+    case 1: // 几何马赛克
+      svg += drawGeometricMosaic(seed, rng, hue1, hue2, hue3);
+      break;
+    case 2: // 圆形曼陀罗
+      svg += drawMandala(seed, rng, hue1, hue2, hue3);
+      break;
+    case 3: // 液态液滴
+      svg += drawLiquidBlobs(seed, rng, hue1, hue2, hue3);
+      break;
+    case 4: // 线性图案
+      svg += drawLinearPatterns(seed, rng, hue1, hue2, hue3);
+      break;
+    case 5: // 波浪场
+      svg += drawWaveField(seed, rng, hue1, hue2, hue3);
+      break;
+    case 6: // 点阵
+      svg += drawDotMatrix(seed, rng, hue1, hue2, hue3);
+      break;
+    case 7: // 碎片
+      svg += drawShards(seed, rng, hue1, hue2, hue3);
+      break;
+  }
+
+  svg += `<rect width="200" height="280" fill="url(#rg${seed})"/>`;
+  svg += `</svg>`;
+  return svg;
+}
+
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function drawFlowingCurves(seed, rng, h1, h2, h3) {
+  let s = '';
+  for (let i = 0; i < 5; i++) {
+    const x1 = rng() * 200, y1 = rng() * 280;
+    const x2 = rng() * 200, y2 = rng() * 280;
+    const cx1 = rng() * 200, cy1 = rng() * 280;
+    const cx2 = rng() * 200, cy2 = rng() * 280;
+    const hue = i % 2 === 0 ? h1 : h2;
+    const op = 0.3 + rng() * 0.4;
+    const sw = 2 + rng() * 6;
+    s += `<path d="M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}" `;
+    s += `stroke="hsl(${hue},60%,75%)" stroke-width="${sw}" fill="none" opacity="${op}" stroke-linecap="round"/>`;
+  }
+  // 添加一些填充形状
+  for (let i = 0; i < 3; i++) {
+    const x = rng() * 200, y = rng() * 280, r = 15 + rng() * 40;
+    const hue = i % 2 === 0 ? h3 : h1;
+    s += `<circle cx="${x}" cy="${y}" r="${r}" fill="hsl(${hue},40%,60%)" opacity="${0.15+rng()*0.25}"/>`;
+  }
+  return s;
+}
+
+function drawGeometricMosaic(seed, rng, h1, h2, h3) {
+  let s = '';
+  const cols = 4 + Math.floor(rng() * 3);
+  const rows = 6 + Math.floor(rng() * 2);
+  const cw = 200 / cols, ch = 280 / rows;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (rng() < 0.35) continue;
+      const x = c * cw, y = r * ch;
+      const hue = [h1, h2, h3][Math.floor(rng() * 3)];
+      const op = 0.2 + rng() * 0.4;
+      const shape = rng();
+      if (shape < 0.4) {
+        s += `<rect x="${x}" y="${y}" width="${cw}" height="${ch}" fill="hsl(${hue},50%,${50+rng()*20}%)" opacity="${op}"/>`;
+      } else if (shape < 0.7) {
+        s += `<polygon points="${x},${y+ch} ${x+cw/2},${y} ${x+cw},${y+ch}" fill="hsl(${hue},50%,${50+rng()*20}%)" opacity="${op}"/>`;
+      } else {
+        s += `<circle cx="${x+cw/2}" cy="${y+ch/2}" r="${Math.min(cw,ch)/2.5}" fill="hsl(${hue},50%,${50+rng()*20}%)" opacity="${op}"/>`;
+      }
+    }
+  }
+  return s;
+}
+
+function drawMandala(seed, rng, h1, h2, h3) {
+  let s = '';
+  const cx = 100, cy = 140;
+  const rings = 4 + Math.floor(rng() * 3);
+  for (let ring = 1; ring <= rings; ring++) {
+    const r = ring * 22;
+    const segments = 6 + ring * 2;
+    const hue = ring % 2 === 0 ? h1 : h2;
+    for (let i = 0; i < segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      const sz = 4 + rng() * 8;
+      s += `<circle cx="${x}" cy="${y}" r="${sz}" fill="hsl(${hue},50%,${60+rng()*15}%)" opacity="${0.3+rng()*0.4}"/>`;
+    }
+  }
+  s += `<circle cx="${cx}" cy="${cy}" r="15" fill="hsl(${h3},60%,70%)" opacity="0.6"/>`;
+  return s;
+}
+
+function drawLiquidBlobs(seed, rng, h1, h2, h3) {
+  let s = '';
+  for (let i = 0; i < 6; i++) {
+    const cx = 20 + rng() * 160, cy = 20 + rng() * 240;
+    const r = 25 + rng() * 50;
+    const hue = [h1, h2, h3, h1][i % 4];
+    // 不规则形状
+    let path = '';
+    const points = 8;
+    for (let j = 0; j < points; j++) {
+      const angle = (j / points) * Math.PI * 2;
+      const radius = r * (0.7 + rng() * 0.6);
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      path += j === 0 ? `M${x},${y}` : ` L${x},${y}`;
+    }
+    path += ' Z';
+    s += `<path d="${path}" fill="hsl(${hue},45%,${55+rng()*15}%)" opacity="${0.2+rng()*0.3}" filter="blur(0)"/>`;
+  }
+  return s;
+}
+
+function drawLinearPatterns(seed, rng, h1, h2, h3) {
+  let s = '';
+  const lineCount = 15 + Math.floor(rng() * 10);
+  for (let i = 0; i < lineCount; i++) {
+    const x1 = rng() * 200, y1 = rng() * 280;
+    const x2 = rng() * 200, y2 = rng() * 280;
+    const hue = i % 3 === 0 ? h1 : i % 3 === 1 ? h2 : h3;
+    const sw = 1 + rng() * 4;
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="hsl(${hue},50%,70%)" stroke-width="${sw}" opacity="${0.2+rng()*0.4}" stroke-linecap="round"/>`;
+  }
+  // 添加一些强调圆点
+  for (let i = 0; i < 4; i++) {
+    const x = rng() * 200, y = rng() * 280;
+    s += `<circle cx="${x}" cy="${y}" r="${3+rng()*5}" fill="hsl(${h3},60%,65%)" opacity="0.6"/>`;
+  }
+  return s;
+}
+
+function drawWaveField(seed, rng, h1, h2, h3) {
+  let s = '';
+  const waves = 6 + Math.floor(rng() * 4);
+  for (let w = 0; w < waves; w++) {
+    const yBase = (w / waves) * 280 + rng() * 20;
+    const amp = 15 + rng() * 35;
+    const freq = 1 + rng() * 3;
+    const phase = rng() * Math.PI * 2;
+    let path = `M0,${yBase}`;
+    for (let x = 0; x <= 200; x += 4) {
+      const y = yBase + Math.sin((x / 200) * Math.PI * 2 * freq + phase) * amp;
+      path += ` L${x},${y}`;
+    }
+    path += ` L200,280 L0,280 Z`;
+    const hue = w % 2 === 0 ? h1 : h2;
+    const op = 0.15 + (w / waves) * 0.25;
+    s += `<path d="${path}" fill="hsl(${hue},45%,${50+w*5}%)" opacity="${op}"/>`;
+  }
+  return s;
+}
+
+function drawDotMatrix(seed, rng, h1, h2, h3) {
+  let s = '';
+  const cols = 8, rows = 11;
+  const gx = 200 / cols, gy = 280 / rows;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (rng() < 0.4) continue;
+      const cx = c * gx + gx/2 + (rng()-0.5) * 8;
+      const cy = r * gy + gy/2 + (rng()-0.5) * 8;
+      const sz = 2 + rng() * 10;
+      const hue = [h1,h2,h3][Math.floor(rng()*3)];
+      s += `<circle cx="${cx}" cy="${cy}" r="${sz}" fill="hsl(${hue},50%,${60+rng()*15}%)" opacity="${0.3+rng()*0.4}"/>`;
+    }
+  }
+  return s;
+}
+
+function drawShards(seed, rng, h1, h2, h3) {
+  let s = '';
+  const shardCount = 8 + Math.floor(rng() * 6);
+  for (let i = 0; i < shardCount; i++) {
+    const cx = rng() * 200, cy = rng() * 280;
+    const size = 20 + rng() * 60;
+    const angle = rng() * Math.PI * 2;
+    const hue = [h1,h2,h3][i%3];
+    const pts = [];
+    const vertices = 3 + Math.floor(rng() * 3);
+    for (let v = 0; v < vertices; v++) {
+      const a = angle + (v / vertices) * Math.PI * 2;
+      const r = size * (0.5 + rng() * 0.5);
+      pts.push(`${cx + Math.cos(a)*r},${cy + Math.sin(a)*r}`);
+    }
+    s += `<polygon points="${pts.join(' ')}" fill="hsl(${hue},45%,${50+rng()*20}%)" opacity="${0.2+rng()*0.35}" stroke="hsl(${hue},50%,75%)" stroke-width="1"/>`;
+  }
+  return s;
+}
+
+// ==================== 状态管理 ====================
+let currentDraw = null; // { imageIdx, textIdx, timestamp }
+
+// ==================== 抽卡逻辑 ====================
+let isDrawing = false;
+
+function drawCards() {
+  if (isDrawing) return;
+  isDrawing = true;
+  document.getElementById('drawBtn').disabled = true;
+
+  // 先翻回背面
+  const imageCard = document.getElementById('imageCard');
+  const textCard = document.getElementById('textCard');
+  imageCard.classList.remove('flipped');
+  textCard.classList.remove('flipped');
+
+  // 隐藏解读区
+  document.getElementById('reflectionArea').classList.remove('show');
+
+  // 随机抽取
+  const imageIdx = Math.floor(Math.random() * 88);
+  const textIdx = Math.floor(Math.random() * 88);
+  currentDraw = { imageIdx, textIdx, timestamp: new Date().toISOString() };
+
+  // 动画效果
+  imageCard.classList.add('drawing');
+  textCard.classList.add('drawing');
+
+  setTimeout(() => {
+    imageCard.classList.remove('drawing');
+    textCard.classList.remove('drawing');
+
+    // 翻转显示
+    setTimeout(() => {
+      // 渲染图像卡
+      document.getElementById('imageCardContent').innerHTML = generateImageSVG(imageIdx + 1);
+      document.getElementById('imageCardNumber').textContent = `图像卡 #${String(imageIdx + 1).padStart(2, '0')}`;
+      imageCard.classList.add('flipped');
+
+      // 渲染文字卡
+      setTimeout(() => {
+        document.getElementById('textCardWord').textContent = TEXT_CARDS[textIdx];
+        document.getElementById('textCardNumber').textContent = `文字卡 #${String(textIdx + 1).padStart(2, '0')}`;
+        textCard.classList.add('flipped');
+
+        // 显示解读区
+        setTimeout(() => {
+          document.getElementById('reflectionPrompt').innerHTML =
+            `你抽到了 <strong style="color:var(--primary-dark)">图像卡 #${imageIdx+1}</strong> 和 <strong style="color:var(--primary-dark)">「${TEXT_CARDS[textIdx]}」</strong>。看到这组卡片，你的第一直觉是什么？它让你联想到了什么？`;
+          document.getElementById('reflectionArea').classList.add('show');
+          document.getElementById('reflectionText').value = '';
+          document.getElementById('reflectionText').focus();
+          isDrawing = false;
+          document.getElementById('drawBtn').disabled = false;
+        }, 700);
+      }, 200);
+    }, 300);
+  }, 600);
+}
+
+function flipCard(type) {
+  const card = type === 'image' ? document.getElementById('imageCard') : document.getElementById('textCard');
+  if (card.classList.contains('flipped')) {
+    card.classList.toggle('flipped');
+  }
+}
+
+function resetCards() {
+  document.getElementById('imageCard').classList.remove('flipped');
+  document.getElementById('textCard').classList.remove('flipped');
+  document.getElementById('reflectionArea').classList.remove('show');
+  currentDraw = null;
+}
+
+// ==================== 记录管理 ====================
+function getRecords() {
+  try {
+    return JSON.parse(localStorage.getItem('ohcard_records') || '[]');
+  } catch { return []; }
+}
+
+function saveRecords(records) {
+  localStorage.setItem('ohcard_records', JSON.stringify(records));
+}
+
+function saveReflection(goToRecords) {
+  if (!currentDraw) {
+    showToast('请先抽卡');
+    return;
+  }
+  const note = document.getElementById('reflectionText').value.trim();
+  const records = getRecords();
+  records.unshift({
+    id: Date.now(),
+    imageIdx: currentDraw.imageIdx,
+    textIdx: currentDraw.textIdx,
+    timestamp: currentDraw.timestamp,
+    note: note
+  });
+  saveRecords(records);
+  updateRecordCount();
+  showToast('记录已保存');
+
+  if (goToRecords) {
+    switchSection('records');
+    renderRecords();
+  } else {
+    resetCards();
+  }
+}
+
+function renderRecords() {
+  const records = getRecords();
+  const list = document.getElementById('recordsList');
+  document.getElementById('recordCount').textContent = records.length;
+
+  if (records.length === 0) {
+    list.innerHTML = `
+      <div class="empty-records">
+        <div class="icon">📝</div>
+        <p>还没有记录，去抽一张卡吧～</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = records.map(r => {
+    const date = new Date(r.timestamp);
+    const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    const imgSVG = generateImageSVG(r.imageIdx + 1);
+    const word = TEXT_CARDS[r.textIdx];
+
+    return `
+      <div class="record-item">
+        <div class="record-cards">
+          <div class="record-mini-card">
+            <div class="record-mini-image">${imgSVG}</div>
+            <div class="record-mini-num">#${String(r.imageIdx+1).padStart(2,'0')}</div>
+          </div>
+          <div class="record-mini-card">
+            <div class="record-mini-text">${word}</div>
+            <div class="record-mini-num">#${String(r.textIdx+1).padStart(2,'0')}</div>
+          </div>
+        </div>
+        <div class="record-content">
+          <div class="record-header">
+            <span class="record-date">${dateStr}</span>
+            <button class="record-delete" onclick="deleteRecord(${r.id})" title="删除">×</button>
+          </div>
+          <div class="record-words">
+            <span class="word-tag image-tag">图像 #${r.imageIdx+1}</span>
+            <span class="word-tag text-tag">「${word}」</span>
+          </div>
+          ${r.note ? `<div class="record-note-label">我的记录：</div><div class="record-note">${escapeHtml(r.note)}</div>` : '<div class="record-note" style="color:var(--text-light);font-style:italic;">（未填写记录）</div>'}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function deleteRecord(id) {
+  let records = getRecords();
+  records = records.filter(r => r.id !== id);
+  saveRecords(records);
+  updateRecordCount();
+  renderRecords();
+  showToast('记录已删除');
+}
+
+function confirmClearRecords() {
+  const records = getRecords();
+  if (records.length === 0) {
+    showToast('暂无记录可清空');
+    return;
+  }
+  if (confirm(`确定要清空全部 ${records.length} 条记录吗？此操作不可撤销。`)) {
+    localStorage.removeItem('ohcard_records');
+    updateRecordCount();
+    renderRecords();
+    showToast('记录已全部清空');
+  }
+}
+
+function exportRecords() {
+  const records = getRecords();
+  if (records.length === 0) {
+    showToast('暂无记录可导出');
+    return;
+  }
+  let text = 'OH卡抽卡记录\n';
+  text += '导出时间：' + new Date().toLocaleString('zh-CN') + '\n';
+  text += '记录总数：' + records.length + '\n';
+  text += '='.repeat(60) + '\n\n';
+
+  records.forEach((r, i) => {
+    const date = new Date(r.timestamp);
+    text += `【第${i+1}条】\n`;
+    text += `时间：${date.toLocaleString('zh-CN')}\n`;
+    text += `图像卡：#${String(r.imageIdx+1).padStart(2,'0')}\n`;
+    text += `文字卡：#${String(r.textIdx+1).padStart(2,'0')} 「${TEXT_CARDS[r.textIdx]}」\n`;
+    if (r.note) text += `记录：${r.note}\n`;
+    text += '-'.repeat(40) + '\n\n';
+  });
+
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `OH卡记录_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('记录已导出');
+}
+
+function updateRecordCount() {
+  const count = getRecords().length;
+  document.getElementById('navRecordCount').textContent = count > 0 ? `(${count})` : '';
+}
+
+// ==================== 工具函数 ====================
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function switchSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.nav-btn[data-section="${name}"]`).classList.add('active');
+  if (name === 'records') renderRecords();
+}
+
+// ==================== 初始化 ====================
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchSection(btn.dataset.section));
+});
+
+// 预生成所有图像卡SVG（缓存）
+const imageCache = {};
+function getCachedImageSVG(idx) {
+  if (!imageCache[idx]) imageCache[idx] = generateImageSVG(idx);
+  return imageCache[idx];
+}
+
+updateRecordCount();
+</script>
+
+<!-- 版权信息 -->
+<div style="text-align:center; padding:16px 0 20px; color:#BBA88E; font-size:13px; letter-spacing:1px;">Powered By Kan Man Tang</div>
+
+</body>
+</html>

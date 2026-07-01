@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图 × OH卡 · 潜意识投射融合系统</title>
+<style>
+:root {
+  --bg: #F5F0E8;
+  --bg-card: #FAF6EF;
+  --bg-deep: #2D2118;
+  --bg-section: #EDE5D8;
+  --primary: #C4956A;
+  --primary-dark: #A07850;
+  --primary-light: #DDB99A;
+  --border: #E8DCC8;
+  --border-dark: #C9B89A;
+  --text-dark: #2D2118;
+  --text-medium: #5C4A38;
+  --text-light: #8A7560;
+  --white: #FFFFFF;
+  --gate-color: #6B7B9E;
+  --gate-bg: #EEF0F5;
+  --shadow: 0 4px 20px rgba(45, 33, 24, 0.12);
+  --shadow-hover: 0 8px 30px rgba(45, 33, 24, 0.2);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text-dark); line-height: 1.7; font-size: 15px; min-height: 100vh;
+}
+/* ===== 导航 ===== */
+.navbar {
+  background: var(--bg-deep); padding: 18px 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 15px rgba(45, 33, 24, 0.15);
+}
+.navbar-inner {
+  max-width: 1200px; margin: 0 auto; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 24px;
+}
+.navbar-brand { display: flex; align-items: center; gap: 12px; }
+.navbar-logo {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--gate-color));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--white);
+}
+.navbar-title { color: var(--white); font-size: 19px; font-weight: 600; letter-spacing: 1px; }
+.navbar-subtitle { color: var(--primary-light); font-size: 12px; margin-top: 2px; }
+.navbar-nav { display: flex; gap: 6px; }
+.nav-btn {
+  background: transparent; border: 1px solid transparent; color: var(--primary-light);
+  padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px;
+  transition: var(--transition);
+}
+.nav-btn:hover { background: rgba(196,149,106,0.15); color: var(--white); }
+.nav-btn.active { background: var(--primary); color: var(--bg-deep); font-weight: 600; }
+
+/* ===== 容器 ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== 抽卡区 ===== */
+.draw-section { text-align: center; }
+.section-title {
+  font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.section-desc { font-size: 14px; color: var(--text-light); margin-bottom: 28px; }
+
+.cards-stage {
+  display: flex; justify-content: center; align-items: flex-start; gap: 24px;
+  margin-bottom: 32px; flex-wrap: wrap;
+}
+.card-slot { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.slot-label {
+  font-size: 13px; color: var(--text-light); letter-spacing: 3px; font-weight: 600;
+  text-transform: uppercase;
+}
+.card-3d {
+  width: 190px; height: 270px; perspective: 1000px; cursor: pointer; position: relative;
+}
+.card-inner {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.card-3d.flipped .card-inner { transform: rotateY(180deg); }
+.card-3d.drawing { animation: shake 0.5s ease; }
+@keyframes shake {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-6px) rotate(-2deg); }
+  40% { transform: translateX(6px) rotate(2deg); }
+  60% { transform: translateX(-4px) rotate(-1deg); }
+  80% { transform: translateX(4px) rotate(1deg); }
+}
+.card-face {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
+}
+.card-back {
+  background: var(--bg-deep); display: flex; align-items: center; justify-content: center;
+}
+.card-back-pattern {
+  width: 80%; height: 80%; border: 2px solid var(--primary); border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+}
+.card-back-text { font-size: 28px; font-weight: 700; color: var(--primary); letter-spacing: 2px; }
+.card-back-sub { font-size: 11px; color: var(--primary-light); letter-spacing: 3px; }
+
+/* 图像卡正面 */
+.card-front { background: var(--white); transform: rotateY(180deg); display: flex; flex-direction: column; }
+.image-card-content { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.image-card-content svg { width: 100%; height: 100%; }
+.image-card-title { font-size: 13px; color: var(--text-medium); text-align: center; padding: 4px 8px 0; font-weight: 600; }
+.image-card-number { font-size: 11px; color: var(--text-light); text-align: center; padding: 0 8px 6px; }
+
+/* 文字卡正面 */
+.text-card-content {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, var(--bg-card), var(--white));
+}
+.text-card-word { font-size: 30px; font-weight: 700; color: var(--text-dark); text-align: center; padding: 20px; letter-spacing: 2px; }
+.text-card-number { font-size: 11px; color: var(--text-light); text-align: center; padding: 0 8px 6px; }
+
+/* 闸门卡正面 */
+.gate-card-content {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, var(--gate-bg), var(--white));
+}
+.gate-hexagram { font-size: 56px; color: var(--gate-color); line-height: 1; margin-bottom: 6px; }
+.gate-name { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+.gate-center-label { font-size: 12px; color: var(--text-light); }
+.gate-keywords { font-size: 12px; color: var(--text-medium); margin-top: 4px; text-align: center; padding: 0 8px; }
+.gate-card-number { font-size: 11px; color: var(--text-light); text-align: center; padding: 4px 8px 6px; }
+
+/* ===== 抽卡按钮 ===== */
+.draw-actions { display: flex; justify-content: center; gap: 14px; margin-bottom: 28px; }
+.btn {
+  padding: 12px 32px; border: none; border-radius: 12px; font-size: 15px;
+  font-weight: 600; cursor: pointer; transition: var(--transition); letter-spacing: 1px;
+}
+.btn-primary { background: var(--bg-deep); color: var(--white); }
+.btn-primary:hover { background: #3D2E22; transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-outline { background: transparent; border: 2px solid var(--border-dark); color: var(--text-medium); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary-dark); }
+.btn-sm { padding: 8px 18px; font-size: 13px; }
+
+/* ===== 融合解读区 ===== */
+.fusion-reading {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px 28px; margin-bottom: 24px; text-align: left;
+  box-shadow: var(--shadow);
+}
+.fusion-reading h3 {
+  font-size: 16px; color: var(--text-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.fusion-cards-display {
+  display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.fusion-card-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; font-size: 14px;
+  font-weight: 600;
+}
+.fusion-card-tag.image-tag { background: rgba(196,149,106,0.15); color: var(--primary-dark); }
+.fusion-card-tag.text-tag { background: rgba(45,33,24,0.08); color: var(--text-medium); }
+.fusion-card-tag.gate-tag { background: rgba(107,123,158,0.15); color: var(--gate-color); }
+.fusion-text { font-size: 14px; color: var(--text-medium); line-height: 1.9; }
+.fusion-text .highlight { color: var(--primary-dark); font-weight: 600; }
+.fusion-text .gate-highlight { color: var(--gate-color); font-weight: 600; }
+
+/* ===== 感受记录 ===== */
+.reflection-area {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease; opacity: 0;
+}
+.reflection-area.show { max-height: 400px; opacity: 1; }
+.reflection-area h3 { font-size: 16px; color: var(--text-dark); margin-bottom: 8px; }
+.reflection-prompt { font-size: 14px; color: var(--text-medium); margin-bottom: 12px; }
+.reflection-textarea {
+  width: 100%; min-height: 100px; padding: 14px 18px; border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; resize: vertical;
+  background: var(--white); color: var(--text-dark); line-height: 1.8;
+}
+.reflection-textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(196,149,106,0.1); }
+.reflection-actions { display: flex; gap: 10px; margin-top: 12px; }
+
+/* ===== 能量中心区 ===== */
+.centers-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+}
+.center-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; cursor: pointer; transition: var(--transition);
+}
+.center-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-3px); }
+.center-card.active { border-color: var(--gate-color); background: var(--gate-bg); }
+.center-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.center-icon {
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--white);
+}
+.center-name { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+.center-type { font-size: 12px; color: var(--text-light); }
+.center-desc { font-size: 13px; color: var(--text-medium); margin-bottom: 8px; line-height: 1.7; }
+.center-gates { display: flex; flex-wrap: wrap; gap: 4px; }
+.gate-mini {
+  display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px;
+  background: rgba(107,123,158,0.12); color: var(--gate-color); font-weight: 600;
+}
+.center-draw-hint { font-size: 12px; color: var(--primary-dark); margin-top: 8px; font-weight: 600; }
+
+/* ===== 记录区 ===== */
+.records-toolbar {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+  padding: 16px 20px; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border);
+}
+.records-count { font-size: 14px; color: var(--text-medium); }
+.records-count strong { color: var(--text-dark); font-size: 18px; }
+.records-list { display: flex; flex-direction: column; gap: 16px; }
+.record-item {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 24px; transition: var(--transition);
+}
+.record-item:hover { box-shadow: var(--shadow); border-color: var(--border-dark); }
+.record-cards { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.record-card-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 16px; font-size: 13px;
+  font-weight: 600;
+}
+.record-mini-image {
+  width: 48px; height: 64px; border-radius: 6px; border: 2px solid var(--primary);
+  overflow: hidden; flex-shrink: 0;
+}
+.record-mini-image svg { width: 100%; height: 100%; }
+.record-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.record-date { font-size: 13px; color: var(--text-light); }
+.record-delete {
+  background: none; border: none; color: var(--text-light); cursor: pointer;
+  font-size: 18px; padding: 4px 8px; border-radius: 6px; transition: var(--transition);
+}
+.record-delete:hover { color: #c44; background: rgba(204,68,68,0.08); }
+.record-note {
+  font-size: 14px; color: var(--text-medium); background: var(--white);
+  border-radius: var(--radius-sm); padding: 12px 16px; border: 1px solid var(--border); line-height: 1.7;
+}
+.record-note-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+.empty-records { text-align: center; padding: 60px 20px; color: var(--text-light); }
+.empty-records .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+
+/* ===== 科普区 ===== */
+.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.intro-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px 28px; box-shadow: var(--shadow);
+}
+.intro-card h2 { font-size: 18px; color: var(--text-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.intro-card h3 { font-size: 15px; color: var(--primary-dark); margin: 14px 0 6px; }
+.intro-card p, .intro-card li { font-size: 14px; color: var(--text-medium); line-height: 1.9; }
+.intro-card ol, .intro-card ul { padding-left: 20px; margin: 6px 0; }
+.intro-tag {
+  display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 4px 3px 0;
+}
+.tag-oh { background: rgba(196,149,106,0.15); color: var(--primary-dark); }
+.tag-hd { background: rgba(107,123,158,0.15); color: var(--gate-color); }
+.fusion-intro {
+  background: linear-gradient(135deg, var(--bg-card), var(--gate-bg)); border: 1px solid var(--border-dark);
+  border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; box-shadow: var(--shadow);
+}
+.fusion-intro h2 { font-size: 18px; color: var(--text-dark); margin-bottom: 12px; }
+.fusion-intro p { font-size: 14px; color: var(--text-medium); line-height: 1.9; }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--bg-deep); color: var(--white); padding: 14px 32px;
+  border-radius: 30px; font-size: 14px; box-shadow: var(--shadow-hover); z-index: 200;
+  opacity: 0; transition: all 0.3s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.version-badge {
+  position: fixed; bottom: 16px; right: 20px; font-size: 12px; color: var(--text-light);
+  background: var(--bg-card); padding: 4px 12px; border-radius: 12px; border: 1px solid var(--border); z-index: 50;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .cards-stage { gap: 16px; }
+  .card-3d { width: 150px; height: 220px; }
+  .text-card-word { font-size: 24px; }
+  .gate-hexagram { font-size: 44px; }
+  .gate-name { font-size: 14px; }
+  .navbar-nav { flex-wrap: wrap; }
+  .nav-btn { padding: 6px 12px; font-size: 13px; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .record-item { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-brand">
+      <div class="navbar-logo">HD×OH</div>
+      <div>
+        <div class="navbar-title">人类图 × OH卡</div>
+        <div class="navbar-subtitle">潜意识投射融合系统 · 88图像 + 88文字 + 64闸门</div>
+      </div>
+    </div>
+    <div class="navbar-nav">
+      <button class="nav-btn active" data-section="draw">三卡抽卡</button>
+      <button class="nav-btn" data-section="centers">九大能量中心</button>
+      <button class="nav-btn" data-section="records">我的记录 <span id="navRecordCount" style="opacity:0.6"></span></button>
+      <button class="nav-btn" data-section="about">融合之道</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ========== 抽卡区 ========== -->
+  <div class="section active" id="section-draw">
+    <div class="draw-section">
+      <h1 class="section-title">静心 · 抽卡 · 观照内心</h1>
+      <p class="section-desc">深呼吸，默念你的问题，同时抽取图像卡、文字卡与人类图闸门卡</p>
+      <div class="cards-stage">
+        <div class="card-slot">
+          <div class="slot-label">图 像 卡</div>
+          <div class="card-3d" id="imageCard" onclick="flipCard('image')">
+            <div class="card-inner">
+              <div class="card-face card-back"><div class="card-back-pattern"><div class="card-back-text">OH</div><div class="card-back-sub">IMAGE</div></div></div>
+              <div class="card-face card-front">
+                <div class="image-card-content" id="imageCardContent"></div>
+                <div class="image-card-title" id="imageCardTitle">—</div>
+                <div class="image-card-number" id="imageCardNumber">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-slot">
+          <div class="slot-label">文 字 卡</div>
+          <div class="card-3d" id="textCard" onclick="flipCard('text')">
+            <div class="card-inner">
+              <div class="card-face card-back"><div class="card-back-pattern"><div class="card-back-text">OH</div><div class="card-back-sub">WORD</div></div></div>
+              <div class="card-face card-front">
+                <div class="text-card-content"><div class="text-card-word" id="textCardWord">—</div></div>
+                <div class="text-card-number" id="textCardNumber">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-slot">
+          <div class="slot-label">闸 门 卡</div>
+          <div class="card-3d" id="gateCard" onclick="flipCard('gate')">
+            <div class="card-inner">
+              <div class="card-face card-back"><div class="card-back-pattern"><div class="card-back-text">HD</div><div class="card-back-sub">GATE</div></div></div>
+              <div class="card-face card-front">
+                <div class="gate-card-content">
+                  <div class="gate-hexagram" id="gateHexagram">—</div>
+                  <div class="gate-name" id="gateName">—</div>
+                  <div class="gate-center-label" id="gateCenter">—</div>
+                  <div class="gate-keywords" id="gateKeywords">—</div>
+                </div>
+                <div class="gate-card-number" id="gateCardNumber">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="draw-actions">
+        <button class="btn btn-primary" id="drawBtn" onclick="drawCards()">三 卡 抽 取</button>
+        <button class="btn btn-outline" onclick="resetCards()">重置</button>
+      </div>
+
+      <div class="fusion-reading" id="fusionReading" style="display:none;">
+        <h3>fusion 融合解读</h3>
+        <div class="fusion-cards-display" id="fusionCardsDisplay"></div>
+        <div class="fusion-text" id="fusionText"></div>
+      </div>
+
+      <div class="reflection-area" id="reflectionArea">
+        <h3>✎ 记录你的感受</h3>
+        <div class="reflection-prompt" id="reflectionPrompt">看到这组卡片，你的第一直觉是什么？</div>
+        <textarea class="reflection-textarea" id="reflectionText" placeholder="在这里写下你的感受、联想和领悟..."></textarea>
+        <div class="reflection-actions">
+          <button class="btn btn-primary btn-sm" onclick="saveReflection(false)">保存记录</button>
+          <button class="btn btn-outline btn-sm" onclick="saveReflection(true)">保存并查看记录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 能量中心区 ========== -->
+  <div class="section" id="section-centers">
+    <h1 class="section-title" style="text-align:center;">九大能量中心 · 闸门引导</h1>
+    <p class="section-desc" style="text-align:center; margin-bottom:28px;">选择一个能量中心，从该中心的闸门中抽取专属引导</p>
+    <div class="centers-grid" id="centersGrid"></div>
+  </div>
+
+  <!-- ========== 记录区 ========== -->
+  <div class="section" id="section-records">
+    <div class="records-toolbar">
+      <div class="records-count">共 <strong id="recordCount">0</strong> 条记录</div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline btn-sm" onclick="exportRecords()">导出记录</button>
+        <button class="btn btn-outline btn-sm" onclick="confirmClearRecords()" style="color:#c44;border-color:#c44;">清空全部</button>
+      </div>
+    </div>
+    <div class="records-list" id="recordsList"></div>
+  </div>
+
+  <!-- ========== 融合之道 ========== -->
+  <div class="section" id="section-about">
+    <div class="fusion-intro">
+      <h2>⚡ 当人类图遇见OH卡</h2>
+      <p>人类图（Human Design）揭示了你的<strong>先天能量蓝图</strong>——64个闸门如同64种宇宙频率，通过九大能量中心运作。OH卡（OH Cards）则是<strong>潜意识的镜子</strong>——88张图像卡 × 88张文字卡 = 7744种投射组合。当二者融合，闸门能量为OH卡的直觉投射注入了一层<strong>原型智慧的维度</strong>：你不仅在看图说话，更是在透过特定闸门的频率棱镜，照见自己内在的能量回响。</p>
+    </div>
+    <div class="intro-grid">
+      <div class="intro-card">
+        <h2><span>OH</span>OH卡 · 潜意识投射卡</h2>
+        <p><strong>起源：</strong>1985年由墨西哥裔艺术家 Ely Raman 创立，后由德国出版商兼心理治疗师 Ofra Diamond 推广至全球。88张图像卡 + 88张文字卡，组合产生 7744 种可能性。</p>
+        <h3>科学原理</h3>
+        <ul>
+          <li><strong>冰山理论：</strong>意识如冰山一角，OH卡绕过理性防御，直接触及水下潜意识。</li>
+          <li><strong>情绪ABC理论：</strong>事件(A)→信念(B)→情绪(C)，OH卡揭示隐藏的B。</li>
+          <li><strong>投射技术：</strong>源于罗夏墨迹测验与TAT主题统觉测验，但更温和、更开放。</li>
+        </ul>
+        <h3>六大精神</h3>
+        <div>
+          <span class="intro-tag tag-oh">没有牌意</span>
+          <span class="intro-tag tag-oh">没有对错</span>
+          <span class="intro-tag tag-oh">没有输赢</span>
+          <span class="intro-tag tag-oh">案主为大</span>
+          <span class="intro-tag tag-oh">开放提问</span>
+          <span class="intro-tag tag-oh">直觉展现</span>
+        </div>
+      </div>
+      <div class="intro-card">
+        <h2><span>HD</span>人类图 · 能量系统</h2>
+        <p><strong>起源：</strong>1987年由加拿大人 Ra Uru Hu 在伊维萨岛经历"神秘体验"后获得。融合了卡巴拉生命之树、印度脉轮系统、中国易经64卦、西方占星学与量子物理学。</p>
+        <h3>核心架构</h3>
+        <ul>
+          <li><strong>64闸门：</strong>源自易经64卦，每个闸门代表一种宇宙能量原型。</li>
+          <li><strong>九大能量中心：</strong>对应身体七个脉轮（拆分为九个），每个中心管理不同的生命主题。</li>
+          <li><strong>四种类型：</strong>显示者、生产者（含显示生产者）、投射者、反映者。</li>
+          <li><strong>内在权威：</strong>情绪中心、荐骨中心、脾脏中心、G中心等决策机制。</li>
+        </ul>
+        <h3>闸门与易经</h3>
+        <p>每个闸门对应一卦易经，64闸门 = 64卦。闸门的能量频率描述了你在该维度上的先天倾向与生命课题。</p>
+      </div>
+    </div>
+    <div class="intro-card" style="margin-top:20px;">
+      <h2>✦ 融合解读方法</h2>
+      <ol>
+        <li><strong>抽三卡：</strong>同时抽取OH图像卡、OH文字卡与人类图闸门卡。</li>
+        <li><strong>看图像：</strong>图像卡是潜意识的画面——你看到了什么？感觉到了什么？</li>
+        <li><strong>读文字：</strong>文字卡是潜意识的标签——这个词对你的意义是什么？</li>
+        <li><strong>感应闸门：</strong>闸门卡是能量频率——这个闸门的关键词如何照亮你此刻的状态？</li>
+        <li><strong>三者交织：</strong>图像+文字+闸门三者之间有什么联系？闸门能量如何为你的投射注入更深层的原型解读？</li>
+        <li><strong>回归自己：</strong>这组卡片与你的困惑/问题之间，存在怎样的内在共鸣？</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="version-badge">V1.0 人类图×OH卡融合版</div>
+
+<script>
+// ==================== 88张文字卡 ====================
+const TEXT_CARDS = [
+  "羞辱","分享","等候","停止","攫取","恐吓","裸体",
+  "梦想","游戏","诙谐","聪明","道歉","孤独","哀伤",
+  "丢脸","前进","色情","危险","上司","父亲","丑陋",
+  "受害者","敌对","违背","亏欠","付出","生气",
+  "憎恶","厌烦","破坏","女人","腐朽","罪恶感",
+  "疲惫","强迫","喜悦","循环","姿态","消除",
+  "憎恨","依赖","羞愧","尴尬","放开","坚定",
+  "执着","习惯","焦虑","权力游戏","吸引","犹豫",
+  "退省","不喜欢","压抑","幻想","感情","混乱",
+  "愚蠢","男性","顺应","专家","威胁","孩童",
+  "成功","开始","母亲","家","弄巧成拙","爱情",
+  "外表","奇妙","改变","失败","错误","欢笑",
+  "攻击","恐惧","希望","痛苦","同性恋","固执",
+  "奴隶","谎言","应该","夸赞","躲藏","陌生人","抗拒"
+];
+
+// ==================== 64人类图闸门数据 ====================
+// 中心颜色
+const CENTER_COLORS = {
+  '头脑中心': '#F0E89A', '逻辑中心': '#A8C8E0', '喉咙中心': '#9B9B9B',
+  'G中心': '#C4956A', '心脏中心': '#E8A07A', '情绪中心': '#C4A0A8',
+  '脾脏中心': '#8AAD7F', '荐骨中心': '#D44A3A', '根部中心': '#8A7560'
+};
+const CENTER_ICON = {
+  '头脑中心': '💭', '逻辑中心': '🧠', '喉咙中心': '🗣',
+  'G中心': '❤', '心脏中心': '🔥', '情绪中心': '🌊',
+  '脾脏中心': '🛡', '荐骨中心': '⚡', '根部中心': '🌳'
+};
+const CENTER_TYPE = {
+  '头脑中心': '压力中心 · 灵感与疑惑', '逻辑中心': '觉察中心 · 概念化',
+  '喉咙中心': '表达中心 · 沟通与显化', 'G中心': '身份中心 · 爱与方向',
+  '心脏中心': '意志力中心 · 自我价值', '情绪中心': '觉察中心 · 情感波',
+  '脾脏中心': '觉察中心 · 直觉与生存', '荐骨中心': '动力中心 · 生命力',
+  '根部中心': '动力中心 · 压力与驱动'
+};
+
+const GATES = [
+  {num:1,name:"自我表达",center:"G中心",keywords:["创造","原创","表达"],wisdom:"创造的力量源自真实自我的独特表达",prompt:"你此刻需要创造的，是什么样的表达？"},
+  {num:2,name:"方向",center:"G中心",keywords:["接纳","方向","高我"],wisdom:"接纳内在的指引，方向自然显现",prompt:"你内心深处的直觉，在指向什么方向？"},
+  {num:3,name:"变革",center:"荐骨中心",keywords:["突变","混乱","新生"],wisdom:"混乱是变革的前奏，旧秩序打破后新生命才能诞生",prompt:"你生命中正在经历怎样的混乱？它可能孕育什么新生？"},
+  {num:4,name:"公式",center:"逻辑中心",keywords:["逻辑","解答","血之爱"],wisdom:"通过逻辑寻找答案，但真正的答案往往超越逻辑",prompt:"你试图用理性解决的，其实需要什么？"},
+  {num:5,name:"固定模式",center:"荐骨中心",keywords:["节奏","等待","规律"],wisdom:"找到属于自己的节奏，不急不躁地等待",prompt:"你生命中需要等待的节奏是什么？"},
+  {num:6,name:"冲突",center:"情绪中心",keywords:["亲密","摩擦","波动"],wisdom:"亲密关系中的摩擦，是情绪波浪的自然展现",prompt:"你与他人之间的摩擦，揭示了什么深层需求？"},
+  {num:7,name:"统帅",center:"喉咙中心",keywords:["领导","军队","方向"],wisdom:"真正的领导不是控制，而是为众人指明方向",prompt:"你在什么情境下需要站出来引导他人？"},
+  {num:8,name:"贡献",center:"喉咙中心",keywords:["团结","贡献","个体"],wisdom:"以独特的自我为群体做出贡献",prompt:"你能贡献什么独特价值？"},
+  {num:9,name:"专注",center:"荐骨中心",keywords:["细节","深耕","专注"],wisdom:"深入细节的力量，在于不被干扰的专注",prompt:"你需要更专注地深入什么？"},
+  {num:10,name:"行为",center:"G中心",keywords:["自我","行为","认同"],wisdom:"行为的本质是自我认同的外化",prompt:"你的行为在表达什么样的自我？"},
+  {num:11,name:"和平",center:"逻辑中心",keywords:["想法","和平","概念"],wisdom:"和平不是没有冲突，而是在冲突中找到平衡的概念",prompt:"什么样的想法能为你带来和平？"},
+  {num:12,name:"谨慎",center:"喉咙中心",keywords:["静止","谨慎","表达"],wisdom:"谨慎的言语有力量，知道何时沉默是智慧",prompt:"你此刻需要谨慎表达的，是什么？"},
+  {num:13,name:"聆听者",center:"G中心",keywords:["倾听","同伴","秘密"],wisdom:"真正的聆听是放下自我，让他人被看见",prompt:"你最近听见了什么未曾说出口的话？"},
+  {num:14,name:"财富",center:"荐骨中心",keywords:["资源","技能","丰盛"],wisdom:"真正的财富是掌握与运用资源的能力",prompt:"你拥有什么未被充分运用的资源？"},
+  {num:15,name:"极端",center:"G中心",keywords:["谦逊","极端","平衡"],wisdom:"在极端中找到平衡，谦逊接纳一切状态",prompt:"你在哪个极端需要回归平衡？"},
+  {num:16,name:"技能",center:"喉咙中心",keywords:["热情","技能","掌握"],wisdom:"热情驱动的技能掌握，胜过机械重复",prompt:"你对什么事物有着真实的热情？"},
+  {num:17,name:"意见",center:"逻辑中心",keywords:["观点","追随","视觉"],wisdom:"意见是个人视角的投射，保持觉知地表达",prompt:"你此刻的强烈意见背后，隐藏着什么？"},
+  {num:18,name:"纠正",center:"逻辑中心",keywords:["纠错","损坏","完美"],wisdom:"看见不完美是天赋，纠正时需带着慈悲",prompt:"你发现了什么需要纠正的不完美？"},
+  {num:19,name:"需求",center:"根部中心",keywords:["接近","需求","依赖"],wisdom:"看见需求是第一步，满足需要而非欲望",prompt:"你最基本的真实需求是什么？"},
+  {num:20,name:"当下",center:"喉咙中心",keywords:["观照","当下","行动"],wisdom:"全然安住当下，行动自然涌现",prompt:"此时此刻，你全然觉察到了什么？"},
+  {num:21,name:"猎人",center:"心脏中心",keywords:["控制","猎取","意志"],wisdom:"用意志力掌控所需，但不可过度抓取",prompt:"你试图控制的是什么？放下控制会怎样？"},
+  {num:22,name:"优雅",center:"情绪中心",keywords:["开放","优雅","情绪"],wisdom:"在情绪波中保持优雅的开放",prompt:"你如何在情绪波动中保持优雅？"},
+  {num:23,name:"裂开",center:"喉咙中心",keywords:["同化","分裂","表达"],wisdom:"接受内在的分裂，才能表达完整的真相",prompt:"你内在有什么被分裂的部分需要被同化？"},
+  {num:24,name:"回归",center:"逻辑中心",keywords:["领悟","回归","理性"],wisdom:"反复思考的尽头，是放下思考的领悟",prompt:"你反复思考的问题，答案可能是什么？"},
+  {num:25,name:"天真",center:"G中心",keywords:["无我","天真","宇宙之爱"],wisdom:"天真不是无知，是无条件地接纳一切",prompt:"你何时能放下评判，以天真的心面对当下？"},
+  {num:26,name:"驯服者",center:"心脏中心",keywords:["力量","驯服","记忆"],wisdom:"真正的力量是驯服内在的野性",prompt:"你需要驯服的内在野性是什么？"},
+  {num:27,name:"滋养",center:"荐骨中心",keywords:["照顾","滋养","培育"],wisdom:"滋养他人前，先滋养自己",prompt:"你此刻最需要被滋养的是什么？"},
+  {num:28,name:"玩家",center:"心脏中心",keywords:["冒险","意义","风险"],wisdom:"人生如游戏，找到值得冒险的意义",prompt:"什么值得你冒险去追求？"},
+  {num:29,name:"坚持",center:"荐骨中心",keywords:["坚持","深渊","说好"],wisdom:"对正确的事情说好，坚持到底",prompt:"你真正需要坚持说好的，是什么？"},
+  {num:30,name:"感受",center:"情绪中心",keywords:["燃烧","渴望","情绪"],wisdom:"欲望的火焰照亮内在渴望，但不可被吞噬",prompt:"什么样的渴望正在燃烧你的内心？"},
+  {num:31,name:"影响",center:"喉咙中心",keywords:["领导","影响","民主"],wisdom:"真正的影响力来自于自然被追随",prompt:"你自然地影响着谁？如何影响？"},
+  {num:32,name:"持续",center:"脾脏中心",keywords:["持久","生存、直觉"],wisdom:"直觉知道什么值得持续，什么需要放下",prompt:"你的直觉告诉你，什么值得持续？"},
+  {num:33,name:"退隐",center:"喉咙中心",keywords:["隐遁","保密","回顾"],wisdom:"退隐不是逃避，是在独处中找到真相",prompt:"你需要退隐独处来反思什么？"},
+  {num:34,name:"力量",center:"荐骨中心",keywords:["伟大","力量","生命力"],wisdom:"纯粹的生命力是最强大的力量",prompt:"你内在的生命力此刻在推动什么？"},
+  {num:35,name:"改变",center:"喉咙中心",keywords:["进步","体验","变化"],wisdom:"变化是唯一的不变，拥抱每一次体验",prompt:"什么样的变化正在发生？你如何拥抱它？"},
+  {num:36,name:"危机",center:"情绪中心",keywords:["暗夜","挑战","情绪"],wisdom:"危机是情绪成长的催化剂",prompt:"你正在经历的危机，如何转化为成长？"},
+  {num:37,name:"家人",center:"喉咙中心",keywords:["友谊","家庭","协议"],wisdom:"家庭与友谊的基石是彼此尊重的协议",prompt:"你与重要他人之间的协议是什么？"},
+  {num:38,name:"对抗",center:"根部中心",keywords:["战士","反对","抗争"],wisdom:"为正确的事情抗争，是内在勇士的体现",prompt:"什么值得你站出来抗争？"},
+  {num:39,name:"障碍",center:"根部中心",keywords:["挑衅","障碍","阻碍"],wisdom:"障碍揭示内在需要面对的课题",prompt:"你面前的障碍在揭示什么？"},
+  {num:40,name:"解脱",center:"心脏中心",keywords:["交付","自由","意志"],wisdom:"放下不属于你的责任，获得真正的自由",prompt:"你需要交付和放下的是什么？"},
+  {num:41,name:"减少",center:"情绪中心",keywords:["想象","收缩","梦想"],wisdom:"减少外在的繁杂，为内在梦想腾出空间",prompt:"你需要减少什么，来为梦想腾出空间？"},
+  {num:42,name:"增加",center:"荐骨中心",keywords:["增益","完成","生长"],wisdom:"完成开始的事情，才能迎来真正的增长",prompt:"你需要完成什么，才能迎来增长？"},
+  {num:43,name:"洞见",center:"逻辑中心",keywords:["突破","内在","顿悟"],wisdom:"洞见来自内在，超越集体逻辑的顿悟",prompt:"你最近的顿悟是什么？"},
+  {num:44,name:"警觉",center:"脾脏中心",keywords:["会面","直觉","模式"],wisdom:"直觉警觉地识别他人的模式与意图",prompt:"你的直觉在警觉什么？"},
+  {num:45,name:"聚集者",center:"喉咙中心",keywords:["国王","聚集","拥有"],wisdom:"聚集资源与人脉，为众人创造价值",prompt:"你正在聚集什么？为了什么目的？"},
+  {num:46,name:"推进",center:"G中心",keywords:["爱","推进","身体之爱"],wisdom:"爱是推动生命向上的根本力量",prompt:"爱如何推动你此刻的生命？"},
+  {num:47,name:"领悟",center:"逻辑中心",keywords:["压迫","困顿","突破"],wisdom:"最深的困顿之后，往往是最亮的领悟",prompt:"你正在困顿中等待什么样的领悟？"},
+  {num:48,name:"井",center:"脾脏中心",keywords:["深度","井","直觉"],wisdom:"直觉的深度如同井水，需要沉静才能汲取",prompt:"你需要深入挖掘的深度是什么？"},
+  {num:49,name:"革命",center:"情绪中心",keywords:["原则","变革","拒绝"],wisdom:"基于原则的变革，需要情绪的清明",prompt:"你需要革命的旧模式是什么？"},
+  {num:50,name:"价值",center:"脾脏中心",keywords:["熔炉","价值","责任"],wisdom:"真正的价值在承担责任中被锤炼",prompt:"你承担的责任在塑造什么价值？"},
+  {num:51,name:"震惊",center:"心脏中心",keywords:["激发","震动","觉醒"],wisdom:"震惊打破惯性，唤醒沉睡的觉知",prompt:"什么震惊打破了你旧的惯性？"},
+  {num:52,name:"保持静止",center:"根部中心",keywords:["山","静止","耐心"],wisdom:"如山般静止，在耐心中蓄积力量",prompt:"你需要如山般静止等待的是什么？"},
+  {num:53,name:"开始",center:"荐骨中心",keywords:["渐进","种子","开端"],wisdom:"每一个伟大的旅程都始于一粒小小的种子",prompt:"你正在开始的旅程，目标是什么？"},
+  {num:54,name:"嫁接",center:"脾脏中心",keywords:["转化","驱动","上升"],wisdom:"在平凡中嫁接非凡，实现转化上升",prompt:"你需要在什么平凡中嫁接非凡？"},
+  {num:55,name:"丰盛",center:"情绪中心",keywords:["精神","丰盛","自由"],wisdom:"真正的丰盛是精神上的自由",prompt:"你在精神上如何体验丰盛？"},
+  {num:56,name:"漫游者",center:"喉咙中心",keywords:["故事","旅行","寻道"],wisdom:"每个故事都是一次心灵的旅行",prompt:"你正在讲述的，是怎样的故事？"},
+  {num:57,name:"温和",center:"脾脏中心",keywords:["直觉","温和","穿透"],wisdom:"直觉是最温和也最穿透的力量",prompt:"你的直觉在温和地告诉你什么？"},
+  {num:58,name:"愉悦",center:"根部中心",keywords:["活力","喜悦","改进"],wisdom:"生命力的喜悦驱使一切改进",prompt:"什么让你感到真实的喜悦和活力？"},
+  {num:59,name:"散开",center:"荐骨中心",keywords:["亲密","散开","连接"],wisdom:"打破隔离的壳，建立真正的亲密",prompt:"你需要打开心防与谁建立亲密？"},
+  {num:60,name:"限制",center:"根部中心",keywords:["接纳","边界","约束"],wisdom:"接受限制，在约束中找到自由",prompt:"你面临什么限制？如何在其中找到自由？"},
+  {num:61,name:"真理",center:"头脑中心",keywords:["个体性","灵感","奥秘"],wisdom:"灵感来自对未知的敬畏，而非已知的重复",prompt:"什么神秘的灵感正在敲你的门？"},
+  {num:62,name:"细节",center:"喉咙中心",keywords:["细节","逻辑","命名"],wisdom:"准确命名事物，是表达力量的基础",prompt:"你需要更清晰地表达的细节是什么？"},
+  {num:63,name:"疑问",center:"头脑中心",keywords:["完成后","怀疑","逻辑"],wisdom:"怀疑是通往真理的必经之路",prompt:"你的怀疑在指向什么真相？"},
+  {num:64,name:"混沌",center:"头脑中心",keywords:["完成前","混乱","可能"],wisdom:"完成前的混沌是所有可能性的源头",prompt:"你正处于完成前的什么混沌中？"}
+];
+
+// ==================== SVG 具象场景绘制系统 ====================
+const P = {
+  skin: ['#E8C4A0','#D4A574','#C4956A','#B08055'],
+  cloth: ['#7BA7BC','#C4956A','#8AAD7F','#D49B6A','#9B8BC4','#C47A7A','#7A9EC4','#BCA574'],
+  sky: ['#A8C8E0','#D4A574','#C49AA0','#9BB0C9','#E0C89B'],
+  ground: ['#C4A87A','#A08858','#8B7355','#9EB07A'],
+  tree: ['#6B8E5A','#5A7A4A','#8BA572','#7A9B5A'],
+  building: ['#D4B894','#C4956A','#B08050','#9E7848'],
+  water: ['#7BA7C4','#6B97B4','#A8C8E0'],
+  dark: '#3D2E22', light: '#FAF6EF', accent: '#C4956A',
+  red: '#C47A6A', yellow: '#E0C44A', white: '#F5F0E8'
+};
+function pick(arr, seed) { return arr[seed % arr.length]; }
+// ---- 背景函数 ----
+function bgSky(s){const c=pick(P.sky,s);return `<rect width="200" height="280" fill="${c}"/><circle cx="${20+s*3%160}" cy="${30+s*2%40}" r="${15+s%20}" fill="${P.white}" opacity="0.3"/>`;}
+function bgIndoor(s){const c=pick(['#E8DCC8','#D4C4A8','#C4B498'],s);return `<rect width="200" height="280" fill="${c}"/>`;}
+function bgNight(s){return `<rect width="200" height="280" fill="#2D2E45"/><circle cx="${30+s*5%160}" cy="${20+s*3%60}" r="1.5" fill="#F5F0E8" opacity="0.8"/><circle cx="${60+s*7%120}" cy="${40+s*5%50}" r="1" fill="#F5F0E8" opacity="0.6"/><circle cx="${100+s*3%80}" cy="${15+s*4%40}" r="2" fill="#F5F0E8" opacity="0.9"/><circle cx="${140+s*5%50}" cy="${50+s*2%30}" r="1.5" fill="#F5F0E8" opacity="0.7"/><circle cx="${170+s*3%20}" cy="${25+s*6%35}" r="1" fill="#F5F0E8" opacity="0.5"/>`;}
+function bgField(s){return `<rect width="200" height="180" fill="${pick(P.sky,s)}"/><rect y="180" width="200" height="100" fill="${pick(P.ground,s)}"/>`;}
+function bgOcean(s){const c=pick(P.water,s);return `<rect width="200" height="120" fill="${pick(P.sky,s)}"/><rect y="120" width="200" height="160" fill="${c}"/><path d="M0,140 Q50,135 100,140 T200,140" stroke="${P.white}" stroke-width="1.5" fill="none" opacity="0.4"/><path d="M0,170 Q50,165 100,170 T200,170" stroke="${P.white}" stroke-width="1.5" fill="none" opacity="0.3"/><path d="M0,200 Q50,195 100,200 T200,200" stroke="${P.white}" stroke-width="1.5" fill="none" opacity="0.25"/>`;}
+function bgForest(s){return `<rect width="200" height="280" fill="#3D4A35"/>`;}
+function bgDawn(s){return `<defs><linearGradient id="dawn${s}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8A07A"/><stop offset="40%" stop-color="#E8C49A"/><stop offset="70%" stop-color="#D4C4A8"/><stop offset="100%" stop-color="#A08858"/></linearGradient></defs><rect width="200" height="280" fill="url(#dawn${s})"/>`;}
+// ---- 人物函数 ----
+function personStand(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="-30" r="8" fill="${skin}"/><path d="M-7,-22 L-7,0 L7,0 L7,-22 Z" fill="${cloth}"/><line x1="-7" y1="0" x2="-10" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="7" y1="0" x2="10" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/></g>`;}
+function personSit(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="-20" r="7" fill="${skin}"/><path d="M-6,-13 L-6,2 L6,2 L6,-13 Z" fill="${cloth}"/><line x1="-6" y1="2" x2="-12" y2="2" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="6" y1="2" x2="12" y2="2" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="-6" y1="2" x2="-6" y2="14" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="6" y1="2" x2="6" y2="14" stroke="${skin}" stroke-width="4" stroke-linecap="round"/></g>`;}
+function personBack(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="-30" r="8" fill="${skin}"/><path d="M-8,-22 Q-10,-5 -9,5 L9,5 Q10,-5 8,-22 Z" fill="${cloth}"/><line x1="-7" y1="5" x2="-9" y2="22" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="7" y1="5" x2="9" y2="22" stroke="${skin}" stroke-width="4" stroke-linecap="round"/></g>`;}
+function personWalk(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="-30" r="8" fill="${skin}"/><path d="M-7,-22 L-5,0 L5,0 L7,-22 Z" fill="${cloth}"/><line x1="-5" y1="0" x2="-12" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="5" y1="0" x2="12" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="-4" y1="-18" x2="-12" y2="-8" stroke="${skin}" stroke-width="3.5" stroke-linecap="round"/><line x1="4" y1="-18" x2="10" y2="-10" stroke="${skin}" stroke-width="3.5" stroke-linecap="round"/></g>`;}
+function personRun(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s}) rotate(-15)"><circle cx="0" cy="-30" r="8" fill="${skin}"/><path d="M-7,-22 L-3,2 L3,2 L7,-22 Z" fill="${cloth}"/><line x1="-3" y1="2" x2="-14" y2="16" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="3" y1="2" x2="14" y2="14" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="-4" y1="-18" x2="-14" y2="-12" stroke="${skin}" stroke-width="3.5" stroke-linecap="round"/><line x1="4" y1="-18" x2="12" y2="-15" stroke="${skin}" stroke-width="3.5" stroke-linecap="round"/></g>`;}
+function twoPeople(x,y,s,skin,c1,c2,g){return personStand(x-g,y,s,skin,c1)+personStand(x+g,y,s,skin,c2);}
+function child(x,y,s,skin,cloth){return `<g transform="translate(${x},${y}) scale(${s*0.65})"><circle cx="0" cy="-30" r="8" fill="${skin}"/><path d="M-7,-22 L-7,0 L7,0 L7,-22 Z" fill="${cloth}"/><line x1="-7" y1="0" x2="-8" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/><line x1="7" y1="0" x2="8" y2="18" stroke="${skin}" stroke-width="4" stroke-linecap="round"/></g>`;}
+// ---- 自然元素 ----
+function sun(x,y,r,c){return `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" opacity="0.85"/><g stroke="${c}" stroke-width="2" opacity="0.5"><line x1="${x}" y1="${y-r-8}" x2="${x}" y2="${y-r-16}"/><line x1="${x}" y1="${y+r+8}" x2="${x}" y2="${y+r+16}"/><line x1="${x-r-8}" y1="${y}" x2="${x-r-16}" y2="${y}"/><line x1="${x+r+8}" y1="${y}" x2="${x+r+16}" y2="${y}"/><line x1="${x-r*0.7-6}" y1="${y-r*0.7-6}" x2="${x-r*0.7-12}" y2="${y-r*0.7-12}"/><line x1="${x+r*0.7+6}" y1="${y-r*0.7-6}" x2="${x+r*0.7+12}" y2="${y-r*0.7-12}"/><line x1="${x-r*0.7-6}" y1="${y+r*0.7+6}" x2="${x-r*0.7-12}" y2="${y+r*0.7+12}"/><line x1="${x+r*0.7+6}" y1="${y+r*0.7+6}" x2="${x+r*0.7+12}" y2="${y+r*0.7+12}"/></g>`;}
+function moon(x,y,r,c){return `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" opacity="0.9"/><circle cx="${x-r*0.3}" cy="${y-r*0.2}" r="${r*0.9}" fill="#2D2E45"/>`;}
+function cloud(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="20" ry="10" fill="${c}" opacity="0.7"/><ellipse cx="-12" cy="-3" rx="12" ry="8" fill="${c}" opacity="0.7"/><ellipse cx="12" cy="-3" rx="14" ry="9" fill="${c}" opacity="0.7"/></g>`;}
+function tree(x,y,s,trunk,leaf){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-5" y="-10" width="10" height="40" fill="${trunk}" rx="2"/><circle cx="0" cy="-25" r="22" fill="${leaf}" opacity="0.85"/><circle cx="-12" cy="-20" r="14" fill="${leaf}" opacity="0.85"/><circle cx="12" cy="-20" r="14" fill="${leaf}" opacity="0.85"/><circle cx="0" cy="-35" r="16" fill="${leaf}" opacity="0.85"/></g>`;}
+function deadTree(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-3" y="-10" width="6" height="50" fill="${c}" rx="1"/><line x1="0" y1="-5" x2="-15" y2="-25" stroke="${c}" stroke-width="3"/><line x1="0" y1="-5" x2="15" y2="-22" stroke="${c}" stroke-width="3"/><line x1="-12" y1="-20" x2="-20" y2="-32" stroke="${c}" stroke-width="2"/><line x1="12" y1="-18" x2="22" y2="-30" stroke="${c}" stroke-width="2"/><line x1="0" y1="-15" x2="0" y2="-35" stroke="${c}" stroke-width="3"/></g>`;}
+function flower(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><line x1="0" y1="0" x2="0" y2="15" stroke="#6B8E5A" stroke-width="2"/><circle cx="0" cy="-3" r="3" fill="${c}"/><circle cx="-5" cy="-1" r="3" fill="${c}"/><circle cx="5" cy="-1" r="3" fill="${c}"/><circle cx="-3" cy="-6" r="3" fill="${c}"/><circle cx="3" cy="-6" r="3" fill="${c}"/><circle cx="0" cy="-3" r="2" fill="${P.yellow}"/></g>`;}
+function bird(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-10,0 Q-5,-6 0,0 Q5,-6 10,0" stroke="${c}" stroke-width="2" fill="none"/></g>`;}
+function fish(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="10" ry="5" fill="${c}"/><polygon points="10,0 16,-4 16,4" fill="${c}"/><circle cx="-5" cy="-1" r="1.5" fill="${P.dark}"/></g>`;}
+function mountain(x,y,w,h,c){return `<polygon points="${x},${y} ${x+w/2},${y-h} ${x+w},${y}" fill="${c}" opacity="0.7"/><polygon points="${x+w*0.3},${y-h*0.4} ${x+w/2},${y-h} ${x+w*0.7},${y-h*0.4}" fill="${P.white}" opacity="0.6"/>`;}
+// ---- 建筑元素 ----
+function house(x,y,s,wall,roof){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-25" y="-20" width="50" height="40" fill="${wall}"/><polygon points="-30,-20 0,-42 30,-20" fill="${roof}"/><rect x="-8" y="-5" width="16" height="20" fill="${P.dark}"/><rect x="-20" y="-15" width="10" height="10" fill="${pick(P.sky,3)}"/><rect x="10" y="-15" width="10" height="10" fill="${pick(P.sky,3)}"/></g>`;}
+function door(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-15" y="-40" width="30" height="45" fill="${c}" rx="2"/><rect x="-12" y="-37" width="24" height="20" fill="${P.yellow}" opacity="0.6"/><circle cx="10" cy="-15" r="2" fill="${P.accent}"/></g>`;}
+function windowFrame(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-18" y="-20" width="36" height="36" fill="${c}" rx="2"/><rect x="-15" y="-17" width="30" height="30" fill="${pick(P.sky,5)}" opacity="0.6"/><line x1="0" y1="-17" x2="0" y2="13" stroke="${c}" stroke-width="2"/><line x1="-15" y1="-2" x2="15" y2="-2" stroke="${c}" stroke-width="2"/></g>`;}
+function bridge(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-40,0 Q0,-25 40,0" stroke="${c}" stroke-width="4" fill="none"/><line x1="-40" y1="0" x2="-40" y2="15" stroke="${c}" stroke-width="3"/><line x1="-20" y1="-12" x2="-20" y2="15" stroke="${c}" stroke-width="2"/><line x1="0" y1="-25" x2="0" y2="15" stroke="${c}" stroke-width="2"/><line x1="20" y1="-12" x2="20" y2="15" stroke="${c}" stroke-width="2"/><line x1="40" y1="0" x2="40" y2="15" stroke="${c}" stroke-width="3"/></g>`;}
+function stairs(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><polygon points="-30,20 -30,10 -15,10 -15,0 0,0 0,-10 15,-10 15,-20 30,-20 30,20" fill="${c}" opacity="0.7"/></g>`;}
+function wall(x,y,w,h,c){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}" opacity="0.7"/><line x1="${x}" y1="${y+h/3}" x2="${x+w}" y2="${y+h/3}" stroke="${P.dark}" stroke-width="0.5" opacity="0.3"/><line x1="${x}" y1="${y+2*h/3}" x2="${x+w}" y2="${y+2*h/3}" stroke="${P.dark}" stroke-width="0.5" opacity="0.3"/>`;}
+// ---- 物品元素 ----
+function chair(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-12" y="-20" width="24" height="6" fill="${c}"/><rect x="-12" y="-20" width="4" height="20" fill="${c}"/><rect x="8" y="-20" width="4" height="20" fill="${c}"/><line x1="-10" y1="0" x2="-10" y2="14" stroke="${c}" stroke-width="3"/><line x1="10" y1="0" x2="10" y2="14" stroke="${c}" stroke-width="3"/></g>`;}
+function clock(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="0" cy="0" r="20" fill="${P.white}" stroke="${c}" stroke-width="3"/><line x1="0" y1="0" x2="0" y2="-12" stroke="${c}" stroke-width="2.5"/><line x1="0" y1="0" x2="10" y2="3" stroke="${c}" stroke-width="2"/><circle cx="0" cy="0" r="2" fill="${c}"/></g>`;}
+function key(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s}) rotate(-30)"><circle cx="0" cy="0" r="10" fill="none" stroke="${c}" stroke-width="4"/><line x1="0" y1="10" x2="0" y2="28" stroke="${c}" stroke-width="4"/><line x1="0" y1="22" x2="8" y2="22" stroke="${c}" stroke-width="4"/><line x1="0" y1="28" x2="6" y2="28" stroke="${c}" stroke-width="4"/></g>`;}
+function mask(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-15,-10 Q-15,8 0,12 Q15,8 15,-10 Q0,-15 -15,-10 Z" fill="${c}" opacity="0.8"/><circle cx="-6" cy="-4" r="2.5" fill="${P.dark}"/><circle cx="6" cy="-4" r="2.5" fill="${P.dark}"/><path d="M-4,4 Q0,6 4,4" stroke="${P.dark}" stroke-width="1.5" fill="none"/></g>`;}
+function mirror(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="15" ry="22" fill="${P.white}" stroke="${c}" stroke-width="3" opacity="0.8"/><ellipse cx="-4" cy="-6" rx="5" ry="8" fill="${P.light}" opacity="0.5"/></g>`;}
+function candle(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-4" y="-5" width="8" height="25" fill="${c}"/><path d="M0,-5 Q-3,-12 0,-18 Q3,-12 0,-5" fill="${P.yellow}" opacity="0.9"/><circle cx="0" cy="-14" r="6" fill="${P.yellow}" opacity="0.2"/></g>`;}
+function book(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-15,-10 L0,-7 L15,-10 L15,10 L0,13 L-15,10 Z" fill="${c}"/><line x1="0" y1="-7" x2="0" y2="13" stroke="${P.dark}" stroke-width="1"/></g>`;}
+function heartShape(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M0,8 C-12,-4 -12,-14 -6,-14 C-2,-14 0,-10 0,-6 C0,-10 2,-14 6,-14 C12,-14 12,-4 0,8 Z" fill="${c}" opacity="0.85"/></g>`;}
+function eyeShape(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-18,0 Q0,-12 18,0 Q0,12 -18,0" fill="${P.white}" stroke="${c}" stroke-width="2"/><circle cx="0" cy="0" r="6" fill="${c}"/><circle cx="0" cy="0" r="3" fill="${P.dark}"/><circle cx="-1" cy="-1" r="1" fill="${P.white}"/></g>`;}
+function birdcage(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><line x1="0" y1="-25" x2="0" y2="-15" stroke="${c}" stroke-width="1.5"/><ellipse cx="0" cy="-15" rx="15" ry="4" fill="none" stroke="${c}" stroke-width="1.5"/><line x1="-15" y1="-15" x2="-15" y2="10" stroke="${c}" stroke-width="1.5"/><line x1="15" y1="-15" x2="15" y2="10" stroke="${c}" stroke-width="1.5"/><line x1="-12" y1="-15" x2="-12" y2="10" stroke="${c}" stroke-width="0.8" opacity="0.5"/><line x1="-8" y1="-15" x2="-8" y2="10" stroke="${c}" stroke-width="0.8" opacity="0.5"/><line x1="0" y1="-15" x2="0" y2="10" stroke="${c}" stroke-width="0.8" opacity="0.5"/><line x1="8" y1="-15" x2="8" y2="10" stroke="${c}" stroke-width="0.8" opacity="0.5"/><line x1="12" y1="-15" x2="12" y2="10" stroke="${c}" stroke-width="0.8" opacity="0.5"/><ellipse cx="0" cy="10" rx="15" ry="4" fill="none" stroke="${c}" stroke-width="1.5"/></g>`;}
+function umbrella(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-18,0 Q0,-22 18,0" fill="${c}" opacity="0.85"/><path d="M-18,0 Q-9,-12 0,0" fill="${c}" opacity="0.7"/><path d="M0,0 Q9,-12 18,0" fill="${c}" opacity="0.7"/><line x1="0" y1="0" x2="0" y2="20" stroke="${P.dark}" stroke-width="2"/><path d="M0,20 Q3,22 5,19" stroke="${P.dark}" stroke-width="2" fill="none"/></g>`;}
+function boat(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-20,0 L20,0 L15,8 L-15,8 Z" fill="${c}"/><line x1="0" y1="0" x2="0" y2="-25" stroke="${P.dark}" stroke-width="2"/><path d="M0,-25 L0,-2 L12,-10 Z" fill="${P.white}" opacity="0.9"/></g>`;}
+function cat(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="12" ry="7" fill="${c}"/><circle cx="10" cy="-8" r="7" fill="${c}"/><polygon points="6,-13 8,-18 11,-13" fill="${c}"/><polygon points="11,-13 14,-18 16,-13" fill="${c}"/><circle cx="8" cy="-8" r="1.5" fill="${P.dark}"/><circle cx="13" cy="-8" r="1.5" fill="${P.dark}"/><path d="M-12,0 Q-18,-3 -18,0" stroke="${c}" stroke-width="2" fill="none"/></g>`;}
+function fishbowl(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="18" ry="14" fill="${pick(P.water,0)}" opacity="0.4" stroke="${c}" stroke-width="2"/><ellipse cx="0" cy="-14" rx="18" ry="4" fill="none" stroke="${c}" stroke-width="2"/><ellipse cx="-5" cy="2" rx="5" ry="3" fill="${P.accent}" opacity="0.8"/><polygon points="0,2 5,0 5,4" fill="${P.accent}" opacity="0.8"/></g>`;}
+function rope(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-20,-10 Q-15,0 -10,-5 Q-5,-10 0,-5 Q5,0 10,-5 Q15,-10 20,-5" stroke="${c}" stroke-width="3" fill="none"/><circle cx="0" cy="5" r="8" fill="none" stroke="${c}" stroke-width="3"/></g>`;}
+function lock(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-10" y="-5" width="20" height="18" fill="${c}" rx="3"/><path d="M-7,-5 L-7,-12 Q-7,-18 0,-18 Q7,-18 7,-12 L7,-5" stroke="${c}" stroke-width="3" fill="none"/><circle cx="0" cy="4" r="3" fill="${P.dark}"/></g>`;}
+function ladder(x,y,s,c){return `<g transform="translate(${x},${y}) scale(${s})"><line x1="-8" y1="-25" x2="-8" y2="20" stroke="${c}" stroke-width="3"/><line x1="8" y1="-25" x2="8" y2="20" stroke="${c}" stroke-width="3"/><line x1="-8" y1="-15" x2="8" y2="-15" stroke="${c}" stroke-width="2.5"/><line x1="-8" y1="-3" x2="8" y2="-3" stroke="${c}" stroke-width="2.5"/><line x1="-8" y1="9" x2="8" y2="9" stroke="${c}" stroke-width="2.5"/></g>`;}
+
+// ==================== 88个具象场景 ====================
+const IMAGE_SCENES = [
+  {title:"窗前的人",render:(s)=>bgIndoor(s)+windowFrame(100,120,1.2,P.building[0])+sun(100,50,15,P.yellow)+personBack(100,220,1.0,P.skin[s%4],P.cloth[s%8])},
+  {title:"两双手",render:(s)=>bgIndoor(s)+`<g transform="translate(100,140)"><path d="M-20,0 Q-10,-8 0,0" stroke="${P.skin[s%4]}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M20,0 Q10,-8 0,0" stroke="${P.skin[(s+1)%4]}" stroke-width="6" fill="none" stroke-linecap="round"/></g>`},
+  {title:"打开的门",render:(s)=>bgIndoor(s)+door(100,180,1.3,P.building[s%4])+`<rect x="70" y="140" width="20" height="40" fill="${P.yellow}" opacity="0.5"/>`},
+  {title:"独坐椅子",render:(s)=>bgIndoor(s)+chair(100,170,1.1,P.building[s%4])+personSit(100,170,1.0,P.skin[s%4],P.cloth[s%8])},
+  {title:"树下的人",render:(s)=>bgField(s)+sun(160,50,18,P.yellow)+tree(120,200,1.3,P.building[s%4],P.tree[s%4])+personBack(80,220,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"面对面对话",render:(s)=>bgField(s)+twoPeople(100,200,0.9,P.skin[s%4],P.cloth[s%8],P.cloth[(s+1)%8],25)},
+  {title:"远望背影",render:(s)=>bgDawn(s)+mountain(0,200,200,80,P.building[s%4])+personBack(100,230,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"过桥的人",render:(s)=>bgOcean(s)+bridge(100,140,1.0,P.building[s%4])+personWalk(100,130,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"迷宫",render:(s)=>bgIndoor(s)+`<g transform="translate(100,140)" stroke="${P.building[s%4]}" stroke-width="3" fill="none"><path d="M-40,-40 L40,-40 L40,40 L-40,40 L-40,-20 L20,-20 L20,20 L0,20 L0,0 L10,0"/></g>`},
+  {title:"镜子前",render:(s)=>bgIndoor(s)+mirror(100,130,1.3,P.building[s%4])+personStand(100,220,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"沉睡的人",render:(s)=>bgNight(s)+moon(160,50,14,P.white)+`<rect x="70" y="180" width="60" height="25" fill="${P.cloth[s%8]}" rx="3"/>`+personSit(100,180,0.8,P.skin[s%4],P.cloth[(s+1)%8])},
+  {title:"行走的人",render:(s)=>bgField(s)+`<path d="M50,230 Q100,220 150,230" stroke="${P.ground[s%4]}" stroke-width="2" fill="none" opacity="0.5"/>`+personWalk(100,210,1.0,P.skin[s%4],P.cloth[s%8])+sun(50,50,16,P.yellow)},
+  {title:"鸟笼",render:(s)=>bgIndoor(s)+birdcage(100,120,1.2,P.building[s%4])+bird(95,120,0.8,P.accent)},
+  {title:"钥匙与门",render:(s)=>bgIndoor(s)+door(120,170,1.0,P.building[s%4])+key(60,150,1.2,P.accent)},
+  {title:"面具",render:(s)=>bgIndoor(s)+mask(100,130,1.5,P.cloth[s%8])+mask(70,150,0.9,P.cloth[(s+2)%8])+mask(130,150,0.9,P.cloth[(s+4)%8])},
+  {title:"时钟",render:(s)=>bgIndoor(s)+clock(100,130,1.3,P.building[s%4])+personStand(100,230,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"燃烧的蜡烛",render:(s)=>bgNight(s)+candle(100,140,1.5,P.cloth[s%8])+`<circle cx="100" cy="120" r="25" fill="${P.yellow}" opacity="0.1"/>`},
+  {title:"打开的书",render:(s)=>bgIndoor(s)+book(100,140,1.5,P.cloth[s%8])},
+  {title:"心",render:(s)=>bgIndoor(s)+heartShape(100,140,2.0,P.red)},
+  {title:"眼睛",render:(s)=>bgIndoor(s)+eyeShape(100,130,2.0,P.building[s%4])},
+  {title:"一家人",render:(s)=>bgField(s)+house(150,180,0.9,P.building[s%4],P.building[(s+1)%4])+personStand(60,210,0.9,P.skin[0],P.cloth[0])+personStand(80,210,0.9,P.skin[1],P.cloth[1])+child(100,215,1.0,P.skin[2],P.cloth[2])},
+  {title:"母亲与孩子",render:(s)=>bgField(s)+personStand(90,200,1.0,P.skin[s%4],P.cloth[s%8])+child(110,215,1.0,P.skin[(s+1)%4],P.cloth[(s+2)%8])},
+  {title:"山顶",render:(s)=>bgDawn(s)+sun(150,60,18,P.yellow)+mountain(20,220,160,100,P.building[s%4])+personStand(100,140,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"海边",render:(s)=>bgOcean(s)+sun(150,50,16,P.yellow)+personBack(100,200,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"森林中",render:(s)=>bgForest(s)+tree(50,200,1.2,P.building[2],P.tree[0])+tree(100,210,1.4,P.building[2],P.tree[1])+tree(160,200,1.1,P.building[2],P.tree[2])+personWalk(100,230,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"花园",render:(s)=>bgField(s)+flower(50,210,1.2,P.red)+flower(70,215,1.0,P.yellow)+flower(130,215,1.1,P.cloth[(s+3)%8])+flower(155,210,0.9,P.red)+tree(170,200,0.8,P.building[s%4],P.tree[s%4])},
+  {title:"雨中",render:(s)=>bgSky(s)+cloud(80,50,1.2,P.white)+cloud(140,70,1.0,P.white)+`<g stroke="${P.water[2]}" stroke-width="1.5" opacity="0.5"><line x1="50" y1="80" x2="45" y2="110"/><line x1="80" y1="70" x2="75" y2="100"/><line x1="110" y1="85" x2="105" y2="115"/><line x1="140" y1="75" x2="135" y2="105"/><line x1="170" y1="90" x2="165" y2="120"/></g>`+umbrella(100,180,1.3,P.cloth[s%8])+personWalk(100,200,0.9,P.skin[s%4],P.cloth[(s+1)%8])},
+  {title:"星空下",render:(s)=>bgNight(s)+moon(160,50,14,P.white)+personBack(100,220,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"日出",render:(s)=>bgDawn(s)+sun(100,90,25,P.yellow)+mountain(0,200,200,60,P.building[s%4])+personBack(100,230,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"月光下",render:(s)=>bgNight(s)+moon(100,60,18,P.white)+windowFrame(70,120,0.9,P.building[s%4])+personSit(130,200,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"阶梯",render:(s)=>bgIndoor(s)+stairs(100,160,1.5,P.building[s%4])+personStand(120,140,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"高墙前",render:(s)=>bgIndoor(s)+wall(20,60,160,120,P.building[s%4])+personBack(100,230,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"打开的窗",render:(s)=>bgIndoor(s)+windowFrame(100,120,1.5,P.building[s%4])+cloud(80,60,0.8,P.white)+bird(130,70,0.8,P.dark)},
+  {title:"空椅子",render:(s)=>bgIndoor(s)+chair(100,160,1.2,P.building[s%4])+`<rect x="60" y="180" width="80" height="3" fill="${P.building[s%4]}" opacity="0.3"/>`},
+  {title:"破碎的镜",render:(s)=>bgIndoor(s)+mirror(100,130,1.3,P.building[s%4])+`<path d="M85,115 L115,145 M90,140 L110,120 M100,110 L100,150" stroke="${P.dark}" stroke-width="1.5" opacity="0.5"/>`},
+  {title:"两条路",render:(s)=>bgField(s)+`<path d="M100,280 L100,200" stroke="${P.ground[s%4]}" stroke-width="4" fill="none"/><path d="M100,200 L50,140" stroke="${P.ground[s%4]}" stroke-width="3" fill="none"/><path d="M100,200 L150,140" stroke="${P.ground[s%4]}" stroke-width="3" fill="none"/>`+personStand(100,220,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"渡河",render:(s)=>bgOcean(s)+`<ellipse cx="100" cy="180" rx="25" ry="6" fill="${P.building[s%4]}"/>`+personStand(100,165,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"攀登",render:(s)=>bgSky(s)+mountain(0,240,200,160,P.building[s%4])+`<line x1="100" y1="240" x2="120" y2="180" stroke="${P.dark}" stroke-width="1" opacity="0.4"/>`+personWalk(115,180,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"拥抱",render:(s)=>bgField(s)+personStand(88,200,0.9,P.skin[s%4],P.cloth[s%8])+personStand(112,200,0.9,P.skin[(s+1)%4],P.cloth[(s+2)%8])},
+  {title:"背对背",render:(s)=>bgIndoor(s)+personBack(85,190,0.9,P.skin[s%4],P.cloth[s%8])+personBack(115,190,0.9,P.skin[(s+1)%4],P.cloth[(s+2)%8])},
+  {title:"指引方向",render:(s)=>bgField(s)+personStand(80,200,1.0,P.skin[s%4],P.cloth[s%8])+`<line x1="92" y1="185" x2="140" y2="160" stroke="${P.skin[s%4]}" stroke-width="3" stroke-linecap="round"/><polygon points="140,160 132,158 135,166" fill="${P.skin[s%4]}"/>`+`<path d="M100,230 Q140,220 170,180" stroke="${P.ground[s%4]}" stroke-width="2" fill="none" opacity="0.4"/>`},
+  {title:"等待",render:(s)=>bgIndoor(s)+chair(100,170,1.0,P.building[s%4])+personSit(100,170,1.0,P.skin[s%4],P.cloth[s%8])+clock(150,100,0.8,P.building[s%4])},
+  {title:"奔跑",render:(s)=>bgField(s)+`<path d="M30,240 Q100,230 170,240" stroke="${P.ground[s%4]}" stroke-width="2" fill="none" opacity="0.4"/>`+personRun(100,200,1.1,P.skin[s%4],P.cloth[s%8])},
+  {title:"房子与花园",render:(s)=>bgField(s)+house(100,170,1.3,P.building[s%4],P.building[(s+1)%4])+flower(50,220,1.0,P.red)+flower(60,225,0.8,P.yellow)+flower(150,220,1.0,P.cloth[(s+3)%8])+tree(165,210,0.7,P.building[s%4],P.tree[s%4])},
+  {title:"空房间",render:(s)=>bgIndoor(s)+windowFrame(60,100,0.8,P.building[s%4])+windowFrame(140,100,0.8,P.building[s%4])+`<rect x="40" y="220" width="120" height="3" fill="${P.building[s%4]}" opacity="0.3"/>`},
+  {title:"楼梯间",render:(s)=>`<rect width="200" height="280" fill="#3D2E22"/>`+stairs(100,180,1.3,'#5C4A38')+`<rect x="0" y="0" width="200" height="80" fill="#2D2118"/>`},
+  {title:"门口的人",render:(s)=>bgIndoor(s)+door(100,160,1.2,P.building[s%4])+personStand(100,220,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"窗外风景",render:(s)=>bgIndoor(s)+windowFrame(100,120,1.5,P.building[s%4])+mountain(40,120,120,40,P.building[(s+1)%4])+sun(150,90,10,P.yellow)},
+  {title:"阳台远望",render:(s)=>bgDawn(s)+`<rect x="0" y="180" width="200" height="100" fill="${P.building[s%4]}"/><rect x="0" y="175" width="200" height="8" fill="${P.building[(s+1)%4]}"/>`+personBack(100,170,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"鱼缸",render:(s)=>bgIndoor(s)+fishbowl(100,140,1.3,P.building[s%4])+fish(95,140,0.8,P.accent)},
+  {title:"飞鸟",render:(s)=>bgSky(s)+sun(160,50,16,P.yellow)+bird(60,80,1.2,P.dark)+bird(90,60,1.0,P.dark)+bird(130,90,0.9,P.dark)+bird(150,70,0.8,P.dark)},
+  {title:"窗边的猫",render:(s)=>bgIndoor(s)+windowFrame(100,100,1.2,P.building[s%4])+cat(100,200,1.3,P.cloth[s%8])},
+  {title:"人与狗",render:(s)=>bgField(s)+personWalk(90,200,0.9,P.skin[s%4],P.cloth[s%8])+`<g transform="translate(125,215) scale(0.8)"><ellipse cx="0" cy="0" rx="10" ry="5" fill="${P.building[s%4]}"/><circle cx="9" cy="-3" r="5" fill="${P.building[s%4]}"/><line x1="-8" y1="3" x2="-8" y2="8" stroke="${P.building[s%4]}" stroke-width="2"/><line x1="8" y1="3" x2="8" y2="8" stroke="${P.building[s%4]}" stroke-width="2"/><line x1="10" y1="3" x2="12" y2="8" stroke="${P.building[s%4]}" stroke-width="2"/></g>`},
+  {title:"蝴蝶与花",render:(s)=>bgField(s)+flower(100,210,1.3,P.cloth[s%8])+`<g transform="translate(100,150) scale(1.2)"><ellipse cx="-7" cy="0" rx="6" ry="9" fill="${P.cloth[s%8]}" opacity="0.8"/><ellipse cx="7" cy="0" rx="6" ry="9" fill="${P.cloth[s%8]}" opacity="0.8"/><ellipse cx="-5" cy="-8" rx="4" ry="5" fill="${P.cloth[(s+2)%8]}" opacity="0.7"/><ellipse cx="5" cy="-8" rx="4" ry="5" fill="${P.cloth[(s+2)%8]}" opacity="0.7"/><line x1="0" y1="-5" x2="0" y2="5" stroke="${P.dark}" stroke-width="1.5"/></g>`},
+  {title:"枯树",render:(s)=>bgField(s)+deadTree(100,200,1.5,P.building[s%4])+personBack(140,225,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"盆栽",render:(s)=>bgIndoor(s)+`<rect x="80" y="170" width="40" height="30" fill="${P.building[s%4]}" rx="3"/><rect x="80" y="170" width="40" height="6" fill="${P.building[(s+1)%4]}"/>`+tree(100,165,0.8,P.building[2],P.tree[s%4])},
+  {title:"火焰",render:(s)=>bgNight(s)+`<g transform="translate(100,160)"><path d="M0,20 Q-15,10 -10,-5 Q-5,-15 0,-25 Q5,-15 10,-5 Q15,10 0,20" fill="${P.red}" opacity="0.8"/><path d="M0,15 Q-8,8 -5,-3 Q0,-12 0,-18 Q0,-12 5,-3 Q8,8 0,15" fill="${P.yellow}" opacity="0.8"/></g>`+personBack(100,230,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"冰雪",render:(s)=>`<rect width="200" height="280" fill="#D4DCE8"/>`+`<g fill="#F5F0E8" opacity="0.7"><circle cx="30" cy="40" r="3"/><circle cx="80" cy="70" r="2"/><circle cx="140" cy="50" r="3"/><circle cx="170" cy="90" r="2"/><circle cx="50" cy="120" r="2"/><circle cx="120" cy="130" r="3"/></g>`+deadTree(60,200,0.9,'#8A7A68')+deadTree(150,200,0.8,'#8A7A68')+personStand(100,220,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"风暴",render:(s)=>bgSky(s)+cloud(60,50,1.5,P.dark)+cloud(140,70,1.3,P.dark)+`<g stroke="${P.water[0]}" stroke-width="2" opacity="0.6"><line x1="40" y1="80" x2="35" y2="120"/><line x1="70" y1="70" x2="65" y2="110"/><line x1="100" y1="85" x2="95" y2="125"/><line x1="130" y1="75" x2="125" y2="115"/><line x1="160" y1="80" x2="155" y2="120"/></g>`+tree(100,200,1.0,P.building[s%4],P.tree[s%4])},
+  {title:"彩虹",render:(s)=>bgSky(s)+`<path d="M20,200 Q100,60 180,200" stroke="${P.red}" stroke-width="5" fill="none"/><path d="M25,200 Q100,68 175,200" stroke="${P.yellow}" stroke-width="5" fill="none"/><path d="M30,200 Q100,76 170,200" stroke="${P.cloth[2]}" stroke-width="5" fill="none"/><path d="M35,200 Q100,84 165,200" stroke="${P.water[0]}" stroke-width="5" fill="none"/>`+personBack(100,230,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"迷雾",render:(s)=>bgField(s)+`<g opacity="0.4"><ellipse cx="100" cy="100" rx="80" ry="20" fill="${P.white}"/><ellipse cx="60" cy="140" rx="60" ry="15" fill="${P.white}"/><ellipse cx="140" cy="160" rx="50" ry="12" fill="${P.white}"/><ellipse cx="100" cy="200" rx="90" ry="18" fill="${P.white}"/></g>`+personBack(100,230,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"深渊边",render:(s)=>`<rect width="200" height="180" fill="${P.ground[s%4]}"/><rect y="180" width="200" height="100" fill="#1A1410"/>`+personStand(80,160,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"岛屿",render:(s)=>bgOcean(s)+`<ellipse cx="100" cy="200" rx="50" ry="12" fill="${P.ground[s%4]}"/><ellipse cx="100" cy="195" rx="40" ry="8" fill="${P.ground[(s+1)%4]}"/>`+tree(100,175,0.9,P.building[s%4],P.tree[s%4])},
+  {title:"沙漠",render:(s)=>`<rect width="200" height="120" fill="${P.sky[3]}"/><rect y="120" width="200" height="160" fill="${P.yellow}" opacity="0.5"/><rect y="120" width="200" height="160" fill="${P.ground[0]}" opacity="0.4"/>`+sun(160,50,18,P.yellow)+`<path d="M0,200 Q50,180 100,200 Q150,220 200,200" stroke="${P.ground[s%4]}" stroke-width="2" fill="none" opacity="0.3"/>`+personBack(100,220,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"废墟",render:(s)=>bgSky(s)+`<g fill="${P.building[s%4]}" opacity="0.6"><rect x="30" y="120" width="20" height="80"/><rect x="55" y="140" width="15" height="60"/><rect x="130" y="130" width="18" height="70"/><rect x="155" y="150" width="12" height="50"/></g><rect x="75" y="170" width="50" height="30" fill="${P.building[s%4]}" opacity="0.5"/>`+personWalk(100,210,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"塔楼",render:(s)=>bgSky(s)+`<rect x="85" y="80" width="30" height="140" fill="${P.building[s%4]}"/><polygon points="80,80 100,40 120,80" fill="${P.building[(s+1)%4]}"/><rect x="92" y="110" width="8" height="12" fill="${P.sky[0]}"/><rect x="100" y="140" width="8" height="12" fill="${P.sky[0]}"/>`+personBack(100,240,0.6,P.skin[s%4],P.cloth[s%8])},
+  {title:"围墙",render:(s)=>bgIndoor(s)+wall(20,40,50,180,P.building[s%4])+wall(130,40,50,180,P.building[s%4])+personWalk(100,200,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"十字路口",render:(s)=>bgField(s)+`<path d="M0,260 L100,200 L200,260" stroke="${P.ground[s%4]}" stroke-width="4" fill="none"/><path d="M100,280 L100,160" stroke="${P.ground[s%4]}" stroke-width="3" fill="none"/>`+personStand(100,180,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"远方",render:(s)=>bgDawn(s)+`<line x1="0" y1="180" x2="200" y2="180" stroke="${P.building[s%4]}" stroke-width="1" opacity="0.4"/>`+personBack(100,230,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"倒影",render:(s)=>bgOcean(s)+personStand(100,160,0.7,P.skin[s%4],P.cloth[s%8])+`<g transform="translate(0,320) scale(1,-1)" opacity="0.3">${personStand(100,160,0.7,P.skin[s%4],P.cloth[s%8])}</g>`},
+  {title:"影子",render:(s)=>bgField(s)+sun(50,50,16,P.yellow)+personStand(100,200,1.0,P.skin[s%4],P.cloth[s%8])+`<ellipse cx="125" cy="225" rx="18" ry="4" fill="${P.dark}" opacity="0.2"/>`},
+  {title:"锁与钥匙",render:(s)=>bgIndoor(s)+lock(80,130,1.3,P.building[s%4])+key(130,140,1.3,P.accent)},
+  {title:"绳结",render:(s)=>bgIndoor(s)+rope(100,140,1.5,P.building[s%4])},
+  {title:"天平",render:(s)=>bgIndoor(s)+`<g transform="translate(100,120)"><line x1="-30" y1="0" x2="30" y2="0" stroke="${P.building[s%4]}" stroke-width="3"/><line x1="0" y1="0" x2="0" y2="30" stroke="${P.building[s%4]}" stroke-width="3"/><line x1="-30" y1="0" x2="-30" y2="12" stroke="${P.building[s%4]}" stroke-width="1"/><line x1="30" y1="0" x2="30" y2="12" stroke="${P.building[s%4]}" stroke-width="1"/><ellipse cx="-30" cy="15" rx="8" ry="4" fill="${P.cloth[s%8]}" opacity="0.7"/><ellipse cx="30" cy="18" rx="8" ry="4" fill="${P.cloth[(s+2)%8]}" opacity="0.7"/></g>`},
+  {title:"面纱",render:(s)=>bgIndoor(s)+mask(100,130,1.5,P.cloth[s%8])+`<g opacity="0.3"><path d="M80,145 Q100,170 120,145 Q120,180 100,190 Q80,180 80,145" fill="${P.white}"/></g>`},
+  {title:"破茧",render:(s)=>bgField(s)+flower(150,220,1.0,P.cloth[s%8])+`<g transform="translate(80,150)"><ellipse cx="0" cy="0" rx="15" ry="20" fill="${P.building[s%4]}" opacity="0.6"/><path d="M-5,-10 Q-15,-5 -12,5" stroke="${P.building[s%4]}" stroke-width="1" fill="none"/></g>`+`<g transform="translate(120,130) scale(1.2)"><ellipse cx="-7" cy="0" rx="6" ry="9" fill="${P.cloth[(s+2)%8]}" opacity="0.8"/><ellipse cx="7" cy="0" rx="6" ry="9" fill="${P.cloth[(s+2)%8]}" opacity="0.8"/><line x1="0" y1="-5" x2="0" y2="5" stroke="${P.dark}" stroke-width="1.5"/></g>`},
+  {title:"根系",render:(s)=>bgField(s)+tree(100,170,1.0,P.building[s%4],P.tree[s%4])+`<g stroke="${P.building[s%4]}" stroke-width="2" fill="none" opacity="0.5"><path d="M100,200 L80,230 M100,200 L120,230 M100,200 L90,240 M100,200 L110,240 M80,230 L70,250 M120,230 L130,250"/></g>`},
+  {title:"年轮",render:(s)=>bgIndoor(s)+`<g transform="translate(100,140)"><circle cx="0" cy="0" r="35" fill="none" stroke="${P.building[s%4]}" stroke-width="1.5" opacity="0.6"/><circle cx="0" cy="0" r="28" fill="none" stroke="${P.building[s%4]}" stroke-width="1.5" opacity="0.5"/><circle cx="0" cy="0" r="21" fill="none" stroke="${P.building[s%4]}" stroke-width="1.5" opacity="0.4"/><circle cx="0" cy="0" r="14" fill="none" stroke="${P.building[s%4]}" stroke-width="1.5" opacity="0.3"/><circle cx="0" cy="0" r="7" fill="${P.building[s%4]}" opacity="0.3"/></g>`},
+  {title:"涟漪",render:(s)=>bgOcean(s)+`<g fill="none" stroke="${P.white}" opacity="0.4"><ellipse cx="100" cy="180" rx="10" ry="3"/><ellipse cx="100" cy="180" rx="20" ry="6"/><ellipse cx="100" cy="180" rx="30" ry="9"/><ellipse cx="100" cy="180" rx="40" ry="12"/></g>`},
+  {title:"火山",render:(s)=>bgSky(s)+`<polygon points="40,240 100,100 160,240" fill="${P.building[s%4]}"/><polygon points="85,130 100,100 115,130" fill="${P.red}" opacity="0.8"/><path d="M100,100 Q95,85 100,70 Q105,85 100,100" fill="${P.yellow}" opacity="0.8"/>`+personBack(100,250,0.5,P.skin[s%4],P.cloth[s%8])},
+  {title:"洞穴",render:(s)=>`<rect width="200" height="280" fill="#1A1410"/>`+`<ellipse cx="100" cy="180" rx="50" ry="60" fill="#2D2118"/>`+`<ellipse cx="100" cy="180" rx="35" ry="45" fill="#3D2E22"/>`+candle(100,220,0.8,P.cloth[s%8])},
+  {title:"帐篷",render:(s)=>bgField(s)+sun(160,50,14,P.yellow)+`<polygon points="70,220 100,150 130,220" fill="${P.cloth[s%8]}"/><polygon points="85,220 100,180 115,220" fill="${P.dark}" opacity="0.4"/>`+personStand(150,220,0.7,P.skin[s%4],P.cloth[(s+1)%8])},
+  {title:"帆船",render:(s)=>bgOcean(s)+sun(160,50,14,P.yellow)+boat(100,170,1.2,P.building[s%4])+personStand(100,155,0.5,P.skin[s%4],P.cloth[s%8])},
+  {title:"风筝",render:(s)=>bgSky(s)+sun(30,40,12,P.yellow)+`<g transform="translate(140,60) rotate(20)"><polygon points="0,-15 10,0 0,15 -10,0" fill="${P.cloth[s%8]}"/><line x1="0" y1="15" x2="-5" y2="25" stroke="${P.cloth[s%8]}" stroke-width="1"/><line x1="0" y1="15" x2="5" y2="22" stroke="${P.cloth[s%8]}" stroke-width="1"/><line x1="0" y1="15" x2="0" y2="25" stroke="${P.cloth[s%8]}" stroke-width="1"/></g>`+`<line x1="140" y1="75" x2="100" y2="200" stroke="${P.dark}" stroke-width="1" opacity="0.3"/>`+personStand(100,220,0.9,P.skin[s%4],P.cloth[s%8])},
+  {title:"蜕壳",render:(s)=>bgField(s)+`<g transform="translate(80,160)"><ellipse cx="0" cy="0" rx="18" ry="14" fill="${P.building[s%4]}" opacity="0.5"/><path d="M-18,0 Q-10,-5 -5,0" stroke="${P.building[s%4]}" stroke-width="1" fill="none"/></g>`+`<g transform="translate(130,150)"><ellipse cx="0" cy="0" rx="8" ry="6" fill="${P.cloth[(s+2)%8]}" opacity="0.8"/><line x1="0" y1="-6" x2="0" y2="-12" stroke="${P.cloth[(s+2)%8]}" stroke-width="1.5"/></g>`},
+  {title:"丰收",render:(s)=>bgField(s)+sun(160,50,14,P.yellow)+`<g fill="${P.yellow}" opacity="0.6"><ellipse cx="40" cy="200" rx="12" ry="5"/><ellipse cx="70" cy="205" rx="12" ry="5"/><ellipse cx="100" cy="200" rx="12" ry="5"/><ellipse cx="130" cy="205" rx="12" ry="5"/><ellipse cx="160" cy="200" rx="12" ry="5"/></g>`+personStand(100,180,0.7,P.skin[s%4],P.cloth[s%8])},
+  {title:"钟摆",render:(s)=>bgIndoor(s)+`<g transform="translate(100,80)"><line x1="0" y1="0" x2="0" y2="50" stroke="${P.building[s%4]}" stroke-width="2"/><circle cx="0" cy="55" r="10" fill="${P.building[s%4]}"/></g>`+`<rect x="70" y="70" width="60" height="4" fill="${P.building[s%4]}"/>`+personSit(100,220,0.8,P.skin[s%4],P.cloth[s%8])},
+  {title:"远方的灯",render:(s)=>bgNight(s)+`<g transform="translate(150,120)"><rect x="-6" y="0" width="12" height="40" fill="${P.building[s%4]}"/><polygon points="-10,0 0,-20 10,0" fill="${P.building[(s+1)%4]}"/><circle cx="0" cy="-10" r="6" fill="${P.yellow}" opacity="0.8"/><circle cx="0" cy="-10" r="12" fill="${P.yellow}" opacity="0.2"/></g>`+personBack(70,230,0.8,P.skin[s%4],P.cloth[s%8])}
+];
+
+// ==================== 生成图像卡SVG ====================
+function generateImageSVG(idx) {
+  const scene = IMAGE_SCENES[idx];
+  if (!scene) return `<rect width="200" height="280" fill="${P.light}"/>`;
+  let svg = `<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">`;
+  svg += scene.render(idx);
+  svg += `</svg>`;
+  return svg;
+}
+
+// ==================== 获取闸门卦象Unicode ====================
+function gateHexagram(num) {
+  return String.fromCharCode(0x4DBF + num);
+}
+
+// ==================== 融合解读引擎 ====================
+function generateFusionReading(imageIdx, textIdx, gateIdx) {
+  const scene = IMAGE_SCENES[imageIdx];
+  const word = TEXT_CARDS[textIdx];
+  const gate = GATES[gateIdx];
+  return {
+    html: `<p>你抽到了图像卡<span class="highlight">「${scene.title}」</span>、文字卡<span class="highlight">「${word}」</span>，以及闸门<span class="gate-highlight">${gate.num} ${gate.name}</span>（${gate.center}）。</p>
+    <p style="margin-top:8px;">闸门<span class="gate-highlight">${gate.name}</span>的能量是「${gate.wisdom}」。当这股能量与图像「${scene.title}」和文字「${word}」交织时，它在问你：<strong style="color:var(--text-dark)">${gate.prompt}</strong></p>
+    <p style="margin-top:8px;">让图像、文字与闸门的能量在你的内心共振。不要急于理性分析，先感受这三者之间的<strong>直觉关联</strong>——它们在一起，正在揭示你此刻需要照见的什么？</p>`
+  };
+}
+
+// ==================== 状态管理 ====================
+let currentDraw = null;
+let isDrawing = false;
+let selectedCenter = null;
+
+// ==================== 抽卡逻辑 ====================
+function drawCards() {
+  if (isDrawing) return;
+  isDrawing = true;
+  document.getElementById('drawBtn').disabled = true;
+
+  const imageCard = document.getElementById('imageCard');
+  const textCard = document.getElementById('textCard');
+  const gateCard = document.getElementById('gateCard');
+  imageCard.classList.remove('flipped','drawing');
+  textCard.classList.remove('flipped','drawing');
+  gateCard.classList.remove('flipped','drawing');
+  document.getElementById('reflectionArea').classList.remove('show');
+  document.getElementById('fusionReading').style.display = 'none';
+
+  const imageIdx = Math.floor(Math.random() * 88);
+  const textIdx = Math.floor(Math.random() * 88);
+
+  let gateIdx;
+  if (selectedCenter) {
+    const centerGates = GATES.filter(g => g.center === selectedCenter);
+    gateIdx = GATES.indexOf(centerGates[Math.floor(Math.random() * centerGates.length)]);
+  } else {
+    gateIdx = Math.floor(Math.random() * 64);
+  }
+
+  currentDraw = { imageIdx, textIdx, gateIdx, timestamp: new Date().toISOString(), center: selectedCenter };
+
+  setTimeout(() => {
+    imageCard.classList.add('drawing');
+    textCard.classList.add('drawing');
+    gateCard.classList.add('drawing');
+  }, 100);
+
+  setTimeout(() => {
+    imageCard.classList.remove('drawing');
+    textCard.classList.remove('drawing');
+    gateCard.classList.remove('drawing');
+    setTimeout(() => {
+      document.getElementById('imageCardContent').innerHTML = generateImageSVG(imageIdx);
+      document.getElementById('imageCardTitle').textContent = IMAGE_SCENES[imageIdx].title;
+      document.getElementById('imageCardNumber').textContent = `图像卡 #${String(imageIdx+1).padStart(2,'0')}`;
+      imageCard.classList.add('flipped');
+
+      setTimeout(() => {
+        document.getElementById('textCardWord').textContent = TEXT_CARDS[textIdx];
+        document.getElementById('textCardNumber').textContent = `文字卡 #${String(textIdx+1).padStart(2,'0')}`;
+        textCard.classList.add('flipped');
+
+        setTimeout(() => {
+          const gate = GATES[gateIdx];
+          document.getElementById('gateHexagram').textContent = gateHexagram(gate.num);
+          document.getElementById('gateName').textContent = `闸门${gate.num} ${gate.name}`;
+          document.getElementById('gateCenter').textContent = gate.center;
+          document.getElementById('gateKeywords').textContent = gate.keywords.join(' · ');
+          document.getElementById('gateCardNumber').textContent = `闸门 #${String(gateIdx+1).padStart(2,'0')}`;
+          gateCard.classList.add('flipped');
+
+          setTimeout(() => {
+            const reading = generateFusionReading(imageIdx, textIdx, gateIdx);
+            document.getElementById('fusionCardsDisplay').innerHTML =
+              `<span class="fusion-card-tag image-tag">图像：${IMAGE_SCENES[imageIdx].title}</span>` +
+              `<span class="fusion-card-tag text-tag">文字：${TEXT_CARDS[textIdx]}</span>` +
+              `<span class="fusion-card-tag gate-tag">闸门${gate.num}：${gate.name}</span>`;
+            document.getElementById('fusionText').innerHTML = reading.html;
+            document.getElementById('fusionReading').style.display = 'block';
+
+            document.getElementById('reflectionPrompt').innerHTML =
+              `图像「${IMAGE_SCENES[imageIdx].title}」+ 文字「${TEXT_CARDS[textIdx]}」+ 闸门${gate.num}「${gate.name}」。<br>这三者之间有什么联系？闸门能量如何照亮你的投射？`;
+            document.getElementById('reflectionArea').classList.add('show');
+            document.getElementById('reflectionText').value = '';
+            isDrawing = false;
+            document.getElementById('drawBtn').disabled = false;
+          }, 700);
+        }, 200);
+      }, 200);
+    }, 300);
+  }, 600);
+}
+
+function flipCard(type) {
+  const card = type === 'image' ? document.getElementById('imageCard') : type === 'text' ? document.getElementById('textCard') : document.getElementById('gateCard');
+  if (card.classList.contains('flipped')) card.classList.toggle('flipped');
+}
+
+function resetCards() {
+  document.getElementById('imageCard').classList.remove('flipped');
+  document.getElementById('textCard').classList.remove('flipped');
+  document.getElementById('gateCard').classList.remove('flipped');
+  document.getElementById('reflectionArea').classList.remove('show');
+  document.getElementById('fusionReading').style.display = 'none';
+  currentDraw = null;
+}
+
+// ==================== 九大能量中心渲染 ====================
+function renderCenters() {
+  const centers = Object.keys(CENTER_COLORS);
+  const grid = document.getElementById('centersGrid');
+  grid.innerHTML = centers.map(name => {
+    const gates = GATES.filter(g => g.center === name);
+    const gateHTML = gates.map(g => `<span class="gate-mini">${g.num}</span>`).join('');
+    const isActive = selectedCenter === name;
+    return `<div class="center-card ${isActive ? 'active' : ''}" onclick="toggleCenter('${name}')">
+      <div class="center-header">
+        <div class="center-icon" style="background:${CENTER_COLORS[name]}">${CENTER_ICON[name]}</div>
+        <div>
+          <div class="center-name">${name}</div>
+          <div class="center-type">${CENTER_TYPE[name]}</div>
+        </div>
+      </div>
+      <div class="center-desc">${getCenterDesc(name)}</div>
+      <div class="center-gates">${gateHTML}</div>
+      ${isActive ? '<div class="center-draw-hint">✦ 已选中此中心，下次抽卡将从此中心抽取闸门</div>' : ''}
+    </div>`;
+  }).join('');
+}
+function getCenterDesc(name) {
+  const descs = {
+    '头脑中心': '灵感与疑惑的压力来源，寻求生命的意义与方向。',
+    '逻辑中心': '概念化与理解的中心，将灵感转化为可表达的观念。',
+    '喉咙中心': '沟通与显化的中心，通过语言和行动表达自我。',
+    'G中心': '爱与方向的核心，承载自我认同与生命轨迹。',
+    '心脏中心': '意志力与自我价值的中心，驱动意志与承诺。',
+    '情绪中心': '情感波的中心，经历情绪起伏并寻求清明。',
+    '脾脏中心': '直觉与生存觉察的中心，瞬间的本能反应。',
+    '荐骨中心': '生命力与 reproductive 的动力中心，回应世界的能量源。',
+    '根部中心': '压力与驱动的中心，推动生存与进化。',
+  };
+  return descs[name] || '';
+}
+function toggleCenter(name) {
+  if (selectedCenter === name) {
+    selectedCenter = null;
+    showToast('已取消能量中心筛选，恢复全闸门抽卡');
+  } else {
+    selectedCenter = name;
+    showToast(`已选择「${name}」，下次抽卡将从此中心抽取闸门`);
+  }
+  renderCenters();
+}
+
+// ==================== 记录管理 ====================
+function getRecords() {
+  try { return JSON.parse(localStorage.getItem('hd_ohcard_records') || '[]'); } catch { return []; }
+}
+function saveRecordsArr(records) {
+  localStorage.setItem('hd_ohcard_records', JSON.stringify(records));
+}
+function saveReflection(goToRecords) {
+  if (!currentDraw) { showToast('请先抽卡'); return; }
+  const note = document.getElementById('reflectionText').value.trim();
+  const records = getRecords();
+  records.unshift({
+    id: Date.now(),
+    imageIdx: currentDraw.imageIdx,
+    textIdx: currentDraw.textIdx,
+    gateIdx: currentDraw.gateIdx,
+    timestamp: currentDraw.timestamp,
+    center: currentDraw.center,
+    note: note
+  });
+  saveRecordsArr(records);
+  updateRecordCount();
+  showToast('记录已保存');
+  if (goToRecords) { switchSection('records'); renderRecords(); }
+  else { resetCards(); }
+}
+function renderRecords() {
+  const records = getRecords();
+  const list = document.getElementById('recordsList');
+  document.getElementById('recordCount').textContent = records.length;
+  if (records.length === 0) {
+    list.innerHTML = `<div class="empty-records"><div class="icon">📝</div><p>还没有记录，去抽一组三卡吧～</p></div>`;
+    return;
+  }
+  list.innerHTML = records.map(r => {
+    const date = new Date(r.timestamp);
+    const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    const imgSVG = generateImageSVG(r.imageIdx);
+    const word = TEXT_CARDS[r.textIdx];
+    const title = IMAGE_SCENES[r.imageIdx].title;
+    const gate = GATES[r.gateIdx];
+    const centerTag = r.center ? `<span class="fusion-card-tag gate-tag" style="font-size:12px;padding:4px 10px;">${r.center}</span>` : '';
+    return `<div class="record-item">
+      <div class="record-cards">
+        <div class="record-mini-image">${imgSVG}</div>
+        <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">
+          <span class="record-card-tag image-tag">图像：${title}</span>
+          <span class="record-card-tag text-tag">文字：${word}</span>
+          <span class="record-card-tag gate-tag">闸门${gate.num}：${gate.name}</span>
+          ${centerTag}
+        </div>
+      </div>
+      <div class="record-header">
+        <span class="record-date">${dateStr}</span>
+        <button class="record-delete" onclick="deleteRecord(${r.id})" title="删除">×</button>
+      </div>
+      ${r.note ? `<div class="record-note-label">我的记录：</div><div class="record-note">${escapeHtml(r.note)}</div>` : '<div class="record-note" style="color:var(--text-light);font-style:italic;">（未填写记录）</div>'}
+    </div>`;
+  }).join('');
+}
+function deleteRecord(id) {
+  saveRecordsArr(getRecords().filter(r => r.id !== id));
+  updateRecordCount(); renderRecords(); showToast('记录已删除');
+}
+function confirmClearRecords() {
+  const records = getRecords();
+  if (records.length === 0) { showToast('暂无记录可清空'); return; }
+  if (confirm(`确定要清空全部 ${records.length} 条记录吗？此操作不可撤销。`)) {
+    localStorage.removeItem('hd_ohcard_records');
+    updateRecordCount(); renderRecords(); showToast('记录已全部清空');
+  }
+}
+function exportRecords() {
+  const records = getRecords();
+  if (records.length === 0) { showToast('暂无记录可导出'); return; }
+  let text = '人类图×OH卡 三卡抽卡记录\n';
+  text += '导出时间：' + new Date().toLocaleString('zh-CN') + '\n';
+  text += '记录总数：' + records.length + '\n' + '='.repeat(60) + '\n\n';
+  records.forEach((r, i) => {
+    const date = new Date(r.timestamp);
+    const gate = GATES[r.gateIdx];
+    text += `【第${i+1}条】\n时间：${date.toLocaleString('zh-CN')}\n`;
+    text += `图像卡：#${String(r.imageIdx+1).padStart(2,'0')} 「${IMAGE_SCENES[r.imageIdx].title}」\n`;
+    text += `文字卡：#${String(r.textIdx+1).padStart(2,'0')} 「${TEXT_CARDS[r.textIdx]}」\n`;
+    text += `闸门卡：#${String(r.gateIdx+1).padStart(2,'0')} 闸门${gate.num}「${gate.name}」(${gate.center})\n`;
+    if (r.center) text += `能量中心模式：${r.center}\n`;
+    if (r.note) text += `记录：${r.note}\n`;
+    text += '-'.repeat(40) + '\n\n';
+  });
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `人类图OH卡记录_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click(); URL.revokeObjectURL(url); showToast('记录已导出');
+}
+function updateRecordCount() {
+  const count = getRecords().length;
+  document.getElementById('navRecordCount').textContent = count > 0 ? `(${count})` : '';
+}
+
+// ==================== 工具函数 ====================
+function escapeHtml(str) {
+  const div = document.createElement('div'); div.textContent = str; return div.innerHTML;
+}
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg; toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+function switchSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.nav-btn[data-section="${name}"]`).classList.add('active');
+  if (name === 'records') renderRecords();
+  if (name === 'centers') renderCenters();
+}
+
+// ==================== 初始化 ====================
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchSection(btn.dataset.section));
+});
+updateRecordCount();
+renderCenters();
+</script>
+
+<!-- 版权信息 -->
+<div style="text-align:center; padding:16px 0 20px; color:#BBA88E; font-size:13px; letter-spacing:1px;">Powered By Kan Man Tang</div>
+
+</body>
+</html>
