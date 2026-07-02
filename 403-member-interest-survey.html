@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会员兴趣调查问卷 — 自我评估</title>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+  /* Badge colors */
+  --color-high: #2D7D46;
+  --color-medium: #C4952E;
+  --color-low: #A6192E;
+  --color-neutral: #5C4A3A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--primary); font-weight: 700;
+}
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn {
+  padding: 9px 20px; border: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all var(--transition); display: inline-flex;
+  align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit;
+}
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* ========== CONTAINER ========== */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* ========== INTRO CARD ========== */
+.intro-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+}
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+  padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gold);
+}
+.intro-card .note {
+  margin-top: 16px; font-size: 13px; color: var(--text-secondary);
+  padding: 12px 16px; background: rgba(45,125,70,0.06); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--success);
+}
+
+/* ========== FORM FIELDS ========== */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.info-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input,
+.form-group textarea {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 14px; font-family: inherit; color: var(--text); background: #fff;
+  transition: border-color var(--transition);
+}
+.form-group textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(119,36,50,0.08);
+}
+
+/* ========== SECTION CARD ========== */
+.section-card {
+  background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden;
+}
+.section-header {
+  padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num {
+  background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+}
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 24px; }
+
+/* ========== TABLE STYLES ========== */
+.rating-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.rating-table th,
+.rating-table td {
+  padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--border-light);
+}
+.rating-table th {
+  background: var(--bg-section); font-weight: 600; color: var(--text);
+  font-size: 12px;
+}
+.rating-table th:first-child,
+.rating-table td:first-child {
+  text-align: left; padding-left: 12px;
+}
+.rating-table tbody tr:hover { background: rgba(119,36,50,0.02); }
+.rating-table td label { cursor: pointer; display: flex; justify-content: center; align-items: center; height: 100%; }
+.rating-table input[type="radio"] { cursor: pointer; transform: scale(1.2); accent-color: var(--primary); }
+
+.checkbox-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+}
+.checkbox-table th,
+.checkbox-table td {
+  padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--border-light);
+}
+.checkbox-table th {
+  background: var(--bg-section); font-weight: 600; color: var(--text);
+  font-size: 12px;
+}
+.checkbox-table th:first-child,
+.checkbox-table td:first-child {
+  text-align: left; padding-left: 12px;
+}
+.checkbox-table tbody tr:hover { background: rgba(119,36,50,0.02); }
+.checkbox-table input[type="checkbox"] { cursor: pointer; transform: scale(1.2); accent-color: var(--primary); }
+
+.text-input-cell { padding: 6px 10px !important; }
+.text-input-cell input {
+  width: 100%; padding: 6px 10px; border: 1px solid var(--border);
+  border-radius: 4px; font-size: 12px; font-family: inherit;
+}
+.text-input-cell input:focus {
+  outline: none; border-color: var(--primary);
+}
+
+/* ========== CHECKBOX LIST ========== */
+.checkbox-list {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+@media (max-width: 640px) { .checkbox-list { grid-template-columns: 1fr; } }
+.checkbox-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; background: var(--bg-section);
+  border-radius: var(--radius-sm); border: 1px solid var(--border-light);
+  cursor: pointer; transition: all var(--transition);
+}
+.checkbox-item:hover { border-color: var(--primary); background: rgba(119,36,50,0.03); }
+.checkbox-item.checked { border-color: var(--primary); background: rgba(119,36,50,0.06); }
+.checkbox-item input[type="checkbox"] { margin-top: 2px; transform: scale(1.1); accent-color: var(--primary); flex-shrink: 0; }
+.checkbox-item span { font-size: 13px; line-height: 1.5; }
+
+.text-input-row {
+  grid-column: 1 / -1; padding: 10px 14px;
+}
+.text-input-row label {
+  font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 6px;
+}
+.text-input-row input {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--border);
+  border-radius: 4px; font-size: 13px; font-family: inherit;
+}
+.text-input-row input:focus { outline: none; border-color: var(--primary); }
+
+/* ========== TEXTAREA FIELDS ========== */
+.open-question {
+  margin-bottom: 20px;
+}
+.open-question:last-child { margin-bottom: 0; }
+.open-question label {
+  font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 8px;
+}
+.open-question textarea {
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 13px; font-family: inherit;
+  color: var(--text); background: #fff; resize: vertical; min-height: 80px;
+  line-height: 1.6; transition: border-color var(--transition);
+}
+.open-question textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(119,36,50,0.08);
+}
+.open-question .hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ========== SUBMIT ========== */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate {
+  padding: 14px 48px; font-size: 16px; border-radius: 30px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit;
+}
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* ========== REPORT ========== */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+
+.report-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center;
+}
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+
+.report-body {
+  background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius);
+  padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none;
+}
+
+/* Summary Cards */
+.summary-section { margin-bottom: 28px; }
+.summary-section h3 {
+  font-size: 16px; color: var(--text); margin-bottom: 16px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--border-light);
+}
+.summary-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+@media (max-width: 640px) { .summary-grid { grid-template-columns: 1fr; } }
+.summary-card {
+  padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);
+  background: var(--bg-section);
+}
+.summary-card .summary-label {
+  font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;
+}
+.summary-card .summary-value {
+  font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.5;
+}
+.summary-card.high-interest {
+  border-left: 4px solid var(--color-high);
+  background: rgba(45,125,70,0.06);
+}
+.summary-card.medium-interest {
+  border-left: 4px solid var(--color-medium);
+  background: rgba(196,149,46,0.06);
+}
+
+/* Interest Summary */
+.interest-list {
+  list-style: none;
+}
+.interest-list li {
+  padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 8px;
+  background: var(--bg-section); border-left: 3px solid var(--border);
+  font-size: 13px; line-height: 1.6;
+}
+.interest-list li.high { border-left-color: var(--color-high); background: rgba(45,125,70,0.06); }
+.interest-list li.medium { border-left-color: var(--color-medium); background: rgba(196,149,46,0.06); }
+.interest-list li.none { border-left-color: var(--text-secondary); }
+.interest-list li .tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; margin-left: 8px;
+}
+.interest-list li .tag.high { background: var(--color-high); color: #fff; }
+.interest-list li .tag.medium { background: var(--color-medium); color: #fff; }
+.interest-list li .tag.none { background: var(--border); color: var(--text-secondary); }
+
+/* Satisfaction Chart */
+.satisfaction-chart {
+  margin: 20px 0; padding: 20px; background: var(--bg-section);
+  border-radius: var(--radius); text-align: center;
+}
+.satisfaction-chart canvas { max-width: 600px; margin: 0 auto; }
+
+/* Open Questions Summary */
+.open-summary {
+  padding: 18px; border-radius: var(--radius-sm); margin-bottom: 14px;
+  background: var(--bg-section); border-left: 3px solid var(--primary);
+}
+.open-summary h4 {
+  font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--primary);
+}
+.open-summary p {
+  font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap;
+}
+
+/* Download Button */
+.download-section {
+  text-align: center; padding: 24px 0 8px;
+}
+.btn-download {
+  padding: 12px 36px; font-size: 14px; border-radius: 25px;
+  background: var(--success); color: #fff; border: none; cursor: pointer;
+  font-weight: 600; letter-spacing: 0.5px; font-family: inherit;
+  box-shadow: 0 4px 15px rgba(45,125,70,0.3); transition: all 0.3s;
+}
+.btn-download:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,125,70,0.4); }
+
+/* Footer */
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--primary-dark); color: #fff; padding: 12px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { opacity: 1; }
+
+/* Print */
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle, .btn-download { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .report-section.visible { display: block !important; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">TI</div>
+      <div>
+        <div class="header-title">会员兴趣调查问卷</div>
+        <div class="header-subtitle">Toastmasters International · 表格 403 · 会员服务工具</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">表格 403 · 会员兴趣调查问卷 · 国际头马演讲会</div>
+    <h1>国际头马演讲会 会员兴趣调查问卷</h1>
+    <div class="instruction">
+      <strong>目的：</strong>帮助俱乐部更好地了解会员的兴趣与需求，提升会员服务质量和俱乐部运营水平。<br><br>
+      <strong>说明：</strong>请认真填写以下各项内容。本问卷包含会员基本信息、年度目标、个人兴趣意向以及俱乐部满意度评价等部分。您的回答将帮助俱乐部干部制定更有针对性的服务计划。
+    </div>
+    <div class="note">
+      <strong>提示：</strong>本问卷结果仅用于俱乐部内部服务改进，不会用于任何商业目的。所有个人信息将受到保护。
+    </div>
+    <div class="info-grid">
+      <div class="form-group">
+        <label>会员姓名</label>
+        <input type="text" id="userName" placeholder="输入你的姓名">
+      </div>
+      <div class="form-group">
+        <label>俱乐部名称</label>
+        <input type="text" id="clubName" placeholder="输入俱乐部名称">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: 年度目标 -->
+  <div class="section-card" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <h2><span class="section-num">1</span> 年度目标</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请列出你作为头马会员，本年度想要完成的 2 项目标：
+      </p>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>目标 1</label>
+        <textarea id="goal1" placeholder="例如：提升公众演讲能力，完成 Level 3 项目"></textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label>目标 2</label>
+        <textarea id="goal2" placeholder="例如：担任一次即兴演讲主持人"></textarea>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请列出未来数月内，为达成上述目标计划完成的 2 项阶段性任务：
+      </p>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>阶段性任务 1</label>
+        <textarea id="task1" placeholder="例如：每月完成2次演讲"></textarea>
+      </div>
+      <div class="form-group">
+        <label>阶段性任务 2</label>
+        <textarea id="task2" placeholder="例如：参加区域演讲比赛"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: 个人成长与职业能力 -->
+  <div class="section-card" id="sec2">
+    <div class="section-header" onclick="toggleSection('sec2')">
+      <h2><span class="section-num">2</span> 个人成长与职业能力</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请对以下个人成长与职业能力领域的兴趣程度进行评价：
+      </p>
+      <table class="rating-table">
+        <thead>
+          <tr>
+            <th style="width:40%;">项目</th>
+            <th>高度感兴趣</th>
+            <th>一般感兴趣</th>
+            <th>无兴趣</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>提升批判性思维能力</td>
+            <td><input type="radio" name="skill1" value="high"></td>
+            <td><input type="radio" name="skill1" value="medium"></td>
+            <td><input type="radio" name="skill1" value="none"></td>
+          </tr>
+          <tr>
+            <td>提升会议主持管理能力</td>
+            <td><input type="radio" name="skill2" value="high"></td>
+            <td><input type="radio" name="skill2" value="medium"></td>
+            <td><input type="radio" name="skill2" value="none"></td>
+          </tr>
+          <tr>
+            <td>提升倾听能力</td>
+            <td><input type="radio" name="skill3" value="high"></td>
+            <td><input type="radio" name="skill3" value="medium"></td>
+            <td><input type="radio" name="skill3" value="none"></td>
+          </tr>
+          <tr>
+            <td>提升领导力</td>
+            <td><input type="radio" name="skill4" value="high"></td>
+            <td><input type="radio" name="skill4" value="medium"></td>
+            <td><input type="radio" name="skill4" value="none"></td>
+          </tr>
+          <tr>
+            <td>提升沟通表达能力</td>
+            <td><input type="radio" name="skill5" value="high"></td>
+            <td><input type="radio" name="skill5" value="medium"></td>
+            <td><input type="radio" name="skill5" value="none"></td>
+          </tr>
+          <tr>
+            <td>提升点评反馈能力</td>
+            <td><input type="radio" name="skill6" value="high"></td>
+            <td><input type="radio" name="skill6" value="medium"></td>
+            <td><input type="radio" name="skill6" value="none"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: 俱乐部服务相关 -->
+  <div class="section-card" id="sec3">
+    <div class="section-header" onclick="toggleSection('sec3')">
+      <h2><span class="section-num">3</span> 俱乐部服务相关</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请勾选你感兴趣的俱乐部服务项目（可多选）：
+      </p>
+      <div class="checkbox-list">
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="mentor">
+          <span>担任新会员导师</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="recruit">
+          <span>协助俱乐部扩充会员人数</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="officer">
+          <span>担任俱乐部干事</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="pr">
+          <span>负责俱乐部对外宣传、公关推广工作</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="writing">
+          <span>参与俱乐部会刊/官网的撰稿、编辑工作</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="parli">
+          <span>学习议事规则（议会程序）</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="speechcraft">
+          <span>牵头或协助开展演讲培训工坊（Speechcraft）</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="youth">
+          <span>牵头或协助开展青少年领导力项目</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="youth-comm">
+          <span>牵头或协助青少年沟通能力课程</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="visit">
+          <span>走访其他头马俱乐部</span>
+        </label>
+        <label class="checkbox-item" onclick="toggleCheckbox(this)">
+          <input type="checkbox" name="clubService" value="contest">
+          <span>参加演讲比赛</span>
+        </label>
+        <div class="text-input-row">
+          <label>其他俱乐部服务意向（请注明）：</label>
+          <input type="text" id="clubServiceOther" placeholder="请输入其他服务意向">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 大区相关事务 -->
+  <div class="section-card" id="sec4">
+    <div class="section-header" onclick="toggleSection('sec4')">
+      <h2><span class="section-num">4</span> 大区相关事务</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请对以下大区相关事务的兴趣程度进行评价：
+      </p>
+      <table class="rating-table">
+        <thead>
+          <tr>
+            <th style="width:40%;">项目</th>
+            <th>高度感兴趣</th>
+            <th>一般感兴趣</th>
+            <th>无兴趣</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>担任演讲比赛评委</td>
+            <td><input type="radio" name="district1" value="high"></td>
+            <td><input type="radio" name="district1" value="medium"></td>
+            <td><input type="radio" name="district1" value="none"></td>
+          </tr>
+          <tr>
+            <td>筹建新头马俱乐部</td>
+            <td><input type="radio" name="district2" value="high"></td>
+            <td><input type="radio" name="district2" value="medium"></td>
+            <td><input type="radio" name="district2" value="none"></td>
+          </tr>
+          <tr>
+            <td>担任大区干事</td>
+            <td><input type="radio" name="district3" value="high"></td>
+            <td><input type="radio" name="district3" value="medium"></td>
+            <td><input type="radio" name="district3" value="none"></td>
+          </tr>
+          <tr>
+            <td>其他（请注明）</td>
+            <td><input type="radio" name="district4" value="high"></td>
+            <td><input type="radio" name="district4" value="medium"></td>
+            <td><input type="radio" name="district4" value="none"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="form-group" style="margin-top:16px;">
+        <label>请说明其他大区事务意向：</label>
+        <input type="text" id="districtOther" placeholder="请输入其他大区事务意向">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: 俱乐部综合质量满意度 -->
+  <div class="section-card" id="sec5">
+    <div class="section-header" onclick="toggleSection('sec5')">
+      <h2><span class="section-num">5</span> 俱乐部综合质量满意度评分</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+        请对以下俱乐部各项特质进行满意度评价：
+      </p>
+      <table class="rating-table" id="satisfactionTable">
+        <thead>
+          <tr>
+            <th style="width:45%;">俱乐部特质</th>
+            <th>极其满意</th>
+            <th>非常满意</th>
+            <th>一般满意</th>
+            <th>略有满意</th>
+            <th>不满意</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>氛围包容友善</td>
+            <td><input type="radio" name="sat1" value="5"></td>
+            <td><input type="radio" name="sat1" value="4"></td>
+            <td><input type="radio" name="sat1" value="3"></td>
+            <td><input type="radio" name="sat1" value="2"></td>
+            <td><input type="radio" name="sat1" value="1"></td>
+          </tr>
+          <tr>
+            <td>氛围轻松融洽</td>
+            <td><input type="radio" name="sat2" value="5"></td>
+            <td><input type="radio" name="sat2" value="4"></td>
+            <td><input type="radio" name="sat2" value="3"></td>
+            <td><input type="radio" name="sat2" value="2"></td>
+            <td><input type="radio" name="sat2" value="1"></td>
+          </tr>
+          <tr>
+            <td>氛围积极、互帮互助</td>
+            <td><input type="radio" name="sat3" value="5"></td>
+            <td><input type="radio" name="sat3" value="4"></td>
+            <td><input type="radio" name="sat3" value="3"></td>
+            <td><input type="radio" name="sat3" value="2"></td>
+            <td><input type="radio" name="sat3" value="1"></td>
+          </tr>
+          <tr>
+            <td>会议流程井然有序</td>
+            <td><input type="radio" name="sat4" value="5"></td>
+            <td><input type="radio" name="sat4" value="4"></td>
+            <td><input type="radio" name="sat4" value="3"></td>
+            <td><input type="radio" name="sat4" value="2"></td>
+            <td><input type="radio" name="sat4" value="1"></td>
+          </tr>
+          <tr>
+            <td>俱乐部干部贴心支持会员</td>
+            <td><input type="radio" name="sat5" value="5"></td>
+            <td><input type="radio" name="sat5" value="4"></td>
+            <td><input type="radio" name="sat5" value="3"></td>
+            <td><input type="radio" name="sat5" value="2"></td>
+            <td><input type="radio" name="sat5" value="1"></td>
+          </tr>
+          <tr>
+            <td>充足的会员参与机会</td>
+            <td><input type="radio" name="sat6" value="5"></td>
+            <td><input type="radio" name="sat6" value="4"></td>
+            <td><input type="radio" name="sat6" value="3"></td>
+            <td><input type="radio" name="sat6" value="2"></td>
+            <td><input type="radio" name="sat6" value="1"></td>
+          </tr>
+          <tr>
+            <td>即兴演讲环节新颖有趣</td>
+            <td><input type="radio" name="sat7" value="5"></td>
+            <td><input type="radio" name="sat7" value="4"></td>
+            <td><input type="radio" name="sat7" value="3"></td>
+            <td><input type="radio" name="sat7" value="2"></td>
+            <td><input type="radio" name="sat7" value="1"></td>
+          </tr>
+          <tr>
+            <td>点评环节专业有效</td>
+            <td><input type="radio" name="sat8" value="5"></td>
+            <td><input type="radio" name="sat8" value="4"></td>
+            <td><input type="radio" name="sat8" value="3"></td>
+            <td><input type="radio" name="sat8" value="2"></td>
+            <td><input type="radio" name="sat8" value="1"></td>
+          </tr>
+          <tr>
+            <td>能提供专业能力成长渠道</td>
+            <td><input type="radio" name="sat9" value="5"></td>
+            <td><input type="radio" name="sat9" value="4"></td>
+            <td><input type="radio" name="sat9" value="3"></td>
+            <td><input type="radio" name="sat9" value="2"></td>
+            <td><input type="radio" name="sat9" value="1"></td>
+          </tr>
+          <tr>
+            <td>良好的人脉交流平台</td>
+            <td><input type="radio" name="sat10" value="5"></td>
+            <td><input type="radio" name="sat10" value="4"></td>
+            <td><input type="radio" name="sat10" value="3"></td>
+            <td><input type="radio" name="sat10" value="2"></td>
+            <td><input type="radio" name="sat10" value="1"></td>
+          </tr>
+          <tr>
+            <td>俱乐部在社区内有宣传推广</td>
+            <td><input type="radio" name="sat11" value="5"></td>
+            <td><input type="radio" name="sat11" value="4"></td>
+            <td><input type="radio" name="sat11" value="3"></td>
+            <td><input type="radio" name="sat11" value="2"></td>
+            <td><input type="radio" name="sat11" value="1"></td>
+          </tr>
+          <tr>
+            <td>会议形式丰富、趣味性强</td>
+            <td><input type="radio" name="sat12" value="5"></td>
+            <td><input type="radio" name="sat12" value="4"></td>
+            <td><input type="radio" name="sat12" value="3"></td>
+            <td><input type="radio" name="sat12" value="2"></td>
+            <td><input type="radio" name="sat12" value="1"></td>
+          </tr>
+          <tr>
+            <td>引荐新会员的会员获得表彰</td>
+            <td><input type="radio" name="sat13" value="5"></td>
+            <td><input type="radio" name="sat13" value="4"></td>
+            <td><input type="radio" name="sat13" value="3"></td>
+            <td><input type="radio" name="sat13" value="2"></td>
+            <td><input type="radio" name="sat13" value="1"></td>
+          </tr>
+          <tr>
+            <td>举办仪式表彰会员取得的成果</td>
+            <td><input type="radio" name="sat14" value="5"></td>
+            <td><input type="radio" name="sat14" value="4"></td>
+            <td><input type="radio" name="sat14" value="3"></td>
+            <td><input type="radio" name="sat14" value="2"></td>
+            <td><input type="radio" name="sat14" value="1"></td>
+          </tr>
+          <tr>
+            <td>俱乐部及会员的成就对外宣传展示</td>
+            <td><input type="radio" name="sat15" value="5"></td>
+            <td><input type="radio" name="sat15" value="4"></td>
+            <td><input type="radio" name="sat15" value="3"></td>
+            <td><input type="radio" name="sat15" value="2"></td>
+            <td><input type="radio" name="sat15" value="1"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 6: 整体参会体验 -->
+  <div class="section-card" id="sec6">
+    <div class="section-header" onclick="toggleSection('sec6')">
+      <h2><span class="section-num">6</span> 整体参会体验</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="open-question">
+        <label>1. 你最喜欢本俱乐部的哪一点？</label>
+        <textarea id="like1" placeholder="请分享你最欣赏俱乐部的地方..."></textarea>
+      </div>
+      <div class="open-question">
+        <label>2. 你最不喜欢本俱乐部的哪一点？</label>
+        <textarea id="like2" placeholder="请分享你认为需要改进的地方..."></textarea>
+      </div>
+      <div class="open-question">
+        <label>3. 你对俱乐部有哪些改进建议？</label>
+        <textarea id="suggestion" placeholder="请分享你的改进建议..."></textarea>
+      </div>
+      <div class="open-question">
+        <label>4. 你还有哪些想要深入学习的专项内容？</label>
+        <textarea id="learnMore" placeholder="请分享你想学习的其他领域..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-generate" onclick="generateReport()">📋 生成汇总报告</button>
+    <div class="submit-hint">完成所有内容填写后点击上方按钮，系统将生成您的问卷汇总报告</div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 会员兴趣调查问卷汇总报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <!-- Member Info -->
+      <div class="summary-section">
+        <h3>会员基本信息</h3>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">会员姓名</div>
+            <div class="summary-value" id="reportName">-</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">俱乐部名称</div>
+            <div class="summary-value" id="reportClub">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goals -->
+      <div class="summary-section">
+        <h3>年度目标</h3>
+        <div class="summary-card" style="margin-bottom:12px;">
+          <div class="summary-label">目标 1</div>
+          <div class="summary-value" id="reportGoal1">-</div>
+        </div>
+        <div class="summary-card" style="margin-bottom:12px;">
+          <div class="summary-label">目标 2</div>
+          <div class="summary-value" id="reportGoal2">-</div>
+        </div>
+        <div class="summary-card" style="margin-bottom:12px;">
+          <div class="summary-label">阶段性任务 1</div>
+          <div class="summary-value" id="reportTask1">-</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">阶段性任务 2</div>
+          <div class="summary-value" id="reportTask2">-</div>
+        </div>
+      </div>
+
+      <!-- Personal Growth Interests -->
+      <div class="summary-section">
+        <h3>个人成长与职业能力兴趣</h3>
+        <ul class="interest-list" id="skillInterests"></ul>
+      </div>
+
+      <!-- Club Service Interests -->
+      <div class="summary-section">
+        <h3>俱乐部服务兴趣</h3>
+        <ul class="interest-list" id="clubServiceList"></ul>
+      </div>
+
+      <!-- District Interests -->
+      <div class="summary-section">
+        <h3>大区相关事务兴趣</h3>
+        <ul class="interest-list" id="districtInterests"></ul>
+      </div>
+
+      <!-- Satisfaction Scores -->
+      <div class="summary-section">
+        <h3>俱乐部满意度评分</h3>
+        <div class="satisfaction-chart">
+          <canvas id="satisfactionChart" width="600" height="300"></canvas>
+        </div>
+        <div class="summary-grid" style="margin-top:16px;">
+          <div class="summary-card high-interest">
+            <div class="summary-label">满意度最高项目</div>
+            <div class="summary-value" id="topSatisfaction">-</div>
+          </div>
+          <div class="summary-card medium-interest">
+            <div class="summary-label">满意度最低项目</div>
+            <div class="summary-value" id="lowSatisfaction">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open Questions -->
+      <div class="summary-section">
+        <h3>整体参会体验反馈</h3>
+        <div class="open-summary">
+          <h4>最喜欢本俱乐部的哪一点？</h4>
+          <p id="reportLike1">-</p>
+        </div>
+        <div class="open-summary">
+          <h4>最不喜欢本俱乐部的哪一点？</h4>
+          <p id="reportLike2">-</p>
+        </div>
+        <div class="open-summary">
+          <h4>改进建议</h4>
+          <p id="reportSuggestion">-</p>
+        </div>
+        <div class="open-summary">
+          <h4>想要深入学习的专项内容</h4>
+          <p id="reportLearnMore">-</p>
+        </div>
+      </div>
+
+      <!-- Download -->
+      <div class="download-section">
+        <button class="btn-download" onclick="window.print()">🖨️ 打印报告</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  基于 Toastmasters International「会员兴趣调查问卷」表格 403<br>
+  修订日期：2016年10月 · 仅供俱乐部内部使用
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+// ============ DATA ============
+const SKILL_ITEMS = [
+  { name: '提升批判性思维能力', key: 'skill1' },
+  { name: '提升会议主持管理能力', key: 'skill2' },
+  { name: '提升倾听能力', key: 'skill3' },
+  { name: '提升领导力', key: 'skill4' },
+  { name: '提升沟通表达能力', key: 'skill5' },
+  { name: '提升点评反馈能力', key: 'skill6' }
+];
+
+const SATISFACTION_ITEMS = [
+  { name: '氛围包容友善', key: 'sat1' },
+  { name: '氛围轻松融洽', key: 'sat2' },
+  { name: '氛围积极、互帮互助', key: 'sat3' },
+  { name: '会议流程井然有序', key: 'sat4' },
+  { name: '俱乐部干部贴心支持会员', key: 'sat5' },
+  { name: '充足的会员参与机会', key: 'sat6' },
+  { name: '即兴演讲环节新颖有趣', key: 'sat7' },
+  { name: '点评环节专业有效', key: 'sat8' },
+  { name: '能提供专业能力成长渠道', key: 'sat9' },
+  { name: '良好的人脉交流平台', key: 'sat10' },
+  { name: '俱乐部在社区内有宣传推广', key: 'sat11' },
+  { name: '会议形式丰富、趣味性强', key: 'sat12' },
+  { name: '引荐新会员的会员获得表彰', key: 'sat13' },
+  { name: '举办仪式表彰会员取得的成果', key: 'sat14' },
+  { name: '俱乐部及会员的成就对外宣传展示', key: 'sat15' }
+];
+
+const CLUB_SERVICE_ITEMS = {
+  mentor: '担任新会员导师',
+  recruit: '协助俱乐部扩充会员人数',
+  officer: '担任俱乐部干事',
+  pr: '负责俱乐部对外宣传、公关推广工作',
+  writing: '参与俱乐部会刊/官网的撰稿、编辑工作',
+  parli: '学习议事规则（议会程序）',
+  speechcraft: '牵头或协助开展演讲培训工坊（Speechcraft）',
+  youth: '牵头或协助开展青少年领导力项目',
+  youthcomm: '牵头或协助青少年沟通能力课程',
+  visit: '走访其他头马俱乐部',
+  contest: '参加演讲比赛'
+};
+
+const DISTRICT_ITEMS = [
+  { name: '担任演讲比赛评委', key: 'district1' },
+  { name: '筹建新头马俱乐部', key: 'district2' },
+  { name: '担任大区干事', key: 'district3' },
+  { name: '其他', key: 'district4' }
+];
+
+// ============ UTILITIES ============
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function toggleCheckbox(el) {
+  const checkbox = el.querySelector('input[type="checkbox"]');
+  checkbox.checked = !checkbox.checked;
+  el.classList.toggle('checked', checkbox.checked);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function getTextValue(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function getRadioValue(name) {
+  const selected = document.querySelector(`input[name="${name}"]:checked`);
+  return selected ? selected.value : null;
+}
+
+function getCheckedValues(name) {
+  const checked = [];
+  document.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => {
+    checked.push(cb.value);
+  });
+  return checked;
+}
+
+// ============ GENERATE REPORT ============
+let satisfactionChartInstance = null;
+
+function generateReport() {
+  // Collect data
+  const userName = getTextValue('userName') || '未填写';
+  const clubName = getTextValue('clubName') || '未填写';
+  const goal1 = getTextValue('goal1') || '未填写';
+  const goal2 = getTextValue('goal2') || '未填写';
+  const task1 = getTextValue('task1') || '未填写';
+  const task2 = getTextValue('task2') || '未填写';
+  const like1 = getTextValue('like1') || '未填写';
+  const like2 = getTextValue('like2') || '未填写';
+  const suggestion = getTextValue('suggestion') || '未填写';
+  const learnMore = getTextValue('learnMore') || '未填写';
+
+  // Update meta
+  document.getElementById('reportMeta').textContent = `会员：${userName} · 俱乐部：${clubName}`;
+
+  // Update member info
+  document.getElementById('reportName').textContent = userName;
+  document.getElementById('reportClub').textContent = clubName;
+
+  // Update goals
+  document.getElementById('reportGoal1').textContent = goal1;
+  document.getElementById('reportGoal2').textContent = goal2;
+  document.getElementById('reportTask1').textContent = task1;
+  document.getElementById('reportTask2').textContent = task2;
+
+  // Update open questions
+  document.getElementById('reportLike1').textContent = like1;
+  document.getElementById('reportLike2').textContent = like2;
+  document.getElementById('reportSuggestion').textContent = suggestion;
+  document.getElementById('reportLearnMore').textContent = learnMore;
+
+  // Skills interests
+  let skillsHTML = '';
+  SKILL_ITEMS.forEach(item => {
+    const value = getRadioValue(item.key);
+    const level = value === 'high' ? 'high' : value === 'medium' ? 'medium' : 'none';
+    const label = value === 'high' ? '高度感兴趣' : value === 'medium' ? '一般感兴趣' : '无兴趣';
+    skillsHTML += `<li class="${level}">${item.name}<span class="tag ${level}">${label}</span></li>`;
+  });
+  document.getElementById('skillInterests').innerHTML = skillsHTML;
+
+  // Club services
+  const selectedServices = getCheckedValues('clubService');
+  let servicesHTML = '';
+  if (selectedServices.length > 0) {
+    selectedServices.forEach(key => {
+      if (CLUB_SERVICE_ITEMS[key]) {
+        servicesHTML += `<li class="high">${CLUB_SERVICE_ITEMS[key]}<span class="tag high">感兴趣</span></li>`;
+      }
+    });
+  } else {
+    servicesHTML = '<li class="none">未选择任何俱乐部服务项目</li>';
+  }
+  const otherService = getTextValue('clubServiceOther');
+  if (otherService) {
+    servicesHTML += `<li class="high">${otherService}<span class="tag high">自填</span></li>`;
+  }
+  document.getElementById('clubServiceList').innerHTML = servicesHTML;
+
+  // District interests
+  let districtHTML = '';
+  DISTRICT_ITEMS.forEach(item => {
+    const value = getRadioValue(item.key);
+    const level = value === 'high' ? 'high' : value === 'medium' ? 'medium' : 'none';
+    const label = value === 'high' ? '高度感兴趣' : value === 'medium' ? '一般感兴趣' : '无兴趣';
+    districtHTML += `<li class="${level}">${item.name}<span class="tag ${level}">${label}</span></li>`;
+  });
+  document.getElementById('districtInterests').innerHTML = districtHTML;
+
+  // Satisfaction chart
+  const satScores = [];
+  const satLabels = [];
+  SATISFACTION_ITEMS.forEach(item => {
+    const value = getRadioValue(item.key);
+    satScores.push(value ? parseInt(value) : 0);
+    satLabels.push(item.name);
+  });
+
+  // Find top and low satisfaction
+  let maxSat = 0, minSat = 6, maxSatName = '', minSatName = '';
+  satScores.forEach((score, i) => {
+    if (score > maxSat) { maxSat = score; maxSatName = satLabels[i]; }
+    if (score > 0 && score < minSat) { minSat = score; minSatName = satLabels[i]; }
+  });
+  document.getElementById('topSatisfaction').textContent = maxSat > 0 ? `${maxSatName}（${['不满意','略有满意','一般满意','非常满意','极其满意'][maxSat-1]}）` : '未评价';
+  document.getElementById('lowSatisfaction').textContent = minSat < 6 ? `${minSatName}（${['不满意','略有满意','一般满意','非常满意','极其满意'][minSat-1]}）` : '未评价';
+
+  // Draw chart
+  drawSatisfactionChart(satLabels, satScores);
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✅ 汇总报告已生成！');
+}
+
+// ============ CHART ============
+function drawSatisfactionChart(labels, scores) {
+  if (satisfactionChartInstance) satisfactionChartInstance.destroy();
+
+  const ctx = document.getElementById('satisfactionChart').getContext('2d');
+  satisfactionChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '满意度评分',
+        data: scores,
+        backgroundColor: scores.map(s => {
+          if (s >= 4) return 'rgba(45, 125, 70, 0.7)';
+          if (s >= 3) return 'rgba(196, 149, 46, 0.7)';
+          if (s >= 2) return 'rgba(166, 25, 46, 0.5)';
+          if (s >= 1) return 'rgba(166, 25, 46, 0.8)';
+          return 'rgba(92, 74, 58, 0.3)';
+        }),
+        borderColor: scores.map(s => {
+          if (s >= 4) return '#2D7D46';
+          if (s >= 3) return '#C4952E';
+          if (s >= 2) return '#A6192E';
+          if (s >= 1) return '#A6192E';
+          return '#5C4A3A';
+        }),
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: 5,
+          ticks: { stepSize: 1, font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)' }
+        },
+        y: {
+          ticks: { font: { size: 11 } },
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const score = context.raw;
+              const label = ['', '不满意', '略有满意', '一般满意', '非常满意', '极其满意'][score] || '未评价';
+              return `评分：${score > 0 ? score + ' - ' + label : '未评价'}`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// ============ RESET ============
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => el.checked = false);
+    document.querySelectorAll('.checkbox-item').forEach(el => el.classList.remove('checked'));
+    document.getElementById('reportSection').classList.remove('visible');
+    if (satisfactionChartInstance) {
+      satisfactionChartInstance.destroy();
+      satisfactionChartInstance = null;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+// ============ AUTO SAVE ============
+function autoSave() {
+  const state = {};
+  document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+    if (el.id) state[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(el => {
+    state[el.name + '_' + el.value] = true;
+  });
+  localStorage.setItem('cs403_state', JSON.stringify(state));
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cs403_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key.includes('_high') || key.includes('_medium') || key.includes('_none')) {
+        const parts = key.split('_');
+        const name = parts[0];
+        const val = parts.slice(1).join('_');
+        const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+        if (radio) radio.checked = true;
+      } else if (key.includes('_5') || key.includes('_4') || key.includes('_3') || key.includes('_2') || key.includes('_1')) {
+        const parts = key.split('_');
+        const name = parts.slice(0, -1).join('_');
+        const val = parts[parts.length - 1];
+        const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+        if (radio) radio.checked = true;
+      } else if (key.includes('_')) {
+        const parts = key.split('_');
+        const cb = document.querySelector(`input[type="checkbox"][name="${parts[0]}"][value="${parts[1]}"]`);
+        if (cb) { cb.checked = true; cb.closest('.checkbox-item')?.classList.add('checked'); }
+      } else {
+        const el = document.getElementById(key);
+        if (el) el.value = value;
+      }
+    });
+  } catch(e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>
