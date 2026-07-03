@@ -106,6 +106,16 @@ body {
   letter-spacing: 0.02em;
 }
 .header-nav a:hover { color: var(--gold-dark); }
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--deep-brown);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
 
 /* ============ Section Common ============ */
 .section { padding: 70px 0; position: relative; }
@@ -518,20 +528,6 @@ body {
   height: 8px;
 }
 
-/* ============ Responsive ============ */
-@media (max-width: 768px) {
-  .hero h1 { font-size: 28px; }
-  .section-title { font-size: 22px; }
-  .module-header { padding: 20px; }
-  .module-body { padding: 0 20px 20px; }
-  .module-num { width: 42px; height: 42px; font-size: 17px; }
-  .module-header-content h3 { font-size: 16px; }
-  .header-nav { display: none; }
-  .section { padding: 48px 0; }
-  .hero { padding: 60px 0 50px; }
-  .type-cards-row { grid-template-columns: 1fr; }
-}
-
 /* ============ Animations ============ */
 .fade-up {
   opacity: 0; transform: translateY(24px);
@@ -703,6 +699,40 @@ body {
   background: linear-gradient(to right, transparent, var(--border-strong), transparent);
 }
 .divider-icon { font-size: 18px; color: var(--gold); }
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 28px; }
+  .section-title { font-size: 22px; }
+  .module-header { padding: 20px; }
+  .module-body { padding: 0 20px 20px; }
+  .module-num { width: 42px; height: 42px; font-size: 17px; }
+  .module-header-content h3 { font-size: 16px; }
+  .mobile-menu-toggle { display: block; }
+  .header-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(245,240,232,0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 28px 16px;
+    box-shadow: 0 12px 30px rgba(45,33,24,0.08);
+  }
+  .header-nav.is-open { display: flex; }
+  .header-nav li { border-bottom: 1px solid rgba(232,220,200,0.5); }
+  .header-nav li:last-child { border-bottom: none; }
+  .header-nav a { display: block; padding: 13px 0; font-size: 14px; }
+  .section { padding: 48px 0; }
+  .hero { padding: 60px 0 50px; }
+  .type-cards-row { grid-template-columns: 1fr; }
+  .type-card-body { padding: 14px 16px 16px; }
+  .type-row { gap: 8px; padding: 6px 0; }
+  .type-label { width: 84px; }
+}
 </style>
 </head>
 <body>
@@ -714,6 +744,7 @@ body {
 <header class="site-header">
   <div class="header-inner">
     <div class="header-logo">HD<span>×</span>Coaching 人类图教练</div>
+    <button class="mobile-menu-toggle" aria-label="菜单" aria-expanded="false">☰</button>
     <ul class="header-nav">
       <li><a href="#research">学术依据</a></li>
       <li><a href="#modules">课程体系</a></li>
@@ -1613,6 +1644,24 @@ function toggleModule(card) {
   // Toggle clicked (if it wasn't open)
   if (!wasOpen) card.classList.add('open');
 }
+// Mobile menu toggle
+(function() {
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const nav = document.querySelector('.header-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', function() {
+    const isOpen = nav.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    toggle.textContent = isOpen ? '✕' : '☰';
+  });
+  nav.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      nav.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = '☰';
+    });
+  });
+})();
 </script>
 
 </body>
