@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高效领导力课程 — 领导力测评</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff; padding: 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; }
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--primary); font-weight: 700; }
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn { padding: 9px 20px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit; }
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* CONTAINER */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* INTRO */
+.intro-card { background: var(--bg-card); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction { font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
+.intro-card .instruction strong { color: var(--text); }
+
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text); background: #fff; transition: border-color var(--transition); }
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* SCALE LEGEND */
+.scale-legend { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-section); border-radius: var(--radius-sm); margin: 16px 0; align-items: center; }
+.scale-legend .label { font-size: 13px; color: var(--text-secondary); margin-right: 8px; font-weight: 600; }
+.scale-item { display: flex; align-items: center; gap: 4px; font-size: 13px; padding: 4px 10px; border-radius: 20px; background: #fff; border: 1px solid var(--border-light); }
+.scale-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* TAB SWITCHER */
+.tab-switcher { display: flex; gap: 0; margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.tab-btn { flex: 1; padding: 14px 20px; border: none; background: var(--bg-card); color: var(--text-secondary); font-size: 14px; font-weight: 600; cursor: pointer; transition: all var(--transition); font-family: inherit; border-bottom: 3px solid transparent; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--bg-card); }
+.tab-btn:hover:not(.active) { background: var(--bg-section); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* SECTION CARD */
+.section-card { background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden; }
+.section-card:hover { box-shadow: var(--shadow-lg); }
+.section-header { padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num { background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+.section-progress { font-size: 13px; opacity: 0.9; font-weight: 400; }
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 24px; }
+
+/* DIMENSION BADGE */
+.dim-badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 6px; }
+
+/* ASSESSMENT ITEM */
+.assessment-item { padding: 18px 0; border-bottom: 1px solid var(--border-light); }
+.assessment-item:last-child { border-bottom: none; }
+.item-question { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
+
+/* Score buttons 1-5 */
+.score-options { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.score-option { position: relative; }
+.score-option input { display: none; }
+.score-option label {
+  display: flex; align-items: center; justify-content: center;
+  width: 48px; height: 38px; border-radius: var(--radius-sm);
+  border: 2px solid var(--border); cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--text-secondary);
+  background: #fff; transition: all var(--transition); user-select: none;
+}
+.score-option label:hover { border-color: var(--primary); color: var(--primary); background: rgba(119,36,50,0.04); }
+.score-option input:checked + label { color: #fff; }
+.score-option input:checked + label.score-5 { background: #2D7D46; border-color: #2D7D46; box-shadow: 0 2px 8px rgba(45,125,70,0.25); }
+.score-option input:checked + label.score-4 { background: #5A9E6F; border-color: #5A9E6F; }
+.score-option input:checked + label.score-3 { background: #C4952E; border-color: #C4952E; }
+.score-option input:checked + label.score-2 { background: #D97746; border-color: #D97746; }
+.score-option input:checked + label.score-1 { background: #A6192E; border-color: #A6192E; }
+
+.score-label-text { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
+
+/* QUIZ ITEMS */
+.quiz-item { padding: 20px 0; border-bottom: 1px solid var(--border-light); }
+.quiz-item:last-child { border-bottom: none; }
+.quiz-question { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; line-height: 1.6; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); border: 2px solid var(--border-light); cursor: pointer; transition: all var(--transition); background: #fff; }
+.quiz-option:hover { border-color: var(--gold); background: rgba(196,149,46,0.04); }
+.quiz-option input { display: none; }
+.quiz-option label { font-size: 14px; color: var(--text); cursor: pointer; flex: 1; line-height: 1.6; }
+.quiz-option .option-letter { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--bg-section); font-size: 12px; font-weight: 700; color: var(--text-secondary); flex-shrink: 0; transition: all var(--transition); }
+.quiz-option.selected { border-color: var(--primary); background: rgba(119,36,50,0.04); }
+.quiz-option.selected .option-letter { background: var(--primary); color: #fff; }
+.quiz-option.correct { border-color: var(--success); background: rgba(45,125,70,0.06); }
+.quiz-option.correct .option-letter { background: var(--success); color: #fff; }
+.quiz-option.wrong { border-color: var(--danger); background: rgba(166,25,46,0.06); }
+.quiz-option.wrong .option-letter { background: var(--danger); color: #fff; }
+.quiz-feedback { margin-top: 10px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; display: none; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: rgba(45,125,70,0.08); color: var(--success); border-left: 3px solid var(--success); }
+.quiz-feedback.wrong { background: rgba(166,25,46,0.08); color: var(--danger); border-left: 3px solid var(--danger); }
+
+/* DIMENSION FILL (Q1) */
+.dim-fill-area { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+@media (max-width: 640px) { .dim-fill-area { grid-template-columns: 1fr; } }
+.dim-fill-item { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid var(--border-light); border-radius: var(--radius-sm); background: #fff; cursor: pointer; transition: all var(--transition); }
+.dim-fill-item:hover { border-color: var(--gold); }
+.dim-fill-item.selected { border-color: var(--success); background: rgba(45,125,70,0.04); }
+.dim-fill-item input { display: none; }
+.dim-fill-item label { font-size: 14px; cursor: pointer; flex: 1; }
+.dim-fill-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; transition: all var(--transition); flex-shrink: 0; }
+.dim-fill-item.selected .dim-fill-check { background: var(--success); border-color: var(--success); }
+
+/* SUBMIT */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate { padding: 14px 48px; font-size: 16px; border-radius: 30px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit; }
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* QUIZ RESULT */
+.quiz-result-card { background: var(--bg-card); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-light); text-align: center; }
+.quiz-result-card h3 { font-size: 16px; color: var(--primary); margin-bottom: 16px; }
+.quiz-score-big { font-size: 42px; font-weight: 800; color: var(--primary); margin: 10px 0; }
+.quiz-score-big .denom { font-size: 20px; color: var(--text-secondary); }
+.quiz-score-label { font-size: 14px; color: var(--text-secondary); }
+.quiz-score-bar { height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; margin: 16px auto; max-width: 400px; }
+.quiz-score-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+/* REPORT */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+.report-header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center; }
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+.report-body { background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius); padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none; }
+
+/* Overview card */
+.overview-card { text-align: center; padding: 28px 20px; margin-bottom: 28px; border-radius: var(--radius); border: 3px solid var(--primary); background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08)); }
+.overview-card .overall-score { font-size: 36px; font-weight: 800; color: var(--primary); margin: 8px 0; }
+.overview-card .overall-label { font-size: 14px; color: var(--text-secondary); }
+.overview-card .overall-desc { font-size: 14px; color: var(--text); max-width: 650px; margin: 14px auto 0; line-height: 1.8; }
+
+/* Radar */
+.chart-container { max-width: 520px; margin: 0 auto 28px; padding: 20px; background: var(--bg-section); border-radius: var(--radius); }
+.chart-container h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 16px; }
+
+/* Dimension cards */
+.dim-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .dim-cards { grid-template-columns: 1fr; } }
+.dim-card { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: var(--bg-section); }
+.dim-card .dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.dim-card .dim-name { font-size: 14px; font-weight: 700; }
+.dim-card .dim-score-val { font-size: 18px; font-weight: 800; }
+.dim-card .dim-bar-bg { height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+.dim-card .dim-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.dim-card .dim-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Full descriptions */
+.dim-desc-full { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.dim-desc-full h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+.dim-desc-block { padding: 18px; border-radius: var(--radius-sm); margin-bottom: 14px; border-left: 4px solid var(--primary); background: var(--bg-section); }
+.dim-desc-block h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.dim-desc-block p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Score table */
+.score-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+.score-table th, .score-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border-light); }
+.score-table th { background: var(--primary); color: #fff; font-weight: 600; font-size: 13px; }
+.score-table tr:nth-child(even) td { background: var(--bg-section); }
+.score-table .highlight-row td { background: rgba(196,149,46,0.12); font-weight: 600; }
+
+/* Strengths & improvements */
+.si-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 640px) { .si-grid { grid-template-columns: 1fr; } }
+.si-card { padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); }
+.si-card.strength { background: rgba(45,125,70,0.04); border-color: rgba(45,125,70,0.2); }
+.si-card.improve { background: rgba(196,149,46,0.04); border-color: rgba(196,149,46,0.2); }
+.si-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.si-card.strength h4 { color: var(--success); }
+.si-card.improve h4 { color: var(--warning); }
+.si-card ul { list-style: none; padding: 0; }
+.si-card li { font-size: 13px; color: var(--text-secondary); padding: 6px 0; padding-left: 18px; position: relative; line-height: 1.6; }
+.si-card li::before { content: ""; position: absolute; left: 0; top: 12px; width: 6px; height: 6px; border-radius: 50%; }
+.si-card.strength li::before { background: var(--success); }
+.si-card.improve li::before { background: var(--warning); }
+
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle, .tab-switcher, .header-actions { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+  .report-section.visible { display: block !important; }
+  .tab-content { display: block !important; }
+}
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-dark); color: #fff; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">HPL</div>
+      <div>
+        <div class="header-title">高效领导力课程</div>
+        <div class="header-subtitle">Toastmasters International · 项目 CS262A</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">项目 CS262A · 高效领导力课程 · 服务型领导力六大维度评估</div>
+    <h1>高效领导力测评</h1>
+    <div class="instruction">
+      <strong>目的：</strong>评估你对服务型领导力的认识程度以及当前的领导力技巧水平，识别优势与改进领域。<br><br>
+      <strong>说明：</strong>本测评分为两个部分。<strong>第一部分</strong>为领导力知识小测（10 道选择题），检验你对服务型领导力六大维度的理解。<strong>第二部分</strong>为领导力技巧自评（23 道行为描述题），请根据 1-5 分制对每项行为进行评级。如果你目前没有具体的领导角色，请回忆你曾经领导他人的情况。
+    </div>
+    <div class="info-grid">
+      <div class="form-group"><label>你的姓名</label><input type="text" id="userName" placeholder="输入你的姓名"></div>
+      <div class="form-group"><label>评估日期</label><input type="date" id="evalDate"></div>
+    </div>
+  </div>
+
+  <!-- TAB SWITCHER -->
+  <div class="tab-switcher">
+    <button class="tab-btn active" onclick="switchTab('quiz')">第一部分：领导力知识小测</button>
+    <button class="tab-btn" onclick="switchTab('self')">第二部分：领导力技巧自评</button>
+  </div>
+
+  <!-- ========== TAB 1: QUIZ ========== -->
+  <div class="tab-content active" id="tab-quiz">
+
+    <div class="section-card" id="quizSection">
+      <div class="section-header" onclick="toggleSection('quizSection')">
+        <h2><span class="section-num">Q</span> 领导力知识小测（10 题）</h2>
+        <span class="section-progress" id="quizProg">0/10 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="quizBody"></div>
+    </div>
+
+    <div class="submit-section">
+      <button class="btn-generate" onclick="gradeQuiz()" style="background: linear-gradient(135deg, var(--gold), #D4A640);">📝 提交小测答案</button>
+      <div class="submit-hint">完成所有 10 道题后点击上方按钮查看得分与解析</div>
+    </div>
+
+    <!-- Quiz Result -->
+    <div id="quizResultArea" style="display:none;">
+      <div class="quiz-result-card">
+        <h3>小测成绩</h3>
+        <div class="quiz-score-big"><span id="quizScoreNum">0</span><span class="denom"> / 10</span></div>
+        <div class="quiz-score-label" id="quizScoreLabel"></div>
+        <div class="quiz-score-bar"><div class="quiz-score-bar-fill" id="quizScoreBar" style="background: var(--primary);"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 2: SELF-ASSESSMENT ========== -->
+  <div class="tab-content" id="tab-self">
+
+    <div class="scale-legend">
+      <span class="label">评分级别：</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#2D7D46"></span> 5 最高</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#5A9E6F"></span> 4 较高</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#C4952E"></span> 3 一般</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#D97746"></span> 2 较低</span>
+      <span class="scale-item"><span class="scale-dot" style="background:#A6192E"></span> 1 最低</span>
+    </div>
+
+    <!-- Section 1: Vision & Values -->
+    <div class="section-card" id="sec1">
+      <div class="section-header" onclick="toggleSection('sec1')">
+        <h2><span class="section-num">1</span> 愿景和价值观 <span style="font-size:12px;opacity:0.7;font-weight:400;">Vision &amp; Values</span></h2>
+        <span class="section-progress" id="prog1">0/6 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body1"></div>
+    </div>
+
+    <!-- Section 2: Direction -->
+    <div class="section-card" id="sec2">
+      <div class="section-header" onclick="toggleSection('sec2')">
+        <h2><span class="section-num">2</span> 指引 <span style="font-size:12px;opacity:0.7;font-weight:400;">Direction</span></h2>
+        <span class="section-progress" id="prog2">0/2 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body2"></div>
+    </div>
+
+    <!-- Section 3: Persuasion -->
+    <div class="section-card" id="sec3">
+      <div class="section-header" onclick="toggleSection('sec3')">
+        <h2><span class="section-num">3</span> 说服 <span style="font-size:12px;opacity:0.7;font-weight:400;">Persuasion</span></h2>
+        <span class="section-progress" id="prog3">0/5 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body3"></div>
+    </div>
+
+    <!-- Section 4: Support -->
+    <div class="section-card" id="sec4">
+      <div class="section-header" onclick="toggleSection('sec4')">
+        <h2><span class="section-num">4</span> 支持 <span style="font-size:12px;opacity:0.7;font-weight:400;">Support</span></h2>
+        <span class="section-progress" id="prog4">0/4 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body4"></div>
+    </div>
+
+    <!-- Section 5: Develop -->
+    <div class="section-card" id="sec5">
+      <div class="section-header" onclick="toggleSection('sec5')">
+        <h2><span class="section-num">5</span> 培养 <span style="font-size:12px;opacity:0.7;font-weight:400;">Develop</span></h2>
+        <span class="section-progress" id="prog5">0/3 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body5"></div>
+    </div>
+
+    <!-- Section 6: Recognition -->
+    <div class="section-card" id="sec6">
+      <div class="section-header" onclick="toggleSection('sec6')">
+        <h2><span class="section-num">6</span> 认可 <span style="font-size:12px;opacity:0.7;font-weight:400;">Recognition</span></h2>
+        <span class="section-progress" id="prog6">0/3 完成</span>
+        <span class="section-toggle">▼</span>
+      </div>
+      <div class="section-body" id="body6"></div>
+    </div>
+
+    <div class="submit-section">
+      <button class="btn-generate" onclick="generateReport()">📊 生成领导力概况报告</button>
+      <div class="submit-hint">完成所有 23 道题后点击上方按钮，系统将自动生成你的领导力雷达图与分析报告</div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="report-section" id="reportSection">
+      <div class="report-header">
+        <h2>📋 领导力概况分析报告</h2>
+        <div class="report-meta" id="reportMeta"></div>
+      </div>
+      <div class="report-body">
+        <div class="overview-card" id="overviewCard"></div>
+
+        <div class="chart-container">
+          <h3>服务型领导力六大维度雷达图</h3>
+          <canvas id="radarChart" width="450" height="450"></canvas>
+        </div>
+
+        <h3 style="font-size:16px;margin-bottom:14px;color:var(--text);">各维度评分详情</h3>
+        <div class="dim-cards" id="dimCards"></div>
+
+        <div class="dim-desc-full">
+          <h3>六大维度评分汇总</h3>
+          <table class="score-table" id="scoreTable"></table>
+        </div>
+
+        <div class="dim-desc-full">
+          <h3>优势与改进领域</h3>
+          <div class="si-grid" id="siGrid"></div>
+        </div>
+
+        <div class="dim-desc-full">
+          <h3>服务型领导力六大维度详解</h3>
+          <div id="dimDescriptions"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-self -->
+
+</div><!-- /container -->
+
+<div class="footer">
+  基于 Toastmasters International「高效领导力课程」项目 CS262A<br>
+  © 2015 Toastmasters International. 版权所有。Rev. 8/2015 书目编号 CS262A<br>
+  Powered By Kan Man Tang
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ QUIZ DATA ============
+const QUIZ_QUESTIONS = [
+  {
+    type: 'fill',
+    question: '默写出服务型领导力的六大维度：',
+    answer: ['愿景和价值观', '指引', '说服', '支持', '培养', '认可'],
+    options: ['愿景和价值观', '指引', '说服', '支持', '培养', '认可', '执行力', '决策力', '创新力', '协调力'],
+    explanation: '服务型领导力的六大维度分别是：愿景和价值观、指引、说服、支持、培养、认可。'
+  },
+  {
+    type: 'choice',
+    question: '领导者可以具备两种权威，它们是：',
+    options: ['计划和非计划', '协调和非协调', '正式和赢得的', '组织性和社会性', '军事和民众'],
+    answer: 2,
+    explanation: '正式权威是根据领导者在组织中的正式职衔和职位授予的权力；赢得的权威是来自于他人对领导者本身的尊敬和尊重的影响力。'
+  },
+  {
+    type: 'choice',
+    question: 'Mohandas Gandhi、Martin Luther King Jr. 和 Mother Teresa 是领导人的典范，具备下述特质：',
+    options: ['正式权威高，赢得的权威高', '正式权威低，赢得的权威低', '正式权威高，赢得的权威低', '正式权威低，赢得的权威高', '既不是正式权威也不是赢得的权威'],
+    answer: 3,
+    explanation: '这三位领袖都没有正式的职衔或职位赋予的权力（正式权威低），但他们通过自身的品格和行为赢得了人们的高度尊敬和追随（赢得的权威高）。'
+  },
+  {
+    type: 'choice',
+    question: '激励别人是哪个领导力维度的技巧：',
+    options: ['愿景和价值观', '说服', '培养', '认可', '以上都不是'],
+    answer: 4,
+    explanation: '激励别人不是某一个单独维度的技巧，而是贯穿于多个维度之中的综合能力。'
+  },
+  {
+    type: 'choice',
+    question: '践行关键价值观是哪个领导力维度的技巧：',
+    options: ['愿景和价值观', '指引', '培养', '认可', '以上都不是'],
+    answer: 0,
+    explanation: '愿景和价值观维度要求领导者亲自践行对团队成功重要的价值观，以行动为团队树立榜样。'
+  },
+  {
+    type: 'choice',
+    question: '有效设定目标是哪个领导力维度的技巧：',
+    options: ['指引', '说服', '培养', '认可', '以上都不是'],
+    answer: 0,
+    explanation: '指引维度包括有效设定团队的目标和策略，以及确保团队成员知道事情的轻重缓急。'
+  },
+  {
+    type: 'choice',
+    question: '表现自信是哪个领导力维度的技巧：',
+    options: ['愿景和价值观', '说服', '支持', '认可', '以上都不是'],
+    answer: 1,
+    explanation: '说服维度要求领导者在与他人相处时表现自信，帮助队员理解和认可做法的目的。'
+  },
+  {
+    type: 'choice',
+    question: '提出创新的想法是哪个领导力维度的技巧：',
+    options: ['指引', '说服', '支持', '认可', '以上都不是'],
+    answer: 2,
+    explanation: '支持维度要求领导者有创造力，并且是一位优秀的问题解决者，能够提出创新的想法。'
+  },
+  {
+    type: 'choice',
+    question: '传授和指导他人是哪个领导力维度的技巧：',
+    options: ['指引', '说服', '培养', '认可', '以上都不是'],
+    answer: 2,
+    explanation: '培养维度要求领导者教授和指导队员，帮助他们面对具体的挑战，解决问题，改善不尽如人意的表现。'
+  },
+  {
+    type: 'choice',
+    question: '利用"仪式、庆祝会和典礼"是哪个领导力维度的技巧：',
+    options: ['指引', '说服', '支持', '认可', '以上都不是'],
+    answer: 3,
+    explanation: '认可维度要求领导者善用有象征意义的沟通方式，通过仪式、庆祝会和典礼来纪念团队的成长与成功。'
+  }
+];
+
+// ============ SELF-ASSESSMENT DATA ============
+const DIMENSIONS = {
+  vision: {
+    name: '愿景和价值观', en: 'Vision & Values', color: '#772432', icon: '🎯',
+    questionRange: [1, 6], count: 6,
+    description: '领导者为团队描绘清晰的目标和方向，时刻了解可能影响团队的事件，预见问题并制定应对方案，在需要时大胆果断，同时亲自践行对团队成功重要的价值观。',
+    improve: '尝试定期与团队分享你对未来的愿景，制定价值观清单并对照执行，主动关注行业动态和可能影响团队的外部事件。'
+  },
+  direction: {
+    name: '指引', en: 'Direction', color: '#C4952E', icon: '🧭',
+    questionRange: [7, 8], count: 2,
+    description: '领导者有效设定团队的目标和策略，确保不同团队成员明确自己的任务和优先级，使整个团队朝着同一方向高效前进。',
+    improve: '学习目标设定框架（如 SMART 原则），定期召开团队会议对齐优先级，确保每位成员清楚自己的职责和时间节点。'
+  },
+  persuasion: {
+    name: '说服', en: 'Persuasion', color: '#3B6FB6', icon: '💬',
+    questionRange: [9, 13], count: 5,
+    description: '领导者通过自信的表现、清晰的目标传达、有效的沟通和倾听来赢得团队的理解与认可，并跟进决策的执行确保落地。',
+    improve: '练习积极倾听技巧，定期提醒团队目标，在沟通中注重"为什么"而不仅是"做什么"，建立决策跟进机制。'
+  },
+  support: {
+    name: '支持', en: 'Support', color: '#2D7D46', icon: '🤲',
+    questionRange: [14, 17], count: 4,
+    description: '领导者了解团队的最新进展，明智地运用人力、资金和物资资源，以创造力解决问题，并有效管理时间以确保工作完成。',
+    improve: '建立项目进度追踪系统，学习资源分配优先级矩阵，培养创造性思维技巧，使用时间管理工具提升效率。'
+  },
+  develop: {
+    name: '培养', en: 'Develop', color: '#7B4FBF', icon: '🌱',
+    questionRange: [18, 20], count: 3,
+    description: '领导者帮助团队成员提高技巧和增加知识，通过教授和指导帮助队员面对挑战、解决问题，并致力于培养团队精神。',
+    improve: '定期与成员进行一对一发展对话，识别每个人的成长需求，安排指导机会，策划团队建设活动增强凝聚力。'
+  },
+  recognition: {
+    name: '认可', en: 'Recognition', color: '#A6192E', icon: '🏆',
+    questionRange: [21, 23], count: 3,
+    description: '领导者对队员的努力和成果表示赞赏，尊重每位成员提出的想法和观念，并通过仪式、庆祝和典礼提供认可机会。',
+    improve: '建立即时认可的习惯，定期举办庆祝活动，创建"想法板"鼓励成员贡献创意，公开表扬优秀表现。'
+  }
+};
+
+const QUESTIONS = [
+  '我清楚地意识到我们团队应实现的目标。',
+  '我时刻了解当前可能影响到我的团队和团队使命的事件。',
+  '我看到可能发生的问题并计划如何克服它们。',
+  '我知悉做决策需要的信息。',
+  '必要时，我可以变得大胆和果断。',
+  '我亲自践行对团队成功很重要的价值观。',
+  '我有效地设定团队的目标和策略。',
+  '我有效地使不同团队成员执行任务，并确保他们知道事情的轻重缓急。',
+  '我在与他人相处时表现自信。',
+  '我帮助队员理解和认可我们做法的目的。',
+  '我常常提醒队员我们要实现的目标。',
+  '我能很好地沟通，并认真倾听。',
+  '我跟进决策的执行并确保它们已经被执行。',
+  '我了解团队的最新进展。',
+  '我明智地运用人力、资金和物资实现我们的使命。',
+  '我有创造力，并且是一位优秀的问题解决者。',
+  '我有效地管理时间并完成工作。',
+  '我帮助团队成员提高技巧和增加知识。',
+  '我教授和指导队员，以帮助他们面对具体的挑战和解决问题，以改善不尽如人意的表现。',
+  '我培养了团队精神。',
+  '我对队员的努力和取得的结果表示赞赏和认可。',
+  '我尊重任何队员提出的想法和观念。',
+  '我提供庆祝成功的机会，表示队员的付出是得到认可的。'
+];
+
+// ============ BUILD QUIZ ============
+function buildQuiz() {
+  let html = '';
+  QUIZ_QUESTIONS.forEach((q, idx) => {
+    html += `<div class="quiz-item" id="quiz-${idx}">
+      <div class="quiz-question">${idx + 1}. ${q.question}</div>`;
+    
+    if (q.type === 'fill') {
+      html += `<div class="dim-fill-area" id="quiz-fill-${idx}">`;
+      q.options.forEach((opt, oi) => {
+        html += `<div class="dim-fill-item" onclick="toggleFill(${idx}, ${oi})">
+          <div class="dim-fill-check">✓</div>
+          <input type="checkbox" id="fill-${idx}-${oi}" data-quiz="${idx}" data-val="${opt}">
+          <label for="fill-${idx}-${oi}">${opt}</label>
+        </div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div class="quiz-options">`;
+      q.options.forEach((opt, oi) => {
+        const letter = String.fromCharCode(97 + oi); // a, b, c, d, e
+        html += `<div class="quiz-option" id="quizopt-${idx}-${oi}" onclick="selectQuiz(${idx}, ${oi})">
+          <div class="option-letter">${letter}</div>
+          <input type="radio" name="quiz${idx}" value="${oi}" id="qz-${idx}-${oi}">
+          <label for="qz-${idx}-${oi}" onclick="selectQuiz(${idx}, ${oi})">${opt}</label>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    
+    html += `<div class="quiz-feedback" id="feedback-${idx}"></div>
+    </div>`;
+  });
+  document.getElementById('quizBody').innerHTML = html;
+}
+
+function selectQuiz(qIdx, optIdx) {
+  // Remove previous selection
+  document.querySelectorAll(`#quiz-${qIdx} .quiz-option`).forEach(el => el.classList.remove('selected'));
+  // Mark selected
+  const opt = document.getElementById(`quizopt-${qIdx}-${optIdx}`);
+  if (opt) opt.classList.add('selected');
+  // Set radio
+  const radio = document.getElementById(`qz-${qIdx}-${optIdx}`);
+  if (radio) radio.checked = true;
+  updateQuizProgress();
+}
+
+function toggleFill(qIdx, optIdx) {
+  const item = document.querySelectorAll(`#quiz-fill-${qIdx} .dim-fill-item`)[optIdx];
+  const checkbox = document.getElementById(`fill-${qIdx}-${optIdx}`);
+  checkbox.checked = !checkbox.checked;
+  if (checkbox.checked) item.classList.add('selected');
+  else item.classList.remove('selected');
+  updateQuizProgress();
+}
+
+function updateQuizProgress() {
+  let answered = 0;
+  QUIZ_QUESTIONS.forEach((q, idx) => {
+    if (q.type === 'fill') {
+      const checked = document.querySelectorAll(`#quiz-fill-${idx} input:checked`);
+      if (checked.length > 0) answered++;
+    } else {
+      if (document.querySelector(`input[name="quiz${idx}"]:checked`)) answered++;
+    }
+  });
+  document.getElementById('quizProg').textContent = `${answered}/10 完成`;
+}
+
+function countQuizAnswered() {
+  let answered = 0;
+  QUIZ_QUESTIONS.forEach((q, idx) => {
+    if (q.type === 'fill') {
+      const checked = document.querySelectorAll(`#quiz-fill-${idx} input:checked`);
+      if (checked.length > 0) answered++;
+    } else {
+      if (document.querySelector(`input[name="quiz${idx}"]:checked`)) answered++;
+    }
+  });
+  return answered;
+}
+
+// ============ GRADE QUIZ ============
+function gradeQuiz() {
+  const answered = countQuizAnswered();
+  if (answered < 10) {
+    showToast(`请完成所有 10 道题后再提交（当前已完成 ${answered} 题）`);
+    return;
+  }
+
+  let score = 0;
+  QUIZ_QUESTIONS.forEach((q, idx) => {
+    const feedback = document.getElementById(`feedback-${idx}`);
+    if (q.type === 'fill') {
+      const checked = Array.from(document.querySelectorAll(`#quiz-fill-${idx} input:checked`)).map(c => c.dataset.val);
+      const correctSet = new Set(q.answer);
+      const userSet = new Set(checked);
+      const isCorrect = correctSet.size === userSet.size && [...correctSet].every(v => userSet.has(v));
+      if (isCorrect) {
+        score++;
+        feedback.className = 'quiz-feedback show correct';
+        feedback.innerHTML = `<strong>✅ 正确！</strong> ${q.explanation}`;
+      } else {
+        feedback.className = 'quiz-feedback show wrong';
+        feedback.innerHTML = `<strong>❌ 不完全正确。</strong> 正确答案是：${q.answer.join('、')}。<br>${q.explanation}`;
+      }
+      // Mark items
+      q.options.forEach((opt, oi) => {
+        const item = document.querySelectorAll(`#quiz-fill-${idx} .dim-fill-item`)[oi];
+        if (item) {
+          item.classList.remove('selected', 'correct', 'wrong');
+          if (correctSet.has(opt)) item.classList.add('correct');
+          else if (userSet.has(opt)) item.classList.add('wrong');
+        }
+      });
+    } else {
+      const selected = document.querySelector(`input[name="quiz${idx}"]:checked`);
+      const userAns = parseInt(selected.value);
+      if (userAns === q.answer) {
+        score++;
+        feedback.className = 'quiz-feedback show correct';
+        feedback.innerHTML = `<strong>✅ 正确！</strong> ${q.explanation}`;
+      } else {
+        feedback.className = 'quiz-feedback show wrong';
+        const correctLetter = String.fromCharCode(97 + q.answer);
+        feedback.innerHTML = `<strong>❌ 答错了。</strong> 正确答案是 <strong>${correctLetter}. ${q.options[q.answer]}</strong>。<br>${q.explanation}`;
+      }
+      // Mark options
+      q.options.forEach((opt, oi) => {
+        const optEl = document.getElementById(`quizopt-${idx}-${oi}`);
+        if (optEl) {
+          optEl.classList.remove('selected', 'correct', 'wrong');
+          if (oi === q.answer) optEl.classList.add('correct');
+          else if (oi === userAns) optEl.classList.add('wrong');
+        }
+      });
+    }
+  });
+
+  // Show result
+  document.getElementById('quizResultArea').style.display = 'block';
+  document.getElementById('quizScoreNum').textContent = score;
+  const pct = (score / 10) * 100;
+  document.getElementById('quizScoreBar').style.width = pct + '%';
+  
+  let label = '';
+  let barColor = '';
+  if (score >= 9) { label = '🎉 优秀！你对服务型领导力有非常深入的理解。'; barColor = '#2D7D46'; }
+  else if (score >= 7) { label = '👍 良好！你已经掌握了大部分领导力知识。'; barColor = '#5A9E6F'; }
+  else if (score >= 5) { label = '📚 一般，建议回顾手册内容加深理解。'; barColor = '#C4952E'; }
+  else { label = '📖 需要加强学习，请仔细阅读手册第一部分。'; barColor = '#A6192E'; }
+  document.getElementById('quizScoreLabel').textContent = label;
+  document.getElementById('quizScoreBar').style.background = barColor;
+
+  document.getElementById('quizResultArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showToast(`小测完成！得分：${score}/10`);
+}
+
+// ============ BUILD SELF-ASSESSMENT ============
+function buildSection(containerId, dimKey) {
+  const dim = DIMENSIONS[dimKey];
+  const [start, end] = dim.questionRange;
+  let html = '';
+  html += `<div class="dim-badge" style="background:${dim.color}15;color:${dim.color};">${dim.icon} ${dim.name} · ${dim.en} · ${dim.count} 题</div>`;
+  for (let i = start; i <= end; i++) {
+    const qIdx = i - 1;
+    html += `<div class="assessment-item">
+      <div class="item-question">${i}. ${QUESTIONS[qIdx]}</div>
+      <div class="score-options" id="score-${qIdx}">
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="5" id="q${qIdx}_5" onchange="updateProgress()"><label for="q${qIdx}_5" class="score-5" title="最高">5</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="4" id="q${qIdx}_4" onchange="updateProgress()"><label for="q${qIdx}_4" class="score-4" title="较高">4</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="3" id="q${qIdx}_3" onchange="updateProgress()"><label for="q${qIdx}_3" class="score-3" title="一般">3</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="2" id="q${qIdx}_2" onchange="updateProgress()"><label for="q${qIdx}_2" class="score-2" title="较低">2</label></span>
+        <span class="score-option"><input type="radio" name="q${qIdx}" value="1" id="q${qIdx}_1" onchange="updateProgress()"><label for="q${qIdx}_1" class="score-1" title="最低">1</label></span>
+        <span class="score-label-text">1=最低 &nbsp; 3=一般 &nbsp; 5=最高</span>
+      </div>
+    </div>`;
+  }
+  document.getElementById(containerId).innerHTML = html;
+}
+
+// ============ INIT ============
+document.getElementById('evalDate').valueAsDate = new Date();
+buildQuiz();
+buildSection('body1', 'vision');
+buildSection('body2', 'direction');
+buildSection('body3', 'persuasion');
+buildSection('body4', 'support');
+buildSection('body5', 'develop');
+buildSection('body6', 'recognition');
+
+// ============ TAB SWITCH ============
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  if (tab === 'quiz') {
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('tab-quiz').classList.add('active');
+  } else {
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    document.getElementById('tab-self').classList.add('active');
+  }
+}
+
+// ============ TOGGLE ============
+function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// ============ PROGRESS ============
+function updateProgress() {
+  const dimKeys = ['vision', 'direction', 'persuasion', 'support', 'develop', 'recognition'];
+  dimKeys.forEach((key, idx) => {
+    const dim = DIMENSIONS[key];
+    const [start, end] = dim.questionRange;
+    let answered = 0;
+    for (let i = start; i <= end; i++) {
+      const qIdx = i - 1;
+      if (document.querySelector(`input[name="q${qIdx}"]:checked`)) answered++;
+    }
+    const progEl = document.getElementById('prog' + (idx + 1));
+    if (progEl) progEl.textContent = `${answered}/${dim.count} 完成`;
+  });
+}
+
+function countAllAnswered() {
+  let answered = 0;
+  for (let i = 0; i < 23; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  return answered;
+}
+
+// ============ GENERATE REPORT ============
+function generateReport() {
+  const userName = document.getElementById('userName').value.trim();
+  const answered = countAllAnswered();
+  
+  if (answered < 23) {
+    showToast(`请完成所有 23 道题目后再生成报告（当前已完成 ${answered} 题）`);
+    return;
+  }
+
+  // Calculate dimension scores
+  const dimScores = {};
+  const dimTotals = {};
+  Object.entries(DIMENSIONS).forEach(([key, dim]) => {
+    const [start, end] = dim.questionRange;
+    let total = 0;
+    for (let i = start; i <= end; i++) {
+      const qIdx = i - 1;
+      const selected = document.querySelector(`input[name="q${qIdx}"]:checked`);
+      if (selected) total += parseInt(selected.value);
+    }
+    dimScores[key] = total / dim.count; // average 1-5
+    dimTotals[key] = total;
+  });
+
+  // Overall average
+  const overallAvg = Object.values(dimScores).reduce((a, b) => a + b, 0) / 6;
+
+  // Sort dimensions
+  const sortedDims = Object.entries(dimScores).sort((a, b) => b[1] - a[1]);
+
+  // Meta
+  const evalDate = document.getElementById('evalDate').value;
+  let meta = '';
+  if (userName) meta += `评估人：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // Overview card
+  let overviewDesc = '';
+  if (overallAvg >= 4) {
+    overviewDesc = '你的整体领导力技巧处于较高水平，在多个维度上表现出色。继续保持并寻找机会进一步提升，同时关注得分相对较低的领域。';
+  } else if (overallAvg >= 3) {
+    overviewDesc = '你的整体领导力技巧处于中等水平，有一定的领导力基础。建议重点关注得分低于 3 分的维度，制定针对性的提升计划。';
+  } else {
+    overviewDesc = '你的整体领导力技巧有较大的提升空间。建议系统学习服务型领导力六大维度的知识和技巧，在实践中逐步提升各项能力。';
+  }
+
+  document.getElementById('overviewCard').innerHTML = `
+    <div class="overall-label">综合领导力评分（六大维度平均分）</div>
+    <div class="overall-score">${overallAvg.toFixed(2)}<span style="font-size:20px;color:var(--text-secondary);"> / 5.00</span></div>
+    <div class="overall-desc">${overviewDesc}</div>
+  `;
+
+  // Radar chart
+  drawRadarChart(dimScores);
+
+  // Dimension detail cards
+  let cardsHTML = '';
+  sortedDims.forEach(([key, avgScore]) => {
+    const dim = DIMENSIONS[key];
+    const pct = (avgScore / 5) * 100;
+    const isStrong = avgScore >= 3.5;
+    cardsHTML += `<div class="dim-card" style="${isStrong ? 'border:2px solid ' + dim.color + ';' : ''}">
+      <div class="dim-header">
+        <span class="dim-name" style="color:${dim.color};">${dim.icon} ${dim.name}</span>
+        <span class="dim-score-val" style="color:${dim.color};">${avgScore.toFixed(2)}</span>
+      </div>
+      <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:${pct}%;background:${dim.color};"></div></div>
+      <div class="dim-detail">${dim.en} · 总分 ${dimTotals[key]} / ${dim.count * 5}</div>
+    </div>`;
+  });
+  document.getElementById('dimCards').innerHTML = cardsHTML;
+
+  // Score table
+  let tableHTML = '<thead><tr><th>维度</th><th>英文</th><th>题数</th><th>总分</th><th>平均分</th><th>等级</th></tr></thead><tbody>';
+  sortedDims.forEach(([key, avgScore]) => {
+    const dim = DIMENSIONS[key];
+    let level = '';
+    let levelColor = '';
+    if (avgScore >= 4) { level = '⭐ 强'; levelColor = 'color:var(--success);'; }
+    else if (avgScore >= 3) { level = '✅ 一般'; levelColor = 'color:var(--warning);'; }
+    else { level = '⚠️ 需加强'; levelColor = 'color:var(--danger);'; }
+    tableHTML += `<tr>
+      <td style="font-weight:600;">${dim.icon} ${dim.name}</td>
+      <td style="font-size:12px;color:var(--text-secondary);">${dim.en}</td>
+      <td>${dim.count}</td>
+      <td>${dimTotals[key]} / ${dim.count * 5}</td>
+      <td style="font-weight:700;color:${dim.color};">${avgScore.toFixed(2)}</td>
+      <td style="${levelColor}font-weight:600;">${level}</td>
+    </tr>`;
+  });
+  tableHTML += `<tr class="highlight-row">
+    <td colspan="4" style="text-align:right;font-weight:700;">综合平均分</td>
+    <td style="font-weight:800;color:var(--primary);">${overallAvg.toFixed(2)}</td>
+    <td></td>
+  </tr>`;
+  tableHTML += '</tbody>';
+  document.getElementById('scoreTable').innerHTML = tableHTML;
+
+  // Strengths & improvements
+  const strengths = sortedDims.filter(([k, v]) => v >= 3.5);
+  const improvements = sortedDims.filter(([k, v]) => v < 3.5);
+  let siHTML = '';
+  
+  // Strengths
+  siHTML += '<div class="si-card strength"><h4>💪 你的优势领域</h4><ul>';
+  if (strengths.length > 0) {
+    strengths.forEach(([key, score]) => {
+      const dim = DIMENSIONS[key];
+      siHTML += `<li><strong>${dim.name}</strong>（${score.toFixed(2)}分）：${dim.description.substring(0, 60)}...</li>`;
+    });
+  } else {
+    siHTML += '<li>当前各维度得分均在 3.5 分以下，建议系统学习服务型领导力各维度知识，在实践中逐步提升。</li>';
+  }
+  siHTML += '</ul></div>';
+
+  // Improvements
+  siHTML += '<div class="si-card improve"><h4>📈 需要提升的领域</h4><ul>';
+  if (improvements.length > 0) {
+    improvements.forEach(([key, score]) => {
+      const dim = DIMENSIONS[key];
+      siHTML += `<li><strong>${dim.name}</strong>（${score.toFixed(2)}分）：${dim.improve}</li>`;
+    });
+  } else {
+    siHTML += '<li>所有维度得分均超过 3.5 分，表现出色！建议寻找更高层次的领导力挑战，如指导他人发展领导力。</li>';
+  }
+  siHTML += '</ul></div>';
+  document.getElementById('siGrid').innerHTML = siHTML;
+
+  // Full descriptions
+  let descHTML = '';
+  const dimOrder = ['vision', 'direction', 'persuasion', 'support', 'develop', 'recognition'];
+  dimOrder.forEach(key => {
+    const dim = DIMENSIONS[key];
+    const score = dimScores[key];
+    const isStrong = score >= 3.5;
+    descHTML += `<div class="dim-desc-block" style="border-left-color:${dim.color};${isStrong ? 'background:rgba(' + hexToRgb(dim.color) + ',0.08);' : ''}">
+      <h4 style="color:${dim.color};">${dim.icon} ${dim.name}（${dim.en}）— 平均分 ${score.toFixed(2)} / 5 ${isStrong ? '⬅ 优势' : ''}</h4>
+      <p>${dim.description}</p>
+      ${score < 3 ? '<p style="margin-top:8px;color:var(--danger);font-weight:600;">⚠️ 此维度得分低于 3 分，建议优先加强。</p>' : ''}
+    </div>`;
+  });
+  document.getElementById('dimDescriptions').innerHTML = descHTML;
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✅ 领导力概况报告已生成！');
+}
+
+// ============ RADAR CHART ============
+let radarChartInstance = null;
+
+function drawRadarChart(dimScores) {
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const dimOrder = ['vision', 'direction', 'persuasion', 'support', 'develop', 'recognition'];
+  const labels = dimOrder.map(k => DIMENSIONS[k].name);
+  const data = dimOrder.map(k => dimScores[k]);
+  const colors = dimOrder.map(k => DIMENSIONS[k].color);
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '得分',
+        data: data,
+        backgroundColor: 'rgba(119, 36, 50, 0.1)',
+        borderColor: '#772432',
+        borderWidth: 2,
+        pointBackgroundColor: colors,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 5,
+          min: 0,
+          ticks: { stepSize: 1, font: { size: 10 }, backdropColor: 'transparent', color: '#5C4A3A' },
+          pointLabels: { font: { size: 13, weight: '600' }, color: '#2D2118' },
+          grid: { color: 'rgba(119, 36, 50, 0.1)' },
+          angleLines: { color: 'rgba(119, 36, 50, 0.1)' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ============ HELPERS ============
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1],16)},${parseInt(result[2],16)},${parseInt(result[3],16)}` : '119,36,50';
+}
+
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    // Quiz
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+    document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected', 'correct', 'wrong'));
+    document.querySelectorAll('.dim-fill-item').forEach(el => el.classList.remove('selected', 'correct', 'wrong'));
+    document.querySelectorAll('.quiz-feedback').forEach(el => { el.className = 'quiz-feedback'; el.innerHTML = ''; });
+    document.getElementById('quizResultArea').style.display = 'none';
+    // Self
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+    updateProgress();
+    updateQuizProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Auto-save
+function autoSave() {
+  const state = {};
+  // Save self-assessment radios
+  for (let i = 0; i < 23; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) state[`q${i}`] = selected.value;
+  }
+  // Save quiz radios
+  for (let i = 0; i < 10; i++) {
+    const selected = document.querySelector(`input[name="quiz${i}"]:checked`);
+    if (selected) state[`quiz${i}`] = selected.value;
+  }
+  // Save quiz checkboxes
+  document.querySelectorAll('.dim-fill-item input:checked').forEach(c => {
+    const key = `fill_${c.dataset.quiz}_${c.dataset.val}`;
+    state[key] = true;
+  });
+  state.userName = document.getElementById('userName').value;
+  state.evalDate = document.getElementById('evalDate').value;
+  localStorage.setItem('cs262a_state', JSON.stringify(state));
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cs262a_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key === 'userName') document.getElementById('userName').value = value;
+      else if (key === 'evalDate') { if (value) document.getElementById('evalDate').value = value; }
+      else if (key.startsWith('quiz') && !key.startsWith('quiz-fill')) {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) {
+          radio.checked = true;
+          const qIdx = parseInt(key.replace('quiz', ''));
+          const optIdx = parseInt(value);
+          const opt = document.getElementById(`quizopt-${qIdx}-${optIdx}`);
+          if (opt) opt.classList.add('selected');
+        }
+      } else if (key.startsWith('fill_')) {
+        const checkbox = document.querySelector(`input[data-quiz="${key.split('_')[1]}"][data-val="${key.split('_').slice(2).join('_')}"]`);
+        if (checkbox) {
+          checkbox.checked = true;
+          checkbox.closest('.dim-fill-item').classList.add('selected');
+        }
+      } else if (key.startsWith('q') && !key.startsWith('quiz')) {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) radio.checked = true;
+      }
+    });
+    updateProgress();
+    updateQuizProgress();
+  } catch(e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>
