@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作风格测评 — Work Styles Assessment</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  /* four work-style colors */
+  --analytical: #3B6FB6;
+  --driver: #A6192E;
+  --expressive: #C4952E;
+  --amiable: #2D7D46;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff; padding: 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; }
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo { width: 44px; height: 44px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--primary); font-weight: 700; }
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn { padding: 9px 20px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit; }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.back-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; }
+.back-link:hover { color: #fff; text-decoration: underline; }
+
+/* CONTAINER */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* INTRO */
+.intro-card { background: var(--bg-card); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-light); }
+.intro-card h1 { font-size: 21px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .breadcrumb a { color: var(--primary); text-decoration: none; }
+.intro-card .breadcrumb a:hover { text-decoration: underline; }
+.intro-card .instruction { font-size: 14px; color: var(--text-secondary); line-height: 1.85; padding: 16px 20px; background: var(--bg-section); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
+.intro-card .instruction strong { color: var(--text); }
+
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+@media (max-width: 640px) { .info-grid { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text); background: #fff; transition: border-color var(--transition); }
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* SCALE LEGEND */
+.scale-legend { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm); margin-bottom: 22px; align-items: center; }
+.scale-legend .label { font-size: 13px; color: var(--text-secondary); margin-right: 6px; font-weight: 600; }
+.scale-item { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 5px 12px; border-radius: 20px; background: #fff; border: 1px solid var(--border-light); }
+.scale-num { width: 20px; height: 20px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+
+/* SECTION CARD */
+.section-card { background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden; }
+.section-card:hover { box-shadow: var(--shadow-lg); }
+.section-header { padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num { background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.section-desc-inline { font-size: 12px; opacity: 0.75; font-weight: 400; }
+.section-progress { font-size: 13px; opacity: 0.9; font-weight: 400; margin-left: auto; margin-right: 14px; }
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 20px 24px; }
+
+/* ROW BLOCK */
+.row-block { padding: 20px 0; border-bottom: 1px dashed var(--border-light); }
+.row-block:last-child { border-bottom: none; }
+.row-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.row-tag { width: 30px; height: 30px; border-radius: 8px; background: var(--gold-light); color: var(--primary); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.row-prompt { font-size: 15px; font-weight: 700; color: var(--text); }
+.row-status { margin-left: auto; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+.row-status.done { background: rgba(45,125,70,0.12); color: var(--success); }
+.row-status.pending { background: var(--bg-section); color: var(--text-secondary); }
+
+/* ITEM ROW */
+.item-row { display: flex; align-items: center; gap: 14px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: #fff; margin-bottom: 8px; transition: all var(--transition); }
+.item-row:hover { border-color: var(--border); background: var(--bg-section); }
+.item-row.assigned { border-color: var(--gold); background: rgba(196,149,46,0.05); }
+.item-text { flex: 1; font-size: 14px; color: var(--text); line-height: 1.6; }
+.item-text .en { display: block; font-size: 11px; color: var(--text-secondary); opacity: 0.8; margin-top: 1px; }
+.rank-group { display: flex; gap: 6px; flex-shrink: 0; }
+.rank-btn { width: 40px; height: 38px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: #fff; color: var(--text-secondary); font-size: 15px; font-weight: 700; cursor: pointer; transition: all var(--transition); font-family: inherit; display: flex; align-items: center; justify-content: center; }
+.rank-btn:hover { border-color: var(--primary); color: var(--primary); }
+.rank-btn.sel { color: #fff; border-color: transparent; }
+.rank-btn.sel.r4 { background: #772432; }
+.rank-btn.sel.r3 { background: #A85260; }
+.rank-btn.sel.r2 { background: #C4952E; }
+.rank-btn.sel.r1 { background: #B9A98C; }
+
+@media (max-width: 640px) {
+  .item-row { flex-direction: column; align-items: stretch; gap: 10px; }
+  .rank-group { justify-content: space-between; }
+  .rank-btn { flex: 1; }
+  .section-progress { display: none; }
+}
+
+/* SUBMIT */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate { padding: 14px 48px; font-size: 16px; border-radius: 30px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit; }
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* REPORT */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+.report-header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center; }
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+.report-body { background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius); padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none; }
+
+.overview-card { text-align: center; padding: 28px 20px; margin-bottom: 28px; border-radius: var(--radius); border: 3px solid var(--primary); background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08)); }
+.overview-card .primary-style-label { font-size: 14px; color: var(--text-secondary); }
+.overview-card .primary-style-name { font-size: 30px; font-weight: 800; margin: 8px 0; }
+.overview-card .primary-style-desc { font-size: 14px; color: var(--text); max-width: 680px; margin: 12px auto 0; line-height: 1.85; }
+.style-chip { display: inline-block; padding: 3px 12px; border-radius: 14px; font-size: 13px; font-weight: 700; color: #fff; margin: 0 3px; }
+
+.chart-container { max-width: 480px; margin: 0 auto 28px; padding: 20px; background: var(--bg-section); border-radius: var(--radius); }
+.chart-container h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 16px; }
+
+.dim-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .dim-cards { grid-template-columns: 1fr; } }
+.dim-card { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: var(--bg-section); }
+.dim-card .dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.dim-card .dim-name { font-size: 14px; font-weight: 700; }
+.dim-card .dim-score-val { font-size: 18px; font-weight: 800; }
+.dim-card .dim-bar-bg { height: 7px; background: var(--border-light); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+.dim-card .dim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.dim-card .dim-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+.report-block { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.report-block h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+
+.score-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 13px; }
+.score-table th, .score-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border-light); }
+.score-table th { background: var(--primary); color: #fff; font-weight: 600; }
+.score-table tr:nth-child(even) td { background: var(--bg-section); }
+.score-table .highlight-row td { background: rgba(196,149,46,0.14); font-weight: 700; }
+.table-note { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+
+/* style detail block */
+.style-block { padding: 20px 22px; border-radius: var(--radius-sm); margin-bottom: 16px; border-left: 5px solid var(--primary); background: var(--bg-section); }
+.style-block.is-primary { box-shadow: 0 0 0 2px var(--gold); }
+.style-block h4 { font-size: 16px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.style-block .primary-badge { font-size: 11px; font-weight: 700; color: var(--primary-dark); background: var(--gold); padding: 2px 10px; border-radius: 12px; }
+.style-block .style-score-inline { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.style-block .kv { margin-top: 10px; }
+.style-block .kv-row { display: flex; gap: 8px; font-size: 13px; line-height: 1.7; margin-bottom: 4px; }
+.style-block .kv-key { font-weight: 700; color: var(--text); flex-shrink: 0; min-width: 92px; }
+.style-block .kv-val { color: var(--text-secondary); }
+.style-block .sub-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 12px 0 6px; }
+.style-block ul { list-style: none; padding: 0; margin: 0; }
+.style-block li { font-size: 13px; color: var(--text-secondary); padding: 3px 0 3px 16px; position: relative; line-height: 1.65; }
+.style-block li::before { content: ""; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--primary); }
+
+.tips-note { font-size: 13px; color: var(--text-secondary); line-height: 1.8; padding: 16px 20px; background: rgba(196,149,46,0.06); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
+.tips-note strong { color: var(--text); }
+
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle, .header-actions, .scale-legend { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+  .report-section.visible { display: block !important; }
+  .section-card.collapsed .section-body { display: block !important; }
+}
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); line-height: 1.9; }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-dark); color: #fff; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">WS</div>
+      <div>
+        <div class="header-title">工作风格测评</div>
+        <div class="header-subtitle">Work Styles Assessment · Toastmasters International</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="Assessment-System.html" class="btn btn-outline btn-sm">← 返回测评系统</a>
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="intro-card">
+    <div class="breadcrumb"><a href="Assessment-System.html">测评系统</a> · 工作风格测评 · Revised June 2024</div>
+    <h1>工作风格测评</h1>
+    <div class="instruction">
+      <strong>目的：</strong>帮助你识别自己的主导工作风格，并了解四种风格（分析型、驱动型、表现型、亲和型）之间的异同。更好地认识自己，是提升协作效能的第一步。<br><br>
+      <strong>填写说明：</strong>请先阅读每一行的四个描述，然后在四个方框中依据「与你的相似程度」进行排序——<strong>每行必须把 4、3、2、1 各用一次</strong>：<br>
+      <strong>4</strong> = 最像我 &nbsp;·&nbsp; <strong>3</strong> = 很像我 &nbsp;·&nbsp; <strong>2</strong> = 有点像我 &nbsp;·&nbsp; <strong>1</strong> = 最不像我。<br><br>
+      请以你<strong>当下</strong>作为一名领导者/团队成员的真实状态作答，而非你「应该」或「希望」成为的样子。（系统会自动确保每行数字不重复：点选已被占用的数字时会与原来的项目自动交换。）
+    </div>
+    <div class="info-grid">
+      <div class="form-group"><label>你的姓名</label><input type="text" id="userName" placeholder="输入你的姓名"></div>
+      <div class="form-group"><label>评估日期</label><input type="date" id="evalDate"></div>
+    </div>
+  </div>
+
+  <div class="scale-legend">
+    <span class="label">排序说明：</span>
+    <span class="scale-item"><span class="scale-num" style="background:#772432">4</span> 最像我</span>
+    <span class="scale-item"><span class="scale-num" style="background:#A85260">3</span> 很像我</span>
+    <span class="scale-item"><span class="scale-num" style="background:#C4952E">2</span> 有点像我</span>
+    <span class="scale-item"><span class="scale-num" style="background:#B9A98C">1</span> 最不像我</span>
+  </div>
+
+  <div class="section-card" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <h2><span class="section-num">1</span> 日常特质 <span class="section-desc-inline">A–D · 平常的我</span></h2>
+      <span class="section-progress" id="prog1">0/4 行</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="body1"></div>
+  </div>
+
+  <div class="section-card" id="sec2">
+    <div class="section-header" onclick="toggleSection('sec2')">
+      <h2><span class="section-num">2</span> 压力与不适 <span class="section-desc-inline">E–H · 状态不好 / 压力下的我</span></h2>
+      <span class="section-progress" id="prog2">0/4 行</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="body2"></div>
+  </div>
+
+  <div class="section-card" id="sec3">
+    <div class="section-header" onclick="toggleSection('sec3')">
+      <h2><span class="section-num">3</span> 偏好与决策 <span class="section-desc-inline">I–L · 我的偏好、动力与决策</span></h2>
+      <span class="section-progress" id="prog3">0/4 行</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="body3"></div>
+  </div>
+
+  <div class="submit-section">
+    <button class="btn-generate" onclick="generateReport()">📊 生成工作风格报告</button>
+    <div class="submit-hint">完成全部 12 行排序后点击上方按钮，系统将自动计算四风格得分并生成雷达图与详细分析</div>
+  </div>
+
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 工作风格分析报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <div class="overview-card" id="overviewCard"></div>
+
+      <div class="chart-container">
+        <h3>四种工作风格得分雷达图</h3>
+        <canvas id="radarChart" width="440" height="440"></canvas>
+      </div>
+
+      <h3 style="font-size:16px;margin-bottom:14px;color:var(--text);">各风格得分详情</h3>
+      <div class="dim-cards" id="dimCards"></div>
+
+      <div class="report-block">
+        <h3>得分汇总表</h3>
+        <table class="score-table" id="scoreTable"></table>
+        <div class="table-note">校验：四项得分之和应等于 <strong>120</strong>，且每项应在 <strong>12–48</strong> 之间。若不符，请检查是否每行都用到了 4、3、2、1 各一次。</div>
+      </div>
+
+      <div class="report-block">
+        <h3>四种工作风格详解</h3>
+        <div id="styleDetails"></div>
+      </div>
+
+      <div class="report-block">
+        <h3>写在最后</h3>
+        <div class="tips-note">
+          <strong>请记住：</strong>每个人都是多种风格的混合体；<strong>没有哪一种风格优于另一种</strong>，每种风格都有其价值，也都有优势和局限。某一风格得分较高，说明你在很多情境下习惯使用它，但并不代表你在所有场合都会选择它。<br><br>
+          本测评基于行为模型，衡量的是<strong>偏好而非能力</strong>，不是对技能或智力的评价。风格描述应作为理解自己与他人的参考，而非给人贴标签或下定论的依据——<em>我们的风格描述了我们，但并不定义我们。</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  基于 Toastmasters International「工作风格测评」（Work Styles Assessment, Rev. June 2024）<br>
+  四风格模型源自 Dr. David Merrill（Tracom Consulting Group）· 测评结果仅保存在本地浏览器<br>
+  Powered By Kan Man Tang
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ STYLE DEFINITIONS ============
+const STYLES = {
+  analytical: {
+    name: '分析型', en: 'Analytical', color: 'var(--analytical)', hex: '#3B6FB6', tag: '蓝色', icon: '🔷',
+    focus: '解决问题',
+    value: '提出难题、避免他人贸然行动',
+    irritated: '粗心大意、含糊不清',
+    pressure: '寻求更多数据和信息',
+    traits: [
+      '有条不紊地处理信息，凡事讲究方法和系统',
+      '提供精确、准确的信息，以知识和证据来领导',
+      '决策前会权衡所有选项、充分规划',
+      '热爱数据与表格，收集大量信息并提出许多问题',
+      '专注于手头任务，重视准确与「做对」',
+      '偏好独立工作，思维敏捷但发言谨慎，不太透露个人信息'
+    ],
+    perceived: '过于严肃、过度分析、过于挑剔',
+    commTips: [
+      '系统、周全、精确，提供分析、事实和大量证据',
+      '专注任务，不要过多涉及私人话题',
+      '认可其对准确与精确的追求，给予充分的评估时间',
+      '做好重复说明的准备，并准备回答许多「如何（how）」的问题'
+    ],
+    adaptPercept: '你多半自认是那个会提出正确问题、「从不遗漏细节」的人；但要注意，别人可能视你为阻碍快速决策的人。',
+    adaptStress: '为避免变得疏离沉默，可尝试通过提问来理解到底发生了什么。',
+    adaptTrust: '别人可能因觉得你多疑、爱设障、缺乏情感而不信任你。你可以通过——适时流露情感、把追根究底的本领留到真正关键之处、允许他人在没有你意见的情况下做决定——来赢得信任。'
+  },
+  driver: {
+    name: '驱动型', en: 'Driver', color: 'var(--driver)', hex: '#A6192E', tag: '红色', icon: '🔴',
+    focus: '结果',
+    value: '让所有人聚焦于可衡量的成果',
+    irritated: '效率低下、犹豫不决',
+    pressure: '主动掌控或加强控制',
+    traits: [
+      '认知处理迅速，直接切中要点，以勇气和魄力领导',
+      '喜欢身处行动核心，主动掌控局面，有强烈主见',
+      '不轻易往心里去，重视结果与节省时间',
+      '擅长授权分工，果断且能坦然面对风险',
+      '常在问题问完之前就已作答',
+      '对私人事务保持低调'
+    ],
+    perceived: '冷漠强势、过度好胜、渴望权力',
+    commTips: [
+      '清晰、准确、理性、有条理，专注任务并谈论结果或预期结果',
+      '用事实而非情绪来讨论，提供简明精确的信息',
+      '简洁并给出选项，未被要求时不提供细节',
+      '准备回答「是什么（what）」的问题'
+    ],
+    adaptPercept: '你多半自认是那个握有计划、「目光锁定目标」的人；但要注意，别人可能觉得你有点太急、缺乏耐心。',
+    adaptStress: '为避免发火并迁怒于报信者，可尝试通过制定计划来掌控局面、减轻冲击。',
+    adaptTrust: '别人可能因觉得你咄咄逼人、直白、鲁莽或没耐心而不信任你。你可以通过——设定截止日期后放手让人各司其职、主动就你的决定征求反馈（最终结果可能更好！）——来赢得信任。'
+  },
+  expressive: {
+    name: '表现型', en: 'Expressive', color: 'var(--expressive)', hex: '#C4952E', tag: '黄色', icon: '🟡',
+    focus: '互动',
+    value: '激励和鼓舞他人尝试新方法',
+    irritated: '条条框框、一成不变',
+    pressure: '「推销」想法或变得好争辩',
+    traits: [
+      '乐于与人互动，善于激发和鼓舞他人',
+      '充满热情、精力充沛，富有感染力',
+      '富有创意、勇于尝试新方法，着眼大局',
+      '以故事、演示和视觉方式来沟通和记忆信息',
+      '乐观开朗，喜欢社交与团体活动',
+      '重视社交上的认可与友好的关系'
+    ],
+    perceived: '缺乏耐心把想法贯彻到底、散漫、情绪化',
+    commTips: [
+      '热情、开放、灵活，着力发展关系并乐于分享你的经验',
+      '多用故事、演示和视觉辅助（他们靠联想记忆信息）',
+      '聚焦大局，不要陷入细节',
+      '提出并回答「谁（who）」的问题'
+    ],
+    adaptPercept: '你多半自认是那个「跳出框框思考」、能带动所有人的热心人；但要注意，别人可能觉得你缺乏耐心去把他们的想法落实。',
+    adaptStress: '为避免变得慌乱或妄下结论，可尝试在表达感受之前先深呼吸。',
+    adaptTrust: '别人可能因觉得你散漫、情绪化、不谨慎或轻率而不信任你。你可以通过——在真正重要时对项目投以认真专注、做出有依据的决定并坚持到底、不卷入团队闲话——来赢得信任。'
+  },
+  amiable: {
+    name: '亲和型', en: 'Amiable', color: 'var(--amiable)', hex: '#2D7D46', tag: '绿色', icon: '🟢',
+    focus: '维持和谐',
+    value: '顾及他人、考虑对人的影响',
+    irritated: '麻木不体贴、缺乏耐心',
+    pressure: '变得沉默、退缩或内省',
+    traits: [
+      '富有同情心和同理心，秉持坚定的信念和价值观',
+      '用心并借助他人来领导，倾向以集体方式做决策',
+      '乐于助人、值得信赖，关心他人的感受',
+      '建立朋友网络来协助完成工作，重视被接纳、和谐与稳定',
+      '随和、偏好稳定平缓的节奏，重大决策较慢',
+      '不喜欢变化和冷漠的态度，不太敢表达相反意见'
+    ],
+    perceived: '过于关注关系与感受、优柔寡断、过于被动迁就',
+    commTips: [
+      '放松、随和、关怀、亲切，不要施压、不要催促',
+      '纳入关于团队其他成员的信息，做到有逻辑、有条理',
+      '制定带书面指引的计划，每一步都澄清并给予安心',
+      '做一个好的倾听者，并准备回答「为什么（why）」的问题'
+    ],
+    adaptPercept: '你多半自认是那个总愿意多付出、照顾所有人的人；但要注意，别人可能觉得你缺乏推动事情的干劲。',
+    adaptStress: '为避免被情绪左右，可尝试花些时间反思当下的处境。',
+    adaptTrust: '别人可能因觉得你固执、封闭、犹豫或平淡而不信任你。你可以通过——说明你需要时间思考再做决定、展现在必要时愿意改变方向、以让自己舒适的方式向他人敞开心扉——来赢得信任。'
+  }
+};
+
+// ============ ROW DATA (12 rows A-L, each item mapped to a style) ============
+const ROWS = [
+  { id:'A', sec:1, prompt:'平常的一天，我往往是……', items:[
+    {t:'好胜 / 目标明确 / 直接', en:'Competitive · Purposeful · Direct', s:'driver'},
+    {t:'善交际 / 充满活力 / 有说服力', en:'Sociable · Dynamic · Persuasive', s:'expressive'},
+    {t:'谨慎 / 精确 / 深思熟虑', en:'Cautious · Precise · Deliberate', s:'analytical'},
+    {t:'关怀他人 / 善于鼓励 / 沉稳平和', en:'Caring · Encouraging · Calm', s:'amiable'}
+  ]},
+  { id:'B', sec:1, prompt:'平常的一天，我往往是……', items:[
+    {t:'内敛 / 善于分析 / 爱追问', en:'Reserved · Analytical · Questioning', s:'analytical'},
+    {t:'有团队精神 / 轻松随和 / 善于倾听', en:'Team player · Relaxed · Good listener', s:'amiable'},
+    {t:'独立自主 / 坚定果决 / 意志坚强', en:'Self-reliant · Determined · Strong-willed', s:'driver'},
+    {t:'情感外露 / 热情洋溢 / 健谈', en:'Demonstrative · Enthusiastic · Talkative', s:'expressive'}
+  ]},
+  { id:'C', sec:1, prompt:'平常的一天，我往往是……', items:[
+    {t:'乐观 / 兴致高昂 / 轻松', en:'Optimistic · High-spirited · Relaxed', s:'expressive'},
+    {t:'果断 / 有勇气 / 敢于冒险', en:'Decisive · Courageous · Risk-taking', s:'driver'},
+    {t:'随和包容 / 谦逊 / 圆融得体', en:'Accommodating · Humble · Tactful', s:'amiable'},
+    {t:'低调内敛 / 稳定一致 / 精确', en:'Private · Consistent · Precise', s:'analytical'}
+  ]},
+  { id:'D', sec:1, prompt:'平常的一天，我往往是……', items:[
+    {t:'有条理 / 准确 / 存疑审慎', en:'Organized · Accurate · Skeptical', s:'analytical'},
+    {t:'性情平和 / 合作 / 有耐心', en:'Even-tempered · Cooperative · Patient', s:'amiable'},
+    {t:'自信 / 坚定 / 结果导向', en:'Confident · Firm · Results-oriented', s:'driver'},
+    {t:'外向 / 善于表达 / 积极投入', en:'Outgoing · Expressive · Involved', s:'expressive'}
+  ]},
+  { id:'E', sec:2, prompt:'在状态不好时，别人可能觉得我……', items:[
+    {t:'优柔寡断 / 疏离冷淡 / 防备', en:'Indecisive · Detached · Defensive', s:'analytical'},
+    {t:'慌乱 / 急躁草率 / 冲动', en:'Frantic · Hasty · Impulsive', s:'expressive'},
+    {t:'顺从 / 固执 / 消极被动', en:'Submissive · Stubborn · Passive', s:'amiable'},
+    {t:'专横 / 没耐性 / 咄咄逼人', en:'Domineering · Impatient · Aggressive', s:'driver'}
+  ]},
+  { id:'F', sec:2, prompt:'我的压力来源包括……', items:[
+    {t:'受到不公对待 / 价值观被违背 / 时间压力', en:'Unfair treatment · Violation of values · Time pressures', s:'amiable'},
+    {t:'缺乏互动或乐趣 / 被个人否定 / 缺乏灵活性', en:'No interaction or fun · Personal rejection · Lack of flexibility', s:'expressive'},
+    {t:'缺乏重点 / 犹豫不决 / 失控感', en:'Lack of focus · Indecisiveness · Feeling out of control', s:'driver'},
+    {t:'缺乏条理 / 工作质量差 / 浪费时间', en:'Lack of structure · Poor quality work · Time wasted', s:'analytical'}
+  ]},
+  { id:'G', sec:2, prompt:'在压力之下，我可能表现得……', items:[
+    {t:'好争辩 / 反应过度 / 主见过强', en:'Argumentative · Over responsive · Highly opinionated', s:'expressive'},
+    {t:'咄咄逼人 / 易怒 / 控制欲强', en:'Aggressive · Irritated · Controlling', s:'driver'},
+    {t:'退缩 / 爱评判 / 过度谨慎', en:'Withdrawn · Judgmental · Overly cautious', s:'amiable'},
+    {t:'吹毛求疵 / 疏离 / 心生怨怼', en:'Nitpicking · Distant · Resentful', s:'analytical'}
+  ]},
+  { id:'H', sec:2, prompt:'我不能接受……', items:[
+    {t:'被批评 / 杂乱无序 / 出错', en:'Criticism · Disorder · Being wrong', s:'analytical'},
+    {t:'失去控制 / 失败 / 示弱', en:'Loss of control · Failure · Vulnerability', s:'driver'},
+    {t:'不被认可 / 失去影响力 / 被忽视', en:'Disapproval · Loss of influence · Being ignored', s:'expressive'},
+    {t:'失去稳定 / 得罪他人 / 正面冲突', en:'Loss of stability · Offending others · Confrontation', s:'amiable'}
+  ]},
+  { id:'I', sec:3, prompt:'我希望别人是……', items:[
+    {t:'有亲和力、善于互动的', en:'Engaging', s:'expressive'},
+    {t:'令人愉快、和善的', en:'Pleasant', s:'amiable'},
+    {t:'精确、严谨的', en:'Precise', s:'analytical'},
+    {t:'简明扼要的', en:'Brief', s:'driver'}
+  ]},
+  { id:'J', sec:3, prompt:'我常常对……感到不耐烦', items:[
+    {t:'条条框框 / 一成不变', en:'Rules · Routine', s:'expressive'},
+    {t:'粗心大意 / 含糊不清', en:'Carelessness · Vagueness', s:'analytical'},
+    {t:'效率低下 / 犹豫不决', en:'Inefficiency · Indecision', s:'driver'},
+    {t:'麻木不体贴 / 缺乏耐心', en:'Insensitivity · Impatience', s:'amiable'}
+  ]},
+  { id:'K', sec:3, prompt:'激励我的是……', items:[
+    {t:'稳定的环境 / 真诚的赏识 / 助人的机会', en:'Stable environments · Sincere appreciation · Opportunities to help', s:'amiable'},
+    {t:'社交上的认可 / 团体活动 / 友好的关系', en:'Social recognition · Group activities · Friendly relationships', s:'expressive'},
+    {t:'权力与权威 / 竞争 / 获胜', en:'Power and authority · Competition · Winning', s:'driver'},
+    {t:'解决问题 / 追求质量 / 发挥专长的机会', en:'Solving problems · Attention to quality · Utilizing expertise', s:'analytical'}
+  ]},
+  { id:'L', sec:3, prompt:'我的决策风格可以描述为……', items:[
+    {t:'快速决策，迅速推动落实', en:'I decide quickly and make things happen fast', s:'driver'},
+    {t:'也许需要时间，但我的决定会是正确的', en:'It may take time, but my decision will be right', s:'analytical'},
+    {t:'快速决策，充满热情地投入', en:'I decide quickly and jump in with enthusiasm', s:'expressive'},
+    {t:'也许需要时间，但我的决定会是公平的', en:'It may take time, but my decision will be fair', s:'amiable'}
+  ]}
+];
+
+// ============ STATE ============
+const RANK_LABELS = { 4:'最像我', 3:'很像我', 2:'有点像我', 1:'最不像我' };
+let rankState = {}; // key `${rowId}-${itemIdx}` => rank (1-4)
+
+// ============ BUILD ROWS ============
+function buildSections() {
+  [1,2,3].forEach(secNum => {
+    let html = '';
+    ROWS.filter(r => r.sec === secNum).forEach(row => {
+      html += `<div class="row-block" id="row-${row.id}">
+        <div class="row-head">
+          <span class="row-tag">${row.id}</span>
+          <span class="row-prompt">${row.prompt}</span>
+          <span class="row-status pending" id="status-${row.id}">未完成</span>
+        </div>
+        <div class="row-items">`;
+      row.items.forEach((item, i) => {
+        html += `<div class="item-row" id="item-${row.id}-${i}">
+          <div class="item-text">${item.t}<span class="en">${item.en}</span></div>
+          <div class="rank-group">`;
+        [4,3,2,1].forEach(r => {
+          html += `<button type="button" class="rank-btn r${r}" id="rb-${row.id}-${i}-${r}" title="${RANK_LABELS[r]}" onclick="setRank('${row.id}',${i},${r})">${r}</button>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div></div>`;
+    });
+    document.getElementById('body' + secNum).innerHTML = html;
+  });
+}
+
+function setRank(rowId, itemIdx, rank) {
+  const key = rowId + '-' + itemIdx;
+  const prev = rankState[key];
+  if (prev === rank) { delete rankState[key]; renderRow(rowId); updateProgress(); autoSave(); return; }
+  // swap: if another item in this row already has this rank, give it the previous value
+  for (let i = 0; i < 4; i++) {
+    const k2 = rowId + '-' + i;
+    if (i !== itemIdx && rankState[k2] === rank) {
+      if (prev) rankState[k2] = prev; else delete rankState[k2];
+    }
+  }
+  rankState[key] = rank;
+  renderRow(rowId);
+  updateProgress();
+  autoSave();
+}
+
+function renderRow(rowId) {
+  const row = ROWS.find(r => r.id === rowId);
+  row.items.forEach((item, i) => {
+    const key = rowId + '-' + i;
+    const cur = rankState[key];
+    const itemEl = document.getElementById(`item-${rowId}-${i}`);
+    if (itemEl) itemEl.classList.toggle('assigned', !!cur);
+    [4,3,2,1].forEach(r => {
+      const btn = document.getElementById(`rb-${rowId}-${i}-${r}`);
+      if (btn) btn.classList.toggle('sel', cur === r);
+    });
+  });
+  // status
+  const assigned = row.items.filter((_, i) => rankState[rowId + '-' + i]).length;
+  const st = document.getElementById('status-' + rowId);
+  if (st) {
+    if (assigned === 4) { st.className = 'row-status done'; st.textContent = '✓ 已完成'; }
+    else { st.className = 'row-status pending'; st.textContent = `${assigned}/4`; }
+  }
+}
+
+function rowComplete(row) {
+  const ranks = row.items.map((_, i) => rankState[row.id + '-' + i]).filter(v => v);
+  return ranks.length === 4 && new Set(ranks).size === 4;
+}
+
+function updateProgress() {
+  [1,2,3].forEach(secNum => {
+    const rows = ROWS.filter(r => r.sec === secNum);
+    const done = rows.filter(rowComplete).length;
+    const el = document.getElementById('prog' + secNum);
+    if (el) el.textContent = `${done}/${rows.length} 行`;
+  });
+}
+
+// ============ TOGGLE ============
+function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// ============ GENERATE REPORT ============
+let radarChartInstance = null;
+
+function generateReport() {
+  const incomplete = ROWS.filter(r => !rowComplete(r));
+  if (incomplete.length > 0) {
+    showToast(`还有 ${incomplete.length} 行未完成排序：${incomplete.map(r => r.id).join('、')}`);
+    // expand section containing first incomplete row and scroll
+    const sec = document.getElementById('sec' + incomplete[0].sec);
+    if (sec) sec.classList.remove('collapsed');
+    const rowEl = document.getElementById('row-' + incomplete[0].id);
+    if (rowEl) rowEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // compute style scores
+  const scores = { analytical:0, driver:0, expressive:0, amiable:0 };
+  ROWS.forEach(row => {
+    row.items.forEach((item, i) => {
+      scores[item.s] += rankState[row.id + '-' + i];
+    });
+  });
+  const total = scores.analytical + scores.driver + scores.expressive + scores.amiable;
+
+  const order = ['analytical','driver','expressive','amiable'];
+  const sorted = order.slice().sort((a,b) => scores[b] - scores[a]);
+  const primaryKey = sorted[0];
+  const primary = STYLES[primaryKey];
+
+  // meta
+  const userName = document.getElementById('userName').value.trim();
+  const evalDate = document.getElementById('evalDate').value;
+  let meta = '';
+  if (userName) meta += `评估人：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}  ·  总分：${total}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // overview
+  const secondKey = sorted[1];
+  const isTie = scores[sorted[0]] === scores[sorted[1]];
+  let overviewHTML = `
+    <div class="primary-style-label">你的主导工作风格</div>
+    <div class="primary-style-name" style="color:${primary.hex};">${primary.icon} ${primary.name} <span style="font-size:16px;font-weight:600;color:var(--text-secondary);">${primary.en}（${primary.tag}）· ${scores[primaryKey]} 分</span></div>
+    <div class="primary-style-desc">
+      <strong>主要焦点：</strong>${primary.focus}。作为「${primary.name}」，你${primary.traits[0]}、${primary.traits[1]}。你对团队的价值在于${primary.value}。
+      ${isTie ? `你的 <strong>${STYLES[secondKey].name}</strong> 得分与之相同（并列主导），说明你能灵活地在两种风格间切换。` : `你的次要风格是 <span class="style-chip" style="background:${STYLES[secondKey].hex};">${STYLES[secondKey].name} ${scores[secondKey]}分</span>，二者共同构成你的行为倾向。`}
+    </div>`;
+  document.getElementById('overviewCard').innerHTML = overviewHTML;
+
+  // radar
+  drawRadar(scores);
+
+  // dimension cards (sorted)
+  let cardsHTML = '';
+  sorted.forEach(key => {
+    const st = STYLES[key];
+    const pct = ((scores[key] - 12) / (48 - 12)) * 100; // 12-48 range
+    const isPrimary = key === primaryKey;
+    cardsHTML += `<div class="dim-card" style="${isPrimary ? 'border:2px solid ' + st.hex + ';' : ''}">
+      <div class="dim-header">
+        <span class="dim-name" style="color:${st.hex};">${st.icon} ${st.name} ${isPrimary ? '⭐' : ''}</span>
+        <span class="dim-score-val" style="color:${st.hex};">${scores[key]}</span>
+      </div>
+      <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:${Math.max(pct,3)}%;background:${st.hex};"></div></div>
+      <div class="dim-detail">${st.en} · ${st.tag} · 主要焦点：${st.focus}（区间 12–48）</div>
+    </div>`;
+  });
+  document.getElementById('dimCards').innerHTML = cardsHTML;
+
+  // score table
+  let tHTML = '<thead><tr><th>工作风格</th><th>颜色</th><th>主要焦点</th><th>得分</th><th>占比</th><th>排名</th></tr></thead><tbody>';
+  sorted.forEach((key, idx) => {
+    const st = STYLES[key];
+    tHTML += `<tr${idx===0?' class="highlight-row"':''}>
+      <td style="font-weight:600;color:${st.hex};">${st.icon} ${st.name}<br><span style="font-size:11px;color:var(--text-secondary);font-weight:400;">${st.en}</span></td>
+      <td>${st.tag}</td>
+      <td>${st.focus}</td>
+      <td style="font-weight:800;color:${st.hex};">${scores[key]}</td>
+      <td>${(scores[key]/total*100).toFixed(1)}%</td>
+      <td>${idx===0?'主导 ⭐':'第 '+(idx+1)}</td>
+    </tr>`;
+  });
+  tHTML += `<tr class="highlight-row"><td colspan="3" style="text-align:right;">合计</td><td style="font-weight:800;">${total}</td><td>100%</td><td>${total===120?'✓ 校验通过':'⚠ 请检查'}</td></tr>`;
+  tHTML += '</tbody>';
+  document.getElementById('scoreTable').innerHTML = tHTML;
+
+  // style details (all four, primary first)
+  let dHTML = '';
+  sorted.forEach(key => {
+    const st = STYLES[key];
+    const isPrimary = key === primaryKey;
+    dHTML += `<div class="style-block ${isPrimary ? 'is-primary' : ''}" style="border-left-color:${st.hex};${isPrimary ? 'background:rgba('+hexToRgb(st.hex)+',0.06);' : ''}">
+      <h4 style="color:${st.hex};">${st.icon} ${st.name}（${st.en} · ${st.tag}）
+        ${isPrimary ? '<span class="primary-badge">你的主导风格</span>' : ''}
+        <span class="style-score-inline">· 得分 ${scores[key]}</span>
+      </h4>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">主要焦点</span><span class="kv-val">${st.focus}</span></div>
+        <div class="kv-row"><span class="kv-key">对团队的价值</span><span class="kv-val">${st.value}</span></div>
+        <div class="kv-row"><span class="kv-key">容易被激怒于</span><span class="kv-val">${st.irritated}</span></div>
+        <div class="kv-row"><span class="kv-key">压力下的反应</span><span class="kv-val">${st.pressure}</span></div>
+      </div>
+      <div class="sub-title">识别特征</div>
+      <ul>${st.traits.map(x => `<li>${x}</li>`).join('')}</ul>
+      <div class="sub-title">可能被他人误解为</div>
+      <div class="kv-val" style="font-size:13px;">${st.perceived}</div>
+      <div class="sub-title">与这种风格的人沟通时</div>
+      <ul>${st.commTips.map(x => `<li>${x}</li>`).join('')}</ul>
+      ${isPrimary ? `
+      <div class="sub-title" style="color:${st.hex};">💡 调整你主导风格的建议</div>
+      <div class="kv"><div class="kv-row"><span class="kv-key">自我认知</span><span class="kv-val">${st.adaptPercept}</span></div>
+      <div class="kv-row"><span class="kv-key">压力反应</span><span class="kv-val">${st.adaptStress}</span></div>
+      <div class="kv-row"><span class="kv-key">建立信任</span><span class="kv-val">${st.adaptTrust}</span></div></div>` : ''}
+    </div>`;
+  });
+  document.getElementById('styleDetails').innerHTML = dHTML;
+
+  const rs = document.getElementById('reportSection');
+  rs.classList.add('visible');
+  rs.scrollIntoView({ behavior:'smooth', block:'start' });
+  showToast(`✅ 报告已生成 · 主导风格：${primary.name}`);
+}
+
+function drawRadar(scores) {
+  if (radarChartInstance) radarChartInstance.destroy();
+  const order = ['analytical','driver','expressive','amiable'];
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: order.map(k => STYLES[k].name),
+      datasets: [{
+        label: '得分',
+        data: order.map(k => scores[k]),
+        backgroundColor: 'rgba(119, 36, 50, 0.12)',
+        borderColor: '#772432',
+        borderWidth: 2,
+        pointBackgroundColor: order.map(k => STYLES[k].hex),
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: false, min: 0, max: 48,
+          ticks: { stepSize: 12, font: { size: 10 }, backdropColor: 'transparent', color: '#5C4A3A' },
+          pointLabels: { font: { size: 14, weight: '700' }, color: '#2D2118' },
+          grid: { color: 'rgba(119, 36, 50, 0.12)' },
+          angleLines: { color: 'rgba(119, 36, 50, 0.12)' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ============ HELPERS ============
+function hexToRgb(hex) {
+  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return r ? `${parseInt(r[1],16)},${parseInt(r[2],16)},${parseInt(r[3],16)}` : '119,36,50';
+}
+
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    rankState = {};
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+    ROWS.forEach(r => renderRow(r.id));
+    updateProgress();
+    localStorage.removeItem('workstyles_state');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ============ AUTO SAVE ============
+function autoSave() {
+  const state = { ranks: rankState, userName: document.getElementById('userName').value, evalDate: document.getElementById('evalDate').value };
+  localStorage.setItem('workstyles_state', JSON.stringify(state));
+}
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('workstyles_state') || '{}');
+    if (state.ranks) rankState = state.ranks;
+    if (state.userName) document.getElementById('userName').value = state.userName;
+    if (state.evalDate) document.getElementById('evalDate').value = state.evalDate;
+  } catch(e) {}
+}
+
+// ============ INIT ============
+buildSections();
+autoRestore();
+if (!document.getElementById('evalDate').value) document.getElementById('evalDate').valueAsDate = new Date();
+ROWS.forEach(r => renderRow(r.id));
+updateProgress();
+document.getElementById('userName').addEventListener('change', autoSave);
+document.getElementById('evalDate').addEventListener('change', autoSave);
+</script>
+
+</body>
+</html>
