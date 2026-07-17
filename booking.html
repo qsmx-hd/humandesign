@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>预约分析师咨询 · 勤思妙享</title>
+<style>
+:root {
+  --purple: #6c5ce7;
+  --purple-light: #a29bfe;
+  --pink: #fd79a8;
+  --teal: #00cec9;
+  --orange: #e17055;
+  --yellow: #fdcb6e;
+  --green: #00b894;
+  --blue: #0984e3;
+  --bg: #f7f6ff;
+  --white: #ffffff;
+  --text: #2d3436;
+  --text-2: #636e72;
+  --border: #e4e1f7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+
+/* ===== NAV ===== */
+.top-nav{background:linear-gradient(135deg,#6c5ce7,#a29bfe,#fd79a8);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(108,92,231,0.3);}
+.nav-inner{display:flex;align-items:center;gap:0;overflow-x:auto;padding:0 16px;}
+.nav-logo{color:white;font-weight:800;font-size:15px;padding:14px 20px 14px 0;white-space:nowrap;border-right:1px solid rgba(255,255,255,0.2);margin-right:8px;flex-shrink:0;}
+.nav-btn{color:rgba(255,255,255,0.85);font-size:13px;padding:14px 14px;cursor:pointer;white-space:nowrap;transition:all 0.2s;border-radius:0;border:none;background:none;font-family:inherit;text-decoration:none;display:inline-block;}
+.nav-btn:hover,.nav-btn.active{color:white;background:rgba(255,255,255,0.15);}
+
+/* ===== HERO ===== */
+.series-hero{background:linear-gradient(135deg,#2d1b69 0%,#6c5ce7 50%,#fd79a8 100%);color:white;padding:64px 40px 56px;text-align:center;position:relative;overflow:hidden;}
+.series-hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,0.04);top:-150px;right:-100px;}
+.series-hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.05);bottom:-80px;left:-50px;}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 18px;font-size:12px;letter-spacing:2px;margin-bottom:20px;}
+.series-hero h1{font-size:40px;font-weight:900;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,0.2);}
+.series-hero p{font-size:16px;opacity:0.9;margin-bottom:30px;max-width:560px;margin-left:auto;margin-right:auto;}
+.hero-steps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.hero-step{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:6px 16px;font-size:13px;}
+
+/* ===== LAYOUT ===== */
+.bk-wrap{max-width:920px;margin:0 auto;padding:28px 20px 10px;}
+.bk-section{background:white;border-radius:20px;padding:28px;margin-bottom:22px;border:1px solid var(--border);box-shadow:0 2px 16px rgba(108,92,231,0.07);}
+.bk-section-title{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.bk-section-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;}
+.bk-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));color:white;font-size:13px;font-weight:800;flex-shrink:0;}
+
+/* ===== ANALYST ===== */
+.bk-analyst{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.bk-avatar{width:88px;height:88px;border-radius:24px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:36px;color:white;font-weight:800;flex-shrink:0;box-shadow:0 6px 20px rgba(108,92,231,0.3);}
+.bk-analyst-info{flex:1;min-width:240px;}
+.bk-analyst-name{font-size:23px;font-weight:800;}
+.bk-analyst-title{font-size:14px;color:var(--purple);font-weight:700;margin:4px 0 10px;}
+.bk-analyst-meta{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--text-2);}
+.bk-analyst-meta b{color:var(--text);}
+.bk-rating{color:#f39c12;font-weight:700;}
+.bk-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.bk-tag{font-size:12px;font-weight:600;padding:4px 12px;border-radius:10px;background:#f3f0ff;color:#5a4fcf;border:1px solid #ddd5ff;}
+
+/* ===== TYPE CARDS ===== */
+.bk-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.bk-type{border:2px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;background:white;position:relative;}
+.bk-type:hover{border-color:var(--purple-light);}
+.bk-type.active{border-color:var(--purple);background:#f7f5ff;box-shadow:0 4px 18px rgba(108,92,231,0.15);}
+.bk-type-check{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:var(--border);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;transition:all .2s;}
+.bk-type.active .bk-type-check{background:linear-gradient(135deg,var(--purple),var(--pink));}
+.bk-type-name{font-size:16px;font-weight:800;margin-bottom:4px;padding-right:26px;}
+.bk-type-dur{font-size:13px;color:var(--text-2);}
+.bk-type-desc{font-size:12px;color:var(--text-2);margin-top:8px;line-height:1.6;}
+.bk-type-price{font-size:21px;font-weight:900;color:var(--purple);margin-top:10px;}
+.bk-type-price small{font-size:12px;color:var(--text-2);font-weight:600;}
+
+/* ===== DATE CHIPS ===== */
+.bk-dates{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;}
+.bk-date{flex:0 0 auto;width:76px;border:2px solid var(--border);border-radius:14px;padding:12px 0;text-align:center;cursor:pointer;transition:all .2s;background:white;}
+.bk-date:hover:not(.disabled){border-color:var(--purple-light);}
+.bk-date.active{background:linear-gradient(135deg,var(--purple),var(--pink));border-color:transparent;color:white;box-shadow:0 4px 16px rgba(108,92,231,0.25);}
+.bk-date.disabled{opacity:.42;cursor:not-allowed;}
+.bk-date .wd{font-size:12px;font-weight:700;}
+.bk-date .dm{font-size:19px;font-weight:900;margin-top:2px;}
+.bk-date .mo{font-size:10px;opacity:.7;}
+.bk-date .today-flag{font-size:10px;margin-top:2px;color:var(--purple);font-weight:700;}
+.bk-date.active .today-flag{color:white;}
+
+/* ===== SLOTS ===== */
+.bk-slot-group{margin-bottom:14px;}
+.bk-group-label{font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.bk-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px;}
+.bk-slot{border:2px solid var(--border);border-radius:14px;padding:14px 0;text-align:center;cursor:pointer;transition:all .2s;background:white;font-weight:700;font-size:15px;}
+.bk-slot:hover:not(.disabled){border-color:var(--purple-light);transform:translateY(-2px);}
+.bk-slot.active{background:linear-gradient(135deg,var(--purple),var(--pink));border-color:transparent;color:white;box-shadow:0 4px 16px rgba(108,92,231,0.25);}
+.bk-slot.disabled{background:#f0f0f4;color:#b0b0b8;cursor:not-allowed;border-color:#ececf0;font-weight:600;font-size:13px;}
+.bk-lunch{text-align:center;font-size:12px;color:var(--text-2);padding:9px;background:#faf8ff;border-radius:10px;margin:6px 0;border:1px dashed #e0d5ff;}
+
+/* ===== FORM ===== */
+.bk-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.bk-field{display:flex;flex-direction:column;gap:6px;}
+.bk-field.full{grid-column:1/-1;}
+.bk-field label{font-size:13px;font-weight:700;color:var(--text);}
+.bk-field .req{color:var(--pink);}
+.bk-input,.bk-select,.bk-textarea{font-family:inherit;font-size:14px;padding:11px 14px;border:1.5px solid var(--border);border-radius:12px;background:#faf9ff;color:var(--text);transition:border .2s;width:100%;}
+.bk-input:focus,.bk-select:focus,.bk-textarea:focus{outline:none;border-color:var(--purple);}
+.bk-textarea{resize:vertical;min-height:84px;}
+
+/* ===== SUMMARY ===== */
+.bk-summary{background:linear-gradient(135deg,#f3f0ff,#fff0f7);border-radius:16px;padding:22px;border:1px solid #e4d9ff;margin-top:22px;}
+.bk-summary-title{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.bk-summary-row{display:flex;justify-content:space-between;font-size:14px;padding:9px 0;border-bottom:1px dashed #e0d5ff;}
+.bk-summary-row:last-child{border-bottom:none;}
+.bk-summary-row .k{color:var(--text-2);}
+.bk-summary-row .v{font-weight:700;text-align:right;}
+.bk-summary-row .v.empty{color:#bbb;font-weight:500;}
+
+/* ===== SUBMIT ===== */
+.bk-submit{width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--purple),var(--pink));color:white;font-size:16px;font-weight:800;cursor:pointer;margin-top:18px;transition:all .2s;font-family:inherit;}
+.bk-submit:hover:not(:disabled){filter:brightness(1.05);transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,92,231,0.3);}
+.bk-submit:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ===== MY BOOKINGS ===== */
+.bk-my-list{display:flex;flex-direction:column;gap:12px;}
+.bk-empty{text-align:center;color:var(--text-2);font-size:14px;padding:30px 0;}
+.bk-my-item{display:flex;justify-content:space-between;align-items:center;background:#faf9ff;border:1px solid var(--border);border-radius:14px;padding:16px 18px;flex-wrap:wrap;gap:10px;}
+.bk-my-info{font-size:14px;}
+.bk-my-info .d{font-weight:800;font-size:16px;}
+.bk-my-info .t{color:var(--purple);font-weight:700;margin-left:8px;}
+.bk-my-info .sub{color:var(--text-2);font-size:13px;margin-top:4px;}
+.bk-my-cancel{font-size:13px;color:var(--pink);background:#fff0f6;border:none;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:700;font-family:inherit;}
+.bk-my-cancel:hover{background:#ffe0ee;}
+
+/* ===== NOTES ===== */
+.bk-notes{font-size:13px;color:var(--text-2);line-height:1.9;padding-left:0;list-style:none;}
+.bk-notes li{margin-bottom:8px;padding-left:24px;position:relative;}
+.bk-notes li::before{content:'✦';position:absolute;left:0;color:var(--purple);}
+
+/* ===== MODAL ===== */
+.bk-modal-mask{position:fixed;inset:0;background:rgba(45,27,105,0.5);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+.bk-modal-mask.show{display:flex;}
+.bk-modal{background:white;border-radius:22px;padding:36px 30px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:pop .3s ease;}
+@keyframes pop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+.bk-modal .ic{font-size:56px;margin-bottom:14px;}
+.bk-modal h3{font-size:22px;font-weight:900;margin-bottom:10px;}
+.bk-modal p{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:8px;}
+.bk-modal .ok{margin-top:20px;}
+
+/* ===== FOOTER ===== */
+.series-footer{background:linear-gradient(135deg,#2d1b69,#6c5ce7);color:white;padding:50px 40px;text-align:center;margin-top:50px;}
+.series-footer h2{font-size:24px;font-weight:800;margin-bottom:12px;}
+.series-footer p{opacity:0.8;font-size:14px;margin-bottom:24px;}
+
+/* ===== MOBILE ===== */
+@media (max-width:640px){
+  .bk-form-grid{grid-template-columns:1fr;}
+  .bk-analyst{flex-direction:column;text-align:center;}
+  .bk-analyst-meta{justify-content:center;}
+  .bk-tags{justify-content:center;}
+  .series-hero h1{font-size:30px;}
+  .bk-section{padding:22px 18px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="top-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">勤思妙享</div>
+    <a class="nav-btn" href="index.html">首页</a>
+    <a class="nav-btn" href="beginner.html">入门</a>
+    <a class="nav-btn" href="intermediate.html">进阶</a>
+    <a class="nav-btn" href="advanced.html">高阶</a>
+    <a class="nav-btn" href="human-design-guide.html">指南</a>
+    <a class="nav-btn active" href="booking.html">预约咨询</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="series-hero">
+  <div class="hero-badge">1 对 1 人类图解读</div>
+  <h1>预约分析师咨询</h1>
+  <p>把你的类型、权威与人生角色，交给专业分析师，用一次深度对话照见自己。</p>
+  <div class="hero-steps">
+    <span class="hero-step">① 选咨询师</span>
+    <span class="hero-step">② 选日期时段</span>
+    <span class="hero-step">③ 填咨询信息</span>
+    <span class="hero-step">④ 确认预约</span>
+  </div>
+</header>
+
+<main class="bk-wrap">
+
+  <!-- 步骤 1：分析师 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">1</span>你的分析师</div>
+    <div class="bk-section-sub">本时段由以下认证分析师为你服务</div>
+    <div class="bk-analyst">
+      <div class="bk-avatar">邓</div>
+      <div class="bk-analyst-info">
+        <div class="bk-analyst-name">邓勤敏</div>
+        <div class="bk-analyst-title">人类图认证分析师 · 认证讲师</div>
+        <div class="bk-analyst-meta">
+          <span>从业 <b>8 年</b></span>
+          <span>已解读 <b>1200+</b> 案例</span>
+          <span class="bk-rating">★ 4.9 满意度</span>
+        </div>
+        <div class="bk-tags">
+          <span class="bk-tag">类型与权威</span>
+          <span class="bk-tag">关系动力</span>
+          <span class="bk-tag">人生角色</span>
+          <span class="bk-tag">轮回交叉</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 步骤 2：咨询类型 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">2</span>选择咨询类型</div>
+    <div class="bk-section-sub">不同咨询目标，对应不同时长与深度</div>
+    <div class="bk-types" id="bkTypes">
+      <div class="bk-type active" data-type="首次解读" data-dur="90分钟" data-price="599">
+        <div class="bk-type-check">✓</div>
+        <div class="bk-type-name">首次解读咨询</div>
+        <div class="bk-type-dur">时长 90 分钟</div>
+        <div class="bk-type-desc">从零开始梳理你的类型、权威、人生角色与定义，建立完整自我认知框架。</div>
+        <div class="bk-type-price">¥599 <small>/ 次</small></div>
+      </div>
+      <div class="bk-type" data-type="深度解读" data-dur="60分钟" data-price="399">
+        <div class="bk-type-check">✓</div>
+        <div class="bk-type-name">深度解读咨询</div>
+        <div class="bk-type-dur">时长 60 分钟</div>
+        <div class="bk-type-desc">聚焦某一主题（关系 / 职业 / 决策）做深入拆解，适合已初步了解自己的你。</div>
+        <div class="bk-type-price">¥399 <small>/ 次</small></div>
+      </div>
+      <div class="bk-type" data-type="跟进咨询" data-dur="30分钟" data-price="199">
+        <div class="bk-type-check">✓</div>
+        <div class="bk-type-name">跟进咨询</div>
+        <div class="bk-type-dur">时长 30 分钟</div>
+        <div class="bk-type-desc">针对上次咨询的落地实践做回顾与微调，短平快地解决当下卡点。</div>
+        <div class="bk-type-price">¥199 <small>/ 次</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 步骤 3：日期 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">3</span>选择日期</div>
+    <div class="bk-section-sub">可预约未来 14 天，工作时间 09:00–12:00 / 14:00–18:00</div>
+    <div class="bk-dates" id="bkDates"></div>
+  </section>
+
+  <!-- 步骤 4：时段 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">4</span>选择时段</div>
+    <div class="bk-section-sub" id="bkSlotHint">请先选择上方日期</div>
+    <div id="bkSlots"></div>
+  </section>
+
+  <!-- 步骤 5：信息 + 确认 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">5</span>填写咨询信息</div>
+    <div class="bk-section-sub">信息仅用于本次预约确认，分析师会提前为你准备</div>
+    <div class="bk-form-grid">
+      <div class="bk-field">
+        <label>姓名 <span class="req">*</span></label>
+        <input class="bk-input" id="bkName" placeholder="你的称呼">
+      </div>
+      <div class="bk-field">
+        <label>手机号 <span class="req">*</span></label>
+        <input class="bk-input" id="bkPhone" placeholder="11 位手机号" inputmode="numeric" maxlength="11">
+      </div>
+      <div class="bk-field">
+        <label>微信号</label>
+        <input class="bk-input" id="bkWechat" placeholder="选填，便于发送资料">
+      </div>
+      <div class="bk-field">
+        <label>你的类型</label>
+        <select class="bk-select" id="bkTypeSel">
+          <option value="">暂不清楚 / 待解读</option>
+          <option>显示者</option>
+          <option>生产者</option>
+          <option>显示生产者</option>
+          <option>投射者</option>
+          <option>反映者</option>
+        </select>
+      </div>
+      <div class="bk-field full">
+        <label>想重点探讨的主题</label>
+        <textarea class="bk-textarea" id="bkTopic" placeholder="例如：职场中的决策困惑、亲密关系里的沟通模式、是否该换赛道……"></textarea>
+      </div>
+    </div>
+
+    <div class="bk-summary">
+      <div class="bk-summary-title">📋 预约摘要</div>
+      <div class="bk-summary-row"><span class="k">咨询类型</span><span class="v" id="sumType">首次解读咨询（90分钟）</span></div>
+      <div class="bk-summary-row"><span class="k">预约日期</span><span class="v empty" id="sumDate">未选择</span></div>
+      <div class="bk-summary-row"><span class="k">预约时段</span><span class="v empty" id="sumTime">未选择</span></div>
+      <div class="bk-summary-row"><span class="k">咨询费用</span><span class="v" id="sumPrice">¥599</span></div>
+    </div>
+
+    <button class="bk-submit" id="bkSubmit" disabled>请选择日期与时段</button>
+  </section>
+
+  <!-- 我的预约 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">★</span>我的预约</div>
+    <div class="bk-section-sub">本设备本地保存，可随时查看或取消</div>
+    <div class="bk-my-list" id="bkMyList"></div>
+  </section>
+
+  <!-- 须知 -->
+  <section class="bk-section">
+    <div class="bk-section-title"><span class="bk-num">i</span>预约须知</div>
+    <ul class="bk-notes">
+      <li>咨询前请准备好你的人类图（出生日期、时间、地点越精确越好），首次解读将以此为基准。</li>
+      <li>预约成功后，分析师会在 24 小时内通过你留的手机号 / 微信与你确认，并发送线上会议链接。</li>
+      <li>如需取消或改期，请至少提前 <b>24 小时</b> 操作；不足 24 小时取消将视为爽约，名额不予保留。</li>
+      <li>每段咨询为整点开始、整点结束的 1 小时单元；迟到不补时，请提前 5 分钟进入会议室。</li>
+      <li>午休时间 12:00–14:00 不安排咨询，晚间不开放预约。</li>
+    </ul>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="series-footer">
+  <h2>用人类图，读懂你自己</h2>
+  <p>勤思妙享 · 人类图入门到精通系列</p>
+</footer>
+
+<!-- ===== MODAL ===== -->
+<div class="bk-modal-mask" id="bkModal">
+  <div class="bk-modal">
+    <div class="ic">🎉</div>
+    <h3>预约提交成功</h3>
+    <p id="bkModalText">我们已收到你的预约，分析师会尽快与你确认。</p>
+    <p style="font-size:13px;color:var(--text-2);">请保持手机畅通，注意查收确认信息。</p>
+    <button class="bk-submit ok" id="bkModalOk">好的，我知道了</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 状态 ---------- */
+  var state = {
+    type: { name: '首次解读咨询', dur: '90分钟', price: 599 },
+    date: null,      // {y,m,d,label,iso}
+    time: null,      // '09:00' ...
+    selectedSlotEl: null
+  };
+
+  var WEEK = ['周日','周一','周二','周三','周四','周五','周六'];
+  var MORNING = ['09:00','10:00','11:00'];
+  var AFTERNOON = ['14:00','15:00','16:00','17:00'];
+  var ALL_SLOTS = MORNING.concat(AFTERNOON);
+  var STORE_KEY = 'hd_consult_bookings';
+
+  /* ========== 预约提醒推送配置（填好 token 即生效，留空不影响提交） ========== */
+  var NOTIFY = {
+    provider: 'pushplus',   // 'pushplus'（推荐，微信扫码即用）或 'serverchan'
+    token: '2bec6da8124046899afe747aa7b1d45e'   // ← 在这里粘贴你的推送 token；留空则不推送
+  };
+  function notifyOwner(b){
+    if(!NOTIFY.token) return;              // 未配置 token：静默跳过，不影响用户
+    var title = '【新预约】' + b.name + ' · ' + b.label + ' ' + b.time;
+    var rows = [
+      '👤 称呼：' + b.name,
+      '📱 手机：' + b.phone,
+      '💬 微信：' + (b.wechat || '—'),
+      '🔮 咨询类型：' + b.type + '（' + b.dur + ' · ¥' + b.price + '）',
+      '📅 预约时段：' + b.label + ' ' + b.time,
+      '📝 咨询主题：' + (b.topic || '—'),
+      '⏰ 提交时间：' + new Date().toLocaleString('zh-CN')
+    ];
+    var url;
+    if(NOTIFY.provider === 'serverchan'){
+      url = 'https://sctapi.ftqq.com/' + NOTIFY.token + '.send'
+          + '?title=' + encodeURIComponent(title)
+          + '&desp='  + encodeURIComponent(rows.join('\n\n'));
+    } else {
+      url = 'https://www.pushplus.plus/send'
+          + '?token='   + encodeURIComponent(NOTIFY.token)
+          + '&title='   + encodeURIComponent(title)
+          + '&content=' + encodeURIComponent(rows.join('<br>'))
+          + '&template=html';
+    }
+    // 主推送：Image 信标（GET），跨域与 file:// 来源均兼容，不受 CORS 限制，浏览器必定发起请求。
+    // fetch(no-cors) 在 file:// 来源下常被浏览器拦截，且拿到的是 opaque 响应无法感知成败，故仅作兜底。
+    try { console.log('[预约推送] 已向分析师微信发送提醒：', title); } catch(e){}
+    var _img = new Image();
+    _img.onerror = function(){ try { fetch(url, { mode:'no-cors' }); } catch(e){} };
+    _img.src = url;
+  }
+
+  /* ---------- 工具 ---------- */
+  function $(id){ return document.getElementById(id); }
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function hashStr(s){ var h=2166136261; for(var i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = (h*16777619)>>>0; } return h>>>0; }
+  function sameDay(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+  function loadBookings(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveBookings(arr){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); } catch(e){}
+  }
+
+  /* 依据日期确定性地"预占"若干时段，模拟真实已约满 */
+  function seededBooked(iso){
+    var h = hashStr(iso);
+    var booked = {};
+    var x = h;
+    var n = 1 + (x % 3);          // 1~3 个已约满
+    for (var i=0;i<n;i++){
+      x = (x*1103515245 + 12345) >>> 0;
+      booked[ ALL_SLOTS[ x % ALL_SLOTS.length ] ] = true;
+    }
+    return booked;
+  }
+
+  /* 用户已存在（本地）的预约，按日期归类 */
+  function userBookedByDate(){
+    var map = {};
+    loadBookings().forEach(function(b){
+      if(!map[b.iso]) map[b.iso] = {};
+      map[b.iso][b.time] = true;
+    });
+    return map;
+  }
+
+  /* ---------- 渲染日期 ---------- */
+  var datesData = [];
+  (function buildDates(){
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    for (var i=0;i<14;i++){
+      var d = new Date(today); d.setDate(today.getDate()+i);
+      var iso = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+      var label = (i===0?'今天':WEEK[d.getDay()]) + ' ' + (d.getMonth()+1) + '/' + d.getDate();
+      datesData.push({ y:d.getFullYear(), m:d.getMonth(), d:d.getDate(), wd:WEEK[d.getDay()], label:label, iso:iso, isToday:(i===0) });
+    }
+  })();
+
+  function renderDates(){
+    var box = $('bkDates'); box.innerHTML='';
+    datesData.forEach(function(dt, idx){
+      var el = document.createElement('div');
+      el.className = 'bk-date' + (state.date && state.date.iso===dt.iso ? ' active' : '');
+      el.innerHTML = '<div class="wd">'+dt.wd+'</div>'+
+                     '<div class="dm">'+dt.d+'</div>'+
+                     '<div class="mo">'+(dt.m+1)+'月</div>'+
+                     (dt.isToday ? '<div class="today-flag">今天</div>' : '');
+      el.addEventListener('click', function(){ selectDate(dt, el); });
+      box.appendChild(el);
+    });
+  }
+
+  function selectDate(dt, el){
+    state.date = dt;
+    state.time = null;
+    state.selectedSlotEl = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.bk-date'), function(n){ n.classList.remove('active'); });
+    if(el) el.classList.add('active');
+    renderSlots();
+    updateSummary();
+  }
+
+  /* ---------- 渲染时段 ---------- */
+  function renderSlots(){
+    var box = $('bkSlots');
+    box.innerHTML = '';
+    if(!state.date){
+      $('bkSlotHint').textContent = '请先选择上方日期';
+      return;
+    }
+    $('bkSlotHint').textContent = '当前选择：' + state.date.label + '（绿色为可约，灰色为已约满或已过）';
+
+    var now = new Date();
+    var todayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var isToday = sameDay(new Date(state.date.y, state.date.m, state.date.d), todayObj);
+    var bookedSeed = seededBooked(state.date.iso);
+    var userMap = userBookedByDate()[state.date.iso] || {};
+
+    function group(title, arr){
+      var g = document.createElement('div'); g.className='bk-slot-group';
+      var lab = document.createElement('div'); lab.className='bk-group-label'; lab.textContent = title;
+      g.appendChild(lab);
+      var grid = document.createElement('div'); grid.className='bk-slots';
+      arr.forEach(function(t){ grid.appendChild(makeSlot(t, isToday, now, bookedSeed, userMap)); });
+      g.appendChild(grid);
+      return g;
+    }
+
+    box.appendChild(group('🌅 上午', MORNING));
+    var lunch = document.createElement('div'); lunch.className='bk-lunch'; lunch.textContent='🍱 午休 12:00 – 14:00（不开放预约）';
+    box.appendChild(lunch);
+    box.appendChild(group('🌇 下午', AFTERNOON));
+  }
+
+  function makeSlot(time, isToday, now, bookedSeed, userMap){
+    var el = document.createElement('div');
+    el.className = 'bk-slot';
+    el.textContent = time;
+    var disabled = false, reason = '';
+    if(isToday && parseInt(time.substring(0,2),10) <= now.getHours()){ disabled=true; reason='已过'; }
+    if(bookedSeed[time] || userMap[time]){ disabled=true; reason='已约满'; }
+    if(disabled){
+      el.classList.add('disabled');
+      el.textContent = time + ' · ' + reason;
+    } else {
+      el.addEventListener('click', function(){ selectSlot(el, time); });
+    }
+    return el;
+  }
+
+  function selectSlot(el, time){
+    if(state.selectedSlotEl) state.selectedSlotEl.classList.remove('active');
+    el.classList.add('active');
+    state.selectedSlotEl = el;
+    state.time = time;
+    updateSummary();
+  }
+
+  /* ---------- 咨询类型 ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.bk-type'), function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.bk-type').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      state.type = {
+        name: card.getAttribute('data-type'),
+        dur: card.getAttribute('data-dur'),
+        price: parseInt(card.getAttribute('data-price'),10)
+      };
+      updateSummary();
+    });
+  });
+
+  /* ---------- 摘要 + 提交按钮 ---------- */
+  function updateSummary(){
+    $('sumType').textContent = state.type.name + '（' + state.type.dur + '）';
+    $('sumPrice').textContent = '¥' + state.type.price;
+    var dEl = $('sumDate'), tEl = $('sumTime');
+    if(state.date){ dEl.textContent = state.date.label; dEl.classList.remove('empty'); }
+    else { dEl.textContent='未选择'; dEl.classList.add('empty'); }
+    if(state.time){ tEl.textContent = state.time; tEl.classList.remove('empty'); }
+    else { tEl.textContent='未选择'; tEl.classList.add('empty'); }
+
+    var ok = state.date && state.time;
+    var btn = $('bkSubmit');
+    btn.disabled = !ok;
+    btn.textContent = ok ? ('确认预约 · ' + state.type.price + '元') : '请选择日期与时段';
+  }
+
+  /* ---------- 提交 ---------- */
+  $('bkSubmit').addEventListener('click', function(){
+    var name = $('bkName').value.trim();
+    var phone = $('bkPhone').value.trim();
+    if(!state.date || !state.time){ alert('请先选择日期与时段'); return; }
+    if(!name){ alert('请填写你的称呼'); $('bkName').focus(); return; }
+    if(!/^1[3-9]\d{9}$/.test(phone)){ alert('请填写正确的 11 位手机号'); $('bkPhone').focus(); return; }
+
+    var booking = {
+      id: Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      type: state.type.name,
+      dur: state.type.dur,
+      price: state.type.price,
+      iso: state.date.iso,
+      label: state.date.label,
+      time: state.time,
+      name: name,
+      phone: phone,
+      wechat: $('bkWechat').value.trim(),
+      chartType: $('bkTypeSel').value,
+      topic: $('bkTopic').value.trim(),
+      created: new Date().toISOString()
+    };
+    var arr = loadBookings(); arr.push(booking); saveBookings(arr);
+    notifyOwner(booking);   // 推送提醒到分析师微信（已配置 token 时）
+
+    $('bkModalText').textContent = '已为你预约 ' + state.date.label + ' ' + state.time + ' 的' + state.type.name + '。';
+    $('bkModal').classList.add('show');
+
+    // 重置选择，刷新该日期时段（新预约标记为已约满）
+    var keepDate = state.date;
+    state.time = null; state.selectedSlotEl = null;
+    renderSlots(); updateSummary(); renderMy();
+    // 清空表单部分字段
+    $('bkTopic').value='';
+  });
+
+  $('bkModalOk').addEventListener('click', function(){ $('bkModal').classList.remove('show'); });
+  $('bkModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('show'); });
+
+  /* ---------- 我的预约 ---------- */
+  function renderMy(){
+    var box = $('bkMyList'); box.innerHTML='';
+    var arr = loadBookings().slice().sort(function(a,b){ return (a.iso+a.time).localeCompare(b.iso+b.time); });
+    if(arr.length===0){
+      box.innerHTML = '<div class="bk-empty">还没有预约记录，选好日期和时段后提交即可～</div>';
+      return;
+    }
+    arr.forEach(function(b){
+      var item = document.createElement('div'); item.className='bk-my-item';
+      var info = document.createElement('div'); info.className='bk-my-info';
+      info.innerHTML = '<div><span class="d">'+b.label+'</span><span class="t">'+b.time+'</span></div>'+
+                       '<div class="sub">'+b.type+' · '+b.dur+(b.name?(' · '+b.name):'')+'</div>';
+      var btn = document.createElement('button'); btn.className='bk-my-cancel'; btn.textContent='取消预约';
+      btn.addEventListener('click', function(){ cancelBooking(b.id); });
+      item.appendChild(info); item.appendChild(btn);
+      box.appendChild(item);
+    });
+  }
+
+  function cancelBooking(id){
+    if(!confirm('确定取消该预约吗？')) return;
+    var arr = loadBookings().filter(function(b){ return b.id!==id; });
+    saveBookings(arr);
+    renderMy();
+    if(state.date) renderSlots();
+  }
+
+  /* ---------- 初始化 ---------- */
+  function firstAvailableDateIdx(){
+    var now = new Date();
+    var todayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    for (var i=0;i<datesData.length;i++){
+      var dt = datesData[i];
+      var dObj = new Date(dt.y, dt.m, dt.d);
+      var isToday = sameDay(dObj, todayObj);
+      var bookedSeed = seededBooked(dt.iso);
+      var open = false;
+      for (var s=0;s<ALL_SLOTS.length;s++){
+        var t = ALL_SLOTS[s];
+        if(isToday && parseInt(t.substring(0,2),10) <= now.getHours()) continue;
+        if(bookedSeed[t]) continue;
+        open = true; break;
+      }
+      if(open) return i;
+    }
+    return 0;
+  }
+
+  renderDates();
+  var firstIdx = firstAvailableDateIdx();
+  // 自动选中第一个有空档的日期，并把对应日期 chip 高亮
+  var chips = document.querySelectorAll('.bk-date');
+  if(chips[firstIdx]) selectDate(datesData[firstIdx], chips[firstIdx]);
+  else { renderSlots(); }
+  renderMy();
+  updateSummary();
+})();
+</script>
+
+</body>
+</html>
