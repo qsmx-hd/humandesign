@@ -364,17 +364,16 @@
   .matrix-banner {
     background: linear-gradient(135deg,#1a1040,#0f0c29);
     border-radius: 18px; padding: 28px; margin-bottom: 40px;
-    display: grid; grid-template-columns: 1fr auto 1fr 1fr;
-    gap: 16px; align-items: center;
+    display: flex; align-items: center; justify-content: space-around;
     border: 1px solid rgba(139,92,246,0.2);
   }
-  .matrix-col { text-align: center; }
+  .matrix-col { text-align: center; flex: 1; padding: 0 16px; }
   .matrix-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
   .matrix-title { font-size: 15px; font-weight: 800; color: #fff; }
   .matrix-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px; }
   .matrix-arrow { font-size: 24px; color: rgba(255,255,255,0.2); }
   .matrix-divider {
-    width: 1px; height: 50px; background: rgba(255,255,255,0.15);
+    width: 1px; height: 50px; background: rgba(255,255,255,0.15); flex-shrink: 0;
   }
 
   /* ===== TIP BOX ===== */
@@ -455,11 +454,39 @@
   .contact-chip:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
 
   @media (max-width: 700px) {
-    .matrix-banner { grid-template-columns: 1fr 1fr; }
-    .matrix-divider, .matrix-arrow { display: none; }
+    .matrix-banner { flex-direction: row; padding: 20px 12px; }
+    .matrix-divider { display: block; height: 40px; }
+    .matrix-col { padding: 0 8px; }
+    .matrix-title { font-size: 13px; }
+    .matrix-sub { font-size: 11px; }
+    .matrix-label { font-size: 9px; }
     .life-cross-wrap { grid-template-columns: 1fr; }
     .section { padding: 0 14px; }
   }
+  /* ===== TOOL CARD ===== */
+  .tool-card {
+    background: #fff; border: 2px solid; border-radius: 16px;
+    padding: 22px 24px; margin: 20px 0;
+    display: flex; align-items: flex-start; gap: 16px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .tool-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
+  .tool-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .tool-body { flex: 1; }
+  .tool-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+  .tool-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .tool-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 20px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+    transition: all .2s;
+  }
+  .tool-btn:hover { filter: brightness(1.08); }
 </style>
 </head>
 <body>
@@ -527,47 +554,47 @@
     <div class="card-title">🔮 轮回交叉的结构</div>
     <div class="cross-diagram">
       <div class="cross-axis">
-        <div class="cross-item" style="border-color:#8b5cf6;background:#f8f5ff;">
-          <div class="cross-item-label" style="color:#7c3aed;">左侧 × 设计</div>
-          <div class="cross-item-num" style="color:#7c3aed;">闸门 41</div>
-          <div class="cross-item-name">设计太阳</div>
+        <div class="cross-item" style="border-color:#14b8a6;background:#f0fdfa;">
+          <div class="cross-item-label" style="color:#0f766e;">设计太阳</div>
+          <div class="cross-item-num" style="color:#0f766e;">闸门 12</div>
+          <div class="cross-item-name">静止 · 谨慎表达</div>
         </div>
         <div class="cross-arrow">×</div>
-        <div class="cross-item" style="border-color:#ec4899;background:#fdf2f8;">
-          <div class="cross-item-label" style="color:#be185d;">左侧 × 个性</div>
-          <div class="cross-item-num" style="color:#be185d;">闸门 30</div>
-          <div class="cross-item-name">个性太阳</div>
+        <div class="cross-item" style="border-color:#8b5cf6;background:#f8f5ff;">
+          <div class="cross-item-label" style="color:#7c3aed;">个性太阳</div>
+          <div class="cross-item-num" style="color:#7c3aed;">闸门 47</div>
+          <div class="cross-item-name">实现 · 顿悟整合</div>
         </div>
       </div>
 
       <div style="font-size:22px;color:var(--border);">+</div>
 
       <div class="cross-axis">
-        <div class="cross-item" style="border-color:#14b8a6;background:#f0fdfa;">
-          <div class="cross-item-label" style="color:#0f766e;">右侧 × 设计</div>
-          <div class="cross-item-num" style="color:#0f766e;">闸门 12</div>
-          <div class="cross-item-name">设计地球</div>
+        <div class="cross-item" style="border-color:#38bdf8;background:#f0f9ff;">
+          <div class="cross-item-label" style="color:#0369a1;">设计地球</div>
+          <div class="cross-item-num" style="color:#0369a1;">闸门 11</div>
+          <div class="cross-item-name">想法 · 概念之流</div>
         </div>
         <div class="cross-arrow">×</div>
         <div class="cross-item" style="border-color:#f59e0b;background:#fffbeb;">
-          <div class="cross-item-label" style="color:#b45309;">右侧 × 个性</div>
+          <div class="cross-item-label" style="color:#b45309;">个性地球</div>
           <div class="cross-item-num" style="color:#b45309;">闸门 22</div>
-          <div class="cross-item-name">个性地球</div>
+          <div class="cross-item-name">优雅 · 开放聆听</div>
         </div>
       </div>
 
       <div class="cross-center-box">
         <div class="cross-center-label">你的轮回交叉</div>
-        <div class="cross-center-name">右角度交叉之自我（Right Angle Cross of Self）</div>
-        <div class="cross-center-sub">闸门 41-30 · 12-22</div>
+        <div class="cross-center-name">左角度交叉之告知（Left Angle Cross of Informing）</div>
+        <div class="cross-center-sub">47/22 | 12/11</div>
       </div>
     </div>
   </div>
 
-  <!-- 四种交叉类型 -->
+  <!-- 三种交叉类型 -->
   <div class="grid-2">
     <div class="card" style="border-top:4px solid #8b5cf6;">
-      <div class="card-title" style="color:#7c3aed;">① 右角度交叉 Right Angle Cross（最常见，约88%）</div>
+      <div class="card-title" style="color:#7c3aed;">① 右角度交叉 Right Angle Cross（约64%）</div>
       <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成90度角，有一条轴线承载压力，指向你<strong>必须面对的人生主题</strong>。</p>
       <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
         <li>自我表达与接收之间的张力</li>
@@ -576,18 +603,8 @@
         <li>最接近"传统命运"概念</li>
       </ul>
     </div>
-    <div class="card" style="border-top:4px solid #ec4899;">
-      <div class="card-title" style="color:#be185d;">② 左角度交叉 Left Angle Cross（约6%）</div>
-      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成150度角，能量指向<strong>内心整合</strong>，主要服务于身边小圈子。</p>
-      <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
-        <li>人生方向由内在决定，非外部驱动</li>
-        <li>倾向于安静、深度的生命表达</li>
-        <li>使命在日常中自然流露</li>
-        <li>通常有艺术/灵性/治疗的天赋</li>
-      </ul>
-    </div>
     <div class="card" style="border-top:4px solid #14b8a6;">
-      <div class="card-title" style="color:#0f766e;">③ 分离交叉 Juxtaposition Cross（约4%）</div>
+      <div class="card-title" style="color:#0f766e;">② 并列交叉 Juxtaposition Cross（约3%）</div>
       <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成0度或180度，平行或对分，强调<strong>持续的主题</strong>而非单一命运。</p>
       <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
         <li>有持续重复出现的人生主题</li>
@@ -596,21 +613,30 @@
         <li>需要主动创造而非等待命运</li>
       </ul>
     </div>
-    <div class="card" style="border-top:4px solid #f59e0b;">
-      <div class="card-title" style="color:#b45309;">④ 神秘交叉 Mysterious / Allocentric（极罕见）</div>
-      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">最神秘的交叉类型，携带非常规使命，可能一生不被理解。</p>
+    <div class="card" style="border-top:4px solid #ec4899;">
+      <div class="card-title" style="color:#be185d;">③ 左角度交叉 Left Angle Cross（约33%）</div>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--muted);">太阳与地球形成150度角，能量指向<strong>内心整合</strong>，主要服务于身边小圈子。</p>
       <ul style="font-size:13px;padding-left:16px;color:var(--text);line-height:2;">
-        <li>代表真正"不同"的存在方式</li>
-        <li>使命通常在身后才被理解</li>
-        <li>走在人类意识进化前沿</li>
-        <li>最需要坚定地跟随内在权威</li>
+        <li>人生方向由内在决定，非外部驱动</li>
+        <li>倾向于安静、深度的生命表达</li>
+        <li>使命在日常中自然流露</li>
+        <li>通常有艺术/灵性/治疗的天赋</li>
       </ul>
     </div>
   </div>
 
   <div class="tip-box">
     <span class="tip-icon">💡</span>
-    <div><strong>如何找到你的轮回交叉？</strong> 在图表中查找：个性太阳（☉）+ 个性地球（🜨）、设计太阳（Ds）+ 设计地球（🜩）四个闸门组合，去 Jovian Archive 网站搜索"Incarnation Cross by Gate"即可找到你的具体命名。</div>
+    <div><strong>如何找到你的轮回交叉？</strong> 在图表中查找：个性太阳（☉）+ 个性地球（🜨）、设计太阳（☉）+ 设计地球（🜨）四个闸门组合（设计侧通常以红色标示），去 Jovian Archive 网站搜索"Incarnation Cross by Gate"即可找到你的具体命名。</div>
+  </div>
+
+  <div class="tool-card" style="border-color:#8b5cf6;">
+    <div class="tool-icon" style="background:#f3eeff;">🧭</div>
+    <div class="tool-body">
+      <div class="tool-title" style="color:#7c3aed;">查询 192 个轮回交叉</div>
+      <div class="tool-desc">输入你图表中的四个太阳/地球闸门，快速找到属于你的轮回交叉名称与使命主题。</div>
+      <a href="192-crosses.html" class="tool-btn" style="background:#8b5cf6;color:#fff;">进入轮回交叉查询 →</a>
+    </div>
   </div>
 </div>
 
@@ -686,7 +712,7 @@
         </div>
         <div class="shadow-item">
           <div class="shadow-icon" style="background:rgba(236,72,153,0.3);color:#f0abfc;">3</div>
-          <div class="shadow-text"><strong style="color:#f0abfc;">显现者</strong>的陷阱：<br>不告知就行动，引发他人的愤怒阻力，陷入"为什么没人理解我"的孤立感。</div>
+          <div class="shadow-text"><strong style="color:#f0abfc;">显示者</strong>的陷阱：<br>不告知就行动，引发他人的愤怒阻力，陷入"为什么没人理解我"的孤立感。</div>
         </div>
       </div>
       <div>
@@ -727,7 +753,7 @@
   </div>
 
   <div class="section-intro">
-    🪐 人类图不止太阳，还有<strong>月亮、水星、金星</strong>等七大行星，加上地球、北交点、南交点——每个星体落在一个闸门和一条爻线上，共同编织成你独一无二的宇宙出生图谱。理解行星层次，才能真正进入高阶解读。
+    🪐 人类图中的天体信息由<strong>太阳、地球、月亮、南北交点、水星、金星、火星、木星、土星、天王星、海王星、冥王星</strong>十三个核心位置共同构成——每个星体落在一个闸门和一条爻线上，编织成你独一无二的宇宙出生图谱。理解行星层次，才能真正进入高阶解读。
   </div>
 
   <!-- 行星卡片 -->
@@ -737,10 +763,25 @@
       <div class="planet-role">意识 · 个性 · 核心身份</div>
       <div class="planet-desc">你的核心人格，太阳闸门代表你此生最需要表达的特质。激活它，你就是那道光。</div>
     </div>
+    <div class="planet-card" style="border-left-color:#22c55e;">
+      <div class="planet-name">🜨 地球 Earth</div>
+      <div class="planet-role">平衡 · 根基 · 落地</div>
+      <div class="planet-desc">你与太阳的对应点，代表你此生立足与平衡的根基，是把太阳能量带到地面的稳定器。</div>
+    </div>
     <div class="planet-card" style="border-left-color:#f59e0b;">
       <div class="planet-name">☽ 月亮 Moon</div>
       <div class="planet-role">无意识 · 身体 · 日常节奏</div>
       <div class="planet-desc">你的身体设计，影响日常反应和情绪模式。每28天走完一圈，月亮位置决定你的"日常自动驾驶仪"。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#ec4899;">
+      <div class="planet-name">☊ 北交点 North Node</div>
+      <div class="planet-role">今生方向 · 进化之路</div>
+      <div class="planet-desc">你今生需要发展的方向——那条你不太舒服但必须走向的道路，是灵魂的进化方向。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#64748b;">
+      <div class="planet-name">☋ 南交点 South Node</div>
+      <div class="planet-role">前世惯性 · 舒适区</div>
+      <div class="planet-desc">你前世的习性、舒适区——这是你不由自主会滑回去的地方，需要有意识地超越。</div>
     </div>
     <div class="planet-card" style="border-left-color:#38bdf8;">
       <div class="planet-name">☿ 水星 Mercury</div>
@@ -767,15 +808,48 @@
       <div class="planet-role">结构 · 考验 · 成熟</div>
       <div class="planet-desc">你的人生功课所在，需要通过时间和努力才能建立的结构和成就。</div>
     </div>
-    <div class="planet-card" style="border-left-color:#ec4899;">
-      <div class="planet-name">☊ 北交点 Node</div>
-      <div class="planet-role">今生方向 · 进化之路</div>
-      <div class="planet-desc">你今生需要发展的方向——那条你不太舒服但必须走向的道路，是灵魂的进化方向。</div>
+    <div class="planet-card" style="border-left-color:#06b6d4;">
+      <div class="planet-name">♅ 天王星 Uranus</div>
+      <div class="planet-role">突变 · 独特性 · 觉醒</div>
+      <div class="planet-desc">带来突变与觉醒的能量，打破常规，推动你活出独特性与个体化表达。</div>
     </div>
-    <div class="planet-card" style="border-left-color:#64748b;">
-      <div class="planet-name">☋ 南交点 South</div>
-      <div class="planet-role">前世惯性 · 舒适区</div>
-      <div class="planet-desc">你前世的习性、舒适区——这是你不由自主会滑回去的地方，需要有意识地超越。</div>
+    <div class="planet-card" style="border-left-color:#3b82f6;">
+      <div class="planet-name">♆ 海王星 Neptune</div>
+      <div class="planet-role">梦想 · 灵性 · 消融</div>
+      <div class="planet-desc">承载你的梦想、灵性渴望与消融边界的能力，也可能带来迷雾与幻象。</div>
+    </div>
+    <div class="planet-card" style="border-left-color:#7c3aed;">
+      <div class="planet-name">♇ 冥王星 Pluto</div>
+      <div class="planet-role">转化 · 阴影 · 深层力量</div>
+      <div class="planet-desc">掌管深层的转化与重生，揭示你灵魂层面的阴影课题与蜕变力量。</div>
+    </div>
+  </div>
+
+  <!-- 行星区域工具卡 -->
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="tool-card" style="border-color:#f59e0b;margin:0;">
+      <div class="tool-icon" style="background:#fffbeb;">🌌</div>
+      <div class="tool-body">
+        <div class="tool-title" style="color:#b45309;">占星与人类图课程</div>
+        <div class="tool-desc">从行星、宫位到闸门对应，系统学习天体能量在人类图中的表达。</div>
+        <a href="astro-hd-courseware.html" class="tool-btn" style="background:#f59e0b;color:#fff;">进入课程 →</a>
+      </div>
+    </div>
+    <div class="tool-card" style="border-color:#38bdf8;margin:0;">
+      <div class="tool-icon" style="background:#f0f9ff;">🔢</div>
+      <div class="tool-body">
+        <div class="tool-title" style="color:#0369a1;">384 爻对应表</div>
+        <div class="tool-desc">每个闸门搭配 1-6 爻，查看完整的 384 爻含义与关键词。</div>
+        <a href="384-lines.html" class="tool-btn" style="background:#38bdf8;color:#fff;">查看爻线 →</a>
+      </div>
+    </div>
+    <div class="tool-card" style="border-color:#14b8a6;margin:0;">
+      <div class="tool-icon" style="background:#f0fdfa;">🕐</div>
+      <div class="tool-body">
+        <div class="tool-title" style="color:#0f766e;">出生时间校准</div>
+        <div class="tool-desc">不确定出生时间？使用校准工具反推更精准的人类图。</div>
+        <a href="hd_birth_time_calibration.html" class="tool-btn" style="background:#14b8a6;color:#fff;">开始校准 →</a>
+      </div>
     </div>
   </div>
 
@@ -901,24 +975,34 @@
         <div style="font-size:12px;color:#b45309;">⚠ 陷阱：用荐骨（分析）或情绪（担忧）替代直觉</div>
       </div>
     </div>
-    <div class="ref-card" style="border-top-color:#14b8a6;">
-      <div style="font-size:12px;color:var(--teal);letter-spacing:1px;margin-bottom:8px;">自我权威 Ego Authority</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">相信你的决定</div>
+    <div class="ref-card" style="border-top-color:#f43f5e;">
+      <div style="font-size:12px;color:#be123c;letter-spacing:1px;margin-bottom:8px;">意志力中心权威 Ego / Heart Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">听从心的承诺</div>
       <p style="font-size:13px;color:var(--muted);line-height:1.6;">你是唯一一个必须对自己的承诺负责的人。在你<strong>说"我愿意"</strong>的那一刻，权威就被激活了。你的Yes就是权威，不需要他人确认。</p>
     </div>
+    <div class="ref-card" style="border-top-color:#8b5cf6;">
+      <div style="font-size:12px;color:var(--violet);letter-spacing:1px;margin-bottom:8px;">G中心权威 Self-Projected Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">说出你的真实</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">投射者专属。透过与信任的人大声说出想法，你在说话过程中会听到自己的真实感受。重点不是对方的建议，而是<strong>听见自己说出口的话</strong>。</p>
+    </div>
     <div class="ref-card" style="border-top-color:#ec4899;">
-      <div style="font-size:12px;color:#be185d;letter-spacing:1px;margin-bottom:8px;">环境权威 Environmental</div>
-      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">感受空间给你的信号</div>
-      <p style="font-size:13px;color:var(--muted);line-height:1.6;">你的身体对物理环境有本能反应——某些地方让你<strong>扩张</strong>，某些地方让你<strong>收缩</strong>。去对地方，做对选择。</p>
+      <div style="font-size:12px;color:#be185d;letter-spacing:1px;margin-bottom:8px;">无内在权威 Mental / Environmental Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">借助环境与外部清明</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">你的身体对物理环境有本能反应——某些地方让你<strong>扩张</strong>，某些地方让你<strong>收缩</strong>。去对地方，与对的人交谈，清明会在外部浮现。</p>
       <div style="margin-top:10px;padding:10px;background:#fdf2f8;border-radius:8px;">
-        <div style="font-size:12px;color:#be185d;">🏡 测试法：去一个地方坐15分钟，感受身体</div>
+        <div style="font-size:12px;color:#be185d;">🏡 测试法：去一个地方坐15分钟，感受身体；与信任的人交谈</div>
       </div>
+    </div>
+    <div class="ref-card" style="border-top-color:#6366f1;">
+      <div style="font-size:12px;color:#4f46e5;letter-spacing:1px;margin-bottom:8px;">月亮循环权威 Lunar Authority</div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:8px;">等待月亮周期</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">反映者专属。重大决定需要等待约28天完整的月亮周期，让月亮行经不同闸门时为你展现决策的各个面向。</p>
     </div>
   </div>
 
   <div class="tip-box" style="margin-top:20px;">
     <span class="tip-icon">🧘</span>
-    <div><strong>权威整合练习：</strong>从今天起，当你面临一个中等以上重要性的决定时，<strong>暂停3秒</strong>，先把问题放在心里，然后只做以下一件事：<br>① 情绪型 → 等一个呼吸周期，问"我现在真正平静吗？" ② 荐骨型 → 问自己，观察身体收紧还是扩张 ③ 直觉型 → 问"此刻我瞬间知道什么？" ④ 自我型 → 问"我愿意吗？" ⑤ 环境型 → 想象自己在不同选项的空间里，感受身体反应</div>
+    <div><strong>权威整合练习：</strong>从今天起，当你面临一个中等以上重要性的决定时，<strong>暂停3秒</strong>，先把问题放在心里，然后只做以下一件事：<br>① 情绪型 → 等一个呼吸周期，问"我现在真正平静吗？" ② 荐骨型 → 问自己，观察身体收紧还是扩张 ③ 直觉型 → 问"此刻我瞬间知道什么？" ④ 意志力中心型 → 问"我愿意吗？" ⑤ G中心型 → 与信任的人说出想法，听自己说什么 ⑥ 无内在型 → 去不同空间、与不同的人交谈，观察清明 ⑦ 月亮循环型 → 等待约28天，记录每天的感受变化</div>
   </div>
 </div>
 
@@ -1036,6 +1120,15 @@
     </div>
   </div>
 
+  <div class="tool-card" style="border-color:#ec4899;">
+    <div class="tool-icon" style="background:#fdf2f8;">✨</div>
+    <div class="tool-body">
+      <div class="tool-title" style="color:#be185d;">用肯定卡整合闸门能量</div>
+      <div class="tool-desc">把64闸门的智慧写成自己的生命自述，跟随肯定卡练习激活你独特的能量主题。</div>
+      <a href="hd-affirmation-cards.html" class="tool-btn" style="background:#ec4899;color:#fff;">打开肯定卡练习 →</a>
+    </div>
+  </div>
+
   <div class="tip-box">
     <span class="tip-icon">🔍</span>
     <div><strong>高阶练习：</strong>对照自己的图表，在矩阵中圈出所有已激活的闸门（深色）。观察：①它们属于哪些颜色区块（回路）？②集中在矩阵的哪个区域（左上/右下等）？③缺失了哪些颜色区块？这些空白往往是你在人生中需要"他人桥接"的能量领域。</div>
@@ -1095,20 +1188,20 @@
   <div class="life-cross-wrap">
     <div class="life-cross-card">
       <div style="font-size:28px;margin-bottom:10px;">⬆ × ⬇</div>
+      <div class="life-cross-name">设计轴线 Design Axis</div>
+      <p class="life-cross-desc">设计太阳×设计地球，连接你的<strong>无意识</strong>层面。<br>这条轴线决定你的身体设计、遗传倾向、你的"真实自我"与"社会自我"之间的张力来源。</p>
+      <div style="margin-top:10px;padding:8px 12px;background:#f0fdfa;border-radius:8px;font-size:12px;">
+        <span style="color:var(--teal);font-weight:700;">☉</span> 设计太阳 = 无意识人格<br>
+        <span style="color:var(--sky);font-weight:700;">🜨</span> 设计地球 = 无意识焦点
+      </div>
+    </div>
+    <div class="life-cross-card">
+      <div style="font-size:28px;margin-bottom:10px;">⬆ × ⬇</div>
       <div class="life-cross-name">个性轴线 Personal Axis</div>
       <p class="life-cross-desc">太阳×地球，连接你的<strong>意识</strong>层面。<br>这条轴线决定你的社会身份、个人表达、你的命运主题在社会中的呈现方式。</p>
       <div style="margin-top:10px;padding:8px 12px;background:#f8f5ff;border-radius:8px;font-size:12px;">
         <span style="color:var(--violet);font-weight:700;">☉</span> 个性太阳 = 意识人格<br>
         <span style="color:var(--accent);font-weight:700;">🜨</span> 个性地球 = 意识焦点
-      </div>
-    </div>
-    <div class="life-cross-card">
-      <div style="font-size:28px;margin-bottom:10px;">⬆ × ⬇</div>
-      <div class="life-cross-name">设计轴线 Design Axis</div>
-      <p class="life-cross-desc">设计太阳×设计地球，连接你的<strong>无意识</strong>层面。<br>这条轴线决定你的身体设计、遗传倾向、你的"真实自我"与"社会自我"之间的张力来源。</p>
-      <div style="margin-top:10px;padding:8px 12px;background:#f0fdfa;border-radius:8px;font-size:12px;">
-        <span style="color:var(--teal);font-weight:700;">Ds</span> 设计太阳 = 无意识人格<br>
-        <span style="color:var(--sky);font-weight:700;">🜩</span> 设计地球 = 无意识焦点
       </div>
     </div>
   </div>
@@ -1125,15 +1218,15 @@
         </tr>
         <tr>
           <td><strong style="color:var(--violet);">个</strong></td>
-          <td>闸门 30（感受）~ 41（开始）</td>
-          <td>情感/欲望的时机</td>
-          <td>当情感闸门（30/55等）被激活时，情感决策更准确；当开始闸门（41）活跃时，新项目开始时机好</td>
+          <td>闸门 47（实现）~ 22（优雅）</td>
+          <td>顿悟/沟通的时机</td>
+          <td>当47-22轴线活跃时，你对信息的整合与表达最具穿透力；适合分享洞见与情感真相。</td>
         </tr>
         <tr>
           <td><strong style="color:var(--teal);">设</strong></td>
-          <td>闸门 12（静止）~ 22（优雅）</td>
-          <td>表达/沟通的时机</td>
-          <td>当你感到想说、想表达，且闸门12-22轴线活跃时，你的言语最具穿透力</td>
+          <td>闸门 12（静止）~ 11（想法）</td>
+          <td>表达/创意的时机</td>
+          <td>当12-11轴线被激活时，你更容易把概念和灵感转化为语言，是写作、演讲和创作的好时机。</td>
         </tr>
         <tr>
           <td><strong style="color:var(--accent);">综</strong></td>
@@ -1142,6 +1235,41 @@
           <td>当方向闸门（10/15/46）出现能量激活时，方向感最强，是做重大人生决定的窗口</td>
         </tr>
       </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px;border-left:5px solid #ec4899;">
+    <div class="card-title">💫 案例解读：左角度交叉之告知（47/22 | 12/11）</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:16px;">
+      左角度交叉之告知是一条<strong>从顿悟到表达</strong>的能量路径。它由两条轴线交织而成：
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="background:#f8f5ff;border-radius:12px;padding:16px;border:1px solid var(--border);">
+        <div style="font-size:13px;font-weight:800;color:#7c3aed;margin-bottom:8px;">个性轴线：47 × 22</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          <strong>闸门47</strong>带来「顿悟整合」——你能把散乱的念头与经验 suddenly 拼成完整的理解；<strong>闸门22</strong>带来「优雅聆听」——你擅长在情绪和社交中保持开放，让真相在人与人的空间中自然流动。这条轴线是：透过内心的顿悟，影响周围的人。
+        </div>
+      </div>
+      <div style="background:#f0fdfa;border-radius:12px;padding:16px;border:1px solid var(--border);">
+        <div style="font-size:13px;font-weight:800;color:#0f766e;margin-bottom:8px;">设计轴线：12 × 11</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          <strong>闸门12</strong>是「静止/谨慎表达」——你的声音有一股天然的克制力，懂得何时该沉默；<strong>闸门11</strong>是「想法/概念之流」——你的无意识深处不断涌出念头与理论。这条轴线是：把灵感化作言语，但只在合适的时机开口。
+        </div>
+      </div>
+    </div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:16px;">
+      <strong>为什么是「告知」？</strong>这个轮回交叉的核心使命是：当你真正领悟了某件事，就会有一股能量推动你把它说出来、分享出去。不是用逻辑说服，而是用生命经验本身去感染他人。你此生最容易吸引来的课题是：「我如何把我的顿悟，以最自然、最优雅、最被接受的方式传递出去？」
+    </p>
+    <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:16px;">
+      <strong>左角度家族（约33%）的特质：</strong>你的方向感不是向外征服，而是向内整合。你不必追求「成为谁」，而是要在日常中活出这个真理：你的存在、你的表达、你的聆听，本身就是最好的告知。你更适合在小范围、深度信任的关系中发挥影响力，而不是站在大众舞台上。
+    </p>
+    <div style="background:linear-gradient(135deg,#fdf2f8,#f3eeff);border-radius:12px;padding:16px;">
+      <div style="font-size:13px;font-weight:800;color:#be185d;margin-bottom:8px;">🎯 给你的时机提示</div>
+      <ul style="font-size:13px;color:var(--muted);line-height:1.8;padding-left:18px;">
+        <li>当47-22轴线被激活时：你特别容易「突然懂了」，这时别急着解释，先让领悟在体内沉淀。</li>
+        <li>当12-11轴线被激活时：你的话语自带感染力，是写作、演讲、分享观点的黄金窗口。</li>
+        <li>当你感到沮丧或苦涩时：通常是因为你太早开口、太晚开口，或者把「告知」变成了「说服」。回到你的权威，重新等待对的时机。</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -1162,6 +1290,13 @@
 
   <div class="matrix-banner">
     <div class="matrix-col">
+      <div class="matrix-label">高阶系列</div>
+      <div style="font-size:11px;background:#d4b5ff;color:#4a1080;padding:2px 8px;border-radius:8px;margin-bottom:6px;">6篇</div>
+      <div class="matrix-title">使命解码</div>
+      <div class="matrix-sub">轮回·生命周期</div>
+    </div>
+    <div class="matrix-divider"></div>
+    <div class="matrix-col">
       <div class="matrix-label">入门系列</div>
       <div style="font-size:11px;background:#a8e0c8;color:#0a3a20;padding:2px 8px;border-radius:8px;margin-bottom:6px;">6篇</div>
       <div class="matrix-title">基础认知</div>
@@ -1173,53 +1308,6 @@
       <div style="font-size:11px;background:#b5d4ff;color:#2a1a80;padding:2px 8px;border-radius:8px;margin-bottom:6px;">7篇</div>
       <div class="matrix-title">深度理解</div>
       <div class="matrix-sub">轮廓·回路·爻线</div>
-    </div>
-    <div class="matrix-divider"></div>
-    <div class="matrix-col">
-      <div class="matrix-label">高阶系列</div>
-      <div style="font-size:11px;background:#d4b5ff;color:#4a1080;padding:2px 8px;border-radius:8px;margin-bottom:6px;">6篇</div>
-      <div class="matrix-title">使命解码</div>
-      <div class="matrix-sub">轮回·生命周期</div>
-    </div>
-  </div>
-
-  <div class="grid-3">
-    <div class="card" style="border-top:4px solid #14b8a6;">
-      <div class="card-title" style="color:#0f766e;">🌱 入门系列 · 6篇</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合新用户 / 公众号引流</div>
-      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
-        <li>什么是人类图（5大系统）</li>
-        <li>四大能量类型</li>
-        <li>九大能量中心</li>
-        <li>策略与内在权威</li>
-        <li>通道与闸门入门</li>
-        <li>如何用于生活</li>
-      </ul>
-    </div>
-    <div class="card" style="border-top:4px solid #8b5cf6;">
-      <div class="card-title" style="color:#7c3aed;">🌿 进阶系列 · 7篇</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合已有基础 / 深度读者</div>
-      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
-        <li>轮廓（12种人生剧本）</li>
-        <li>回路系统（三大回路）</li>
-        <li>定义类型（单一/分裂/三分/四分）</li>
-        <li>变量四箭头（精细调校）</li>
-        <li>爻线六种深解</li>
-        <li>跨类型关系解读</li>
-        <li>完整实操手册</li>
-      </ul>
-    </div>
-    <div class="card" style="border-top:4px solid #ec4899;">
-      <div class="card-title" style="color:#be185d;">🌳 高阶系列 · 6篇</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">适合深度用户 / 高净值读者</div>
-      <ul style="font-size:12px;line-height:2;padding-left:14px;color:var(--text);">
-        <li>轮回交叉（人生使命）</li>
-        <li>非自己主题（阴影陷阱）</li>
-        <li>行星系统（完整能量图谱）</li>
-        <li>权威深层机制</li>
-        <li>64闸门全景索引</li>
-        <li>生命周期与时机</li>
-      </ul>
     </div>
   </div>
 </div>
@@ -1233,7 +1321,7 @@
     <div class="summary-grid">
       <div class="summary-item">
         <div class="summary-item-title">轮回交叉</div>
-        <div class="summary-item-content">此生使命主题句<br>右角度/左角度/分离/神秘<br>由四轴闸门组合定义</div>
+        <div class="summary-item-content">此生使命主题句<br>右角度/并列/左角度<br>由四轴闸门组合定义</div>
       </div>
       <div class="summary-item">
         <div class="summary-item-title">非自己</div>

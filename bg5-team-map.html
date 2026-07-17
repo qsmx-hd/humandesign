@@ -181,8 +181,14 @@ body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
 .footer .powered { display: block; margin-top: 4px; font-size: 11px; color: #A08968; }
 
 @media (max-width: 640px) {
-  .add-form { flex-direction: column; }
-  .form-group { min-width: 100%; }
+  .team-name-group input { max-width: 100%; }
+  .add-form { flex-direction: column; align-items: stretch; gap: 14px; }
+  .form-group { width: 100%; min-width: 100%; }
+  .form-group input, .form-group select { width: 100%; }
+  .btn-add { width: 100%; }
+  .channel-custom { flex-direction: column; align-items: stretch; }
+  .channel-custom input { width: 100%; }
+  .channel-custom .btn-small { width: 100%; }
   .chart-area { flex-direction: column; }
   .chart-container { max-width: 100%; }
 }
