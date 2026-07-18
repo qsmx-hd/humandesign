@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图实践艺术 · 四门生活艺术课程系列</title>
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --bg-soft:#FBF8F2;
+    --bg-card:#FFFFFF;
+    --primary:#C4956A;
+    --primary-deep:#A8743F;
+    --primary-deep2:#8A5A2B;
+    --dark:#2D2118;
+    --border:#E8DCC8;
+    --muted:#6B5D4F;
+    --muted-soft:#8C7C6B;
+    --shadow:0 6px 22px rgba(45,33,24,.08);
+    --shadow-lg:0 14px 40px rgba(45,33,24,.12);
+    --font-sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Helvetica Neue",Arial,sans-serif;
+    --font-serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-sans);
+    background:var(--bg);
+    color:var(--dark);
+    font-size:15px;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ===== Top Nav ===== */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,240,232,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--dark);}
+  .brand .dot{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-deep));display:inline-block;box-shadow:inset 0 0 0 3px var(--bg);}
+  .nav-links{display:flex;gap:6px;flex-wrap:wrap;}
+  .nav-links a{
+    font-size:13.5px;color:var(--muted);padding:7px 13px;border-radius:20px;transition:.2s;
+  }
+  .nav-links a:hover{color:var(--primary-deep);background:var(--bg-soft);}
+  .nav-links a.active{color:#fff;background:var(--primary-deep);}
+
+  /* hamburger toggle (mobile) */
+  .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;cursor:pointer;padding:0;flex-shrink:0;}
+  .nav-toggle span{display:block;width:20px;height:2px;background:var(--primary-deep);border-radius:2px;margin:0 auto;transition:.25s;}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open span:nth-child(2){opacity:0;}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;overflow:hidden;padding:84px 0 70px;}
+  .hero-bg{position:absolute;inset:0;z-index:0;opacity:.5;}
+  .hero-inner{position:relative;z-index:1;text-align:center;max-width:860px;margin:0 auto;}
+  .eyebrow{
+    display:inline-block;font-size:13px;letter-spacing:3px;color:var(--primary-deep);
+    border:1px solid var(--border);background:var(--bg-soft);
+    padding:6px 16px;border-radius:30px;margin-bottom:22px;
+  }
+  .hero h1{
+    font-family:var(--font-serif);font-size:46px;line-height:1.25;font-weight:700;
+    color:var(--dark);margin-bottom:18px;letter-spacing:1px;
+  }
+  .hero h1 .accent{color:var(--primary-deep);}
+  .hero p.sub{font-size:17px;color:var(--muted);max-width:680px;margin:0 auto 34px;}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:13px 28px;border-radius:30px;font-size:14.5px;font-weight:600;transition:.2s;cursor:pointer;
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:#fff;box-shadow:var(--shadow);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .btn-ghost{background:var(--bg-soft);color:var(--dark);border:1px solid var(--border);}
+  .btn-ghost:hover{border-color:var(--primary);color:var(--primary-deep);}
+
+  .hero-stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:46px;}
+  .stat{
+    background:var(--bg-soft);border:1px solid var(--border);border-radius:16px;
+    padding:18px 26px;min-width:130px;box-shadow:var(--shadow);
+  }
+  .stat .num{font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--primary-deep);line-height:1;}
+  .stat .lab{font-size:13px;color:var(--muted);margin-top:8px;}
+
+  /* ===== Section ===== */
+  section{padding:64px 0;}
+  .sec-head{text-align:center;max-width:760px;margin:0 auto 44px;}
+  .sec-tag{font-size:13px;letter-spacing:3px;color:var(--primary-deep);font-weight:600;}
+  .sec-head h2{font-family:var(--font-serif);font-size:32px;font-weight:700;margin:12px 0 14px;color:var(--dark);letter-spacing:1px;}
+  .sec-head p{font-size:15.5px;color:var(--muted);}
+
+  /* ===== Overview cards ===== */
+  .ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;}
+  .ov-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:18px;
+    padding:30px 26px;box-shadow:var(--shadow);transition:.25s;position:relative;overflow:hidden;
+  }
+  .ov-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary);}
+  .ov-card .ic{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-family:var(--font-serif);font-weight:700;margin-bottom:16px;}
+  .ov-card h3{font-size:19px;font-weight:700;margin-bottom:6px;color:var(--dark);}
+  .ov-card .en{font-size:12.5px;color:var(--muted-soft);letter-spacing:1px;margin-bottom:14px;}
+  .ov-card .q{font-size:14px;color:var(--muted);background:var(--bg-soft);border-radius:10px;padding:10px 13px;margin-bottom:14px;}
+  .ov-card .tool{font-size:13px;color:var(--primary-deep);font-weight:600;}
+  .ov-card .go{position:absolute;top:24px;right:24px;font-size:20px;color:var(--border);transition:.2s;}
+  .ov-card:hover .go{color:var(--primary);transform:translateX(3px);}
+
+  /* ===== Course block ===== */
+  .course{padding:30px 0;}
+  .course-banner{
+    background:linear-gradient(120deg,#3a2a1d,#2D2118);
+    border-radius:20px;padding:34px 38px;color:#fff;margin-bottom:36px;position:relative;overflow:hidden;
+    box-shadow:var(--shadow-lg);
+  }
+  .course-banner::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(196,149,106,.35),transparent 70%);}
+  .course-banner .idx{font-family:var(--font-serif);font-size:14px;letter-spacing:4px;color:var(--primary);opacity:.9;}
+  .course-banner h2{font-family:var(--font-serif);font-size:30px;margin:8px 0 10px;letter-spacing:1px;}
+  .course-banner p{font-size:15px;color:#e8dcc8;max-width:760px;opacity:.92;}
+  .course-banner .pill{display:inline-block;margin-top:16px;font-size:12.5px;background:rgba(196,149,106,.22);border:1px solid rgba(196,149,106,.5);padding:5px 14px;border-radius:20px;color:#f3e7d6;}
+
+  .block-title{display:flex;align-items:center;gap:12px;margin:38px 0 20px;}
+  .block-title .bar{width:5px;height:24px;border-radius:3px;background:var(--primary);}
+  .block-title h3{font-size:20px;font-weight:700;color:var(--dark);font-family:var(--font-serif);letter-spacing:.5px;}
+  .block-title .note{font-size:13px;color:var(--muted-soft);margin-left:auto;}
+
+  /* card grid for authorities/types/scenes */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;}
+  .mini{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:15px;padding:22px 20px;box-shadow:var(--shadow);transition:.2s;
+  }
+  .mini:hover{transform:translateY(-3px);border-color:var(--primary);box-shadow:var(--shadow-lg);}
+  .mini .top{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .mini .badge{width:34px;height:34px;border-radius:10px;background:var(--bg-soft);border:1px solid var(--border);color:var(--primary-deep);font-family:var(--font-serif);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .mini h4{font-size:16px;font-weight:700;color:var(--dark);}
+  .mini .en{font-size:11.5px;color:var(--muted-soft);}
+  .kv{font-size:13.5px;margin-bottom:9px;}
+  .kv .k{color:var(--primary-deep);font-weight:600;display:inline-block;min-width:62px;}
+  .kv .v{color:var(--muted);}
+  .mantra{margin-top:6px;font-size:13.5px;color:var(--dark);background:linear-gradient(90deg,rgba(196,149,106,.14),transparent);border-left:3px solid var(--primary);padding:8px 12px;border-radius:0 8px 8px 0;font-weight:600;}
+
+  /* table */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px;background:var(--bg-card);}
+  thead th{background:var(--bg-soft);color:var(--primary-deep);text-align:left;padding:13px 16px;font-weight:700;border-bottom:2px solid var(--border);white-space:nowrap;}
+  tbody td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover td{background:var(--bg-soft);}
+  tbody td strong{color:var(--dark);}
+
+  /* details */
+  details{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-top:18px;box-shadow:var(--shadow);overflow:hidden;}
+  details summary{cursor:pointer;padding:16px 22px;font-weight:600;font-size:15px;color:var(--dark);list-style:none;display:flex;align-items:center;gap:10px;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::before{content:"▸";color:var(--primary-deep);transition:.2s;font-size:13px;}
+  details[open] summary::before{transform:rotate(90deg);}
+  .ppt-list{padding:6px 26px 22px;font-size:14px;color:var(--muted);}
+  .ppt-list li{margin-bottom:8px;padding-left:4px;}
+  .ppt-list li b{color:var(--dark);}
+
+  /* materials */
+  .mat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+  .mat{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:26px 24px;box-shadow:var(--shadow);transition:.2s;}
+  .mat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+  .mat .ic{font-size:26px;margin-bottom:12px;}
+  .mat h4{font-size:17px;margin-bottom:8px;color:var(--dark);}
+  .mat p{font-size:13.5px;color:var(--muted);}
+  .mat ul{margin:10px 0 0;padding-left:18px;font-size:13px;color:var(--muted);}
+  .mat ul li{margin-bottom:5px;}
+
+  /* footer */
+  footer{background:#2D2118;color:#cdbfae;padding:48px 0 36px;margin-top:30px;}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;}
+  footer h5{color:#fff;font-family:var(--font-serif);font-size:18px;margin-bottom:12px;}
+  footer p,footer li{font-size:13px;color:#b7a892;line-height:1.9;}
+  footer ul{list-style:none;}
+  footer .small{width:100%;text-align:center;border-top:1px solid rgba(255,255,255,.1);margin-top:24px;padding-top:18px;font-size:12px;color:#8c7c6b;}
+
+  /* back to top */
+  .totop{position:fixed;right:24px;bottom:24px;width:46px;height:46px;border-radius:50%;background:var(--primary-deep);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:.3s;z-index:60;}
+  .totop.show{opacity:1;pointer-events:auto;}
+
+  @media(max-width:640px){
+    .hero h1{font-size:34px;}
+    .sec-head h2{font-size:26px;}
+    .course-banner{padding:26px 22px;}
+    .course-banner h2{font-size:24px;}
+    .nav-inner{height:62px;flex-wrap:nowrap;padding:0;}
+    .brand{font-size:16px;}
+    .nav-toggle{display:flex;}
+    .nav-links{
+      display:none;
+      position:absolute;top:62px;left:0;right:0;
+      flex-direction:column;gap:0;
+      background:var(--bg-card);
+      border-bottom:1px solid var(--border);
+      box-shadow:var(--shadow-lg);
+      padding:6px 0;
+      z-index:49;
+    }
+    .nav-links.open{display:flex;}
+    .nav-links a{white-space:nowrap;font-size:14px;padding:13px 22px;border-radius:0;text-align:left;}
+    .nav-links a.active{background:var(--bg-soft);color:var(--primary-deep);}
+    .card-grid,.ov-grid,.mat-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand"><span class="dot"></span>人类图实践艺术</div>
+    <nav class="nav-links">
+      <a href="#overview">系列总览</a>
+      <a href="#surrender">臣服的艺术</a>
+      <a href="#communication">沟通的艺术</a>
+      <a href="#leadership">领导的艺术</a>
+      <a href="#love">爱的艺术</a>
+      <a href="#materials">配套物料</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="展开/收起导航菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <svg class="hero-bg" viewBox="0 0 1180 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="#C4956A" stroke-width="1.4" opacity="0.5">
+      <circle cx="200" cy="120" r="80"/><circle cx="320" cy="220" r="80"/>
+      <circle cx="200" cy="320" r="80"/><circle cx="980" cy="160" r="90"/>
+      <circle cx="860" cy="280" r="90"/><circle cx="980" cy="380" r="90"/>
+      <line x1="200" y1="120" x2="320" y2="220"/><line x1="320" y1="220" x2="200" y2="320"/>
+      <line x1="860" y1="280" x2="980" y2="160"/><line x1="980" y1="160" x2="980" y2="380"/>
+      <line x1="980" y1="380" x2="860" y2="280"/>
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">课程研发方案 · 人类图 × 实践哲学</span>
+    <h1>从<span class="accent">了解自己</span><br>走向<span class="accent">活出自己</span></h1>
+    <p class="sub">将人类图的核心智慧，转化为四门可落地的"生活艺术"课程——臣服、沟通、领导、爱。用身体的决策系统与类型的自然节律，重新设计你的人生、关系与团队。</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#overview">浏览课程系列</a>
+      <a class="btn btn-ghost" href="#materials">查看配套物料</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">4</div><div class="lab">门实践艺术课程</div></div>
+      <div class="stat"><div class="num">7</div><div class="lab">种内在权威</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">大能量类型策略</div></div>
+      <div class="stat"><div class="num">4</div><div class="lab">大关系合图场景</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OVERVIEW ===== -->
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">SERIES OVERVIEW</div>
+      <h2>四门实践艺术 · 系列总览</h2>
+      <p>本系列课程旨在将人类图从"知识"转化为"实践"，通过四个核心主题，引导学员从了解自己，走向活出自己。</p>
+    </div>
+    <div class="ov-grid">
+      <a class="ov-card" href="#surrender">
+        <span class="go">→</span>
+        <div class="ic">臣</div>
+        <h3>臣服的艺术</h3>
+        <div class="en">THE ART OF SURRENDER</div>
+        <div class="q">关键问题："我该相信什么来做决定？"</div>
+        <div class="tool">核心工具 · 七种权威速查卡</div>
+      </a>
+      <a class="ov-card" href="#communication">
+        <span class="go">→</span>
+        <div class="ic">沟</div>
+        <h3>沟通的艺术</h3>
+        <div class="en">THE ART OF COMMUNICATION</div>
+        <div class="q">关键问题："如何说，对方才听得懂？"</div>
+        <div class="tool">核心工具 · 类型沟通速查卡</div>
+      </a>
+      <a class="ov-card" href="#leadership">
+        <span class="go">→</span>
+        <div class="ic">领</div>
+        <h3>领导的艺术</h3>
+        <div class="en">THE ART OF LEADERSHIP</div>
+        <div class="q">关键问题："如何带对团队？"</div>
+        <div class="tool">核心工具 · 团队能量地图工作表</div>
+      </a>
+      <a class="ov-card" href="#love">
+        <span class="go">→</span>
+        <div class="ic">爱</div>
+        <h3>爱的艺术</h3>
+        <div class="en">THE ART OF LOVE</div>
+        <div class="q">关键问题："如何爱，对方才感受得到？"</div>
+        <div class="tool">核心工具 · 关系人类图协议模板</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COURSE 1: 臣服 ===== -->
+<section id="surrender" class="course">
+  <div class="wrap">
+    <div class="course-banner">
+      <div class="idx">COURSE 01</div>
+      <h2>臣服的艺术 · 聆听你的内在权威</h2>
+      <p>帮助学员理解并信任身体层面的决策信号，从"大脑分析"的模式，转向"臣服于内在权威"的模式。</p>
+      <span class="pill">核心主题：内在权威（7种） · 核心工具：七种权威速查卡</span>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>七种内在权威详解</h3><span class="note">身体比大脑更懂你</span></div>
+    <div class="card-grid">
+      <div class="mini">
+        <div class="top"><div class="badge">1</div><div><h4>情绪权威</h4><div class="en">Emotional · Solar Plexus</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">胸口的情绪波浪（起伏）</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">骑乘波浪，等平稳再决定</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">高潮或低谷时都不做重大决定，等"清明感"出现；核心原则——没有紧迫感就是清晰的信号</span></div>
+        <div class="mantra">口诀："等情绪退潮再说"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">2</div><div><h4>荐骨权威</h4><div class="en">Sacral</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">荐骨当下发出"嗯哼（是）/ 嗯嗯（否）"</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">即时回应</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">用简单问题唤醒身体，信任本能的即时回应（生产者专属）</span></div>
+        <div class="mantra">口诀："感觉对了就做"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">3</div><div><h4>直觉权威</h4><div class="en">Splenic</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">当下瞬间、不重复的"知道"感</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">即时（一次性，不会重复）</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">在安静中倾听身体的直觉信号，重视第一反应</span></div>
+        <div class="mantra">口诀："信不信由你，3 秒内"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">4</div><div><h4>意志力中心权威</h4><div class="en">Ego / Will</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">自然脱口而出的"我想要 / 我需要"</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">即时（需真实表达）</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">听自己真实的语言——开口说话时，你会听到自己真正想要的</span></div>
+        <div class="mantra">口诀："听自己真实的语言"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">5</div><div><h4>G中心权威</h4><div class="en">Self-Projected</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">在说出口的过程中逐渐清晰</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">需要对话</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">与信任的人大声说出想法，在说话中听到真实感受（投射者专属）</span></div>
+        <div class="mantra">口诀："说给别人听"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">6</div><div><h4>无内在权威</h4><div class="en">Mental / Environmental</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">需依赖外部环境获得清晰</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">需要外部参照</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">与不同的人交谈、在不同空间感受，观察环境对自己的影响</span></div>
+        <div class="mantra">口诀："不急着做决定"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">7</div><div><h4>月亮循环权威</h4><div class="en">Lunar · Reflector</div></div></div>
+        <div class="kv"><span class="k">身体信号</span><span class="v">对环境的整体感受随月相变化</span></div>
+        <div class="kv"><span class="k">决策节奏</span><span class="v">需要 28 天（完整月亮周期）</span></div>
+        <div class="kv"><span class="k">操作方法</span><span class="v">等待完整月亮周期，其间与信任的人交谈，让月亮不同位置显露不同面向（反映者专属）</span></div>
+        <div class="mantra">口诀："28 天后见分晓"</div>
+      </div>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>教学大纲</h3><span class="note">4 大模块 · 建议 3–6 小时</span></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:130px">模块</th><th style="width:170px">主题</th><th>核心内容</th><th style="width:180px">教学目标</th></tr></thead>
+        <tbody>
+          <tr><td><strong>第一模块</strong></td><td>为何需要"臣服"？</td><td>引入"用头脑决策"的困境与痛苦；揭示"内在权威"概念：比大脑更快更准的决策系统；引出"去制约"的核心理念。</td><td>激发学员对"臣服于身体智慧"的好奇与认同。</td></tr>
+          <tr><td><strong>第二模块</strong></td><td>七种内在权威详解</td><td>情绪 / 荐骨 / 直觉 / 意志力 / G中心 / 无内在权威 / 月亮，逐一解析其运作原理（按最低定义中心由高到低的权威顺序）。</td><td>让学员清晰识别自己属于哪种权威，并理解其运作。</td></tr>
+          <tr><td><strong>第三模块</strong></td><td>实践：如何"臣服"？</td><td>分辨方法；"臣服练习"：日常小决定先问身体再问头脑；应对外在压力、保护决策节奏。</td><td>传授可落地的"臣服"技巧，帮助学员真实应用。</td></tr>
+          <tr><td><strong>第四模块</strong></td><td>臣服的高阶</td><td>区分"臣服"与"摆烂"；案例分享；引导制定"臣服实验"计划。</td><td>提升认知层次，鼓励持续实践。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>PPT 内容大纲（建议 17 页）</summary>
+      <ul class="ppt-list">
+        <li><b>Slide 1</b> 封面——《臣服的艺术：聆听你的内在权威》</li>
+        <li><b>Slide 2</b> 开场——你的决策"正确"吗？反思过往后悔的决定</li>
+        <li><b>Slide 3</b> 核心概念——什么是"内在权威"？身体比大脑更懂你</li>
+        <li><b>Slide 4–10</b> 七种权威详解（每页一种）</li>
+        <li><b>Slide 11</b> 表格——七种权威对照表（信号 / 时间 / 操作方法）</li>
+        <li><b>Slide 12</b> 案例——用错权威的代价（如：情绪权威在兴奋时签约）</li>
+        <li><b>Slide 13–14</b> 实践单元——分辨身体信号与大脑噪音；"臣服实验"第一周</li>
+        <li><b>Slide 15</b> 核心心法——臣服不是软弱，而是找到最真实的力量</li>
+        <li><b>Slide 16</b> 总结——从"努力正确"到"自然流动"</li>
+        <li><b>Slide 17</b> 课后任务——选择一种权威，进行 7 天"臣服实验"</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ===== COURSE 2: 沟通 ===== -->
+<section id="communication" class="course">
+  <div class="wrap">
+    <div class="course-banner">
+      <div class="idx">COURSE 02</div>
+      <h2>沟通的艺术 · 你的类型，就是你的语言</h2>
+      <p>帮助学员理解不同能量类型的沟通模式，学习根据对方的"设计"调整沟通策略，减少误解与冲突。</p>
+      <span class="pill">核心主题：类型与策略 · 核心工具：类型沟通速查卡</span>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>四大类型的沟通策略</h3><span class="note">用对方的语言说话</span></div>
+    <div class="card-grid">
+      <div class="mini">
+        <div class="top"><div class="badge">显</div><div><h4>显示者</h4><div class="en">Manifestor</div></div></div>
+        <div class="kv"><span class="k">核心策略</span><span class="v">告知</span></div>
+        <div class="kv"><span class="k">最讨厌</span><span class="v">被追问、被控制、被命令</span></div>
+        <div class="kv"><span class="k">最有效</span><span class="v">给空间与尊重，先告知意图</span></div>
+        <div class="mantra">示范："我打算做这件事，跟你说一声。"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">生</div><div><h4>生产者 / 显示生产者</h4><div class="en">Generator / MG</div></div></div>
+        <div class="kv"><span class="k">核心策略</span><span class="v">等待回应</span></div>
+        <div class="kv"><span class="k">最讨厌</span><span class="v">被命令、被催着主动发起</span></div>
+        <div class="kv"><span class="k">最有效</span><span class="v">给问题、等待回应——问而不是说</span></div>
+        <div class="mantra">示范："这件事你怎么看？"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">投</div><div><h4>投射者</h4><div class="en">Projector</div></div></div>
+        <div class="kv"><span class="k">核心策略</span><span class="v">等待被邀请</span></div>
+        <div class="kv"><span class="k">最讨厌</span><span class="v">主动的、未经邀请的建议</span></div>
+        <div class="kv"><span class="k">最有效</span><span class="v">发出真诚的邀请</span></div>
+        <div class="mantra">示范："我想听听你的想法，你愿意吗？"</div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">反</div><div><h4>反映者</h4><div class="en">Reflector</div></div></div>
+        <div class="kv"><span class="k">核心策略</span><span class="v">等待 28 天</span></div>
+        <div class="kv"><span class="k">最讨厌</span><span class="v">逼迫、快速决策、高压环境</span></div>
+        <div class="kv"><span class="k">最有效</span><span class="v">给时间、给安全、不逼迫</span></div>
+        <div class="mantra">示范："你不用现在回答，回去好好感受一下。"</div>
+      </div>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>类型冲突的沟通化解</h3></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:200px">冲突组合</th><th>典型张力</th><th>化解话术</th></tr></thead>
+        <tbody>
+          <tr><td><strong>显示者 vs 生产者</strong></td><td>主动发起 vs 等待回应</td><td>显示者："我先干为敬，你随意。" 生产者："我想听听你的看法…"</td></tr>
+          <tr><td><strong>投射者 vs 显示者</strong></td><td>需要被看见 vs 需要空间</td><td>投射者："你能帮我看看这个吗？" 显示者："我需要自己待会。"</td></tr>
+          <tr><td><strong>反映者</strong></td><td>被环境"卷"进去</td><td>先问："这个环境对你健康吗？"再谈任务。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>教学大纲</h3></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:130px">模块</th><th style="width:170px">主题</th><th>核心内容</th><th style="width:180px">教学目标</th></tr></thead>
+        <tbody>
+          <tr><td><strong>第一模块</strong></td><td>为何沟通如此困难？</td><td>传统沟通学的局限；人类图洞见：能量类型不同，沟通模式天生不同。</td><td>激发对"类型化沟通"的兴趣。</td></tr>
+          <tr><td><strong>第二模块</strong></td><td>四大类型沟通策略</td><td>显示者告知 / 生产者等待回应 / 投射者等待邀请 / 反映者等待 28 天。</td><td>掌握与不同类型沟通的核心"开关"。</td></tr>
+          <tr><td><strong>第三模块</strong></td><td>类型冲突的化解</td><td>显示者 vs 生产者、投射者 vs 显示者、反映者的沟通陷阱与话术。</td><td>提供化解类型冲突的具体话术。</td></tr>
+          <tr><td><strong>第四模块</strong></td><td>高阶：权威 + 角色</td><td>结合内在权威与人生角色；建立"人类图沟通档案"。</td><td>提升沟通的深度与精准度。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>PPT 内容大纲（建议 15 页）</summary>
+      <ul class="ppt-list">
+        <li><b>Slide 1</b> 封面——《沟通的艺术：你的类型，就是你的语言》</li>
+        <li><b>Slide 2</b> 开场——为何"我为你好"反而让对方更生气？</li>
+        <li><b>Slide 3</b> 核心概念——类型决定你发送和接收信息的"频道"</li>
+        <li><b>Slide 4–7</b> 四大类型沟通策略（每页一型）</li>
+        <li><b>Slide 8</b> 表格——四大类型沟通策略对照表</li>
+        <li><b>Slide 9–11</b> 类型冲突化解（三组对照）</li>
+        <li><b>Slide 12</b> 结合权威——情绪不佳时按暂停键</li>
+        <li><b>Slide 13</b> 沟通心法——"邀请式"沟通：不说"你应该"，问"你想听吗？"</li>
+        <li><b>Slide 14</b> 总结——最好的沟通，是用对方的语言说话</li>
+        <li><b>Slide 15</b> 课后任务——用人类图分析一次最近的沟通冲突</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ===== COURSE 3: 领导 ===== -->
+<section id="leadership" class="course">
+  <div class="wrap">
+    <div class="course-banner">
+      <div class="idx">COURSE 03</div>
+      <h2>领导的艺术 · 不是成为谁，而是成为自己</h2>
+      <p>帮助管理者从"通用领导力模型"中解放出来，学会根据团队的天赋设计，搭建互补型团队并调整领导风格。</p>
+      <span class="pill">核心主题：类型与策略 · 核心工具：团队能量地图工作表</span>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>四大类型的领导风格</h3><span class="note">领导力是你能量设计的自然流露</span></div>
+    <div class="card-grid">
+      <div class="mini">
+        <div class="top"><div class="badge">显</div><div><h4>显示者</h4><div class="en">Manifestor</div></div></div>
+        <div class="kv"><span class="k">天然风格</span><span class="v">开创者、破局者</span></div>
+        <div class="kv"><span class="k">陷阱 / 警示</span><span class="v">忘记"告知"，显得孤傲</span></div>
+        <div class="kv"><span class="k">最佳配合</span><span class="v">搭配"生产者"落实执行</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">生</div><div><h4>生产者</h4><div class="en">Generator</div></div></div>
+        <div class="kv"><span class="k">天然风格</span><span class="v">以身作则的回应型领导</span></div>
+        <div class="kv"><span class="k">陷阱 / 警示</span><span class="v">过度主动发起，导致挫败</span></div>
+        <div class="kv"><span class="k">最佳配合</span><span class="v">搭配"显示者"创新开道</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">投</div><div><h4>投射者</h4><div class="en">Projector</div></div></div>
+        <div class="kv"><span class="k">天然风格</span><span class="v">战略军师、引导型领导</span></div>
+        <div class="kv"><span class="k">陷阱 / 警示</span><span class="v">主动插手、未被邀请时付出</span></div>
+        <div class="kv"><span class="k">最佳配合</span><span class="v">搭配"显示者"行动落地</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">反</div><div><h4>反映者</h4><div class="en">Reflector</div></div></div>
+        <div class="kv"><span class="k">天然风格</span><span class="v">环境的镜子、诊断型领导</span></div>
+        <div class="kv"><span class="k">陷阱 / 警示</span><span class="v">被他人的能量带走</span></div>
+        <div class="kv"><span class="k">最佳配合</span><span class="v">搭配"投射者"做战略决策</span></div>
+      </div>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>如何带领不同类型的团队</h3></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:160px">领导类型</th><th>策略要点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>显示者领导</strong></td><td>学会"告知"团队，而非独断专行。</td></tr>
+          <tr><td><strong>生产者领导</strong></td><td>用"提问"代替"命令"（如："你怎么看？"）。</td></tr>
+          <tr><td><strong>投射者领导</strong></td><td>等待团队"邀请"你指导，而非主动插手。</td></tr>
+          <tr><td><strong>反映者领导</strong></td><td>反映团队的健康状态，成为"回音壁"。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>教学大纲</h3></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:130px">模块</th><th style="width:170px">主题</th><th>核心内容</th><th style="width:180px">教学目标</th></tr></thead>
+        <tbody>
+          <tr><td><strong>第一模块</strong></td><td>传统领导力误区</td><td>"放之四海皆准"模型为何失效；案例：技术天才晋升 CTO 后为何沉默。</td><td>打破模板，建立"个性化领导"认知。</td></tr>
+          <tr><td><strong>第二模块</strong></td><td>四大类型领导风格</td><td>显示者破局者 / 生产者回应型 / 投射者军师 / 反映者镜子。</td><td>识别自己的天然领导风格。</td></tr>
+          <tr><td><strong>第三模块</strong></td><td>领导力策略</td><td>如何带领生产者 / 显示者 / 投射者 / 反映者团队。</td><td>掌握与团队类型匹配的领导工具。</td></tr>
+          <tr><td><strong>第四模块</strong></td><td>搭建互补型团队</td><td>团队人类图审计；案例：显示者创始人 + 生产者 CEO；绘制团队能量地图。</td><td>运用人类图优化团队结构与人才配置。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>PPT 内容大纲（建议 16 页）</summary>
+      <ul class="ppt-list">
+        <li><b>Slide 1</b> 封面——《领导的艺术：不是成为谁，而是成为自己》</li>
+        <li><b>Slide 2</b> 开场——案例：三位优秀的管理者为何失败？</li>
+        <li><b>Slide 3</b> 核心概念——领导力不是技能，是你能量设计的自然流露</li>
+        <li><b>Slide 4–7</b> 四大类型领导风格（每页一型）</li>
+        <li><b>Slide 8</b> 对照表——五大类型领导力特质对照表（含警示信号）</li>
+        <li><b>Slide 9–12</b> 领导力策略——分别带领生产者 / 显示者 / 投射者 / 反映者团队</li>
+        <li><b>Slide 13</b> 团队建设——案例：陈总（投射者）的团队重组</li>
+        <li><b>Slide 14</b> 练习——团队人类图审计（现场 / 课后）</li>
+        <li><b>Slide 15</b> 核心心法——最好的领导者，是能让每个人活出自己设计的人</li>
+        <li><b>Slide 16</b> 总结——从"管理"到"赋能"</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ===== COURSE 4: 爱 ===== -->
+<section id="love" class="course">
+  <div class="wrap">
+    <div class="course-banner">
+      <div class="idx">COURSE 04</div>
+      <h2>爱的艺术 · 从"合图"到"合心"</h2>
+      <p>运用人类图关系合图，理解伴侣关系中的能量互动模式，学习如何在关系中既保持自我，又建立深度连接。</p>
+      <span class="pill">核心主题：关系合图 · 核心工具：关系人类图协议模板</span>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>爱的四个场景</h3><span class="note">火花 → 相伴 → 主导 → 妥协</span></div>
+    <div class="card-grid">
+      <div class="mini">
+        <div class="top"><div class="badge">火</div><div><h4>火花（电磁效应）</h4><div class="en">Electro-Magnetic</div></div></div>
+        <div class="kv"><span class="k">合图定义</span><span class="v">两人各拥有同一条通道两端的"半边"闸门，相遇时共同定义出完整通道</span></div>
+        <div class="kv"><span class="k">关系动态</span><span class="v">人类图中最强的吸引动力——吸引与排斥并存</span></div>
+        <div class="kv"><span class="k">相处启示</span><span class="v">强烈吸引不等于长期契合，给关系一点时间看清</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">伴</div><div><h4>相伴（共享）</h4><div class="en">Companionship</div></div></div>
+        <div class="kv"><span class="k">合图定义</span><span class="v">两人拥有相同有颜色的通道或闸门</span></div>
+        <div class="kv"><span class="k">关系动态</span><span class="v">体验一致，轻松、互相理解，像友谊般自然</span></div>
+        <div class="kv"><span class="k">相处启示</span><span class="v">在一致处建立默契，是关系的舒适基底</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">主</div><div><h4>主导（能量覆盖）</h4><div class="en">Dominance</div></div></div>
+        <div class="kv"><span class="k">合图定义</span><span class="v">一方定义了整条通道，另一方在该通道上没有任何闸门</span></div>
+        <div class="kv"><span class="k">关系动态</span><span class="v">被定义方的能量"覆盖"开放方，后者需接受并臣服于这条能量</span></div>
+        <div class="kv"><span class="k">相处启示</span><span class="v">开放方不必"变成"对方，承认差异、不硬扛</span></div>
+      </div>
+      <div class="mini">
+        <div class="top"><div class="badge">妥</div><div><h4>妥协（单闸门让步）</h4><div class="en">Compromise</div></div></div>
+        <div class="kv"><span class="k">合图定义</span><span class="v">一方拥有整条完整通道，另一方只拥有该通道中的一个闸门</span></div>
+        <div class="kv"><span class="k">关系动态</span><span class="v">只拥单闸门者，会向拥有完整通道的一方"妥协"</span></div>
+        <div class="kv"><span class="k">相处启示</span><span class="v">察觉自己在何处"让步"，用沟通平衡而非一味牺牲</span></div>
+      </div>
+    </div>
+
+    <div class="block-title"><span class="bar"></span><h3>教学大纲</h3></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:130px">模块</th><th style="width:170px">主题</th><th>核心内容</th><th style="width:180px">教学目标</th></tr></thead>
+        <tbody>
+          <tr><td><strong>第一模块</strong></td><td>关系中的四大场景</td><td>火花 / 相伴 / 主导 / 妥协，建立审视关系的框架。</td><td>建立从人类图视角看关系的框架。</td></tr>
+          <tr><td><strong>第二模块</strong></td><td>火花与相伴</td><td>电磁效应（火花）如何产生吸引；相伴（共享通道 / 闸门）如何形成默契与友谊。</td><td>理解关系中"吸引力"与"舒适基底"的来源。</td></tr>
+          <tr><td><strong>第三模块</strong></td><td>主导与妥协</td><td>主导（能量覆盖）与妥协（单闸门让步）在合图中的真实动态；如何在差异中既亲密又不迷失自我。</td><td>掌握在权力与让步中保持自我的心法。</td></tr>
+          <tr><td><strong>第四模块</strong></td><td>高阶：活出"爱的设计"</td><td>案例；建立"关系人类图协议"；核心心法：爱不是牺牲，是各自活出自己后的相互照耀。</td><td>将人类图提升为"爱的实践哲学"。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>PPT 内容大纲（建议 16 页）</summary>
+      <ul class="ppt-list">
+        <li><b>Slide 1</b> 封面——《爱的艺术：从"合图"到"合心"</li>
+        <li><b>Slide 2</b> 开场——为什么相爱容易，相处难？</li>
+        <li><b>Slide 3</b> 核心框架——爱的四个场景：火花 → 相伴 → 主导 → 妥协</li>
+        <li><b>Slide 4–5</b> 模块一：火花与相伴（电磁效应吸引 / 共享通道默契）</li>
+        <li><b>Slide 6–8</b> 模块二：主导与妥协（能量覆盖 / 单闸门让步 / 案例）</li>
+        <li><b>Slide 9</b> 核心心法——关系里最大的"妥协"，不是改变自己，而是让对方做自己</li>
+        <li><b>Slide 10–13</b> 四大类型在关系中的需求（生产者 / 显示者 / 投射者 / 反映者）</li>
+        <li><b>Slide 14</b> 练习——为你的关系绘制"人类图关系协议"</li>
+        <li><b>Slide 15</b> 高阶心法——爱的最高级，是"各自活出自己"</li>
+        <li><b>Slide 16</b> 总结——从"磨合"到"共鸣"</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ===== MATERIALS ===== -->
+<section id="materials">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">SUPPORTING MATERIALS</div>
+      <h2>配套物料包</h2>
+      <p style="text-align:center">每门课程均配套可打印、可塑封的辅助物料，让学员在课堂内外持续实践。<br>可统一装订为《人类图实践艺术 · 学员物料包》。</p>
+    </div>
+    <div class="mat-grid">
+      <div class="mat">
+        <div class="ic">📒</div>
+        <h4>物料一 · 学员手册</h4>
+        <p>四门课程核心概览 + 个人人类图笔记模板 + 课后反思日志。</p>
+        <ul>
+          <li>我的类型 / 策略 / 权威 / 人生角色</li>
+          <li>定义与未定义中心记录</li>
+          <li>"一周臣服实验"记录表</li>
+        </ul>
+      </div>
+      <div class="mat">
+        <div class="ic">🃏</div>
+        <h4>物料二 · 速查卡</h4>
+        <p>可打印塑封，课后随身携带的四套速查卡。</p>
+        <ul>
+          <li>七种内在权威速查卡</li>
+          <li>四大类型沟通策略速查卡</li>
+          <li>四大类型领导风格速查卡</li>
+          <li>关系合图四大场景速查卡</li>
+        </ul>
+      </div>
+      <div class="mat">
+        <div class="ic">📝</div>
+        <h4>物料三 · 练习册</h4>
+        <p>课堂 + 课后实操，把知识转化为体验。</p>
+        <ul>
+          <li>21 天"内在权威"实验记录本</li>
+          <li>类型冲突化解实验</li>
+          <li>团队能量地图工作表</li>
+          <li>关系人类图协议模板</li>
+        </ul>
+      </div>
+      <div class="mat">
+        <div class="ic">🎁</div>
+        <h4>物料四 · 课程道具</h4>
+        <p>课堂互动专用道具建议。</p>
+        <ul>
+          <li>"臣服"身体感受引导卡片</li>
+          <li>速查卡塑封套装</li>
+          <li>关系合图打印纸（A3）</li>
+          <li>"告知"彩带（显示者标识）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div>
+      <h5>人类图实践艺术</h5>
+      <p>将人类图从"知识"转化为"实践"，<br>用四门生活艺术，陪你从了解自己走向活出自己。</p>
+    </div>
+    <div>
+      <h5>课程系列</h5>
+      <ul>
+        <li>臣服的艺术 · 内在权威</li>
+        <li>沟通的艺术 · 类型策略</li>
+        <li>领导的艺术 · 类型策略</li>
+        <li>爱的艺术 · 关系合图</li>
+      </ul>
+    </div>
+    <div>
+      <h5>课程建议</h5>
+      <ul>
+        <li>单场 3 小时（含互动练习）</li>
+        <li>深度版 6 小时（含个案讨论）</li>
+        <li>配套：手册 / 速查卡 / 练习册</li>
+      </ul>
+    </div>
+    <div class="small">课程研发方案 · 基于人类图系统智慧设计 · 内容供教研参考使用<br>Powered By Kan Man Tang</div>
+  </div>
+</footer>
+
+<div class="totop" id="totop">↑</div>
+
+<script>
+  // scroll-spy
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id = '#' + e.target.id;
+        links.forEach(l=>l.classList.toggle('active', l.getAttribute('href')===id));
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  sections.forEach(s=>spy.observe(s));
+
+  // back to top
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll',()=>{
+    totop.classList.toggle('show', window.scrollY>500);
+  });
+  totop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  // hamburger menu (mobile)
+  const navToggle = document.getElementById('navToggle');
+  const navPanel = document.querySelector('.nav-links');
+  navToggle.addEventListener('click',()=>{
+    const open = navPanel.classList.toggle('open');
+    navToggle.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navPanel.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click',()=>{
+      navPanel.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded','false');
+    });
+  });
+</script>
+</body>
+</html>
