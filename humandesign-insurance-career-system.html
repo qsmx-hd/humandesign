@@ -176,6 +176,8 @@
 
         <div class="chips" id="r-chips"></div>
 
+        <div class="warn" id="r-check" style="display:none;"></div>
+
         <div class="rgrid" id="r-cards"></div>
 
         <h3>保险职业适配 · 专属解读段</h3>
@@ -234,6 +236,54 @@ const DEF_INFO = {
   '无定义（非自己）':{team:'强烈依赖环境与团队，需紧密带教 + 稳定环境'}
 };
 
+// ===== 四要素自检逻辑（类型 / 权威 / 定义 必须互相自洽）=====
+// 各类型合法的决策权威
+const TYPE_AUTH = {
+  '显示者':     ['情绪权威','直觉权威（脾中心）','意志力中心权威（自我权威）'],
+  '生产者':     ['荐骨权威','情绪权威','直觉权威（脾中心）','意志力中心权威（自我权威）'],
+  '显示生产者': ['荐骨权威','情绪权威','直觉权威（脾中心）','意志力中心权威（自我权威）'],
+  '投射者':     ['情绪权威','直觉权威（脾中心）','意志力中心权威（自我权威）','G中心权威（自我投射权威）','无内在权威（环境权威）'],
+  '反映者':     ['月亮循环权威（反映者）','无内在权威（环境权威）']
+};
+// 各类型合法的定义（只有反映者为「无定义」）
+const TYPE_DEF = {
+  '显示者':     ['一分人','二分人','三分人','四分人'],
+  '生产者':     ['一分人','二分人','三分人','四分人'],
+  '显示生产者': ['一分人','二分人','三分人','四分人'],
+  '投射者':     ['一分人','二分人','三分人','四分人'],
+  '反映者':     ['无定义（非自己）']
+};
+// 某类型下的 canonical（默认）取值，用于自动修正
+const TYPE_DEFAULT_AUTH = {'显示者':'情绪权威','生产者':'荐骨权威','显示生产者':'荐骨权威','投射者':'情绪权威','反映者':'月亮循环权威（反映者）'};
+const TYPE_DEFAULT_DEF  = {'显示者':'一分人','生产者':'一分人','显示生产者':'一分人','投射者':'一分人','反映者':'无定义（非自己）'};
+
+// 自检：返回 {type,auth,def,fixes:[{field,from,to,why}]}
+function validateAndFix(type, auth, def){
+  const fixes = [];
+  const va = TYPE_AUTH[type] || [];
+  if(!va.includes(auth)){
+    let why;
+    if(auth === '月亮循环权威（反映者）') why = '「月亮循环权威」只属于反映者，其他类型不可能拥有。';
+    else if(type === '反映者') why = '反映者全身中心开放、没有内在权威，唯一合法权威是「月亮循环权威」。';
+    else if(auth === '荐骨权威') why = '「荐骨权威」仅属于生产者 / 显示生产者。';
+    else if(auth.indexOf('G中心') >= 0) why = '「G中心权威（自我投射）」仅属于投射者。';
+    else why = `「${type}」与「${auth}」不能并存。`;
+    const to = TYPE_DEFAULT_AUTH[type];
+    fixes.push({field:'权威', from:auth, to:to, why});
+    auth = to;
+  }
+  const vd = TYPE_DEF[type] || [];
+  if(!vd.includes(def)){
+    let why;
+    if(type === '反映者') why = '反映者没有任何定义中心，定义必须为「无定义（非自己）」。';
+    else why = `「${type}」为有定义类型，不可能是「无定义（非自己）」；只有反映者为无定义。`;
+    const to = TYPE_DEFAULT_DEF[type];
+    fixes.push({field:'定义', from:def, to:to, why});
+    def = to;
+  }
+  return {type, auth, def, fixes};
+}
+
 // 由 Profile 推导市场类型与人生角色类别
 function deriveMarket(profile){
   const has = c => profile.includes(c);
@@ -288,10 +338,22 @@ const SOPS = {
 function esc(s){return s;}
 
 function gen(){
-  const type = document.getElementById('f-type').value;
-  const auth = document.getElementById('f-auth').value;
-  const def  = document.getElementById('f-def').value;
+  // 读取原始输入
+  let type = document.getElementById('f-type').value;
+  let auth = document.getElementById('f-auth').value;
+  let def  = document.getElementById('f-def').value;
   const prof = document.getElementById('f-prof').value;
+
+  // 四要素自检：类型 / 权威 / 定义 必须互相自洽
+  const chk = validateAndFix(type, auth, def);
+  type = chk.type; auth = chk.auth; def = chk.def;
+  const fixes = chk.fixes;
+
+  // 若发生自动修正，同步回输入框（让下拉框反映真实值，避免误读）
+  if(fixes.length){
+    document.getElementById('f-auth').value = auth;
+    document.getElementById('f-def').value  = def;
+  }
 
   const ti = TYPE_INFO[type], ai = AUTH_INFO[auth], di = DEF_INFO[def];
   const mk = deriveMarket(prof);
@@ -302,6 +364,25 @@ function gen(){
     `<span class="chip">权威 <b>${auth}</b></span>`+
     `<span class="chip">定义 <b>${def}</b></span>`+
     `<span class="chip">人生角色 <b>${prof}（${mk.type}）</b></span>`;
+
+  // 自检结果（有冲突时高亮提示并展示已自动修正内容；无冲突时给通过提示）
+  const cEl = document.getElementById('r-check');
+  if(fixes.length){
+    let html = `<span class="k">⚠ 四要素自检未通过 · 已自动修正</span><br>你勾选的组合在人类图中不可能成立，系统已按类型规则修正如下：`;
+    fixes.forEach(f=>{
+      html += `<div style="margin-top:6px;">· <b>${f.field}</b>：${f.from} <span style="color:#a85a2c;">→ 已修正为 ${f.to}</span><br><span style="font-size:12.5px;color:#8A7A66;">${f.why}</span></div>`;
+    });
+    html += `<div style="margin-top:8px;font-size:12.5px;color:#8A7A66;">说明：人生角色（Profile）与类型无强制绑定，无需修正。</div>`;
+    cEl.innerHTML = html;
+    cEl.style.display = 'block';
+    cEl.style.borderColor = '#E8C9A8';
+    cEl.style.background = '#FCEFE6';
+  } else {
+    cEl.innerHTML = `<span class="k" style="color:#3a7d44;">✓ 四要素自检通过</span><br>类型 / 权威 / 定义 互相自洽，可放心使用本报告。`;
+    cEl.style.display = 'block';
+    cEl.style.borderColor = '#BFE3C4';
+    cEl.style.background = '#EFF8F0';
+  }
 
   // cards
   document.getElementById('r-cards').innerHTML =
@@ -341,10 +422,15 @@ function demo(){
 function rand(){
   const t=document.getElementById('f-type'), a=document.getElementById('f-auth'),
         d=document.getElementById('f-def'), p=document.getElementById('f-prof');
-  t.selectedIndex=Math.floor(Math.random()*t.length);
-  a.selectedIndex=Math.floor(Math.random()*a.length);
-  d.selectedIndex=Math.floor(Math.random()*d.length);
-  p.selectedIndex=Math.floor(Math.random()*p.length);
+  // 先定类型，再在该类型合法的权威 / 定义范围内随机，杜绝出现逻辑矛盾组合
+  const type = t.options[Math.floor(Math.random()*t.length)].value;
+  const auths = TYPE_AUTH[type], defs = TYPE_DEF[type];
+  const auth = auths[Math.floor(Math.random()*auths.length)];
+  const def  = defs[Math.floor(Math.random()*defs.length)];
+  t.value = type;
+  a.value = auth;
+  d.value = def;
+  p.selectedIndex = Math.floor(Math.random()*p.length);
   gen();
 }
 </script>
