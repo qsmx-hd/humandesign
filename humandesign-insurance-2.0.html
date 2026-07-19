@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图 × 保险中支优增优育项目赋能方案（课程版 V2.0）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --text:#2D2118; --primary:#C4956A; --border:#E8DCC8;
+    --card:#FBF6EC; --light:#F3E9D8; --mk:#9A6B3F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:14px;line-height:1.75;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 0 80px;}
+
+  /* ===== Top nav ===== */
+  .nav{position:sticky;top:0;z-index:20;background:rgba(245,240,232,.96);
+    border-bottom:1px solid var(--border);
+    display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;
+    padding:10px 18px;font-size:12.5px;}
+  .nav a{color:var(--text);text-decoration:none;white-space:nowrap;}
+  .nav a:hover{color:var(--primary);}
+  .nav b{color:var(--primary);}
+
+  /* ===== Hero ===== */
+  .hero{text-align:center;padding:34px 20px 8px;}
+  .hero h1{font-size:25px;font-weight:700;color:var(--primary);margin:0 0 8px;letter-spacing:1px;line-height:1.4;}
+  .hero .sub{color:#8A7A66;font-size:14px;margin:4px 0;}
+  .hero .tagline{display:inline-block;margin-top:10px;background:var(--light);
+    border:1px solid var(--border);border-radius:20px;padding:5px 16px;font-size:13px;color:var(--text);}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px 0 4px;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:14px 16px;min-width:104px;text-align:center;}
+  .stat .num{font-size:23px;font-weight:800;color:var(--primary);line-height:1;}
+  .stat .lab{font-size:12px;color:#8A7A66;margin-top:6px;}
+
+  /* ===== Syllabus ===== */
+  .syllabus{max-width:880px;margin:18px auto 0;padding:0 28px;}
+  .sec-title{font-size:16px;font-weight:700;color:var(--primary);text-align:center;margin:8px 0 16px;letter-spacing:1px;}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .mc{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:14px 16px;text-decoration:none;color:var(--text);display:block;}
+  .mc:hover{border-color:var(--primary);}
+  .mc .code{font-size:11px;letter-spacing:1px;color:var(--mk);font-weight:700;}
+  .mc .t{font-size:14.5px;font-weight:700;margin:4px 0 4px;}
+  .mc .d{font-size:12.5px;color:#8A7A66;}
+
+  /* ===== Module ===== */
+  .mod{max-width:880px;margin:34px auto 0;padding:0 28px;scroll-margin-top:56px;}
+  .mod-h{display:flex;align-items:baseline;gap:12px;border-left:4px solid var(--primary);
+    padding-left:12px;margin:0 0 14px;}
+  .mod-h .code{font-size:12px;letter-spacing:1.5px;color:var(--mk);font-weight:700;}
+  .mod-h h2{font-size:18px;font-weight:700;color:var(--text);margin:0;}
+
+  h3{font-size:15px;font-weight:700;color:var(--primary);margin:24px 0 10px;}
+  p{margin:10px 0;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:16px 20px;margin:14px 0;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+  th,td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--primary);color:#FFF8EF;font-weight:700;}
+  tbody tr:nth-child(even){background:#FCF8F0;}
+  .tag{display:inline-block;background:var(--light);color:var(--text);
+    border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;margin:2px;}
+  .note{background:#FDF3E3;border:1px dashed var(--primary);border-radius:10px;
+    padding:12px 16px;font-size:13px;color:#6B5A45;margin:14px 0;}
+  code{background:var(--light);border:1px solid var(--border);border-radius:5px;
+    padding:1px 6px;font-size:12px;color:var(--text);}
+  ol,ul{margin:10px 0;padding-left:22px;}
+  li{margin:6px 0;}
+  .kpi{color:var(--primary);font-weight:700;}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .toolbar{max-width:880px;margin:14px auto;padding:0 28px;}
+  .btn{display:inline-block;background:var(--primary);color:#FFF8EF;padding:10px 18px;
+    border-radius:9px;font-weight:700;text-decoration:none;}
+
+  .footer{max-width:880px;margin:54px auto 0;padding:18px 28px 0;border-top:1px solid var(--border);
+    font-size:12px;color:#8A7A66;text-align:center;}
+  .totop{display:block;text-align:center;margin:18px 0 0;color:var(--primary);text-decoration:none;font-size:13px;}
+
+  @media (max-width:640px){
+    body{font-size:13.5px;}
+    .wrap{padding-bottom:54px;}
+    .hero h1{font-size:21px;}
+    .mod,.syllabus,.toolbar,.footer{padding-left:14px;padding-right:14px;}
+    .mod-h h2{font-size:16px;}
+    h3{font-size:14.5px;margin:20px 0 9px;}
+    .cards{grid-template-columns:1fr;}
+    .card{padding:14px 15px;}
+    .stat{flex:1 1 40%;min-width:0;}
+    table{font-size:12px;}
+    th,td{padding:7px 8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="#intro"><b>引言</b></a>
+    <a href="#m1"><b>模块一</b> 底层逻辑</a>
+    <a href="#m2"><b>模块二</b> 优增侧</a>
+    <a href="#m3"><b>模块三</b> 优育侧</a>
+    <a href="#m4"><b>模块四</b> 工具包</a>
+    <a href="#m5"><b>模块五</b> 落地 SOP</a>
+    <a href="#m6"><b>模块六</b> 话术附录</a>
+    <a href="#tool">▶ 工具栏</a>
+  </nav>
+
+  <header class="hero">
+    <h1>人类图 × 保险中支优增优育项目赋能方案</h1>
+    <div class="sub">课程版 · V2.0 ｜ 商业产品包定位 ｜ 轻量版四要素</div>
+    <div class="tagline">用人类图把"统一话术"升级成"统一框架下的千人千面"</div>
+    <div class="stats">
+      <div class="stat"><div class="num">5</div><div class="lab">能量类型</div></div>
+      <div class="stat"><div class="num">7</div><div class="lab">决策权威</div></div>
+      <div class="stat"><div class="num">12</div><div class="lab">人生角色</div></div>
+      <div class="stat"><div class="num">11</div><div class="lab">大赛道</div></div>
+      <div class="stat"><div class="num">30/60/90</div><div class="lab">天陪跑</div></div>
+    </div>
+  </header>
+
+  <!-- 课程大纲 -->
+  <section class="syllabus">
+    <div class="sec-title">课程大纲</div>
+    <div class="cards">
+      <a class="mc" href="#intro"><div class="code">INTRO</div><div class="t">课程引言</div><div class="d">这套方案解决什么、为什么有效</div></a>
+      <a class="mc" href="#m1"><div class="code">MODULE 01</div><div class="t">底层逻辑：术 + 道</div><div class="d">为什么人类图能补"对谁标准化"这一刀</div></a>
+      <a class="mc" href="#m2"><div class="code">MODULE 02</div><div class="t">优增侧（招募）</div><div class="d">识人画像 · 按权威邀约 · 看图面试 · 人生角色×市场</div></a>
+      <a class="mc" href="#m3"><div class="code">MODULE 03</div><div class="t">优育侧（培育）</div><div class="d">类型化培育 · 30/60/90 天陪跑 · 师徒匹配</div></a>
+      <a class="mc" href="#m4"><div class="code">MODULE 04</div><div class="t">工具包</div><div class="d">速查卡 · 小程序报告 · 打卡 · 衔接总表</div></a>
+      <a class="mc" href="#m5"><div class="code">MODULE 05</div><div class="t">中支落地 SOP</div><div class="d">日 / 周 / 月闭环 · 月度赋能打分表</div></a>
+      <a class="mc" href="#m6"><div class="code">MODULE 06</div><div class="t">话术对照附录</div><div class="d">标准 ↔ 按类型 / 权威 / 人生角色微调</div></a>
+      <a class="mc" href="#tool"><div class="code">TOOL</div><div class="t">▶ 配套工具栏</div><div class="d">人类图职业适配系统（在线生成报告）</div></a>
+    </div>
+  </section>
+
+  <!-- 课程引言 -->
+  <section class="mod" id="intro">
+    <div class="mod-h"><span class="code">INTRO</span><h2>课程引言：这套方案解决什么</h2></div>
+    <div class="card">
+      <p style="margin-top:0;"><b>这份方案解决什么：</b>把人类图作为"读人"的科学工具，嵌入机构既有的优增优育痛点解决方案。原体系把"术"做得很满——四大痛点、话术、打卡、打分、SOP 全是动作层；但全是标准化，没解决"对谁标准化"。人类图补这一刀：把"统一话术"升级成<b>"统一框架下的千人千面"</b>。</p>
+      <p style="margin-bottom:0;">定位为面向保险中支机构的<b>"工具 + 培训"产品包</b>；应用深度取<b>轻量版四要素</b>——主管只需会看"类型 / 权威 / 定义 / 人生角色"四样，即可落地，无需懂人类图全部知识体系。</p>
+    </div>
+  </section>
+
+  <!-- 模块一 -->
+  <section class="mod" id="m1">
+    <div class="mod-h"><span class="code">MODULE 01</span><h2>底层逻辑：术 + 道</h2></div>
+    <p><b>原体系补"术"：</b>渠道拓新、脱敏邀约、异议标准、面试闭环——解决"说什么、做什么动作"（已落地为六维评估、11 大赛道、70-30 法则、面谈五步法、追踪表）。</p>
+    <p><b>人类图补"道"：</b>在统一框架下按对方的能量类型 / 决策权威 / 定义 / 人生角色做个性化适配——解决"对谁说、怎么说才命中、该攻哪类市场"。</p>
+    <div class="note">轻量四要素的分工：<br>
+    <span class="tag">类型</span> 解决"这人适合干哪块、怎么带" → 对应人才画像 / 师徒匹配<br>
+    <span class="tag">权威</span> 解决"怎么跟他说、何时促单" → 对应脱敏邀约 / 促成时机（与 70-30 法则协同）<br>
+    <span class="tag">定义</span> 解决"他是单兵还是靠团队" → 对应师徒搭配 / 留存环境<br>
+    <span class="tag">人生角色</span> 解决"关系经营方式 / 天生渠道" → 对应 缘故市场 vs 陌生市场（与 11 大赛道协同）</div>
+  </section>
+
+  <!-- 模块二 -->
+  <section class="mod" id="m2">
+    <div class="mod-h"><span class="code">MODULE 02</span><h2>优增侧（招募）</h2></div>
+
+    <h3>2.1 能量人才画像升级（叠加六维人才评估模型）</h3>
+    <p>保留原职业身份画像（店长 / 宝妈 / 企业内勤），<b>叠加能量类型适配度</b>，避免把"反映者"硬拉进高压节奏（注定流失），把对的人放在对的角色。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>能量类型</th><th>占比 / 特征</th><th>在优增优育中的角色</th></tr></thead>
+      <tbody>
+        <tr><td>生产者 / 显示生产者</td><td>~70%，持续行动力</td><td>销售主力 · 直增 · 大量触达 · 有回应就干</td></tr>
+        <tr><td>投射者</td><td>~20%，需被邀请 / 看见</td><td>顾问 · 陪访 · 教练 · 深度一对一；不宜硬压 KPI</td></tr>
+        <tr><td>显示者</td><td>~8%，发起开拓</td><td>渠道开拓尖兵 · 启动新项目；需告知计划 + 给自主</td></tr>
+        <tr><td>反映者</td><td>~1%，需稳环境</td><td>特殊关怀 · 低频；一般不强推增员</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>人类图 × 六维 互补对照：</b>六维评"标准分"，人类图补"能量成因"，双视角降低错配流失。（六维共 6 项，覆盖行业认知、学习能力、人脉资源、意愿度、抗压、沟通）<br>
+    · <b>行业认知（基础项）</b> ↔ 类型 / 权威：六维看"是否懂保险 / 金融语境"；人类图看"靠哪种方式建立认知"——显示生产者靠快速试错上手、投射者靠深度研究后再输出，错配的教学方式会拖慢其行业认知。<br>
+    · <b>学习能力（核心项）</b> ↔ 类型 / 定义：六维看"能否持续学新规、新产品"；人类图看"学习节奏"——生产者靠"做中学"、投射者靠被邀请参与深度研讨、四分人靠团队带教补位，单兵硬学易流失。<br>
+    · <b>人脉资源（加分项）</b> ↔ 人生角色含 4 爻：六维看"人脉有多少"，人类图看"天生靠不靠人脉"——含 4 爻者让人脉自然裂变，逼其陌生地推是浪费。<br>
+    · <b>意愿度（一票否决项）</b> ↔ 权威 / 定义：意愿度 ≤2 直接"暂不适合"；人类图解释"为什么推不动"——如情绪权威被逼当场决定会本能抗拒。<br>
+    · <b>抗压能力（核心项）</b> ↔ 类型 / 定义：六维看恢复力；人类图看"是否被错配消耗"——投射者被压硬指标、显示者不被告知计划，抗压会被结构性击穿。<br>
+    · <b>沟通能力（核心项）</b> ↔ 类型：投射者需被看见、显示者需自主、生产者要"有回应的行动"，沟通打法因类型而异。</div>
+
+    <h3>2.2 按权威定制脱敏邀约</h3>
+    <p>标准作业要求"全员统一脱敏、三不原则"（不提卖保单 / 不提入职 / 不提销售）。底线不动，但按对方的<b>决策权威</b>微调话术内核，命中其决策方式，见面率直接提升。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>决策权威</th><th>决策特征</th><th>脱敏邀约话术要点（守三不原则）</th><th>促成时机</th></tr></thead>
+      <tbody>
+        <tr><td>情绪权威</td><td>情绪需时间沉淀才清晰，当下易摇摆</td><td>"先发你一份本地赛道报告，过两天清晰了咱再聊"</td><td><b>严禁当场逼单</b>，留白 1–2 天再跟</td></tr>
+        <tr><td>荐骨权威</td><td>身体即时回应（嗯 / 啊）</td><td>"你来试一次这个模式，看身体有没有能量"</td><td>当场有回应即约下次</td></tr>
+        <tr><td>直觉权威（脾中心）</td><td>当下直觉、瞬间警觉</td><td>"你第一眼感觉这事儿靠谱不？"</td><td>借当下直觉切入</td></tr>
+        <tr><td>意志力中心权威（自我权威）</td><td>意志 / 承诺驱动，说到做到</td><td>"愿不愿意给自己一个 3 个月承诺试试？"</td><td>用挑战 / 承诺锁定</td></tr>
+        <tr><td>G中心权威（自我投射权威）</td><td>需被"看见 / 邀请"才表达方向</td><td>"我特别想请你来聊聊，因为你这特质很少见"</td><td>多给其说话、确认方向的空间，邀请式推进</td></tr>
+        <tr><td>无内在权威（环境权威）</td><td>看环境对不对，无内在指南针</td><td>"来现场感受下我们团队氛围"</td><td>多次接触、让其感受环境后再自然推进</td></tr>
+        <tr><td>月亮循环权威（反映者）</td><td>需一整个月亮周期（约 28 天）才看清</td><td>"先感受、慢慢看，不急着决定"</td><td>低频、给足时间，约 28 天周期评估，不强推</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:0;">注：人类图标准权威共 <b>7 种</b>，本表已覆盖全部。原"脾权威 / 自我权威 / 环境权威"在此对应"直觉权威（脾中心）/ 意志力中心权威（自我权威）/ 无内在权威（环境权威）"——名称标准化，含义不变；新增的 G中心权威（自我投射权威）、月亮循环权威（反映者）补全了标准全集，邀约时按对方实际权威选用即可。</div>
+
+    <h3>2.3 人类图面试法（看图面试）</h3>
+    <p>把标准化面试 SOP 升级为"看图面试"，让人类图成为"免费职业测评"的完美载体，且天然契合脱敏人设。它<b>架在机构既有的"面谈五步法 + STAR 结构化面试 + 70/30 法则"之上</b>，不是另起炉灶。<b>前置动作：</b>加微信后先发人类图小程序测评链接（出生时间即可生成图）——即"我帮你做免费职业测评"的落地载体，面试前你已拿到对方的四要素图。</p>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">2.3.1 面谈五步法实操</h4>
+    <div class="card">
+      <p style="margin-top:0;"><b>总框架：</b><b>① 共鸣</b>（30秒）→ <b>② 共情</b>（2-3分钟）→ <b>③ 拆困</b>（5-8分钟）→ <b>④ 重构</b>（5-8分钟）→ <b>⑤ 邀约</b>（2-3分钟）。<b>核心原则：</b>整个面谈外勤说 <span class="kpi">30%</span>、候选人说 <span class="kpi">70%</span>（70/30 法则）；信任 = 让对方放下戒备、进入对话状态。</p>
+      <div class="scroll-x"><table>
+        <thead><tr><th>步骤</th><th>时长</th><th>核心原则</th><th>关键动作 / 话术模板</th><th>人类图叠加（看图面试）</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>① 共鸣</b></td><td>30秒</td>
+            <td>不谈保险，先谈对方行业和近况</td>
+            <td>三模板：<b>行业共鸣型</b>（"最近你们行业怎么样？听说XX政策 / 市场变化挺大的"——适用报行合一 / 教培双减 / 医药带量采购）；<b>生活关怀型</b>（"看你朋友圈最近在忙XX，生活状态挺好的啊"）；<b>第三方引荐型</b>（"XX跟我提到你很专业，想听听你的看法"）</td>
+            <td>用类型 / 权威开场建专业感（如"你是生产者、荐骨权威，行动力天生强，跟销售很搭"），不暴露招聘目的</td>
+          </tr>
+          <tr>
+            <td><b>② 共情</b></td><td>2-3分钟</td>
+            <td>先听后说，让对方感到被理解</td>
+            <td>三问：<b>"你现在工作中最大的挑战是什么？"</b> → <b>"你觉得现在这个状态能持续多久？"</b> → <b>"如果有一个机会能改变现状，你会考虑吗？"</b>。技巧：不急着给建议；用"我理解 / 确实"回应；找情绪触发点（收入下降？晋升无望？时间不自由？）</td>
+            <td>按权威调倾听节奏：情绪权威多留白、不逼答；荐骨权威让其"试"；直觉权威（脾中心）借当下直觉接话</td>
+          </tr>
+          <tr>
+            <td><b>③ 拆困</b></td><td>5-8分钟</td>
+            <td>用提问引导对方自己发现问题（非直接给答案）</td>
+            <td><b>SPIN 提问法</b>：S 现状（"你收入结构什么样？底薪占比？"）→ P 痛点（"报行合一再收紧，收入怎么变？"）→ I 影响（"持续下去对家庭 / 孩子教育 / 退休规划有何影响？"）→ N 需求回报（"有方式在保持现状同时增一份不受政策影响的收入，愿了解吗？"）。另按赛道选 1-2 个拆解问（银行 / 企业主 / 宝妈 / 退休女性 / 青二代 / 通用）</td>
+            <td>结合人生角色定向挖：含 4 爻问"你身边谁可能需要"；含 5 爻问"你公域影响力怎么用"；偏 1/3 问"你最擅长的专业是什么"</td>
+          </tr>
+          <tr>
+            <td><b>④ 重构</b></td><td>5-8分钟</td>
+            <td>不是推销，帮对方看到新路径</td>
+            <td><b>跨行业对比 6 维度</b>：收入结构（底薪 + 绩效有天花板 vs 佣金 + 管理津贴上不封顶）/ 时间自由度 / 成长路径 / 风险特征（单一 vs 多元抗风险）/ 客户关系（一次性 vs 终身）/ 创业门槛（资金场地 vs 零成本启动）。话术示范（银行）："同样服务高净值客户，保险变现效率是银行 3-5 倍"</td>
+            <td>用图背书重构："所以你适合顾问角色 + 缘故渠道"——图谱比口头承诺可信，避免画饼</td>
+          </tr>
+          <tr>
+            <td><b>⑤ 邀约</b></td><td>2-3分钟</td>
+            <td>自然过渡到"了解一下"</td>
+            <td><b>三种邀约</b>：轻邀约（"就当多一个选择，不合适也没关系"）/ 价值邀约（"我朋友 / 团队做得很好，介绍你们认识"）/ 体验邀约（"下周有个沙龙 / 下午茶，像职业发展分享会"）。<b>721 跟进法则</b>：7天内 ≥3 次触达、促成 ≥1 次深入面谈（24h 感谢 + 邀请 / 3天分享文章 / 7天约二次面谈）</td>
+            <td>看图促成：用类型说明适配角色、人生角色指明主攻市场（见 2.4），当场双向筛选避免错配；按权威定促成时机</td>
+          </tr>
+        </tbody>
+      </table></div>
+      <div class="note" style="margin-bottom:0;">三不原则（守底线）：不夸大 / 不被动 / 必闭环；看图面试新增——<b>用图说话，不画饼</b>。<b>异议处理万能公式：</b>表面顾虑 → 底层痛点 → 对应赛道方案（如"我再想想"→ 收入 / 面子 / 家人 → 追问真实顾虑；"保险不好做"→ 刻板印象 → 行业数据重构；"我有自己的事业"→ 安全感 → 加安全垫 / 对冲）。</div>
+    </div>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">2.3.2 STAR 结构化面试</h4>
+    <div class="card">
+      <p style="margin-top:0;">用过去的行为预测未来表现——通过问候选人真实经历（<b>S</b>ituation 情境 / <b>T</b>ask 任务 / <b>A</b>ction 行动 / <b>R</b>esult 结果），判断其是否具备保险行业所需素质。人类图"面谈前已拿到"，可在每个维度定向追问。</p>
+      <div class="scroll-x"><table>
+        <thead><tr><th>维度</th><th>目的</th><th>标准提问示例</th><th>人类图叠加（定向追问）</th></tr></thead>
+        <tbody>
+          <tr><td><b>S 情境</b></td><td>了解职业状况</td><td>"你现在的工作 / 事业是什么情况？做了多久？"</td><td>结合类型：显示者问"你发起过什么"；投射者问"你等过谁邀请"</td></tr>
+          <tr><td><b>T 任务</b></td><td>评估核心成就</td><td>"你在那项目具体负责什么？目标是什么？"</td><td>按权威：荐骨权威问"你身体最想做的那件事"</td></tr>
+          <tr><td><b>A 行动</b></td><td>评估行动力 / 执行力</td><td>"面对困难你具体做了什么？怎么推动的？" 区分团队与个人："你个人具体做了什么？"</td><td>按定义：一分人问"你单兵怎么打"；无定义问"你和谁搭才成"</td></tr>
+          <tr><td><b>R 结果</b></td><td>判断结果导向 / 自驱</td><td>"最后结果怎样？若重来一次你会怎么做？" 抗压探查："你遇到最大挫折是什么、怎么处理的？"</td><td>结合人生角色：含 6 爻问"长期信任怎么建"；偏 1/3 问"专业沉淀出什么成果"</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note" style="margin-bottom:0;"><b>STAR 评分表</b>（对接六维）：候选人 | S | T | A | R | 对应六维维度（行业认知 / 沟通 / 人脉 / 学习 / 抗压 / 意愿度）| 评分。抗压直接由 R 的"挫折处理"项评估；意愿度一票否决（≤2 否），抗压 ≤2 先补，六维 ≥3 且意愿 ≥4 直接送认证。人类图不替代六维，而是标注"他会在哪类任务上自燃"。</div>
+    </div>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">2.3.3 双工具收口（六维定"送不送" × 人类图定"放哪"）</h4>
+    <div class="card">
+      <p style="margin-top:0;margin-bottom:0;"><b>面谈后</b>独立填六维评估定"是否送认证"（意愿度 ≤2 否、抗压 ≤2 先补、六维 ≥3 且意愿 ≥4 直接送）；<b>面谈前</b>已拿到的四要素图定"放哪个角色 / 渠道"——两者各管一段，叠加成完整面试闭环。红线：不夸大 / 不被动 / 必闭环 / <b>用图说话不画饼</b>。</p>
+    </div>
+
+    <h3>2.4 人生角色（Profile）：缘故市场 vs 陌生市场 · 新增维度</h3>
+    <p>行业第一大痛点，是"渠道枯竭、缘故透支、无法触达优质人才"。传统做法是让所有人硬啃缘故，导致资源透支、且不适合缘故的人极其痛苦。人类图<b>人生角色（Profile）</b>能直接判断：这个人天生靠"人脉连接"还是靠"破圈影响"——从而把对的人放到对的渠道，从根上解决"缘故透支"。</p>
+    <p><b>Profile 是什么：</b>由两个爻线数字组成（个性 / 意识爻线 · 设计 / 潜意识爻线，各为 1–6），数字含义——1 研究者（基础建立者 · 知识积累）｜2 隐士（天才等待者 · 需被召唤）｜3 殉道者（实验学习者 · 试错韧性）｜4 机会主义者（关系织网者 · 人脉连接）｜5 异端（实用解决者 · 公众传播）｜6 角色模型（三阶领袖 · 长期信任）。人生角色（Profile）共 <b>12 种</b>（见 2.4.1）。</p>
+    <p><b>判断口诀：</b>看 Profile 里含哪个"爻"——偏 <b>1/3</b> → 实做型 → 陌生市场靠专业（研究 + 试错，靠专业内容破圈）；含 <b>2</b> → 桥梁型 → 被引荐入圈（天生才能需被"看见 / 邀请"，安排引荐人带入，别让其独自破冰）；含 <b>4</b> → 人脉型 → 缘故市场；含 <b>5</b> → 传播型 → 陌生市场 / 公域；含 <b>6</b> → 口碑型 → 长期信任。</p>
+
+    <h3>2.4.1 人生角色 × 11 大赛道 × 市场类型 综合矩阵</h3>
+    <p>把人类图"天生渠道偏好"与"11 大赛道"的职业身份画像交叉，得到可直接落地的<b>分渠道增员地图</b>。赛道匹配度评估表解决"他是哪类职业人群"，人生角色解决"他天生该走人脉还是破圈"——两者一起，渠道分配从盲打变双保险。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>人生角色（爻）</th><th>天生擅长</th><th>主攻市场</th><th>典型适配赛道（11 大赛道举例）</th></tr></thead>
+      <tbody>
+        <tr><td>实做型 · 偏 1/3（1/3 · 3/5）</td><td>专业沉淀 · 研究试错</td><td><b>陌生市场（专业内容）</b></td><td>医药代表转型、银行金融从业转型、专业服务人士、外贸制造转型</td></tr>
+        <tr><td>含 2 爻（2/4 · 2/5 · 5/2 · 6/2）</td><td>隐居天才 · 需被邀请</td><td><b>引荐入圈</b>（叠加自身主市场）</td><td>各赛道均需"引荐人"引入者；安排引荐人，别让其独自破冰</td></tr>
+        <tr><td>含 4 爻（1/4 · 2/4 · 4/1 · 4/6）</td><td>人脉连接 · 转介绍裂变</td><td><b>缘故 / 转介绍</b></td><td>宝妈回归群体、50 岁退休女性群体、企业主转型（转介绍）、专业服务人士</td></tr>
+        <tr><td>含 5 爻（2/5 · 3/5 · 5/1 · 5/2）</td><td>公众传播 · 影响陌生</td><td><b>陌生 / 公域</b></td><td>教培行业转型、房地产中介转型、互联网大厂优化期、青二代群体（内容破圈）</td></tr>
+        <tr><td>含 6 爻（3/6 · 4/6 · 6/2 · 6/3）</td><td>长期信任 · 角色模型</td><td><b>高端 / 口碑</b></td><td>企业主转型（资产隔离 / 传承）、专业服务人士（高端客户）、50 岁退休女性（姐妹团标杆）</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:0;">说明：人生角色（Profile）共 <b>12 种</b>（1/3 · 1/4 · 2/4 · 2/5 · 3/5 · 3/6 · 4/1 · 4/6 · 5/1 · 5/2 · 6/2 · 6/3），上表所列均出自这 12 种，未做任何编造。一个 Profile 含两条爻线，可能同时触发两类渠道（如 2/4 既是含 2 爻桥梁型、又是含 4 爻人脉型）——上表按"主导市场"归类；含 2 爻者无论主市场为何，都需"被引荐 / 邀请"带入圈。</div>
+
+    <p><b>Profile 维度对照表（含典型适配赛道，按判断口诀顺序排列）：</b></p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>人生角色（典型）</th><th>能量特质</th><th>适合经营的市场</th><th>增员 / 培育要点</th><th>适配赛道举例</th></tr></thead>
+      <tbody>
+        <tr><td>实做型 · 偏 1/3（1/3 · 3/5）</td><td>研究者 + 殉道者 · 专业沉淀</td><td><b>陌生市场</b>（专业内容破圈）</td><td>给学习路径、允许试错，靠专业立足而非人脉</td><td>医药代表、银行金融、专业服务</td></tr>
+        <tr><td>含 2 爻（2/4 · 2/5 · 5/2 · 6/2）</td><td>隐士 · 天才等待者 · 需被邀请</td><td><b>桥梁型</b>（被引荐入圈）</td><td>安排引荐人，别让其独自破冰</td><td>各赛道需引荐人</td></tr>
+        <tr><td>含 4 爻（1/4 · 2/4 · 4/1 · 4/6）</td><td>机会主义 · 人脉连接</td><td><b>缘故市场</b>（熟人 / 社群 / 转介绍）</td><td>发挥关系网做转介绍裂变；别逼陌生地推，浪费人脉</td><td>宝妈回归、退休女性、企业主（转介绍）</td></tr>
+        <tr><td>含 5 爻（2/5 · 3/5 · 5/1 · 5/2）</td><td>异端 · 传播影响</td><td><b>陌生市场</b>（公域 / 内容 / 短视频）</td><td>给内容素材、公域打法，让其影响陌生群体</td><td>教培、房产中介、大厂、青二代</td></tr>
+        <tr><td>含 6 爻（3/6 · 4/6 · 6/2 · 6/3）</td><td>角色模型 · 长期信任</td><td><b>长期口碑</b>（高端 / 缘故深耕）</td><td>给时间沉淀、树标杆，不急功近利</td><td>企业主（传承）、专业服务（高端）</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">应用落点：增员时先读对方 Profile → 分配渠道方向；再用赛道匹配度评估表确认其职业身份画像 → 二者一致即高匹配。培育时按市场类型给打法（缘故型发"转介绍 SOP"，陌生型发"内容 / 公域 SOP"，口碑型发"标杆打造 SOP"，详见 2.4.2）。让 1/5 的人硬磕缘故圈既尴尬又低效，让 2/4 的人浪费人脉做陌生地推更是错配——人生角色维度让"渠道拓新"从盲打变精准。</div>
+
+    <h3>2.4.2 三类市场 SOP 工具包（转介绍 SOP / 内容-公域 SOP / 标杆打造 SOP）</h3>
+    <p>增员 / 培育落地时，按对方人生角色推导出的市场类型，<b>自动派发对应 SOP</b>——<b>缘故型（含 4 爻 / 含 2 爻桥梁型）发"转介绍 SOP"；陌生型（含 5 爻 / 1-3 实做型）发"内容 / 公域 SOP"；口碑型（含 6 爻）发"标杆打造 SOP"</b>。三类 SOP 与"人生角色 → 市场"严格对应、互不串用，主管照单执行即可，无需自己摸索打法。</p>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">① 转介绍 SOP（缘故 / 人脉型专用 · 含 4 爻 · 含 2 爻桥梁型）</h4>
+    <div class="card">
+      <ol style="margin:0;">
+        <li><b>关系盘点：</b>画出三层人脉圈——强连接（亲友 / 同事）/ 弱连接（老客户 / 同好）/ 潜在连接（朋友的朋友），标注"谁可能需职业转型 / 副业"。</li>
+        <li><b>价值前置：</b>先给后求。用"免费人类图职业测评 / 本地赛道分析"做钩子，不卖货、不提入职（守三不原则），让人脉自然感受到价值。</li>
+        <li><b>触点设计：</b>借节点邀约——生日、节日、行业变动、孩子升学等生活时刻，轻量触达而非硬推销。</li>
+        <li><b>脱敏转介绍话术：</b>守三不原则（不提卖保单 / 不提入职 / 不提销售）。例："我最近在帮朋友用人类图做职业规划，免费帮你测一下？不涉及保险，就是看适不适合多一条路。"</li>
+        <li><b>熟人见证 / 案例背书：</b>用身边真实故事破冰（"你认识的 XX 就是这么转型的"），比自夸可信。</li>
+        <li><b>裂变闭环：</b>老客户转介绍激励 + 社群信任运营（宝妈群 / 退休姐妹团），让转介绍自循环——含 4 爻者最擅长此道，只需给舞台。</li>
+      </ol>
+    </div>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">② 内容 / 公域 SOP（陌生 / 传播型专用 · 含 5 爻 · 1-3 实做型）</h4>
+    <div class="card">
+      <ol style="margin:0;">
+        <li><b>人设定位：</b>选一个垂直赛道做深（如"宝妈理财避坑""理赔真相""职业转型实录"），专业 / 真实 / 垂直三选一主打，别贪全。</li>
+        <li><b>平台矩阵：</b>按人群选阵地——视频号（私域 + 中年）/ 小红书（女性 / 宝妈）/ 抖音（泛流量）/ 知乎（专业纵深）。含 5 爻者天然会"被看见"，给素材即可。</li>
+        <li><b>内容选题：</b>保险科普 / 避坑指南 / 真实理赔案例 / 人类图职业测评故事，每周稳定输出，用专业破圈而非人脉。</li>
+        <li><b>公域引流：</b>评论区互动 + 私信钩子 + "免费测评领取"，把陌生流量引入私域。</li>
+        <li><b>私域承接：</b>朋友圈人设运营 + 社群信任 + 一对一咨询，完成从"陌生"到"信任"的过渡。</li>
+        <li><b>转化节奏：</b>不强攻，套用 70-30 法则——让对方说 70%、你只说 30%；按权威调追问节奏（情绪权威留白、荐骨权威让其"试"）。</li>
+      </ol>
+    </div>
+
+    <h4 style="font-size:14px;color:var(--text);margin:18px 0 8px;">③ 标杆打造 SOP（口碑 / 长期信任型专用 · 含 6 爻）</h4>
+    <div class="card">
+      <ol style="margin:0;">
+        <li><b>标杆定位：</b>选其最擅长的高端客群（企业主传承 / 专业服务高端），树为团队标杆案例，让其"活成榜样"即是最好的增员名片。</li>
+        <li><b>长期信任运营：</b>不急功近利，用"熟人见证 / 案例背书"打法深耕，时间换口碑；含 6 爻者成熟后影响力才达峰值，给足耐心。</li>
+        <li><b>内容沉淀：</b>将其真实服务故事做成标杆素材，反哺团队其他成员的转介绍 / 公域 SOP，形成正向循环。</li>
+      </ol>
+    </div>
+    <div class="note">注：含 2 爻桥梁型虽归"被引荐入圈"，实际经营仍以缘故 / 转介绍为主（需引荐人带入圈后再走转介绍 SOP）；含 6 爻口碑型走"标杆打造 SOP"，节奏更慢、不急功近利，复用转介绍 SOP 的"熟人见证"打法。三类 SOP 已同步内置进独立的「人类图 × 保险职业适配系统」网页（见下方工具栏），主管输入四要素即自动派发对应一种。</div>
+
+    <h3>2.4.3 11 大赛道邀约话术 × 人生角色 速查</h3>
+    <p>把 2.4.1 的"人生角色 → 市场"维度，与 11 大赛道真实职业画像交叉，得到"按赛道开口 + 按人生角色分渠"的落地速查。每赛道都带<b>一句话定位 / 目标人群 / 关键钩子 / 最佳场景 / 适配人生角色</b>，外勤照表执行即可。</p>
+    <div class="card">
+      <div class="scroll-x"><table>
+        <thead><tr><th>赛道（11 大赛道）</th><th>一句话定位</th><th>目标人群</th><th>关键钩子（话术要点）</th><th>最佳场景 / 时间</th><th>适配人生角色（渠道）</th></tr></thead>
+        <tbody>
+          <tr><td><b>银行金融转型</b></td><td>报行合一下的第二收入曲线</td><td>30-45岁客户经理 / 理财经理，从业5-15年</td><td>资源迁移（变现效率3-5倍）/ 收入无上限 / 时间自主 / 专业延续</td><td>咖啡馆；周末下午或工作日晚（避月底冲刺）</td><td>含 4 爻（转介绍高客）/ 含 5 爻（公域影响）</td></tr>
+          <tr><td><b>宝妈回归</b></td><td>带娃也能经营的轻创业</td><td>28-40岁全职妈妈，大专+，社交强</td><td>时间自由 / 零成本轻创业 / 圈层变现 / 个人成长</td><td>咖啡馆下午茶 / 亲子场所；工作日上午或周末</td><td>含 4 爻（缘故 / 社群）/ 含 2 爻桥梁（引荐带入）</td></tr>
+          <tr><td><b>企业主转型</b></td><td>风险隔离 + 第二曲线双布局</td><td>35-55岁中小企业主，年营收500-5000万</td><td>资产隔离 / 第二曲线 / 圈层资源 / 传承规划</td><td>商务饭局 / 茶室 / 企业主沙龙；工作日晚或周末</td><td>含 4 爻（转介绍）/ 含 6 爻（高端口碑）</td></tr>
+          <tr><td><b>50岁退休女性</b></td><td>退休后第二人生与经验资本化</td><td>48-55岁将退 / 刚退，社交圈稳，经济尚可</td><td>第二人生 / 经验变现 / 社交价值 / 轻投入</td><td>茶馆 / 社区中心 / 姐姐聚会；工作日下午或周末</td><td>含 6 爻（口碑标杆）/ 含 4 爻（姐妹团转介绍）</td></tr>
+          <tr><td><b>青二代</b></td><td>不被定义的职业选择与轻创业</td><td>22-30岁，父母有经济基础</td><td>不被定义 / 轻创业 / 成长型收入 / 师徒制</td><td>咖啡馆 / 创业分享会；周末或工作日晚</td><td>含 5 爻（公域内容）/ 偏 1-3（专业实做）</td></tr>
+          <tr><td><b>互联网大厂优化期</b></td><td>35岁大厂人，用技术换收入自由</td><td>28-38岁大厂员工，中年危机</td><td>能力迁移 / 收入自主 / 时间自由 / 长期价值</td><td>咖啡馆 / 技术沙龙；周末下午或工作日晚</td><td>含 5 爻（公域）/ 偏 1-3（专业实做）</td></tr>
+          <tr><td><b>外贸制造转型</b></td><td>用供应链资源开辟第二曲线</td><td>35-55岁外贸 / 制造老板，利润下滑</td><td>资源复用 / 轻资产 / 稳定现金流 / 圈层价值</td><td>商务饭局 / 行业交流会 / 茶室；工作日晚或周末</td><td>含 4 爻（转介绍）/ 含 6 爻（高端）</td></tr>
+          <tr><td><b>房地产中介转型</b></td><td>用客户资源换稳定高收入</td><td>28-45岁经纪人，市场下行</td><td>客户终身价值 / 收入稳定 / 时间自主 / 资源复用</td><td>门店拜访 / 咖啡馆 / 同行聚会；工作日下午或周末</td><td>含 4 爻（转介绍）/ 含 5 爻（公域）</td></tr>
+          <tr><td><b>教培行业转型</b></td><td>用表达与教育圈层开新赛道</td><td>25-40岁教培从业者，受双减冲击</td><td>能力迁移 / 圈层变现 / 价值升级 / 稳定平台</td><td>同行聚会 / 咖啡馆 / 教育沙龙；周末或工作日晚</td><td>含 5 爻（公域内容）/ 含 4 爻（家长圈转介绍）</td></tr>
+          <tr><td><b>专业服务人士</b></td><td>用专业能力做价值延伸</td><td>30-50岁律师 / 会计 / 设计师 / 顾问</td><td>身份延伸 / 客户复用 / 收入多元 / 专业互补</td><td>专业沙龙 / 商务饭局 / 咖啡馆；工作日晚或周末</td><td>含 4 爻（高端转介绍）/ 含 6 爻（高端口碑）</td></tr>
+          <tr><td><b>医药代表转型</b></td><td>用客户资源与销售力跨界</td><td>28-45岁医药代表，受带量采购冲击</td><td>资源迁移 / 销售能力复用 / 职业延展 / 专业背景</td><td>行业交流会 / 咖啡馆 / 医药圈聚会；工作日晚或周末</td><td>含 4 爻（转介绍）/ 含 5 爻（高客经营）</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note" style="margin-bottom:0;"><b>用法：</b>先读对方人生角色 → 定主攻市场（缘故 / 陌生 / 口碑，见 2.4.1）→ 选对应赛道打开话术（上表"关键钩子"）→ 按"最佳场景 / 时间"约面 → 套用该赛道异议应对（表面顾虑 → 底层痛点 → 赛道方案）。三类市场 SOP（2.4.2）与赛道话术一致，照单执行即可。人生角色维度让"11 大赛道分渠"从盲打变精准。</div>
+    </div>
+
+    <!-- 工具栏：人类图 × 保险职业适配系统 -->
+    <div class="card" style="border-color:var(--primary);">
+      <p style="margin-top:0;"><b>👉 在线试用：</b>下方为独立的「人类图 × 保险职业适配系统」网页——输入准增员的<b>类型 / 权威 / 定义 / 人生角色</b>四要素，系统自动生成职业适配报告，并按其人生角色派发对应市场 SOP（转介绍 / 内容公域 / 标杆打造）。主管在日常增员、陪跑、面谈中可随时打开使用，无需记背。</p>
+      <p style="margin-bottom:0;"><a href="humandesign-insurance-career-system.html" target="_blank" class="btn">打开人类图 × 保险职业适配系统 →</a></p>
+    </div>
+  </section>
+
+  <!-- 模块三 -->
+  <section class="mod" id="m3">
+    <div class="mod-h"><span class="code">MODULE 03</span><h2>优育侧（培育）</h2></div>
+
+    <h3>3.1 类型化培育路径</h3>
+    <p>培育端痛点是"留存率低"。留存率的钥匙在"满足类型的核心需求"——按类型给培育节奏，而非一刀切。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>类型</th><th>核心需求</th><th>培育节奏建议</th></tr></thead>
+      <tbody>
+        <tr><td>生产者 / 显示生产者</td><td>有回应的行动 + 认可</td><td>给明确任务、大量实践、及时正反馈；"等待回应"= 做有回应的事，不是不行动</td></tr>
+        <tr><td>投射者</td><td>被看见、被邀请</td><td>频繁给予反馈与认可、邀请其做顾问 / 陪访；缺认可极易流失</td></tr>
+        <tr><td>显示者</td><td>自主空间</td><td>告知计划、给发挥余地、不微观管控；发挥其开拓力</td></tr>
+        <tr><td>反映者</td><td>稳环境、低压力</td><td>低频接触、避免强推；一般不建议作为主增对象</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>3.1.1 各类型新人 30/60/90 天陪跑节奏模板</h3>
+    <p>下表为"看图培育"的标准陪跑节奏；叠加<b>定义维度</b>（单兵 vs 团队）与<b>市场分轨</b>（人生角色 → 打法）做两层裁剪。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>类型</th><th>第 1–30 天（破冰融入）</th><th>第 31–60 天（能力成型）</th><th>第 61–90 天（稳定产出）</th><th>典型离职预警信号</th></tr></thead>
+      <tbody>
+        <tr><td>生产者 / 显示生产者</td><td>密集触达 + 话术通关 + 陪访 3–5 次；每日正反馈"你的回应很对"</td><td>独立作业、明确目标、减少陪访；用荐骨"等回应"原理不空转</td><td>复盘成长曲线、树标杆、准备带新</td><td>连续 2 周无有效触达动作、回避正反馈（疑类型错配）</td></tr>
+        <tr><td>投射者</td><td>高频一对一、认可其洞察、邀请参与顾问工作；不压硬指标</td><td>委以陪访 / 教练角色、给深度项目</td><td>成为团队教练、建专业口碑</td><td>长期无认可、被当普通销售压 KPI（投射者首要流失因）</td></tr>
+        <tr><td>显示者</td><td>告知全盘计划、给自主空间、不微观管控</td><td>让其启动小项目、发挥开拓力</td><td>复盘渠道成果、给更大自主权</td><td>被频繁打断 / 管控、计划不透明（"不被告知"即走）</td></tr>
+        <tr><td>反映者</td><td>低频关怀、稳环境、长周期评估；一般非主增</td><td>同上，观察能量是否稳</td><td>评估是否适合长期</td><td>环境波动、被强推即流失</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>两层裁剪：</b><br>
+    <span class="tag">按定义</span> 一分人（2爻/3爻）= 自主作业强，陪跑可减少；四分人 / 非自己（开口 / 无定义）= 必须配团队 / 师傅，否则易孤军<br>
+    <span class="tag">按市场分轨</span> 缘故型（含 4 爻）→ 发"转介绍 SOP / 社群信任运营"打法；陌生型（含 5 爻 / 1-3 实做）→ 发"内容 / 公域 SOP / 短视频专业破圈"打法；口碑型（含 6 爻）→ 长期标杆打造、不急功近利</div>
+
+    <h3>3.2 心态脱敏新解</h3>
+    <p>行业普遍以"拒绝 = 双向不匹配"做心态训练。人类图让其从"口号"变"可解释的科学"：被拒不是我不好，是我 / 对方的类型能量不匹配。把"卑微求人"转成"科学筛选"，内在真正接受。</p>
+
+    <h3>3.3 师徒匹配</h3>
+    <p>不同权威 / 类型的主管，带不同类型新人效果不同：</p>
+    <ul>
+      <li>投射者主管 → 擅长深度一对一辅导，适合带需要被"看见"的投射者新人。</li>
+      <li>生产者主管 → 擅长带节奏、给任务，适合带生产者新人。</li>
+      <li>避免<b>同型短板叠加</b>：如情绪权威主管带情绪权威新人，双方都"不过夜不决策"，易拖延——需机制补位。</li>
+      <li>补充：<b>按市场属性搭师徒</b>——缘故型师傅带缘故型新人、陌生型（含 5 爻）师傅带陌生型新人，打法同频，带教效率最高（与 2.4 渠道分轨一致）。</li>
+    </ul>
+  </section>
+
+  <!-- 模块四 -->
+  <section class="mod" id="m4">
+    <div class="mod-h"><span class="code">MODULE 04</span><h2>工具包</h2></div>
+
+    <h3>4.1 类型 / 权威速查卡</h3>
+    <p>主管不可能先让人家报生日算图。给<b>行为线索清单</b>，30 秒快速判断对方类型 / 权威，这是产品落地的关键。<b>人生角色需通过小程序测评获取，不在 30 秒行为识别范围</b>，详见 4.2。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>观察维度</th><th>行为线索</th><th>推断类型 / 权威</th><th>对应动作</th></tr></thead>
+      <tbody>
+        <tr><td>说话节奏</td><td>语速快、爱打断、边说边做</td><td>生产者 / 显示生产者</td><td>给任务、等回应</td></tr>
+        <tr><td>说话节奏</td><td>慢、先观察、被问才说、建议精准</td><td>投射者</td><td>邀请、给认可</td></tr>
+        <tr><td>对话主导</td><td>一上来宣布计划、问"为什么"、不耐细节</td><td>显示者</td><td>告知计划、给自主</td></tr>
+        <tr><td>整体气场</td><td>不抢话、安静观察、能量随场域起伏、很少主动主导</td><td>反映者</td><td>低频接触、给空间、不施压</td></tr>
+        <tr><td>决策模式</td><td>回答前后摇摆、要"过一晚"才清晰</td><td>情绪权威</td><td>不逼当场，留白</td></tr>
+        <tr><td>决策模式</td><td>身体先反应"嗯 / 啊"、被问"感觉呢"秒答</td><td>荐骨权威</td><td>让"试"、当场约</td></tr>
+        <tr><td>决策模式</td><td>"我第一感觉不对"、直觉快、瞬间判断</td><td>直觉权威（脾中心）</td><td>借当下直觉切入</td></tr>
+        <tr><td>决策模式</td><td>"我决定做"、重承诺、说到做到</td><td>意志力中心权威（自我权威）</td><td>用挑战 / 承诺锁定</td></tr>
+        <tr><td>决策模式</td><td>说话先征求方向、"你觉得呢"、需被确认</td><td>G中心权威（自我投射权威）</td><td>多给表达空间、邀请式</td></tr>
+        <tr><td>决策模式</td><td>决策随"今天环境怎样"而变、看氛围</td><td>无内在权威（环境权威）</td><td>让其感受环境、多次接触</td></tr>
+        <tr><td>决策模式</td><td>要漫长周期、反复变、不急于定</td><td>月亮循环权威（反映者）</td><td>低频、给足时间、不强推</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:0;"><b>初次接触 30 秒识别加成：</b>① <b>入群 / 进门 3 秒</b>——显示者已开口说"我要做什么"；生产者已动手翻资料 / 加微信；投射者先环视、等被问才说；反映者靠边观察、不抢镜。② <b>给个小任务测</b>——"你先试一下这个测评"：生产者立刻做、显示生产者边做边调、投射者先问"为什么要做"、反映者明显犹豫。③ <b>看眼神落点</b>——投射者寻找"被看见"的眼神接触；显示者扫视全局、不耐细节；生产者聚焦当下具体事。④ 决策节奏见上表"决策模式"行。多留意这四点，初次接触即可贴对能量标签，比事后回忆准得多。</div>
+
+    <h3>4.2 人类图职业适配报告（小程序输出）</h3>
+    <p>对接本方案配套的人类图微信小程序：测评后自动生成一页"职业适配报告"，含类型、权威、定义、人生角色、适配岗位、主攻市场（缘故 / 陌生）、培育建议、沟通建议，可直接发给准增员（既是测评交付，也是脱敏触点）。</p>
+    <h3>4.2.1 报告标准字段</h3>
+    <div class="scroll-x"><table>
+      <thead><tr><th>字段</th><th>内容</th><th>输出形式</th><th>来源要素</th></tr></thead>
+      <tbody>
+        <tr><td>基础信息</td><td>姓名 / 测评日期 / 图 ID</td><td>文本</td><td>—</td></tr>
+        <tr><td>能量类型</td><td>生产者 / 投射者 / 显示者 / 反映者</td><td>标签 + 一句话</td><td>类型</td></tr>
+        <tr><td>适配岗位</td><td>销售主线 / 顾问陪访 / 开拓尖兵 / 特殊</td><td>标签</td><td>类型</td></tr>
+        <tr><td>决策权威</td><td>情绪 / 荐骨 / 直觉(脾中心) / 意志力(自我) / G中心(自我投射) / 无内在(环境) / 月亮循环(反映者)</td><td>标签 + 沟通要点</td><td>权威</td></tr>
+        <tr><td>定义</td><td>一分人 / 二分人 / 三分人 / 四分人 / 无定义（非自己）</td><td>标签 + 团队建议</td><td>定义</td></tr>
+        <tr><td>人生角色</td><td>1-3(专业) / 含4(缘故) / 含5(陌生) / 含6(口碑)</td><td>标签 + 主攻市场</td><td>人生角色</td></tr>
+        <tr><td>保险职业适配解读</td><td>把四要素落到保险场景的专属段</td><td>段落</td><td>综合</td></tr>
+        <tr><td>培育节奏建议</td><td>链接 3.1.1 模板精简版</td><td>文本</td><td>综合</td></tr>
+        <tr><td>风险提示</td><td>错配预警（如"避免压硬指标"）</td><td>文本</td><td>综合</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>保险职业适配 · 专属解读段模板：</b></p>
+    <div class="card">"你是 <b>{类型}</b>（{适配岗位}），决策走 <b>{权威}</b>（{沟通要点}）。你的定义是 <b>{定义}</b>，{团队/单兵建议}。人生角色 <b>{profile}</b>，主攻 <b>{市场}</b> 市场（{市场打法}；参考赛道：{11大赛道举例}）。按你的能量，建议 30/60/90 天陪跑：{陪跑要点}，避开 {风险}——这比硬背话术更能让你长期跑出来。"</div>
+
+    <!-- 工具栏：人类图 × 保险职业适配系统（打卡前快速生成报告） -->
+    <div class="card" id="tool" style="border-color:var(--primary);">
+      <p style="margin-top:0;"><b>👉 配套工具栏：</b>填写每日打卡表前，可先用下方「人类图 × 保险职业适配系统」网页——输入准增员的<b>类型 / 权威 / 定义 / 人生角色</b>四要素，一键生成职业适配报告，再把类型 / 权威 / 人生角色 / 主攻市场直接抄入下方打卡表对应栏，确保打卡数据与小程序统计打通。</p>
+      <p style="margin-bottom:0;"><a href="humandesign-insurance-career-system.html" target="_blank" class="btn">打开人类图 × 保险职业适配系统 →</a></p>
+    </div>
+
+    <h3>4.3 升级版每日打卡表</h3>
+    <p>在原有每日优增动作打卡表基础上，新增"对方类型 / 权威 / 人生角色 / 主攻市场"栏，让每次沟通都沉淀能量标签与渠道方向，便于师徒匹配、市场分轨与复盘。建议字段与 4.2.1 的 <code>type / authority / profile / market</code> 对齐，确保打卡数据可直接汇入小程序统计，并与候选人生命周期追踪表、候选名单筛选漏斗工具共用同一批准增员主数据。</p>
+
+    <h3>4.4 人类图 × 现有工具衔接总表</h3>
+    <p>把本方案的四个叠加模块，与机构现有优增优育工具一一对应，便于向中支交付时讲清"不是替换、是升级"：</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>机构现有工具</th><th>人类图叠加模块</th><th>叠加价值</th></tr></thead>
+      <tbody>
+        <tr><td>六维人才评估模型</td><td>四要素画像（2.1）</td><td>六维评"标准分"，人类图补"能量成因"，双视角减少错配流失</td></tr>
+        <tr><td>赛道匹配度评估表（11 大赛道）</td><td>人生角色 → 市场（2.4 / 2.4.1）</td><td>赛道看"职业身份"，人生角色看"天生渠道偏好"，双保险分渠</td></tr>
+        <tr><td>STAR 结构化面试 / 面谈五步法</td><td>人类图看图面试（2.3）</td><td>面试中先看图，问题按权威调整，命中决策内核</td></tr>
+        <tr><td>70/30 法则</td><td>看图面试节奏（2.3）</td><td>70-30 管"说多少"，人类图管"问什么 / 何时促"</td></tr>
+        <tr><td>候选人追踪表 / 生命周期追踪</td><td>类型化陪跑（3.1.1）</td><td>追踪按类型给陪跑节奏，离职预警按类型信号</td></tr>
+        <tr><td>候选名单筛选漏斗</td><td>速查卡初筛（4.1）</td><td>漏斗顶端用速查卡 30 秒贴能量标签，提高漏斗质量</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 模块五 -->
+  <section class="mod" id="m5">
+    <div class="mod-h"><span class="code">MODULE 05</span><h2>中支落地 SOP（日 / 周 / 月）</h2></div>
+    <p>沿用行业成熟的日管控 / 周督导 / 月落地闭环，新增人类图相关考核指标：</p>
+    <ul>
+      <li><b>日：</b>早会心态赋能 + 话术通关；夕会案例复盘 + 邀约演练（新增：按权威微调话术抽查、按人生角色分渠道复盘）。</li>
+      <li><b>周：</b>模拟面试 PK（升级为"看图面试"）、异议话术考核、拓客渠道复盘（按缘故 / 陌生分轨统计）。</li>
+      <li><b>月：</b>统计见面率、面谈转化率、入职 / 留存率，<b>新增指标</b>：<span class="kpi">类型识别准确率</span>、<span class="kpi">按权威邀约见面率</span>、<span class="kpi">人生角色-市场错配率</span>、<span class="kpi">类型-岗位错配率</span>。</li>
+    </ul>
+    <h3>5.1 人类图赋能指标 · 月度打分表</h3>
+    <p>下表为可打印的"人类图赋能"专项打分表，可与每日打卡表、月度打分表并列使用。</p>
+    <div class="scroll-x"><table>
+      <thead><tr><th>考核维度</th><th>指标</th><th>权重</th><th>评分标准（满分示例）</th><th>数据来源</th><th>得分</th></tr></thead>
+      <tbody>
+        <tr><td>识人能力</td><td>类型识别准确率（随机抽 10 个准增员，主管能正确说类型/权威）</td><td>25%</td><td>每错 1 个扣 2.5 分</td><td>早会抽查</td><td>___</td></tr>
+        <tr><td>邀约命中</td><td>按权威邀约见面率（对比统一话术基线）</td><td>25%</td><td>高于基线 10% 得满，每低 2% 扣 5 分</td><td>打卡表</td><td>___</td></tr>
+        <tr><td>渠道精准</td><td>人生角色-市场错配率（分配市场与 Profile 不符比例）</td><td>20%</td><td>0 错配满分，每 1 例扣 5 分</td><td>入职分配表</td><td>___</td></tr>
+        <tr><td>岗位匹配</td><td>类型-岗位错配率（入职 3 月内因错配流失/转岗）</td><td>20%</td><td>0 错配满分，每 1 例扣 5 分</td><td>留存表</td><td>___</td></tr>
+        <tr><td>流程覆盖</td><td>看图面试覆盖率（面试中使用人类图报告比例）</td><td>10%</td><td>100% 满分，每低 10% 扣 1 分</td><td>面试记录</td><td>___</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>评级：</b>总分 ≥ 90 优秀 ｜ 70–89 良好 ｜ ＜ 70 待改进。建议每月由中支督导填写，作为"人类图赋能"专项考核，季度汇总纳入主管绩效。</div>
+  </section>
+
+  <!-- 模块六 -->
+  <section class="mod" id="m6">
+    <div class="mod-h"><span class="code">MODULE 06</span><h2>话术对照总表（标准 ↔ 按类型 / 权威 / 人生角色微调）</h2></div>
+    <div class="scroll-x"><table>
+      <thead><tr><th>场景</th><th>原标准话术（守底线）</th><th>人类图微调（按权威 / 类型 / 人生角色）</th></tr></thead>
+      <tbody>
+        <tr><td>万能邀约</td><td>"我帮你免费做职业测评 / 赛道分析，不推销、30 分钟聊聊"</td><td>情绪权威补："先发你报告，过两天清晰了再聊"；荐骨权威补："你来试一次看身体有没有能量"</td></tr>
+        <tr><td>对方推脱</td><td>"我理解你对传统保险的印象，现在职业化模式完全不同"</td><td>投射者："我特别想请你来，因为你这特质很少见"（用邀请）</td></tr>
+        <tr><td>面试促成</td><td>"安排你参加免费新人孵化培训，了解清楚再决定"</td><td>看图促成：用对方类型说明适配角色，用人生角色指明主攻市场（缘故 / 陌生，结合 11 大赛道），避免错配</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <a class="totop" href="#">↑ 返回顶部</a>
+
+  <div class="footer">
+    人类图 × 保险中支优增优育项目赋能方案 · V2.0<br>
+    Powered By Kan Man Tang
+  </div>
+
+</div>
+</body>
+</html>
