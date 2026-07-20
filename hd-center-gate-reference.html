@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九大中心 × 闸门对照表 · 人类图 可打印 A4 版</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --bg-card:#FFFFFF; --bg-soft:#FBF8F2;
+    --primary:#C4956A; --primary-deep:#A8743F; --primary-deep2:#8A5A2B;
+    --dark:#2D2118; --border:#E8DCC8; --muted:#6B5D4F; --muted-soft:#8C7C6B;
+    --font-sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Helvetica Neue",Arial,sans-serif;
+    --font-serif:"Songti SC","STSong","Noto Serif SC","SimSun",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--dark);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .page{max-width:820px;margin:0 auto;padding:40px 36px 28px;background:var(--bg);}
+
+  .doc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:3px solid var(--primary);padding-bottom:16px;margin-bottom:24px;}
+  .doc-head .t{font-family:var(--font-serif);}
+  .doc-head h1{font-size:27px;font-weight:700;color:var(--dark);letter-spacing:1px;}
+  .doc-head .sub{font-size:13px;color:var(--muted);margin-top:6px;}
+  .doc-head .brand{font-family:var(--font-serif);font-size:14px;color:var(--primary-deep);text-align:right;}
+  .doc-head .brand .dot{display:inline-block;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-deep));vertical-align:-3px;margin-right:6px;box-shadow:inset 0 0 0 3px var(--bg);}
+
+  .intro{font-size:13.5px;color:var(--muted);margin-bottom:22px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
+  .intro b{color:var(--primary-deep);}
+
+  /* 九大中心定义卡 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px;}
+  .c{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 15px;break-inside:avoid;}
+  .c h3{font-size:15px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px;}
+  .c .en{font-size:10.5px;color:var(--muted-soft);letter-spacing:.5px;}
+  .c .def{font-size:12px;color:var(--muted);margin:7px 0;}
+  .c .state{font-size:11.5px;color:var(--muted);line-height:1.6;border-top:1px dashed var(--border);padding-top:7px;}
+  .c .state b{color:var(--primary-deep);}
+  .c .gates{margin-top:8px;font-size:12px;color:var(--dark);font-weight:600;background:var(--bg-soft);border-radius:8px;padding:6px 9px;letter-spacing:.5px;}
+
+  /* 对照表 */
+  .tbl-title{font-family:var(--font-serif);font-size:18px;font-weight:700;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+  .tbl-title::before{content:"";width:6px;height:20px;background:var(--primary);border-radius:3px;display:inline-block;}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  thead th{background:var(--bg-soft);color:var(--primary-deep);text-align:left;padding:10px 13px;font-weight:700;border-bottom:2px solid var(--border);white-space:nowrap;}
+  tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--muted);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody td strong{color:var(--dark);}
+  tbody .total td{background:var(--bg-soft);font-weight:600;color:var(--dark);}
+  tbody .total td strong{color:var(--primary-deep);}
+
+  .doc-foot{margin-top:26px;border-top:1px solid var(--border);padding-top:14px;text-align:center;font-size:11.5px;color:var(--muted-soft);letter-spacing:.5px;}
+
+  .print-btn{position:fixed;right:24px;bottom:24px;background:linear-gradient(135deg,var(--primary),var(--primary-deep));color:#fff;border:none;border-radius:30px;padding:13px 26px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(45,33,24,.2);font-family:var(--font-sans);}
+  .print-btn:hover{transform:translateY(-2px);}
+
+  @media print{
+    body{background:#fff;}
+    .page{margin:0;padding:0;max-width:100%;}
+    .print-btn{display:none;}
+    .c,.grid{break-inside:avoid;}
+    @page{size:A4;margin:14mm;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="doc-head">
+    <div class="t">
+      <h1>九大中心 × 64 闸门对照表</h1>
+      <div class="sub">人类图 · 天赋才华课程 · 随身速查 / 可打印 A4</div>
+    </div>
+    <div class="brand"><span class="dot"></span>天赋才华 · 人类图</div>
+  </div>
+
+  <div class="intro">
+    <b>用法：</b>在人类图里，每个闸门只会归属一个能量中心。下方编号与「天赋筛选器」「通道卡片」完全对应——
+    在筛选器输入你有颜色的闸门，即可顺着所属中心与通道，读出自己的天赋才华。同一闸门不可跨中心。
+  </div>
+
+  <div class="grid">
+    <div class="c"><h3>头脑中心 <span class="en">HEAD</span></h3><div class="def">思维与灵感的发源地，产生问题与困惑，驱动人类探索意义。</div><div class="state"><b>有定义</b>：问题稳定，专注特定领域。<b>开放</b>：易被外界问题淹没、过度思考。</div><div class="gates">61 · 63 · 64</div></div>
+    <div class="c"><h3>逻辑中心 <span class="en">AJNA</span></h3><div class="def">概念化与分析中心，负责处理、整合和表达思想。</div><div class="state"><b>有定义</b>：有固定思考方式与信念。<b>开放</b>：易吸收他人观点，思考随外界波动。</div><div class="gates">4 · 11 · 17 · 24 · 43 · 47</div></div>
+    <div class="c"><h3>喉咙中心 <span class="en">THROAT</span></h3><div class="def">表达与显化核心，所有能量最终流向喉咙以表达或行动。</div><div class="state"><b>有定义</b>：表达稳定、言出必行。<b>开放</b>：易多话、为说而说，或被他人"借嘴"说话。</div><div class="gates">8 · 12 · 16 · 20 · 23 · 31 · 33 · 35 · 45 · 56 · 62</div></div>
+    <div class="c"><h3>G中心 <span class="en">G CENTRE</span></h3><div class="def">身份认同、爱与方向感的中心，决定"我是谁、要去哪里"。</div><div class="state"><b>有定义</b>：身份与方向感稳定清晰。<b>开放</b>：易在关系里迷失自己、跟随他人方向。</div><div class="gates">1 · 2 · 7 · 10 · 13 · 15 · 25 · 46</div></div>
+    <div class="c"><h3>意志力中心 <span class="en">WILL · EGO</span></h3><div class="def">意志力、竞争与物质世界的中心，管理承诺与价值感。</div><div class="state"><b>有定义</b>：承诺可靠、自我价值稳定。<b>开放</b>：易为证明自己而过度承诺、硬撑。</div><div class="gates">21 · 26 · 40 · 51</div></div>
+    <div class="c"><h3>情绪中心 <span class="en">SOLAR PLEXUS</span></h3><div class="def">情绪、感受与情感波浪，也是最强内在权威来源之一。</div><div class="state"><b>有定义</b>：情绪有清晰波浪、内在权威在此。<b>开放</b>：吸收他人情绪，喜怒随外界起伏。</div><div class="gates">6 · 22 · 30 · 36 · 37 · 49 · 55</div></div>
+    <div class="c"><h3>直觉中心 <span class="en">SPLEEN</span></h3><div class="def">直觉、免疫与生存本能，在当下瞬间传递警觉信号。</div><div class="state"><b>有定义</b>：当下直觉清晰、本能警觉。<b>开放</b>：易忽略身体信号、吸收他人恐惧。</div><div class="gates">18 · 28 · 32 · 44 · 48 · 50 · 57</div></div>
+    <div class="c"><h3>荐骨中心 <span class="en">SACRAL</span></h3><div class="def">生命力与生殖能量核心，生产者专属的持续能量。</div><div class="state"><b>有定义</b>：持续生命力，能回答"对 / 不对"。<b>开放</b>：易透支、替他人回应，能量不持续。</div><div class="gates">3 · 5 · 9 · 14 · 27 · 29 · 34 · 42 · 59</div></div>
+    <div class="c"><h3>根部中心 <span class="en">ROOT</span></h3><div class="def">压力与肾上腺素的来源，驱动行动的底层动力。</div><div class="state"><b>有定义</b>：压力可转化为稳定驱动力。<b>开放</b>：易被外界紧迫感牵着走、急于卸压。</div><div class="gates">19 · 38 · 39 · 41 · 52 · 53 · 54 · 58 · 60</div></div>
+  </div>
+
+  <div class="tbl-title">64 闸门归属一览</div>
+  <table>
+    <thead><tr><th>能量中心</th><th>英文</th><th>闸门数</th><th>包含闸门</th></tr></thead>
+    <tbody>
+      <tr><td><strong>头脑中心</strong></td><td>HEAD</td><td>3</td><td>61 · 63 · 64</td></tr>
+      <tr><td><strong>逻辑中心</strong></td><td>AJNA</td><td>6</td><td>4 · 11 · 17 · 24 · 43 · 47</td></tr>
+      <tr><td><strong>喉咙中心</strong></td><td>THROAT</td><td>11</td><td>8 · 12 · 16 · 20 · 23 · 31 · 33 · 35 · 45 · 56 · 62</td></tr>
+      <tr><td><strong>G中心</strong></td><td>G CENTRE</td><td>8</td><td>1 · 2 · 7 · 10 · 13 · 15 · 25 · 46</td></tr>
+      <tr><td><strong>意志力中心</strong></td><td>WILL · EGO</td><td>4</td><td>21 · 26 · 40 · 51</td></tr>
+      <tr><td><strong>情绪中心</strong></td><td>SOLAR PLEXUS</td><td>7</td><td>6 · 22 · 30 · 36 · 37 · 49 · 55</td></tr>
+      <tr><td><strong>直觉中心</strong></td><td>SPLEEN</td><td>7</td><td>18 · 28 · 32 · 44 · 48 · 50 · 57</td></tr>
+      <tr><td><strong>荐骨中心</strong></td><td>SACRAL</td><td>9</td><td>3 · 5 · 9 · 14 · 27 · 29 · 34 · 42 · 59</td></tr>
+      <tr><td><strong>根部中心</strong></td><td>ROOT</td><td>9</td><td>19 · 38 · 39 · 41 · 52 · 53 · 54 · 58 · 60</td></tr>
+      <tr class="total"><td colspan="2"><strong>合计</strong></td><td><strong>64</strong></td><td>覆盖全部 64 个闸门，无重复、无遗漏</td></tr>
+    </tbody>
+  </table>
+
+  <div class="doc-foot">天赋才华课程 · 基于人类图系统智慧设计 · 内容供教研与自我探索参考使用<br>© 人类图天赋才华课程 · Powered By Kan Man Tang</div>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨 打印 / 保存为 PDF</button>
+</body>
+</html>
