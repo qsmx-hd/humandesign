@@ -85,6 +85,8 @@
   #exportGrid .mcard .core{display:block; -webkit-line-clamp:unset; -webkit-box-orient:initial; overflow:visible}
   /* 保险行销集团·前辈思想库卡片：同上，完整显示 */
   #immGrid .mcard .core{display:block; -webkit-line-clamp:unset; -webkit-box-orient:initial; overflow:visible}
+  /* 杂志主题库卡片：同上，完整显示，不做行数截断 */
+  #magGrid .mcard .core, #magThemeGrid .mcard .core{display:block; -webkit-line-clamp:unset; -webkit-box-orient:initial; overflow:visible}
   .intro-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
   /* Chips inside bot bubble */
   .msg.bot .chips-in{background:transparent; border:none; padding:0; margin-top:10px; gap:7px}
@@ -305,8 +307,12 @@
 
       <div class="card">
         <h3><span class="dot"></span>历年《保险营销 / 保险行销》杂志 · 主题智库</h3>
-        <p style="color:var(--muted);font-size:13px">杂志持续 40 年追踪华人保险业的观念、技巧与趋势。以下为可检索的主题库（可按贵团队实际年份 / 合订本继续扩充）：</p>
+        <p style="color:var(--muted);font-size:13px">《保险行销》杂志（IMM 梁天龙 1983 创办，1989 年创刊；2021 年简体版升级「每月一主题」，40 年来采访 9000+ 专家、6 万+ 版面、读者遍及 17 国）。下方上半部为<b>时代主题框架</b>，下半部为<b>每月一主题·公开企划索引</b>（主题取自官网公开列表，正文受版权保护、需订阅原文）。可按贵团队实际年份 / 合订本继续扩充：</p>
         <div class="mgrid" id="magGrid"></div>
+        <div style="margin-top:14px">
+          <div style="font-size:13px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:6px;margin-bottom:8px">📑 每月一主题 · 公开企划索引（2022–2023 / 2026，主题取自官网公开列表）</div>
+          <div class="mgrid" id="magThemeGrid"></div>
+        </div>
       </div>
 
       <div class="card" style="margin-top:6px">
@@ -698,7 +704,7 @@
 <div id="printStage" class="print-stage"></div>
 
 <footer class="site-footer">
-  <div>© 2026 保险赋能智能体 V20 · 内容基于全球寿险营销大师公开著作与中国头部险企公开实践整理，供团队长培训与从业者自学使用。<br><span class="powered">Powered By Kan Man Tang</span></div>
+  <div>© 2026 保险赋能智能体 V22 · 内容基于全球寿险营销大师公开著作与中国头部险企公开实践整理，供团队长培训与从业者自学使用。<br><span class="powered">Powered By Kan Man Tang</span></div>
 </footer>
 
 <script>
@@ -763,6 +769,50 @@ const MAG_TOPICS = [
    core:"报行合一后，杂志聚焦「人海→优增优育」、主管创业化、医康养财法商综合赋能、数字化展业。与新华 XIN一代、平安 MVP、太保 CA 企业家同频。"},
   {era:"常设专栏", title:"IDA / 荣誉体系 · 标杆案例", tags:["IDA","CIA500","典范","主管奖"],
    core:"每期跟踪国际龙奖 IDA 与世界华人保险大会的标杆人物与团队，把「典范·完美·尊贵」拆解成可学的经营动作，是团队长最好的活教材。"}
+];
+
+/* ===================== 智库：杂志公开主题索引（官网公开列表抓取，正文受版权保护） ===================== */
+const MAG_THEMES = [
+  {date:"2022-07", title:"顺利成交的关键——信任感", tags:["信任","促成","客户经营"],
+   core:"成交的底层逻辑是信任。探讨如何用专业与真诚建立客户信任、取代生硬话术，让成交自然发生——与斯通『温暖销售』同源。"},
+  {date:"2022-09", title:"一次拆解顶尖业务员的销售循环", tags:["销售循环","标准化","新人培训"],
+   core:"把顶尖业务员的完整销售流程拆成可复制的标准动作：开拓→接触→需求→方案→成交→服务，让新人照做就能上手。"},
+  {date:"2022-10", title:"网络时代下的精准数位表达力", tags:["数字化","社群","表达力"],
+   core:"网络时代的展业表达：在社群、短视频、线上会议中精准传达专业价值，用内容扩大触达、降低获客成本。"},
+  {date:"2022-11", title:"读听看问做，业务员的全面学习成长", tags:["学习","成长","习惯"],
+   core:"读、听、看、问、做——业务员的五感学习法，把日常变成持续成长的训练场，让专业靠积累而非天赋。"},
+  {date:"2022-12", title:"开拓生态圈效益，金融保险市场应从何做起？", tags:["生态圈","异业","资源整合"],
+   core:"从单打独斗到生态经营：整合金融保险周边资源（法务、医疗、教育），拓展合作边界、共享客户。"},
+  {date:"2023-02", title:"用团队愿景绘制伙伴从业的北极星", tags:["团队愿景","留存","目标感"],
+   core:"用团队愿景为伙伴画出从业的『北极星』，让目标感替代盲目冲刺——愿景清晰的人更愿意留下。"},
+  {date:"2023-03", title:"客户需求日新月异，保险业如何经营转型？", tags:["转型","客户经营","需求导向"],
+   core:"客户需求快速变化下，保险业如何从产品导向转向需求导向经营，用顾问式服务留住客户。"},
+  {date:"2023-04", title:"长期经营，人脉复利的力量", tags:["人脉","转介绍","长期经营"],
+   core:"长期经营客户关系的复利效应：把每一次服务变成下一次转介绍的『种子』，人脉越经营越值钱。"},
+  {date:"2023-05", title:"剖析转介绍关键，构筑保险事业长远蓝图", tags:["转介绍","客户经营","系统化"],
+   core:"拆解转介绍的关键节点，系统性构筑可持续的转介绍蓝图，而非碰运气——与吴征宇『100% 转介绍』同频。"},
+  {date:"2023-06", title:"是财务顾问，也是流量创造者", tags:["流量","个人品牌","获客"],
+   core:"财务顾问也是流量创造者：用内容与人设持续吸引精准客户，让获客从『找』变成『被找』。"},
+  {date:"2023-07", title:"心智图，视觉化的高效展业法", tags:["工具","心智图","沟通"],
+   core:"用视觉化心智图整理客户信息与展业逻辑，提升沟通效率与专业感，让复杂需求一眼看清。"},
+  {date:"2023-08", title:"推动力——事业长久的基石", tags:["推动力","主管","团队动力"],
+   core:"事业长久的基石是『推动力』：主管如何持续点燃团队动力、避免倦怠脱落，把长跑变成习惯。"},
+  {date:"2023-09", title:"培养自驱力——克服挫折，迈向绩优", tags:["自驱力","心态","留存"],
+   core:"培养自驱力：帮助组员克服挫折、建立内在动机，从『要我做』到『我要做』，专治新人脱落。"},
+  {date:"2023-10", title:"看见学习的价值，学习才有动力", tags:["学习","文化","成长"],
+   core:"看见学习的价值，学习才有动力：把成长变成团队文化而非任务，让学习成为自发行为。"},
+  {date:"2023-11", title:"信念赋能，长久经营寿险事业", tags:["信念","初心","长期主义"],
+   core:"以信念赋能、长久经营寿险事业：用初心与使命对抗行业波动，让从业者走得更远、留得更稳。"},
+  {date:"2026-07", title:"专业时代的最高学历——终身学习", tags:["终身学习","专业","趋势"],
+   core:"专业时代的最高学历是终身学习：在监管与产品快速迭代中保持专业领先，是被客户信任的前提。"},
+  {date:"2026-07", title:"超高龄时代的保险机遇", tags:["养老","长照","趋势"],
+   core:"超高龄社会的保险机遇：长照、养老、传承需求爆发，正是寿险人服务客户的新蓝海。"},
+  {date:"2026-07", title:"容易产生共鸣又易被忽略的议题——亚健康", tags:["健康","保障缺口","话题"],
+   core:"亚健康——易被忽略的保障缺口：用健康管理话题打开客户保障意识，自然衔接医疗险与重疾险。"},
+  {date:"2026-07", title:"每个人都要学会卖掉自己", tags:["个人品牌","自我营销","获客"],
+   core:"每个人都要学会『卖掉自己』：个人品牌与自我营销，是新时代业务员建立信任、获得转介绍的必修课。"},
+  {date:"2026-07", title:"对抗通膨与日常支出，创造保值现金流", tags:["现金流","年金","储蓄"],
+   core:"对抗通膨与日常支出，创造保值现金流：用储蓄型 / 年金险帮客户守住购买力，是当下最被需要的方案。"}
 ];
 
 /* ===================== 智库：保险行销集团 前辈思想 ===================== */
@@ -1028,6 +1078,19 @@ MAG_TOPICS.forEach(m=>{
   magGrid.appendChild(d);
 });
 
+/* 智库：杂志公开主题索引 */
+const magThemeGrid=document.getElementById("magThemeGrid");
+if(magThemeGrid){
+  MAG_THEMES.forEach(m=>{
+    const d=document.createElement("div");
+    d.className="mcard";
+    d.innerHTML=`<div class='top'><div class='av'>📑</div><div><div class='nm'>${m.title}</div><div class='en'>${m.date} · 每月一主题</div></div></div>`+
+      `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
+      `<div class='core'>${m.core}</div>`;
+    magThemeGrid.appendChild(d);
+  });
+}
+
 /* 智库：保险行销集团前辈 */
 const immGrid=document.getElementById("immGrid");
 IMM_PEOPLE.forEach(m=>{
@@ -1036,7 +1099,9 @@ IMM_PEOPLE.forEach(m=>{
   d.dataset.key=m.nm;
   d.innerHTML=`<div class='top'><div class='av'>${m.av}</div><div><div class='nm'>${m.nm}</div><div class='en'>${m.en}</div></div></div>`+
     `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
-    `<div class='core'>${m.core}<br><b>金句：</b>${m.quote}<br><b>落地：</b>${m.app}</div>`;
+    `<div class='core'>${m.core}</div>`+
+    `<div class='quote'>${m.quote}</div>`+
+    `<div class='app'>▸ 落地用法：${m.app}</div>`;
   immGrid.appendChild(d);
 });
 
