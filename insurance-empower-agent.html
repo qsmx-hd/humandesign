@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保险行业赋能智能体 · 寿险营销大师与团队长智慧</title>
+<style>
+  :root{
+    --bg:#FBF8F2; --panel:#FFFFFF; --ink:#23262B; --muted:#6B7280;
+    --navy:#15324E; --navy2:#1E4870; --gold:#C29A3E; --gold-soft:#E8D9B5;
+    --line:#ECE5D8; --teal:#2E7D6F; --rose:#B4543B;
+    --shadow:0 6px 24px rgba(21,50,78,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.65; font-size:15px;
+  }
+  .app{display:grid; grid-template-columns:248px 1fr; min-height:100vh}
+  /* Sidebar */
+  .sidebar{background:linear-gradient(180deg,var(--navy),var(--navy2)); color:#EAF1F7; padding:22px 16px; position:sticky; top:0; height:100vh; overflow:auto}
+  .brand{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .brand .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#E0C07A); display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  .brand h1{font-size:16px; font-weight:700; letter-spacing:.5px}
+  .brand .sub{font-size:11px; color:#AFC4D6; margin-top:2px}
+  .nav{margin-top:26px; display:flex; flex-direction:column; gap:6px}
+  .nav button{
+    text-align:left; background:transparent; border:none; color:#D6E2EC; padding:11px 14px; border-radius:10px;
+    font-size:14px; cursor:pointer; display:flex; align-items:center; gap:10px; transition:.18s; font-family:inherit;
+  }
+  .nav button .ico{font-size:16px; width:20px; text-align:center}
+  .nav button:hover{background:rgba(255,255,255,.08); color:#fff}
+  .nav button.active{background:var(--gold); color:#1c2a16; font-weight:700}
+  .side-note{margin-top:24px; font-size:11px; color:#9FB6C8; border-top:1px solid rgba(255,255,255,.12); padding-top:14px; line-height:1.6}
+  /* Main */
+  .main{padding:26px 34px 40px; max-width:1080px}
+  .topbar{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px}
+  .topbar h2{font-size:22px; color:var(--navy); font-weight:800; letter-spacing:.5px}
+  .topbar p{color:var(--muted); font-size:13px; margin-top:4px}
+  .badge{background:var(--gold-soft); color:#7a5a14; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid #d8c188}
+  section.view{display:none; animation:fade .25s ease}
+  section.view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 16px; box-shadow:var(--shadow); margin-bottom:12px}
+  .card h3{font-size:17px; color:var(--navy); margin-bottom:10px; display:flex; align-items:center; gap:8px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+  /* Chat */
+  .chat-wrap{display:flex; flex-direction:column; height:calc(100dvh - 170px); min-height:480px}
+  .chat-head{background:var(--panel); border:1px solid var(--line); border-radius:14px 14px 0 0; padding:12px 16px; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow)}
+  .chat-head .ava{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--gold));display:flex;align-items:center;justify-content:center;font-size:18px}
+  .chat-head .meta b{color:var(--navy); font-size:15px}
+  .chat-head .meta span{display:block; font-size:12px; color:var(--teal); line-height:1.5}
+  .chat-body{flex:1; overflow:auto; background:#FCFAF5; border-left:1px solid var(--line); border-right:1px solid var(--line); padding:18px; display:flex; flex-direction:column; gap:14px}
+  .msg{max-width:86%; padding:12px 15px; border-radius:14px; font-size:14.5px; line-height:1.65; word-break:break-word}
+  .msg.user{align-self:flex-end; background:var(--navy); color:#fff; border-bottom-right-radius:4px; white-space:pre-wrap}
+  .msg.bot{align-self:flex-start; background:#fff; border:1px solid var(--line); border-bottom-left-radius:4px; white-space:normal}
+  .msg.bot .who{font-size:12px; color:var(--gold); font-weight:700; margin-bottom:5px; display:flex; align-items:center; gap:6px}
+  .msg.bot ul{margin:8px 0 4px 18px}
+  .msg.bot li{margin:5px 0}
+  .mchip{display:inline-block; background:var(--gold-soft); color:#7a5a14; border:1px solid #e0cd95; border-radius:20px; padding:1px 9px; font-size:11.5px; font-weight:600; margin-right:5px; margin-bottom:4px}
+  .msg.bot .tip{margin-top:10px; font-size:12.5px; color:var(--teal); background:#EAF5F2; border-left:3px solid var(--teal); padding:8px 11px; border-radius:6px}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; padding:12px 16px 4px; background:#FCFAF5; border-left:1px solid var(--line); border-right:1px solid var(--line)}
+  .chips button{background:#fff; border:1px solid var(--line); color:var(--navy2); border-radius:20px; padding:7px 13px; font-size:13px; cursor:pointer; transition:.15s; font-family:inherit}
+  .chips button:hover{border-color:var(--gold); color:var(--gold); background:#FDF8EE}
+  .chips-label{display:flex; align-items:center; gap:6px; padding:11px 16px 2px; background:#FCFAF5; border-left:1px solid var(--line); border-right:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--gold); letter-spacing:.3px}
+  .chat-input{display:flex; gap:10px; padding:12px 14px; background:var(--panel); border:1px solid var(--line); border-radius:0 0 14px 14px; box-shadow:var(--shadow); align-items:flex-end}
+  .chat-input textarea{flex:1; resize:none; border:1px solid var(--line); border-radius:12px; padding:11px 14px; font-size:15px; line-height:1.6; font-family:inherit; color:var(--ink); outline:none; min-height:48px; max-height:120px}
+  .chat-input textarea:focus{border-color:var(--gold)}
+  .chat-input button{background:var(--navy); color:#fff; border:none; border-radius:12px; padding:0 20px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; height:48px}
+  .chat-input button:hover{background:var(--navy2)}
+  /* Masters grid */
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; align-items:stretch}
+  .mcard{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:11px; box-shadow:var(--shadow); transition:.18s; cursor:default; display:flex; flex-direction:column}
+  .mcard:hover{transform:translateY(-3px); box-shadow:0 12px 30px rgba(21,50,78,.13)}
+  .mcard .top{display:flex; align-items:center; gap:11px; margin-bottom:7px}
+  .mcard .av{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--navy),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700; flex-shrink:0}
+  .mcard .nm{font-size:15px; font-weight:800; color:var(--navy); line-height:1.3}
+  .mcard .en{font-size:11px; color:var(--muted)}
+  .mcard .tag{display:inline-block; background:#F0E9D8; color:#7a5a14; font-size:10.5px; padding:1px 7px; border-radius:12px; margin:1px 3px 1px 0}
+  .mcard .core{font-size:12.5px; color:#3a3f47; margin:5px 0; line-height:1.55; flex:0 1 auto; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+  .mcard .quote{font-size:12px; color:var(--navy2); background:#F7F3EA; border-left:3px solid var(--gold); padding:6px 9px; border-radius:6px; font-style:italic; margin:6px 0 0}
+  .mcard .app{font-size:11.5px; color:var(--teal); margin-top:6px}
+  /* 专家观点库卡片：手机端/电脑端均完整显示，不做行数截断 */
+  #exportGrid .mcard .core{display:block; -webkit-line-clamp:unset; -webkit-box-orient:initial; overflow:visible}
+  /* 保险行销集团·前辈思想库卡片：同上，完整显示 */
+  #immGrid .mcard .core{display:block; -webkit-line-clamp:unset; -webkit-box-orient:initial; overflow:visible}
+  .intro-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
+  /* Chips inside bot bubble */
+  .msg.bot .chips-in{background:transparent; border:none; padding:0; margin-top:10px; gap:7px}
+  .msg.bot .chips-in button{font-size:12.5px; padding:6px 11px; background:#fff; border-color:#e0d6c4}
+  .msg.bot .chips-label.chips-in{background:transparent; border:none; padding:0; margin:14px 0 6px; font-size:12.5px}
+  /* Diagnostic */
+  .qrow{padding:13px 0; border-bottom:1px dashed var(--line)}
+  .qrow .qt{font-size:14px}
+  .qrow .scale{display:flex; gap:6px; margin-top:10px}
+  .qrow .scale button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);font-family:inherit;transition:.15s}
+  .qrow .scale button:hover{border-color:var(--gold)}
+  .qrow .scale button.sel{background:var(--gold); color:#1c2a16; border-color:var(--gold)}
+  .gauge{text-align:center; margin:18px 0}
+  .gauge .num{font-size:46px; font-weight:800; color:var(--navy)}
+  .gauge .lab{font-size:15px; font-weight:700; margin-top:2px}
+  .diag-out{display:none}
+  .diag-out.show{display:block}
+  /* Toolbox accordion */
+  .acc{border:1px solid var(--line); border-radius:12px; margin-bottom:12px; overflow:hidden; background:#fff}
+  .acc .hd{display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer; font-weight:700; color:var(--navy); font-size:15px; background:#FBF8F2}
+  .acc .hd .ic{font-size:17px}
+  .acc .hd .arrow{margin-left:auto; transition:.2s; color:var(--muted)}
+  .acc.open .hd .arrow{transform:rotate(90deg)}
+  .acc .bd{max-height:0; overflow:hidden; transition:max-height .3s ease; padding:0 16px}
+  .acc.open .bd{max-height:1400px; padding:14px 16px 18px}
+  .acc .bd ol,.acc .bd ul{margin:6px 0 6px 20px}
+  .acc .bd li{margin:7px 0; font-size:14px}
+  .acc .bd table{width:100%; border-collapse:collapse; margin:8px 0; font-size:13px}
+  .acc .bd th,.acc .bd td{border:1px solid var(--line); padding:8px 10px; text-align:left}
+  .acc .bd th{background:#F4EFE3; color:var(--navy); font-weight:700}
+  .hl{background:#FBF3DD; padding:1px 5px; border-radius:4px}
+  @media(max-width:820px){
+    .app{grid-template-columns:1fr; min-height:100dvh}
+    .sidebar{position:static; height:auto; padding:14px 12px}
+    .brand h1{font-size:15px}
+    .brand .sub{font-size:10px}
+    .nav{margin-top:12px; flex-direction:row; flex-wrap:wrap; gap:5px}
+    .nav button{padding:8px 10px; font-size:12.5px; border-radius:8px}
+    .nav button .ico{font-size:14px; width:auto}
+    .side-note{display:none}
+    .main{padding:12px 12px 90px}
+    .topbar{margin-bottom:10px}
+    .topbar h2{font-size:18px}
+    .topbar p{font-size:12px; margin-top:2px}
+    .badge{font-size:11px; padding:3px 9px}
+    /* 手机端智能咨询台 → 对话式布局 */
+    #view-chat{padding:0; margin:0 -12px}
+    .chat-wrap{height:calc(100dvh - 168px); min-height:auto; max-height:none; border-radius:0; border:none; background:#F5F1E9}
+    .chat-head{display:none}
+    .chat-body{padding:12px; gap:11px; background:#F5F1E9; border:none}
+    .msg{max-width:94%; padding:10px 13px; font-size:14px; border-radius:16px; line-height:1.62; word-break:break-word; overflow-wrap:break-word}
+    .msg.user{border-bottom-right-radius:4px; background:var(--navy)}
+    .msg.bot{border-bottom-left-radius:4px; box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    .msg.bot .who{font-size:11px; margin-bottom:4px}
+    .chips, .chips-label{padding:8px 12px; background:#F5F1E9; border:none}
+    .chips button{font-size:12px; padding:6px 10px; border-radius:16px}
+    .chat-input{border-radius:0; border-left:none; border-right:none; border-bottom:none; padding:10px 12px; padding-bottom:calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -2px 10px rgba(0,0,0,.06); gap:8px}
+    .chat-input textarea{min-height:44px; max-height:110px; font-size:15px; padding:10px 12px; border-radius:18px}
+    .chat-input button{height:44px; padding:0 18px; border-radius:18px; font-size:14px}
+    .mgrid{grid-template-columns:1fr; gap:10px}
+    .mcard{padding:11px; border-radius:12px}
+    .mcard .av{width:38px;height:38px;font-size:17px;border-radius:10px}
+    .mcard .nm{font-size:14.5px}
+    .mcard .core{font-size:12.5px; -webkit-line-clamp:unset; display:block}
+    .card{padding:13px 15px; margin-bottom:10px}
+    .qrow .scale{margin-top:9px}
+  }
+  .site-footer{margin-top:0; padding:18px 24px 24px; text-align:center; font-size:12px; color:var(--muted); background:var(--bg); border-top:1px solid var(--line)}
+  .site-footer .powered{margin-top:7px; font-weight:800; color:var(--gold); letter-spacing:.6px; font-size:13px}
+  /* ===== 智库 · 工具卡 & 痛点索引 ===== */
+  .pchip{display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:20px; margin-bottom:8px; line-height:1.5}
+  .pchip.phold{background:#FCEBDD; color:#a45a1a; border:1px solid #e9c79b}
+  .pchip.precruit{background:#E2EEF7; color:#1f5e96; border:1px solid #b9d6ee}
+  .pchip.ptrans{background:#E7F1E2; color:#3f7a2e; border:1px solid #bcdcae}
+  .tt{font-size:15px; font-weight:800; color:var(--navy); margin-bottom:2px}
+  .texpert{font-size:12.5px; color:var(--gold); margin-bottom:8px}
+  .toolgrid .mcard{cursor:pointer; transition:.16s}
+  .toolgrid .mcard:hover{border-color:var(--gold); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.07)}
+  .idx3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:6px}
+  .idxcol{background:#FCFAF5; border:1px solid var(--line); border-radius:12px; padding:12px 14px}
+  .idxcol h4{font-size:14px; margin:0 0 8px; display:flex; align-items:center; gap:6px}
+  .idxcol h4 .pchip{margin-bottom:0}
+  .idxcol ul{margin:0; padding-left:16px}
+  .idxcol li{font-size:12.5px; line-height:1.7; margin-bottom:4px}
+  .xlink{color:var(--navy); font-weight:700; cursor:pointer; border-bottom:1px dashed var(--gold); transition:.15s}
+  .xlink:hover{color:var(--gold); border-bottom-style:solid}
+  .mcard.flash{animation:cardFlash 1.2s ease}
+  @keyframes cardFlash{0%{box-shadow:0 0 0 0 rgba(196,149,106,.6)}70%{box-shadow:0 0 0 8px rgba(196,149,106,0)}100%{box-shadow:0 0 0 0 rgba(196,149,106,0)}}
+  /* Handbook */
+  .hgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:10px}
+  .hcard{background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; page-break-inside:avoid}
+  .hcard .htt{font-size:16px; font-weight:800; color:var(--navy); margin-bottom:3px}
+  .hcard .hexpert{font-size:12px; color:var(--gold); font-weight:700; margin-bottom:8px}
+  .hcard .hdef{font-size:13px; line-height:1.6; margin-bottom:8px}
+  .hcard .hsteps{font-size:12px; line-height:1.7; margin:0 0 8px; padding-left:16px}
+  .hcard .hquote{font-size:12px; font-style:italic; color:var(--navy2); background:#F7F3EA; border-left:3px solid var(--gold); padding:6px 9px; border-radius:6px}
+  .printbar{display:flex; gap:10px; margin-top:12px}
+  .printbar button{background:var(--navy); color:#fff; border:none; border-radius:9px; padding:9px 18px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit}
+  .printbar button:hover{background:var(--navy2)}
+  .print-stage{display:none}
+  @media(max-width:820px){ .idx3{grid-template-columns:1fr} .hgrid{grid-template-columns:1fr} .intro-grid{grid-template-columns:1fr} }
+  @media print{
+    @page { size:A4; margin:8mm }
+    html,body{height:auto !important; overflow:visible !important; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .app,.site-footer{display:none !important}
+    .print-stage{display:block !important; position:absolute; left:0; top:0; width:100%; max-width:100%; margin:0; padding:0; box-sizing:border-box; overflow:hidden}
+    .print-stage .card{box-shadow:none; border:none; margin:0; padding:0}
+    .print-stage .hgrid{display:block; width:100%}
+    .print-stage .hcard{break-inside:avoid; page-break-inside:avoid; border:1px solid #ccc; border-radius:8px; padding:8px 10px; margin:0 0 8px}
+    .print-stage .hcard .htt{font-size:13px}
+    .print-stage .hcard .hexpert{font-size:10.5px}
+    .print-stage .hcard .hdef,.print-stage .hcard .hsteps,.print-stage .hcard .hquote{font-size:10px; line-height:1.5}
+    .print-stage .pchip{font-size:9.5px}
+    .print-stage .printbar{display:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">🛡️</div>
+      <div>
+        <h1>保险赋能智能体</h1>
+        <div class="sub">大师智慧 × 团队长实战</div>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-view="chat" class="active"><span class="ico">💬</span>智能咨询台</button>
+      <button data-view="masters"><span class="ico">📚</span>大师思想库</button>
+      <button data-view="think"><span class="ico">📖</span>智库 · 保险行销体系</button>
+      <button data-view="retain"><span class="ico">🧭</span>留存破局</button>
+      <button data-view="tools"><span class="ico">🧰</span>团队长工具箱</button>
+      <button data-view="scripts"><span class="ico">🎯</span>情景话术库</button>
+    </nav>
+    <div class="side-note">
+      本智能体为<strong>离线知识型 Agent</strong>，内置全球寿险营销大师、<strong>保险行销集团前辈智库</strong>、<strong>9 位华人名家思想库</strong>（含陈玉婷 3W 文化、李佳蓉经委会、龙子明件数文化、陈嘉虎询导、吴征宇台阶理论、宋明华心法论等）与中外团队长的公开方法论，用关键词引擎即时匹配您的疑问。可无缝嵌入微信小程序作为「保险从业者赋能助手」。
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2 id="pageTitle">智能咨询台</h2>
+        <p id="pageSub">向智能体提问，立刻获得大师与团队长的破局思路</p>
+      </div>
+      <span class="badge" id="roleBadge">为「保险企业家·外勤总监」量身打造</span>
+    </div>
+
+    <!-- ============ CHAT ============ -->
+    <section class="view active" id="view-chat">
+      <div class="chat-wrap">
+        <div class="chat-head">
+          <div class="ava">🤖</div>
+          <div class="meta">
+            <b>保险赋能教练</b>
+            <span>● 7×24小时在线 · 随时召唤</span>
+          </div>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="msg bot">
+            <div class="who">🤖 保险赋能教练</div>
+            您好，总监！我是您的保险行业赋能智能体。您早已是「<b>保险企业家</b>」、带外勤团队，最棘手的一定是「<b>留存难</b>」。
+            我会 1 秒内调出 Ben Feldman、梅第、斯通、金克拉、Granum、甘道夫等大师，保险行销集团梁天龙/陈亦纯/吴锦珠等前辈，以及陈玉婷、李佳蓉、龙子明、陈嘉虎、吴征宇、宋明华等华人名家的智库，给您可落地的答案。
+            <div class="chips chips-in" id="chips">
+              <button>新人总是脱落怎么办？</button>
+              <button>怎么让心态崩了的组员重新燃起动力？</button>
+              <button>转介绍怎么开口要名单？</button>
+              <button>基本法怎么给新人讲清楚？</button>
+              <button>客户经营怎么从一单做到一生？</button>
+              <button>保险行销集团的 IDA 怎么用来带团队？</button>
+              <button>团队长该用什么样的领导方式？</button>
+            </div>
+            <div class="chips-label chips-in">💡 专家核心赋能工具 · 引导题目</div>
+            <div class="chips chips-in" id="chipsTool">
+              <button>陈玉婷的 3W 文化怎么落地到团队？</button>
+              <button>李佳蓉的经委会怎么孵化人才？</button>
+              <button>龙子明的件数文化怎么降脱落？</button>
+              <button>陈嘉虎的询导怎么带团队？</button>
+              <button>吴征宇的台阶理论怎么帮新人？</button>
+              <button>宋明华的心法论怎么招募优才？</button>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input">
+          <textarea id="userInput" rows="3" placeholder="输入您团队正在遇到的真实难题…（Enter 发送）"></textarea>
+          <button id="sendBtn">发送</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MASTERS ============ -->
+    <section class="view" id="view-masters">
+      <div class="card">
+        <h3><span class="dot"></span>全球寿险营销大师 · 思想档案</h3>
+        <p style="color:var(--muted);font-size:13.5px">九位被全球保险业反复验证的大师，他们的核心方法可直接迁移到「留存 / 增员 / 辅导 / 客户经营」。点击任一卡片，思考：<b>这条思路能解决我团队里的哪个具体问题？</b></p>
+      </div>
+      <div class="mgrid" id="mgrid"></div>
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>中国本土实战框架（团队长必读）</h3>
+        <ul style="margin-left:18px">
+          <li><b>万峰「五利益」模型</b>：队伍靠销售利益 / 增员利益 / 管理利益 / 育成利益 / 福利利益维系；核心是<b>赋予权</b>——下属离司后其有效保单续期与客户资源归主管，稳定主管、激励长期育成。</li>
+          <li><b>中国人寿「六新」</b>：新定位（金融保险规划师）、新架构（扁平化）、新制度、新营销、新赋能、新发展；新人培训拉长到 1 年，招募标准升级为「高学历 / 高自主 / 高潜质」。</li>
+          <li><b>新华保险 XIN一代 + WLP</b>：全生命周期规划师培养体系，从「卖保单」升级为「客户生命旅程的长期伙伴」。</li>
+          <li><b>泰康 HWP</b>：健康财富规划师，把基本法升级为「生态基本法」，用招募-训练-激励-成长十大维度体系化赋能。</li>
+          <li><b>国泰人寿张瑞文「定著四要素」</b>：精准招募、深度陪跑、文化塑造、开放管理——30 岁以下新人占 80%、定著率 85%。</li>
+          <li><b>明亚李晓洁「80/20 法则」</b>：80% 时间建共性培训体系，20% 做个性化辅导；每位新人发「成长手册」明确路径。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ THINK TANK (保险行销集团智库) ============ -->
+    <section class="view" id="view-think">
+      <div class="card">
+        <h3><span class="dot"></span>保险行销集团 · 华人保险思想智库</h3>
+        <p style="color:var(--muted);font-size:13.5px">保险行销集团（IMM，1983 年梁天龙创办于台北）是华人保险专业资讯的奠基者，旗下有《Advisers 财务顾问》杂志（原《保险行销》杂志，2002 年更名）、国际龙奖 IDA、世界华人保险大会、CIA500。本智库汇集其创办人及诸位前辈的著作与思想，与全球大师互为补充，专治「留存难、增员难、组织发展难」。</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>历年《保险营销 / 保险行销》杂志 · 主题智库</h3>
+        <p style="color:var(--muted);font-size:13px">杂志持续 40 年追踪华人保险业的观念、技巧与趋势。以下为可检索的主题库（可按贵团队实际年份 / 合订本继续扩充）：</p>
+        <div class="mgrid" id="magGrid"></div>
+      </div>
+
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>保险行销集团 · 前辈思想库</h3>
+        <div class="mgrid" id="immGrid"></div>
+      </div>
+
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>华人保险名家 · 专家观点库</h3>
+        <p style="color:var(--muted);font-size:13px">以下名家横跨大陆、港台与海外，均为一线顶尖业绩与卓越团队经营的践行者。其思想可与此前的大师、前辈互为参照，专治「留存难、增员难、组织发展难」。</p>
+        <div class="mgrid" id="exportGrid"></div>
+      </div>
+
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>3W 文化 · 寿险经营的底层活动量操作系统</h3>
+        <p style="color:var(--muted);font-size:13px">代表人物：<b>陈玉婷</b>（保德信人寿首席寿险顾问 · 2020–2021 MDRT 大中华区主席 · IDA 终身会员）。「3W」= <b>每周 3 张新保单（3 policies a Week）</b>，她自 1992 年起持续 1,235 周以上不间断，创「世界华人 3W 历史纪录」。</p>
+        <div class="intro-grid">
+          <div style="background:#FCFAF5;border:1px solid var(--line);border-radius:12px;padding:14px">
+            <div style="font-weight:700;color:var(--navy);font-size:14px;margin-bottom:6px">① 3W 的内核</div>
+            <p style="font-size:13px;line-height:1.7">用「对」的心态做「对」的事情；回到保险最初——以「爱」为本的保障规划（爱、备爱、实践爱），实现「财务安全 × 心灵和平」。不靠爆发，靠<b>稳定、可累积的周节奏</b>：每周固定 3 张新保单，雷打不动。</p>
+          </div>
+          <div style="background:#FCFAF5;border:1px solid var(--line);border-radius:12px;padding:14px">
+            <div style="font-weight:700;color:var(--navy);font-size:14px;margin-bottom:6px">② 配套方法论：7S + KASH</div>
+            <p style="font-size:13px;line-height:1.7"><b>7S</b>：Search 寻找 / Service 服务 / Sell 销售 / Study 学习 / Sit Plan 计划 / Structure Activity 固定工作时刻表 / Sales Manager 管理职。<br><b>KASH</b>：知识 Knowledge · 态度 Attitude · 技巧 Skill · 习惯 Habit。七力并进、长期经营。</p>
+          </div>
+        </div>
+        <div style="background:var(--gold-soft);border:1px solid #d8c188;border-radius:12px;padding:14px;margin-top:12px">
+          <div style="font-weight:700;color:#7a5a14;font-size:14px;margin-bottom:6px">→ 团队长怎么用（专治留存难）</div>
+          <p style="font-size:13px;line-height:1.7">把「3W」设为新人的<b>最低活动量纪律</b>：用稳定、可预期的周节奏替代「暴涨暴跌」式业绩，让新人每月都有确定性进展、看见自己在成长——这与 Granum「10-3-1」活动量系统同源，专治留存难。陈玉婷座右铭：「<b>知识与经验的分享是给人们最好的礼物</b>」，把她的 3W 节奏 + 7S 拆解进新人 90 天陪跑，留存自然提升。</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>专家核心赋能工具库 · 6 大落地打法</h3>
+        <p style="color:var(--muted);font-size:13px">把智能咨询台里的 6 个核心工具做成独立「工具卡」，点任意一张即可在【智能咨询台】调出该专家的完整团队落地打法。按痛点着色：<span class="pchip phold">留存难</span> <span class="pchip precruit">增员难</span> <span class="pchip ptrans">转型难</span></p>
+        <div class="mgrid toolgrid" id="toolGrid">
+          <div class="mcard" data-q="陈玉婷的 3W 文化怎么落地到团队？">
+            <span class="pchip phold">留存难</span>
+            <div class="tt">3W 文化</div>
+            <div class="texpert">陈玉婷 · 保德信人寿首席寿险顾问</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">每周 3 张新保单的稳定活动量纪律，陈玉婷自 1992 年起持续 1,235 周以上不间断，创「世界华人 3W 历史纪录」。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>设为新人最低活动量标准，配 7S+KASH，用稳定周节奏替代「暴涨暴跌」式业绩。</p>
+          </div>
+          <div class="mcard" data-q="李佳蓉的经委会怎么孵化人才？">
+            <span class="pchip phold">留存难</span><span class="pchip precruit" style="margin-left:4px">增员难</span>
+            <div class="tt">经委会 / 功能组</div>
+            <div class="texpert">李佳蓉 · 磊山保经董事长</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">「用任务成就人才，而非用人完成任务」——把团队事务拆成功能组，让组员在真实任务中长本事、被看见。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>选 1–2 位组员任功能组长，给权责资源；例会表彰「因任务而成长」的故事。</p>
+          </div>
+          <div class="mcard" data-q="龙子明的件数文化怎么降脱落？">
+            <span class="pchip phold">留存难</span>
+            <div class="tt">件数文化</div>
+            <div class="texpert">龙子明 · 香港宏利「龙之家族」</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">以「件数」而非「大单」衡量贡献——件数=客户=定著；其 IDA 会员定著率高达 95%。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>早会设本周件数目标，IDA 荣誉墙表彰，让「持续出单」成团队身份认同。</p>
+          </div>
+          <div class="mcard" data-q="陈嘉虎的询导怎么带团队？">
+            <span class="pchip precruit">增员难</span><span class="pchip ptrans" style="margin-left:4px">转型难</span>
+            <div class="tt">询导</div>
+            <div class="texpert">陈嘉虎 · CIA500 峰会主席</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">以教练式提问引导取代命令——「你最想达成什么？团队能帮你什么？下一步你打算怎么做？」。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>把业务员从「受雇者」扭成「企业主」；CIA500 首重「绩优占比」而非人力。</p>
+          </div>
+          <div class="mcard" data-q="吴征宇的台阶理论怎么帮新人？">
+            <span class="pchip phold">留存难</span>
+            <div class="tt">台阶理论</div>
+            <div class="texpert">吴征宇 · 大都会「太阳系」创始人</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">把「10 米高墙」拆成 50 个 20cm 台阶，每次只盯下一步，目标不再吓人。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>把年度大目标拆到「本周见几人、谈几单」，配合 3W 节奏锚点。</p>
+          </div>
+          <div class="mcard" data-q="宋明华的心法论怎么招募优才？">
+            <span class="pchip precruit">增员难</span>
+            <div class="tt">心法论</div>
+            <div class="texpert">宋明华 · 原新华保险浙江资深总监</div>
+            <p style="font-size:13px;line-height:1.65;margin:0 0 6px">「想要什么样的人，就会找到什么样的人」——内心坚持决定人才质量。</p>
+            <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0"><b>落地：</b>用高素质 4 标准（28–40 岁 / 形象 / 资源 / 阅历）精准招募，从源头降脱落。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card handbook" id="handbookSource" style="margin-top:6px">
+        <h3><span class="dot"></span>📘 团队长赋能手册 · 6 大专家工具（打印版）</h3>
+        <p style="color:var(--muted);font-size:13px">把 6 张工具卡做成 A4 可打印的早会手册，主管随身参考。每张卡含「核心打法 + 3 步落地 + 金句」。</p>
+        <div class="hgrid">
+          <div class="hcard">
+            <span class="pchip phold">留存难</span>
+            <div class="htt">3W 文化</div>
+            <div class="hexpert">陈玉婷 · 保德信人寿首席寿险顾问</div>
+            <div class="hdef">每周 3 张新保单的稳定活动量纪律，用可预期的周节奏替代暴涨暴跌。</div>
+            <ol class="hsteps">
+              <li>新人入职首周即设「每周 3 件」最低活动量标准。</li>
+              <li>用 7S+KASH 配套：寻找、服务、销售、学习、计划、固定时刻表、管理职。</li>
+              <li>周一早会公布上周 3W 达成榜，表彰持续而非大单。</li>
+            </ol>
+            <div class="hquote">「知识与经验的分享是给人们最好的礼物。」</div>
+          </div>
+          <div class="hcard">
+            <span class="pchip phold">留存难</span><span class="pchip precruit" style="margin-left:4px">增员难</span>
+            <div class="htt">经委会 / 功能组</div>
+            <div class="hexpert">李佳蓉 · 磊山保经董事长</div>
+            <div class="hdef">「用任务成就人才，而非用人完成任务」——让组员在真实任务中长本事。</div>
+            <ol class="hsteps">
+              <li>把团队事务拆成功能组（训练、活动、客户经营、增员）。</li>
+              <li>选 1–2 位组员任组长，给权责、给资源、给舞台。</li>
+              <li>例会表彰「因任务而成长」的故事，把责任变成领导力。</li>
+            </ol>
+            <div class="hquote">「用任务成就人才，而非用人完成任务。」</div>
+          </div>
+          <div class="hcard">
+            <span class="pchip phold">留存难</span>
+            <div class="htt">件数文化</div>
+            <div class="hexpert">龙子明 · 香港宏利「龙之家族」</div>
+            <div class="hdef">以「件数」而非「大单」衡量贡献：件数=客户=定著。</div>
+            <ol class="hsteps">
+              <li>早会设本周件数目标， tracking board 可视化。</li>
+              <li>设 IDA 荣誉墙，让「持续出单」成为团队身份认同。</li>
+              <li>主管以身作则做件数，新人自然跟随。</li>
+            </ol>
+            <div class="hquote">「做大做强做持久；件数就是客户，客户就是定著。」</div>
+          </div>
+          <div class="hcard">
+            <span class="pchip precruit">增员难</span><span class="pchip ptrans" style="margin-left:4px">转型难</span>
+            <div class="htt">询导</div>
+            <div class="hexpert">陈嘉虎 · CIA500 峰会主席</div>
+            <div class="hdef">以教练式提问取代命令，把业务员从「受雇者」扭成「企业主」。</div>
+            <ol class="hsteps">
+              <li>1 对 1 用三问：「你最想达成什么？团队能帮你什么？下一步你打算怎么做？」</li>
+              <li>不直接给答案，引导对方自己承诺行动。</li>
+              <li>用 CIA500「绩优占比」替代人力规模作为团队目标。</li>
+            </ol>
+            <div class="hquote">「以询导启发自主经营，让企业主思维长在团队里。」</div>
+          </div>
+          <div class="hcard">
+            <span class="pchip phold">留存难</span>
+            <div class="htt">台阶理论</div>
+            <div class="hexpert">吴征宇 · 大都会「太阳系」创始人</div>
+            <div class="hdef">把 10 米高墙拆成 50 个 20cm 台阶，每次只盯下一步。</div>
+            <ol class="hsteps">
+              <li>把年度大目标拆到季度→月度→周→日行动。</li>
+              <li>本周只看「见几人、谈几单、成几件」。</li>
+              <li>配合 3W 节奏锚点，让新人每周都有确定的小胜。</li>
+            </ol>
+            <div class="hquote">「把高墙拆成台阶，新人拾级而上就不会恐高。」</div>
+          </div>
+          <div class="hcard">
+            <span class="pchip precruit">增员难</span>
+            <div class="htt">心法论</div>
+            <div class="hexpert">宋明华 · 原新华保险浙江资深总监</div>
+            <div class="hdef">「想要什么样的人，就会找到什么样的人」——内心坚持决定人才质量。</div>
+            <ol class="hsteps">
+              <li>主管先写下「我团队要招什么样的人」并贴出来。</li>
+              <li>用高素质 4 标准：28–40 岁、形象舒适、有资源、有阅历。</li>
+              <li>宁可慢招，不滥招；从源头降低脱落率。</li>
+            </ol>
+            <div class="hquote">「你想要什么样的人，就会找到什么样的人。」</div>
+          </div>
+        </div>
+        <div class="printbar">
+          <button onclick="printHandbook()">打印此手册</button>
+          <button onclick="jumpToCard('陈玉婷')" style="background:#fff;color:var(--navy);border:1px solid var(--line)">查看智库详情</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:6px">
+        <h3><span class="dot"></span>痛点归类索引 · 留存难 / 增员难 / 转型难</h3>
+        <p style="color:var(--muted);font-size:13px">按团队最痛的三类难题，把已收录的全球大师、保险行销集团前辈与华人名家思想归类，便于快速取用。点上方工具卡可一键调出对应打法。</p>
+        <div class="idx3">
+          <div class="idxcol">
+            <h4><span class="pchip phold">留存难</span> 留不住人</h4>
+            <ul>
+              <li><span class="xlink" data-key="陈玉婷">陈玉婷</span> · 3W 文化（每周 3 张）</li>
+              <li><span class="xlink" data-key="龙子明">龙子明</span> · 件数文化（件数=定著）</li>
+              <li><span class="xlink" data-key="吴征宇">吴征宇</span> · 台阶理论（目标拆小）</li>
+              <li><span class="xlink" data-key="李佳蓉">李佳蓉</span> · 经委会 / 功能组孵化</li>
+              <li><span class="xlink" data-key="梅第">梅第</span> / <span class="xlink" data-key="甘道夫">甘道夫</span> · 服务客户一辈子</li>
+              <li><span class="xlink" data-key="阿尔·格拉纳姆">Granum</span> · 10-3-1 活动量系统</li>
+              <li><b>万峰</b> · 五利益 + 赋予权</li>
+            </ul>
+          </div>
+          <div class="idxcol">
+            <h4><span class="pchip precruit">增员难</span> 招不到 / 招不对</h4>
+            <ul>
+              <li><span class="xlink" data-key="宋明华">宋明华</span> · 心法论（4 标准）</li>
+              <li><span class="xlink" data-key="朱美音">朱美音</span> · 三高团队（善良是风水）</li>
+              <li><span class="xlink" data-key="龙子明">龙子明</span> · 件数文化 + 做大做强做持久</li>
+              <li><span class="xlink" data-key="李佳蓉">李佳蓉</span> · 经委会孵化领导者</li>
+              <li><b>国泰张瑞文</b> · 定著四要素</li>
+              <li><span class="xlink" data-key="陈亦纯">陈亦纯</span> · 8 张保单论</li>
+            </ul>
+          </div>
+          <div class="idxcol">
+            <h4><span class="pchip ptrans">转型难</span> 报行合一 / 专业化</h4>
+            <ul>
+              <li><span class="xlink" data-key="陈嘉虎">陈嘉虎</span> · 询导（企业主思维）</li>
+              <li><span class="xlink" data-key="贺恋疆">贺恋疆</span> · 顾问式行销 3.0</li>
+              <li><span class="xlink" data-key="苏婉薇">苏婉薇</span> · 一站式理财策划</li>
+              <li><b>泰康 HWP / 新华 WLP</b> · 健康财富规划师</li>
+              <li><span class="xlink" data-key="桑杰">桑杰</span> · 快乐销售（别自我设限）</li>
+              <li><span class="xlink" data-key="MDRT">MDRT</span> · 全人理念（Whole Person）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>荣誉与体系 · 团队经营的「世界级标准」</h3>
+        <ul style="margin-left:18px">
+          <li><b>国际龙奖 IDA（1998）</b>：以「典范·完美·尊贵」为理念，设杰出业务奖与优秀主管奖；每年 36 件以上长期寿险新契约，背后是 100 次拒绝、36 个转介绍中心、36 份续期——正是留存与组织发展的硬指标。</li>
+          <li><b>世界华人保险大会（1996）</b>：华人保险业规模最大、层级最高的国际会议，梁天龙创办，是「无疆界学习平台」。</li>
+          <li><b>CIA500 世界华人保险 500 强团队</b>：以团队经营质量为标杆，鼓励「可大、可久、可敬」的组织发展。</li>
+          <li><b>保险 GNP（Great Neat Place）</b>：梁天龙倡导的「伟大保险净土」，以专业、道德、尊严重塑行业形象。</li>
+          <li><b>Advisers / 保险行销杂志</b>：华人保险人手边的专业读物，40 年沉淀的行销观念与方法论。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ RETAIN / DIAGNOSTIC ============ -->
+    <section class="view" id="view-retain">
+      <div class="card">
+        <h3><span class="dot"></span>留存诊断 · 您的团队「定著健康度」</h3>
+        <p style="color:var(--muted);font-size:13.5px">留存难是系统性问题，不是某个人的问题。请就您团队现状，对以下 5 项打分（1=完全没有，5=非常到位），智能体将给出诊断与大师级改进优先级。</p>
+        <div id="quiz"></div>
+        <div style="text-align:center;margin-top:14px">
+          <button id="diagBtn" style="background:var(--navy);color:#fff;border:none;border-radius:10px;padding:11px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">生成诊断报告</button>
+        </div>
+      </div>
+      <div class="card diag-out" id="diagOut">
+        <h3><span class="dot"></span>诊断报告</h3>
+        <div class="gauge">
+          <div class="num" id="diagNum">0</div>
+          <div class="lab" id="diagLab"></div>
+        </div>
+        <div id="diagText"></div>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>留存破局 · 六大赋能杠杆</h3>
+        <p style="color:var(--muted);font-size:13px;line-height:1.7">下列杠杆均取自本智能体已收录的<b>全球大师</b>（Feldman / 梅第 / 斯通 / 金克拉 / Granum / 甘道夫 / MDRT）、<b>中国本土实战</b>（万峰 / 国泰张瑞文 / 明亚 / 国寿白凯）与<b>保险行销智库</b>（梁天龙 / 陈亦纯 / 陈玉婷 3W / 龙子明 / 陈嘉虎 / 桑杰 / 朱美音 / 宋明华 / 贺恋疆 等），可直接落地到您的团队。</p>
+        <ol style="margin-left:20px">
+          <li><b>精准招募（不是人海）</b>：国泰张瑞文「定著四要素」+ 朱美音「三高团队」+ 宋明华「心法论·4 标准」+ 龙子明「件数文化」——从源头匹配对的人，脱落自降。参考国寿「三高」标准。</li>
+          <li><b>深度陪跑（师徒制）</b>：国泰师徒制 + 陈嘉虎「询导」教练式引导（用提问让组员自己觉察，而非高压命令）+ 李佳蓉「用任务成就人才，而非用人完成任务」。</li>
+          <li><b>成长手册与职业路径</b>：明亚 80/20 + 基本法「三年收入账」+ 龙子明「敢梦敢想的共同愿景」，让新人一眼看见「学什么→做什么→到哪一步→赚多少」。</li>
+          <li><b>活动量系统（掌控感）</b>：Granum 10-3-1 / One Card + 陈玉婷「3W＝每周 3 张」最低活动量纪律 + 吴征宇「台阶理论」（把高墙拆成可拾级的台阶）。</li>
+          <li><b>长期服务文化</b>：梅第 / 甘道夫「服务客户一辈子」+ 苏婉薇「一站式理财策划」+ 吴征宇「用金融契约传递爱与责任」+ IDA「件数＝客户＝归属感」。</li>
+          <li><b>利益分配透明</b>：万峰「五利益 + 赋予权」+ 陈嘉虎「自主经营 / 企业主式思维」，让主管与新人都看见长期收益，主管才有增员与育成动力。</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ TOOLS ============ -->
+    <section class="view" id="view-tools">
+      <div class="card" style="margin-bottom:6px">
+        <h3><span class="dot"></span>团队长工具箱 · 可直接照做的模板</h3>
+        <p style="color:var(--muted);font-size:13px;line-height:1.7">以下 4 套工具均来自本智能体已收录的智库方法论，并已同步最新内容：<br>
+        · <b>新人 90 天陪跑计划</b> → 国泰深度陪跑 + 陈玉婷 3W（每周 3 张）+ 贺恋疆西点计划 + 朱美音 / 宋明华精准招募<br>
+        · <b>每日行动计划模板</b> → Granum 10-3-1 + 陈玉婷 7S + 吴征宇台阶理论<br>
+        · <b>增员面谈框架</b> → Granum 六步 + 宋明华心法论 + 朱美音三高 + 龙子明件数文化 + 李佳蓉经委会<br>
+        · <b>1 对 1 辅导话术</b> → 陈嘉虎询导 + 李佳蓉经委会 + 龙子明 Feel good + 桑杰 4 原则 + 吴征宇台阶理论<br>
+        想看每位专家背后的完整思想，去【智库 · 保险行销体系 → 专家核心赋能工具库 / 华人保险名家】。</p>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">📅</span>新人 90 天陪跑计划（可直接发给主管照做）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p>基于国泰「深度陪跑」+ Granum 活动量 + 明亚成长手册，并把陈玉婷「3W（每周 3 张）」设为<b>最低活动量纪律</b>、以贺恋疆「西点计划」式严谨甄选 + 朱美音 / 宋明华「精准招募」从源头降脱落，把新人前 90 天拆成三个阶段，每个阶段给主管明确的动作与可量化目标。</p>
+          <table>
+            <tr><th>阶段</th><th>核心任务</th><th>主管动作</th><th>关键指标</th></tr>
+            <tr><td>第 1–30 天<br>扎根期</td><td>建立习惯、完成基础培训、积累首批准客户</td><td>每日行动计划打卡；陪访前 10 单；师傅逐字带练开场与反对处理</td><td>完成 30 个准客户建卡；首单破零</td></tr>
+            <tr><td>第 31–60 天<br>成长期</td><td>独立约访、转介绍开口、做深 1–2 个客户圈</td><td>周复盘会；教 Granum 六步转介绍；帮新人做 1 次家庭保障检视演示</td><td>月均 2–3 单；拿到 5 个转介绍名单</td></tr>
+            <tr><td>第 61–90 天<br>定著期</td><td>形成个人节奏、建立客户服务仪式、规划晋升</td><td>共绘「三年收入与晋升地图」；表彰首月绩优；引导定下职业目标</td><td>连续举绩；明确下一考核晋升路径</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">📊</span>每日行动计划模板（Granum 活动量版）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p>给每位组员一张表，主管每天只看这一张，过程可预测、结果可控制。结合陈玉婷 7S（固定工作时刻表 / 计划 / 管理），把「自律」变成「系统」。</p>
+          <ul>
+            <li><b>10-3-1 规律</b>：每 10 个合格准客户 → 3 个面谈 → 1 个成交（Granum 数据证明此比例恒定）。</li>
+            <li><b>台阶理论（吴征宇）</b>：把「10 米高墙」拆成 50 个 20cm 台阶，让新人每次只盯下一步，目标不再吓人；最低节奏锚定陈玉婷「3W＝每周 3 张」。</li>
+            <li>当日目标：新增准客户建卡 ____ 个；面谈 ____ 个；成交 ____ 单。</li>
+            <li>时间块：学习/培训 __:__–__:__ ｜ 约访 __:__–__:__ ｜ 行政/服务 __:__–__:__</li>
+            <li>复盘三问：今天见了谁？卡在哪？明天第一件事是什么？</li>
+            <li>主管批注：________________________</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🤝</span>增员面谈框架（Granum 六步转介绍法改编）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p style="font-size:13px;color:var(--muted);line-height:1.7">融入宋明华「心法论」（想要什么人便找到什么人）、朱美音「三高 + 善良是风水」、龙子明「做大做强做持久」与李佳蓉「用任务成就人才」——把「找人」升级为「筛选与孵化领导者」。</p>
+          <ol>
+            <li><b>取得认同</b>：回顾你为对方（或他认识的人）做过的事，确认他对保险价值的真实感受。</li>
+            <li><b>引入人选</b>：自然提到一个你认识、可能适合的人，「能多聊聊他吗？」</li>
+            <li><b>收集画像</b>：年龄、职业、家庭、收入规划、人脉特点——判断匹配度。</li>
+            <li><b>追问还有谁</b>：「想到他时，您还想到别的合适的人吗？」链式扩列。</li>
+            <li><b>锁定首选</b>：把最熟、最匹配的人放名单首位，约定引荐方式。</li>
+            <li><b>重复扩展</b>：对每位都问「他熟的人里，谁最可能也想了解？」形成推荐人网络。</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">💡</span>1 对 1 辅导话术（四种高频场景）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>① 心态崩了 / 想放弃</b><br>
+          先共情不评判：「这行前两年最难，我 21 年里也想过无数次放弃。」再给 Mandino 视角：「<span class="hl">我会坚持，直到成功</span>——坚持不是硬扛，是把'每天见一个人'这种小事做成习惯。」用 Stone 的「Do it now!」把恐惧交给行动；也可借桑杰「4 原则」——不把工作当工作、只见喜欢的人、给最好建议、不执着结果，让新人把销售变轻松。</p>
+          <p><b>② 连续被拒绝</b><br>
+          Feldman 金句：「客户说'不'，意思是<span class="hl">'现在不行'</span>，不是'永远不'。跟进、跟进、再跟进。」带他复盘：是哪句没接住？下次怎么改？</p>
+          <p><b>③ 业绩下滑</b><br>
+          用 Granum 逻辑：「业绩是活动量的滞后指标。我们先不看结果，看过程——这周见了几个人？」用吴征宇「台阶理论」把大目标拆小，先保陈玉婷「3W＝每周 3 张」的最低节奏，焦虑自然落地。</p>
+          <p><b>④ 对行业没信心</b><br>
+          梅第式信念：「保险是上帝赐给人类最美丽的好礼物。我们不是在卖合同，是在帮一个家庭避免'无知的代价'。」用真实赔案故事重建意义感。</p>
+          <p><b>⑤ 组员没动力 / 躺平</b><br>
+          陈嘉虎「询导」：用提问代替命令——「你最想达成什么？团队能帮你什么？」引导他自我驱动；李佳蓉「用任务成就人才」：把合适的人放进经委会 / 功能组，让他在真实任务中长本事、被看见；龙子明「Feel good do better」：多表彰、多带外出参会、建荣誉墙，让人「感觉良好」自然更起劲，用 IDA「件数文化」给每人一个小目标。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCRIPTS ============ -->
+    <section class="view" id="view-scripts">
+      <div class="card" style="margin-bottom:6px">
+        <h3><span class="dot"></span>情景话术库 · 开口就能用</h3>
+        <p style="color:var(--muted);font-size:13px;line-height:1.7">每一条话术都已嵌入本智能体的大师与名家方法论：Ziglar 四问隔离 / Feldman「不=现在不行」/ Granum 六步 / Stone「Do it now」/ 梅第意义感 / 甘道夫长期服务，以及华人名家——陈嘉虎询导、李佳蓉经委会、龙子明件数文化 + Feel good、宋明华心法论、朱美音三高、吴征宇爱与责任、桑杰快乐销售。点开任一手风琴即可照读。</p>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🛡️</span>客户说「我考虑考虑」<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>Ziglar 四问隔离法</b>：把模糊的拖延变成具体的议题——</p>
+          <ul>
+            <li>「为了理清我自己的思路，您想考虑的是哪一点？是怀疑我们公司？」</li>
+            <li>「还是怀疑我这个人？」</li>
+            <li>「那一定是产品本身了？」</li>
+            <li>隔离出真问题后，再进入：「您喜欢吗？想要吗？买得起吗？想什么时候开始享受保障？」</li>
+          </ul>
+          <p><b>Feldman 故事法</b>：用一个有寓意的小故事，扩大「拥有的快乐」与「没有保险的痛苦」，让客户自己算账，而不是你催他。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🔁</span>转介绍开口<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>Gandolfo 金句</b>：「<span class="hl">我需要你的帮助</span>。」——真诚向客户求助，没有人会拒绝。比「您有朋友需要保险吗」自然百倍。</p>
+          <p><b>Granum 六步</b>：先取得服务认同 → 提及具体人选 → 收集资料 → 追问还有谁 → 锁定首位 → 重复扩展。关键：在服务交付后自然索取，而非成交时才想起来。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🌱</span>新人破冰 / 被拒绝时<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>Stone「Do it now!」</b>：离开上一扇门，立刻对自己喊一句「现在就做！」走进下一扇。用行动压过恐惧（哈佛 James 原理）。</p>
+          <p><b>Feldman「不=现在不行」</b>：把每次拒绝记下来，标注「回访日」，3 个月后、6 个月后、17 个月后都可能是成交点。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">❤️</span>传递行业意义（对抗职业倦怠）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>梅第</b>：「我年轻时每月做 2 份保单，现在每月参加 2 个葬礼——用当初苦口婆心让他们买的保单，给受益人送去几百万。在所有服务过的家族里，我最受尊敬。」</p>
+          <p><b>甘道夫</b>：「我有义务为他们服务一辈子。」小客户 19 岁买 5000 保额，后来继承家业买了 720 万——客户是在和你一起成长的。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🔥</span>怎么让组员有动力（团队长对内）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>陈嘉虎「询导」</b>：别说教，用提问引导——「你最想达成什么？团队能帮你什么？」让他自己说出动力。</p>
+          <p><b>李佳蓉「用任务成就人才」</b>：把合适的人放进经委会 / 功能组，让他在真实任务中长本事、被看见，比空洞打鸡血更持久。</p>
+          <p><b>龙子明「Feel good do better」</b>：多表彰、多带伙伴外出参会、建荣誉墙——让人「感觉良好」，做事自然更起劲；用 IDA「件数文化」给每人一个自己的小目标。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">🌟</span>招募面谈怎么说（吸引优才）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>宋明华「心法论」</b>：你想要什么样的人，就会找到什么样的人——先校准自己要的人，再谈招募，人才质量自不同。</p>
+          <p><b>朱美音「善良是最好的风水」+ 三高</b>：用「和优秀的人一起做有意义的事」吸引对的人，而非只谈佣金。</p>
+          <p><b>吴征宇「传递爱与责任」</b>：把保险讲成「用金融契约把爱和责任传下去」，让优才看见职业尊严与长期价值。</p>
+        </div>
+      </div>
+      <div class="acc" data-acc>
+        <div class="hd"><span class="ic">💎</span>客户经营做深（终身服务）<span class="arrow">▶</span></div>
+        <div class="bd">
+          <p><b>梅第 / 甘道夫</b>：把「卖一单」升级为「服务客户一辈子」——小客户也会长大，和他一起成长，续期与转介绍自然来。</p>
+          <p><b>苏婉薇「一站式理财策划」</b>：用长期、专业、一站式服务锁定客户终身价值，降低脱落。</p>
+          <p><b>吴征宇「100% 转介绍」</b>：售后远重于售前，诚信专业带来链式转介绍——也是团队活动量的源头活水。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="printStage" class="print-stage"></div>
+
+<footer class="site-footer">
+  <div>© 2026 保险赋能智能体 V20 · 内容基于全球寿险营销大师公开著作与中国头部险企公开实践整理，供团队长培训与从业者自学使用。<br><span class="powered">Powered By Kan Man Tang</span></div>
+</footer>
+
+<script>
+/* ===================== 大师数据 ===================== */
+const MASTERS = [
+  {nm:"班·费德文 Ben Feldman", en:"纽约人寿 · 美国", av:"F",
+   tags:["深度经营","准备至上","卖的是钱","跟进","简化","道德"],
+   core:"从业 52 年、生涯销售额 18 亿美元（吉尼斯纪录）。在仅 1.7 万人口的小镇卖出奇迹，靠的是深度经营客户、把每个客户延伸到其人脉网；相信「不」=「现在不行」，用故事扩大痛苦与快乐。",
+   quote:"I do not sell life insurance. I sell money — dollars for pennies apiece. 问题都有价签，不作为的代价往往更高。",
+   app:"用于留存：教组员深耕老客户、做链式转介绍，而非做一单丢一单。"},
+  {nm:"梅第·法克沙戴 Mehdi", en:"大都会人寿 · 美裔伊朗", av:"M",
+   tags:["诚实","将心比心","长期主义","转介绍","使命"],
+   core:"从业 60+ 年、被尊为「保险教父 / 永远的世界第一」。90% 客户来自转介绍，靠 10–20 年视角的长期服务。成功五原则：诚实至上、将心比心、知识即力量、工作即娱乐、绝不气馁。",
+   quote:"保险是世界上最伟大的慈善事业。如果你觉得保险太贵，试试无知的代价。",
+   app:"用于留存：建立「服务客户一辈子」的长期文化，让组员看到超越佣金的意义。"},
+  {nm:"克莱门特·斯通 W.Clement Stone", en:"Combined Insurance 创始人 · 美国", av:"S",
+   tags:["积极心态PMA","Do it now","系统培训","道德","小铰链"],
+   core:"「积极心态(PMA)」之父，从 $100 起家做成亿万帝国。像训练演员一样逐字培训代理人；提出「知识不是力量，它是潜在力量」——知道怎么做≠有动力去做。",
+   quote:"知识不是力量，它是潜在力量。Big doors swing on little hinges.（大门由小铰链转动）",
+   app:"用于留存：用 PMA 点燃团队，建立可复制的系统，让普通人也能成功。"},
+  {nm:"金克拉 Zig Ziglar", en:"励志销售大师 · 美国", av:"Z",
+   tags:["关系销售","卖希望","信任","选择式成交","山羊领导"],
+   core:"关系销售宗师。成交贯穿整个销售过程，而非最后一步；发明「公平吗成交法」「选择式成交」。提出「山羊领导论」：羊群会跟着山羊跳墙，主管的每个决策都影响整个团队。",
+   quote:"人们喜欢你，会听你；人们信任你，才会和你做生意。障碍，是你目光离开目标时看到的东西。",
+   app:"用于留存：主管以身作则、用提问引导组员自我觉察，而非高压命令。"},
+  {nm:"奥格·曼狄诺 Og Mandino", en:"《世界上最伟大的推销员》作者", av:"O",
+   tags:["十卷羊皮卷","好习惯","坚持","立即行动","爱"],
+   core:"曾跌入谷底又靠保险逆袭的作家。用「十卷羊皮卷」把成功变成可练的习惯：形成好习惯、用爱待人、坚持到底、掌控情绪、立刻行动（书中写 18 遍）。",
+   quote:"我会坚持，直到成功。我要立刻行动。",
+   app:"用于留存：新人习惯养成与抗压训练的核心教材。"},
+  {nm:"阿尔·格拉纳姆 Al Granum", en:"Northwestern Mutual · 美国", av:"G",
+   tags:["10-3-1","One Card","数据驱动","六步转介绍","可控"],
+   core:"「One Card System」之父。用 25 年数据证明 10-3-1 规律（10 准客户→3 面谈→1 成交），比例恒定不随经验变。主张用系统记录每个准客户，让过程可预测、可控制。",
+   quote:"你必须知道你处境的真相，然后采取适当的行动。",
+   app:"用于留存：用活动量系统给新人掌控感，用六步转介绍做链式增员。"},
+  {nm:"乔·甘道夫 Joe Gandolfo", en:"一年卖 10 亿的经纪 · 美国", av:"J",
+   tags:["见更多人","时间管理","自我信念","与客户同成长","创意行销"],
+   core:"史上唯一一年卖出超 10 亿美元保费的人寿保险经纪。秘诀：见更多的人、极致时间管理（早 5 点）、坚信自己卖的是好东西；「我有义务为他们服务一辈子」，小客户也会长成大客户。",
+   quote:"我有义务为他们服务一辈子。我需要你的帮助。",
+   app:"用于留存：小客户培育、终身服务，让组员看见客户终身价值。"},
+  {nm:"百万圆桌 MDRT", en:"全球寿险精英组织", av:"★",
+   tags:["See more people","全人理念","专业","道德","终身学习"],
+   core:"MDRT 大门写着「See more people（见更多的人）」。倡导「全人 Whole Person」——事业只是人生一部分，平衡健康、家庭、精神与社群；以高道德标准与终身学习为会员基石。",
+   quote:"See more people. 专业，是留存与客户信任的真正护城河。",
+   app:"用于留存：为团队设定专业标准与终身学习节奏。"},
+  {nm:"托尼·戈登 Tony Gordon", en:"英国保险教父 · 提问式销售大师", av:"T",
+   tags:["提问式销售","问题就是答案","高客经营","转介绍","道德"],
+   core:"英国寿险业传奇，MDRT 英国总会长，『Questions are the Answers（问题就是答案）』提出者。主张销售不是『说』而是『问』——用精心设计的开放式问题，让客户自己发现需求、自己说服自己；把每次面谈变成客户主动寻找解决方案的过程。认为专业人士的价值在于诊断，而非推销。",
+   quote:"Questions are the answers. 答案就在问题里，高手不是会说，而是会问。",
+   app:"用于留存：训练新人用『提问清单』代替『产品说明会』，降低被拒绝感；让客户自己说出需求，成交与转介绍自然发生。"}
+];
+
+/* ===================== 智库：历年《保险营销》杂志 主题 ===================== */
+const MAG_TOPICS = [
+  {era:"1980s–1990s 启蒙期", title:"推销技术与观念启蒙", tags:["话术","拒绝处理","促成","陌生开发"],
+   core:"改革开放后保险重启，杂志聚焦「怎么把保险卖出去」：开门话术、反对问题处理、促成技巧、缘故与陌生市场开发。陈亦纯《我有理由不买保险》正是这一时期华人保险的启蒙圣经。"},
+  {era:"2000s 专业化期", title:"组织发展与主管经营", tags:["增员","留存","基本法","师徒制"],
+   core:"行业进入组织发展时代，杂志大量探讨增员质量、新人留存、基本法设计与主管陪跑。与万峰五利益、国泰定著四要素同期共振。"},
+  {era:"2010s 转型期", title:"客户经营与财富管理", tags:["客户经营","理财规划","高客","转介绍"],
+   core:"中产崛起，杂志转向「从卖保单到做财务顾问」：家庭保障检视、资产配置、高客经营、以服务驱动转介绍。与 MDRT 全人理念、泰康 HWP 同步。"},
+  {era:"2020s 高质量期", title:"优增优育与职业化", tags:["报行合一","优增","职业化","数字化"],
+   core:"报行合一后，杂志聚焦「人海→优增优育」、主管创业化、医康养财法商综合赋能、数字化展业。与新华 XIN一代、平安 MVP、太保 CA 企业家同频。"},
+  {era:"常设专栏", title:"IDA / 荣誉体系 · 标杆案例", tags:["IDA","CIA500","典范","主管奖"],
+   core:"每期跟踪国际龙奖 IDA 与世界华人保险大会的标杆人物与团队，把「典范·完美·尊贵」拆解成可学的经营动作，是团队长最好的活教材。"}
+];
+
+/* ===================== 智库：保险行销集团 前辈思想 ===================== */
+const IMM_PEOPLE = [
+  {nm:"梁天龙", en:"保险行销集团创办人", av:"梁",
+   tags:["使命","专业尊严","体系","教育赋能"],
+   core:"1974 年入行，1983 年于台北创办保险行销集团，立志『为保险人找到尊严』。创办世界华人保险大会（1996）、国际龙奖 IDA（1998）、CIA500，以『荣誉 + 教育』双引擎建立华人保险专业生态。提出保险 GNP（伟大保险净土），主张以专业、道德、尊重视同行业形象。",
+   quote:"心怀保险行销，放眼全球保险。",
+   app:"用于团队长：用 IDA『典范·完美·尊贵』为团队树立世界级标准，用荣誉驱动取代纯利益驱动。"},
+  {nm:"陈亦纯", en:"台湾保险布道家 · 台大保经董事长", av:"陈",
+   tags:["基本功","8张保单论","保险捐赠","坚持"],
+   core:"1975 年入行，从业务员做到保经公司董事长，连续 11 年台湾团队总冠军。著书 30+ 册，代表作《我有理由不买保险》（华人保险启蒙书）、《保险这样卖就成交 168 个理由》、《打造顶尖团队的六项修炼》。提出『8 张保单论』（为父母、爱人、子女、医院、银行、税捐、养老院、上天各留一份保单）。以『保险捐赠』为志业，人称保险布道家。",
+   quote:"再也没有比保险更好的志业了，既利人又利己。",
+   app:"用于留存：用『基本功=听话照做+每天固定拜访』化解新人焦虑；用『8 张保单论』让组员把保险讲成完整的人生保障。"},
+  {nm:"吴锦珠", en:"畅销书作家 · 专业讲师", av:"吴",
+   tags:["系统","人脉","领导力","传记"],
+   core:"曾任报社记者、杂志与出版社总编辑，著书 200+ 册，采访无数保险传奇人物（蹇宏、梅第、庄秀凤等）。提出成功者五大特质：身先足以率人、律己足以服人、倾财足以聚人、量宽足以得人、得人心者得天下。洞见：『专业是利刃，人脉是秘密武器』，87.5% 收入来自关系。",
+   quote:"全世界最成功的人，都在做两件事：建立系统，寻找顶尖人才。",
+   app:"用于团队长：用『建立系统 + 培养领导者（乘法成长）』的思维经营组织，而非事必躬亲。"},
+  {nm:"王鼎琪", en:"高效能学府创办人 · 梅第传记合著者", av:"王",
+   tags:["高效能","梅第精神","全脑教学","坚持"],
+   core:"牛津布鲁克斯大学商学院硕士，近 20 年全脑高效能教学，海内外演讲上万场。与吴锦珠合著《无惧与坚持：销售巨人梅第传》，把梅第 60 年保险精神的『无惧、坚持、超越』系统传播，强调谦卑、服务热诚与夫妻关系经营。",
+   quote:"无惧与坚持，是保险人穿越周期的两道光。",
+   app:"用于心态：把梅第式『无惧与坚持』做成团队晨会/辅导的常驻主题，对抗职业倦怠。"},
+  {nm:"容永祺", en:"友邦区域执行总监 · IARFC 港澳区荣誉主席", av:"容",
+   tags:["财务策划","专业资格","区域总监","社会责任"],
+   core:"1982 年投身寿险，历任友邦区域执行总监，是全国政协委员。持有 CFP、RFC、ChFP 等多张国际认证，是华人保险『财务顾问专业化』的代表人物，长期推动以专业资格提升行业社会地位。",
+   quote:"专业资格，是保险人赢得社会尊重的通行证。",
+   app:"用于团队：鼓励组员考取 RFC/CFP 等专业认证，把『卖保险』升级为『财务顾问』，提升留存与客单价。"},
+  {nm:"苏婉薇", en:"大同理财服务创办人 · IARFC 港澳区主席", av:"苏",
+   tags:["理财策划","MDRT","一站式服务","团队领导"],
+   core:"1983 年入行，从顾问做到业务总监，带领逾百人团队；2001 年创立大同理财，旗下逾半数顾问为 MDRT 会员。倡导『一站式理财策划服务』，以专业与长期服务建立客户信任。",
+   quote:"一站式、长期、专业的服务，是团队与客户共同成长的基石。",
+   app:"用于客户经营：用『一站式理财策划』锁定客户终身价值，降低脱落率。"}
+];
+
+/* ===================== 智库：华人保险名家 专家观点 ===================== */
+const EXP_EXPERTS = [
+  {nm:"桑杰（Sanjay Torani）", en:"迪拜保险大师 · IDA 655 倍纪录", av:"桑",
+   tags:["正念经营","不设限","转介绍中心","快乐销售"],
+   core:"迪拜保险大师，连续多年完成国际龙奖 IDA 白金奖，并自 2020 年起不断达成 IDA 百人荣誉，2023 年以 655 倍 IDA、剑指 1000 倍 IDA 刷新纪录。父亲给他的 4 条原则：①不要把它当『工作』——把给予财务建议当成性格特质；②每天去见你喜欢的人；③任何时候给任何人你最好的建议（销售自然跟随）；④不要太在意结果（问题在自己活动量，不在客户）。主张『用正确思维经营、最短时间达成、别自我设限』，『恐惧销售得快，但快乐销售得大』。",
+   quote:"恐惧可以销售得很快，但快乐可以销售得很大。",
+   app:"用于留存：把『工作』重新定义为『帮人做财务决定』，新人从『求人买』转为『给人建议』，脱落率自降；用『4 原则』做心态与活动量陪跑。"},
+  {nm:"陈嘉虎", en:"CIA500 峰会主席 · 原信诚人寿高管", av:"陈",
+   tags:["询导","自主经营","企业主思维","倒金字塔"],
+   core:"CIA500 世界华人保险 500 强领导人峰会主席，原信诚人寿高管，30+ 年从业。提出『询导』——领导人以教练式引导（而非命令）带团队，是持续达成 CIA500 的王道。诊断行业生态：60% 业务员很快阵亡、30% 单兵作战、仅 10% 做团队经营；主张『自主经营』= 自主创业精神 + 持续经营意识，三要素为自我认知、强烈企图心、经营概念。区分三种思维：家庭主妇式（被动悲观）、受雇者式（求稳侥幸）、企业主式（主动乐观、系统化策略）。领导风格『向下服务、向上管理』的倒金字塔——职位越高责任越重。CIA500 三指标中最关键的是『绩优占比』。",
+   quote:"有绩优人才，就有优秀业绩；有优秀业绩，定著率才高。",
+   app:"用于团队长：用『询导』取代『指令』，把业务员思维从『受雇者』扭成『企业主』；用『绩优占比』而非人力为团队第一指标。"},
+  {nm:"龙子明（George Lung）", en:"香港宏利行政區域總監 · 龙之家族创始人", av:"龙",
+   tags:["伦理文化","敢梦敢想","IDA百人","Feel good do better"],
+   core:"香港宏利人寿行政區域總監，1990 年入行，2016 年成为宏利百余年历史第二位行政區域總監；创立『龙之家族』（1400+ 人），连续 13 年蝉联 IDA 百人团队，并打造全球首支 IDA 千人团队。核心理念：团队经营要『做大、做强、做持久』，首要有『敢梦敢想』的目标与共同愿景。重『伦理』——团队如家人，伙伴比家人更懂彼此；用 IDA 标准（件数=客户=归属感=定著率）做标杆，IDA 会员定著率高达 95%。推动百人团队的 5 法：潜移默化、目标追踪（季度盘点+表彰）、资源分享双赢、外出学习（带伙伴参会）、良性竞争。主张『Feel good do better』——让大家感觉良好，做事更起劲。",
+   quote:"做大、做强、做持久——敢梦敢想，善用平台，接轨世界标准。",
+   app:"用于留存：用『件数文化』取代『大单文化』，提高归属性与定著率；用『外出参会 + 荣誉墙』做潜移默化的荣誉驱动。"},
+  {nm:"李佳蓉", en:"台湾磊山保经董事长 · 保险天后", av:"李",
+   tags:["利他","经委会","功能组","成就人才"],
+   core:"台湾磊山保险经纪人董事长，1990 年入行，曾被称为『保险天后』，赢得两千多客户信赖、带千余伙伴；2008 年金融海啸后因无法替客户做到周全规划，毅然从单一公司业务员转型为保险经纪人，创立磊山保经（2025 年实收保费 137 亿元、年增 64%）。核心洞见：『真诚利他，永續磊山』；经委会是『用任务成就人才，而不是用人完成任务』——通过功能组培养伙伴管理能力，让团队代代相传统一价值观。主张保险的本质是保障，接轨新制不靠利差靠专业。",
+   quote:"用任务成就人才，而不是用人完成任务。",
+   app:"用于团队长：把『功能组/经委会』设计成人才孵化器，让组员在做事中长成领导者；用『利他』文化化解业绩与客户的零和。"},
+  {nm:"贺恋疆", en:"原大都会人寿浙江分公司总经理 · 顾问行销创始人", av:"贺",
+   tags:["顾问式行销","回归初心","以人为本","西点计划"],
+   core:"原大都会人寿浙江分公司总经理、顾问行销渠道创始人。提出保险营销三阶段论：1.0 走通路径、组建团队；2.0 产品导向做到一对多；3.0『以人为本、需求导向、专业引领』的回归初心时代。主张『顾问式行销』是未来趋势——反映人寿保险本质，总结出人人可成功的规律；『西点计划』以至少 7 轮严谨甄选 + 教练式培养，让行业『生手』快速成长为精英。理念：『以客户需求为导向，回归保险真正的价值』，团队本科以上占比 70%。",
+   quote:"保险营销的大趋势，是以人为本，回归初心。",
+   app:"用于转型：用『顾问式行销』把团队从产品导向拉回需求导向；用『严谨甄选 + 教练式培养』提升新人品质与定著。"},
+  {nm:"朱美音", en:"平安人寿深圳弘龙18部高级总监", av:"朱",
+   tags:["利他","三高团队","以身作则","善良是风水"],
+   core:"平安人寿深圳分公司高级总监，1998 年从英语教师转型，带领『弘龙18部』连续多年蝉联全国 FYC 冠军、MDRT 成员数系统第一，培养百余位 MDRT，一个直辖团队规模保费比肩同行一机构。倡导『初心正、用心专、恒心久』与『善良是最好的风水』的利他文化，团队理念『简单快乐、德才兼备、英雄辈出、感恩进取』。选人首看人品与态度再看能力，严筛选、亲考察培训；以教师之心倾囊相授，打造『三高团队』（学历高、素质高、业绩高）。金句：『你成功的速度要赶上父母衰老的速度。』以『成人达己』成就团队。",
+   quote:"善良是最好的风水；管理的最低成本，是以身作则。",
+   app:"用于团队长：用『利他 + 以身作则』代替高压管理，提高定著；用『三高』标准做精准招募，从源头降脱落。"},
+  {nm:"张江安", en:"国寿年丰北京分公司·新起点财富管理中心创始人", av:"张",
+   tags:["成人达己","少讲多练","高素质留存","终身成就"],
+   core:"原大都会人寿北京分公司营业处总监，2004 年入司，创建『新起点家族』（辖 8 营业处、600 位创业伙伴，外资公司首支千人团队），获『终身成就奖』、CIA500 皇冠会员、IDA 白金。培训秘诀一个字——『练』（少讲多练，把知识反复捶打柔顺），讲台是讲师舞台，要『精心准备，完美再现』。独创组织发展系列课程《高素质人才招募 / 留存 / 发展》，与国寿、平安、太平、工行等 30+ 机构合作。主张『成人达己』——成就伙伴就是成就自己。",
+   quote:"成人达己；团队训练的秘诀，就是『练』——少讲多练。",
+   app:"用于留存：把新人训练从『听课』改为『反复练』，用『高素质人才留存课程』提升定著；用『成人达己』凝聚主管。"},
+  {nm:"宋明华", en:"国寿年丰浙江分公司·阳光财富管理中心创始人", av:"宋",
+   tags:["心法论","人性经营","高素质人才","公益"],
+   core:"原新华保险浙江分公司资深总监、营销总监，2007 年创立『阳光家族』（现 900 人，杭州中支最大团队），世界华人保险大会大陆第一 CIA500 双冠王，著有《人性经营》。核心『心法论』：你想要什么样的人，就会找到什么样的人——内心坚持决定人才质量。高素质人才 4 标准：①28–40 岁（尤其女性，责任感强）；②形象舒适整洁；③有资源；④有社会阅历。长期参与『捡回珍珠』公益助学，团队获『珍珠之家公益实践基地』。全国保险系统劳动模范、保险名家管理金奖。",
+   quote:"心法论——你想要什么样的人，就会找到什么样的人。",
+   app:"用于增员：用『心法论 + 4 标准』做精准招募，从源头提升定著；把公益文化做成团队凝聚力。"},
+  {nm:"吴征宇", en:"大都会人寿太阳系团队创始人", av:"吴",
+   tags:["爱与责任","转介绍","目标拆分","温暖文化"],
+   core:"中美联泰大都会人寿『太阳系』团队创始人，深耕保险 20+ 年，自身销售与团队管理双拔尖（新人留存率 80%、团队 40% 为 MDRT）。核心信念：保险终极使命是『用金融契约传递爱与责任』，售后远重于售前；『业绩的 100% 来自转介绍』，转介绍基础是诚信与专业。育人三件事：团队文化/精神引导、职业规划拆分、专业水平。经典比喻：把 10 米高墙拆成 50 个 20cm 台阶，让新人拾级而上。团队文化『敢梦、无惧、助人、公益』，温暖而有安全感——『你努力了业绩没出，会有更多人帮你』。近年成立『隽融』家族办公室服务高净值客户。",
+   quote:"保险最核心的价值，是把人类的爱和责任以金融的方式体现出来。",
+   app:"用于留存：用『目标拆分 + 台阶理论』让新人看见确定路径；用『100% 转介绍』做长期客户经营，降低脱落；用温暖文化托底。"}
+];
+
+/* ===================== 知识库（对话引擎） ===================== */
+const KB = [
+  {tags:["留存","脱落","流失","留不住","留存难","定著","掉人"], masters:["万峰","中国人寿白凯","国泰张瑞文"],
+   a:"留存难的本质不是「人不行」，而是「体系没接住人」。\n• 原行业研究指出：队伍靠利益分配维系，新人脱落通常源于四缺——①招募不精准（人海增员→错配）；②入职后无人「深度陪跑」；③没有清晰职业路径与收入预期（基本法指挥棒不透明）；④只冲首年佣金、缺「服务客户一辈子」的长期文化。\n• 中国人寿白凯：『人来了不是增员，人留下才是增员。』\n• 国泰张瑞文：新人像种子，主管的责任是陪它长成大树——其团队 30 岁以下新人占 80%、定著率 85%。\n破解顺序：先精准招募 → 再陪跑育成 → 最后用制度锁定长期收益。"},
+  {tags:["增员","招募","招人","找人","面试","面谈","裂变"], masters:["万峰","中国人寿","国泰张瑞文","Al Granum"],
+   a:"增员乏力，往往是基本法没保障主管的「增员利益 + 管理利益 + 赋予权」。\n• 万峰：利益足够，主管自然有动力；反之主管宁可自己干业务。\n• 中国人寿白凯：劳动力不缺，缺的是「育成」——人来了能不能成长、拿到资源，决定他留不留。\n• 国泰张瑞文：精准招募而非人海，面谈及引导确认对方有信心与兴趣。\n• Granum 六步转介绍法可改造为「推荐人链式增员」：从现有伙伴/客户延伸到他们认可的人。\n招募标准从「肯干」升级为「高学历 / 高自主 / 高潜质」。"},
+  {tags:["陪跑","陪访","辅导","带新人","师徒","养成","90天","带人"], masters:["国泰张瑞文","明亚李晓洁","泰康HWP","Al Granum"],
+   a:"深度陪跑是定著率的关键，四要素：精准招募、深度陪跑、文化塑造、开放管理。\n• 师徒制：选有主管潜力的伙伴当导师，用「每日行动计划」帮新人管理时间（学 / 约访 / 行政）。\n• 明亚李晓洁 80/20 法则：80% 时间建共性培训体系，20% 做个性化辅导。\n• 每位新人发「成长手册」，明确每一步学什么、做什么、到哪。\n• Granum 10-3-1 让新人每天有可达成的小目标，建立掌控感，而不是被大目标吓退。"},
+  {tags:["心态","信念","动力","没动力","丧","挫败","坚持","放弃","正能量","倦"], masters:["W.Clement Stone","Og Mandino","Mehdi 梅第","Ben Feldman"],
+   a:"破解动力枯竭，用大师的「心态系统」：\n• Stone 的 PMA：『知识不是力量，它是潜在力量；知道怎么做≠有动力去做。』用「Do it now!」以行动压过恐惧（哈佛 James：情绪不受理性控制时，行动可以）。\n• Mandino 十卷羊皮卷：『我会坚持，直到成功』『今天我开始新的生活』『我要立刻行动』——把好习惯练成肌肉记忆。\n• 梅第：把工作当娱乐、把客户当家人，『勤奋、使命、传奇』。\n• Feldman：把『不』听成『现在不行』，『跟进、跟进、再跟进』。"},
+  {tags:["客户经营","客户维护","老客户","深耕","经营客户","关系","一辈子"], masters:["Ben Feldman","Mehdi 梅第","Joe Gandolfo"],
+   a:"Feldman 在 1.7 万人口小镇卖出 18 亿，秘诀是『深度经营』：不做一单丢一单，而是相信每个客户背后都有人脉网，从他延伸到亲友圈。\n• 『卖的是钱，是用几分钱买一美元』——把保险变成可感知的资产保护。\n• 『问题都有价签，不作为的代价往往高于作为』。\n• 梅第 90% 客户来自转介绍，靠 10–20 年视角长期服务。\n• Gandolfo：『我有义务为他们服务一辈子』——19 岁青年后来买 720 万美元保单，客户是与你同成长的。"},
+  {tags:["转介绍","介绍人","要名单","名单","referral","介绍"], masters:["Al Granum","Joe Gandolfo"],
+   a:"转介绍是低成本、高信任的增量来源。\n• Granum 六步：①取得客户认同 ②提及具体人选 ③收集资料 ④「还有其他人选吗」⑤锁定最熟者放首位 ⑥重复扩展。\n• Gandolfo 金句：『我需要你的帮助』——真诚求助，没人会说不，比「您有朋友要保险吗」自然百倍。\n关键：转介绍要在服务交付后自然索取，而非成交时才想起来；把每次服务都变成下一次介绍的伏笔。"},
+  {tags:["基本法","制度","佣金","利益","分配","考核","津贴","收入","钱"], masters:["万峰","复旦大学许闲","21世纪经济报道"],
+   a:"『基本法』是队伍的指挥棒，决定收入、考核、福利与晋升。\n• 报行合一后佣金下降，行业靠「优增优育 + 调整基本法」保留存：提高首年佣金计提比例、放宽考核、发新人津贴。\n• 万峰框架：队伍靠五类利益维系——销售利益、增员利益、管理利益、育成利益、福利利益；核心是『赋予权』（下属离司后其有效保单续期与客户资源归主管），稳定主管、激励长期育成。\n团队长要帮新人算清『三年收入账』，让长期收益看得见。"},
+  {tags:["促成","成交","关单","签单","closing","考虑考虑","如何成交","怎么卖"], masters:["Zig Ziglar","Ben Feldman","Joe Gandolfo"],
+   a:"Ziglar：成交不是单独环节，而是贯穿整个销售过程。\n• 「公平吗」成交法：『结束时我会请你做决定，可以吗？』先取得承诺再谈方案。\n• 选择式成交：不问『买不买』，问『红色还是蓝色 / 周一还是周三』。\n• 客户说『我考虑考虑』→四问隔离法：是怀疑公司？怀疑我？还是产品本身？\nFeldman：『扩大拥有的快乐，扩大没有保险的痛苦』，用故事让客户自己算账。Gandolfo 开门见山：『你会在银行存钱，但银行不像保险保障你后半生。』"},
+  {tags:["团队","管理","主管","总监","外勤总监","带团队","领导力","组织发展","队伍"], masters:["W.Clement Stone","Zig Ziglar","万峰","泰康HWP"],
+   a:"团队长的角色，决定整个队伍的留存。\n• Stone：像训演员一样『逐字』培训代理人，不放过任何细节，并把积极心态植入团队。\n• Ziglar 山羊领导论：羊群会跟着山羊跳过高墙，哪怕墙已撤走——主管的每个决策都影响团队，责任最大。\n• 万峰：主管利益（增员 + 管理 + 育成）是队伍发展的核心驱动力，职级越高，管理利益应占收入越高。\n• 泰康 HWP：用『招募-训练-激励-成长』十大维度体系化赋能，把基本法升级为『生态基本法』，让伙伴看到职业化创业路径。"},
+  {tags:["长期","职业生涯","职业发展","规划","长期主义","一辈子"], masters:["Mehdi 梅第","Joe Gandolfo","泰康","MDRT"],
+   a:"给 21 年资历的您一个视角：您的资产不是佣金，而是 20 年积累的信任网与客户终身价值。\n• 梅第：『保险是上帝赐给人类最美丽的好礼物』，从业 60 年战斗到生命最后一刻，把工作当使命。\n• Gandolfo：与客户一同成长，年轻客户会变成大客户。\n• MDRT「全人」理念：事业只是人生一部分，平衡健康、家庭、精神、社群。\n用『长期主义』重新定义团队成功——留得住人、服务得了一生，才是真突围。"},
+  {tags:["活动量","拜访","见人","见更多的人","准客户","名单","开拓","没客户"], masters:["Al Granum","Joe Gandolfo","MDRT"],
+   a:"MDRT 大门写着『See more people（见更多的人）』。\n• Gandolfo 一年卖 10 亿，秘诀是『接触的人越多，成交机会越大』，早上 5 点开始拜访。\n• Granum 数据证明 10-3-1 规律：每 10 个合格准客户→3 个面谈→1 个成交，比例不随经验改变。\n给团队：不求『每单都大』，先求『每天有活动量』——用 One Card 系统记录每个准客户，让过程可预测、可控制。"},
+  {tags:["报行合一","佣金下降","行业变化","转型","高质量发展","清虚","迷茫"], masters:["21世纪经济报道","复旦大学许闲","万峰"],
+   a:"报行合一压缩销售费用，倒逼行业从『人海战术』转向『优增优育』。\n• 头部险企推出平安 MVP、太平医康养经理人、新华 XIN一代/WLP、泰康 HWP、太保 CA 企业家——方向一致：专业化、职业化、综合化（医康养财法商）。\n• 对团队长：别再比『人头数』，要比『绩优率与定著率』；用公司资源（医康养、税法、养老）给新人『赋能武器』，让客户因专业留下、因服务留存。"},
+  {tags:["IDA","龙奖","国际龙奖","优秀主管奖","杰出业务奖","36件"], masters:["梁天龙","国际龙奖IDA"],
+   a:"国际龙奖 IDA（梁天龙 1998 年创设）是华人保险界的『世界级标准』，理念是『典范·完美·尊贵』。\n• 注册硬指标：每年 36 件以上长期寿险新契约——背后是约 100 次拒绝、36 个转介绍中心、36 份续期佣金，正是留存与组织发展的根基。\n• 设『杰出业务奖』与『优秀主管奖』：主管奖以『培养的 IDA 会员数』为条件，直接衡量领导力。\n团队长用法：用 IDA 标准替团队设定『可大、可久、可敬』的目标，用荣誉驱动（而非只靠佣金）留住骨干；把『36 件』拆成每日活动量，与 Granum 10-3-1 叠加。"},
+  {tags:["保险行销","保险行销集团","华人保险大会","CIA500","保险GNP","Advisers"], masters:["梁天龙","保险行销集团"],
+   a:"保险行销集团（IMM，梁天龙 1983 年创办于台北）是华人保险专业资讯的奠基者：旗下有《Advisers/保险行销》杂志、世界华人保险大会（1996）、国际龙奖 IDA（1998）、CIA500 世界华人保险 500 强团队。\n• 核心理念：『荣誉 + 教育』双引擎，为保险人找尊严；倡导保险 GNP（伟大保险净土），以专业、道德、尊重视塑行业形象。\n• 对留存破局的价值：把团队经营拉到『世界级标准』，用榜样与体系替代人管人。"},
+  {tags:["陈亦纯","8张保单","我有理由不买保险","打造顶尖团队","保险布道家"], masters:["陈亦纯"],
+   a:"陈亦纯（台湾保险布道家，台大保经董事长）著书 30+ 册，是华人保险的启蒙者之一。\n• 基本功论：『听话照做 + 每天固定拜访的量与质 + 达成业绩标准』，把大数法则落到行动。\n• 8 张保单论：为父母、爱人、子女、医院、银行、税捐、养老院、上天各留一份保单，把保障讲完整。\n• 《打造顶尖团队的六项修炼》：从领导人、团队发展概念、方法到执行步骤系统化解增员与育成。\n用于留存：用『基本功』化解新人焦虑，用『8 张保单论』让组员把保险讲成人生保障，而非单一产品。"},
+  {tags:["吴锦珠","建立系统","人脉","领导力","成功者特质"], masters:["吴锦珠"],
+   a:"吴锦珠（畅销书作家、专业讲师，著书 200+ 册）洞见：『全世界最成功的人都在做两件事——建立系统让别人为你工作、寻找顶尖人才建立更好的系统。』\n• 成功者五大特质：身先足以率人、律己足以服人、倾财足以聚人、量宽足以得人、得人心者得天下。\n• 培养追随者用加法、培养领导者用乘法——团队长的核心是把人变成领导者。\n• 专业是利刃，人脉是秘密武器：87.5% 收入来自关系。\n用于团队长：从『事必躬亲』转向『建系统 + 育领导者』，用乘法思维放大组织。"},
+  {tags:["杂志智库","保险营销杂志","保险行销杂志","历年","合订本","主题","趋势"], masters:["保险行销集团","陈亦纯"],
+   a:"历年《保险营销/保险行销》杂志是华人保险业 40 年的观念与技巧沉淀，可按主题检索为团队赋能：\n• 启蒙期（80–90s）：推销技术、话术、拒绝处理、陌生开发。\n• 专业化期（2000s）：增员质量、新人留存、基本法、师徒制。\n• 转型期（2010s）：客户经营、财富管理、高客、以服务驱动转介绍。\n• 高质量期（2020s）：报行合一、优增优育、职业化、数字化展业。\n• 常设专栏：IDA/荣誉标杆案例，把『典范·完美·尊贵』拆成可学动作。\n可把对应年份/合订本作为团队共读与早会素材。"}
+  ,{tags:["桑杰","陈嘉虎","龙子明","李佳蓉","吴征宇","朱美音","张江安","宋明华","贺恋疆","专家观点库","名家观点","华人名家"], masters:["桑杰","陈嘉虎","龙子明","李佳蓉","吴征宇","朱美音","张江安","宋明华","贺恋疆"],
+   a:"这 9 位华人保险名家，皆为一线顶尖业绩与卓越团队经营的践行者，思想可与全球大师、保险行销集团前辈互为参照：\n• 桑杰（迪拜）：把工作当『给人财务建议』，4 原则（不视工作、见喜欢的人、给最好建议、不执结果）+『别自我设限』，快乐销售得大。\n• 陈嘉虎：以『询导』教练式引导团队，倡『自主经营』与企业主式思维，CIA500 首重『绩优占比』。\n• 龙子明（香港宏利）：『做大做强做持久』+ 伦理如家人 + IDA 件数文化（件数=客户=定著），IDA 会员定著 95%。\n• 李佳蓉（磊山保经）：『用任务成就人才，而非用人完成任务』，经委会/功能组孵化领导者；真诚利他。\n• 吴征宇（大都会）：保险=『用金融契约传递爱与责任』，业绩 100% 来自转介绍，台阶理论拆分目标，温暖文化托底。\n• 朱美音（平安）：『善良是最好的风水』，利他+以身作则，三高团队精准招募。\n• 张江安（大都会）：成人达己，训练秘诀『少讲多练』，高素质人才留存课程。\n• 宋明华（新华）：『心法论』——想要什么人便找到什么人，高素质 4 标准 + 公益凝聚。\n• 贺恋疆（大都会）：保险营销 3.0『以人为本、回归初心』，顾问式行销 + 西点计划严谨甄选。\n→ 完整卡片见【智库·保险行销体系 → 华人保险名家·专家观点库】。"}
+  ,{tags:["3W文化","3w文化","陈玉婷","活动量","每周三张","新人纪律","稳定节奏","7S","KASH"], masters:["陈玉婷","3W文化"],
+   a:"『3W』= 每周 3 张新保单（3 policies a Week），代表人物陈玉婷（保德信人寿首席寿险顾问、2020–2021 MDRT 大中华区主席、IDA 终身会员）——她自 1992 年起持续 1,235 周以上不间断，创『世界华人 3W 历史纪录』。\n内核：用『对』的心态做『对』的事情，回到保险最初『以爱为本』的保障规划（爱、备爱、实践爱），实现财务安全 × 心灵和平；不靠爆发，靠稳定、可累积的周节奏。\n配套方法论：7S（Search 寻找 / Service 服务 / Sell 销售 / Study 学习 / Sit Plan 计划 / Structure Activity 固定工作时刻表 / Sales Manager 管理职）+ KASH（知识·态度·技巧·习惯），七力并进、长期经营。\n团队长用法：把『3W』设为新人的最低活动量纪律，用稳定可预期的周节奏替代『暴涨暴跌』式业绩，让新人每月都有确定性进展——这与 Granum『10-3-1』活动量系统同源，专治留存难。陈玉婷座右铭：『知识与经验的分享是给人们最好的礼物』。\n→ 详见【智库 · 保险行销体系 → 3W 文化】。"}
+ ,{tags:["经委会","功能组","李佳蓉","用任务成就人才","孵化人才"], masters:["李佳蓉","经委会"],
+   a:"『经委会 / 功能组』是李佳蓉（磊山保经董事长 · 保险天后）孵化领导者的核心机制——核心理念：『用任务成就人才，而不是用人完成任务』。\n做法：把团队事务拆成招募、培训、活动、关怀等功能组，让有潜质的组员『在真实任务中长本事、被看见』，而非只做业绩工具；主管退后半步，做教练与资源方。\n留存价值：功能组给新人『角色感与归属感』，让人因『被需要、能成长』而留下；价值观在代际传递中统一（真诚利他、永续磊山）。\n落地三步走：①选 1–2 位有意愿的组员任功能组组长；②给清晰权责与资源；③例会表彰『因任务而成长』的故事。\n→ 详见【智库 · 华人保险名家 · 专家观点库 → 李佳蓉】。"}
+ ,{tags:["件数文化","龙子明","定著率","IDA件数"], masters:["龙子明","件数文化"],
+   a:"『件数文化』是龙子明（香港宏利 · 『龙之家族』1400+ 人、连续 13 年 IDA 百人团队）降脱落的密钥：以『件数』而非『大单』衡量贡献，件数=客户=定著。\n原理：鼓励每人每月稳定出『小步快跑』的件数，而非押注偶发大单；件数多的伙伴客户接触面广、归属感强，IDA 会员定著率高达 95%。\n与陈玉婷 3W（每周 3 张）同源——都是『稳定周节奏』。团队长用法：在早会设『本周件数目标』，用 IDA 荣誉墙表彰件数达人，让『持续出单』成为团队身份认同。\n→ 详见【智库 · 华人保险名家 · 专家观点库 → 龙子明】。"}
+ ,{tags:["询导","陈嘉虎","教练式","自主经营"], masters:["陈嘉虎","询导"],
+   a:"『询导』是陈嘉虎（CIA500 峰会主席 · 原信诚人寿高管）带团队的方法：领导人以『教练式提问引导』取代命令。\n三句话话术：『你最想达成什么？』『团队能帮你什么？』『下一步你打算怎么做？』——让组员自己说出动力与计划，而非被动执行。\n配套『自主经营』：把业务员思维从『受雇者』扭成『企业主』（自我认知 + 企图心 + 经营概念）；CIA500 第一指标是『绩优占比』而非人力。\n留存价值：被尊重、被赋能的人更愿意留下；主管从『催业绩』转为『成就人』。\n→ 详见【智库 · 华人保险名家 · 专家观点库 → 陈嘉虎】。"}
+ ,{tags:["台阶理论","吴征宇","目标拆分","目标拆小"], masters:["吴征宇","台阶理论"],
+   a:"『台阶理论』是吴征宇（大都会人寿 · 『太阳系』团队创始人）化解新人畏难的核心工具：把『10 米高墙』拆成 50 个 20cm 台阶，每次只盯下一步，目标不再吓人。\n用法：把年度/月度大目标拆到『本周见几个人、谈几单』，配合陈玉婷 3W（每周 3 张）的最低节奏锚点，让新人天天有可达成的小胜。\n留存价值：确定性的小步进展 = 掌控感 = 不脱落。团队文化『敢梦、无惧、助人、公益』托底——『你努力了业绩没出，会有更多人帮你』。\n→ 详见【智库 · 华人保险名家 · 专家观点库 → 吴征宇】。"}
+ ,{tags:["心法论","宋明华","招募优才","4标准"], masters:["宋明华","心法论"],
+   a:"『心法论』是宋明华（原新华保险浙江资深总监 · 阳光家族创始人）招募优才的心法：『你想要什么样的人，就会找到什么样的人』——内心坚持决定人才质量。\n高素质 4 标准：①28–40 岁（尤其女性，责任感强）；②形象舒适整洁；③有资源；④有社会阅历。长期做『捡回珍珠』公益，把公益文化变团队凝聚力。\n留存价值：从源头招对人，脱落自降；用『人性经营』而非『人海战术』。\n→ 详见【智库 · 华人保险名家 · 专家观点库 → 宋明华】。"}
+];
+
+/* ===================== 引擎 ===================== */
+const SYN = { "脱落":"留存","流失":"留存","掉人":"留存","留不住":"留存","招人":"增员","找人":"增员","裂变":"增员",
+  "陪访":"陪跑","带新人":"陪跑","带人":"陪跑","养成":"陪跑","辅导":"陪跑",
+  "信念":"心态","动力":"心态","丧":"心态","挫败":"心态","倦":"心态","正能量":"心态",
+  "客户维护":"客户经营","深耕":"客户经营","经营客户":"客户经营","关系":"客户经营",
+  "制度":"基本法","佣金":"基本法","钱":"基本法","收入":"基本法","考核":"基本法","津贴":"基本法",
+  "关单":"促成","签单":"促成","成交":"促成","如何成交":"促成","怎么卖":"促成","考虑考虑":"促成",
+  "总监":"团队","外勤总监":"团队","带团队":"团队","领导力":"团队","队伍":"团队","管理":"团队",
+  "一辈子":"长期","职业生涯":"长期","职业发展":"长期","规划":"长期","长期主义":"长期",
+  "见人":"活动量","拜访":"活动量","没客户":"活动量","名单":"活动量","开拓":"活动量",
+  "转型":"报行合一","清虚":"报行合一","高质量发展":"报行合一","行业变化":"报行合一","迷茫":"报行合一",
+  "转介绍":"转介绍","介绍人":"转介绍","要名单":"转介绍","名单":"转介绍",
+  "国际龙奖":"IDA","龙奖":"IDA","国际龙奖IDA":"IDA",
+  "保险营销杂志":"杂志智库","保险行销杂志":"杂志智库","杂志":"杂志智库","历年":"杂志智库","合订本":"杂志智库","主题":"杂志智库","趋势":"杂志智库",
+  "专家":"专家观点库","名家":"专家观点库","观点库":"专家观点库","桑杰":"桑杰","陈嘉虎":"陈嘉虎","龙子明":"龙子明","李佳蓉":"李佳蓉","吴征宇":"吴征宇","朱美音":"朱美音","张江安":"张江安","宋明华":"宋明华","贺恋疆":"贺恋疆","3W":"3W文化","三W":"3W文化","每周三张":"3W文化","陈玉婷":"3W文化","活动量":"3W文化","新人纪律":"3W文化" };
+
+function normalize(s){ return s.toLowerCase().replace(/[\s，。？！、,.?!；;：:""''（）()]/g,""); }
+function matchKB(input){
+  let s = normalize(input);
+  Object.keys(SYN).forEach(k=>{ if(s.includes(k)) s = s.replace(new RegExp(k,"g"), SYN[k]); });
+  const scored = KB.map(node=>{
+    let score=0; const hit=[];
+    node.tags.forEach(t=>{ if(s.includes(t)){ score+=2; hit.push(t);} });
+    if(s.length<6 && node.tags.some(t=>t===s)) score+=2;
+    return {node,score,hit};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  return scored.slice(0,3);
+}
+function buildBot(nodes){
+  if(nodes.length===0){
+    return {who:"🤖 保险赋能教练", html:
+      "您的问题我先从「留存难」这个核心切入口帮您梳理："+
+      "<ul>"+
+      "<li><span class='mchip'>万峰</span><span class='mchip'>国泰张瑞文</span>留存难=体系没接住人。先精准招募，再深度陪跑，最后用制度（基本法+赋予权）锁定长期收益。</li>"+
+      "<li><span class='mchip'>梅第</span><span class='mchip'>甘道夫</span>建立「服务客户一辈子」的长期文化，让组员看到超越首年佣金的意义。</li>"+
+      "<li><span class='mchip'>Granum</span>用 10-3-1 活动量系统给新人掌控感。</li>"+
+      "</ul>"+
+      "<div class='tip'>试试问我：「新人总是脱落怎么办？」「怎么让组员有动力？」「陈玉婷的 3W 文化怎么落地到团队？」「李佳蓉的经委会怎么孵化人才？」也可到【留存破局】做留存诊断，或到【智库】看保险行销集团前辈与华人名家思想。</div>"};
+  }
+  let html="<ul>";
+  nodes.forEach(n=>{
+    const chips = n.node.masters.map(m=>`<span class='mchip'>${m}</span>`).join("");
+    html += `<li>${chips}${n.node.a.replace(/\n/g,"<br>")}</li>`;
+  });
+  html += "</ul>";
+  html += "<div class='tip'>→ 想系统落地？可到【留存破局】做团队定著诊断，或到【团队长工具箱】拿 90 天陪跑计划、每日行动计划模板，也可到【智库】调取保险行销集团前辈思想。</div>";
+  return {who:"🤖 保险赋能教练", html};
+}
+
+/* ===================== 渲染 ===================== */
+const chatBody=document.getElementById("chatBody");
+const input=document.getElementById("userInput");
+function addMsg(cls, who, html){
+  const d=document.createElement("div");
+  d.className="msg "+cls;
+  if(who) d.innerHTML=`<div class='who'>${who}</div>`+html;
+  else d.innerHTML=html;
+  chatBody.appendChild(d);
+  chatBody.scrollTop=chatBody.scrollHeight;
+}
+function botThink(nodes){
+  const typing=document.createElement("div");
+  typing.className="msg bot";
+  typing.innerHTML="<div class='who'>🤖 保险赋能教练</div>正在调取大师思路…";
+  chatBody.appendChild(typing);
+  chatBody.scrollTop=chatBody.scrollHeight;
+  setTimeout(()=>{
+    chatBody.removeChild(typing);
+    const r=buildBot(nodes);
+    addMsg("bot", r.who, r.html);
+  }, 480);
+}
+function send(){
+  const v=input.value.trim();
+  if(!v) return;
+  addMsg("user", null, v);
+  input.value=""; input.style.height="auto";
+  const nodes=matchKB(v);
+  botThink(nodes);
+}
+document.getElementById("sendBtn").onclick=send;
+input.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send(); }});
+input.addEventListener("input",()=>{ input.style.height="auto"; input.style.height=Math.min(input.scrollHeight,120)+"px"; });
+document.querySelectorAll(".chips button").forEach(b=>{
+  b.onclick=()=>{ input.value=b.textContent; send(); };
+});
+
+/* 智库工具卡 → 一键跳转到咨询台并提问 */
+const toolGrid=document.getElementById("toolGrid");
+if(toolGrid){
+  toolGrid.addEventListener("click",e=>{
+    const c=e.target.closest(".mcard"); if(!c||!c.dataset.q) return;
+    document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));
+    const nb=document.querySelector('#nav button[data-view="chat"]'); if(nb) nb.classList.add("active");
+    document.querySelectorAll("section.view").forEach(s=>s.classList.remove("active"));
+    document.getElementById("view-chat").classList.add("active");
+    document.getElementById("pageTitle").textContent=titles.chat[0];
+    document.getElementById("pageSub").textContent=titles.chat[1];
+    window.scrollTo(0,0);
+    input.value=c.dataset.q; send();
+  });
+}
+
+/* 大师卡片 */
+const mgrid=document.getElementById("mgrid");
+MASTERS.forEach(m=>{
+  const d=document.createElement("div");
+  d.className="mcard";
+  d.dataset.key=m.nm;
+  d.innerHTML=`<div class='top'><div class='av'>${m.av}</div><div><div class='nm'>${m.nm}</div><div class='en'>${m.en}</div></div></div>`+
+    `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
+    `<div class='core'>${m.core}</div>`+
+    `<div class='quote'>${m.quote}</div>`+
+    `<div class='app'>▸ 落地用法：${m.app}</div>`;
+  mgrid.appendChild(d);
+});
+
+/* 智库：杂志主题 */
+const magGrid=document.getElementById("magGrid");
+MAG_TOPICS.forEach(m=>{
+  const d=document.createElement("div");
+  d.className="mcard";
+  d.innerHTML=`<div class='top'><div class='av'>📰</div><div><div class='nm'>${m.title}</div><div class='en'>${m.era}</div></div></div>`+
+    `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
+    `<div class='core'>${m.core}</div>`;
+  magGrid.appendChild(d);
+});
+
+/* 智库：保险行销集团前辈 */
+const immGrid=document.getElementById("immGrid");
+IMM_PEOPLE.forEach(m=>{
+  const d=document.createElement("div");
+  d.className="mcard";
+  d.dataset.key=m.nm;
+  d.innerHTML=`<div class='top'><div class='av'>${m.av}</div><div><div class='nm'>${m.nm}</div><div class='en'>${m.en}</div></div></div>`+
+    `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
+    `<div class='core'>${m.core}<br><b>金句：</b>${m.quote}<br><b>落地：</b>${m.app}</div>`;
+  immGrid.appendChild(d);
+});
+
+/* 智库：华人保险名家 专家观点 */
+const exportGrid=document.getElementById("exportGrid");
+EXP_EXPERTS.forEach(m=>{
+  const d=document.createElement("div");
+  d.className="mcard";
+  d.dataset.key=m.nm;
+  d.innerHTML=`<div class='top'><div class='av'>${m.av}</div><div><div class='nm'>${m.nm}</div><div class='en'>${m.en}</div></div></div>`+
+    `<div>${m.tags.map(t=>`<span class='tag'>${t}</span>`).join("")}</div>`+
+    `<div class='core'>${m.core}</div>`+
+    `<div class='quote'>${m.quote}</div>`+
+    `<div class='app'>▸ 落地用法：${m.app}</div>`;
+  exportGrid.appendChild(d);
+});
+
+/* 导航 */
+const titles={chat:["智能咨询台","向智能体提问，立刻获得大师与团队长的破局思路"],
+  masters:["大师思想库","九位全球寿险营销大师 + 中国本土实战框架"],
+  think:["智库 · 保险行销体系","历年杂志主题库 + 保险行销集团前辈思想 + IDA 荣誉体系"],
+  retain:["留存破局","诊断团队定著健康度，掌握六大赋能杠杆"],
+  tools:["团队长工具箱","90天陪跑、每日行动计划、增员面谈、1对1辅导话术"],
+  scripts:["情景话术库","高频场景的开口与成交话术，直接照着说"]};
+document.querySelectorAll("#nav button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    const v=b.dataset.view;
+    document.querySelectorAll("section.view").forEach(s=>s.classList.remove("active"));
+    document.getElementById("view-"+v).classList.add("active");
+    document.getElementById("pageTitle").textContent=titles[v][0];
+    document.getElementById("pageSub").textContent=titles[v][1];
+    window.scrollTo(0,0);
+  };
+});
+
+/* 诊断 */
+const QUIZ=[
+  "新人入职后前 3 个月，是否有「师傅」每日陪访 / 陪练？",
+  "团队是否给新人清晰的职业晋升路径与收入预期（基本法讲得清）？",
+  "招募时是否做「精准画像」匹配，而非人海式广撒网？",
+  "基本法 / 利益分配是否让新人与主管都「看得到长期收益」（含赋予权）？",
+  "团队是否有「服务客户一辈子」的长期文化，而非只冲首年佣金？"
+];
+const quiz=document.getElementById("quiz");
+QUIZ.forEach((q,i)=>{
+  const row=document.createElement("div"); row.className="qrow";
+  let btns=""; for(let n=1;n<=5;n++) btns+=`<button data-q="${i}" data-n="${n}">${n}</button>`;
+  row.innerHTML=`<div class='qt'>${i+1}. ${q}</div><div class='scale'>${btns}</div>`;
+  quiz.appendChild(row);
+});
+quiz.querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{
+    const q=b.dataset.q;
+    quiz.querySelectorAll(`button[data-q="${q}"]`).forEach(x=>x.classList.remove("sel"));
+    b.classList.add("sel");
+  };
+});
+document.getElementById("diagBtn").onclick=()=>{
+  const ans={}; quiz.querySelectorAll("button.sel").forEach(b=>ans[b.dataset.q]=+b.dataset.n);
+  if(Object.keys(ans).length<5){ alert("请先完成全部 5 项评分 🙂"); return; }
+  let sum=0; for(let i=0;i<5;i++) sum+=ans[i];
+  const pct=Math.round(sum/25*100);
+  const out=document.getElementById("diagOut");
+  document.getElementById("diagNum").textContent=pct+"分";
+  let lab,color,txt;
+  if(pct>=84){ lab="健康留存体系 ✅"; color="var(--teal)";
+    txt="您的团队已具备较强的定著基础。建议：①用万峰「赋予权 + 育成利益」+ 陈嘉虎「自主经营」进一步激励主管裂变组织；②把梅第/甘道夫的「服务一辈子」文化做成团队仪式，形成壁垒；③用 MDRT 全人理念帮绩优合伙人做长期职业生涯规划；④用陈玉婷「3W（每周 3 张）」把活动量纪律化、让绩优更稳，用龙子明「件数文化 + IDA 荣誉墙」做领导者孵化，组织自然裂变。"; }
+  else if(pct>=60){ lab="需补强 ⚠️"; color="var(--gold)";
+    txt="体系已搭框架，但有关键短板。优先补三块：①<b>深度陪跑</b>（国泰师徒制 + 陈嘉虎「询导」+ 李佳蓉「用任务成就人才」）提升新人定著；②用 Granum 10-3-1 与陈玉婷「3W（每周 3 张）」+ 吴征宇「台阶理论」给新人<b>活动量掌控感</b>；③把<b>基本法讲成「三年收入账」</b>，让长期收益可见（万峰五利益）。"; }
+  else { lab="高危，需系统性重建 🔴"; color="var(--rose)";
+    txt="团队留存风险高，须回到根本：①停止人海增员，改<b>精准招募</b>（张瑞文四要素 + 朱美音三高 + 宋明华心法论）；②立刻建立<b>师徒制陪跑</b>（国泰 + 陈嘉虎「询导」+ 李佳蓉「用任务成就人才」），前 90 天主管亲自带；③用<b>万峰五利益 + 赋予权</b> + 陈嘉虎「自主经营」重设主管增员动力；④植入<b>梅第式长期服务文化</b>，用贺恋疆「顾问式行销 / 西点计划」提升新人品质。留存是体系工程，先抓「陪跑」与「利益」两根支柱。"; }
+  document.getElementById("diagNum").style.color=color;
+  document.getElementById("diagLab").textContent=lab;
+  document.getElementById("diagLab").style.color=color;
+  document.getElementById("diagText").innerHTML=`<div style="font-size:14px;color:#3a3f47">${txt}</div>`;
+  out.classList.add("show");
+  out.scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+/* 痛点索引 → 专家卡联动 */
+function switchToView(v){
+  document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));
+  const btn=document.querySelector(`#nav button[data-view="${v}"]`);
+  if(btn)btn.classList.add("active");
+  document.querySelectorAll("section.view").forEach(s=>s.classList.remove("active"));
+  document.getElementById("view-"+v).classList.add("active");
+  document.getElementById("pageTitle").textContent=titles[v][0];
+  document.getElementById("pageSub").textContent=titles[v][1];
+}
+function jumpToCard(key){
+  const cards=[...document.querySelectorAll(".mcard")];
+  const card=cards.find(c=>{
+    const k=(c.dataset.key||"").toLowerCase();
+    return k.includes(key.toLowerCase()) || key.toLowerCase().includes(k);
+  });
+  if(!card){ alert("未找到该专家卡片："+key); return; }
+  const parentId=card.closest("section.view")?.id.replace("view-","");
+  if(parentId) switchToView(parentId);
+  setTimeout(()=>{
+    card.scrollIntoView({behavior:"smooth",block:"center"});
+    card.classList.remove("flash");
+    void card.offsetWidth;
+    card.classList.add("flash");
+  },80);
+}
+document.querySelectorAll(".xlink").forEach(x=>{
+  x.onclick=()=>jumpToCard(x.dataset.key);
+});
+
+/* 手风琴 */
+document.querySelectorAll("[data-acc]").forEach(a=>{
+  a.querySelector(".hd").onclick=()=>a.classList.toggle("open");
+});
+
+/* 打印手册：把 handbook 内容 clone 到独立打印层，避免其他元素占位 */
+function printHandbook(){
+  const src=document.getElementById("handbookSource");
+  const stage=document.getElementById("printStage");
+  if(!src||!stage) return;
+  stage.innerHTML=src.innerHTML;
+  const bar=stage.querySelector(".printbar");
+  if(bar) bar.remove();
+  window.print();
+}
+</script>
+</body>
+</html>
