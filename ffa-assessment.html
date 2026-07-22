@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FFA 情绪反应模式测评</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+  /* Mode colors */
+  --color-introvert: #3B6FB6;
+  --color-express: #A6192E;
+  --color-reflect: #C4952E;
+  --color-advance: #2D7D46;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--primary); font-weight: 700;
+}
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  padding: 9px 20px; border: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all var(--transition); display: inline-flex;
+  align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit;
+}
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* ========== CONTAINER ========== */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* ========== INTRO CARD ========== */
+.intro-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+}
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+  padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gold);
+}
+.intro-card .instruction p { margin: 6px 0; }
+
+/* ========== FORM FIELDS ========== */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.info-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 14px; font-family: inherit; color: var(--text); background: #fff;
+  transition: border-color var(--transition);
+}
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* ========== SECTION CARD ========== */
+.section-card {
+  background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden;
+}
+.section-header {
+  padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num {
+  background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+}
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 24px; }
+
+/* ========== ASSESSMENT ITEM ========== */
+.assessment-item {
+  padding: 18px 0; border-bottom: 1px solid var(--border-light);
+}
+.assessment-item:last-child { border-bottom: none; }
+.item-question {
+  font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6;
+}
+.item-number { color: var(--primary); font-weight: 700; margin-right: 6px; }
+
+/* Option buttons (A/B/C/D) */
+.option-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+@media (max-width: 640px) { .option-grid { grid-template-columns: 1fr; } }
+.option-item { position: relative; }
+.option-item input { display: none; }
+.option-item label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px; color: var(--text); background: #fff;
+  transition: all var(--transition); user-select: none; line-height: 1.5;
+}
+.option-item label:hover { border-color: var(--primary); background: rgba(119,36,50,0.03); }
+.option-item .option-letter {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+  background: var(--bg-section); color: var(--text-secondary); flex-shrink: 0;
+  transition: all var(--transition);
+}
+.option-item input:checked + label {
+  border-color: var(--primary); background: rgba(119,36,50,0.06);
+}
+.option-item input:checked + label .option-letter {
+  background: var(--primary); color: #fff;
+}
+
+/* ========== SUBMIT ========== */
+.submit-section { text-align: center; padding: 32px 0; }
+.btn-generate {
+  padding: 14px 48px; font-size: 16px; border-radius: 30px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit;
+}
+.btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* ========== REPORT ========== */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+
+.report-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center;
+}
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+
+.report-body {
+  background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius);
+  padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none;
+}
+
+/* Result summary card */
+.result-summary-card {
+  text-align: center; padding: 26px 20px; margin-bottom: 26px;
+  border-radius: var(--radius); border: 3px solid var(--primary);
+  background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08));
+}
+.result-summary-card .result-type {
+  display: inline-block; padding: 8px 28px; border-radius: 30px;
+  font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px;
+}
+.result-summary-card .result-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.result-summary-card .result-text { font-size: 14px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.8; }
+
+/* Primary / secondary style cards */
+.style-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+@media (max-width: 640px) { .style-result-grid { grid-template-columns: 1fr; } }
+.style-result-card {
+  padding: 24px 22px; border-radius: var(--radius); border: 2px solid var(--border-light);
+  background: var(--bg-section); text-align: center;
+}
+.style-result-card.is-primary { border-width: 3px; }
+.style-result-card .sr-badge {
+  display: inline-block; padding: 6px 18px; border-radius: 20px;
+  font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px;
+}
+.style-result-card .sr-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.style-result-card .sr-score { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+.style-result-card .sr-desc { font-size: 13px; color: var(--text); line-height: 1.7; text-align: left; }
+
+/* Radar chart */
+.chart-container {
+  max-width: 500px; margin: 0 auto 28px; padding: 20px;
+  background: var(--bg-section); border-radius: var(--radius);
+}
+.chart-container h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 16px; }
+
+/* Style detail cards */
+.style-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .style-cards { grid-template-columns: 1fr; } }
+.style-card {
+  padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);
+  background: var(--bg-section);
+}
+.style-card .style-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+.style-card .style-name { font-size: 14px; font-weight: 700; }
+.style-card .style-score-val { font-size: 20px; font-weight: 800; }
+.style-card .style-bar-bg { height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.style-card .style-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.style-card .style-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Style description section */
+.style-desc-full { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--border-light); }
+.style-desc-full h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; }
+.style-desc-block {
+  padding: 18px; border-radius: var(--radius-sm); margin-bottom: 14px;
+  border-left: 4px solid var(--primary);
+  background: var(--bg-section);
+}
+.style-desc-block h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.style-desc-block .sd-preamble { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 10px; }
+.style-desc-block .sd-line { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; padding-left: 2px; }
+.style-desc-block .sd-line strong { color: var(--text); }
+
+/* Print */
+@media print {
+  .header, .btn-generate, .submit-hint, .section-toggle { display: none !important; }
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+  .report-section.visible { display: block !important; }
+}
+
+/* Footer */
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--primary-dark); color: #fff; padding: 12px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">FFA</div>
+      <div>
+        <div class="header-title">FFA 情绪反应模式测评</div>
+        <div class="header-subtitle">情绪觉察 · 自我探索工具 · Fact Feeling Action</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="Assessment-System.html" class="btn btn-outline btn-sm">← 返回测评系统</a>
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">情绪觉察工具 · FFA 情绪反应模式测评 · 20 题情境自评</div>
+    <h1>FFA 情绪反应模式测评</h1>
+    <div class="instruction">
+      <p>情绪会影响我们理解事情、处理关系和作出决定的方式。</p>
+      <p>本测评通过 20 个日常情境，帮助你探寻自己的情绪反应模式，理解自己在不同情境中最先启动的自动反应，为生活、关系和工作提供觉察与行动参考。</p>
+      <p><strong>说明：</strong>每道题没有正确答案。请根据大多数情况下最先出现的<strong>真实反应</strong>，选择最接近自己的一项。每道题必选且仅选一个答案。</p>
+    </div>
+    <div class="info-grid">
+      <div class="form-group">
+        <label>你的姓名</label>
+        <input type="text" id="userName" placeholder="输入你的姓名">
+      </div>
+      <div class="form-group">
+        <label>测评日期</label>
+        <input type="date" id="evalDate">
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONNAIRE -->
+  <div class="section-card" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <h2><span class="section-num">1</span> 情绪反应情境问卷</h2>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" id="questionnaireBody"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-generate" onclick="generateReport()">📊 生成分析报告</button>
+    <div class="submit-hint">完成所有 20 道题后点击上方按钮，系统将自动分析你的情绪反应模式</div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 情绪反应模式分析报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <!-- Result Summary -->
+      <div class="result-summary-card" id="resultSummaryCard"></div>
+
+      <!-- Primary / Secondary result cards -->
+      <div class="style-result-grid" id="styleResultGrid"></div>
+
+      <!-- Radar Chart -->
+      <div class="chart-container">
+        <h3>四种情绪反应模式分布</h3>
+        <canvas id="radarChart" width="400" height="400"></canvas>
+      </div>
+
+      <!-- Style Cards -->
+      <h3 style="font-size:16px;margin-bottom:14px;color:var(--text);">各模式评分详情</h3>
+      <div class="style-cards" id="styleCards"></div>
+
+      <!-- Style Descriptions -->
+      <div class="style-desc-full">
+        <h3>四种情绪反应模式详解</h3>
+        <div id="styleDescriptions"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  FFA 情绪反应模式测评 · 情绪觉察与自我探索工具<br>
+  本测评用于帮助个人了解自己的情绪反应倾向，为日常生活、关系沟通、工作决策和自我成长提供参考，不用于心理诊断。<br>
+  © 2026 &nbsp;·&nbsp; 本地运行 · 数据不离开浏览器 &nbsp;·&nbsp; Powered By Kan Man Tang
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA ============
+const MODES = {
+  introvert: { key: 'introvert', name: '内敛模式', alias: '沉静的情绪守护者', color: '#3B6FB6', icon: '🌙',
+    preamble: '情绪出现时，你习惯先把感受留在心里，给自己一定的缓冲空间。',
+    strength: '你的优势是沉稳、克制，能够照顾环境与他人的感受。面对突发情况时，你通常不会立即被情绪带着走。',
+    watch: '需要留意的是，长期不表达真实感受，可能让压力、失望和委屈逐渐累积。你需要练习辨认自己的需要，并在合适的时候说出来。',
+    shortDesc: '沉稳克制，照顾他人，先感受后表达' },
+  express: { key: 'express', name: '表达模式', alias: '真实的情绪传递者', color: '#A6192E', icon: '💬',
+    preamble: '情绪出现时，你习惯直接表达自己的感受和立场。',
+    strength: '你的优势是真实、直接，能够让身边的人迅速理解你的态度。你的情绪具有感染力，也能推动关系中的问题被看见。',
+    watch: '需要留意的是，情绪强烈时，表达速度可能快于思考速度。适当增加一点停顿，可以让你的真实更容易被理解。',
+    shortDesc: '真实直接，富有感染，推动问题被看见' },
+  reflect: { key: 'reflect', name: '思辨模式', alias: '敏锐的情绪观察者', color: '#C4952E', icon: '🔍',
+    preamble: '情绪出现时，你习惯寻找事情背后的原因、意义与可能性。',
+    strength: '你的优势是敏锐、深入，善于从情绪中捕捉信息，发现别人容易忽略的问题。你通常不会满足于表面的答案。',
+    watch: '需要留意的是，当思考长时间没有出口时，分析可能变成反复推演和自我消耗。你需要为思考设置边界，并适时回到事实与当下。',
+    shortDesc: '敏锐深入，捕捉信息，善于分析问题' },
+  advance: { key: 'advance', name: '推进模式', alias: '坚定的情绪行动者', color: '#2D7D46', icon: '🚀',
+    preamble: '情绪出现时，你习惯迅速采取行动，改变眼前的情况。',
+    strength: '你的优势是果断、务实，能够较快恢复掌控感。面对问题和不确定性时，你更愿意从可以改变的部分开始。',
+    watch: '需要留意的是，过快进入行动，有时会跳过自己和他人的真实感受。行动之前多停留片刻，可能帮助你看见真正需要解决的问题。',
+    shortDesc: '果断务实，快速行动，恢复掌控感' }
+};
+
+const QUESTIONS = [
+  { num: 1, text: '当一份投入很多心力的方案没有被采纳时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会把失望留在心里。', mode: 'introvert' },
+    { letter: 'B', text: '我会马上修改方案。', mode: 'advance' },
+    { letter: 'C', text: '我会反复想方案哪里出了问题。', mode: 'reflect' },
+    { letter: 'D', text: '我会直接质疑这个决定。', mode: 'express' }
+  ]},
+  { num: 2, text: '当一条重要消息迟迟没有得到回复时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会想对方为什么没有回复。', mode: 'reflect' },
+    { letter: 'B', text: '我会先处理其他事情。', mode: 'advance' },
+    { letter: 'C', text: '我会直接追问对方。', mode: 'express' },
+    { letter: 'D', text: '我会着急，但忍住不再发消息。', mode: 'introvert' }
+  ]},
+  { num: 3, text: '当别人公开肯定你的表现时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会暗自开心。', mode: 'introvert' },
+    { letter: 'B', text: '我会马上想到下一个目标。', mode: 'advance' },
+    { letter: 'C', text: '我会非常兴奋。', mode: 'express' },
+    { letter: 'D', text: '我会分析自己哪里做得好。', mode: 'reflect' }
+  ]},
+  { num: 4, text: '当伴侣临时取消原本约好的安排时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会告诉自己算了。', mode: 'introvert' },
+    { letter: 'B', text: '我会直接表达不满。', mode: 'express' },
+    { letter: 'C', text: '我会想对方为什么临时取消。', mode: 'reflect' },
+    { letter: 'D', text: '我会马上安排其他事情。', mode: 'advance' }
+  ]},
+  { num: 5, text: '当原定计划突然发生变化时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会担心变化带来的连锁影响。', mode: 'reflect' },
+    { letter: 'B', text: '我会直接说自己很生气。', mode: 'express' },
+    { letter: 'C', text: '我会压下心里的烦躁。', mode: 'introvert' },
+    { letter: 'D', text: '我会马上重新安排计划。', mode: 'advance' }
+  ]},
+  { num: 6, text: '当你发现孩子的作业出现很多错误时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会想孩子为什么错这么多。', mode: 'reflect' },
+    { letter: 'B', text: '我会马上把错题标出来。', mode: 'advance' },
+    { letter: 'C', text: '我会忍住不发火。', mode: 'introvert' },
+    { letter: 'D', text: '我会当场发火。', mode: 'express' }
+  ]},
+  { num: 7, text: '当一件准备很久的事情结果不如预期时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会反复想哪里出了问题。', mode: 'reflect' },
+    { letter: 'B', text: '我会独自消化这份失落。', mode: 'introvert' },
+    { letter: 'C', text: '我会马上调整后续安排。', mode: 'advance' },
+    { letter: 'D', text: '我会直接说自己很失望。', mode: 'express' }
+  ]},
+  { num: 8, text: '当讨论中出现明显的意见分歧时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会推动大家尽快作出决定。', mode: 'advance' },
+    { letter: 'B', text: '我会保留自己的意见。', mode: 'introvert' },
+    { letter: 'C', text: '我会坚持表达自己的观点。', mode: 'express' },
+    { letter: 'D', text: '我会分析分歧为什么出现。', mode: 'reflect' }
+  ]},
+  { num: 9, text: '当孩子取得明显进步时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会马上夸奖孩子。', mode: 'express' },
+    { letter: 'B', text: '我会把欣慰放在心里。', mode: 'introvert' },
+    { letter: 'C', text: '我会马上安排下一阶段的练习。', mode: 'advance' },
+    { letter: 'D', text: '我会分析孩子进步的原因。', mode: 'reflect' }
+  ]},
+  { num: 10, text: '当你认真说话时，伴侣一直在看手机，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会直接质问对方。', mode: 'express' },
+    { letter: 'B', text: '我会想对方是不是不在意我。', mode: 'reflect' },
+    { letter: 'C', text: '我会沉默下来。', mode: 'introvert' },
+    { letter: 'D', text: '我会先去做自己的事情。', mode: 'advance' }
+  ]},
+  { num: 11, text: '当别人批评你的工作时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会立即为自己辩解。', mode: 'express' },
+    { letter: 'B', text: '我会先保持沉默。', mode: 'introvert' },
+    { letter: 'C', text: '我会判断这份批评是否有道理。', mode: 'reflect' },
+    { letter: 'D', text: '我会马上修改相关内容。', mode: 'advance' }
+  ]},
+  { num: 12, text: '当一个期待已久的机会突然出现时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会马上开始准备。', mode: 'advance' },
+    { letter: 'B', text: '我会先分析其中的风险。', mode: 'reflect' },
+    { letter: 'C', text: '我会非常兴奋。', mode: 'express' },
+    { letter: 'D', text: '我会提醒自己先别高兴太早。', mode: 'introvert' }
+  ]},
+  { num: 13, text: '当一个值得信任的伙伴出现明显失误时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会马上处理出错的部分。', mode: 'advance' },
+    { letter: 'B', text: '我会直接批评对方。', mode: 'express' },
+    { letter: 'C', text: '我会暂时压下自己的不满。', mode: 'introvert' },
+    { letter: 'D', text: '我会想对方为什么会出错。', mode: 'reflect' }
+  ]},
+  { num: 14, text: '当一项重要安排多次延误时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会马上重新安排进度。', mode: 'advance' },
+    { letter: 'B', text: '我会直接表达对拖延的不满。', mode: 'express' },
+    { letter: 'C', text: '我会自己承受这份着急。', mode: 'introvert' },
+    { letter: 'D', text: '我会分析事情延误的原因。', mode: 'reflect' }
+  ]},
+  { num: 15, text: '当你发现自己犯了一个明显的错误时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会直接说自己很懊恼。', mode: 'express' },
+    { letter: 'B', text: '我会反复想别人会怎么看我。', mode: 'reflect' },
+    { letter: 'C', text: '我会马上采取补救行动。', mode: 'advance' },
+    { letter: 'D', text: '我会藏起自己的挫败。', mode: 'introvert' }
+  ]},
+  { num: 16, text: '当你完成了一个努力很久的目标时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会安静地享受这份满足。', mode: 'introvert' },
+    { letter: 'B', text: '我会回顾自己为什么能够做到。', mode: 'reflect' },
+    { letter: 'C', text: '我会马上开始下一个目标。', mode: 'advance' },
+    { letter: 'D', text: '我会非常兴奋。', mode: 'express' }
+  ]},
+  { num: 17, text: '当一件事情同时收到肯定和质疑时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会分析大家为什么评价不同。', mode: 'reflect' },
+    { letter: 'B', text: '我会马上调整原来的方案。', mode: 'advance' },
+    { letter: 'C', text: '我会立即回应其中的质疑。', mode: 'express' },
+    { letter: 'D', text: '我会先保持沉默。', mode: 'introvert' }
+  ]},
+  { num: 18, text: '当一个重要任务的参与者突然退出时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会把担忧留给自己。', mode: 'introvert' },
+    { letter: 'B', text: '我会想对方为什么突然退出。', mode: 'reflect' },
+    { letter: 'C', text: '我会马上重新分配任务。', mode: 'advance' },
+    { letter: 'D', text: '我会直接质问对方。', mode: 'express' }
+  ]},
+  { num: 19, text: '当一件重要的事情长时间没有确定结果时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会先做自己能够控制的事情。', mode: 'advance' },
+    { letter: 'B', text: '我会直接说出自己的焦虑。', mode: 'express' },
+    { letter: 'C', text: '我会不断设想可能出现的结果。', mode: 'reflect' },
+    { letter: 'D', text: '我会独自承受这份不安。', mode: 'introvert' }
+  ]},
+  { num: 20, text: '当一次合作顺利完成并得到认可时，你的第一反应通常是：', options: [
+    { letter: 'A', text: '我会非常开心。', mode: 'express' },
+    { letter: 'B', text: '我会默默感到满足。', mode: 'introvert' },
+    { letter: 'C', text: '我会分析这次成功的关键。', mode: 'reflect' },
+    { letter: 'D', text: '我会马上推动下一次合作。', mode: 'advance' }
+  ]}
+];
+
+// ============ BUILD QUESTIONNAIRE ============
+function buildQuestionnaire() {
+  let html = '';
+  QUESTIONS.forEach((q, i) => {
+    html += `<div class="assessment-item">
+      <div class="item-question"><span class="item-number">${q.num}.</span>${q.text}</div>
+      <div class="option-grid">`;
+    q.options.forEach((opt, j) => {
+      html += `<div class="option-item">
+        <input type="radio" name="q${i}" value="${j}" id="q${i}_${j}" onchange="autoSave()">
+        <label for="q${i}_${j}">
+          <span class="option-letter">${opt.letter}</span>
+          <span>${opt.text}</span>
+        </label>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('questionnaireBody').innerHTML = html;
+}
+
+// ============ INIT ============
+document.getElementById('evalDate').valueAsDate = new Date();
+buildQuestionnaire();
+
+// ============ SECTION TOGGLE ============
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+// ============ CHECK ALL ANSWERED ============
+function checkAllAnswered() {
+  let answered = 0;
+  QUESTIONS.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) answered++;
+  });
+  return answered;
+}
+
+// ============ GENERATE REPORT ============
+function generateReport() {
+  const userName = document.getElementById('userName').value.trim();
+  const answered = checkAllAnswered();
+
+  if (answered < QUESTIONS.length) {
+    showToast(`请完成所有 ${QUESTIONS.length} 道题目后再生成报告（当前已完成 ${answered} 题）`);
+    return;
+  }
+
+  // Calculate scores
+  const scores = { introvert: 0, express: 0, reflect: 0, advance: 0 };
+  QUESTIONS.forEach((q, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) {
+      const optIdx = parseInt(selected.value);
+      const mode = q.options[optIdx].mode;
+      scores[mode]++;
+    }
+  });
+
+  // Sort modes by score desc
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const topKey = sorted[0][0];
+  const topScore = sorted[0][1];
+  const secondKey = sorted[1][0];
+  const secondScore = sorted[1][1];
+
+  // Determine result type
+  let resultType = 'single'; // single | combination | dual
+  if (topScore === secondScore) {
+    resultType = 'combination';
+  } else if (topScore - secondScore === 1) {
+    resultType = 'dual';
+  }
+
+  // Meta
+  const evalDate = document.getElementById('evalDate').value;
+  let meta = '';
+  if (userName) meta += `评估人：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // Result summary
+  const topM = MODES[topKey];
+  const secM = MODES[secondKey];
+  let summaryText = '';
+  let summaryLabel = '';
+  if (resultType === 'combination') {
+    summaryLabel = '并列组合模式';
+    summaryText = `你的 ${topM.name}（${topM.alias}）与 ${secM.name}（${secM.alias}）得分并列最高（各 ${topScore} 分）。两种反应倾向同样明显，你会在不同情境下灵活切换这两种自动反应，呈现出组合式的情绪应对风格。`;
+  } else if (resultType === 'dual') {
+    summaryLabel = '双模式明显';
+    summaryText = `你的主要模式是 ${topM.name}（${topM.alias}，${topScore} 分），次要模式是 ${secM.name}（${secM.alias}，${secondScore} 分）。两者仅差 1 分，说明两种反应倾向都比较明显，你会以主要模式为主、次要模式为辅。`;
+  } else {
+    summaryLabel = '单一主导模式';
+    summaryText = `你的主要情绪反应模式是 ${topM.name}（${topM.alias}），得 ${topScore} 分；次要模式为 ${secM.name}（${secM.alias}），得 ${secondScore} 分。你最习惯在第一时间启动「${topM.name}」的自动反应。`;
+  }
+  document.getElementById('resultSummaryCard').innerHTML = `
+    <div class="result-type" style="background:${topM.color};">${topM.icon} ${summaryLabel}</div>
+    <div class="result-title">主要情绪反应模式：${topM.name} · ${topM.alias}</div>
+    <div class="result-text">${summaryText}</div>
+  `;
+
+  // Primary / Secondary result cards
+  let cardsHTML = '';
+  if (resultType === 'combination') {
+    [topKey, secondKey].forEach(k => {
+      const m = MODES[k];
+      cardsHTML += buildResultCard(m, scores[k.key], true, '并列最高');
+    });
+  } else {
+    cardsHTML += buildResultCard(topM, scores[topKey], true, '主要模式');
+    cardsHTML += buildResultCard(secM, scores[secondKey], false, '次要模式');
+  }
+  document.getElementById('styleResultGrid').innerHTML = cardsHTML;
+
+  // Radar chart
+  drawRadarChart(scores);
+
+  // Style detail cards (all 4, sorted)
+  let detailHTML = '';
+  sorted.forEach(([key, score]) => {
+    const m = MODES[key];
+    const isPrimary = key === topKey;
+    const isSecondary = key === secondKey;
+    const pct = (score / QUESTIONS.length) * 100;
+    let tag = '';
+    if (isPrimary) tag = ' ⬅ 主要模式';
+    else if (isSecondary && resultType !== 'combination') tag = ' ⬅ 次要模式';
+    detailHTML += `<div class="style-card" style="${isPrimary ? 'border:2px solid ' + m.color + ';' : ''}">
+      <div class="style-header">
+        <span class="style-name" style="color:${m.color};">${m.icon} ${m.name}${tag}</span>
+        <span class="style-score-val" style="color:${m.color};">${score}</span>
+      </div>
+      <div class="style-bar-bg"><div class="style-bar-fill" style="width:${pct}%;background:${m.color};"></div></div>
+      <div class="style-detail">${m.shortDesc}</div>
+    </div>`;
+  });
+  document.getElementById('styleCards').innerHTML = detailHTML;
+
+  // Full descriptions
+  let descHTML = '';
+  const order = ['introvert', 'express', 'reflect', 'advance'];
+  order.forEach(key => {
+    const m = MODES[key];
+    const isPrimary = key === topKey;
+    descHTML += `<div class="style-desc-block" style="border-left-color:${m.color};${isPrimary ? 'background:rgba(' + hexToRgb(m.color) + ',0.08);' : ''}">
+      <h4 style="color:${m.color};">${m.icon} ${m.name} · ${m.alias}${isPrimary ? '（你的主要模式）' : ''}</h4>
+      <div class="sd-preamble">${m.preamble}</div>
+      <div class="sd-line"><strong>优势：</strong>${m.strength}</div>
+      <div class="sd-line"><strong>需要留意：</strong>${m.watch}</div>
+    </div>`;
+  });
+  document.getElementById('styleDescriptions').innerHTML = descHTML;
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✅ 情绪反应模式分析报告已生成！');
+}
+
+function buildResultCard(m, score, isPrimary, tag) {
+  return `<div class="style-result-card ${isPrimary ? 'is-primary' : ''}" style="${isPrimary ? 'border-color:' + m.color + ';' : ''}">
+    <div class="sr-badge" style="background:${m.color};">${tag}</div>
+    <div class="sr-name" style="color:${m.color};">${m.icon} ${m.name}</div>
+    <div class="sr-score">${m.alias} · 得分 ${score} / ${QUESTIONS.length}</div>
+    <div class="sr-desc">${m.preamble}</div>
+  </div>`;
+}
+
+// ============ RADAR CHART ============
+let radarChartInstance = null;
+
+function drawRadarChart(scores) {
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const labels = ['内敛模式', '表达模式', '思辨模式', '推进模式'];
+  const data = [scores.introvert, scores.express, scores.reflect, scores.advance];
+  const colors = ['#3B6FB6', '#A6192E', '#C4952E', '#2D7D46'];
+  const maxVal = QUESTIONS.length;
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '得分',
+        data: data,
+        backgroundColor: 'rgba(119, 36, 50, 0.12)',
+        borderColor: '#772432',
+        borderWidth: 2.5,
+        pointBackgroundColor: colors,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: maxVal,
+          min: 0,
+          ticks: { stepSize: 2, font: { size: 11 }, backdropColor: 'transparent', color: '#5C4A3A' },
+          pointLabels: { font: { size: 13, weight: '600' }, color: '#2D2118' },
+          grid: { color: 'rgba(119, 36, 50, 0.1)' },
+          angleLines: { color: 'rgba(119, 36, 50, 0.1)' }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ============ HEX TO RGB helper ============
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1],16)},${parseInt(result[2],16)},${parseInt(result[3],16)}` : '119,36,50';
+}
+
+// ============ UTILITIES ============
+function resetForm() {
+  if (confirm('确定要清空所有已填写的内容吗？此操作不可撤销。')) {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    if (radarChartInstance) { radarChartInstance.destroy(); radarChartInstance = null; }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Auto-save to localStorage
+function autoSave() {
+  const state = {};
+  QUESTIONS.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected) state[`q${i}`] = selected.value;
+  });
+  state.userName = document.getElementById('userName').value;
+  state.evalDate = document.getElementById('evalDate').value;
+  localStorage.setItem('ffa_state', JSON.stringify(state));
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('ffa_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key === 'userName') document.getElementById('userName').value = value;
+      else if (key === 'evalDate') { if (value) document.getElementById('evalDate').value = value; }
+      else {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) radio.checked = true;
+      }
+    });
+  } catch(e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>
