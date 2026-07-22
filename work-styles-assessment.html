@@ -193,6 +193,11 @@ body {
 .tips-note { font-size: 13px; color: var(--text-secondary); line-height: 1.8; padding: 16px 20px; background: rgba(196,149,46,0.06); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
 .tips-note strong { color: var(--text); }
 
+/* Mobile table scroll safeguard */
+@media (max-width: 640px) {
+  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
 @media print {
   .header, .btn-generate, .submit-hint, .section-toggle, .header-actions, .scale-legend { display: none !important; }
   body { background: #fff; }

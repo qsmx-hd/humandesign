@@ -109,6 +109,7 @@ body {
 /* ========== FORM FIELDS ========== */
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
 .info-grid.full { grid-template-columns: 1fr; }
+@media (max-width: 640px) { .info-grid:not(.full) { grid-template-columns: 1fr; } }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
 .form-group input,
@@ -357,6 +358,11 @@ body {
   opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 .toast.show { opacity: 1; }
+
+/* Mobile table scroll safeguard */
+@media (max-width: 640px) {
+  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
 
 /* Print */
 @media print {

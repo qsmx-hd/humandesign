@@ -220,7 +220,7 @@ body {
 
 /* Strengths & improvements */
 .si-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-@media (max-width: 640px) { .si-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .si-grid { grid-template-columns: 1fr; } .info-grid { grid-template-columns: 1fr; } }
 .si-card { padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); }
 .si-card.strength { background: rgba(45,125,70,0.04); border-color: rgba(45,125,70,0.2); }
 .si-card.improve { background: rgba(196,149,46,0.04); border-color: rgba(196,149,46,0.2); }
@@ -232,6 +232,11 @@ body {
 .si-card li::before { content: ""; position: absolute; left: 0; top: 12px; width: 6px; height: 6px; border-radius: 50%; }
 .si-card.strength li::before { background: var(--success); }
 .si-card.improve li::before { background: var(--warning); }
+
+/* Mobile table scroll safeguard */
+@media (max-width: 640px) {
+  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
 
 @media print {
   .header, .btn-generate, .submit-hint, .section-toggle, .tab-switcher, .header-actions { display: none !important; }

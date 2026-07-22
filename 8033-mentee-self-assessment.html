@@ -248,6 +248,33 @@ textarea.list-input-field { resize: vertical; min-height: 60px; line-height: 1.6
 }
 .btn-download:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,125,70,0.4); }
 
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 640px) {
+  .header-inner { flex-direction: column; gap: 10px; align-items: flex-start; padding: 10px 16px; }
+  .header-actions { width: 100%; justify-content: center; }
+  .container { padding: 16px 14px 48px; }
+  .intro-card { padding: 20px 18px; }
+  .intro-card h1 { font-size: 18px; }
+  .intro-card .instruction { font-size: 13px; padding: 12px 14px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .section-header { padding: 14px 16px; }
+  .section-header h2 { font-size: 15px; }
+  .section-body { padding: 16px 14px; }
+  .report-header { padding: 24px 18px; }
+  .report-header h2 { font-size: 19px; }
+  .report-body { padding: 22px 18px; }
+  .report-section-block h3 { font-size: 15px; }
+  .report-list li { padding: 10px 12px; font-size: 13px; }
+  .report-notes { padding: 14px; font-size: 13px; }
+  .footer { padding: 20px 16px; }
+}
+@media (max-width: 380px) {
+  .header-title { font-size: 15px; }
+  .header-subtitle { font-size: 11px; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+  .container { padding: 12px 10px 40px; }
+}
+
 /* Footer */
 .footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); }
 

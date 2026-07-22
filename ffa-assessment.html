@@ -264,6 +264,74 @@ body {
 .style-desc-block .sd-line { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin: 4px 0; padding-left: 2px; }
 .style-desc-block .sd-line strong { color: var(--text); }
 
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 640px) {
+  /* Header */
+  .header-inner { flex-direction: column; gap: 10px; align-items: flex-start; padding: 10px 16px; }
+  .header-actions { width: 100%; justify-content: center; }
+
+  /* Container */
+  .container { padding: 16px 14px 48px; }
+
+  /* Intro card */
+  .intro-card { padding: 20px 18px; }
+  .intro-card h1 { font-size: 18px; }
+  .intro-card .instruction { font-size: 13px; padding: 12px 14px; }
+
+  /* Form fields — single column on mobile */
+  .info-grid { grid-template-columns: 1fr; }
+
+  /* Section card */
+  .section-header { padding: 14px 16px; }
+  .section-header h2 { font-size: 15px; }
+  .section-body { padding: 16px 14px; }
+
+  /* Question items */
+  .item-question { font-size: 13px; }
+  .option-item label { padding: 10px 12px; font-size: 13px; }
+
+  /* Submit button */
+  .btn-generate { padding: 12px 36px; font-size: 15px; width: 90%; max-width: 320px; }
+
+  /* Report header */
+  .report-header { padding: 24px 18px; }
+  .report-header h2 { font-size: 19px; }
+  .result-summary-card { padding: 22px 16px; }
+  .result-type { font-size: 15px; padding: 7px 20px; }
+  .result-title { font-size: 15px; }
+  .result-text { font-size: 13px; }
+
+  /* Report body */
+  .report-body { padding: 22px 18px; }
+
+  /* Style result cards */
+  .style-result-grid { gap: 12px; }
+  .style-result-card { padding: 20px 16px; }
+  .style-result-card .sr-name { font-size: 16px; }
+
+  /* Style detail cards */
+  .style-cards { gap: 10px; }
+  .style-card { padding: 14px; }
+  .style-desc-full h3 { font-size: 15px; }
+  .style-desc-block { padding: 14px; margin-bottom: 10px; }
+  .style-desc-block h4 { font-size: 14px; }
+
+  /* Footer */
+  .footer { padding: 20px 16px; }
+}
+
+/* Extra small screens (< 380px) */
+@media (max-width: 380px) {
+  .header-title { font-size: 15px; }
+  .header-subtitle { font-size: 11px; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+  .container { padding: 12px 10px 40px; }
+  .intro-card { padding: 16px 14px; }
+  .section-body { padding: 14px 12px; }
+  .report-body { padding: 18px 14px; }
+  .report-header { padding: 20px 14px; }
+}
+
 /* Print */
 @media print {
   .header, .btn-generate, .submit-hint, .section-toggle { display: none !important; }

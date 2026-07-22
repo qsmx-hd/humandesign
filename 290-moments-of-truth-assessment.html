@@ -177,6 +177,7 @@ body {
   margin-top: 20px;
 }
 .info-grid.full { grid-template-columns: 1fr; }
+@media (max-width: 640px) { .info-grid:not(.full) { grid-template-columns: 1fr; } }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
 .form-group label {
   font-size: 13px;
