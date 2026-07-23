@@ -598,15 +598,10 @@ body {
         </div>
         <div class="share-panel" id="sharePanel" style="display:none;">
           <div class="share-img-wrap">
-            <img src="FFA-Assessment.PNG" alt="FFA 测评二维码" class="share-img"
-                 onerror="this.style.display='none';document.getElementById('shareFallback').style.display='flex';">
-            <div class="share-fallback" id="shareFallback" style="display:none;">
-              <div class="share-fallback-icon">📱</div>
-              <div>未找到二维码图片<br>请将测评二维码保存为 <code>FFA-Assessment.PNG</code><br>放在本页面同目录</div>
-            </div>
+            <img id="shareQrImg" alt="FFA 测评二维码" class="share-img">
           </div>
           <p class="share-tip">分享给你最好的朋友吧！</p>
-          <a href="FFA-Assessment.PNG" download class="share-save">⬇ 保存二维码</a>
+          <a href="#" id="shareSaveLink" download="FFA-Assessment.png" class="share-save">⬇ 保存二维码</a>
         </div>
       </div>
     </div>
@@ -664,7 +659,7 @@ const MODES = {
 };
 
 // 产品版本号：每次迭代 +1（页脚会自动显示 "FFA 情绪反应模式测评 Vx"）
-const APP_VERSION = 12;
+const APP_VERSION = 13;
 
 const QUESTIONS = [
   { num: 1, text: '当一份投入很多心力的方案没有被采纳时，你的第一反应通常是：', options: [
@@ -1193,7 +1188,18 @@ window.addEventListener('DOMContentLoaded', autoRestore);
 // 页脚自动写入版本号（与 APP_VERSION 同步，避免多处硬编码）
 (function () {
   const t = document.getElementById('footerTitle');
-  if (t) t.textContent = 'FFA 情绪反应模式测评 V' + (typeof APP_VERSION !== 'undefined' ? APP_VERSION : 11);
+  if (t) t.textContent = 'FFA 情绪反应模式测评 V' + (typeof APP_VERSION !== 'undefined' ? APP_VERSION : 12);
+})();
+
+// 分享面板二维码：使用 base64 内嵌（避免 file:// 路径在手机/GitHub Pages 上无法加载）
+(function () {
+  var img = document.getElementById('shareQrImg');
+  if (img && typeof QR_DATA_URI !== 'undefined') { img.src = QR_DATA_URI; }
+  // 下载链接：触发 base64 图片下载
+  var dl = document.getElementById('shareSaveLink');
+  if (dl && typeof QR_DATA_URI !== 'undefined') {
+    dl.href = QR_DATA_URI;
+  }
 })();
 </script>
 
