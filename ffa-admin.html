@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FFA 测评记录管理</title>
+<style>
+  :root {
+    --primary: #772432;
+    --primary-light: #9c3346;
+    --gold: #C4952E;
+    --bg: #F5F0E8;
+    --card: #FFFFFF;
+    --text: #2D2118;
+    --text-secondary: #6B5C4D;
+    --border: #E8DCC8;
+    --border-light: #F0E8DA;
+    --introvert: #3B6FB6;
+    --express: #A6192E;
+    --reflect: #C4952E;
+    --advance: #2D7D46;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+    padding: 0 0 60px;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, #5a1a26 100%);
+    color: #fff;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(119, 36, 50, 0.18);
+  }
+  .header h1 { font-size: 20px; letter-spacing: 1px; margin-bottom: 6px; }
+  .header .sub { font-size: 12.5px; opacity: .9; }
+  .container { max-width: 960px; margin: 22px auto; padding: 0 16px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(119, 36, 50, 0.06);
+  }
+  .card h2 {
+    font-size: 15px;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+  /* stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .stat-box {
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    background: #FCF8F1;
+  }
+  .stat-num { font-size: 26px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+  .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .mode-bars { margin-top: 6px; }
+  .mode-bar-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 12.5px; }
+  .mode-bar-name { width: 70px; flex-shrink: 0; color: var(--text); }
+  .mode-bar-track { flex: 1; height: 14px; background: var(--border-light); border-radius: 7px; overflow: hidden; }
+  .mode-bar-fill { height: 100%; border-radius: 7px; }
+  .mode-bar-val { width: 42px; text-align: right; color: var(--text-secondary); flex-shrink: 0; }
+  /* filters */
+  .filter-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+  .filter-item { display: flex; flex-direction: column; gap: 5px; }
+  .filter-item label { font-size: 12px; color: var(--text-secondary); }
+  .filter-item input {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    min-width: 160px;
+    background: #FFFDF9;
+    color: var(--text);
+  }
+  .filter-item input:focus { outline: none; border-color: var(--gold); }
+  .btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--primary); }
+  .btn-danger { background: transparent; border: 1px solid #d99; color: #b3434f; }
+  .btn-danger:hover { background: #b3434f; color: #fff; border-color: #b3434f; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-top: 4px; }
+  /* table */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+  thead th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 10px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    position: sticky; top: 0;
+  }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border-light); white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #FCF8F1; }
+  tbody tr:hover { background: #F3E9D8; }
+  .tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 11.5px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .tag-combo { background: #7B5EA7; }
+  .tag-dual { background: var(--gold); }
+  .tag-primary { background: var(--primary); }
+  .score-cell { font-variant-numeric: tabular-nums; }
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  .empty .big { font-size: 40px; margin-bottom: 10px; }
+  .rec-count { font-size: 12.5px; color: var(--text-secondary); }
+  .footer-note { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 24px; }
+  .admin-entry { color: var(--primary); text-decoration: none; }
+  .admin-entry:hover { text-decoration: underline; }
+  /* toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%) translateY(20px);
+    background: var(--primary); color: #fff; padding: 11px 20px; border-radius: 24px;
+    font-size: 13px; opacity: 0; pointer-events: none; transition: all .25s; z-index: 99;
+    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .filter-item input { min-width: 130px; }
+    .container { padding: 0 12px; }
+  }
+  /* header logout */
+  .header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .header-main { flex: 1; text-align: center; }
+  .logout-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.6);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .logout-btn:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+  @media (max-width: 640px) {
+    .header { flex-direction: column; align-items: flex-start; }
+    .logout-btn { align-self: flex-end; }
+  }
+  /* login gate */
+  .login-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #5a1a26 0%, #772432 100%);
+    padding: 20px;
+  }
+  .login-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 28px 26px;
+    width: 100%; max-width: 340px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.32);
+    text-align: center;
+  }
+  .login-card h2 { color: var(--primary); font-size: 17px; margin-bottom: 6px; }
+  .login-card .sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 18px; }
+  .login-field { text-align: left; margin-bottom: 14px; }
+  .login-field label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+  .login-field input {
+    width: 100%; padding: 11px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; background: #FFFDF9; color: var(--text);
+  }
+  .login-field input:focus { outline: none; border-color: var(--gold); }
+  .login-btn { width: 100%; margin-top: 4px; }
+  .login-err {
+    display: none; color: #b3434f; font-size: 12.5px;
+    background: #fbeaec; border: 1px solid #f0c4ca;
+    border-radius: 8px; padding: 8px 10px; margin-bottom: 12px;
+  }
+  .login-hint { font-size: 11.5px; color: var(--text-secondary); margin-top: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <!-- 登录门：未通过账号密码校验前隐藏记录内容，避免一般用户随意查看 -->
+  <div class="login-gate" id="loginGate">
+    <div class="login-card">
+      <h2>🔐 管理员登录</h2>
+      <div class="sub">请输入账号与密码以查看测评记录</div>
+      <div class="login-field">
+        <label for="loginUser">账号</label>
+        <input type="text" id="loginUser" placeholder="请输入账号" autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label for="loginPass">密码</label>
+        <input type="password" id="loginPass" placeholder="请输入密码" autocomplete="current-password">
+      </div>
+      <div class="login-err" id="loginErr" style="display:none;"></div>
+      <button class="btn btn-primary login-btn" onclick="doLogin()">登录</button>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="header-main">
+      <h1>FFA 情绪反应模式测评 · 记录管理</h1>
+      <div class="sub">查看本机浏览器中保存的测评记录（数据不离开浏览器）</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">登出</button>
+  </div>
+
+  <div class="container">
+    <!-- 统计概要 -->
+    <div class="card">
+      <h2>统计概要</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-num" id="statTotal">0</div>
+          <div class="stat-label">测评总记录数</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statPeople">0</div>
+          <div class="stat-label">参与人数（去重）</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statTopMode">—</div>
+          <div class="stat-label">最常见主要模式</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statCombo">0</div>
+          <div class="stat-label">组合/双模式人数</div>
+        </div>
+      </div>
+      <div class="mode-bars" id="modeBars"></div>
+    </div>
+
+    <!-- 筛选与操作 -->
+    <div class="card">
+      <h2>筛选与导出</h2>
+      <div class="filter-row">
+        <div class="filter-item">
+          <label for="fName">按姓名搜索</label>
+          <input type="text" id="fName" placeholder="输入姓名关键词">
+        </div>
+        <div class="filter-item">
+          <label for="fDate">按测评日期</label>
+          <input type="date" id="fDate">
+        </div>
+        <button class="btn btn-ghost" onclick="resetFilters()">重置筛选</button>
+      </div>
+      <div class="toolbar">
+        <span class="rec-count" id="recCount"></span>
+        <div>
+          <button class="btn btn-primary" onclick="exportCSV()">⬇ 导出 CSV</button>
+          <button class="btn btn-danger" onclick="clearAll()">清空全部记录</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 记录列表 -->
+    <div class="card">
+      <h2>测评记录</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>姓名</th>
+              <th>测评日期</th>
+              <th>内敛</th>
+              <th>表达</th>
+              <th>思辨</th>
+              <th>推进</th>
+              <th>主要模式</th>
+              <th>次要模式</th>
+              <th>结果类型</th>
+              <th>完成时间</th>
+            </tr>
+          </thead>
+          <tbody id="recBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="emptyState" style="display:none;">
+        <div class="big">📭</div>
+        暂无测评记录。请先在 FFA 测评页完成测评并生成报告，记录会自动保存在本机浏览器中。
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <a href="ffa-assessment.html" class="admin-entry">← 返回 FFA 测评页</a><br>
+      本页面仅读取并展示当前浏览器内保存的测评记录，不涉及任何网络上传。
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+// ============ STORAGE ============
+const STORE_KEY = 'ffa_records';
+const MODE_META = {
+  introvert: { name: '内敛模式', color: 'var(--introvert)' },
+  express:   { name: '表达模式', color: 'var(--express)' },
+  reflect:   { name: '思辨模式', color: 'var(--reflect)' },
+  advance:   { name: '推进模式', color: 'var(--advance)' }
+};
+const RESULT_LABEL = {
+  combination: '组合模式',
+  dual: '双模式明显',
+  'primary-secondary': '主要+次要'
+};
+
+function getRecords() {
+  try {
+    const list = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    return Array.isArray(list) ? list : [];
+  } catch (e) { return []; }
+}
+
+// ============ LOGIN GATE ============
+// 说明：纯前端页面无法做真正安全校验，以下账号密码仅用于“挡住一般用户随意查看”，
+// 并非加密保护。记录本身存在本机浏览器 localStorage，懂技术者可自行查看。
+// 如需真正安全，应将记录移后端/云数据库并做服务端鉴权。
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'ffa2026';
+const AUTH_KEY = 'ffa_admin_auth';
+
+function checkAuth() {
+  return sessionStorage.getItem(AUTH_KEY) === '1';
+}
+
+function doLogin() {
+  const u = (document.getElementById('loginUser').value || '').trim();
+  const p = document.getElementById('loginPass').value || '';
+  const errEl = document.getElementById('loginErr');
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('loginGate').style.display = 'none';
+    errEl.style.display = 'none';
+    render();
+    showToast('✅ 已登录管理员');
+  } else {
+    errEl.textContent = '账号或密码错误，请重试';
+    errEl.style.display = 'block';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+
+// ============ RENDER ============
+function render() {
+  let records = getRecords();
+  const nameKw = (document.getElementById('fName').value || '').trim().toLowerCase();
+  const dateKw = document.getElementById('fDate').value || '';
+
+  if (nameKw) records = records.filter(r => (r.name || '').toLowerCase().includes(nameKw));
+  if (dateKw) records = records.filter(r => (r.evalDate || '').indexOf(dateKw) === 0);
+
+  // sort by timestamp desc (newest first)
+  records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+  renderStats(getRecords());
+  renderTable(records);
+}
+
+function renderStats(all) {
+  document.getElementById('statTotal').textContent = all.length;
+  const people = new Set(all.map(r => (r.name || '').trim()).filter(Boolean));
+  document.getElementById('statPeople').textContent = people.size;
+
+  // count top modes
+  const topCount = { introvert: 0, express: 0, reflect: 0, advance: 0 };
+  let comboCount = 0;
+  all.forEach(r => {
+    if (r.topKey && topCount[r.topKey] !== undefined) topCount[r.topKey]++;
+    if (r.resultType === 'combination' || r.resultType === 'dual') comboCount++;
+  });
+  const topEntries = Object.entries(topCount).sort((a, b) => b[1] - a[1]);
+  const topMode = topEntries[0] && topEntries[0][1] > 0 ? MODE_META[topEntries[0][0]].name : '—';
+  document.getElementById('statTopMode').textContent = topMode;
+  document.getElementById('statCombo').textContent = comboCount;
+
+  // mode bars (by top mode share)
+  const maxC = topEntries[0] ? topEntries[0][1] : 0;
+  let bars = '';
+  ['introvert', 'express', 'reflect', 'advance'].forEach(k => {
+    const c = topCount[k];
+    const pct = maxC > 0 ? (c / maxC * 100) : 0;
+    bars += `<div class="mode-bar-row">
+      <span class="mode-bar-name">${MODE_META[k].name}</span>
+      <span class="mode-bar-track"><span class="mode-bar-fill" style="width:${pct}%;background:${MODE_META[k].color};"></span></span>
+      <span class="mode-bar-val">${c} 人</span>
+    </div>`;
+  });
+  document.getElementById('modeBars').innerHTML = bars;
+}
+
+function renderTable(records) {
+  const body = document.getElementById('recBody');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('recCount').textContent = `当前显示 ${records.length} 条`;
+
+  if (records.length === 0) {
+    body.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  let html = '';
+  records.forEach((r, i) => {
+    const s = r.scores || { introvert: 0, express: 0, reflect: 0, advance: 0 };
+    const topName = MODE_META[r.topKey] ? MODE_META[r.topKey].name : '—';
+    const secName = MODE_META[r.secondKey] ? MODE_META[r.secondKey].name : '—';
+    const rType = RESULT_LABEL[r.resultType] || '—';
+    const tagClass = r.resultType === 'combination' ? 'tag-combo'
+                   : r.resultType === 'dual' ? 'tag-dual' : 'tag-primary';
+    const done = r.timestamp ? new Date(r.timestamp).toLocaleString('zh-CN') : '—';
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td>${escapeHtml(r.name || '匿名')}</td>
+      <td>${r.evalDate || '—'}</td>
+      <td class="score-cell">${s.introvert}</td>
+      <td class="score-cell">${s.express}</td>
+      <td class="score-cell">${s.reflect}</td>
+      <td class="score-cell">${s.advance}</td>
+      <td>${topName}</td>
+      <td>${secName}</td>
+      <td><span class="tag ${tagClass}">${rType}</span></td>
+      <td>${done}</td>
+    </tr>`;
+  });
+  body.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// ============ ACTIONS ============
+function resetFilters() {
+  document.getElementById('fName').value = '';
+  document.getElementById('fDate').value = '';
+  render();
+}
+
+function clearAll() {
+  const n = getRecords().length;
+  if (n === 0) { showToast('当前没有可清空的记录'); return; }
+  if (confirm(`确定要清空全部 ${n} 条测评记录吗？此操作不可撤销。`)) {
+    localStorage.removeItem(STORE_KEY);
+    render();
+    showToast('已清空全部记录');
+  }
+}
+
+function exportCSV() {
+  const records = getRecords();
+  if (records.length === 0) { showToast('没有可导出的记录'); return; }
+  const headers = ['序号', '姓名', '测评日期', '内敛模式', '表达模式', '思辨模式', '推进模式', '主要模式', '次要模式', '结果类型', '完成时间'];
+  const lines = [headers.join(',')];
+  records.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+  records.forEach((r, i) => {
+    const s = r.scores || { introvert: 0, express: 0, reflect: 0, advance: 0 };
+    const topName = MODE_META[r.topKey] ? MODE_META[r.topKey].name : '';
+    const secName = MODE_META[r.secondKey] ? MODE_META[r.secondKey].name : '';
+    const rType = RESULT_LABEL[r.resultType] || '';
+    const done = r.timestamp ? new Date(r.timestamp).toLocaleString('zh-CN') : '';
+    const row = [i + 1, r.name || '匿名', r.evalDate || '', s.introvert, s.express, s.reflect, s.advance, topName, secName, rType, done]
+      .map(v => `"${String(v).replace(/"/g, '""')}"`);
+    lines.push(row.join(','));
+  });
+  // BOM for Excel Chinese compatibility
+  const csv = '﻿' + lines.join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `FFA测评记录_${stamp}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('已导出 CSV 文件');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ============ INIT ============
+document.getElementById('fName').addEventListener('input', render);
+document.getElementById('fDate').addEventListener('change', render);
+
+// 登录交互
+document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// 未登录则显示登录遮罩并隐藏记录；已登录（同标签页会话内）直接进入
+if (checkAuth()) {
+  document.getElementById('loginGate').style.display = 'none';
+  render();
+} else {
+  document.getElementById('loginGate').style.display = 'flex';
+}
+</script>
+</body>
+</html>
