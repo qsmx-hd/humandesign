@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>保险增长飞轮智能体 V8</title>
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --primary: #C4956A;
+      --dark: #2D2118;
+      --border: #E8DCC8;
+      --card: #FFFFFF;
+      --light: #FDFBF7;
+      --muted: #8C7B6B;
+      --danger: #B85C5C;
+      --success: #6B8E5A;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    header {
+      text-align: center;
+      padding: 18px 0 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 21px;
+      color: var(--dark);
+      font-weight: 700;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 20px;
+    }
+    .tab {
+      flex: 1 1 calc(33.333% - 8px);
+      min-width: 96px;
+      padding: 13px 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--dark);
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 500;
+      transition: background .2s, color .2s;
+    }
+    .tab.active {
+      background: var(--primary);
+      color: var(--dark);
+      border-color: var(--primary);
+    }
+    .scene { display: none; }
+    .scene.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title::before {
+      content: "";
+      width: 6px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+    .hint {
+      font-size: 13px;
+      color: var(--muted);
+      background: var(--light);
+      border-left: 3px solid var(--primary);
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 16px;
+    }
+    .ref-note {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--dark);
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 0 0 16px;
+    }
+    .ref-note a { color: var(--primary); word-break: break-all; text-decoration: underline; }
+    .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    @media (max-width: 480px) { .dim-grid { grid-template-columns: 1fr; } }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--dark);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--dark);
+      outline: none;
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .row-2 { grid-template-columns: 1fr; }
+    }
+    button.primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--dark);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary {
+      width: 100%;
+      padding: 12px;
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .report-card {
+      background: var(--light);
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .report-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--dark);
+    }
+    .report-header .period {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .metric {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .metric-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .narrative {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .narrative p { margin: 0 0 8px; }
+    .highlights {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .highlights h4 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+    .highlights ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .highlights li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .gap-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+    .gap-table th, .gap-table td {
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      text-align: center;
+    }
+    .gap-table th {
+      background: var(--light);
+      color: var(--dark);
+      font-weight: 600;
+    }
+    .gap-table td:first-child { text-align: left; font-weight: 600; }
+    .gap-pos { color: var(--success); font-weight: 700; }
+    .gap-zero { color: var(--muted); }
+    .coupling-box {
+      background: #FFF8ED;
+      border: 1px dashed var(--primary);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .coupling-box h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--dark);
+    }
+    .coupling-box p, .coupling-box li { font-size: 14px; }
+    .coupling-box ul { margin: 0; padding-left: 18px; }
+
+    .score-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .score-number {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: var(--dark);
+      flex-shrink: 0;
+    }
+    .score-number .num { font-size: 28px; font-weight: 700; line-height: 1; }
+    .score-number .txt { font-size: 12px; margin-top: 4px; }
+    .score-bar-bg {
+      flex: 1;
+      height: 24px;
+      background: #E8DCC8;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .score-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width .5s ease;
+    }
+    .verdict {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    .verdict.high { background: var(--primary); color: var(--dark); }
+    .verdict.medium { background: #E8DCC8; color: var(--dark); }
+    .verdict.low { background: #E8E0D8; color: var(--muted); }
+    .radar-wrap { margin: 4px 0 8px; }
+    .dimension {
+      margin-bottom: 12px;
+    }
+    .dimension-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .dim-bar { height: 10px; border-radius: 5px; background: #E8DCC8; }
+    .dim-bar-fill { height: 100%; border-radius: 5px; background: var(--primary); }
+    .section-title { font-size: 15px; font-weight: 700; margin: 16px 0 10px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tag {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 5px 12px;
+      font-size: 13px;
+    }
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 24px 0 12px;
+      line-height: 1.8;
+    }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+    .hidden { display: none; }
+
+    /* 双飞轮耦合模型 动画 */
+    .fly-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: spin 24s linear infinite;
+    }
+    .fly-ring.slow { animation-duration: 30s; }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .fly-label { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--dark);
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+    /* 核心训练体系 */
+    .channel-btns { display: flex; gap: 8px; margin-bottom: 14px; }
+    .chan {
+      flex: 1;
+      padding: 11px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--dark);
+      font-size: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .chan.active { background: var(--primary); border-color: var(--primary); }
+    .track-stage { border-left: 3px solid var(--primary); padding: 8px 0 8px 14px; margin-bottom: 10px; }
+    .track-stage .st { font-weight: 700; font-size: 15px; }
+    .track-stage .pe { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .track-stage ul { margin: 4px 0 0; padding-left: 18px; }
+    .track-stage li { font-size: 13.5px; margin-bottom: 3px; }
+    .track-stage .fo { font-size: 13.5px; margin-top: 6px; }
+    .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .method-grid { grid-template-columns: 1fr; } }
+    .method-box { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    .method-box h4 { margin: 0 0 8px; font-size: 14px; }
+    .method-box ul { margin: 0; padding-left: 16px; font-size: 13px; }
+    .method-box li { margin-bottom: 3px; }
+
+    /* 同口径对比条 */
+    .cmp-row { margin-bottom: 10px; }
+    .cmp-head { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 4px; }
+    .cmp-head .lv { font-weight: 600; }
+    .cmp-head .amt { color: var(--primary); font-weight: 700; }
+    .cmp-bg { height: 22px; background: #E8DCC8; border-radius: 11px; overflow: hidden; }
+    .cmp-fill { height: 100%; background: var(--primary); border-radius: 11px; transition: width .6s ease; }
+    .cmp-fill.cur { background: var(--success); }
+    .cmp-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>保险增长飞轮智能体</h1>
+  </header>
+
+  <!-- 双飞轮耦合模型（动画） -->
+  <div class="card">
+    <div class="card-title">双飞轮耦合模型（动画演示）</div>
+    <div class="hint">
+      动画展示：两架飞轮各自转动，数据在「客户经营」与「组织发展」之间<b>双向回流</b>；
+      <b>AI 智能体是耦合中枢</b>——它同时给两个飞轮供能，并把两个飞轮产生的数据反吸回来迭代自身。看懂数据流，就看懂了飞轮为什么越转越快。
+    </div>
+    <div id="flywheel-svg"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:#C4956A"></i>客户经营飞轮</span>
+      <span><i class="dot" style="background:#6B8E5A"></i>组织发展飞轮</span>
+      <span><i class="dot" style="background:#2D2118"></i>AI 智能体（耦合中枢）</span>
+      <span><i class="dot" style="background:#C4956A"></i>客户成果 → 优增吸引力素材</span>
+      <span><i class="dot" style="background:#6B8E5A"></i>合格人力 / 话术知识 → 客户飞轮加速</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="train" onclick="switchTab('train')">核心训练体系</button>
+    <button class="tab" data-tab="family" onclick="switchTab('family')">家庭保障分析</button>
+    <button class="tab" data-tab="retire" onclick="switchTab('retire')">退休养老规划</button>
+    <button class="tab" data-tab="report" onclick="switchTab('report')">展业战报生成</button>
+    <button class="tab" data-tab="recruit" onclick="switchTab('recruit')">优增画像初筛</button>
+    <button class="tab" data-tab="comp" onclick="switchTab('comp')">基本法测算模型</button>
+  </div>
+
+  <!-- 场景 0：核心训练体系（新增，位于展业战报之前） -->
+  <div id="scene-train" class="scene active">
+    <div class="hint">
+      语料参考：大都会人寿（中美联泰大都会 MetLife）顾问行销渠道核心训练体系——底层以 <b>NBS 需求导向销售</b> 为内核，配 <b>MET 主管辅导五环</b>，组织发展线走 <b>四龙计划</b>。
+      真实系统中，本模块由 AI 智能体驱动：为新人与主管推送训练内容、陪练与效果追踪，并把训练数据反吸回「育人模型」。
+    </div>
+
+    <div class="card">
+      <div class="card-title">双轨成长地图</div>
+      <div class="channel-btns">
+        <button id="ch-sales" class="chan active" onclick="switchTrain('sales')">销售能力发展线</button>
+        <button id="ch-org" class="chan" onclick="switchTrain('org')">组织发展管理线</button>
+      </div>
+      <div id="train-sales">
+        <div id="train-sales-stages"></div>
+        <div class="coupling-box">
+          <h4>反哺客户经营飞轮</h4>
+          <p>NBS 销售训练直接提升转化、服务、续保环节的产能，是<b>展业战报</b>与家庭/养老分析的专业底座；训练效果数据回流耦合中枢，让客户经营飞轮越转越快。</p>
+          <button class="secondary" onclick="switchTab('report')">看看展业战报生成 →</button>
+        </div>
+      </div>
+      <div id="train-org" class="hidden">
+        <div id="train-org-stages"></div>
+        <div class="coupling-box">
+          <h4>反哺组织发展飞轮</h4>
+          <p>新人训练数据（打卡、通关、陪访）回流「育人模型」，优化优增画像与陪练内容，加速主管孵化与组织裂变；训练效果数据回流耦合中枢，让组织发展飞轮越转越快。</p>
+          <button class="secondary" onclick="switchTab('comp')">看看基本法测算模型 →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">底层核心方法论</div>
+      <div class="method-grid">
+        <div class="method-box">
+          <h4>NBS · 需求导向销售</h4>
+          <ul>
+            <li>以家庭财务安全为核心，非产品推销</li>
+            <li>结构化提问挖掘保障缺口</li>
+            <li>定制家庭财务解决方案</li>
+            <li>全部销售训练的统一主线</li>
+          </ul>
+        </div>
+        <div class="method-box">
+          <h4>MET 主管辅导五环</h4>
+          <ul>
+            <li>RSP 周计划检视</li>
+            <li>SID 个别发展面谈</li>
+            <li>SGD 团体发展研讨</li>
+            <li>ODC 市场陪同展业（最关键）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 底部耦合区已按双轨分别内置：销售线→展业战报，组织线→基本法测算 -->
+  </div>
+
+  <!-- 场景 1：展业战报 -->
+  <div id="scene-report" class="scene">
+    <div class="hint">
+      真实系统中，此模块将调用私有化 LLM + 保险业务数据 RAG 生成战报；本原型使用规则模板演示，用于快速验证“客户成果 → 反哺优增”的耦合价值。
+    </div>
+
+    <div class="card">
+      <div class="card-title">填写代理人本月经营数据</div>
+      <div class="form-group">
+        <label>代理人姓名</label>
+        <input id="r-name" type="text" placeholder="例如：李敏" />
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>当前职级</label>
+          <select id="r-level" onchange="applyReportPreset()">
+            <option value="试用业务员">试用业务员</option>
+            <option value="正式业务员" selected>正式业务员</option>
+            <option value="业务主任">业务主任</option>
+            <option value="营业部经理">营业部经理</option>
+            <option value="总监">总监</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>统计月份</label>
+          <input id="r-month" type="month" value="2026-07" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>本月签单数（件）</label>
+          <input id="r-signed" type="number" min="0" value="3" />
+        </div>
+        <div class="form-group">
+          <label>本月保费规模（万元）</label>
+          <input id="r-premium" type="number" min="0" step="0.1" value="4.5" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>服务客户数（人）</label>
+          <input id="r-customers" type="number" min="0" value="28" />
+        </div>
+        <div class="form-group">
+          <label>理赔协助案例数（件）</label>
+          <input id="r-claims" type="number" min="0" value="1" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>续保率（%）</label>
+          <input id="r-renewal" type="number" min="0" max="100" value="85" />
+        </div>
+        <div class="form-group">
+          <label>获得转介绍/好评数（次）</label>
+          <input id="r-referrals" type="number" min="0" value="2" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>典型客户好评或转介绍案例（可选）</label>
+        <textarea id="r-story" placeholder="例如：客户王女士因重疾险理赔顺利，主动介绍了两位朋友咨询家庭保障方案。"></textarea>
+      </div>
+      <button class="primary" onclick="generateReport()">生成展业战报</button>
+    </div>
+
+    <div id="report-output" class="hidden">
+      <div class="report-card">
+        <div class="report-header">
+          <h3 id="rh-title">展业战报</h3>
+          <span id="rh-period" class="period"></span>
+        </div>
+        <div class="metrics" id="metrics"></div>
+        <div id="narrative" class="narrative"></div>
+        <div class="highlights">
+          <h4>本月高光</h4>
+          <ul id="highlights"></ul>
+        </div>
+        <div class="highlights" style="background:#FFF8ED; border-style:dashed;">
+          <h4>下一步行动</h4>
+          <ul id="next-actions"></ul>
+        </div>
+      </div>
+
+      <div class="coupling-box">
+        <h4>反哺优增：这份战报可以传递什么信号？</h4>
+        <p id="recruit-signal"></p>
+        <ul id="recruit-bullets"></ul>
+        <button class="secondary" onclick="switchTab('recruit')">携带这份战报，去初筛一位优增候选人 →</button>
+      </div>
+      <button class="secondary" onclick="copyReportText()">复制战报文案</button>
+    </div>
+  </div>
+
+  <!-- 场景 2：家庭保障分析 -->
+  <div id="scene-family" class="scene">
+    <div class="hint">
+      真实系统中，此模块将调用私有化 LLM + 家庭/产品知识库 RAG，生成个性化保障方案；本原型使用规则计算演示，用于验证“家庭保障缺口分析 → 反哺客户经营飞轮（转化环节）”的耦合价值。
+    </div>
+
+    <div class="card">
+      <div class="card-title">填写家庭基本信息</div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>家庭年收入（万元）</label>
+          <input id="f-income" type="number" min="0" step="0.5" value="30" />
+        </div>
+        <div class="form-group">
+          <label>家庭年支出（万元）</label>
+          <input id="f-expense" type="number" min="0" step="0.5" value="15" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>家庭负债（房贷+车贷+其他，万元）</label>
+          <input id="f-debt" type="number" min="0" step="1" value="150" />
+        </div>
+        <div class="form-group">
+          <label>子女数量（未成年）</label>
+          <input id="f-kids" type="number" min="0" max="10" value="1" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>需赡养父母数量</label>
+          <input id="f-parents" type="number" min="0" max="10" value="2" />
+        </div>
+        <div class="form-group">
+          <label>经济支柱年龄</label>
+          <input id="f-life-age" type="number" min="18" max="70" value="35" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>经济支柱收入占家庭比重（%）</label>
+        <input id="f-life-share" type="number" min="0" max="100" value="100" />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">填写已有保障（保额，万元）</div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>已有寿险保额</label>
+          <input id="f-life-ins" type="number" min="0" step="1" value="0" />
+        </div>
+        <div class="form-group">
+          <label>已有重疾保额</label>
+          <input id="f-ci-ins" type="number" min="0" step="1" value="0" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>已有医疗保额（百万医疗按 200 计）</label>
+          <input id="f-med-ins" type="number" min="0" step="1" value="0" />
+        </div>
+        <div class="form-group">
+          <label>已有意外保额</label>
+          <input id="f-acc-ins" type="number" min="0" step="1" value="0" />
+        </div>
+      </div>
+      <button class="primary" onclick="evaluateFamily()">生成家庭保障分析</button>
+    </div>
+
+    <div id="family-output" class="hidden">
+      <div class="report-card">
+        <div class="report-header">
+          <h3 id="fh-title">家庭保障缺口分析</h3>
+          <span class="period">基于规则测算</span>
+        </div>
+        <div class="metrics" id="f-metrics"></div>
+        <div id="f-narrative" class="narrative"></div>
+        <div class="section-title">保障缺口明细</div>
+        <table class="gap-table" id="f-gap"></table>
+      </div>
+
+      <div class="highlights">
+        <h4>保障方案建议草稿</h4>
+        <ul id="f-plan"></ul>
+      </div>
+
+      <div class="coupling-box">
+        <h4>反哺双飞轮</h4>
+        <p id="f-flywheel"></p>
+        <ul id="f-flywheel-bullets"></ul>
+        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业战报 →</button>
+      </div>
+      <button class="secondary" onclick="copyFamilyText()">复制分析文案</button>
+    </div>
+  </div>
+
+  <!-- 场景 3：退休养老规划 -->
+  <div id="scene-retire" class="scene">
+    <div class="hint">
+      真实系统中，此模块将调用私有化 LLM + 养老/年金产品库 RAG，生成养老储备方案；本原型使用规则计算演示，用于验证“养老规划 → 反哺客户经营飞轮（中年/高客深度经营）”的耦合价值。
+    </div>
+
+    <div class="card">
+      <div class="card-title">填写养老规划基本信息</div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>当前年龄</label>
+          <input id="t-age" type="number" min="20" max="70" value="38" />
+        </div>
+        <div class="form-group">
+          <label>预计退休年龄</label>
+          <input id="t-retire" type="number" min="45" max="70" value="60" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>已有退休金/月领（元）</label>
+          <input id="t-pension" type="number" min="0" step="100" value="3000" />
+        </div>
+        <div class="form-group">
+          <label>期望退休后月生活支出（元）</label>
+          <input id="t-need" type="number" min="0" step="100" value="10000" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>当前养老储蓄/资产（万元）</label>
+          <input id="t-asset" type="number" min="0" step="1" value="40" />
+        </div>
+        <div class="form-group">
+          <label>预期投资年化收益率（%）</label>
+          <input id="t-rate" type="number" min="0" max="15" step="0.5" value="4" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>每月可投入养老储备（元）</label>
+        <input id="t-monthly" type="number" min="0" step="100" value="3000" />
+      </div>
+      <button class="primary" onclick="evaluateRetire()">生成退休养老规划</button>
+    </div>
+
+    <div id="retire-output" class="hidden">
+      <div class="report-card">
+        <div class="report-header">
+          <h3>退休养老规划分析</h3>
+          <span class="period">基于规则测算</span>
+        </div>
+        <div class="metrics" id="t-metrics"></div>
+        <div id="t-narrative" class="narrative"></div>
+        <div class="highlights">
+          <h4>规划建议</h4>
+          <ul id="t-plan"></ul>
+        </div>
+      </div>
+
+      <div class="coupling-box">
+        <h4>反哺双飞轮</h4>
+        <p id="t-flywheel"></p>
+        <ul id="t-flywheel-bullets"></ul>
+        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业战报 →</button>
+      </div>
+      <button class="secondary" onclick="copyRetireText()">复制分析文案</button>
+    </div>
+  </div>
+
+  <!-- 场景 4：优增画像初筛（五维雷达图） -->
+  <div id="scene-recruit" class="scene">
+    <div class="hint">
+      真实系统中，此模块将基于历史代理人画像与留存/产能数据训练“优增画像模型”；本原型使用规则评分演示，用于快速验证“优增优育 → 客户飞轮加速”的耦合价值。
+    </div>
+
+    <div class="card">
+      <div class="card-title">填写候选人信息</div>
+      <div class="form-group">
+        <label>候选人姓名</label>
+        <input id="c-name" type="text" placeholder="例如：张伟" />
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>年龄</label>
+          <input id="c-age" type="number" min="18" max="65" value="32" />
+        </div>
+        <div class="form-group">
+          <label>当前职业</label>
+          <select id="c-job">
+            <option value="企业白领">企业白领</option>
+            <option value="销售/市场">销售/市场</option>
+            <option value="金融从业者">金融从业者</option>
+            <option value="教培/咨询">教培/咨询</option>
+            <option value="医疗/健康">医疗/健康</option>
+            <option value="自由职业">自由职业</option>
+            <option value="企业主">企业主</option>
+            <option value="宝妈群体">宝妈群体</option>
+            <option value="50岁退休人员">50岁退休人员</option>
+            <option value="互联网行业">互联网行业</option>
+            <option value="外贸制造业">外贸制造业</option>
+            <option value="专业服务人士">专业服务人士</option>
+            <option value="青二代群体（官/创/富二代）">青二代群体（官/创/富二代）</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>学历</label>
+          <select id="c-edu">
+            <option value="大专">大专</option>
+            <option value="本科" selected>本科</option>
+            <option value="硕士及以上">硕士及以上</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>每周可投入时间（小时）</label>
+          <input id="c-hours" type="number" min="0" max="80" value="15" />
+        </div>
+      </div>
+      <div class="dim-grid" id="recruit-dim-fields"></div>
+      <div class="form-group">
+        <label>职业期望与加入动机（可选）</label>
+        <textarea id="c-goal" placeholder="例如：希望利用业余时间建立可持续收入，同时帮助身边家庭做好风险规划。"></textarea>
+      </div>
+      <button class="primary" onclick="evaluateRecruit()">生成优增画像初筛</button>
+    </div>
+
+    <div id="recruit-output" class="hidden">
+      <div class="card">
+        <div class="card-title" id="rc-title">初筛结果</div>
+        <div class="score-wrap">
+          <div class="score-number">
+            <div id="score-num" class="num">0</div>
+            <div class="txt">综合得分</div>
+          </div>
+          <div>
+            <div class="score-bar-bg"><div id="score-bar" class="score-bar-fill" style="width:0%"></div></div>
+            <div id="verdict" class="verdict"></div>
+          </div>
+        </div>
+
+        <div class="section-title">能力雷达图（8 维）</div>
+        <div class="radar-wrap" id="radar"></div>
+
+        <div class="divider"></div>
+        <div class="section-title">优势</div>
+        <div id="strengths" class="tag-list"></div>
+        <div class="section-title">风险</div>
+        <div id="risks" class="tag-list"></div>
+
+        <div class="divider"></div>
+        <div class="section-title">培育建议</div>
+        <ul id="suggestions" style="font-size:14px; padding-left:18px;"></ul>
+
+        <div class="coupling-box">
+          <h4>补强客户经营飞轮</h4>
+          <p id="flywheel-impact"></p>
+          <button class="secondary" onclick="goTrainSales()">如何用核心训练体系为优增候选人赋能 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 场景 5：基本法测算模型（重构：放大职级杠杆） -->
+  <div id="scene-comp" class="scene">
+    <div class="hint">
+      语料参考：《寿险公司代理人管理评价与公司经营目标实现——基于寿险公司“基本法”的视角》（行业研究报告；框架：业绩利益 + 组织发展利益 + 福利保障 + 新人支持 + 合规管理）。
+      本原型先用一套<b>示意性</b>逻辑演示：个人佣金率、<b>管理津贴率（组织发展利益）</b>、<b>育成津贴（间接团队计提）</b>、<b>直辖人力津贴（分级）</b>、<b>福利保障（长期服务津贴）</b>与晋升考核。<b>后期将以准确基本法替换本逻辑。</b>
+    </div>
+
+    <p class="ref-note">
+      目前我国保险代理人（包括专属代理人和中介公司代理人）对寿险业保费收入的贡献超过50%。作为各公司保险代理人管理的基本纲要，保险代理人基本管理办法（基本法）通过对保险代理人的约束与管理，对公司经营目标的实现产生重要影响。本文对26家公司的基本法内容进行拆解整合，形成包含7个一级指标，30个二级指标，76个三级指标的基本法指标体系。运用层次分析法，在对保险公司管理人员、保险代理人和消费者调查的基础上，确定了指标体系权重，形成了基本法评估框架。基于这一框架，本文聚焦寿险公司经营中重点关注的业务规模、业务稳定性和保险投诉指标，阐述了基本法指标模块与寿险公司经营指标的传导机制，帮助寿险公司基于公司发展目标形成差异化且有针对性的基本法改革思路。
+      <br><br>
+      资料出处：《保险研究》2024年第2期
+      <br>
+      全文链接：<a href="https://mp.weixin.qq.com/s/F0ZFRcGoGlxl21-y1CSt8A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/F0ZFRcGoGlxl21-y1CSt8A</a>
+    </p>
+
+    <div class="card">
+      <div class="card-title">填写代理人当前经营数据</div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>当前职级</label>
+          <select id="k-level" onchange="rerollComp()">
+            <option value="试用业务员">试用业务员</option>
+            <option value="正式业务员" selected>正式业务员</option>
+            <option value="业务主任">业务主任</option>
+            <option value="营业部经理">营业部经理</option>
+            <option value="总监">总监</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>入职月数</label>
+          <input id="k-months" type="number" min="0" max="120" value="8" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>演示数据（按职级匹配团队结构与入职月数，个人月保费恒为 3 万）</label>
+        <select id="k-demo" onchange="applyCompPreset()">
+          <option value="">— 手动调整 / 默认 —</option>
+          <option value="试用业务员">示例·试用新人</option>
+          <option value="正式业务员">示例·正式业务员</option>
+          <option value="业务主任">示例·业务主任</option>
+          <option value="营业部经理">示例·营业部经理</option>
+          <option value="总监">示例·总监</option>
+          <option value="__random__">随机重抽（当前职级）</option>
+        </select>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>个人月首年保费（万元）</label>
+          <input id="k-self" type="number" min="0" step="0.1" value="3" />
+        </div>
+        <div class="form-group">
+          <label>直辖团队月首年保费（万元）</label>
+          <input id="k-team" type="number" min="0" step="0.1" value="12" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label>直辖有效人力（人）</label>
+          <input id="k-head" type="number" min="0" max="50" value="4" />
+        </div>
+        <div class="form-group">
+          <label>育成团队月保费（万元，仅经理/总监）</label>
+          <input id="k-nurture" type="number" min="0" step="0.1" value="0" />
+        </div>
+      </div>
+      <button class="primary" onclick="evaluateComp()">生成基本法测算</button>
+    </div>
+
+    <div id="comp-output" class="hidden">
+      <div class="report-card">
+        <div class="report-header">
+          <h3 id="kc-title">基本法测算结果</h3>
+          <span class="period">示意模型</span>
+        </div>
+        <div class="metrics" id="k-metrics"></div>
+        <div class="highlights">
+          <h4>收入构成（元 / 月）</h4>
+          <ul id="k-breakdown"></ul>
+        </div>
+        <div class="highlights" style="background:#FFF8ED; border-style:dashed;">
+          <h4 id="k-promote-title">晋升进度</h4>
+          <ul id="k-promote"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">同口径对比：同样经营数据，五职级总收入</div>
+        <div class="hint" style="margin-bottom:10px;">
+          把当前填写的个人保费 / 团队 / 人力 / 育成<b>原样代入五个职级</b>，看管理利益、育成利益与福利保障如何放大职级差距。
+        </div>
+        <div id="k-compare"></div>
+        <div class="cmp-note" id="k-compare-note"></div>
+      </div>
+
+      <div class="coupling-box">
+        <h4>反哺组织发展飞轮</h4>
+        <p id="k-flywheel"></p>
+        <button class="secondary" onclick="switchTab('recruit')">带着收入预期，去初筛一位优增候选人 →</button>
+      </div>
+      <button class="secondary" onclick="copyCompText()">复制测算文案</button>
+    </div>
+  </div>
+
+  <footer>
+    保险增长飞轮智能体 <span id="ver">V8</span><br>
+    Powered By Kan Man Tang
+  </footer>
+</div>
+
+<script>
+const VERSION = 'V8';
+
+/* ===== 双飞轮耦合模型 动画 ===== */
+const SEG_LEFT  = ['获客','转化','承保服务','理赔','续保','交叉销售','转介绍'];
+const SEG_RIGHT = ['优增','优育/训练','晋升','团队扩张','产能释放','反哺获客'];
+
+function polar(cx, cy, r, deg){
+  const a = deg * Math.PI / 180;
+  return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+}
+
+function buildFlywheel(cx, cy, R, segs, ringColor, slow){
+  let s = '';
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${ringColor}" stroke-width="2" opacity="0.22"/>`;
+  s += `<circle class="fly-ring${slow ? ' slow' : ''}" cx="${cx}" cy="${cy}" r="${R-9}" fill="none" stroke="${ringColor}" stroke-width="3" stroke-dasharray="6 10" opacity="0.75"/>`;
+  const n = segs.length;
+  for (let i = 0; i < n; i++){
+    const deg = -90 + i * (360 / n);
+    const [x, y] = polar(cx, cy, R, deg);
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="#fff" stroke="${ringColor}" stroke-width="2.5"/>`;
+    const [lx, ly] = polar(cx, cy, R + 17, deg);
+    let anchor = lx < cx - 4 ? 'end' : (lx > cx + 4 ? 'start' : 'middle');
+    s += `<text class="fly-label" x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="${anchor}" font-size="12" fill="#2D2118" font-weight="600">${segs[i]}</text>`;
+  }
+  return s;
+}
+
+function renderFlywheel(){
+  const mobile = window.matchMedia && window.matchMedia('(max-width: 600px)').matches;
+  let W, H, hub, left, right, topPath, botPath, maxw, R, hubR, hubT, hubS;
+  if (mobile){
+    /* 手机端：双飞轮上下堆叠（客户经营在上，组织发展在下），耦合中枢居中，免横向滑动 */
+    W = 360; H = 680;
+    hub  = [180, 330];
+    left = [180, 115];   // 客户经营（上方）
+    right= [180, 545];   // 组织发展（下方）
+    topPath = "M233,168 C300,250 300,410 233,492";
+    botPath = "M127,492 C60,410 60,250 127,168";
+    maxw = 360; R = 75; hubR = 36; hubT = 12; hubS = 10;
+  } else {
+    /* 桌面 / 平板：双飞轮左右并排，耦合中枢居中 */
+    W = 760; H = 440;
+    hub  = [380, 215];
+    left = [165, 215];
+    right= [595, 215];
+    topPath = "M255,188 C320,135 440,135 505,188";
+    botPath = "M505,242 C440,295 320,295 255,242";
+    maxw = 680; R = 82; hubR = 40; hubT = 13; hubS = 11;
+  }
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${maxw}px;display:block;margin:0 auto;" role="img" aria-label="双飞轮耦合模型动画">`;
+  svg += `<defs>
+    <marker id="arrowR" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#C4956A"/></marker>
+    <marker id="arrowL" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6B8E5A"/></marker>
+  </defs>`;
+
+  // 耦合双向路径
+  svg += `<path d="${topPath}" fill="none" stroke="#C4956A" stroke-width="2.5" opacity="0.55" marker-end="url(#arrowR)"/>`;
+  svg += `<path d="${botPath}" fill="none" stroke="#6B8E5A" stroke-width="2.5" opacity="0.55" marker-end="url(#arrowL)"/>`;
+
+  // 飞轮
+  svg += buildFlywheel(left[0], left[1], R, SEG_LEFT, '#C4956A', false);
+  svg += buildFlywheel(right[0], right[1], R, SEG_RIGHT, '#6B8E5A', true);
+
+  // 飞轮中心标题
+  svg += `<text class="fly-label" x="${left[0]}" y="${left[1]-2}" text-anchor="middle" font-size="13" fill="#2D2118" font-weight="700">客户经营</text>`;
+  svg += `<text class="fly-label" x="${left[0]}" y="${left[1]+14}" text-anchor="middle" font-size="11" fill="#8C7B6B">飞轮</text>`;
+  svg += `<text class="fly-label" x="${right[0]}" y="${right[1]-2}" text-anchor="middle" font-size="13" fill="#2D2118" font-weight="700">组织发展</text>`;
+  svg += `<text class="fly-label" x="${right[0]}" y="${right[1]+14}" text-anchor="middle" font-size="11" fill="#8C7B6B">飞轮</text>`;
+
+  // 耦合中枢
+  svg += `<circle cx="${hub[0]}" cy="${hub[1]}" r="${hubR}" fill="#2D2118"/>`;
+  svg += `<circle cx="${hub[0]}" cy="${hub[1]}" r="${hubR}" fill="none" stroke="#C4956A" stroke-width="2"/>`;
+  svg += `<text class="fly-label" x="${hub[0]}" y="${hub[1]-4}" text-anchor="middle" font-size="${hubT}" fill="#F5F0E8" font-weight="700">AI 智能体</text>`;
+  svg += `<text class="fly-label" x="${hub[0]}" y="${hub[1]+14}" text-anchor="middle" font-size="${hubS}" fill="#C4956A">耦合中枢</text>`;
+
+  // 数据流标签
+  if (mobile){
+    svg += `<text class="fly-label" x="180" y="250" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 优增吸引力素材</text>`;
+    svg += `<text class="fly-label" x="180" y="410" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">合格人力 / 话术知识 → 客户飞轮加速</text>`;
+  } else {
+    svg += `<text class="fly-label" x="380" y="120" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 优增吸引力素材</text>`;
+    svg += `<text class="fly-label" x="380" y="350" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">合格人力 / 话术知识 → 客户飞轮加速</text>`;
+  }
+
+  // 数据包（双向流动）
+  svg += `<circle r="5.5" fill="#C4956A"><animateMotion dur="4s" repeatCount="indefinite" path="${topPath}"/></circle>`;
+  svg += `<circle r="5.5" fill="#C4956A"><animateMotion dur="4s" begin="2s" repeatCount="indefinite" path="${topPath}"/></circle>`;
+  svg += `<circle r="5.5" fill="#6B8E5A"><animateMotion dur="4s" repeatCount="indefinite" path="${botPath}"/></circle>`;
+  svg += `<circle r="5.5" fill="#6B8E5A"><animateMotion dur="4s" begin="2s" repeatCount="indefinite" path="${botPath}"/></circle>`;
+
+  svg += `</svg>`;
+  document.getElementById('flywheel-svg').innerHTML = svg;
+  window.__flyMobile = mobile;
+}
+
+/* ===== 核心训练体系（双轨成长地图） ===== */
+const TRAIN = {
+  sales: [
+    { stage:'新人孵化层（0–12 个月）', period:'筑基期', programs:['寿险规划师基础训练营（≥160h 通关制式培训）','SSR2.0 星耀人才计划（48 个月全周期）','新人 90 天落地行动方案（MET 五环陪访）'], focus:'NBS 销售全流程标准化、角色扮演与话术通关、养成持续开拓面谈习惯' },
+    { stage:'成长寿险规划师（1–3 年）', period:'能力放大期', programs:['进阶 NBS 深度运用','多子女 / 单亲 / 中小企业主差异化方案','转介绍系统经营与圈层运营','家庭资产视角保障规划'], focus:'提升件均、客户经营能力、长期保单检视服务体系' },
+    { stage:'高阶绩优 / MDRT 菁英（3 年+）', period:'精英路线', programs:['财富管理专项培训（终身寿 / 年金 / 传承 / 家办）','MDRT 全人理念研修','EX2000 / 北斗计划','个人品牌与高端沙龙'], focus:'高净值客户经营、个人品牌、持续高产能' },
+  ],
+  org: [
+    { stage:'储备主管（育龙计划）', period:'准主管', programs:['七步甄选招募流程','事业说明会运作','MET 五环初步（ODC 陪访）','个人时间管理'], focus:'组织发展认知、选才与招募面谈、新人吸引' },
+    { stage:'业务经理 SM（腾龙计划）', period:'团队初创', programs:['MET 五环完整落地（RSP/SID/SGD/ODC）','新人留存体系搭建','早会运作与目标拆解','招募持续化'], focus:'主管第一阶段管理能力、团队日常经营、销售品质管控' },
+    { stage:'营业处经理 AM（潜龙计划）', period:'成熟主管', programs:['搭建训练系统 / 培育内部讲师','组织发展战略与人才梯队','经营数据分析（访量 / 转化 / 留存 / 人均产能）','教练领导力'], focus:'从亲自辅导升级为培育新主管（培养能培养人的人）' },
+    { stage:'营业总监 AD（飞龙计划）', period:'高阶管理', programs:['长期组织战略规划','大区人才布局','高阶领导力与传承机制','组织健康度管理'], focus:'企业家视角组织经营、可持续内生增长' },
+  ]
+};
+
+function stageHTML(s){
+  return `<div class="track-stage">
+    <div class="st">${s.stage}</div>
+    <div class="pe">${s.period}</div>
+    <ul>${s.programs.map(p=>`<li>${p}</li>`).join('')}</ul>
+    <div class="fo"><b>训练重点：</b>${s.focus}</div>
+  </div>`;
+}
+
+function renderTrain(){
+  document.getElementById('train-sales-stages').innerHTML = TRAIN.sales.map(stageHTML).join('');
+  document.getElementById('train-org-stages').innerHTML = TRAIN.org.map(stageHTML).join('');
+}
+
+function switchTrain(track){
+  document.getElementById('ch-sales').classList.toggle('active', track === 'sales');
+  document.getElementById('ch-org').classList.toggle('active', track === 'org');
+  document.getElementById('train-sales').classList.toggle('hidden', track !== 'sales');
+  document.getElementById('train-org').classList.toggle('hidden', track !== 'org');
+}
+
+/* ===== Tab 切换（按 data-tab 高亮，与调用者无关，底部跳转链接也能正确高亮） ===== */
+let currentTrainTrack = 'sales';
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.getAttribute('data-tab') === name) t.classList.add('active');
+    else t.classList.remove('active');
+  });
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  const scene = document.getElementById('scene-' + name);
+  if (scene) scene.classList.add('active');
+  if (name === 'train') switchTrain(currentTrainTrack);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goTrainSales(){
+  currentTrainTrack = 'sales';
+  switchTab('train');
+}
+
+function val(id){ return document.getElementById(id).value; }
+function num(id){ return parseFloat(document.getElementById(id).value) || 0; }
+function fmtYuan(n){ return Math.round(n).toLocaleString('zh-CN'); }
+
+/* ===== 场景 1：展业战报 ===== */
+const REPORT_PRESETS = {
+  '试用业务员':   {signed:1,  premium:1.5,  customers:12,  claims:0, renewal:70, referrals:0},
+  '正式业务员':   {signed:3,  premium:4.5,  customers:28,  claims:1, renewal:85, referrals:2},
+  '业务主任':     {signed:6,  premium:9,    customers:55,  claims:2, renewal:88, referrals:4},
+  '营业部经理':   {signed:10, premium:18,   customers:120, claims:4, renewal:90, referrals:8},
+  '总监':         {signed:15, premium:35,   customers:250, claims:8, renewal:92, referrals:15}
+};
+function applyReportPreset(){
+  const p = REPORT_PRESETS[val('r-level')];
+  if (!p) return;
+  document.getElementById('r-signed').value    = p.signed;
+  document.getElementById('r-premium').value   = p.premium;
+  document.getElementById('r-customers').value = p.customers;
+  document.getElementById('r-claims').value    = p.claims;
+  document.getElementById('r-renewal').value   = p.renewal;
+  document.getElementById('r-referrals').value = p.referrals;
+}
+function generateReport(){
+  const name = val('r-name') || '代理人';
+  const level = val('r-level');
+  const month = val('r-month') || '2026-07';
+  const signed = num('r-signed');
+  const premium = num('r-premium');
+  const customers = num('r-customers');
+  const claims = num('r-claims');
+  const renewal = num('r-renewal');
+  const referrals = num('r-referrals');
+  const story = val('r-story').trim();
+
+  document.getElementById('rh-title').textContent = name + ' 的展业战报';
+  document.getElementById('rh-period').textContent = month.replace('-','年') + '月';
+
+  const metrics = [
+    {v: signed, l: '签单数（件）'},
+    {v: premium.toFixed(1), l: '保费规模（万）'},
+    {v: customers, l: '服务客户（人）'},
+    {v: claims, l: '理赔协助（件）'},
+    {v: renewal + '%', l: '续保率'},
+    {v: referrals, l: '转介绍/好评（次）'},
+  ];
+  document.getElementById('metrics').innerHTML = metrics.map(m =>
+    `<div class="metric"><div class="metric-value">${m.v}</div><div class="metric-label">${m.l}</div></div>`
+  ).join('');
+
+  let paras = [];
+  paras.push(`${name} 作为${level}，在 ${month.replace('-','年') + '月'} 持续经营客户，累计服务 ${customers} 位客户，${signed > 0 ? `完成签单 ${signed} 件、保费规模 ${premium} 万元` : '以服务和客户经营为主'}。`);
+  if (claims > 0) {
+    paras.push(`在理赔服务方面，本月协助 ${claims} 位客户完成理赔，体现了保险代理人的核心温度——客户最需要的时刻，我们站在身边。`);
+  }
+  if (renewal >= 80) {
+    paras.push(`续保率达到 ${renewal}%，说明客户对服务长期认可，信任关系正在沉淀为持续经营的资产。`);
+  } else if (renewal > 0) {
+    paras.push(`续保率为 ${renewal}%，后续可通过持续服务和保单整理进一步提升客户黏性。`);
+  }
+  if (referrals > 0) {
+    paras.push(`获得 ${referrals} 次客户转介绍或好评，说明服务口碑正在扩散，这是客户经营飞轮加速的明显信号。`);
+  }
+  if (story) {
+    paras.push(`客户案例：${story}`);
+  }
+  paras.push(`下一步，建议继续深耕家庭保障与养老规划需求，把单次成交转化为长期服务关系，让客户经营与组织发展（优增优育）两架飞轮相互加速。`);
+  document.getElementById('narrative').innerHTML = paras.map(p => `<p>${p}</p>`).join('');
+
+  const highlights = [];
+  if (premium >= 5) highlights.push(`保费规模突破 ${premium} 万元，展现较强的方案设计与成交能力。`);
+  if (customers >= 20) highlights.push(`服务客户 ${customers} 人，客户池正在稳步扩大。`);
+  if (claims >= 1) highlights.push(`理赔协助 ${claims} 件，体现“服务即营销”的长期主义。`);
+  if (renewal >= 85) highlights.push(`续保率 ${renewal}%，客户信任度良好。`);
+  if (referrals >= 1) highlights.push(`客户转介绍/好评 ${referrals} 次，口碑开始裂变。`);
+  if (highlights.length === 0) highlights.push('本月持续经营客户，保持活动量，建议继续沉淀。');
+  document.getElementById('highlights').innerHTML = highlights.map(h => `<li>${h}</li>`).join('');
+
+  const actions = [];
+  if (customers >= 20 && premium < 5) actions.push('针对存量客户做家庭保障缺口与养老规划分析，提升件均保费。');
+  if (renewal < 80) actions.push('对续保率偏低的客户进行保单年检，主动提醒续期。');
+  if (referrals < 1) actions.push('向满意客户发出“保障体验官”邀请，启动转介绍。');
+  if (claims >= 1) actions.push('把理赔服务案例整理成客户可感知的“守护故事”，用于客户教育与优增展示。');
+  actions.push('把本月战报同步到优增场景，让潜在候选人看到真实成长轨迹。');
+  document.getElementById('next-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
+
+  document.getElementById('recruit-signal').textContent =
+    `${name} 的这份战报，正是向优增候选人展示“这份工作真实长什么样”的最佳素材：不是空喊收入，而是服务客户的真实记录、理赔陪伴的真实价值、续保与转介绍的真实反馈。`;
+  const rb = [];
+  if (customers >= 15) rb.push(`单月服务客户 ${customers} 人，证明这份工作每天都在产生真实社会价值。`);
+  if (claims >= 1) rb.push(`理赔协助 ${claims} 件，体现“雪中送炭”的职业意义。`);
+  if (renewal >= 80) rb.push(`续保率 ${renewal}%，说明客户愿意长期托付。`);
+  if (premium > 0) rb.push(`保费规模 ${premium} 万，业务成果可量化。`);
+  document.getElementById('recruit-bullets').innerHTML = rb.map(b => `<li>${b}</li>`).join('');
+
+  document.getElementById('report-output').classList.remove('hidden');
+}
+
+function copyReportText(){
+  const text = document.getElementById('narrative').innerText + '\n\n' + document.getElementById('highlights').innerText + '\n\n' + document.getElementById('next-actions').innerText;
+  navigator.clipboard.writeText(text).then(() => alert('战报文案已复制'));
+}
+
+/* ===== 场景 2：家庭保障分析 ===== */
+function evaluateFamily(){
+  const income = num('f-income');
+  const expense = num('f-expense');
+  const debt = num('f-debt');
+  const kids = num('f-kids');
+  const parents = num('f-parents');
+  const lifeAge = num('f-life-age');
+  const lifeShare = num('f-life-share') / 100;
+
+  const lifeIns = num('f-life-ins');
+  const ciIns = num('f-ci-ins');
+  const medIns = num('f-med-ins');
+  const accIns = num('f-acc-ins');
+
+  const eduReserve = kids * 30;
+  const transition = expense * 10;
+  const lifeNeed = debt + eduReserve + transition;
+  const lifeGap = Math.max(0, lifeNeed - lifeIns);
+
+  const ciNeed = 50 + income * lifeShare * 2;
+  const ciGap = Math.max(0, ciNeed - ciIns);
+
+  const accNeed = income * lifeShare * 3;
+  const accGap = Math.max(0, accNeed - accIns);
+
+  const medCovered = medIns >= 200;
+
+  const metrics = [
+    {v: lifeGap.toFixed(0), l: '寿险缺口（万）'},
+    {v: ciGap.toFixed(0), l: '重疾缺口（万）'},
+    {v: accGap.toFixed(0), l: '意外缺口（万）'},
+    {v: medCovered ? '已覆盖' : '建议补', l: '医疗（百万医疗）'},
+  ];
+  document.getElementById('f-metrics').innerHTML = metrics.map(m =>
+    `<div class="metric"><div class="metric-value">${m.v}</div><div class="metric-label">${m.l}</div></div>`
+  ).join('');
+
+  const totalGap = lifeGap + ciGap + accGap;
+  let para = `这是一个 ${kids > 0 ? kids + ' 名未成年子女、' : ''}${parents > 0 ? parents + ' 位需赡养父母、' : ''}经济支柱 ${lifeAge} 岁的家庭，家庭年收入约 ${income} 万元、年支出约 ${expense} 万元、负债约 ${debt} 万元。`;
+  para += `按家庭责任法测算，家庭整体保障缺口约 <b>${totalGap.toFixed(0)} 万元</b>（不含医疗补充），其中寿险是核心责任载体，重疾与意外次之。`;
+  if (lifeGap > 0) para += `寿险缺口主要来自家庭负债与责任过渡期的收入替代需求；`;
+  if (ciGap > 0) para += `重疾缺口来自治疗康复费用与收入中断损失；`;
+  if (!medCovered) para += `医疗方面建议补充一份百万医疗，覆盖大额住院风险。`;
+  document.getElementById('f-narrative').innerHTML = `<p>${para}</p>`;
+
+  const rows = [
+    ['寿险', lifeNeed.toFixed(0), lifeIns.toFixed(0), lifeGap, '家庭负债 + 子女教育 + 责任过渡期收入替代'],
+    ['重疾', ciNeed.toFixed(0), ciIns.toFixed(0), ciGap, '治疗康复(约50万) + 收入中断损失'],
+    ['意外', accNeed.toFixed(0), accIns.toFixed(0), accGap, '支柱年收入 × 3 的意外保障'],
+    ['医疗', medCovered ? '已覆盖' : '建议补', medIns.toFixed(0), medCovered ? 0 : 1, '百万医疗（报销型，不限病种）'],
+  ];
+  let html = `<tr><th>险种</th><th>建议保额</th><th>已有保额</th><th>缺口</th><th>测算依据</th></tr>`;
+  rows.forEach(r => {
+    let gapCell;
+    if (r[0] === '医疗') {
+      gapCell = r[3] === 0 ? '<span class="gap-zero">已覆盖</span>' : '<span class="gap-pos">建议补充</span>';
+    } else {
+      gapCell = r[3] > 0 ? `<span class="gap-pos">${r[3].toFixed(0)} 万</span>` : '<span class="gap-zero">充足</span>';
+    }
+    html += `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${gapCell}</td><td style="font-size:12px;color:#8C7B6B">${r[4]}</td></tr>`;
+  });
+  document.getElementById('f-gap').innerHTML = html;
+
+  const plan = [];
+  if (lifeGap > 0) plan.push(`寿险：优先补足 <b>${lifeGap.toFixed(0)} 万</b>，建议定期寿险（杠杆高、成本低），覆盖负债与责任期。`);
+  if (ciGap > 0) plan.push(`重疾险：补足 <b>${ciGap.toFixed(0)} 万</b>，建议保至 70 岁或终身，覆盖治疗与收入损失。`);
+  if (accGap > 0) plan.push(`意外险：补足 <b>${accGap.toFixed(0)} 万</b>，年缴低、杠杆高，建议含意外医疗。`);
+  if (!medCovered) plan.push(`百万医疗：补充一份，年缴数百元即可获数百万住院报销额度。`);
+  if (totalGap <= 0) plan.push('当前保额基本充足，建议定期做保单年检与受益人核对。');
+  plan.push('建议按「寿险 → 重疾 → 医疗 → 意外」顺序配置，先覆盖身故与大病两类极端风险。');
+  document.getElementById('f-plan').innerHTML = plan.map(p => `<li>${p}</li>`).join('');
+
+  document.getElementById('f-flywheel').textContent =
+    '一次专业的家庭保障分析，同时滋养两架飞轮：在客户经营飞轮里，它是「转化」环节最有力的需求洞察工具，把模糊的“想买点保险”变成可量化的保障方案；在组织发展飞轮里，它又是代理人专业度的直观证明，是最容易打动候选人的“优增素材”。';
+  const fb = [];
+  if (lifeGap > 0 || ciGap > 0) fb.push('用缺口数据触发客户紧迫感，提升转化与件均保费（客户经营飞轮）。');
+  fb.push('把分析过程整理成案例，作为新人陪练与优增展示素材（组织发展飞轮）。');
+  fb.push('分析结果回流 AI 智能体，持续优化缺口测算与方案推荐（耦合中枢迭代）。');
+  document.getElementById('f-flywheel-bullets').innerHTML = fb.map(b => `<li>${b}</li>`).join('');
+
+  document.getElementById('family-output').classList.remove('hidden');
+}
+
+function copyFamilyText(){
+  const text = document.getElementById('f-narrative').innerText + '\n\n' + document.getElementById('f-gap').innerText + '\n\n' + document.getElementById('f-plan').innerText;
+  navigator.clipboard.writeText(text).then(() => alert('分析文案已复制'));
+}
+
+/* ===== 场景 3：退休养老规划 ===== */
+function evaluateRetire(){
+  const age = num('t-age');
+  const retire = num('t-retire');
+  const pension = num('t-pension');
+  const need = num('t-need');
+  const asset = num('t-asset');
+  const rate = num('t-rate') / 100;
+  const monthly = num('t-monthly');
+
+  const nYears = Math.max(1, retire - age);
+  const retYears = Math.max(1, 90 - retire);          // 预期退休生活年限（按 90 岁预期寿命）
+  const monthlyGap = Math.max(0, need - pension);     // 退休后每月缺口（元）
+  const needTotal = monthlyGap * 12 * retYears;        // 退休时点需储备总额（元，名义值）
+
+  // 当前资产到退休时点的终值
+  const fvCurrent = asset * 10000 * Math.pow(1 + rate, nYears);
+
+  // 每月定投的年金终值系数
+  const rm = rate / 12;
+  const months = nYears * 12;
+  const fvifa = rm > 0 ? ((Math.pow(1 + rm, months) - 1) / rm) : months;
+  const fvMonthly = monthly * fvifa;
+
+  const totalFv = fvCurrent + fvMonthly;
+  const shortfall = Math.max(0, needTotal - totalFv);
+  const monthlyNeed = rm > 0 ? shortfall / fvifa : (needTotal - fvCurrent) / months;
+  const monthlyNeedRounded = Math.max(0, monthlyNeed);
+
+  const metrics = [
+    {v: fmtYuan(monthlyGap), l: '退休后月缺口（元）'},
+    {v: (needTotal/10000).toFixed(0), l: '退休需储备（万）'},
+    {v: (fvCurrent/10000).toFixed(0), l: '现有资产增值后（万）'},
+    {v: fmtYuan(monthlyNeedRounded), l: '每月应储备（元）'},
+  ];
+  document.getElementById('t-metrics').innerHTML = metrics.map(m =>
+    `<div class="metric"><div class="metric-value">${m.v}</div><div class="metric-label">${m.l}</div></div>`
+  ).join('');
+
+  let para = `当前 ${age} 岁，计划 ${retire} 岁退休，退休后生活约 ${retYears} 年。已有退休金约 ${fmtYuan(pension)} 元/月，期望生活支出 ${fmtYuan(need)} 元/月，每月缺口约 <b>${fmtYuan(monthlyGap)} 元</b>。`;
+  para += `按当前资产 ${asset} 万元、年化 ${ (rate*100).toFixed(1) }% 测算，退休时点需储备约 <b>${(needTotal/10000).toFixed(0)} 万元</b>（名义值，未计通胀）。`;
+  if (monthly >= monthlyNeedRounded) {
+    para += `若每月坚持投入 ${fmtYuan(monthly)} 元，已能覆盖目标，储备充足。`;
+  } else {
+    para += `按当前每月 ${fmtYuan(monthly)} 元投入，距离目标还差约每月 ${fmtYuan(monthlyNeedRounded - monthly)} 元，需适当提升储备力度。`;
+  }
+  document.getElementById('t-narrative').innerHTML = `<p>${para}</p>`;
+
+  const plan = [];
+  if (monthlyGap <= 0) plan.push('现有退休金已覆盖期望支出，重点做好资产保值与通胀对冲即可。');
+  else {
+    plan.push(`补足月缺口 ${fmtYuan(monthlyGap)} 元：优先用年金/增额寿锁定长期现金流，再用固收类资产做灵活补充。`);
+    if (monthly < monthlyNeedRounded) plan.push(`把每月养老储备从 ${fmtYuan(monthly)} 元提升至约 ${fmtYuan(monthlyNeedRounded)} 元，或延长缴费年限/提高收益假设。`);
+    plan.push('建议采用「社保/年金打底 + 商业养老年金 + 稳健投资」三层结构，兼顾确定性与增值。');
+  }
+  plan.push('每 1–2 年复盘一次：收入、支出、收益与预期寿命变化都可能影响目标。');
+  document.getElementById('t-plan').innerHTML = plan.map(p => `<li>${p}</li>`).join('');
+
+  document.getElementById('t-flywheel').textContent =
+    '养老规划是中年与高净值客群的核心痛点，也是客户经营飞轮里「深度经营 + 交叉销售」的高价值入口；同时，一份专业养老测算本身就是代理人专业度的有力证明，是组织发展飞轮里极佳的优增展示素材。';
+  const fb = [];
+  fb.push('用养老缺口触发客户长期规划意识，拉动年金/增额寿等储蓄型产品（客户经营飞轮）。');
+  fb.push('将养老测算案例用于新人陪练与优增面谈，展示职业价值（组织发展飞轮）。');
+  fb.push('测算数据回流 AI 智能体，持续优化养老方案与产品推荐（耦合中枢迭代）。');
+  document.getElementById('t-flywheel-bullets').innerHTML = fb.map(b => `<li>${b}</li>`).join('');
+
+  document.getElementById('retire-output').classList.remove('hidden');
+}
+
+function copyRetireText(){
+  const text = document.getElementById('t-narrative').innerText + '\n\n' + document.getElementById('t-plan').innerText;
+  navigator.clipboard.writeText(text).then(() => alert('分析文案已复制'));
+}
+
+/* ===== 场景 4：优增画像初筛（雷达图） ===== */
+function buildRadar(values, labels){
+  const cx = 170, cy = 140, R = 95;
+  const n = labels.length;
+  const ang = i => (-90 + i * 360 / n) * Math.PI / 180;
+  let s = `<svg viewBox="0 0 340 280" width="100%" style="max-width:340px;display:block;margin:0 auto;" role="img" aria-label="能力雷达图（8 维）">`;
+  [0.25, 0.5, 0.75, 1].forEach(level => {
+    let pts = [];
+    for (let i = 0; i < n; i++){ const a = ang(i); pts.push((cx + R*level*Math.cos(a)).toFixed(1) + ',' + (cy + R*level*Math.sin(a)).toFixed(1)); }
+    s += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E8DCC8" stroke-width="1"/>`;
+  });
+  for (let i = 0; i < n; i++){
+    const a = ang(i);
+    s += `<line x1="${cx}" y1="${cy}" x2="${(cx + R*Math.cos(a)).toFixed(1)}" y2="${(cy + R*Math.sin(a)).toFixed(1)}" stroke="#E8DCC8" stroke-width="1"/>`;
+  }
+  let dpts = [];
+  for (let i = 0; i < n; i++){
+    const a = ang(i);
+    const v = Math.max(0, Math.min(100, values[i])) / 100;
+    dpts.push((cx + R*v*Math.cos(a)).toFixed(1) + ',' + (cy + R*v*Math.sin(a)).toFixed(1));
+  }
+  s += `<polygon points="${dpts.join(' ')}" fill="#C4956A" fill-opacity="0.35" stroke="#C4956A" stroke-width="2"/>`;
+  for (let i = 0; i < n; i++){
+    const a = ang(i);
+    const v = Math.max(0, Math.min(100, values[i])) / 100;
+    s += `<circle cx="${(cx + R*v*Math.cos(a)).toFixed(1)}" cy="${(cy + R*v*Math.sin(a)).toFixed(1)}" r="3" fill="#C4956A"/>`;
+  }
+  for (let i = 0; i < n; i++){
+    const a = ang(i);
+    const lx = cx + (R + 22) * Math.cos(a);
+    const ly = cy + (R + 22) * Math.sin(a);
+    const anchor = lx < cx - 4 ? 'end' : (lx > cx + 4 ? 'start' : 'middle');
+    s += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="${anchor}" font-size="12" fill="#2D2118" font-weight="600">${labels[i]}</text>`;
+  }
+  s += `</svg>`;
+  return s;
+}
+
+const RECRUIT_DIMS = [
+  {id:'d-industry',   label:'行业认知', type:'rating'},
+  {id:'d-comm',       label:'沟通能力', type:'rating'},
+  {id:'d-learn',      label:'学习能力', type:'rating'},
+  {id:'d-resilience', label:'抗压能力', type:'rating'},
+  {id:'d-network',    label:'人脉资源', type:'rating'},
+  {id:'d-goal',       label:'目标感',   type:'rating'},
+  {id:'d-selfDrive',  label:'自驱力',   type:'rating'},
+  {id:'d-willing',    label:'意愿度',   type:'rating'},
+  {id:'d-exp',        label:'销售/培训经验', type:'exp'}
+];
+
+function ratingOptions(){
+  let o = '';
+  for (let i = 1; i <= 5; i++) o += `<option ${i === 4 ? 'selected' : ''}>${i}</option>`;
+  return o;
+}
+
+function renderRecruitForm(){
+  let h = '';
+  RECRUIT_DIMS.forEach(d => {
+    if (d.type === 'rating'){
+      h += `<div class="form-group"><label>${d.label}（1-5）</label><select id="${d.id}">${ratingOptions()}</select></div>`;
+    } else {
+      h += `<div class="form-group"><label>${d.label}</label><select id="${d.id}"><option value="yes" selected>有</option><option value="no">无</option></select></div>`;
+    }
+  });
+  document.getElementById('recruit-dim-fields').innerHTML = h;
+}
+
+function evaluateRecruit(){
+  const name = val('c-name') || '候选人';
+  const age = num('c-age');
+  const job = val('c-job');
+  const edu = val('c-edu');
+  const hours = num('c-hours');
+  const goal = val('c-goal').trim();
+
+  // 八维自评（1-5）+ 销售经验（有/无）+ 时间投入（由每周小时数折算）
+  const d = {
+    network:    num('d-network'),
+    industry:   num('d-industry'),
+    comm:       num('d-comm'),
+    learn:      num('d-learn'),
+    resilience: num('d-resilience'),
+    goal:       num('d-goal'),
+    willing:    num('d-willing'),
+    selfDrive:  num('d-selfDrive')
+  };
+  const exp = val('d-exp') === 'yes';
+
+  let hourScore = 30;
+  if (hours >= 20) hourScore = 100;
+  else if (hours >= 15) hourScore = 80;
+  else if (hours >= 10) hourScore = 60;
+  else if (hours >= 5) hourScore = 40;
+
+  // 重新设计的加权打分规则（权重之和 = 1.00）
+  const W = {network:0.12, industry:0.10, comm:0.12, learn:0.10, resilience:0.10,
+             goal:0.08, willing:0.12, selfDrive:0.06, exp:0.12, time:0.08};
+  const expScore = exp ? 100 : 40;
+  let score = 0;
+  for (const k in d) score += d[k] * 20 * W[k];   // 1-5 → 0-100
+  score += expScore * W.exp;
+  score += hourScore * W.time;
+
+  let bonus = 0;
+  if (age >= 25 && age <= 40) bonus += 3;
+  else if (age >= 41 && age <= 50) bonus += 1;
+  if (edu === '硕士及以上') bonus += 1;
+  else if (edu === '大专') bonus -= 1;
+  score = Math.max(0, Math.min(100, score + bonus));
+  score = Math.round(score);
+
+  let verdict, vcls;
+  if (score >= 80) { verdict = '高潜力：建议优先面谈'; vcls = 'high'; }
+  else if (score >= 60) { verdict = '待观察：建议进一步了解动机'; vcls = 'medium'; }
+  else { verdict = '不建议：当前匹配度偏低'; vcls = 'low'; }
+
+  document.getElementById('rc-title').textContent = name + ' 的优增画像初筛';
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-bar').style.width = score + '%';
+  const vd = document.getElementById('verdict');
+  vd.textContent = verdict;
+  vd.className = 'verdict ' + vcls;
+
+  // 能力雷达：严格按用户指定顺序（8 维）—— 行业认知、沟通能力、学习能力、抗压能力、人脉资源、目标感、自驱力、意愿度
+  const dims8 = RECRUIT_DIMS.filter(x => x.type === 'rating');
+  const radarLabels = dims8.map(x => x.label);
+  const radarValues = dims8.map(x => num(x.id) * 20);
+  document.getElementById('radar').innerHTML = buildRadar(radarValues, radarLabels);
+
+  const strengths = [];
+  if (d.network >= 4) strengths.push('人脉资源较广');
+  if (d.industry >= 4) strengths.push('行业认知清晰');
+  if (d.comm >= 4) strengths.push('沟通能力强');
+  if (d.learn >= 4) strengths.push('学习能力强');
+  if (d.resilience >= 4) strengths.push('抗压能力好');
+  if (d.goal >= 4) strengths.push('目标感明确');
+  if (d.willing >= 4) strengths.push('加入意愿度高');
+  if (d.selfDrive >= 4) strengths.push('自驱力强');
+  if (exp) strengths.push('有销售/培训经验');
+  if (hours >= 20) strengths.push('时间投入充足');
+  if (age >= 25 && age <= 40) strengths.push('年龄处于黄金职业期');
+  if (job === '销售/市场' || job === '金融从业者' || job === '教培/咨询' || job === '专业服务人士' || job === '互联网行业') strengths.push('职业背景与保险/客户场景相关');
+  if (job === '企业主') strengths.push('企业主：客群与资源基础好，支付能力较强');
+  if (job === '外贸制造业') strengths.push('外贸制造业：常接触企业主客群，增员与展业双机会');
+  if (job === '青二代群体（官/创/富二代）') strengths.push('青二代：家庭资源与圈层优势明显');
+  if (strengths.length === 0) strengths.push('基础条件可培养');
+
+  const risks = [];
+  if (hours < 10) risks.push('可投入时间偏少');
+  if (!exp) risks.push('缺乏销售/培训经验');
+  if (d.network <= 2) risks.push('人脉基础较弱');
+  if (d.industry <= 2) risks.push('行业认知待补强');
+  if (d.comm <= 2) risks.push('沟通能力待提升');
+  if (d.resilience <= 2) risks.push('抗压能力偏弱');
+  if (d.goal <= 2) risks.push('目标感不足');
+  if (d.willing <= 2) risks.push('加入意愿度偏低');
+  if (age < 25 || age > 50) risks.push('年龄与主流优增画像偏差');
+  if (job === '宝妈群体') risks.push('宝妈群体：可投入时间需结合家庭安排确认');
+  if (job === '50岁退休人员') risks.push('50岁退休人员：年龄偏大，需关注精力与展业节奏');
+  if (risks.length === 0) risks.push('暂无显著风险，需面谈验证真实性');
+
+  document.getElementById('strengths').innerHTML = strengths.map(s => `<span class="tag">${s}</span>`).join('');
+  document.getElementById('risks').innerHTML = risks.map(s => `<span class="tag">${s}</span>`).join('');
+
+  const suggestions = [];
+  if (!exp) suggestions.push('安排 AI 陪练与话术演练，弥补销售经验短板。');
+  if (d.network <= 2) suggestions.push('先从“缘故市场”认知与朋友圈经营入手，小步建立信任。');
+  if (hours < 15) suggestions.push('明确每周可投入时段，避免兼职与主职冲突导致脱落。');
+  if (d.industry <= 2) suggestions.push('补强保险与家庭财务基础知识，建立专业底气。');
+  if (d.comm <= 2) suggestions.push('通过角色扮演与主管陪访，提升需求沟通与倾听能力。');
+  if (d.resilience <= 2) suggestions.push('设置小目标与及时反馈，增强抗压与持续活动量。');
+  if (d.goal >= 4 || d.willing >= 4) suggestions.push('利用目标感/意愿度优势，设置 90 天新人产能冲刺目标。');
+  if (d.learn >= 4 || d.selfDrive >= 4) suggestions.push('进入进阶班，学习家庭保障缺口与养老规划分析、合规话术。');
+  suggestions.push('建议主管面谈时重点验证：加入动机、家庭支持度、能否接受 3-6 个月成长期。');
+  document.getElementById('suggestions').innerHTML = suggestions.map(s => `<li>${s}</li>`).join('');
+
+  let impact = '';
+  if (score >= 80) impact = `${name} 的综合条件较优，预计可在 3-6 个月内形成有效客户触点，直接为客户经营飞轮带来增量覆盖。建议作为“优增重点苗子”投入培育资源。`;
+  else if (score >= 60) impact = `${name} 存在可培养空间，若能在时间投入或经验上补强，有望在 6-12 个月内成为客户经营飞轮的有效触点。`;
+  else impact = `${name} 当前画像与优增目标匹配度较低，若加入，短期内较难形成稳定客户触点，可能拖累组织发展飞轮。建议暂不优先跟进。`;
+  document.getElementById('flywheel-impact').textContent = impact + (goal ? ` 动机备注：${goal}` : '');
+
+  document.getElementById('recruit-output').classList.remove('hidden');
+}
+
+/* ===== 场景 5：基本法测算模型（重构：放大职级杠杆） ===== */
+const SELF_RATE = {试用业务员:0.25, 正式业务员:0.30, 业务主任:0.35, 营业部经理:0.38, 总监:0.42};          // 个人佣金率（业绩利益）
+const MGT_RATE  = {试用业务员:0,    正式业务员:0,    业务主任:0.08, 营业部经理:0.12, 总监:0.15};           // 管理津贴率（组织发展利益）
+const NURTURE_RATE = {试用业务员:0, 正式业务员:0,    业务主任:0,    营业部经理:0.04, 总监:0.06};           // 育成津贴率（间接团队计提）
+const WELFARE   = {试用业务员:0,    正式业务员:0,    业务主任:500,  营业部经理:1000, 总监:1500};            // 福利保障·长期服务津贴（示意）
+
+function headAllow(head, level){
+  if (!(level === '业务主任' || level === '营业部经理' || level === '总监')) return 0;
+  let per = 0;
+  if (head <= 3) per = 200;
+  else if (head <= 6) per = 350;
+  else if (head <= 12) per = 500;
+  else per = 650;
+  return head * per;
+}
+
+function trainAllow(self, months, level){
+  if (!(level === '试用业务员' || level === '正式业务员')) return 0;
+  if (months > 12) return 0;
+  if (self < 1) return 800;
+  else if (self < 3) return 1500;
+  else if (self < 5) return 2500;
+  else return 3500;
+}
+
+function computeComp(level, self, team, head, nurture, months){
+  const selfComm = self * 10000 * SELF_RATE[level];
+  const mgt = team * 10000 * MGT_RATE[level];
+  const nur = nurture * 10000 * NURTURE_RATE[level];
+  const train = trainAllow(self, months, level);
+  const ha = headAllow(head, level);
+  const wf = WELFARE[level];
+  const total = selfComm + mgt + nur + train + ha + wf;
+  return { selfComm, mgt, nur, train, ha, wf, total };
+}
+
+/* 职级 / 演示数据变化时，关联数据按基本法逻辑随机联动；个人月保费恒为 3 万（唯一不变参数），入职月数与职级关联随机 */
+function rerollComp(){
+  const lv = val('k-level');
+  document.getElementById('k-self').value = 3;
+  const rnd = (a, b) => Math.round(a + Math.random() * (b - a));
+  let teamR, headR, nurR;
+  switch (lv){
+    case '试用业务员':   teamR=[3,3];    headR=[0,0];  nurR=[0,0];  break;
+    case '正式业务员':   teamR=[4,9];    headR=[0,0];  nurR=[0,0];  break;
+    case '业务主任':     teamR=[8,20];   headR=[3,8];  nurR=[0,3];  break;
+    case '营业部经理':   teamR=[20,60];  headR=[5,12]; nurR=[3,10]; break;
+    case '总监':         teamR=[60,150]; headR=[8,20]; nurR=[8,25]; break;
+    default:             teamR=[3,3];    headR=[0,0];  nurR=[0,0];
+  }
+  document.getElementById('k-team').value    = rnd(teamR[0], teamR[1]);
+  document.getElementById('k-head').value    = rnd(headR[0], headR[1]);
+  document.getElementById('k-nurture').value = rnd(nurR[0], nurR[1]);
+  // 入职月数：与职级关联、随机匹配（职级越高，合理司龄越长）
+  const monthsR = {试用业务员:[1,12], 正式业务员:[3,36], 业务主任:[12,60], 营业部经理:[24,96], 总监:[48,120]};
+  document.getElementById('k-months').value = rnd(monthsR[lv][0], monthsR[lv][1]);
+}
+
+function applyCompPreset(){
+  const v = val('k-demo');
+  if (!v) return;
+  if (v === '__random__'){
+    rerollComp();
+  } else {
+    document.getElementById('k-level').value = v;
+    rerollComp();
+  }
+  document.getElementById('k-demo').value = '';
+}
+
+function evaluateComp(){
+  const level = val('k-level');
+  const months = num('k-months');
+  const self = num('k-self');
+  const team = num('k-team');
+  const head = num('k-head');
+  const nurture = num('k-nurture');
+
+  const r = computeComp(level, self, team, head, nurture, months);
+
+  const metrics = [
+    {v: fmtYuan(r.selfComm), l: '个人佣金（元）'},
+    {v: fmtYuan(r.mgt + r.nur), l: '管理+育成（元）'},
+    {v: fmtYuan(r.train + r.ha + r.wf), l: '津贴+福利（元）'},
+    {v: fmtYuan(r.total), l: '月度总收入（元）'},
+  ];
+  document.getElementById('k-metrics').innerHTML = metrics.map(m =>
+    `<div class="metric"><div class="metric-value">${m.v}</div><div class="metric-label">${m.l}</div></div>`
+  ).join('');
+
+  const breakdown = [
+    `个人销售佣金：个人保费 ${self} 万 × 佣金率 ${(SELF_RATE[level]*100).toFixed(0)}% = ${fmtYuan(r.selfComm)} 元`,
+    MGT_RATE[level] > 0 ? `管理津贴（组织发展利益）：团队保费 ${team} 万 × 管理率 ${(MGT_RATE[level]*100).toFixed(0)}% = ${fmtYuan(r.mgt)} 元` : `管理津贴：当前职级暂不享受管理利益`,
+    NURTURE_RATE[level] > 0 ? `育成津贴：育成团队保费 ${nurture} 万 × 育成率 ${(NURTURE_RATE[level]*100).toFixed(0)}% = ${fmtYuan(r.nur)} 元` : `育成津贴：当前职级不适用`,
+    r.train > 0 ? `新人训练津贴（入职 ${months} 月，≤12月）：${fmtYuan(r.train)} 元` : `新人训练津贴：已超出 12 月享发期或当前职级不适用`,
+    r.ha > 0 ? `直辖人力津贴（分级）：${head} 人 × ${head<=3?200:(head<=6?350:(head<=12?500:650))} 元 = ${fmtYuan(r.ha)} 元` : `直辖人力津贴：当前职级不适用`,
+    r.wf > 0 ? `福利保障·长期服务津贴：${fmtYuan(r.wf)} 元` : `福利保障：当前职级不适用`,
+  ];
+  document.getElementById('k-breakdown').innerHTML = breakdown.map(b => `<li>${b}</li>`).join('');
+
+  const rules = {
+    试用业务员: { next:'正式业务员', ok: self >= 1, req:['个人月保费 ≥ 1 万'] },
+    正式业务员: { next:'业务主任', ok: self >= 2 && head >= 3 && team >= 8, req:['个人月保费 ≥ 2 万','直辖有效人力 ≥ 3','团队月保费 ≥ 8 万'] },
+    业务主任:   { next:'营业部经理', ok: self >= 3 && head >= 6 && team >= 20, req:['个人月保费 ≥ 3 万','直辖有效人力 ≥ 6','团队月保费 ≥ 20 万'] },
+    营业部经理: { next:'总监', ok: self >= 3 && head >= 12 && team >= 50, req:['个人月保费 ≥ 3 万','直辖有效人力 ≥ 12','团队月保费 ≥ 50 万'] },
+    总监:       { next:null },
+  };
+  const rule = rules[level];
+  const pt = document.getElementById('k-promote-title');
+  const pu = document.getElementById('k-promote');
+  if (rule.next === null) {
+    pt.textContent = '晋升进度';
+    pu.innerHTML = '<li>已处于最高职级（总监），可横向复制团队、沉淀组织红利。</li>';
+  } else if (rule.ok) {
+    pt.textContent = `晋升进度：已达「${rule.next}」晋升条件`;
+    pu.innerHTML = `<li>当前指标已满足晋升「${rule.next}」要求，建议提交晋升考核。</li>`;
+  } else {
+    pt.textContent = `晋升进度：距离「${rule.next}」还差`;
+    const missing = [];
+    if (self < ({试用业务员:1, 正式业务员:2, 业务主任:3, 营业部经理:3}[level])) missing.push(`个人月保费需达 ${ {试用业务员:1, 正式业务员:2, 业务主任:3, 营业部经理:3}[level] } 万（当前 ${self} 万）`);
+    if (level !== '试用业务员' && head < ({正式业务员:3, 业务主任:6, 营业部经理:12}[level])) missing.push(`直辖有效人力需达 ${ {正式业务员:3, 业务主任:6, 营业部经理:12}[level] } 人（当前 ${head} 人）`);
+    if (level !== '试用业务员' && team < ({正式业务员:8, 业务主任:20, 营业部经理:50}[level])) missing.push(`团队月保费需达 ${ {正式业务员:8, 业务主任:20, 营业部经理:50}[level] } 万（当前 ${team} 万）`);
+    pu.innerHTML = missing.map(m => `<li>${m}</li>`).join('');
+  }
+
+  /* 同口径对比：把当前经营数据代入五个职级，看职级杠杆 */
+  const LEVELS = ['试用业务员','正式业务员','业务主任','营业部经理','总监'];
+  const cmp = LEVELS.map(lv => ({ lv, r: computeComp(lv, self, team, head, nurture, months) }));
+  const maxTotal = Math.max(...cmp.map(c => c.r.total), 1);
+  const curLevel = level;
+  let bars = '';
+  cmp.forEach(c => {
+    const pct = (c.r.total / maxTotal * 100).toFixed(1);
+    const isCur = c.lv === curLevel;
+    bars += `<div class="cmp-row">
+      <div class="cmp-head"><span class="lv">${c.lv}${isCur ? '（当前）' : ''}</span><span class="amt">${fmtYuan(c.r.total)} 元</span></div>
+      <div class="cmp-bg"><div class="cmp-fill ${isCur ? 'cur' : ''}" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('k-compare').innerHTML = bars;
+
+  const minT = cmp[0].r.total, maxT = cmp[cmp.length-1].r.total;
+  const ratio = (maxT / Math.max(1, minT)).toFixed(1);
+  document.getElementById('k-compare-note').innerHTML =
+    `同样的个人月保费 ${self} 万、团队 ${team} 万、直辖 ${head} 人：从「试用业务员」到「总监」，月度总收入由约 <b>${fmtYuan(minT)}</b> 元放大到约 <b>${fmtYuan(maxT)}</b> 元（约 <b>${ratio}×</b>）。差距主要来自<b>管理利益、育成利益与福利保障</b>——这正是基本法驱动组织发展飞轮（优增优育）持续转动的杠杆。`;
+
+  document.getElementById('k-flywheel').textContent =
+    `基本法把“个人产能”与“组织发展”的利益绑在一起：管理津贴、育成津贴与人力/福利津贴，正是组织发展飞轮（优增优育）能持续转动的制度引擎；清晰的收入预期，也让优增面谈更有说服力。`;
+  document.getElementById('comp-output').classList.remove('hidden');
+}
+
+function copyCompText(){
+  const text = document.getElementById('k-breakdown').innerText + '\n\n' + document.getElementById('k-promote').innerText + '\n\n' + document.getElementById('k-compare-note').innerText;
+  navigator.clipboard.writeText(text).then(() => alert('测算文案已复制'));
+}
+
+/* 初始化 */
+document.getElementById('ver').textContent = VERSION;
+renderFlywheel();
+renderTrain();
+renderRecruitForm();
+switchTab('train');
+
+/* 屏幕在 600px 断点两侧切换（如手机横竖屏旋转）时，重绘飞轮布局 */
+window.addEventListener('resize', function(){
+  const m = window.matchMedia('(max-width: 600px)').matches;
+  if (m !== window.__flyMobile) renderFlywheel();
+});
+</script>
+</body>
+</html>
