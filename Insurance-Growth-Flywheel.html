@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>保险增长飞轮智能体 V8</title>
+  <title>保险增长飞轮智能体 V10</title>
   <style>
     :root {
       --bg: #F5F0E8;
@@ -47,8 +47,8 @@
       margin: 16px 0 20px;
     }
     .tab {
-      flex: 1 1 calc(33.333% - 8px);
-      min-width: 96px;
+      flex: 1 1 calc(25% - 8px);
+      min-width: 64px;
       padding: 13px 6px;
       border: 1px solid var(--border);
       background: var(--card);
@@ -111,7 +111,10 @@
     }
     .ref-note a { color: var(--primary); word-break: break-all; text-decoration: underline; }
     .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
-    @media (max-width: 480px) { .dim-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) {
+      .dim-grid { grid-template-columns: 1fr; }
+      .tab { font-size: 13px; padding: 10px 4px; }
+    }
     .form-group {
       margin-bottom: 16px;
     }
@@ -441,6 +444,8 @@
     <button class="tab" data-tab="family" onclick="switchTab('family')">家庭保障分析</button>
     <button class="tab" data-tab="retire" onclick="switchTab('retire')">退休养老规划</button>
     <button class="tab" data-tab="report" onclick="switchTab('report')">展业战报生成</button>
+    <button class="tab" data-tab="culture" onclick="switchTab('culture')">企业文化模块</button>
+    <button class="tab" data-tab="honor" onclick="switchTab('honor')">荣誉认可模块</button>
     <button class="tab" data-tab="recruit" onclick="switchTab('recruit')">优增画像初筛</button>
     <button class="tab" data-tab="comp" onclick="switchTab('comp')">基本法测算模型</button>
   </div>
@@ -477,26 +482,138 @@
     </div>
 
     <div class="card">
-      <div class="card-title">底层核心方法论</div>
-      <div class="method-grid">
-        <div class="method-box">
-          <h4>NBS · 需求导向销售</h4>
-          <ul>
-            <li>以家庭财务安全为核心，非产品推销</li>
-            <li>结构化提问挖掘保障缺口</li>
-            <li>定制家庭财务解决方案</li>
-            <li>全部销售训练的统一主线</li>
-          </ul>
-        </div>
-        <div class="method-box">
-          <h4>MET 主管辅导五环</h4>
-          <ul>
-            <li>RSP 周计划检视</li>
-            <li>SID 个别发展面谈</li>
-            <li>SGD 团体发展研讨</li>
-            <li>ODC 市场陪同展业（最关键）</li>
-          </ul>
-        </div>
+      <div class="card-title">底层核心方法论（统一训练内核）</div>
+      <div class="hint" style="border-left-color:var(--success)">
+        所有销售与主管训练都围绕两大方法论展开：<b>NBS 需求导向销售</b>（卖家庭财务安全，不卖产品）与 <b>MET 主管辅导五环</b>（每周固定的管理动作闭环）。下面是可落地的执行细则。
+      </div>
+
+      <div class="section-title">一、NBS 需求导向销售（Needs Based Selling）</div>
+      <div class="method-box">
+        <h4>核心理念</h4>
+        <ul>
+          <li>先诊断需求、后匹配方案；卖财务规划，不卖保险产品</li>
+          <li>以家庭现金流、风险缺口为沟通主线，不谈收益、不先讲条款</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">1. 建立信任与面谈定位（破冰）</div>
+        <div class="pe">开场即定位“财务规划顾问”，先梳理风险而非推销</div>
+        <ul>
+          <li>收集家庭结构、职业、收支、负债、已有保障、家庭责任</li>
+          <li>控制自我表达，多用开放式提问；3 分钟内建立安全感</li>
+          <li>通关标准：客户愿意配合完成信息问卷</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">2. 需求发掘（结构化提问 · 核心）</div>
+        <div class="pe">四大风险维度：收入中断 / 医疗大额 / 养老现金流 / 传承教育</div>
+        <ul>
+          <li>漏斗式提问：宽泛 → 聚焦痛点 → 量化损失</li>
+          <li>引导客户自己算出“风险→现金流断裂→目标落空”的缺口</li>
+          <li>禁止替客户定义风险，必须让其自我感知</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">3. 需求分析与缺口量化</div>
+        <ul>
+          <li>录入财务分析系统，测算家庭责任额度（负债/抚养年限/月度开支）</li>
+          <li>现有保障额度抵扣，得出保障差额</li>
+          <li>方案额度由缺口推导，预算仅用来调整结构（保障/储蓄配比、缴费期）</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">4. 解决方案设计</div>
+        <ul>
+          <li>基础保障层优先：寿险 / 重疾 / 医疗 / 意外覆盖突发风险</li>
+          <li>长期目标层：教育金 / 养老金 / 资产传承</li>
+          <li>组合方案，不单一产品堆砌；备 A 方案（标准缺口）+ B 方案（预算折中）</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">5. 方案呈现与建议书讲解</div>
+        <ul>
+          <li>顺序：家庭责任 → 风险后果 → 缺口大小 → 规划方案 → 产品作用</li>
+          <li>严禁开篇直接演示产品利益表</li>
+          <li>异议处理统一逻辑：回到客户家庭需求，不陷入产品利益对比</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">6. 促成 · 递送 · 持续经营与转介绍</div>
+        <ul>
+          <li>促成落脚点：完成家庭财务安全目标，而非“买一份保险”</li>
+          <li>建立每年保单检视机制，递送不是服务终点</li>
+          <li>标准转介绍问话：身边同样承担家庭责任的亲友，是否也需要一次免费财务梳理？</li>
+        </ul>
+      </div>
+      <div class="method-box">
+        <h4>NBS 配套落地保障</h4>
+        <ul>
+          <li>统一制式财务问卷、标准化建议书模板</li>
+          <li>新人必须全流程角色扮演通关，未通关禁止独立面谈</li>
+          <li>主管 ODC 陪访重点检视：是否跳过需求挖掘直接讲产品</li>
+          <li>质检录音核查 NBS 流程，杜绝产品导向推销</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">二、MET 主管辅导五环（Management Effectiveness Training）</div>
+      <div class="method-box">
+        <h4>通用前提</h4>
+        <ul>
+          <li>五环是每周固定循环的管理动作，主管最低标准工作循环</li>
+          <li>教练模式：多提问、少命令，赋能自主思考而非直接给答案</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">RSP · 周计划检视（五环起点）</div>
+        <ul>
+          <li>本周复盘：业绩/访量/成交/转化/准客户/增员，对比计划找差距</li>
+          <li>下周量化目标：有效面谈≥8、新增准客户5、沙龙2场、增员面谈1</li>
+          <li>障碍识别纳入 SID / ODC 课题；代理人主动承诺，主管明确配套支持</li>
+          <li>红线：只盯保费不追访量、单向下达目标、无书面追踪</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">SID · 个别发展面谈</div>
+        <ul>
+          <li>一对一深度教练，解决个性化能力短板</li>
+          <li>四步：事实陈述 → 探寻感受 → 共因（意愿/技能）→ 改进行动 + 跟进</li>
+          <li>场景：新人不出单、绩优瓶颈、增员无果、动作变形</li>
+          <li>重在启发，多用提问引导自我反思</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">SGD · 团体发展研讨</div>
+        <ul>
+          <li>小组集中训练，批量解决共性技能问题</li>
+          <li>流程：课题选取 → 案例导入 → 技能示范 → 两两演练 → 互评 → 课后实战</li>
+          <li>频次：常规每周≥1次，60–90分钟；新人组提高频次</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">ODC · 市场陪同展业（最高权重）</div>
+        <ul>
+          <li>示范陪访（新人）：主管主导演示标准 NBS，离场即复盘</li>
+          <li>观测陪访（有基础）：代理人主导，主管带观察清单记录偏差</li>
+          <li>硬性标准：新人前 6 月保证频次；禁止“只跟着不辅导不复盘”</li>
+          <li>陪访记录录入系统，作为主管考核与新人留存核心指标</li>
+        </ul>
+      </div>
+      <div class="track-stage">
+        <div class="st">实战执行闭环（五环串联）</div>
+        <ul>
+          <li>RSP 发现共性问题/个体短板 → SGD 团体演练 / SID 一对一</li>
+          <li>技能学习后 → ODC 市场实战检验纠偏 → 下周 RSP 再检视，持续循环</li>
+        </ul>
+      </div>
+      <div class="method-box">
+        <h4>MET 五环的两大应用场景</h4>
+        <ul>
+          <li>销售辅导：NBS 落地、访量管理、面谈技能、客户经营</li>
+          <li>组织发展：复用五环，内容换为招募面谈 / 新人甄选 / 团队经营 / 主管培育</li>
+          <li>优秀主管同时用五环做“业务辅导 + 组织发展辅导”</li>
+        </ul>
       </div>
     </div>
     <!-- 底部耦合区已按双轨分别内置：销售线→展业战报，组织线→基本法测算 -->
@@ -592,6 +709,107 @@
         <button class="secondary" onclick="switchTab('recruit')">携带这份战报，去初筛一位优增候选人 →</button>
       </div>
       <button class="secondary" onclick="copyReportText()">复制战报文案</button>
+    </div>
+  </div>
+
+  <!-- 场景：企业文化模块（位于展业战报之后） -->
+  <div id="scene-culture" class="scene">
+    <div class="hint">
+      企业文化是组织发展飞轮（优增优育）的“精神底盘”——清晰的企业愿景、使命与价值观，是吸引同频候选人的底层磁力，也是新人留存与团队凝聚的长期黏合剂。
+    </div>
+    <div class="card">
+      <div class="card-title">企业愿景 · 使命 · 价值观</div>
+      <div class="method-box">
+        <h4>企业愿景</h4>
+        <p style="font-size:14px;line-height:1.75;margin:0;">成为客户与社会最值得信赖的<b>保障与财富守护者</b>，让每一个家庭在风险来临时都有可依靠的肩膀。</p>
+      </div>
+      <div class="method-box">
+        <h4>企业使命</h4>
+        <ul>
+          <li>以专业与温度，帮中国家庭规划可落地的财务安全方案</li>
+          <li>为每一位代理人提供“凭专业获得尊重、凭努力获得回报”的事业平台</li>
+          <li>把保障的确定性，传递给更多曾经被忽略的普通家庭</li>
+        </ul>
+      </div>
+      <div class="method-box">
+        <h4>核心价值观</h4>
+        <ul>
+          <li><b>客户至上</b>：先解决客户的问题，再谈自己的业绩</li>
+          <li><b>专业立身</b>：用 NBS 方法论与持续训练，建立不可替代的专业度</li>
+          <li><b>长期主义</b>：保单递送不是终点，是长期服务的起点</li>
+          <li><b>诚信合规</b>：合规是底线，口碑是最贵的资产</li>
+          <li><b>共生共荣</b>：主管与团队、公司与代理人，在双飞轮里彼此成就</li>
+        </ul>
+      </div>
+    </div>
+    <div class="coupling-box">
+      <h4>反哺优增：文化即吸引力</h4>
+      <p>清晰的愿景、使命与价值观，是向候选人传递“这是一份有意义、能长期做的事业”的最佳语言；当候选人与文化同频，留存与自驱力都会显著提升。</p>
+      <button class="secondary" onclick="switchTab('train')">看看核心训练体系，文化如何落地为能力 →</button>
+    </div>
+  </div>
+
+  <!-- 场景：荣誉认可模块（位于展业战报之后） -->
+  <div id="scene-honor" class="scene">
+    <div class="hint">
+      荣誉体系是组织发展飞轮（优增优育）的“加速器”——绩优文化、行业典范与国内国际荣誉标准，既给代理人以尊严与目标感，也是向候选人展示“这份事业的天花板有多高”的有力素材。
+    </div>
+    <div class="card">
+      <div class="card-title">公司绩优文化 · 行业典范</div>
+      <div class="method-box">
+        <h4>公司绩优文化</h4>
+        <ul>
+          <li>以“持续达标、长期经营”为荣，而非单月冲量</li>
+          <li>季度/年度荣誉表彰、高峰会议、绩优俱乐部等荣誉载体</li>
+          <li>把优秀代理人的真实成长故事，沉淀为团队可复制的标杆</li>
+        </ul>
+      </div>
+      <div class="method-box">
+        <h4>行业典范文化</h4>
+        <ul>
+          <li>以行业最高服务与专业标准为镜，建立代理人的职业尊严</li>
+          <li>合规经营、客户利益优先，做“被社会尊重”的保险从业者</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">国际荣誉体系（进阶目标）</div>
+      <div class="dim-grid">
+        <div class="method-box">
+          <h4>MDRT · 百万圆桌</h4>
+          <ul>
+            <li>全球寿险业公认的绩优标准与荣誉组织</li>
+            <li>以保费、佣金或收入达标，分会员 / 内阁 / 顶级三档</li>
+            <li>代表专业的“入场券”与持续经营的标杆</li>
+          </ul>
+        </div>
+        <div class="method-box">
+          <h4>IDA · 国际龙奖</h4>
+          <ul>
+            <li>华语地区保险从业者的重要荣誉（国际龙奖）</li>
+            <li>表彰业务品质、专业与服务兼具的杰出代理人</li>
+          </ul>
+        </div>
+        <div class="method-box">
+          <h4>CIA500 · 保险名家</h4>
+          <ul>
+            <li>以“保险名家”为标准的高绩效团队/个人荣誉</li>
+            <li>强调可持续的产能与团队经营能力</li>
+          </ul>
+        </div>
+        <div class="method-box">
+          <h4>其他里程碑</h4>
+          <ul>
+            <li>公司高峰会、区域绩优俱乐部、终身荣誉会员等</li>
+            <li>荣誉路径：新人达标 → 公司荣誉 → 国际荣誉（MDRT / IDA / CIA500）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="coupling-box">
+      <h4>反哺优增：用荣誉讲一个“成长天花板”的故事</h4>
+      <p>把公司的绩优文化与 MDRT / IDA / CIA500 等国际荣誉路径，放进展业战报与优增面谈，让候选人看到：这份事业不仅有起点，更有清晰可见的高度。</p>
+      <button class="secondary" onclick="switchTab('report')">生成一份展业战报，看看荣誉如何被记录 →</button>
     </div>
   </div>
 
@@ -959,13 +1177,13 @@
   </div>
 
   <footer>
-    保险增长飞轮智能体 <span id="ver">V8</span><br>
+    保险增长飞轮智能体 <span id="ver">V10</span><br>
     Powered By Kan Man Tang
   </footer>
 </div>
 
 <script>
-const VERSION = 'V8';
+const VERSION = 'V10';
 
 /* ===== 双飞轮耦合模型 动画 ===== */
 const SEG_LEFT  = ['获客','转化','承保服务','理赔','续保','交叉销售','转介绍'];
