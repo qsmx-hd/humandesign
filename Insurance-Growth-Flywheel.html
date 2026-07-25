@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>保险增长飞轮智能体 V10</title>
+  <title>保险增长飞轮智能体 V11</title>
   <style>
     :root {
       --bg: #F5F0E8;
@@ -434,8 +434,8 @@
       <span><i class="dot" style="background:#C4956A"></i>客户经营飞轮</span>
       <span><i class="dot" style="background:#6B8E5A"></i>组织发展飞轮</span>
       <span><i class="dot" style="background:#2D2118"></i>AI 智能体（耦合中枢）</span>
-      <span><i class="dot" style="background:#C4956A"></i>客户成果 → 优增吸引力素材</span>
-      <span><i class="dot" style="background:#6B8E5A"></i>合格人力 / 话术知识 → 客户飞轮加速</span>
+      <span><i class="dot" style="background:#C4956A"></i>客户成果 → 反哺优增吸引力</span>
+      <span><i class="dot" style="background:#6B8E5A"></i>优增优育 → 客户飞轮加速</span>
     </div>
   </div>
 
@@ -443,14 +443,14 @@
     <button class="tab active" data-tab="train" onclick="switchTab('train')">核心训练体系</button>
     <button class="tab" data-tab="family" onclick="switchTab('family')">家庭保障分析</button>
     <button class="tab" data-tab="retire" onclick="switchTab('retire')">退休养老规划</button>
-    <button class="tab" data-tab="report" onclick="switchTab('report')">展业战报生成</button>
+    <button class="tab" data-tab="report" onclick="switchTab('report')">展业数据看板</button>
     <button class="tab" data-tab="culture" onclick="switchTab('culture')">企业文化模块</button>
     <button class="tab" data-tab="honor" onclick="switchTab('honor')">荣誉认可模块</button>
     <button class="tab" data-tab="recruit" onclick="switchTab('recruit')">优增画像初筛</button>
     <button class="tab" data-tab="comp" onclick="switchTab('comp')">基本法测算模型</button>
   </div>
 
-  <!-- 场景 0：核心训练体系（新增，位于展业战报之前） -->
+  <!-- 场景 0：核心训练体系（新增，位于展业数据看板之前） -->
   <div id="scene-train" class="scene active">
     <div class="hint">
       语料参考：大都会人寿（中美联泰大都会 MetLife）顾问行销渠道核心训练体系——底层以 <b>NBS 需求导向销售</b> 为内核，配 <b>MET 主管辅导五环</b>，组织发展线走 <b>四龙计划</b>。
@@ -467,8 +467,8 @@
         <div id="train-sales-stages"></div>
         <div class="coupling-box">
           <h4>反哺客户经营飞轮</h4>
-          <p>NBS 销售训练直接提升转化、服务、续保环节的产能，是<b>展业战报</b>与家庭/养老分析的专业底座；训练效果数据回流耦合中枢，让客户经营飞轮越转越快。</p>
-          <button class="secondary" onclick="switchTab('report')">看看展业战报生成 →</button>
+          <p>NBS 销售训练直接提升转化、服务、续保环节的产能，是<b>展业数据看板</b>与家庭/养老分析的专业底座；训练效果数据回流耦合中枢，让客户经营飞轮越转越快。</p>
+          <button class="secondary" onclick="switchTab('report')">看看展业数据看板 →</button>
         </div>
       </div>
       <div id="train-org" class="hidden">
@@ -616,13 +616,13 @@
         </ul>
       </div>
     </div>
-    <!-- 底部耦合区已按双轨分别内置：销售线→展业战报，组织线→基本法测算 -->
+    <!-- 底部耦合区已按双轨分别内置：销售线→展业数据看板，组织线→基本法测算 -->
   </div>
 
-  <!-- 场景 1：展业战报 -->
+  <!-- 场景 1：展业数据看板 -->
   <div id="scene-report" class="scene">
     <div class="hint">
-      真实系统中，此模块将调用私有化 LLM + 保险业务数据 RAG 生成战报；本原型使用规则模板演示，用于快速验证“客户成果 → 反哺优增”的耦合价值。
+      真实系统中，此模块将调用私有化 LLM + 保险业务数据 RAG 生成数据看板；本原型使用规则模板演示，用于快速验证“客户成果 → 反哺优增”的耦合价值。
     </div>
 
     <div class="card">
@@ -681,13 +681,13 @@
         <label>典型客户好评或转介绍案例（可选）</label>
         <textarea id="r-story" placeholder="例如：客户王女士因重疾险理赔顺利，主动介绍了两位朋友咨询家庭保障方案。"></textarea>
       </div>
-      <button class="primary" onclick="generateReport()">生成展业战报</button>
+      <button class="primary" onclick="generateReport()">生成展业数据看板</button>
     </div>
 
     <div id="report-output" class="hidden">
       <div class="report-card">
         <div class="report-header">
-          <h3 id="rh-title">展业战报</h3>
+          <h3 id="rh-title">展业数据看板</h3>
           <span id="rh-period" class="period"></span>
         </div>
         <div class="metrics" id="metrics"></div>
@@ -703,16 +703,16 @@
       </div>
 
       <div class="coupling-box">
-        <h4>反哺优增：这份战报可以传递什么信号？</h4>
+        <h4>反哺优增：这份数据看板可以传递什么信号？</h4>
         <p id="recruit-signal"></p>
         <ul id="recruit-bullets"></ul>
-        <button class="secondary" onclick="switchTab('recruit')">携带这份战报，去初筛一位优增候选人 →</button>
+        <button class="secondary" onclick="switchTab('recruit')">携带这份数据看板，去初筛一位优增候选人 →</button>
       </div>
-      <button class="secondary" onclick="copyReportText()">复制战报文案</button>
+      <button class="secondary" onclick="copyReportText()">复制数据看板文案</button>
     </div>
   </div>
 
-  <!-- 场景：企业文化模块（位于展业战报之后） -->
+  <!-- 场景：企业文化模块（位于展业数据看板之后） -->
   <div id="scene-culture" class="scene">
     <div class="hint">
       企业文化是组织发展飞轮（优增优育）的“精神底盘”——清晰的企业愿景、使命与价值观，是吸引同频候选人的底层磁力，也是新人留存与团队凝聚的长期黏合剂。
@@ -749,7 +749,7 @@
     </div>
   </div>
 
-  <!-- 场景：荣誉认可模块（位于展业战报之后） -->
+  <!-- 场景：荣誉认可模块（位于展业数据看板之后） -->
   <div id="scene-honor" class="scene">
     <div class="hint">
       荣誉体系是组织发展飞轮（优增优育）的“加速器”——绩优文化、行业典范与国内国际荣誉标准，既给代理人以尊严与目标感，也是向候选人展示“这份事业的天花板有多高”的有力素材。
@@ -808,8 +808,8 @@
     </div>
     <div class="coupling-box">
       <h4>反哺优增：用荣誉讲一个“成长天花板”的故事</h4>
-      <p>把公司的绩优文化与 MDRT / IDA / CIA500 等国际荣誉路径，放进展业战报与优增面谈，让候选人看到：这份事业不仅有起点，更有清晰可见的高度。</p>
-      <button class="secondary" onclick="switchTab('report')">生成一份展业战报，看看荣誉如何被记录 →</button>
+      <p>把公司的绩优文化与 MDRT / IDA / CIA500 等国际荣誉路径，放进展业数据看板与优增面谈，让候选人看到：这份事业不仅有起点，更有清晰可见的高度。</p>
+      <button class="secondary" onclick="switchTab('report')">生成一份展业数据看板，看看荣誉如何被记录 →</button>
     </div>
   </div>
 
@@ -903,7 +903,7 @@
         <h4>反哺双飞轮</h4>
         <p id="f-flywheel"></p>
         <ul id="f-flywheel-bullets"></ul>
-        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业战报 →</button>
+        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业数据看板 →</button>
       </div>
       <button class="secondary" onclick="copyFamilyText()">复制分析文案</button>
     </div>
@@ -972,7 +972,7 @@
         <h4>反哺双飞轮</h4>
         <p id="t-flywheel"></p>
         <ul id="t-flywheel-bullets"></ul>
-        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业战报 →</button>
+        <button class="secondary" onclick="switchTab('report')">把这次专业分析带回展业数据看板 →</button>
       </div>
       <button class="secondary" onclick="copyRetireText()">复制分析文案</button>
     </div>
@@ -1177,17 +1177,17 @@
   </div>
 
   <footer>
-    保险增长飞轮智能体 <span id="ver">V10</span><br>
+    保险增长飞轮智能体 <span id="ver">V11</span><br>
     Powered By Kan Man Tang
   </footer>
 </div>
 
 <script>
-const VERSION = 'V10';
+const VERSION = 'V11';
 
 /* ===== 双飞轮耦合模型 动画 ===== */
 const SEG_LEFT  = ['获客','转化','承保服务','理赔','续保','交叉销售','转介绍'];
-const SEG_RIGHT = ['优增','优育/训练','晋升','团队扩张','产能释放','反哺获客'];
+const SEG_RIGHT = ['优增','优育/训练','产能','组织裂变','留存','品牌文化'];
 
 function polar(cx, cy, r, deg){
   const a = deg * Math.PI / 180;
@@ -1261,11 +1261,11 @@ function renderFlywheel(){
 
   // 数据流标签
   if (mobile){
-    svg += `<text class="fly-label" x="180" y="250" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 优增吸引力素材</text>`;
-    svg += `<text class="fly-label" x="180" y="410" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">合格人力 / 话术知识 → 客户飞轮加速</text>`;
+    svg += `<text class="fly-label" x="180" y="250" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 反哺优增吸引力</text>`;
+    svg += `<text class="fly-label" x="180" y="410" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">优增优育 → 客户飞轮加速</text>`;
   } else {
-    svg += `<text class="fly-label" x="380" y="120" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 优增吸引力素材</text>`;
-    svg += `<text class="fly-label" x="380" y="350" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">合格人力 / 话术知识 → 客户飞轮加速</text>`;
+    svg += `<text class="fly-label" x="380" y="120" text-anchor="middle" font-size="12" fill="#C4956A" font-weight="600">客户成果 → 反哺优增吸引力</text>`;
+    svg += `<text class="fly-label" x="380" y="350" text-anchor="middle" font-size="12" fill="#6B8E5A" font-weight="600">优增优育 → 客户飞轮加速</text>`;
   }
 
   // 数据包（双向流动）
@@ -1339,7 +1339,7 @@ function val(id){ return document.getElementById(id).value; }
 function num(id){ return parseFloat(document.getElementById(id).value) || 0; }
 function fmtYuan(n){ return Math.round(n).toLocaleString('zh-CN'); }
 
-/* ===== 场景 1：展业战报 ===== */
+/* ===== 场景 1：展业数据看板 ===== */
 const REPORT_PRESETS = {
   '试用业务员':   {signed:1,  premium:1.5,  customers:12,  claims:0, renewal:70, referrals:0},
   '正式业务员':   {signed:3,  premium:4.5,  customers:28,  claims:1, renewal:85, referrals:2},
@@ -1369,7 +1369,7 @@ function generateReport(){
   const referrals = num('r-referrals');
   const story = val('r-story').trim();
 
-  document.getElementById('rh-title').textContent = name + ' 的展业战报';
+  document.getElementById('rh-title').textContent = name + ' 的展业数据看板';
   document.getElementById('rh-period').textContent = month.replace('-','年') + '月';
 
   const metrics = [
@@ -1417,11 +1417,11 @@ function generateReport(){
   if (renewal < 80) actions.push('对续保率偏低的客户进行保单年检，主动提醒续期。');
   if (referrals < 1) actions.push('向满意客户发出“保障体验官”邀请，启动转介绍。');
   if (claims >= 1) actions.push('把理赔服务案例整理成客户可感知的“守护故事”，用于客户教育与优增展示。');
-  actions.push('把本月战报同步到优增场景，让潜在候选人看到真实成长轨迹。');
+  actions.push('把本月数据看板同步到优增场景，让潜在候选人看到真实成长轨迹。');
   document.getElementById('next-actions').innerHTML = actions.map(a => `<li>${a}</li>`).join('');
 
   document.getElementById('recruit-signal').textContent =
-    `${name} 的这份战报，正是向优增候选人展示“这份工作真实长什么样”的最佳素材：不是空喊收入，而是服务客户的真实记录、理赔陪伴的真实价值、续保与转介绍的真实反馈。`;
+    `${name} 的这份数据看板，正是向优增候选人展示“这份工作真实长什么样”的最佳素材：不是空喊收入，而是服务客户的真实记录、理赔陪伴的真实价值、续保与转介绍的真实反馈。`;
   const rb = [];
   if (customers >= 15) rb.push(`单月服务客户 ${customers} 人，证明这份工作每天都在产生真实社会价值。`);
   if (claims >= 1) rb.push(`理赔协助 ${claims} 件，体现“雪中送炭”的职业意义。`);
@@ -1434,7 +1434,7 @@ function generateReport(){
 
 function copyReportText(){
   const text = document.getElementById('narrative').innerText + '\n\n' + document.getElementById('highlights').innerText + '\n\n' + document.getElementById('next-actions').innerText;
-  navigator.clipboard.writeText(text).then(() => alert('战报文案已复制'));
+  navigator.clipboard.writeText(text).then(() => alert('数据看板文案已复制'));
 }
 
 /* ===== 场景 2：家庭保障分析 ===== */
@@ -1954,6 +1954,22 @@ window.addEventListener('resize', function(){
   const m = window.matchMedia('(max-width: 600px)').matches;
   if (m !== window.__flyMobile) renderFlywheel();
 });
+</script>
+
+<!-- 微信内打开异常引导：页面能加载但显示异常时给出兜底提示（连接重置类错误整页加载不出时本脚本也不执行，属网络层问题，需换稳定域名解决） -->
+<script>
+  (function () {
+    var ua = navigator.userAgent.toLowerCase();
+    if (/micromessenger/.test(ua)) {
+      window.addEventListener('load', function () {
+        var bar = document.createElement('div');
+        bar.setAttribute('style', 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#2D2118;color:#F5F0E8;font-size:13px;padding:10px 12px;text-align:center;line-height:1.6;transition:opacity .6s;box-shadow:0 2px 8px rgba(0,0,0,.25);');
+        bar.textContent = '如页面空白或打不开，请点右上角「···」→「在浏览器打开」';
+        (document.body || document.documentElement).appendChild(bar);
+        setTimeout(function () { bar.style.opacity = '0'; setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 700); }, 5000);
+      });
+    }
+  })();
 </script>
 </body>
 </html>
