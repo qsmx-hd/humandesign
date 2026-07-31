@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图四箭头 · 精细校准系列 V5</title>
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --main:#C4956A;
+    --main-deep:#A8743F;
+    --dark:#2D2118;
+    --border:#E8DCC8;
+    --card:#FBF8F2;
+    --soft:#EFE7D8;
+    --muted:#7A6A58;
+    --green:#6E8B5E;
+    --danger:#B85C38;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--dark);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:14px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--main-deep);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 18px 60px;}
+  .en{font-family:Georgia,"Times New Roman",serif;letter-spacing:.12em;text-transform:uppercase;}
+
+  /* ===== HERO ===== */
+  .hero{
+    text-align:center;
+    padding:54px 18px 40px;
+    background:linear-gradient(180deg,#F8F3EA 0%,var(--bg) 100%);
+    border-bottom:1px solid var(--border);
+  }
+  .hero .kicker{
+    font-size:13px;color:var(--muted);letter-spacing:.18em;margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:34px;line-height:1.35;margin:0 0 10px;font-weight:700;color:var(--dark);
+  }
+  .hero .sub-en{font-size:14px;color:var(--main-deep);letter-spacing:.1em;margin-bottom:22px;}
+  .hero p.lead{
+    font-size:15px;color:var(--dark);max-width:680px;margin:0 auto 26px;line-height:1.9;
+    text-align:left;
+  }
+  /* CTA 移到 SVG 下方 + 两列 */
+  .cta{display:grid;grid-template-columns:1fr 1fr;gap:14px;justify-content:center;max-width:560px;margin:30px auto 4px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:30px;
+    font-size:14px;font-weight:600;border:1px solid var(--main);transition:.2s;min-height:46px;text-align:center;
+  }
+  .btn.primary{background:var(--main);color:#fff;}
+  .btn.primary:hover{background:var(--main-deep);border-color:var(--main-deep);text-decoration:none;}
+  .btn.ghost{background:transparent;color:var(--main-deep);}
+  .btn.ghost:hover{background:var(--soft);text-decoration:none;}
+
+  /* ===== HERO DIAGRAM ===== */
+  .hero-diagram{max-width:600px;margin:24px auto 6px;}
+  .hero-diagram svg{width:100%;height:auto;display:block;overflow:visible;}
+  .diagram-cap{font-size:12.5px;color:var(--muted);text-align:center;margin:12px 0 0;line-height:1.8;}
+  .diagram-legend{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0 0;}
+  .chip{font-size:12.5px;background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:6px 14px;color:var(--dark);}
+
+  /* ===== STATS ===== */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:34px auto 0;max-width:820px;
+  }
+  .stat{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;
+  }
+  .stat .num{font-size:32px;font-weight:800;color:var(--main-deep);line-height:1;}
+  .stat .lab{font-size:12.5px;color:var(--muted);margin-top:8px;}
+
+  /* ===== SECTION ===== */
+  .section{padding-top:48px;}
+  .sec-label{font-size:12.5px;color:var(--main-deep);letter-spacing:.22em;margin-bottom:6px;}
+  .sec-title{font-size:21px;font-weight:700;margin:0 0 6px;color:var(--dark);}
+  .sec-intro{font-size:14px;color:var(--muted);max-width:760px;margin:0 0 22px;line-height:1.85;}
+
+  /* ===== COURSE GRID ===== */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .gcard{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 16px;
+    display:flex;flex-direction:column;transition:.2s;position:relative;
+  }
+  .gcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(168,116,63,.14);}
+  .gcard .big{font-size:40px;font-weight:800;color:var(--main);line-height:1;margin-bottom:8px;}
+  .gcard h3{font-size:16px;margin:4px 0 2px;}
+  .gcard .gen{font-size:12px;color:var(--muted);letter-spacing:.1em;margin-bottom:10px;}
+  .gcard .q{font-size:12.5px;color:var(--dark);margin:8px 0;line-height:1.7;}
+  .gcard .tool{font-size:12.5px;color:var(--main-deep);margin-top:auto;padding-top:8px;border-top:1px dashed var(--border);}
+  .gcard .arrow{position:absolute;top:16px;right:16px;font-size:18px;color:var(--main);}
+
+  /* ===== MODULE ===== */
+  .module{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;
+    padding:28px 24px;margin-bottom:26px;
+  }
+  .module-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+  .module-no{font-size:13px;font-weight:700;color:#fff;background:var(--main);border-radius:20px;padding:3px 12px;}
+  .module h2{font-size:19px;margin:0;color:var(--dark);}
+  .module .men{font-size:12px;color:var(--muted);letter-spacing:.1em;}
+  .module .mdesc{font-size:14px;color:var(--dark);margin:10px 0 16px;line-height:1.85;}
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .chip{font-size:12.5px;background:var(--soft);border:1px solid var(--border);border-radius:20px;padding:5px 14px;color:var(--dark);}
+
+  .subhead{font-size:16px;font-weight:700;color:var(--main-deep);margin:22px 0 12px;border-left:4px solid var(--main);padding-left:10px;}
+
+  /* detail cards */
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .dcard{
+    background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;
+  }
+  .dcard .top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .dcard .badge{
+    width:30px;height:30px;border-radius:50%;background:var(--main);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:0 0 auto;
+  }
+  .dcard .dchar{font-size:22px;font-weight:800;color:var(--main-deep);}
+  .dcard h4{font-size:15px;margin:0;color:var(--dark);}
+  .dcard .den{font-size:12px;color:var(--muted);letter-spacing:.08em;}
+  .dcard p{font-size:13px;color:var(--dark);margin:6px 0 0;line-height:1.7;}
+  .dcard .variant{font-size:12px;color:var(--main-deep);margin-top:8px;background:var(--soft);border-radius:8px;padding:6px 9px;line-height:1.6;}
+
+  /* left/right compare */
+  .lr{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 4px;}
+  .lr .col{border-radius:12px;padding:14px 16px;border:1px solid var(--border);}
+  .lr .left{background:#FBF1E6;}
+  .lr .right{background:#EEF2EC;}
+  .lr .col h5{font-size:13px;margin:0 0 6px;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-wrap:wrap;justify-content:flex-start;}
+  .lr .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .lr .left .dot{background:var(--main-deep);}
+  .lr .right .dot{background:var(--green);}
+  .lr .col p{font-size:13px;margin:0;line-height:1.7;color:var(--dark);}
+
+  .note{
+    background:#FBF1E6;border:1px solid var(--border);border-left:4px solid var(--main);
+    border-radius:10px;padding:13px 16px;font-size:13px;color:var(--dark);margin:14px 0 0;line-height:1.8;
+  }
+  .note b{color:var(--main-deep);}
+
+  /* ===== TABLE ===== */
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;background:var(--card);border-radius:12px;overflow:hidden;}
+  th,td{border:1px solid var(--border);padding:11px 12px;text-align:left;vertical-align:top;line-height:1.7;}
+  th{background:var(--main);color:#fff;font-weight:600;font-size:13px;}
+  tbody tr:nth-child(even){background:var(--bg);}
+
+  /* ===== PPT list（折叠） ===== */
+  details.ppt-toggle{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-top:14px;}
+  details.ppt-toggle > summary{
+    cursor:pointer;font-size:15px;font-weight:700;color:var(--main-deep);
+    list-style:none;display:flex;align-items:center;gap:8px;
+  }
+  details.ppt-toggle > summary::-webkit-details-marker{display:none;}
+  details.ppt-toggle > summary::before{
+    content:"▶";display:inline-block;font-size:11px;color:var(--muted);transition:transform .2s;
+  }
+  details.ppt-toggle[open] > summary::before{transform:rotate(90deg);}
+  .pptlist{list-style:none;padding:0;margin:14px 0 0;counter-reset:s;}
+  .pptlist li{
+    font-size:13.5px;color:var(--dark);padding:9px 14px 9px 44px;position:relative;
+    border-bottom:1px dashed var(--border);line-height:1.7;
+  }
+  .pptlist li::before{
+    counter-increment:s;content:counter(s);position:absolute;left:12px;top:9px;
+    width:22px;height:22px;border-radius:50%;background:var(--soft);color:var(--main-deep);
+    font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== MATERIALS ===== */
+  .grid4m{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .mcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 16px;}
+  .mcard .emoji{font-size:26px;}
+  .mcard h4{font-size:15px;margin:8px 0 8px;color:var(--dark);}
+  .mcard ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--dark);line-height:1.75;}
+  .mcard li{margin-bottom:4px;}
+
+  /* ===== RELATED LINK CARD ===== */
+  .relcard{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .relcard .rel-txt{flex:1;min-width:220px;}
+  .relcard .rel-txt h4{font-size:15px;margin:0 0 6px;color:var(--dark);}
+  .relcard .rel-txt p{font-size:13px;color:var(--muted);margin:0;line-height:1.7;}
+  .relcard .rel-btn{
+    display:inline-block;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;
+    background:var(--main);color:#fff;border:1px solid var(--main);
+  }
+  .relcard .rel-btn:hover{background:var(--main-deep);border-color:var(--main-deep);text-decoration:none;}
+
+  /* ===== SOURCES / FOOTER ===== */
+  .sources{background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:18px 20px;font-size:12.5px;color:var(--muted);line-height:1.8;}
+  .sources b{color:var(--dark);}
+  .sources a{color:var(--main-deep);word-break:break-all;}
+  footer{text-align:center;padding:30px 18px 10px;color:var(--muted);font-size:12.5px;}
+  footer .ver{color:var(--main-deep);font-weight:700;}
+  footer .pbt{color:var(--main);font-weight:700;display:block;margin-top:4px;letter-spacing:.04em;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:760px){
+    .grid4,.grid4m{grid-template-columns:repeat(2,1fr);}
+    .grid6{grid-template-columns:1fr 1fr;}
+    .hero h1{font-size:27px;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .cta{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:480px){
+    .grid4,.grid4m,.grid6{grid-template-columns:1fr;}
+    .lr{grid-template-columns:1fr;}
+    .hero h1{font-size:24px;}
+    body{font-size:13.5px;}
+    .module{padding:22px 16px;}
+    table{font-size:12.5px;}
+    th,td{padding:9px 9px;}
+    .cta{grid-template-columns:1fr;}
+    .relcard{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="kicker en">Course Design · Human Design × Precision Living</div>
+  <h1>人类图四箭头 · 精细校准系列</h1>
+  <div class="sub-en en">THE FOUR ARROWS · LIVING YOUR DESIGN PRECISELY</div>
+  <p class="lead">在「类型 · 策略 · 权威」之上，人类图还有一层最细腻的机制——图表头部环绕的四个箭头，称为<b>变量（Variables）</b>，也称<b>四重转化（Four Transformations）</b>。它们回答一个被忽略的问题：<b>「我已经在做对的自己，为什么还是偶尔觉得『哪里不对』？」</b>本课程带你从身体到心智，精细校准你吸收、安放、驱动与看见自己的方式。</p>
+
+  <!-- 四箭头图示（位置修正：右上=动机、右下=视角） -->
+  <div class="hero-diagram">
+    <svg viewBox="0 0 600 380" role="img" aria-label="人类图四箭头布局示意图">
+      <g stroke="#E8DCC8" stroke-width="2" stroke-dasharray="4 5">
+        <line x1="300" y1="190" x2="150" y2="95"/>
+        <line x1="300" y1="190" x2="150" y2="285"/>
+        <line x1="300" y1="190" x2="450" y2="95"/>
+        <line x1="300" y1="190" x2="450" y2="285"/>
+      </g>
+      <circle cx="300" cy="190" r="52" fill="#FBF8F2" stroke="#A8743F" stroke-width="2.5"/>
+      <text x="300" y="184" text-anchor="middle" font-size="21" font-weight="700" fill="#2D2118" font-family="sans-serif">你的</text>
+      <text x="300" y="208" text-anchor="middle" font-size="21" font-weight="700" fill="#2D2118" font-family="sans-serif">设计</text>
+
+      <!-- 左上：消化 -->
+      <g>
+        <line x1="190" y1="95" x2="110" y2="95" stroke="#C4956A" stroke-width="4" stroke-linecap="round"/>
+        <polygon points="110,95 126,86 126,104" fill="#C4956A"/>
+        <text x="150" y="64" text-anchor="middle" font-size="24" font-weight="800" fill="#2D2118" font-family="sans-serif">消化</text>
+      </g>
+      <!-- 左下：环境 -->
+      <g>
+        <line x1="190" y1="285" x2="110" y2="285" stroke="#C4956A" stroke-width="4" stroke-linecap="round"/>
+        <polygon points="110,285 126,276 126,294" fill="#C4956A"/>
+        <text x="150" y="254" text-anchor="middle" font-size="24" font-weight="800" fill="#2D2118" font-family="sans-serif">环境</text>
+      </g>
+      <!-- 右上：动机（修正） -->
+      <g>
+        <line x1="410" y1="95" x2="490" y2="95" stroke="#C4956A" stroke-width="4" stroke-linecap="round"/>
+        <polygon points="490,95 474,86 474,104" fill="#C4956A"/>
+        <text x="450" y="64" text-anchor="middle" font-size="24" font-weight="800" fill="#2D2118" font-family="sans-serif">动机</text>
+      </g>
+      <!-- 右下：视角（修正） -->
+      <g>
+        <line x1="410" y1="285" x2="490" y2="285" stroke="#C4956A" stroke-width="4" stroke-linecap="round"/>
+        <polygon points="490,285 474,276 474,294" fill="#C4956A"/>
+        <text x="450" y="254" text-anchor="middle" font-size="24" font-weight="800" fill="#2D2118" font-family="sans-serif">视角</text>
+      </g>
+    </svg>
+
+    <div class="diagram-legend">
+      <span class="chip">← Tone 1·2·3 = 左箭头（战略型）</span>
+      <span class="chip">→ Tone 4·5·6 = 右箭头（接收型）</span>
+      <span class="chip">身体层：消化 / 环境</span>
+      <span class="chip">心智层：动机 / 视角</span>
+    </div>
+    <p class="diagram-cap"><b style="color:#A8743F">箭头方向由出生 Tone 决定</b>（Ra Uru Hu 原始传递）；图中方向仅为布局示意。</p>
+  </div>
+
+  <!-- CTA 移到 SVG 下方，每行两个按钮 -->
+  <div class="cta">
+    <a class="btn primary" href="#overview">浏览课程总览</a>
+    <a class="btn ghost" href="hd-four-arrows-cheatsheet.html">六决定 / 六环境速查卡 ↗</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">4</div><div class="lab">支精细箭头</div></div>
+    <div class="stat"><div class="num">24</div><div class="lab">种主题色彩（6×4）</div></div>
+    <div class="stat"><div class="num">16</div><div class="lab">种认知组合</div></div>
+    <div class="stat"><div class="num">4</div><div class="lab">重转化序列</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="section" id="overview">
+    <div class="sec-label en">Series Overview</div>
+    <div class="sec-title">四箭头 · 系列总览</div>
+    <p class="sec-intro">四个箭头分属身体侧（设计/Design）与心智侧（个性/Personality）：左上与左下由身体决定，关乎「如何被滋养、被安放」；右上与右下由心智决定，关乎「如何驱动、如何看见」。每一支箭头都朝左或朝右——<b>左=Tone 1·2·3（主动、聚焦、有结构）；右=Tone 4·5·6（接纳、开阔、流动）</b>，没有好坏，只是不同的天生配置。</p>
+
+    <div class="grid4">
+      <div class="gcard">
+        <span class="arrow">→</span>
+        <div class="big">消</div>
+        <h3>消化箭头</h3>
+        <div class="gen en">Digestion · Determination (PHS)</div>
+        <div class="q">关键问题：「我该如何吸收——食物、信息、经验？」</div>
+        <div class="tool">核心工具 · 六决定速查卡</div>
+      </div>
+      <div class="gcard">
+        <span class="arrow">→</span>
+        <div class="big">境</div>
+        <h3>环境箭头</h3>
+        <div class="gen en">Environment · Orientation</div>
+        <div class="q">关键问题：「我的身体在哪类场域里最不被消耗？」</div>
+        <div class="tool">核心工具 · 六环境对照卡</div>
+      </div>
+      <div class="gcard">
+        <span class="arrow">→</span>
+        <div class="big">动</div>
+        <h3>动机箭头</h3>
+        <div class="gen en">Motivation · Awareness</div>
+        <div class="q">关键问题：「什么驱动我的行动？」</div>
+        <div class="tool">核心工具 · 六动机解码卡</div>
+      </div>
+      <div class="gcard">
+        <span class="arrow">→</span>
+        <div class="big">视</div>
+        <h3>视角箭头</h3>
+        <div class="gen en">Perspective · View</div>
+        <div class="q">关键问题：「我通过什么透镜看世界？」</div>
+        <div class="tool">核心工具 · 六视角透镜卡</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MODULES ===================== -->
+  <section class="section">
+    <div class="sec-label en">Course Modules</div>
+    <div class="sec-title">四门模块 · 详解</div>
+
+    <!-- 模块 01：消化 -->
+    <div class="module">
+      <div class="module-head">
+        <span class="module-no">01</span>
+        <h2>消化箭头</h2>
+        <span class="men en">DIGESTION · DETERMINATION (PHS)</span>
+      </div>
+      <p class="mdesc"><b>关键问题：</b>我该如何吸收——食物、信息、经验？</p>
+      <p class="mdesc">消化箭头属于身体层，对应 PHS（初级健康系统）的「六决定」。它描述你如何判断自己被正确滋养。六决定中有两对存在转位：味觉↔声音、触碰↔光。</p>
+      <div class="chips">
+        <span class="chip">🍽️ 身体层</span>
+        <span class="chip">🎨 6 种 Color</span>
+        <span class="chip">🔊 6 种 Tone（决定方向）</span>
+        <span class="chip">⚖️ Base 决定节奏</span>
+      </div>
+
+      <div class="subhead">六决定 · Determination</div>
+      <div class="grid6">
+        <div class="dcard">
+          <div class="top"><span class="badge">1</span><div><h4>食欲</h4><div class="den en">Appetite</div></div></div>
+          <p>一次只吃一种食物效果最佳——分离进食：先吃面包再吃奶酪，而非三明治。简单纯净。</p>
+          <div class="variant">不转位 · 稳定基准</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">2</span><div><h4>味觉</h4><div class="den en">Taste</div></div></div>
+          <p>吃离家近的食物效果最佳——本地简单产品，饮食较固定。重复相同的食物，身体反而更好。</p>
+          <div class="variant">与 声音(5) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">3</span><div><h4>口渴</h4><div class="den en">Thirst</div></div></div>
+          <p>关于摄入物的温度与效应——不仅是物理冷热，也包括食物对身体升温或降温的作用。</p>
+          <div class="variant">不转位 · 稳定基准</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">4</span><div><h4>触碰</h4><div class="den en">Touch</div></div></div>
+          <p>焦点从「吃什么」转向「进食环境」。左箭头=平静环境；右箭头=刺激性环境。</p>
+          <div class="variant">与 光(6) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">5</span><div><h4>声音</h4><div class="den en">Sound</div></div></div>
+          <p>环境中声音的作用——创造合适的声学环境以实现最佳消化。左=高声环境，右=低声环境。</p>
+          <div class="variant">与 味觉(2) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">6</span><div><h4>光</h4><div class="den en">Light</div></div></div>
+          <p>进食时光线的重要性。左箭头需要日光；右箭头不需要日光。</p>
+          <div class="variant">与 触碰(4) 转位</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 02：环境 -->
+    <div class="module">
+      <div class="module-head">
+        <span class="module-no">02</span>
+        <h2>环境箭头</h2>
+        <span class="men en">ENVIRONMENT · ORIENTATION</span>
+      </div>
+      <p class="mdesc"><b>关键问题：</b>我的身体在哪类场域里最不被消耗？</p>
+      <p class="mdesc">环境箭头属于身体层，对应「六环境」。统一框架：箭头<b>朝左=Tone 1·2·3（你需要主动身处其中，它在滋养你）</b>；箭头<b>朝右=Tone 4·5·6（你需要离开它，它在消耗你）</b>。是「趋向/远离」，而非必须搬迁。</p>
+      <div class="chips">
+        <span class="chip">🏠 身体层</span>
+        <span class="chip">🌿 6 种 Color</span>
+        <span class="chip">🔊 Tone 决定方向</span>
+      </div>
+
+      <div class="subhead">六环境 · Environment</div>
+      <div class="grid6">
+        <div class="dcard">
+          <div class="top"><span class="badge">1</span><div><h4>洞穴</h4><div class="den en">Caves</div></div></div>
+          <p>安全与控制——最少入口的空间，背靠墙坐，能看到门，对进出有掌控感。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>你需要洞穴独处来充电回血。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>独处反而耗你，需要走出来。</p></div>
+          </div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">2</span><div><h4>市集</h4><div class="den en">Markets</div></div></div>
+          <p>持续活动与交换——金钱、想法、互动。在行动、运动和动态中茁壮成长。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>人群与热闹在滋养你。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>人群消耗你，需抽离。</p></div>
+          </div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">3</span><div><h4>厨房</h4><div class="den en">Kitchens</div></div></div>
+          <p>事物被转化或创造的地方——持续变化、实验和新事物中茁壮成长。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>围绕食物与社群让你安定。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>需离开厨房式环境。</p></div>
+          </div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">4</span><div><h4>高山</h4><div class="den en">Mountains</div></div></div>
+          <p>更高视角——鸟瞰视野。高层公寓或有开阔视野的地方，看清大局。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>高度与视野让你清晰。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>高处令你耗散，需下来。</p></div>
+          </div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">5</span><div><h4>山谷</h4><div class="den en">Valleys</div></div></div>
+          <p>能量自由流动、人与人相遇——声音重要，喜欢听到他人交谈或背景音乐包围。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>被包围的感觉让你安全。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>低处令你停滞，需离开。</p></div>
+          </div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">6</span><div><h4>海岸</h4><div class="den en">Shores</div></div></div>
+          <p>两个世界交汇——边界模糊的地方。同时体验内外，城市与自然交界处。</p>
+          <div class="lr">
+            <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>边界与流动让你平衡。</p></div>
+            <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>边界感消耗你，需抽身。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 03：动机（修正：恐惧未知/希望/欲望/必要性/修复/只是存在）-->
+    <div class="module">
+      <div class="module-head">
+        <span class="module-no">03</span>
+        <h2>动机箭头</h2>
+        <span class="men en">MOTIVATION · AWARENESS</span>
+      </div>
+      <p class="mdesc"><b>关键问题：</b>什么驱动我的行动？</p>
+      <p class="mdesc">动机箭头属于心智层，对应「六动机」。它描述推动你行动的内在能量形态，没有好坏，只是不同的天生驱动。六动机全部成对转位。来源：Jovian Archive / Ra Uru Hu。</p>
+      <div class="chips">
+        <span class="chip">🔥 心智层</span>
+        <span class="chip">🎨 6 种 Color</span>
+        <span class="chip">🔊 Tone 决定方向</span>
+      </div>
+
+      <div class="subhead">六动机 · Motivation</div>
+      <div class="grid6">
+        <div class="dcard">
+          <div class="top"><span class="badge">1</span><div><h4>对未知的恐惧</h4><div class="den en">Fear of Unknown</div></div></div>
+          <p>被「理解事物」的需要驱动——学习、研究、深入钻研以获取全面理解。</p>
+          <div class="variant">与 只是存在(6) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">2</span><div><h4>希望</h4><div class="den en">Hope</div></div></div>
+          <p>希望的力量——何时不行动、何时不强迫；信任过程时保持冷静自信。</p>
+          <div class="variant">与 修复(5) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">3</span><div><h4>欲望</h4><div class="den en">Desire</div></div></div>
+          <p>创造运动和组织——激励聚焦并坚定朝目标努力，领导他人朝新方向前进。</p>
+          <div class="variant">与 必要性(4) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">4</span><div><h4>必要性</h4><div class="den en">Necessity</div></div></div>
+          <p>被「什么是必要的」驱动——穿透噪音，识别真正需要关注的核心。</p>
+          <div class="variant">与 欲望(3) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">5</span><div><h4>修复</h4><div class="den en">Fixing</div></div></div>
+          <p>被「修复事物」驱动——为自己也为他人。清楚看到有效与无效。</p>
+          <div class="variant">与 希望(2) 转位</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">6</span><div><h4>只是存在</h4><div class="den en">Just Being</div></div></div>
+          <p>没有议程或目的——从旁边观察，关乎存在而非特定结果；纯粹为了体验而做。</p>
+          <div class="variant">与 对未知的恐惧(1) 转位</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块 04：视角（修正位置：右下）-->
+    <div class="module">
+      <div class="module-head">
+        <span class="module-no">04</span>
+        <h2>视角箭头</h2>
+        <span class="men en">PERSPECTIVE · VIEW</span>
+      </div>
+      <p class="mdesc"><b>关键问题：</b>我通过什么透镜看世界？</p>
+      <p class="mdesc">视角箭头属于心智层，对应「六视角」。它决定你注意力天然落在哪一类信息上。「个人化」属于偏分心（Distracted）的视角；其余五者各有侧重。来源：Jovian Archive / Ra Uru Hu。</p>
+      <div class="chips">
+        <span class="chip">👁️ 心智层</span>
+        <span class="chip">🎨 6 种 Color</span>
+        <span class="chip">🔊 Tone 决定方向</span>
+      </div>
+
+      <div class="subhead">六视角 · Perspective</div>
+      <div class="grid6">
+        <div class="dcard">
+          <div class="top"><span class="badge">1</span><div><h4>生存</h4><div class="den en">Survival</div></div></div>
+          <p>通过生存镜头看世界——天然能看到自己和他人为生存需要什么：安全、关系、资源。</p>
+          <div class="variant">生存级 · 基础透镜</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">2</span><div><h4>可能性</h4><div class="den en">Possibility</div></div></div>
+          <p>通过可能性的镜头看世界——在一切事物中看到潜力，帮助他人认识自身潜力。</p>
+          <div class="variant">潜力级 · 拓展透镜</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">3</span><div><h4>权力</h4><div class="den en">Power</div></div></div>
+          <p>通过权力镜头看世界——看到谁拥有权力、谁滥用、谁处于自己的权力之中。</p>
+          <div class="variant">竞争级 · 透视透镜</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">4</span><div><h4>缺失</h4><div class="den en">Lack</div></div></div>
+          <p>看到缺失什么、缺乏什么、需要什么——意识到不必修复一切，有时只需观察。</p>
+          <div class="variant">觉察级 · 诊断透镜</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">5</span><div><h4>概率</h4><div class="den en">Probability</div></div></div>
+          <p>看到可能发生什么——识别趋势走向。务实负责，不陷入幻想。</p>
+          <div class="variant">趋势级 · 推断透镜</div>
+        </div>
+        <div class="dcard">
+          <div class="top"><span class="badge">6</span><div><h4>个人化</h4><div class="den en">Personal</div></div></div>
+          <p>透过个人滤镜看世界——可能带有一定天真。一切都经过个人维度的过程。</p>
+          <div class="variant">偏分心视角 · 个人滤镜</div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:16px">
+        <b>🌀 分心（Distraction）是视角箭头的专属机制：</b>六个视角里，<b>前五个天生聚焦</b>（生存 / 可能性 / 权力 / 缺失 / 概率），各有一类天然关注的信息；唯独<b>个人化（第 6 视角）天生偏分心</b>——它是设计来「从体验与分心中学习」的，分心对它而言是正确状态，而非缺陷。
+        <br><br>当<b>心智接管（not-self）</b>时，两件事会错位：五个聚焦视角会「掉进分心」、注意力被拽走；而个人化反而被环境强迫去「聚焦」。Ra Uru Hu 的要点是：<b>分心就是心智试图成为决策者的地方</b>——一旦觉察「我分心了」，就等于收到信号：你离开了内在权威，该回到身体、等待策略与权威。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 转位与分心 画重点 ===================== -->
+  <section class="section">
+    <div class="sec-label en">Key Takeaways</div>
+    <div class="sec-title">转位 与 分心 · 画重点</div>
+    <p class="sec-intro">两个心智层箭头（动机 / 视角）各有一套「心智接管」机制。先分清一件事：<b>箭头朝左朝右由 Tone 决定</b>；而<b>转位 / 分心描述的是「当心智替你做主时，驱动与视角如何变形」</b>——这是两件事，别混为一谈。</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:90px">机制</th><th style="width:80px">所属箭头</th><th>触发（not-self）</th><th>表现</th><th>如何回归</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>转位<br>Transference</b></td>
+          <td>动机</td>
+          <td>心智接管，动机翻到配对项</td>
+          <td>天生驱动变成过度、强迫、扭曲的版本</td>
+          <td>回到策略与权威，让动机自然流动</td>
+        </tr>
+        <tr>
+          <td><b>分心<br>Distraction</b></td>
+          <td>视角</td>
+          <td>心智接管：聚焦视角掉进分心；个人化被强迫「聚焦」</td>
+          <td>注意力被拽走 / 或错位地强撑专注</td>
+          <td>觉察「我分心了」＝离开权威 → 回身体、等待</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:16px">
+      <b>🎯 画重点：</b>
+      <ul style="margin:8px 0 0;padding-left:20px;line-height:1.95">
+        <li><b>转位</b>是「动机」的翻面：六动机全部成对（恐惧⇄只是存在、希望⇄修复、欲望⇄必要性）。状态好＝本然驱动；not-self＝翻到配对项、变强迫。</li>
+        <li><b>分心</b>是「视角」的翻面：五个视角天生聚焦，<b>个人化天生偏分心、本就如此</b>。not-self 时，五个掉进分心、个人化反被逼「聚焦」——两者都错位。</li>
+        <li>两者本质同源：都是<b>「心智在替你做主」的警报灯</b>。觉察到转位或分心，就等于收到信号——退一步，回到身体与权威。</li>
+        <li>身体层（消化 / 环境）的「决定转位」是另一套机制，决定你如何被滋养 / 在哪类场域最不被消耗，触发条件请以 CTB 分析系统与软件报告为准。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== OUTLINE ===================== -->
+  <section class="section">
+    <div class="sec-label en">Teaching Outline</div>
+    <div class="sec-title">教学大纲 · 建议 5 模块 / 6–10 小时</div>
+    <table>
+      <thead>
+        <tr><th style="width:110px;">模块</th><th style="width:160px;">主题</th><th>核心内容</th><th>教学目标</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>模块一</td><td>变量入门</td><td>四箭头是什么、在图表何处（头部四角）；左/右机制；Color·Tone·Base 三层结构；为何需要精确出生时间；与类型/策略/权威的关系。</td><td>建立「变量是精细条件层」的框架，破除「箭头=性格标签」的误解。</td></tr>
+        <tr><td>模块二</td><td>身体层 · 消化</td><td>主动/被动消化；六决定（食欲/味觉/口渴/触碰/声音/光）；转位配对；温和实验法。</td><td>学员识别自己的决定色彩，设计两周身体实验。</td></tr>
+        <tr><td>模块三</td><td>身体层 · 环境</td><td>六环境（洞穴/市集/厨房/高山/山谷/海岸）及左右变体；土星回归后的权重；「趋向而非搬迁」。</td><td>学员能在日常中识别并更常选择滋养场域。</td></tr>
+        <tr><td>模块四</td><td>心智层 · 视角与动机</td><td>六视角与分心；六动机与转位；「心智不是决策工具」「心智是见证者」的边界。</td><td>学员识别自己的视角/动机，觉察分心滑落并回归。</td></tr>
+        <tr><td>模块五</td><td>整合 · 四重序列</td><td>身体优先序列；从消化→环境→视角→动机的终身实验；个案与复盘。</td><td>学员带走可执行的「四箭头实验计划」。</td></tr>
+      </tbody>
+    </table>
+
+    <!-- PPT 18 页大纲（默认折叠） -->
+    <details class="ppt-toggle">
+      <summary>PPT 内容大纲（建议 18 页）· 点击展开</summary>
+      <ol class="pptlist" style="margin-top:14px">
+        <li>封面——《人类图四箭头·精细校准系列》</li>
+        <li>开场——「我已经在做对的自己，为什么还是偶尔觉得『哪里不对』？」</li>
+        <li>核心概念——什么是变量（Variables）/ 四重转化（Four Transformations）</li>
+        <li>定位——图表头部四角：左/右 与 身体侧/心智侧</li>
+        <li><b>机制——Color · Tone · Base 三层：为什么需要精确出生时间</b></li>
+        <li>总览——四箭头一张图：消化 / 环境 / 动机 / 视角</li>
+        <li>模块一·消化——主动 vs 被动</li>
+        <li>模块一·消化——六决定详解（6 页，每页一种）</li>
+        <li>模块一·消化——转位机制与两周实验法</li>
+        <li>模块二·环境——六环境详解（6 页，含左右变体）</li>
+        <li>模块二·环境——「趋向而非搬迁」+ 土星回归提示</li>
+        <li>模块三·动机——聚焦 vs 全景 + 六动机与转位</li>
+        <li>模块三·动机——策略 vs 接纳 + 六动机与转位</li>
+        <li>模块三·心智边界——心智不是决策工具</li>
+        <li>模块四·序列——身体优先：消化→环境→动机→视角</li>
+        <li>模块四·序列——16 种认知组合速览</li>
+        <li>整合——日常校准三件套</li>
+        <li>结语——参考资料与下一步</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- ===================== MATERIALS ===================== -->
+  <section class="section" id="materials">
+    <div class="sec-label en">Course Materials</div>
+    <div class="sec-title">配套物料</div>
+    <div class="grid4m">
+      <div class="mcard">
+        <div class="emoji">📇</div>
+        <h4>六决定速查卡</h4>
+        <ul>
+          <li>六决定核心问题</li>
+          <li>转位配对对照</li>
+          <li>可打印 · A6 携带版</li>
+        </ul>
+      </div>
+      <div class="mcard">
+        <div class="emoji">🌿</div>
+        <h4>六环境对照卡</h4>
+        <ul>
+          <li>六环境左右变体</li>
+          <li>「趋向/远离」框架</li>
+          <li>与六决定速查卡合并</li>
+        </ul>
+      </div>
+      <div class="mcard">
+        <div class="emoji">🔥</div>
+        <h4>六动机解码卡</h4>
+        <ul>
+          <li>六动机驱动力描述</li>
+          <li>转位配对速查</li>
+          <li>整合行动指引</li>
+        </ul>
+      </div>
+      <div class="mcard">
+        <div class="emoji">👁️</div>
+        <h4>六视角透镜卡</h4>
+        <ul>
+          <li>六视角认知差异</li>
+          <li>个人化/分心视角</li>
+          <li>日常观察提示</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RELATED LINKS ===================== -->
+  <section class="section">
+    <div class="sec-label en">Related Resources</div>
+    <div class="sec-title">关联资源</div>
+
+    <div class="relcard" style="margin-bottom:14px">
+      <div class="rel-txt">
+        <h4>📇 四箭头 · 六决定 / 六环境 速查卡</h4>
+        <p>可打印速查卡——含六决定（食欲/味觉/口渴/触碰/声音/光）+ 六环境（洞穴/市集/厨房/高山/山谷/海岸）左右对照 + 查询指引。</p>
+      </div>
+      <a class="rel-btn" href="hd-four-arrows-cheatsheet.html">打开速查卡 ↗</a>
+    </div>
+
+    <div class="relcard">
+      <div class="rel-txt">
+        <h4>⬡ CTB 能量变量分析系统</h4>
+        <p>同工程的 CTB 分析系统——Color · Tone · Base 三层能量解码，含 Tone 决定箭头方向的权威规则、四箭头 16 组合、可交互分析器。与本课程内容强相关。</p>
+      </div>
+      <a class="rel-btn" href="ctb-analysis.html">打开 CTB 分析系统 ↗</a>
+    </div>
+  </section>
+
+  <!-- ===================== SOURCES ===================== -->
+  <section class="section">
+    <div class="sec-label en">References &amp; Credits</div>
+    <div class="sec-title">资料来源与专业参考</div>
+    <div class="sources">
+      本课程内容严格基于公开的人类图专业资料交叉核对，未做主观编造。核心机制（四箭头=Variables/Four Transformations、左右=主动/接纳、<b>Tone 1·2·3 朝左 / Tone 4·5·6 朝右</b>、六决定/六环境/六视角/六动机、转位与分心配对、身体优先序列）均来自以下执业者与档案来源：
+      <br><br>
+      <b>体系与创始人：</b>人类图体系由 <b>Ra Uru Hu</b> 创立；变量（Variables）亦称「四重转化（Four Transformations）」，属 Rave 心理学范畴。变量研究的重要贡献者包括 <b>Vaness Henry</b> 等。
+      <br><br>
+      <b>参考来源（节选）：</b>
+      <a href="https://livingfromyouressence.com/2025/10/the-human-design-variables/" target="_blank">Living From Your Essence · The Human Design Variables</a> ·
+      <a href="https://humandesignredefined.com/human-design-variables/" target="_blank">HD ReDefined · Variables Complete Guide</a> ·
+      <a href="https://www.jovianarchive.com/pages/seeing-through-your-unique-perspective-understanding-view-in-human-design" target="_blank">Jovian Archive · View in Human Design</a> ·
+      <a href="https://www.mybodygraph.com/blog/perspective-in-human-design-how-youre-meant-to-see-things" target="_blank">myBodyGraph · Perspective</a> ·
+      <a href="https://freehumandesignchart.com/understanding-the-four-variables-in-human-design/" target="_blank">Free Human Design Chart · The Four Variables</a> ·
+      <a href="https://www.thedesignofyou.com/blog/environments-and-human-design" target="_blank">The Design of You · Environments</a> ·
+      <a href="https://nikkiwillemse.com/variables-human-design/" target="_blank">Nikki Willemse · Variables</a> ·
+      <a href="https://holistichuman.design/the-human-design-arrows-illuminate-your-cognition" target="_blank">Holistic Human · The 16 Arrows</a> ·
+      <a href="https://humandesign.ai/zh/docs/hd-variables/human-design-motivation-6-colors-guide" target="_blank">humandesign.ai · Motivation 6 Colors</a> ·
+      <a href="https://www.humandesign.wtf/blog/perspective-human-design-how-your-view-shapes-reality" target="_blank">humandesign.wtf · Perspective</a> ·
+      <a href="https://soulandsage.com/human-design-tools-for-coaches/" target="_blank">Soul &amp; Sage · Tools for Coaches</a>
+      <br><br>
+      <b>使用说明：</b>变量精度依赖出生时间（建议误差在数分钟以内）。本课程内容用于自我实验与成长探索，<b>不构成医学、营养或心理诊断建议</b>；如有健康问题请遵循专业医疗意见。
+    </div>
+  </section>
+
+  <footer>
+    <div class="ver">人类图四箭头 · 精细校准系列 · VERSION V5</div>
+    <div>课程研发方案 · 人类图 × 生命精细设计 · 内容基于专业人类图数据库查证</div>
+    <div style="margin-top:6px;">© 2026 人类图课程研发 · 仅供学习与教学使用</div>
+    <div class="pbt">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>

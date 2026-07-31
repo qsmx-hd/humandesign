@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图四箭头 · 六决定 / 六环境速查卡 V3</title>
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --main:#C4956A;
+    --main-deep:#A8743F;
+    --dark:#2D2118;
+    --border:#E8DCC8;
+    --card:#FBF8F2;
+    --soft:#EFE7D8;
+    --muted:#7A6A58;
+    --green:#6E8B5E;
+    --danger:#B85C38;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);color:var(--dark);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:14px;line-height:1.75;margin:0;padding:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--main-deep);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:840px;margin:0 auto;padding:24px 18px 50px;}
+
+  .chead{text-align:center;padding:18px 0 14px;border-bottom:2px solid var(--main);margin-bottom:22px;}
+  .chead .k{font-size:12.5px;color:var(--muted);letter-spacing:.18em;}
+  .chead h1{font-size:24px;margin:6px 0 4px;font-weight:800;color:var(--dark);}
+  .chead .sub{font-size:13px;color:var(--main-deep);letter-spacing:.08em;}
+  .chead .back{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--main-deep);}
+
+  .how{background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--dark);line-height:1.85;margin-bottom:18px;}
+  .how b{color:var(--main-deep);}
+
+  .correction{
+    background:#FBF1E6;border:1px solid var(--danger);border-left:4px solid var(--danger);
+    border-radius:10px;padding:13px 16px;font-size:13px;color:var(--dark);margin-bottom:26px;line-height:1.85;
+  }
+  .correction b{color:var(--danger);}
+
+  .block-title{font-size:18px;font-weight:800;color:var(--dark);margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  .block-title .bar{width:6px;height:22px;background:var(--main);border-radius:3px;display:inline-block;}
+  .block-intro{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.8;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 15px;break-inside:avoid;
+  }
+  .card .top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .card .badge{
+    width:30px;height:30px;border-radius:50%;background:var(--main);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:0 0 auto;
+  }
+  .card h3{font-size:16px;margin:0;color:var(--dark);}
+  .card .en{font-size:12px;color:var(--muted);letter-spacing:.06em;}
+  .card p{font-size:13px;color:var(--dark);margin:7px 0 0;line-height:1.7;}
+  .card .xfer{font-size:12.5px;color:var(--main-deep);margin-top:9px;background:var(--soft);border-radius:8px;padding:6px 9px;line-height:1.6;}
+
+  .lr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;}
+  .lr .col{border-radius:9px;padding:9px 10px;border:1px solid var(--border);}
+  .lr .left{background:#FBF1E6;}
+  .lr .right{background:#EEF2EC;}
+  .lr .col h5{font-size:12.5px;margin:0 0 4px;display:flex;align-items:center;gap:6px;}
+  .lr .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .lr .left .dot{background:var(--main-deep);}
+  .lr .right .dot{background:var(--green);}
+  .lr .col p{font-size:12.5px;margin:0;line-height:1.65;color:var(--dark);}
+
+  .guide{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-top:26px;}
+  .guide h3{font-size:16px;margin:0 0 10px;color:var(--dark);}
+  .guide ol{margin:0;padding-left:20px;font-size:13px;color:var(--dark);line-height:1.85;}
+  .guide li{margin-bottom:6px;}
+  .guide b{color:var(--main-deep);}
+
+  /* 关联资源卡 */
+  .relcard{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-top:26px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .relcard .rel-txt{flex:1;min-width:200px;}
+  .relcard .rel-txt h4{font-size:15px;margin:0 0 6px;color:var(--dark);}
+  .relcard .rel-txt p{font-size:13px;color:var(--muted);margin:0;line-height:1.7;}
+  .relcard .rel-btn{
+    display:inline-block;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:600;
+    background:var(--main);color:#fff;border:1px solid var(--main);
+  }
+  .relcard .rel-btn:hover{background:var(--main-deep);border-color:var(--main-deep);text-decoration:none;}
+
+  .disclaimer{font-size:12px;color:var(--muted);line-height:1.8;margin-top:22px;border-top:1px dashed var(--border);padding-top:14px;}
+
+  .foot{text-align:center;padding:18px;color:var(--muted);font-size:12px;}
+  .foot .ver{color:var(--main-deep);font-weight:700;}
+  .foot .pbt{color:var(--main);font-weight:700;display:block;margin-top:4px;letter-spacing:.04em;}
+
+  @media (max-width:680px){
+    .grid{grid-template-columns:1fr 1fr;}
+    .chead h1{font-size:21px;}
+  }
+  @media (max-width:460px){
+    .grid{grid-template-columns:1fr;}
+    .relcard{flex-direction:column;align-items:flex-start;}
+  }
+
+  /* ===== 转位/分心对比表 ===== */
+  .tbl-wrap{overflow-x:auto;margin-top:14px;}
+  .tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px;}
+  .tbl th,.tbl td{border:1px solid var(--border);padding:8px 9px;text-align:left;vertical-align:top;line-height:1.6;}
+  .tbl th{background:var(--soft);color:var(--dark);font-weight:700;}
+  .tbl td{color:var(--dark);}
+  .tbl b{color:var(--main-deep);}
+
+  /* ===== 打印优化 ===== */
+  @page{margin:12mm;}
+  @media print{
+    body{background:#fff;color:#000;font-size:12px;}
+    .wrap{max-width:100%;padding:0;}
+    .chead{border-bottom:2px solid #000;padding-top:0;}
+    .chead .k,.chead .sub,.chead .back{color:#333;}
+    .how{background:#fff;border:1px solid #999;}
+    .how b{color:#000;}
+    .correction{background:#fff;border:1px solid #000;}
+    .card,.guide,.relcard{background:#fff;border:1.2px solid #888;break-inside:avoid;}
+    .card .badge{background:#555;color:#fff;}
+    .card .xfer{background:#f2f2f2;border:1px solid #bbb;}
+    .lr .left{background:#fbf3ea;border:1px solid #bbb;}
+    .lr .right{background:#eef3ec;border:1px solid #bbb;}
+    .block-title .bar{background:#555;}
+    .disclaimer{color:#333;}
+    .relcard .rel-btn,.foot .ver,.foot .pbt{color:#000;background:#fff;border:1px solid #000;}
+    .no-print{display:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chead">
+    <div class="k en">HUMAN DESIGN · VARIABLES QUICK CARD</div>
+    <h1>四箭头 · 六决定 / 六环境 速查卡</h1>
+    <div class="sub">The Six Determinations &amp; Six Environments · 打印携带版</div>
+    <div><a class="back" href="hd-four-arrows-course.html">← 返回课程主页</a></div>
+  </div>
+
+  <div class="how">
+    <b>怎么用这张卡：</b>四箭头（变量 / 四重转化）里，<b>消化箭头（左上）</b>对应六决定，<b>环境箭头（左下）</b>对应六环境，都属于「身体层」。本卡列出全部 6 种决定与 6 种环境的通用解读框架，方便你对照自己的图表快速查询。
+  </div>
+
+  <!-- V3 关键修正 -->
+  <div class="correction">
+    <b>⚠️ 关键修正（V3）：</b>箭头方向由 <b>Tone（音调）</b> 决定，不是 Color。
+    <ul style="margin:6px 0 0;padding-left:20px;line-height:1.85">
+      <li><b>Tone 1 · 2 · 3 = 左箭头 ←</b>（战略性、主动、聚焦）</li>
+      <li><b>Tone 4 · 5 · 6 = 右箭头 →</b>（接受性、被动、开放）</li>
+    </ul>
+    这是 Ra Uru Hu 原始传递的权威规则，参见 <a href="ctb-analysis.html">CTB 能量变量分析系统 ↗</a>。
+  </div>
+
+  <!-- ============ A. 六决定 ============ -->
+  <div class="block-title"><span class="bar"></span>一 · 六决定（Digestion / Determination · PHS）</div>
+  <p class="block-intro">六决定描述你「如何判断自己被正确滋养」的六类身体信号。其中有两对存在<b>转位（Transference）</b>：味觉↔声音、触碰↔光——当决定落在转位位置时，实际生效的是配对项（触发机制以 CTB 分析系统与软件报告为准）。</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="top"><span class="badge">1</span><div><h3>食欲</h3><div class="en">Appetite</div></div></div>
+      <p>一次只吃一种食物效果最佳——分离进食：先吃面包再吃奶酪，而非三明治。简单与纯净。</p>
+      <div class="xfer">不转位 · 稳定基准</div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">2</span><div><h3>味觉</h3><div class="en">Taste</div></div></div>
+      <p>吃离家近的食物效果最佳——本地简单产品。饮食较固定，重复相同食物身体反而更好。</p>
+      <div class="xfer">与 声音（5）转位</div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">3</span><div><h3>口渴</h3><div class="en">Thirst</div></div></div>
+      <p>关于摄入物的温度与效应——不仅是物理冷热，也包括食物对身体升温或降温的作用。</p>
+      <div class="xfer">不转位 · 稳定基准</div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">4</span><div><h3>触碰</h3><div class="en">Touch</div></div></div>
+      <p>焦点从「吃什么」转向「进食环境」。左=平静环境，右=刺激性环境。</p>
+      <div class="xfer">与 光（6）转位</div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">5</span><div><h3>声音</h3><div class="en">Sound</div></div></div>
+      <p>环境中声音的作用——创造合适的声学环境以实现最佳消化。左=高声环境，右=低声环境。</p>
+      <div class="xfer">与 味觉（2）转位</div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">6</span><div><h3>光</h3><div class="en">Light</div></div></div>
+      <p>进食时光线的重要性——左箭头需要日光（daylight），右箭头不需要日光。</p>
+      <div class="xfer">与 触碰（4）转位</div>
+    </div>
+  </div>
+
+  <!-- ============ B. 六环境 ============ -->
+  <div class="block-title" style="margin-top:30px;"><span class="bar"></span>二 · 六环境（Environment / Orientation）</div>
+  <p class="block-intro">六环境描述你的身体在<b>哪类场域里最不被消耗</b>。统一框架：箭头<b>朝左 = 趋向该类环境（它在滋养你，应主动身处其中）</b>；箭头<b>朝右 = 远离该类环境（它在消耗你，应抽身离开）</b>。注意是「趋向 / 远离」，而非必须搬家搬迁。</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="top"><span class="badge">1</span><div><h3>洞穴</h3><div class="en">Caves</div></div></div>
+      <p>安全与控制——最少入口的空间，背靠墙坐，能看到门，对进出有掌控感。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>你需要洞穴独处来充电回血。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>独处反而耗你，需要走出来。</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">2</span><div><h3>市集</h3><div class="en">Markets</div></div></div>
+      <p>持续活动与交换——金钱、想法、互动。在行动、运动和动态中茁壮成长。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>人群与热闹在滋养你。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>人群消耗你，需抽离。</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">3</span><div><h3>厨房</h3><div class="en">Kitchens</div></div></div>
+      <p>事物被转化或创造的地方——持续变化、实验和新事物中茁壮成长。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>围绕食物与社群让你安定。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>需离开厨房式环境。</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">4</span><div><h3>高山</h3><div class="en">Mountains</div></div></div>
+      <p>更高视角——鸟瞰视野。高层公寓或有开阔视野的地方，看清大局。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>高度与视野让你清晰。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>高处令你耗散，需下来。</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">5</span><div><h3>山谷</h3><div class="en">Valleys</div></div></div>
+      <p>能量自由流动、人与人相遇——声音重要，喜欢听到他人交谈或背景音乐包围。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>被包围的感觉让你安全。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>低处令你停滞，需离开。</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="top"><span class="badge">6</span><div><h3>海岸</h3><div class="en">Shores</div></div></div>
+      <p>两个世界交汇——边界模糊的地方。同时体验内外，城市与自然交界处。</p>
+      <div class="lr">
+        <div class="col left"><h5><span class="dot"></span>朝左 · 趋向</h5><p>边界与流动让你平衡。</p></div>
+        <div class="col right"><h5><span class="dot"></span>朝右 · 远离</h5><p>边界感消耗你，需抽身。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 查询指引 ============ -->
+  <div class="guide">
+    <h3>怎么查到自己属于哪一种？</h3>
+    <ol>
+      <li><b>看图表头部四个箭头的方向</b>：左上为消化（决定）、左下为环境，箭头朝左 / 朝右即对应上面的「趋向 / 远离」。</li>
+      <li><b>查精确 Tone</b>：消化与环境的箭头方向由各位置的 <b>Tone 值</b>决定（Tone 1·2·3 朝左，Tone 4·5·6 朝右）。需要<b>精确的出生时间（误差在分钟级）</b>才能算准。</li>
+      <li><b>用人类图软件 / CTB 分析系统</b>：主流人类图解读工具（如 myBodyGraph、Jovian Archive）会直接给出你的六决定、六环境与 Tone 值。</li>
+      <li><b>转位判断</b>：若你的决定落在转位位置（味觉/声音、触碰/光），实际生效的是配对项——以 CTB 分析系统与软件报告为准。</li>
+    </ol>
+  </div>
+
+  <!-- ============ C. 转位与分心 画重点 ============ -->
+  <div class="block-title" style="margin-top:30px;"><span class="bar"></span>三 · 转位 与 分心 · 画重点</div>
+  <p class="block-intro">两个心智层箭头（动机 / 视角）各有一套「心智接管」机制。先分清：<b>箭头朝左朝右由 Tone 决定</b>；而<b>转位 / 分心描述的是「当心智替你做主时，驱动与视角如何变形」</b>——两件事别混为一谈。</p>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th style="width:78px">机制</th><th style="width:64px">所属</th><th>触发（not-self）</th><th>表现</th><th>如何回归</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>转位<br>Transference</b></td>
+          <td>动机</td>
+          <td>心智接管，动机翻到配对项</td>
+          <td>天生驱动变过度、强迫、扭曲</td>
+          <td>回到策略与权威，让动机自然流动</td>
+        </tr>
+        <tr>
+          <td><b>分心<br>Distraction</b></td>
+          <td>视角</td>
+          <td>聚焦视角掉进分心；个人化被强迫「聚焦」</td>
+          <td>注意力被拽走 / 错位强撑专注</td>
+          <td>觉察「我分心了」＝离开权威 → 回身体、等待</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="guide">
+    <h3>🎯 画重点</h3>
+    <ul style="margin:0;padding-left:20px;font-size:13px;color:var(--dark);line-height:1.85">
+      <li><b>转位</b>是「动机」的翻面：六动机全部成对（恐惧⇄只是存在、希望⇄修复、欲望⇄必要性）。状态好＝本然驱动；not-self＝翻到配对项、变强迫。</li>
+      <li><b>分心</b>是「视角」的翻面：五个视角天生聚焦，<b>个人化天生偏分心、本就如此</b>。not-self 时，五个掉进分心、个人化反被逼「聚焦」——两者都错位。</li>
+      <li>两者本质同源：都是<b>「心智在替你做主」的警报灯</b>。觉察到转位或分心，就等于收到信号——退一步，回到身体与权威。</li>
+      <li>身体层（消化 / 环境）的「决定转位」是另一套机制——味觉↔声音、触碰↔光；实际生效以 CTB 分析系统与软件报告为准。</li>
+    </ul>
+  </div>
+
+  <!-- ============ 关联资源 ============ -->
+  <div class="relcard">
+    <div class="rel-txt">
+      <h4>⬡ CTB 能量变量分析系统</h4>
+      <p>同工程的 CTB 分析系统——Color · Tone · Base 三层能量解码，含 Tone 决定箭头方向的权威规则、四箭头 16 组合、可交互分析器。</p>
+    </div>
+    <a class="rel-btn" href="ctb-analysis.html">打开 CTB 系统 ↗</a>
+  </div>
+
+  <p class="disclaimer">
+    说明：本速查卡 V3 内容基于人类图体系中 Variables / PHS 的公开专业资料 + 同工程 <a href="ctb-analysis.html">CTB 能量变量分析系统 V8</a>（Powered By Kan Man Tang）权威沉淀整理。变量机制高度依赖<b>精确的出生时间</b>，请勿仅凭记忆或近似时间自我判断。本卡仅供学习与自我观察参考，<b>不构成任何医疗、心理或诊断建议</b>。人类图体系由 Ra Uru Hu（Alan Krakower）于 1987 年创立。
+  </p>
+
+  <div class="foot">
+    <div class="ver">人类图四箭头 · 速查卡 · VERSION V3</div>
+    <div class="pbt">Powered By Kan Man Tang</div>
+  </div>
+
+</div>
+</body>
+</html>
