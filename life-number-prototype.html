@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>生命数字密码 · 个人成长探索</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --card:#FBF7F0; --ink:#2D2118; --sub:#6B5D4F; --muted:#9A8C7A;
+    --pri:#C4956A; --pri-soft:#F0E6D6; --gold:#B8860B; --gold-soft:#F3E9D2;
+    --brand:#7C43B3; --brand-soft:#F2EDF7;
+    --line:#E8DCC8; --warn:#C0762E; --ok:#7A8B5A;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:14.5px;line-height:1.75;}
+  .app{max-width:460px;margin:0 auto;padding:16px 14px 70px;min-height:100vh;}
+  h1{font-size:22px;text-align:center;color:var(--brand);margin:10px 0 4px;letter-spacing:1px;}
+  .tag{text-align:center;font-size:13px;color:var(--sub);margin-bottom:18px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:18px;margin-bottom:14px;box-shadow:0 4px 18px rgba(45,33,24,.10);}
+  .card h2{font-size:16px;color:var(--pri);margin:0 0 12px;
+    border-left:4px solid var(--gold);padding-left:10px;display:flex;align-items:center;gap:8px;}
+  label{display:block;font-size:13px;color:var(--sub);margin:10px 0 6px;}
+  .seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .seg button{flex:1;border:0;background:var(--card);padding:11px;font-size:14px;color:var(--sub);}
+  .seg button.on{background:var(--pri-soft);color:var(--pri);font-weight:700;}
+  input[type=date]{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;
+    font-size:15px;background:var(--bg);color:var(--ink);}
+  .row{display:flex;gap:10px;}
+  .row>div{flex:1;}
+  .calc{width:100%;margin-top:14px;padding:15px;border:0;border-radius:14px;
+    background:linear-gradient(135deg,var(--pri),#B07D4E);color:#FBF7F0;font-size:16px;
+    font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(45,33,24,.18);}
+  .calc:active{opacity:.9;}
+  .big-num{font-size:72px;font-weight:800;color:var(--gold);text-align:center;line-height:1.05;text-shadow:0 0 24px rgba(184,134,11,.22);}
+  .big-label{text-align:center;color:var(--sub);font-size:14px;margin-bottom:8px;}
+  .pill{display:inline-block;background:var(--gold-soft);color:var(--gold);border:1px solid rgba(184,134,11,.25);
+    border-radius:999px;padding:5px 13px;font-size:13px;margin:4px 6px 4px 0;font-weight:600;}
+  .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px;gap:10px;}
+  .kv:last-child{border-bottom:0;}
+  .kv b{color:var(--pri);font-weight:600;flex-shrink:0;}
+  .kv span{color:var(--sub);}
+  .sec-note{font-size:12.5px;color:var(--warn);background:rgba(201,139,94,.08);border-radius:10px;
+    padding:10px 12px;margin-top:10px;border:1px solid rgba(201,139,94,.15);}
+  .disc{font-size:12px;color:var(--muted);text-align:center;margin-top:22px;padding:0 10px;line-height:1.8;}
+  .hide{display:none !important;}
+  .li-code{margin:8px 0;font-size:13.5px;padding:10px;border-radius:10px;background:var(--pri-soft);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:flex-start;line-height:1.7;}
+  .li-code b{color:var(--gold);font-size:15px;}
+  .badge{font-size:11px;background:var(--pri-soft);color:var(--pri);border-radius:6px;padding:3px 7px;margin-right:8px;border:1px solid var(--line);}
+
+  /* 正三角：按图示网格精确布局 */
+  .tri-wrap{position:relative;padding:10px 0 14px;margin-top:8px;overflow-x:auto;}
+  .tri-diagram{display:grid;grid-template-columns:44px repeat(8,1fr) 44px;
+    grid-template-rows:repeat(6,auto);gap:10px 3px;align-items:center;justify-items:center;
+    min-width:340px;font-variant-numeric:tabular-nums;}
+  .tri-diagram .cell{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .tri-diagram .n{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+    border-radius:8px;background:var(--pri-soft);border:1px solid var(--line);font-weight:700;font-size:14px;}
+  .tri-diagram .n.apex{background:linear-gradient(135deg,var(--gold),#D4A020);color:#2D2118;border:none;font-weight:800;box-shadow:0 0 18px rgba(184,134,11,.35);}
+  .tri-diagram .n.base{background:var(--bg);color:var(--ink);border-color:var(--muted);}
+  .tri-diagram .n.ext{background:var(--gold-soft);color:var(--gold);border-color:rgba(184,134,11,.25);}
+  .tri-diagram .n.side{background:#EFE0CC;border-color:#D9C3A4;color:#9A6B3F;}
+  .tri-diagram .formula{font-size:10px;color:var(--muted);white-space:nowrap;}
+  .tri-diagram .label{font-size:10px;color:var(--sub);}
+  .tri-diagram .zone-label{font-size:10px;color:var(--warn);text-align:center;}
+
+  .age-zones{display:flex;justify-content:space-around;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;}
+  .age-zones .z{text-align:center;color:var(--sub);}
+  .age-zones .z b{display:block;color:var(--pri);font-size:13px;margin-bottom:2px;}
+
+  .formula-list{margin-top:14px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:13px;}
+  .formula-list .fl-row{display:flex;flex-wrap:wrap;gap:8px 16px;margin:5px 0;}
+  .formula-list .fl-item{background:var(--pri-soft);border-radius:8px;padding:6px 10px;font-size:12px;}
+  .formula-list .fl-item b{color:var(--gold);margin-right:4px;}
+
+  .code-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+  .code-chip{padding:10px 6px;text-align:center;border-radius:10px;background:var(--pri-soft);border:1px solid var(--line);cursor:pointer;transition:.15s;}
+  .code-chip:active{transform:scale(.96);}
+  .code-chip .cd{font-size:18px;font-weight:800;color:var(--gold);}
+  .code-chip .nm{font-size:11px;color:var(--sub);margin-top:2px;}
+  .code-detail{margin-top:12px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:13px;color:var(--ink);}
+  .code-detail h4{margin:0 0 6px;color:var(--pri);font-size:14px;}
+
+  .warn-bar{font-size:12px;color:var(--warn);background:rgba(201,139,94,.08);border:1px solid rgba(201,139,94,.2);
+    border-radius:10px;padding:10px 12px;margin-bottom:14px;}
+
+  .tri-legend{margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--line);}
+  .tri-legend .legend-title{font-size:13px;color:var(--muted);text-align:center;margin-bottom:8px;}
+  .tri-diagram.legend .n{background:var(--line);color:var(--muted);border-color:var(--line);font-weight:600;}
+  .tri-diagram.legend .n.apex{background:var(--pri-soft);color:var(--pri);border-color:var(--pri);box-shadow:none;}
+  .tri-diagram.legend .n.side{background:#E8DDD0;color:#8B7355;border-color:#D8C4A8;}
+  .tri-diagram.legend .n.ext{background:var(--gold-soft);color:var(--gold);border-color:var(--gold-soft);}
+  .legend-labels{display:flex;justify-content:space-around;font-size:12px;color:var(--sub);margin-top:10px;flex-wrap:wrap;gap:6px;}
+  .tri-diagram .label{white-space:nowrap;}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>生命数字密码</h1>
+  <div class="tag">输入生日，探索你的数字能量地图 · 原型 v5</div>
+
+  <div class="warn-bar">本工具所有内容<b>仅供个人成长探索与娱乐参考</b>，不构成任何专业建议。请理性看待，切勿沉迷。</div>
+
+  <!-- 输入区 -->
+  <div class="card">
+    <h2>① 你的生日</h2>
+    <div class="seg" id="calType">
+      <button data-v="solar" class="on">阳历</button>
+      <button data-v="lunar">农历</button>
+    </div>
+    <label id="lblDate">选择阳历生日</label>
+    <input type="date" id="birth" value="1976-06-16" min="1900-01-01" max="2100-12-31">
+    <div class="row" style="margin-top:10px;">
+      <div><label>性别（可选）</label>
+        <div class="seg" id="gender">
+          <button data-v="f">女</button><button data-v="m">男</button>
+        </div>
+      </div>
+      <div><label>闰月（农历时）</label>
+        <div class="seg" id="leap">
+          <button data-v="0" class="on">否</button><button data-v="1">是</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>② 伴侣生日（算夫妻码，可留空）</h2>
+    <div class="seg" id="calType2">
+      <button data-v="solar" class="on">阳历</button>
+      <button data-v="lunar">农历</button>
+    </div>
+    <label id="lblDate2">选择伴侣阳历生日</label>
+    <input type="date" id="birth2" min="1900-01-01" max="2100-12-31">
+  </div>
+
+  <button class="calc" id="go">生 成 我 的 生 命 密 码</button>
+
+  <!-- 结果区 -->
+  <div id="result" class="hide">
+
+    <div class="card">
+      <h2>主性格数字</h2>
+      <div class="big-num" id="rMain">-</div>
+      <div class="big-label" id="rMainName">-</div>
+      <div id="rMainDesc" style="font-size:13.5px;color:var(--sub);margin-top:10px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>扩展密码 · 点击数字查看含义</h2>
+      <div class="code-grid" id="rExtGrid"></div>
+      <div class="code-detail hide" id="rExtDetail"></div>
+      <div class="sec-note">扩展码（内心、潜意识、外心、人生目标、流年等）规则可对照你的教材或对标案例进一步校准，当前按主流数字学体系生成。</div>
+    </div>
+
+    <div class="card">
+      <h2>生命数字三角形 · 完整能量图</h2>
+<div class="tri-legend">
+  <div class="legend-title">数字代码示意图（固定参考）</div>
+  <div class="tri-diagram legend">
+    <div class="cell" style="grid-column:2;grid-row:6;"><div class="n base">A</div><div class="formula">日十位</div></div>
+    <div class="cell" style="grid-column:3;grid-row:6;"><div class="n base">B</div><div class="formula">日个位</div></div>
+    <div class="cell" style="grid-column:4;grid-row:6;"><div class="n base">C</div><div class="formula">月十位</div></div>
+    <div class="cell" style="grid-column:5;grid-row:6;"><div class="n base">D</div><div class="formula">月个位</div></div>
+    <div class="cell" style="grid-column:6;grid-row:6;"><div class="n base">E</div><div class="formula">年千位</div></div>
+    <div class="cell" style="grid-column:7;grid-row:6;"><div class="n base">F</div><div class="formula">年百位</div></div>
+    <div class="cell" style="grid-column:8;grid-row:6;"><div class="n base">G</div><div class="formula">年十位</div></div>
+    <div class="cell" style="grid-column:9;grid-row:6;"><div class="n base">H</div><div class="formula">年个位</div></div>
+
+    <div class="cell" style="grid-column:3;grid-row:5;"><div class="n">I</div><div class="formula">A+B</div></div>
+    <div class="cell" style="grid-column:4;grid-row:5;"><div class="n">J</div><div class="formula">C+D</div></div>
+    <div class="cell" style="grid-column:6;grid-row:5;"><div class="n">K</div><div class="formula">E+F</div></div>
+    <div class="cell" style="grid-column:7;grid-row:5;"><div class="n">L</div><div class="formula">G+H</div></div>
+
+    <div class="cell" style="grid-column:4;grid-row:4;"><div class="n">M</div><div class="formula">I+J</div></div>
+    <div class="cell" style="grid-column:6;grid-row:4;"><div class="n">N</div><div class="formula">K+L</div></div>
+
+    <div class="cell" style="grid-column:5;grid-row:3;"><div class="n apex">O</div><div class="formula">M+N</div><div class="label">主性格</div></div>
+
+    <div class="cell" style="grid-column:4;grid-row:2;"><div class="n ext">Q</div><div class="formula">N+O</div></div>
+    <div class="cell" style="grid-column:6;grid-row:2;"><div class="n ext">P</div><div class="formula">M+O</div></div>
+    <div class="cell" style="grid-column:5;grid-row:1;"><div class="n ext">R</div><div class="formula">Q+P</div><div class="label">人生目标</div></div>
+
+    <div class="cell" style="grid-column:1;grid-row:1;"><div class="n side">U</div><div class="formula">T+S</div><div class="label">21-40岁</div></div>
+    <div class="cell" style="grid-column:1;grid-row:3;"><div class="n side">T</div><div class="formula">I+M</div></div>
+    <div class="cell" style="grid-column:1;grid-row:5;"><div class="n side">S</div><div class="formula">J+M</div></div>
+
+    <div class="cell" style="grid-column:10;grid-row:1;"><div class="n side">X</div><div class="formula">V+W</div><div class="label">61岁+</div></div>
+    <div class="cell" style="grid-column:10;grid-row:3;"><div class="n side">V</div><div class="formula">K+N</div></div>
+    <div class="cell" style="grid-column:10;grid-row:5;"><div class="n side">W</div><div class="formula">L+N</div></div>
+  </div>
+  <div class="legend-labels">
+    <span class="lg">左侧 T-S-U：工作·朋友·21-40岁</span>
+    <span class="lg">顶部 Q-P-R：下属·儿女·41-60岁</span>
+    <span class="lg">右侧 V-W-X：晚年·家庭·61岁+</span>
+  </div>
+</div>
+      <div class="tri-wrap" id="triWrap">
+        <div class="tri-diagram" id="rTri"></div>
+      </div>
+      <div class="age-zones" id="ageZones"></div>
+      <div class="formula-list" id="formulaList"></div>
+      <div class="sec-note" id="triNote">正三角展示：底部为阳历生日数字，向上逐层相加取根，顶点 O 即主性格。</div>
+    </div>
+
+    <div class="card">
+      <h2>12 组联合码</h2>
+      <div id="rLianhe"></div>
+    </div>
+
+    <div class="card">
+      <h2>缺失数字（正 / 负 / 缺）</h2>
+      <div id="rQue"></div>
+    </div>
+
+    <div class="card">
+      <h2>五行 & 内心世界</h2>
+      <div class="wx-chart" style="margin-bottom:14px;text-align:center;">
+        <svg viewBox="0 0 300 290" style="width:100%;max-width:320px;height:auto;">
+          <defs>
+            <marker id="arrowS" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="var(--pri)"/>
+            </marker>
+            <marker id="arrowK" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="var(--sub)"/>
+            </marker>
+          </defs>
+          <!-- 相生外圈（顺时针：木→火→土→金→水→木） -->
+          <path d="M150,50 Q232,53 245,119" fill="none" stroke="var(--pri)" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowS)"/>
+          <path d="M245,119 Q264,187 209,231" fill="none" stroke="var(--pri)" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowS)"/>
+          <path d="M209,231 Q150,270 91,231" fill="none" stroke="var(--pri)" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowS)"/>
+          <path d="M91,231 Q36,187 55,119" fill="none" stroke="var(--pri)" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowS)"/>
+          <path d="M55,119 Q68,53 150,50" fill="none" stroke="var(--pri)" stroke-width="1.6" stroke-dasharray="4,4" marker-end="url(#arrowS)"/>
+          <!-- 相克五角星 -->
+          <line x1="160" y1="80" x2="199" y2="201" stroke="var(--sub)" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowK)"/>
+          <line x1="183" y1="212" x2="81" y2="138" stroke="var(--sub)" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowK)"/>
+          <line x1="87" y1="119" x2="213" y2="119" stroke="var(--sub)" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowK)"/>
+          <line x1="219" y1="138" x2="117" y2="212" stroke="var(--sub)" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowK)"/>
+          <line x1="101" y1="201" x2="140" y2="80" stroke="var(--sub)" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#arrowK)"/>
+          <!-- 木 -->
+          <circle cx="150" cy="50" r="30" fill="#7CB342" stroke="#fff" stroke-width="2"/>
+          <text x="150" y="43" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">木</text>
+          <text x="150" y="63" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">49</text>
+          <!-- 火 -->
+          <circle cx="245" cy="119" r="30" fill="#E53935" stroke="#fff" stroke-width="2"/>
+          <text x="245" y="112" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">火</text>
+          <text x="245" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">38</text>
+          <!-- 土 -->
+          <circle cx="209" cy="231" r="30" fill="#8D6E63" stroke="#fff" stroke-width="2"/>
+          <text x="209" y="224" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">土</text>
+          <text x="209" y="244" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">5</text>
+          <!-- 金 -->
+          <circle cx="91" cy="231" r="30" fill="#FBC02D" stroke="#fff" stroke-width="2"/>
+          <text x="91" y="224" text-anchor="middle" fill="#5D4037" font-size="17" font-weight="700">金</text>
+          <text x="91" y="244" text-anchor="middle" fill="#5D4037" font-size="15" font-weight="700">16</text>
+          <!-- 水 -->
+          <circle cx="55" cy="119" r="30" fill="#1E88E5" stroke="#fff" stroke-width="2"/>
+          <text x="55" y="112" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">水</text>
+          <text x="55" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">27</text>
+          <!-- 生/克 标签 -->
+          <text x="232" y="42" fill="var(--pri)" font-size="11">生</text>
+          <text x="268" y="175" fill="var(--pri)" font-size="11">生</text>
+          <text x="150" y="282" fill="var(--pri)" font-size="11">生</text>
+          <text x="32" y="175" fill="var(--pri)" font-size="11">生</text>
+          <text x="68" y="42" fill="var(--pri)" font-size="11">生</text>
+          <text x="180" y="145" fill="var(--sub)" font-size="11">克</text>
+          <text x="132" y="175" fill="var(--sub)" font-size="11">克</text>
+          <text x="150" y="122" fill="var(--sub)" font-size="11">克</text>
+          <text x="168" y="175" fill="var(--sub)" font-size="11">克</text>
+          <text x="120" y="145" fill="var(--sub)" font-size="11">克</text>
+        </svg>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">五行与数字对应：金1/6 · 水2/7 · 木4/9 · 火3/8 · 土5</div>
+      </div>
+      <div id="rWx"></div>
+    </div>
+
+    <div class="card">
+      <h2>流年 & 黄金 20 年</h2>
+      <div id="rYear"></div>
+    </div>
+
+    <div class="card" id="rFqCard">
+      <h2>夫妻码</h2>
+      <div id="rFq"></div>
+    </div>
+
+  </div>
+
+  <div class="disc">
+    生命数字密码作为启发式自我探索工具，所有解读<b>仅供娱乐与个人成长参考</b>，请勿将其作为人生决策、医疗、心理或法律等专业依据。<br>
+    如遇重大人生问题，请寻求专业人士帮助。<br>
+    <span style="color:var(--muted);">Powered By Kan Man Tang</span>
+  </div>
+</div>
+
+<script>
+/* ============ 万年历：农历→阳历（1900-2100） ============ */
+var lunarInfo=[0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
+0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
+0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x055c0,0x0ab60,0x096d5,0x092e0,
+0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,
+0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,
+0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,
+0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,
+0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
+0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,
+0x0d520];
+function leapMonth(y){return lunarInfo[y-1900]&0xf;}
+function leapDays(y){return leapMonth(y)?((lunarInfo[y-1900]&0x10000)?30:29):0;}
+function monthDays(y,m){return ((lunarInfo[y-1900]&(0x10000>>m))?30:29);}
+function lYearDays(y){var s=348;for(var i=0x8000;i>0x8;i>>=1)s+=(lunarInfo[y-1900]&i)?1:0;return s+leapDays(y);}
+function lunar2solar(ly,lm,ld,isLeap){
+  var off=0;for(var y=1900;y<ly;y++) off+=lYearDays(y);
+  var leap=leapMonth(ly);
+  for(var m=1;m<lm;m++) off+=monthDays(ly,m);
+  if(isLeap){off+=monthDays(ly,leap);}else if(leap!==0 && leap<lm){off+=leapDays(ly);}
+  off+=ld-1;var base=Date.UTC(1900,0,31);var d=new Date(base+off*86400000);
+  return {y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate()};
+}
+
+/* ============ 计算引擎 ============ */
+function digitalRoot(n){n=Math.abs(n);while(n>9){n=String(n).split('').reduce((a,c)=>a+ +c,0);}return n===0?9:n;}
+function lifeNumber(y,m,d){
+  var s=''+y+String(m).padStart(2,'0')+String(d).padStart(2,'0');
+  return digitalRoot(s.split('').reduce((a,c)=>a+ +c,0));
+}
+function buildTriangle(y,m,d){
+  // 标准生命数字三角形：AB(日) CD(月) EF(年上) GH(年下)
+  // I=A+B, J=C+D, K=E+F, L=G+H
+  // M=I+J, N=K+L
+  // O=M+N（顶点 = 主性格）
+  var day=(''+d).padStart(2,'0'), mon=(''+m).padStart(2,'0'), yr=''+y;
+  var A=+day[0],B=+day[1],C=+mon[0],D=+mon[1],E=+yr[0],F=+yr[1],G=+yr[2],H=+yr[3];
+  var bottom=[A,B,C,D,E,F,G,H];
+  var I=digitalRoot(A+B),J=digitalRoot(C+D),K=digitalRoot(E+F),L=digitalRoot(G+H);
+  var row1=[I,J,K,L];
+  var M=digitalRoot(I+J),N=digitalRoot(K+L);
+  var row2=[M,N];
+  var O=digitalRoot(M+N);
+  var row3=[O];
+  return [bottom,row1,row2,row3]; // rows[0]=底(8位), rows[1]=4, rows[2]=2, rows[3]=顶点(1)
+}
+
+/* ============ 内容数据库 ============ */
+var NUM_DESC={
+  1:{n:'开创者',c:'红',e:'独立、开创、领导',light:'目标明确、敢为人先、执行力强',shadow:'易固执、自我、孤独',guide:'学习在独立中合作，把"我要赢"升级为"我们一起赢"。'},
+  2:{n:'协调者',c:'橙',e:'敏感、配合、洞察',light:'细腻共情、善于平衡、文笔/手工佳',shadow:'依赖、犹豫、过度迁就',guide:'建立内在肯定，敢于表达真实需求，边界即力量。'},
+  3:{n:'表达者',c:'黄',e:'创意、表达、活力',light:'口才好、点子多、感染力强',shadow:'三分钟热度、情绪化、夸大',guide:'把创意落到具体行动，专注一个切口做深。'},
+  4:{n:'实干家',c:'绿',e:'秩序、务实、稳定',light:'踏实可靠、善于规划、组织力强',shadow:'固执、缺乏安全感、保守',guide:'在稳定中允许变化，安全来自能力而非控制。'},
+  5:{n:'自由者',c:'蓝',e:'自由、变化、包容',light:'适应力强、善于营销、热爱探索',shadow:'散漫、冲动、逃避承诺',guide:'自由不是随心所欲，而是对选择的负责。'},
+  6:{n:'疗愈者',c:'靛',e:'责任、关爱、智慧',light:'温暖付出、审美佳、家庭观念强',shadow:'牺牲过度、挑剔、控制',guide:'先疗愈自己，付出才会轻盈；爱不是改造。'},
+  7:{n:'思考者',c:'紫',e:'分析、真理、幸运',light:'好学深思、直觉敏锐、贵人多',shadow:'多疑、孤僻、拖延',guide:'把"想明白"的终点设为"做出来"，行动中验证真理。'},
+  8:{n:'成就者',c:'粉红',e:'权力、财富、责任',light:'目标感强、商业头脑、抗压',shadow:'功利、控制、压力大',guide:'真正的权力是成就他人，财富是价值的副产品。'},
+  9:{n:'奉献者',c:'金黄',e:'圆满、博爱、智慧',light:'视野大、有灵性、乐于助人',shadow:'贪心、空想、边界模糊',guide:'聚焦一个使命深入服务，圆满来自深耕而非广博。'}
+};
+
+var WUXING={
+  1:{w:'金',rel:'金生水',inner:2,note:'外表刚硬独立，内心柔软渴望被懂；刀子嘴豆腐心，学会柔软表达。'},
+  2:{w:'水',rel:'水生木',inner:4,note:'善沟通却直接，表面犹豫内心早有计划，缺自信时易随波逐流。'},
+  3:{w:'火',rel:'火克金',inner:6,note:'行动力强，内心有财富能量；脾气若失控，易"火烧财库"。'},
+  4:{w:'木',rel:'木生火',inner:8,note:'责任担当直接，内心挣扎多、想得多，需学会释放压力。'},
+  5:{w:'土',rel:'土生金',inner:1,note:'追求自由独立，内心有领导灵感，但好面子、怕被束缚。'},
+  6:{w:'金',rel:'火克金',inner:3,note:'敏感多疑又爱付出，内心急躁易冲动，需先爱自己再爱人。'},
+  7:{w:'水',rel:'水克土',inner:5,note:'表面随和好说话，骨子里固执有主见，内心执着于真相。'},
+  8:{w:'火',rel:'水克火',inner:7,note:'责任感强照顾人，内心追根究底，易因思虑加重负担。'},
+  9:{w:'木',rel:'比合',inner:9,note:'机会多活力足，内心变化无穷可化任何能量；切忌贪心分散。'}
+};
+
+var EXT_DEF={
+  main:{name:'主性格',desc:'三角形顶点 O，代表你此生最核心的能量底色、外在呈现与人生课题。'},
+  inner:{name:'内心密码',desc:'公式 O+M+N，揭示你内心深处的真实渴望与情感模式。'},
+  sub:{name:'潜意识密码',desc:'公式 L+I+O，代表潜意识里的自动反应与隐藏驱力。'},
+  outer:{name:'外心密码',desc:'公式 U+R+X，反映你面对外部世界的应激面具与社交形象。'},
+  topR:{name:'人生目标 R',desc:'公式 R=Q+P，代表你此生最想活出的能量高度与终极目标。'},
+  talent:{name:'天赋数',desc:'生日全数相加取根，是你与生俱来的潜能资源库。'},
+  challenge:{name:'挑战数',desc:'由生日月份与日期取根相减所得，代表此生需要跨越的内在功课。'},
+  liunian:{name:'流年数',desc:'公式 = 当年年份根 + 出生月根 + 出生日根，代表当前年份的流动能量主题。'},
+  star:{name:'星位密码',desc:'O、I、L 三数，代表命运星位上的关键能量锚点。'},
+  seven:{name:'七魄',desc:'I、J、K、L、M、N、O 七数，构成你完整的能量魂魄图谱。'}
+};
+
+function extMean(type,num){
+  var d=NUM_DESC[num]||NUM_DESC[1];
+  var base=EXT_DEF[type].desc;
+  return base+' 当前数字 <b>'+num+'</b> 对应的能量是「'+d.n+'」：'+d.e+'。提示：'+d.guide;
+}
+
+var LIANHE={
+  '111':'直觉强、点子多，但易钻牛角尖；学会倾听他人，避免独断。',
+  '112':'天生口才与领导魅力，注意说话别太直接，以免伤人。',
+  '113':'创意爆棚但情绪化，找到情绪出口，专注把想法落地。',
+  '114':'规划能力强，但容易固执；灵活一点，合作更顺。',
+  '115':'敢冒险、有号召力，学会承诺与坚持，别只顾新鲜。',
+  '116':'有爱心又有主见，付出前先确认对方是否需要。',
+  '117':'智慧型领导者，但疑心重；信任是效率的加速器。',
+  '118':'事业心极强，注意别把压力都扛在自己身上。',
+  '119':'理想主义领袖，学会接地气，把大爱变成具体行动。',
+  '121':'避免过于自我，要懂得广纳谏言、学会倾听，亲密关系中改善语言模式。',
+  '122':'温柔又有力量，适合协调工作；别过度迁就失去自己。',
+  '123':'避免说话过于直接，情绪起伏时注意自我调节。',
+  '124':'实干型沟通者，注意别太急躁，给过程一点时间。',
+  '125':'自由表达者，适合创意与销售；别被新鲜感牵着走。',
+  '126':'暖男/暖女型，付出时设边界，否则易疲惫。',
+  '127':'分析型表达者，用智慧沟通而非说教。',
+  '128':'有商业表达力，注意承诺与结果的平衡。',
+  '129':'大爱型演说家，聚焦一个主题会更打动人。',
+  '131':'原创力强但自我，团队协作中学会妥协。',
+  '132':'表达欲强，注意言多必失，先说重点。',
+  '133':'创意天才但易三分钟热度，找个伙伴互相督促。',
+  '134':'有创意的实干家，别因委屈而抱怨，影响成果。',
+  '135':'创意+行动+变化，适合新媒体与创业；守住初心。',
+  '136':'用创意服务他人，但别期待所有人懂你。',
+  '137':'灵感型研究者，把直觉与数据结合。',
+  '138':'创意变现能力强，避免因贪心而分散。',
+  '139':'梦想家，把大愿景拆成可执行的小步骤。',
+  '141':'独立又有规划，学会放权，团队才能壮大。',
+  '142':'踏实协调者，注意别把所有事都自己扛。',
+  '143':'创意规划者，给团队空间，也给自己耐心。',
+  '144':'超级实干家，警惕眼高手低或过于保守。',
+  '145':'开拓型规划者，大胆尝试，别怕失败丢面子。',
+  '146':'有责任心的组织者，照顾别人时也照顾自己。',
+  '147':'研究型规划者，分析够了就行动。',
+  '148':'企业家潜质，财富来自稳定的系统。',
+  '149':'有社会责任感，把理想放进可执行的框架。',
+  '151':'自由领袖，给团队方向也给他们空间。',
+  '152':'灵活协调者，适合公关与资源整合。',
+  '153':'创意+自由+行动，适合做开拓者而非守成者。',
+  '154':'稳健中有突破，变化中守住核心。',
+  '155':'双重自由能量，极度需要自主空间，忌被管束。',
+  '156':'自由与责任的平衡，多走出去创造机会。',
+  '157':'自由思考者，适合独立研究或顾问。',
+  '158':'自由创业者，财富来自多元尝试后的聚焦。',
+  '159':'自由奉献者，把个人理想与社会价值结合。',
+  '161':'有主见的付出者，学会接受被爱。',
+  '162':'温柔疗愈者，别把他人的情绪当成自己的责任。',
+  '163':'创意疗愈者，用艺术或表达助人。',
+  '164':'务实疗愈者，建立可持续的服务系统。',
+  '165':'自由疗愈者，帮助他人时保持自我空间。',
+  '166':'大爱付出者，警惕过度牺牲与控制。',
+  '167':'智慧疗愈者，直觉强，但别被情感绑架。',
+  '168':'财富疗愈者，越助人越要建立清晰边界。',
+  '169':'奉献型领袖，服务他人时也成就自己。',
+  '171':'独立思考者，领袖气质但不易亲近。',
+  '172':'敏锐协调者，洞察力是优势，别过度分析。',
+  '173':'灵感思考者，把想法系统化才能传播。',
+  '174':'研究型实干家，细节与执行力兼备。',
+  '175':'探索型思考者，保持好奇也要落地。',
+  '176':'智慧疗愈者，帮助他人前先修自己。',
+  '177':'深度研究者，避免钻牛角尖、孤立自己。',
+  '178':'思考型企业家，用智慧撬动资源。',
+  '179':'灵性思考者，把高远智慧讲成大白话。',
+  '181':'事业型领袖，注意别把权力当安全感。',
+  '182':'压力型协调者，学会释放情绪，别硬撑。',
+  '183':'创业创意者，情绪化是双刃剑，需管理。',
+  '184':'责任重压者，学会分压与授权。',
+  '185':'压力中求变，变化中找机会。',
+  '186':'责任与爱心并存，别为他人过度担责。',
+  '187':'压力下仍能洞察真相，但需倾诉对象。',
+  '188':'大企业家能量，注意健康与家庭平衡。',
+  '189':'理想型成就者，把大任拆小步。',
+  '191':'孤独领袖，记得常与家人朋友联络。',
+  '192':'敏感领袖，情绪稳定是领导力的底盘。',
+  '193':'创意领袖，把灵感变成产品。',
+  '194':'务实领袖，用制度成就愿景。',
+  '195':'自由领袖，给团队方向感与自由度。',
+  '196':'服务型领袖，大爱但需边界。',
+  '197':'智慧领袖，直觉与理性并用。',
+  '198':'成就领袖，财富与责任同行。',
+  '199':'圆满领袖，聚焦核心使命，别贪多。',
+  '211':'温和领导者，用柔的方式影响他人。',
+  '212':'超级协调者，人际关系是最大资产。',
+  '213':'避免唠叨碎碎念招人烦，说话谨慎，注意言多必失。',
+  '214':'耐心协调者，适合细节跟进与客服。',
+  '215':'灵活配合者，但需明确自己的立场。',
+  '216':'温暖陪伴者，别让对方过度依赖。',
+  '217':'洞察型协调者，直觉准确但别当面揭穿。',
+  '218':'资源整合者，人脉即财富。',
+  '219':'大爱协调者，把善意传递给更多人。',
+  '221':'配合型领袖，以柔克刚。',
+  '222':'极度敏感协调，适合心理咨询、艺术；情绪管理是功课。',
+  '223':'沟通创意者，话多但点子也多。',
+  '224':'刀子嘴豆腐心，改善沟通方式，避免口舌之争，小心泄密。',
+  '225':'自由沟通者，适合销售与公关。',
+  '226':'温柔疗愈者，情绪共鸣强但需保护自己。',
+  '227':'直觉沟通者，感知敏锐，学会筛选信息。',
+  '228':'沟通变现者，靠嘴吃饭也能赚大钱。',
+  '229':'慈悲沟通者，避免耳根软、被人情绑架。',
+  '231':'表达型协调者，先听后说效果更好。',
+  '232':'温和表达者，适合教育、咨询。',
+  '233':'创意表达者，情绪起伏大时需独处充电。',
+  '234':'务实表达者，说做一致更有说服力。',
+  '235':'容易因自我感觉产生不确定，要学会自律、设立边界。',
+  '236':'暖心表达者，用表达疗愈他人。',
+  '237':'智慧表达者，深入浅出是本事。',
+  '238':'压力型表达者，避免夸大或情绪化销售。',
+  '239':'大爱表达者，传播正能量也接得住负能量。',
+  '241':'规划型协调者，细节控但别太挑剔。',
+  '242':'耐心实干者，稳扎稳打。',
+  '243':'创意实干者，把点子变成流程。',
+  '244':'超强执行力，但易固执，开放听取建议。',
+  '245':'开拓实干者，别怕试错。',
+  '246':'不要过于强调价值高低，要更注重增值服务。',
+  '247':'研究型实干者，分析后快行动。',
+  '248':'企业家实干者，建立系统才能放大。',
+  '249':'理想实干者，把愿景落地成项目。',
+  '251':'自由协调者，适合弹性工作。',
+  '252':'自在型配合者，但需建立目标感。',
+  '253':'灵活创意者，多变中找主线。',
+  '254':'稳健中求变，适合转型顾问。',
+  '255':'自由之魂，最怕被束缚，适合创业或自由职业。',
+  '257':'培养同理心，多花时间与帮助你的人相处交流。',
+  '258':'自由实干者，财富来自多元尝试后的聚焦。',
+  '259':'自由奉献者，把善意变成可持续的事业。',
+  '261':'责任型协调者，家庭与事业兼顾。',
+  '262':'温暖疗愈者，适合家庭、教育、护理。',
+  '263':'创意疗愈者，用温柔的方式启发他人。',
+  '264':'务实疗愈者，建立规律的服务节奏。',
+  '265':'自由疗愈者，帮助他人时保有自己的空间。',
+  '266':'大爱护航者，避免过度操心导致疲惫。',
+  '268':'内心想致富、谈钱敏感、易攀比，要控制平衡金钱欲望。',
+  '269':'慈悲服务者，学会接受回报。',
+  '271':'洞察型协调者，看人准但别轻易评判。',
+  '272':'直觉型配合者，信任自己的第六感。',
+  '273':'灵感沟通者，把直觉表达出来。',
+  '274':'研究型协调者，用数据说话。',
+  '275':'探索型协调者，适合跨领域连接。',
+  '279':'女生易把男士当哥们、男生易把女性当闺蜜，注意边界。',
+  '278':'智慧资源连接者，人脉需要经营。',
+  '279':'人缘极佳，注意情感边界。',
+  '281':'避免过于强势给人压迫感，改善表达方式，否则适得其反。',
+  '282':'压力型协调者，学会释放情绪。',
+  '283':'创意压力者，把焦虑变成产出。',
+  '284':'责任重压者，分压才能走远。',
+  '285':'变化中承压，学会在混乱中找秩序。',
+  '286':'责任疗愈者，别让善意变成负担。',
+  '287':'压力下保持洞察，但别一个人扛。',
+  '288':'大企业家协调者，注意身心健康。',
+  '289':'理想承压者，把大任拆小步。',
+  '291':'孤独协调者，主动联系重要的人。',
+  '292':'避免耳根软、过于纠结犹豫而错过合作机会。',
+  '293':'慈悲创意者，情绪细腻但需保护。',
+  '294':'务实慈悲者，把善意系统化。',
+  '295':'自由慈悲者，游走于不同圈子。',
+  '296':'大爱协调者，边界感是必修课。',
+  '297':'智慧慈悲者，直觉助人但要适度。',
+  '298':'成就协调者，人脉与责任并重。',
+  '299':'圆满协调者，把爱集中给对的人。',
+  '311':'创意领袖，但别太自我。',
+  '312':'创意协调者，点子多但需聚焦。',
+  '313':'超级创意者，点子多到做不完，找合伙人落地。',
+  '314':'避免因没被肯定而委屈，对结果保持耐心。',
+  '315':'创意开拓者，适合新媒体与创业。',
+  '316':'创意疗愈者，用创意温暖他人。',
+  '317':'灵感研究者，把直觉变成方法论。',
+  '318':'创意企业家，把兴趣变成事业。',
+  '319':'理想创意者，把愿景变成作品。',
+  '321':'表达型创意者，适合内容创作。',
+  '322':'温和创意者，艺术感强。',
+  '323':'创意表达者，但情绪起伏大。',
+  '324':'务实创意者，把创意变成产品。',
+  '325':'要提升定力，否则心散，要知行合一。',
+  '326':'暖心创意者，用创意服务人。',
+  '327':'智慧创意者，洞察人性后创作。',
+  '328':'商业创意者，创意变现能力强。',
+  '329':'大爱创意者，作品要有社会价值。',
+  '331':'原创型创意者，保护自己的版权。',
+  '332':'细腻创意者，适合艺术与设计。',
+  '333':'三倍创意能量，想法多到爆炸，必须筛选落地。',
+  '334':'创意实干者，别因委屈放弃。',
+  '335':'自由创意者，最怕被框死。',
+  '336':'注意情绪管理、聚焦专注，财富建议积少成多。',
+  '337':'灵感爆棚，但别停留在想象。',
+  '338':'创意企业家，把独特想法商业化。',
+  '339':'梦想家，把大梦想拆小。',
+  '341':'规划型创意者，适合产品经理。',
+  '342':'协调型创意者，团队中的润滑剂。',
+  '343':'细节创意者，打磨作品而不是数量。',
+  '344':'超强执行力创意者，但易固执。',
+  '345':'开拓型创意者，大胆试错。',
+  '347':'学会调整节奏，太急躁直接会导致误判形势。',
+  '347':'研究型创意者，用数据验证灵感。',
+  '348':'企业家创意者，建立创意变现系统。',
+  '349':'理想创意者，把创意变成社会价值。',
+  '351':'自由创意者，适合独立创作。',
+  '352':'灵活创意者，多变但有魅力。',
+  '353':'超级自由创意，最怕重复。',
+  '354':'稳健创意者，在框架内创新。',
+  '355':'自由开拓者，适合探索新领域。',
+  '358':'易因脾气急躁冲动而争执，勿一时冲动意气用事。',
+  '357':'自由研究者，跨界思维强。',
+  '358':'创意变现者，避免冲动决策。',
+  '359':'自由梦想家，把探索变成内容。',
+  '361':'责任型创意者，用创意照顾他人。',
+  '362':'温暖创意者，适合教育内容。',
+  '363':'情绪型创意者，需稳定输出节奏。',
+  '364':'务实疗愈创意者，把服务产品化。',
+  '365':'自由疗愈创意者，游走助人。',
+  '366':'大爱创意者，付出需边界。',
+  '369':'避免三分钟热度，易陷未来不能立足当下，结合实际推进。',
+  '368':'商业疗愈创意者，财富来自价值输出。',
+  '369':'理想疗愈者，把大爱变成具体帮助。',
+  '371':'交了新朋友也别忘老朋友，夫轻诺必寡信。',
+  '372':'洞察型创意者，直觉驱动创作。',
+  '373':'灵感深度者，别陷在完美主义里。',
+  '374':'研究型创意者，把灵感系统化。',
+  '375':'探索型创意者，适合跨界项目。',
+  '376':'智慧疗愈创意者，用创作助人。',
+  '377':'深度思考创意者，产出虽慢但深。',
+  '378':'企业家创意研究者，用洞察做产品。',
+  '379':'灵性创意者，把高维想法通俗化。',
+  '381':'事业型创意者，把创意做成品牌。',
+  '382':'压力型创意者，情绪是创作的燃料也是风险。',
+  '383':'高强度创意者，注意劳逸结合。',
+  '384':'责任创意者，别为追求完美而拖延。',
+  '385':'变化中创意，适合危机中找机会。',
+  '386':'责任疗愈创意者，别让善意透支自己。',
+  '387':'压力下仍有洞察力，但需释放。',
+  '388':'大企业家创意者，把创意规模化。',
+  '389':'理想成就创意者，把愿景商业化。',
+  '391':'孤独创意领袖，需团队支持落地。',
+  '392':'敏感创意者，情绪管理是创作前提。',
+  '393':'把时间精力用在接管相关的事上，避免无效社交。',
+  '394':'务实创意领袖，用制度保护创意。',
+  '395':'自由创意领袖，给团队空间。',
+  '396':'服务创意领袖，大爱但需边界。',
+  '397':'智慧创意领袖，直觉与理性并重。',
+  '398':'成就创意领袖，财富与影响力同行。',
+  '399':'圆满创意者，聚焦核心作品。',
+  '411':'规划领袖，用制度成就团队。',
+  '412':'耐心协调者，适合项目管理。',
+  '413':'创意规划者，给团队清晰方向。',
+  '414':'超级规划者，但易固执保守。',
+  '415':'大胆尝试实践，勿因怕失败丢面子错失良机，实践出真知。',
+  '416':'责任规划者，照顾团队也照顾自己。',
+  '417':'研究型规划者，分析后快决策。',
+  '418':'企业家规划者，系统即财富。',
+  '419':'理想规划者，把愿景制度化。',
+  '421':'协调型实干者，稳扎稳打。',
+  '422':'耐心实干者，细节决定成败。',
+  '423':'创意实干者，把点子流程化。',
+  '424':'超强执行力，但需开放听取意见。',
+  '425':'开拓实干者，别怕变化。',
+  '426':'避免算小账斤斤计较，勿因贪图实惠买非必需品。',
+  '427':'研究型实干者，用数据驱动执行。',
+  '428':'企业家实干者，建立可复制的系统。',
+  '429':'理想实干者，把愿景落地。',
+  '431':'规划型创意者，适合产品经理。',
+  '432':'协调型创意者，团队中润滑剂。',
+  '433':'细节创意者，打磨作品。',
+  '434':'执行力创意者，但易固执。',
+  '435':'开拓创意者，大胆试错。',
+  '437':'避免过度计划分析而把握不住最佳时机。',
+  '437':'研究型创意者，用数据验证。',
+  '438':'企业家创意者，系统变现。',
+  '439':'理想创意者，落地为王。',
+  '441':'超级规划者，控制欲强，学会放权。',
+  '442':'稳定实干者，但可能抗拒变化。',
+  '443':'创意规划实干者，细节与想象并存。',
+  '444':'四倍稳定能量，超强执行力，但最怕变化。',
+  '445':'稳健开拓者，守住底盘再突破。',
+  '446':'责任实干者，别过度承担。',
+  '447':'研究型规划者，分析后行动。',
+  '448':'避免眼高手低想大做小，勿太计较眼前得失，眼光放长远。',
+  '449':'理想规划者，把大愿拆小步。',
+  '451':'自由规划者，在变化中守秩序。',
+  '452':'灵活实干者，适合转型项目。',
+  '453':'自由创意实干者，多变中求主线。',
+  '454':'稳健中求变，适合流程优化。',
+  '455':'自由开拓者，最怕被制度束缚。',
+  '459':'明确目标系统做事，勿贪心，专注聚焦才能持续成功。',
+  '457':'自由研究者，跨界整合。',
+  '458':'自由企业家，财富来自创新后的聚焦。',
+  '459':'自由梦想实干者，把愿景变成项目。',
+  '461':'易挑剔他人起冲突，谨记对事不对人。',
+  '462':'责任协调实干者，家庭事业兼顾。',
+  '463':'创意疗愈实干者，把服务产品化。',
+  '464':'超强责任执行力，但易疲惫。',
+  '465':'自由责任者，帮助他人也保空间。',
+  '466':'大爱责任者，避免过度操心。',
+  '467':'智慧责任者，直觉辅助决策。',
+  '468':'企业家责任者，财富来自担当。',
+  '469':'理想责任者，把大愿落地。',
+  '471':'研究型领袖，理性但需亲和力。',
+  '472':'避免纸上谈兵光说不练，加强行动力。',
+  '473':'灵感研究实干者，把直觉系统化。',
+  '474':'深度研究者，别陷在细节。',
+  '475':'探索型研究实干者，跨界验证。',
+  '476':'智慧疗愈实干者，用研究助人。',
+  '477':'深度思考者，产出虽慢但深。',
+  '478':'研究型企业家，用洞察建系统。',
+  '479':'灵性研究实干者，把真理通俗化。',
+  '481':'事业型规划者，用制度成就大事。',
+  '482':'压力型实干者，学会释放。',
+  '483':'注重细节，避免丢三落四犯迷糊。',
+  '484':'责任重压者，分压才能走远。',
+  '485':'变化中承压，找到新秩序。',
+  '486':'责任疗愈实干者，别让善意透支。',
+  '487':'压力下洞察真相，但需倾诉。',
+  '488':'大企业家实干者，注意健康。',
+  '489':'理想成就实干者，把大任拆小步。',
+  '491':'孤独规划领袖，需团队支持。',
+  '492':'敏感实干领袖，情绪稳定是底盘。',
+  '493':'创意规划领袖，用制度保护创意。',
+  '494':'易思维保守，要注意变通，太务实让人觉得小气。',
+  '495':'自由规划领袖，给团队方向与自由。',
+  '496':'服务规划领袖，大爱但需边界。',
+  '497':'智慧规划领袖，直觉理性并用。',
+  '498':'成就规划领袖，财富责任同行。',
+  '499':'圆满规划者，聚焦核心系统。',
+  '511':'自由领袖，给方向也给人空间。',
+  '512':'灵活协调者，适合资源整合。',
+  '513':'自由创意者，适合开拓新业务。',
+  '514':'稳健开拓者，守住核心再突破。',
+  '515':'双重自由，极度需要自主权。',
+  '516':'四方大地都可创造财富机会，可大胆多走出去。',
+  '517':'自由思考者，适合独立顾问。',
+  '518':'自由企业家，财富来自多元尝试后聚焦。',
+  '519':'自由理想者，把个人使命与社会价值结合。',
+  '521':'协调型自由者，人脉广泛。',
+  '522':'自在配合者，但需目标感。',
+  '523':'自由表达者，适合销售与公关。',
+  '524':'稳健自由者，适合弹性工作。',
+  '525':'超级自由灵魂，最怕束缚。',
+  '527':'怕麻烦不愿求人反被误会傲慢，减少执着多靠近他人。',
+  '528':'自由实干者，财富来自行动。',
+  '529':'自由慈悲者，游走助人。',
+  '531':'创意自由者，最怕重复。',
+  '532':'灵活创意者，多变有魅力。',
+  '533':'自由创意者，点子多到做不完。',
+  '534':'稳健创意者，在框架内创新。',
+  '535':'自由开拓者，适合新领域。',
+  '538':'注意情绪管理勿过感性，听取建议利于决策平衡。',
+  '537':'自由研究者，跨界思维。',
+  '538':'创意变现自由者，避免冲动。',
+  '539':'自由梦想家，把探索变成内容。',
+  '541':'规划型自由者，方向清晰。',
+  '542':'灵活实干者，适合转型顾问。',
+  '543':'自由创意实干者，多变中求主线。',
+  '544':'稳健自由实干者，执行力强。',
+  '545':'自由开拓者，变化中找机会。',
+  '549':'坚定内心渴望，应用吸引力法则事半功倍。',
+  '547':'自由研究者，跨界整合。',
+  '548':'自由企业家，财富来自创新聚焦。',
+  '549':'自由梦想实干者，愿景落地。',
+  '551':'避免过于自我固执，勿不撞南墙不回头。',
+  '552':'自由配合者，需建立目标感。',
+  '553':'超级自由创意，最怕重复。',
+  '554':'自由稳定者，在变化中守秩序。',
+  '555':'五倍自由能量，一生都在寻找意义与空间。',
+  '556':'自由责任者，多走出去创造机会。',
+  '557':'自由思考者，直觉强但需落地。',
+  '558':'自由企业家，财富来自多元后聚焦。',
+  '559':'自由奉献者，把善意变成可持续事业。',
+  '561':'责任自由者，家庭事业兼顾。',
+  '562':'自由疗愈者，帮助他人也保空间。',
+  '563':'自由创意疗愈者，游走助人。',
+  '564':'自由务实疗愈者，服务产品化。',
+  '565':'自由疗愈者，最怕被情感绑架。',
+  '566':'大爱自由者，付出需边界。',
+  '567':'智慧自由疗愈者，用自由助人。',
+  '568':'自由企业家疗愈者，财富来自价值。',
+  '569':'自由理想疗愈者，把大爱落地。',
+  '571':'自由思考领袖，直觉强。',
+  '572':'自由洞察协调者，跨界连接。',
+  '573':'改善自卑心，易看不惯他人，表面傲慢内心不自信。',
+  '574':'自由研究实干者，跨界验证。',
+  '575':'自由探索者，一生在寻找新可能。',
+  '576':'自由智慧疗愈者，用研究助人。',
+  '577':'自由深度思考者，产出慢但深。',
+  '578':'自由研究企业家，用洞察建系统。',
+  '579':'自由灵性者，把真理通俗化。',
+  '581':'自由事业领袖，给方向与空间。',
+  '582':'自由压力协调者，学会释放。',
+  '583':'自由创意压力者，把焦虑变产出。',
+  '584':'易钻牛角尖不听劝谏，多觉察及时做调整。',
+  '585':'自由变化承压者，在混乱中找秩序。',
+  '586':'自由责任疗愈者，别让善意透支。',
+  '587':'自由压力下洞察，但需倾诉。',
+  '588':'自由大企业家，注意健康。',
+  '589':'自由理想成就者，把大任拆小步。',
+  '591':'孤独自由领袖，需团队落地。',
+  '592':'敏感自由者，情绪稳定是底盘。',
+  '593':'自由创意领袖，用制度保护创意。',
+  '594':'自由规划领袖，方向清晰。',
+  '595':'对朋友伙伴特别仗义愿付出，注意平衡照顾家庭。',
+  '596':'自由服务领袖，大爱但需边界。',
+  '597':'自由智慧领袖，直觉理性并用。',
+  '598':'自由成就领袖，财富责任同行。',
+  '599':'圆满自由者，聚焦核心使命。',
+  '611':'责任领袖，用服务成就团队。',
+  '612':'温暖协调者，适合家庭与教育。',
+  '613':'创意疗愈者，用创意温暖他人。',
+  '614':'务实疗愈者，建立可持续服务。',
+  '615':'自由疗愈者，帮助他人保空间。',
+  '616':'双倍责任与爱，付出型人格，需先爱自己。',
+  '617':'乐于分享美好事物给更多人，预防被情感绑架。',
+  '618':'企业家疗愈者，财富来自价值输出。',
+  '619':'理想疗愈领袖，把大爱落地。',
+  '621':'协调型疗愈者，人际关系是资产。',
+  '622':'温暖疗愈者，情绪共鸣强。',
+  '623':'创意温暖者，用表达助人。',
+  '624':'务实温暖者，服务具体化。',
+  '625':'自由疗愈者，游走助人。',
+  '626':'大爱疗愈者，但需边界。',
+  '628':'不要常与人比较，把注意力放自己成长价值上。',
+  '627':'智慧温暖者，直觉助人。',
+  '628':'疗愈变现者，价值输出得财富。',
+  '629':'慈悲疗愈者，学会接受回报。',
+  '631':'创意责任者，用创意照顾人。',
+  '632':'温暖创意者，适合教育内容。',
+  '633':'情绪型创意者，需稳定节奏。',
+  '634':'务实疗愈创意者，服务产品化。',
+  '635':'自由疗愈创意者，游走助人。',
+  '636':'大爱创意者，付出需边界。',
+  '637':'智慧疗愈创意者，用创作助人。',
+  '638':'商业疗愈创意者，财富来自价值。',
+  '639':'财富来得快去得也快，做好财富规划，注意把握节奏。',
+  '641':'责任规划者，照顾团队也照顾自己。',
+  '642':'责任协调实干者，家庭事业兼顾。',
+  '643':'创意疗愈实干者，服务产品化。',
+  '644':'超强责任执行力，但易固执。',
+  '645':'自由责任者，多走出去创造机会。',
+  '646':'大爱责任者，避免过度操心。',
+  '647':'智慧责任者，直觉辅助决策。',
+  '648':'企业家责任者，财富来自担当。',
+  '649':'理想责任者，把大愿落地。',
+  '651':'自由责任者，家庭事业兼顾。',
+  '652':'生活别太多算计，开心些，带太多目的不利人际。',
+  '653':'自由创意疗愈者，游走助人。',
+  '654':'自由务实疗愈者，服务产品化。',
+  '655':'自由疗愈者，最怕被情感绑架。',
+  '656':'大爱自由疗愈者，付出需边界。',
+  '657':'智慧自由疗愈者，用自由助人。',
+  '658':'自由企业家疗愈者，财富来自价值。',
+  '659':'自由理想疗愈者，把大爱落地。',
+  '661':'责任大爱领袖，但需边界。',
+  '662':'温暖大爱者，适合家庭、教育。',
+  '663':'情绪大爱者，需稳定输出节奏。',
+  '664':'务实大爱者，把服务系统化。',
+  '665':'自由大爱者，游走助人。',
+  '666':'六六大爱，极致付出型，最易疲惫，必须学会爱自己。',
+  '667':'智慧大爱者，直觉助人但需边界。',
+  '668':'大爱企业家，财富来自大量服务。',
+  '669':'大爱理想者，把慈悲变成事业。',
+  '671':'智慧疗愈领袖，直觉强。',
+  '672':'洞察疗愈者，看人准但别评判。',
+  '673':'灵感疗愈者，把直觉表达出来。',
+  '674':'研究型疗愈者，用数据说话。',
+  '675':'探索型疗愈者，跨界助人。',
+  '674':'善用财富与智慧做好人际经营，相信自己是幸运的。',
+  '677':'深度疗愈思考者，产出慢但深。',
+  '678':'疗愈企业家，用洞察建服务系统。',
+  '679':'灵性疗愈者，把真理通俗化。',
+  '681':'事业型疗愈者，把服务做成品牌。',
+  '682':'压力型疗愈者，学会释放情绪。',
+  '683':'高强度疗愈创意者，注意劳逸结合。',
+  '684':'责任疗愈实干者，别让善意透支。',
+  '685':'做事直截了当，必要时学会委婉平衡，多欣赏他人优点。',
+  '686':'责任大爱疗愈者，最易透支，必须设边界。',
+  '687':'压力下洞察真相，但需倾诉。',
+  '688':'大企业家疗愈者，注意健康。',
+  '689':'理想成就疗愈者，把大愿拆小步。',
+  '691':'孤独疗愈领袖，需团队支持。',
+  '692':'敏感疗愈者，情绪管理是服务前提。',
+  '693':'创意疗愈领袖，用制度保护善意。',
+  '694':'务实疗愈领袖，服务系统化。',
+  '695':'自由疗愈领袖，游走助人。',
+  '696':'预防因贪心分散投资受损，适时信直觉，过理性会错失。',
+  '697':'智慧疗愈领袖，直觉理性并用。',
+  '698':'成就疗愈领袖，财富责任同行。',
+  '699':'圆满疗愈者，聚焦核心服务。',
+  '711':'智慧领袖，直觉强但需亲和力。',
+  '712':'洞察协调者，看人准。',
+  '713':'灵感研究者，把直觉系统化。',
+  '714':'研究型实干者，细节与执行兼备。',
+  '715':'探索型思考者，保持好奇也落地。',
+  '716':'智慧疗愈者，帮助他人前先修自己。',
+  '717':'深度思考者，直觉与理性并重，但易孤立。',
+  '718':'小心被最亲近的人背叛利用，有时太在乎朋友对方不这么想。',
+  '719':'灵性思考者，把高远智慧通俗化。',
+  '721':'洞察型协调者，直觉驱动关系。',
+  '722':'直觉型配合者，第六感强。',
+  '723':'灵感沟通者，把直觉表达出来。',
+  '724':'研究型协调者，用数据说话。',
+  '725':'探索型协调者，跨界连接。',
+  '726':'智慧疗愈协调者，用洞察助人。',
+  '727':'深度直觉者，别陷在怀疑里。',
+  '728':'智慧资源连接者，人脉即财富。',
+  '729':'不要轻易信他人好话，理性分析做具体验证再决定。',
+  '731':'做好人际管理，避免关系杂乱分不清重点耗在无效社交。',
+  '732':'洞察型创意者，直觉驱动创作。',
+  '733':'灵感深度者，别陷完美主义。',
+  '734':'研究型创意者，用数据验证灵感。',
+  '735':'探索型创意者，跨界项目。',
+  '736':'智慧疗愈创意者，用创作助人。',
+  '737':'深度思考创意者，产出慢但深。',
+  '738':'企业家创意研究者，用洞察做产品。',
+  '739':'灵性创意者，把高维想法通俗化。',
+  '741':'研究型领袖，理性但需亲和力。',
+  '742':'研究型协调实干者，加强行动力。',
+  '743':'灵感研究实干者，把直觉系统化。',
+  '744':'深度研究者，别陷在细节。',
+  '745':'探索型研究实干者，跨界验证。',
+  '746':'智慧疗愈实干者，用研究助人。',
+  '747':'深度思考者，产出虽慢但深。',
+  '748':'研究型企业家，用洞察建系统。',
+  '749':'灵性研究实干者，把真理通俗化。',
+  '751':'自由思考领袖，直觉强。',
+  '752':'自由洞察协调者，跨界连接。',
+  '753':'易怀疑帮过你的人或遇伪善者，多花时间分辨。',
+  '754':'自由研究实干者，跨界验证。',
+  '755':'自由探索者，一生寻找新可能。',
+  '756':'自由智慧疗愈者，用研究助人。',
+  '757':'自由深度思考者，产出慢但深。',
+  '758':'自由研究企业家，用洞察建系统。',
+  '759':'自由灵性者，把真理通俗化。',
+  '761':'智慧疗愈领袖，直觉强。',
+  '762':'洞察疗愈者，看人准但别评判。',
+  '763':'灵感疗愈者，把直觉表达出来。',
+  '764':'研究型疗愈者，用数据说话。',
+  '765':'探索型疗愈者，跨界助人。',
+  '766':'深度疗愈大爱者，别被情感淹没。',
+  '764':'提升自信，内在富足智慧喜悦，才吸引外在财富。',
+  '767':'深度智慧疗愈者，直觉理性并用。',
+  '768':'疗愈企业家，用洞察建服务系统。',
+  '769':'灵性疗愈者，把真理通俗化。',
+  '771':'孤独智慧领袖，需团队支持。',
+  '772':'敏感思考者，情绪稳定是洞察前提。',
+  '773':'灵感深度领袖，别陷完美主义。',
+  '774':'研究型领袖，理性但需亲和力。',
+  '775':'加强行动力，易怀疑纠结深陷情绪，学会换角度思考。',
+  '776':'智慧疗愈领袖，帮助他人前先修自己。',
+  '777':'三倍智慧能量，极度内省，需落地与社交。',
+  '778':'智慧企业家，用洞察撬动资源。',
+  '779':'灵性领袖，把高远智慧通俗化。',
+  '781':'事业型思考者，用智慧成就大事。',
+  '782':'压力型协调思考者，学会释放。',
+  '783':'压力型创意研究者，把焦虑变产出。',
+  '784':'压力型规划研究者，分压才能走远。',
+  '785':'变化中思考承压，找到新秩序。',
+  '786':'易被激怒冲动失理性，勿被表象迷惑。',
+  '787':'压力下深度思考，但需倾诉。',
+  '788':'大企业家思考者，注意健康。',
+  '789':'理想成就思考者，把大任拆小步。',
+  '791':'孤独智慧领袖，需团队落地。',
+  '792':'敏感智慧者，情绪管理是洞察前提。',
+  '793':'创意智慧领袖，用制度保护洞察。',
+  '794':'务实智慧领袖，研究系统化。',
+  '795':'自由智慧领袖，跨界思考。',
+  '796':'服务智慧领袖，大爱但需边界。',
+  '797':'提升行动力敢于尝试，勿停留在思考想象不行动。',
+  '798':'成就智慧领袖，财富责任同行。',
+  '799':'圆满智慧者，聚焦核心真理。',
+  '811':'事业领袖，用权力成就团队。',
+  '812':'资源协调者，人脉广。',
+  '813':'创意企业家，把灵感商业化。',
+  '814':'责任实干企业家，建立系统。',
+  '815':'自由企业家，财富来自多元后聚焦。',
+  '816':'责任疗愈企业家，服务与财富并行。',
+  '817':'智慧企业家，用洞察撬动资源。',
+  '818':'双倍事业能量，大企业家潜质，注意健康与家庭。',
+  '819':'理想企业家，把大愿商业化。',
+  '821':'资源协调者，人脉即财富。',
+  '822':'压力型协调者，学会释放。',
+  '823':'创意压力者，把焦虑变产出。',
+  '824':'责任压力实干者，分压才能走远。',
+  '825':'自由压力者，在变化中承压。',
+  '826':'责任疗愈压力者，别让善意透支。',
+  '827':'压力下仍有洞察，但需倾诉。',
+  '828':'双倍财富能量，大企业家潜质，注意情绪管理。',
+  '829':'理想压力者，把大任拆小步。',
+  '831':'创意企业家，把灵感商业化。',
+  '832':'压力型创意者，情绪是燃料也是风险。',
+  '833':'高强度创意者，注意劳逸结合。',
+  '834':'责任创意实干者，别为完美拖延。',
+  '835':'自由创意压力者，多变中求主线。',
+  '836':'责任疗愈创意者，别让善意透支。',
+  '837':'压力下洞察创意，但需释放。',
+  '838':'大企业家创意者，把创意规模化。',
+  '839':'理想创意企业家，把大愿商业化。',
+  '841':'责任规划企业家，用制度成就。',
+  '842':'压力型协调实干者，学会释放。',
+  '843':'压力型创意实干者，注重细节。',
+  '844':'责任重压实干者，分压才能走远。',
+  '845':'变化中承压实干，找到新秩序。',
+  '846':'责任疗愈实干者，别让善意透支。',
+  '847':'压力下洞察实干，但需倾诉。',
+  '848':'大企业家实干者，注意健康。',
+  '849':'理想实干企业家，把大愿落地。',
+  '851':'自由企业家，财富来自多元后聚焦。',
+  '852':'自由压力协调者，学会释放。',
+  '853':'自由创意压力者，多变中求主线。',
+  '854':'自由责任压力者，在变化中承压。',
+  '855':'自由变化承压者，找到新秩序。',
+  '856':'自由责任疗愈者，别让善意透支。',
+  '857':'自由压力下洞察，但需倾诉。',
+  '858':'自由大企业家，注意健康。',
+  '859':'自由理想企业家，把大任拆小步。',
+  '861':'责任疗愈领袖，服务与财富并行。',
+  '862':'压力型疗愈者，学会释放。',
+  '863':'高强度疗愈创意者，注意劳逸结合。',
+  '864':'责任疗愈实干者，别让善意透支。',
+  '865':'变化中疗愈承压，找到新秩序。',
+  '866':'责任大爱疗愈者，最易透支，必须设边界。',
+  '867':'压力下洞察疗愈，但需倾诉。',
+  '868':'大企业家疗愈者，注意健康。',
+  '869':'理想疗愈企业家，把大愿商业化。',
+  '871':'智慧企业家领袖，用洞察成就大事。',
+  '872':'压力型智慧协调者，学会释放。',
+  '873':'压力型智慧创意者，把焦虑变产出。',
+  '874':'压力型智慧规划者，分压才能走远。',
+  '875':'变化中智慧承压，找到新秩序。',
+  '876':'注意说话方式，觉察自身傲慢。',
+  '877':'压力下深度智慧，但需倾诉。',
+  '878':'大企业家智慧者，注意健康。',
+  '879':'理想智慧企业家，把大任拆小步。',
+  '881':'事业重压领袖，注意健康与授权。',
+  '882':'压力倍增，必须学会释放与分压。',
+  '883':'高强度创意企业家，注意劳逸结合。',
+  '884':'责任重压倍增，分压与授权是生存技能。',
+  '885':'变化中压力倍增，找到稳定内核。',
+  '886':'责任大爱重压，最易透支，必须设边界。',
+  '887':'注意情绪管理，勿过于纠结执着，敢于跳脱固有思维。',
+  '888':'八倍财富能量，大企业家巅峰配置，注意平衡所有关系。',
+  '889':'理想成就重压者，把大任拆小步。',
+  '891':'孤独事业领袖，需团队支持。',
+  '892':'敏感企业家，情绪稳定是底盘。',
+  '893':'创意事业领袖，用制度保护创意。',
+  '894':'务实事业领袖，系统成就愿景。',
+  '895':'自由事业领袖，给方向与自由。',
+  '896':'服务事业领袖，大爱但需边界。',
+  '897':'智慧事业领袖，直觉理性并用。',
+  '898':'勿因情绪烦躁脾气大，多走出去学会释放。',
+  '899':'圆满事业领袖，聚焦核心使命。',
+  '911':'理想领袖，把大愿变成现实。',
+  '912':'慈悲协调者，游走助人。',
+  '913':'理想创意者，把愿景变成作品。',
+  '914':'理想实干者，把大愿落地。',
+  '915':'自由理想者，把个人使命与社会价值结合。',
+  '916':'理想疗愈者，把大爱变成事业。',
+  '917':'灵性思考者，把高远智慧通俗化。',
+  '918':'理想企业家，把大愿商业化。',
+  '919':'双倍圆满能量，大爱与成就并存，切忌贪心。',
+  '921':'慈悲协调者，学会接受回报。',
+  '922':'敏感慈悲者，情绪管理是服务前提。',
+  '923':'慈悲创意者，情绪细腻但需保护。',
+  '924':'务实慈悲者，把善意系统化。',
+  '925':'自由慈悲者，游走于不同圈子。',
+  '926':'大爱协调者，边界感是必修课。',
+  '927':'智慧慈悲者，直觉助人但要适度。',
+  '928':'慈悲变现者，价值输出得财富。',
+  '929':'双倍慈悲，极易被情感绑架，必须设边界。',
+  '931':'理想创意者，把愿景变成作品。',
+  '932':'敏感创意者，情绪管理是创作前提。',
+  '933':'梦想家，点子多到做不完，必须筛选落地。',
+  '934':'务实创意者，把创意变成产品。',
+  '935':'自由梦想家，把探索变成内容。',
+  '936':'理想疗愈创意者，把大爱变成具体帮助。',
+  '937':'灵性创意者，把高维想法通俗化。',
+  '938':'理想创意企业家，把大愿商业化。',
+  '939':'三倍梦想能量，理想主义高峰，需极强执行力。',
+  '941':'理想规划者，把愿景制度化。',
+  '942':'敏感实干领袖，情绪稳定是底盘。',
+  '943':'创意规划领袖，用制度保护创意。',
+  '944':'易计划太多方案太多，避免光说不练。',
+  '945':'自由规划领袖，方向清晰。',
+  '946':'理想疗愈领袖，服务与愿景并行。',
+  '947':'灵性研究领袖，把真理通俗化。',
+  '948':'理想企业家，把大愿商业化。',
+  '949':'四倍理想能量，计划多执行少，必须拆解落地。',
+  '951':'自由理想领袖，给方向与自由。',
+  '952':'敏感自由者，情绪稳定是底盘。',
+  '953':'自由创意领袖，用制度保护创意。',
+  '954':'自由规划领袖，方向清晰。',
+  '955':'对朋友热情仗义，注意勿冲动行事。',
+  '956':'自由服务领袖，大爱但需边界。',
+  '957':'自由智慧领袖，直觉理性并用。',
+  '958':'自由成就领袖，财富责任同行。',
+  '959':'自由圆满者，聚焦核心使命。',
+  '961':'理想疗愈领袖，把大爱落地。',
+  '962':'敏感疗愈者，情绪管理是服务前提。',
+  '963':'创意疗愈领袖，用制度保护善意。',
+  '964':'务实疗愈领袖，服务系统化。',
+  '965':'自由疗愈领袖，游走助人。',
+  '966':'太轻易得赞美肯定会对自己更完美谨慎胆小，错失良机。',
+  '967':'智慧疗愈领袖，直觉理性并用。',
+  '968':'成就疗愈领袖，财富责任同行。',
+  '969':'圆满疗愈者，聚焦核心服务。',
+  '971':'灵性领袖，把高远智慧通俗化。',
+  '972':'敏感智慧者，情绪管理是洞察前提。',
+  '973':'灵感智慧领袖，别陷完美主义。',
+  '974':'务实智慧领袖，研究系统化。',
+  '975':'自由智慧领袖，跨界思考。',
+  '976':'服务智慧领袖，大爱但需边界。',
+  '977':'对帮过你的人友善，提升行动力坚定目标助成果放大。',
+  '978':'成就智慧领袖，财富责任同行。',
+  '979':'圆满智慧者，聚焦核心真理。',
+  '981':'理想事业领袖，把大愿商业化。',
+  '982':'敏感企业家，情绪稳定是底盘。',
+  '983':'创意事业领袖，用制度保护创意。',
+  '984':'务实事业领袖，系统成就愿景。',
+  '985':'自由事业领袖，给方向与自由。',
+  '986':'服务事业领袖，大爱但需边界。',
+  '987':'智慧事业领袖，直觉理性并用。',
+  '988':'易过度投入工作忘照顾自己，注意生活平衡关注健康。',
+  '989':'圆满事业领袖，聚焦核心使命。',
+  '991':'孤独圆满领袖，需团队支持落地。',
+  '992':'敏感圆满者，情绪管理是慈悲前提。',
+  '993':'梦想圆满者，点子多到做不完，必须筛选。',
+  '994':'计划圆满者，避免光说不练。',
+  '995':'自由圆满者，游走助人但需聚焦。',
+  '996':'大爱圆满者，付出需边界。',
+  '997':'智慧圆满者，直觉理性并用。',
+  '998':'成就圆满者，财富责任同行。',
+  '999':'机会太多切忌太贪心无重点，打造核心竞争力并学会感恩。'
+};
+
+var QUESHI={
+  1:'支撑力与独立性不足：易迷失自我、为他人而活、自信不足、决策依赖。',
+  2:'沟通与共情较弱：难同频、说服力差、易沟通错位。',
+  3:'行动力与自我管理欠缺：行动力差、易拖延、忽视自身问题。',
+  4:'规划与细节意识薄弱：不擅规划、顾此失彼、缺乏系统积累。',
+  5:'方向感与决策力不足：重大决策犹豫、想法多变、方向感差。',
+  6:'资源管理与自我关怀失衡：财富智慧难留、对他人慷慨对自己计较。',
+  7:'人脉感知与机会把握不足：知心朋友少、难察觉他人善意。',
+  8:'责任认知与压力承受波动：倾向简单生活、平时逃避关键时刻挺身。',
+  9:'价值认同与回报感知错位：付出易被视作理所当然、自我价值感低。'
+};
+
+var HUANGJIN={
+  1:{'21-40':'行动力极强，总想证明自己；学会合作，别单打独斗。',
+      '41-60':'领导力巅峰期，但易固执；放权与信任是放大器。',
+      '61岁后':'用前半生积累的威望影响后辈，注意身体。'},
+  2:{'21-40':'在配合中积累人脉，别因犹豫错过机会。',
+      '41-60':'协调力与人脉变现期，建立稳定合作关系。',
+      '61岁后':'成为温暖的顾问者，享受平和。'},
+  3:{'21-40':'虽努力却总觉得差一点，行动力十足想快速出结果；别用力过猛，经历都是积累。',
+      '41-60':'累了倦了但压力让你停不下来，遇瓶颈想换方向；稳定比什么都重要，开干就完了。',
+      '61岁后':'也能吃老本，安享积累。'},
+  4:{'21-40':'踏实积累阶段，别嫌慢，系统即财富。',
+      '41-60':'稳健上升期， established 后适度冒险。',
+      '61岁后':'享受稳定成果，传承经验。'},
+  5:{'21-40':'多尝试、多变化，找到真正热爱的方向。',
+      '41-60':'在自由中建立事业底盘，聚焦才能放大。',
+      '61岁后':'自在游历，分享阅历。'},
+  6:{'21-40':'每天忙却感觉瞎忙偶尔有成就感，迷茫纠结；下定决心很重要，不能既要又要。',
+      '41-60':'佛系心态与世无争，稳定心态比什么都重要；随遇而安但心态不可消极。',
+      '61岁后':'更潇洒自在。'},
+  7:{'21-40':'深度学习与积累期，别因怀疑而停滞。',
+      '41-60':'智慧变现期，贵人运强，把握关键机会。',
+      '61岁后':'成为智者导师，享受思考。'},
+  8:{'21-40':'野心初显，学会承担压力与责任。',
+      '41-60':'事业财富高峰期，注意健康与家庭平衡。',
+      '61岁后':'把资源交给可靠的人，退而不休。'},
+  9:{'21-40':'黄金20年！努力就有收获，事推着你走，有贵人相助；勿膨胀，没有一分钱白来。',
+      '41-60':'人生新高度，资源人脉空前丰富；为晚年考虑，抓机遇积累财富。',
+      '61岁后':'可能在用60岁前的财富管理，恭喜。'}
+};
+
+var FUQI={
+  1:'彼此相对独立，各有社交与财务自主；宜"小别胜新婚"，避免共同经营夫妻档、在家少谈工作。',
+  2:'相处融洽和气，善沟通化解矛盾；婚前话多，婚后斗嘴亦情深。',
+  3:'热衷分享欢乐、同游美食；追求小浪漫小幸福，但婚后前五年易生小情绪。',
+  4:'共同为家庭制定规划，成长型稳固家庭，离婚率低；需携手共同成长。',
+  5:'不宜共同经营，宜各自发展独立事业；同游放松享受生活，避谈工作。',
+  6:'智慧与财富之合，结合后易赚钱、财富积累；切忌争吵损财。',
+  7:'良缘人缘，结合后人脉拓展、遇贵人；切忌争吵损人脉。',
+  8:'一方压力大一方轻松，可触大平台重要人物；切忌争吵损资源。',
+  9:'家庭多成功，机会多、认可多、财富随；步入婚姻后发展良好。'
+};
+
+var LIUNIAN={
+  1:'新开始、新计划之年，适合独立启动项目，主动争取机会。',
+  2:'合作与关系之年，放慢节奏，倾听与配合会带来好运。',
+  3:'表达与社交之年，适合创作、演讲、拓展人脉，但别贪玩。',
+  4:'务实与积累之年，打好基础、整理系统，别急于求成。',
+  5:'变化与自由之年，可能有出行、转型，保持弹性。',
+  6:'责任与家庭之年，关注亲密关系，付出前先照顾好自己。',
+  7:'学习与内观之年，适合进修、研究、独处，答案向内求。',
+  8:'成就与财富之年，承担更大责任，财富与压力同步增长。',
+  9:'圆满与放下之年，收尾旧项目，总结复盘，准备新周期。'
+};
+
+/* ============ 交互 ============ */
+var calType='solar',calType2='solar',leap=0;
+function bindSeg(id,cb){document.querySelectorAll('#'+id+' button').forEach(function(b){
+  b.onclick=function(){document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');cb(b.dataset.v);};});}
+bindSeg('calType',function(v){calType=v;document.getElementById('lblDate').textContent=
+  v==='solar'?'选择阳历生日':'选择农历生日（含闰月选项）';});
+bindSeg('calType2',function(v){calType2=v;document.getElementById('lblDate2').textContent=
+  v==='solar'?'选择伴侣阳历生日':'选择伴侣农历生日';});
+bindSeg('leap',function(v){leap=+v;});
+bindSeg('gender',function(){});
+
+function resolveDate(inputId,type,lp){
+  var v=document.getElementById(inputId).value; if(!v)return null;
+  var p=v.split('-');var y=+p[0],m=+p[1],d=+p[2];
+  if(type==='lunar'){return lunar2solar(y,m,d,lp===1);}
+  return {y:y,m:m,d:d};
+}
+
+function lianheMean(code){
+  var txt=LIANHE[code];
+  if(txt)return '<span style="color:var(--ink);display:block;flex:1 1 100%;">'+txt+'</span>';
+  // 尝试两位组合
+  var two=LIANHE[code.slice(0,2)] || LIANHE[code.slice(1,3)];
+  if(two)return '<span style="color:var(--sub);display:block;flex:1 1 100%;">（该组合暂无完整三位解读，参考两位：'+code.slice(0,2)+'）</span><span style="display:block;flex:1 1 100%;">'+two+'</span>';
+  return '<span style="color:var(--warn);display:block;flex:1 1 100%;">当前数据库暂未收录该组合，后续可补充。</span>';
+}
+
+function renderExtGrid(codes){
+  var html='';
+  codes.forEach(function(c){
+    html+='<div class="code-chip" data-type="'+c.type+'" data-num="'+c.num+'">'+
+      '<div class="cd">'+c.num+'</div><div class="nm">'+EXT_DEF[c.type].name+'</div></div>';
+  });
+  document.getElementById('rExtGrid').innerHTML=html;
+  document.querySelectorAll('#rExtGrid .code-chip').forEach(function(ch){
+    ch.onclick=function(){
+      var type=this.dataset.type,num=+this.dataset.num;
+      document.getElementById('rExtDetail').classList.remove('hide');
+      document.getElementById('rExtDetail').innerHTML=
+        '<h4>'+EXT_DEF[type].name+' · '+num+'</h4>'+extMean(type,num);
+    };
+  });
+}
+
+document.getElementById('go').onclick=function(){
+  var a=resolveDate('birth',calType,leap); if(!a){alert('请选择你的生日');return;}
+  var main=lifeNumber(a.y,a.m,a.d);
+  var tri=buildTriangle(a.y,a.m,a.d);
+  var bottom=tri[0];
+  var I=tri[1][0],J=tri[1][1],K=tri[1][2],L=tri[1][3];
+  var M=tri[2][0],N=tri[2][1];
+  var O=tri[3][0];
+
+  // 扩展码：严格按标准图示公式
+  // 内心密码 = O+M+N；潜意识密码 = L+I+O；外心密码 = U+R+X
+  // 左侧（工作·朋友·21-40岁）：T=I+M, S=J+M, U=T+S
+  // 顶部（下属·儿女·41-60岁）：Q=N+O, P=M+O, R=Q+P
+  // 右侧（晚年·家庭·61岁+）：V=K+N, W=L+N, X=V+W
+  var innerCode=digitalRoot(O+M+N);
+  var subCode=digitalRoot(L+I+O);
+  var T=digitalRoot(I+M),S=digitalRoot(J+M),U=digitalRoot(T+S);
+  var Q=digitalRoot(N+O),P=digitalRoot(M+O),R=digitalRoot(Q+P);
+  var V=digitalRoot(K+N),W=digitalRoot(L+N),X=digitalRoot(V+W);
+  var outerCode=digitalRoot(U+R+X);
+  var starCode=[O,I,L];
+  var sevenSouls=[I,J,K,L,M,N,O];
+
+  // 天赋数 / 挑战数（补充参考）
+  var talentRaw=(''+a.y+String(a.m).padStart(2,'0')+String(a.d).padStart(2,'0')).split('').reduce((x,c)=>x+ +c,0);
+  var talentNum=digitalRoot(talentRaw);
+  var challengeNum=Math.abs(digitalRoot(a.m)-digitalRoot(a.d))||9;
+
+  // 流年（当前年份 2026）
+  var yr=2026;
+  var flow=digitalRoot(digitalRoot(yr)+digitalRoot(a.m)+digitalRoot(a.d));
+
+  // 12组联合码
+  var codes12={
+    '父亲基因 IJM':''+I+J+M,'母亲基因 KLN':''+K+L+N,'坐镇码 MNO':''+M+N+O,
+    '工作·朋友 IMT':''+I+M+T,'工作·朋友 JMS':''+J+M+S,'21-40岁 TSU':''+T+S+U,
+    '下属·儿女 NOQ':''+N+O+Q,'下属·儿女 MOP':''+M+O+P,'41-60岁 QPR':''+Q+P+R,
+    '晚年·家庭 KNV':''+K+N+V,'晚年·家庭 LNW':''+L+N+W,'61岁+ VWX':''+V+W+X
+  };
+
+  // 缺失数字：只统计内码（七魄 I,J,K,L,M,N,O）
+  var inner7=[I,J,K,L,M,N,O];
+  var cnt={}; inner7.forEach(function(x){cnt[x]=(cnt[x]||0)+1;});
+  var pos=[],neg=[],miss=[];
+  for(var k=1;k<=9;k++){if(cnt[k]===1)pos.push(k);else if(cnt[k]>1)neg.push(k+'(×'+cnt[k]+')');if(!cnt[k])miss.push(k);}
+
+  // 五行
+  var wx=WUXING[main];
+
+  // 黄金20年
+  var hj=HUANGJIN[main]||null;
+
+  /* 渲染 */
+  document.getElementById('result').classList.remove('hide');
+  document.getElementById('rMain').textContent=main;
+  document.getElementById('rMainName').textContent='你是 '+main+' 号人 · '+NUM_DESC[main].n;
+  document.getElementById('rMainDesc').innerHTML=
+    '<b>核心能量：</b>'+NUM_DESC[main].e+'<br>'+
+    '<b>天赋面：</b>'+NUM_DESC[main].light+'<br>'+
+    '<b>阴影面：</b>'+NUM_DESC[main].shadow+'<br>'+
+    '<b>成长建议：</b>'+NUM_DESC[main].guide;
+
+  // 扩展码网格
+  renderExtGrid([
+    {type:'main',num:main},{type:'inner',num:innerCode},{type:'sub',num:subCode},{type:'outer',num:outerCode},
+    {type:'topR',num:R},{type:'liunian',num:flow},{type:'talent',num:talentNum},{type:'challenge',num:challengeNum}
+  ]);
+
+  // 用户具体生命数字三角形（只展示数字与标签，公式见上方示意图）
+  function triCell(num,label,cls,col,row){
+    return '<div class="cell" style="grid-column:'+col+';grid-row:'+row+';">'+
+      '<div class="n '+cls+'">'+num+'</div>'+
+      (label?'<div class="label">'+label+'</div>':'')+
+      '</div>';
+  }
+  var A=bottom[0],B=bottom[1],C=bottom[2],D=bottom[3],E=bottom[4],F=bottom[5],G=bottom[6],H=bottom[7];
+  var triHtml='';
+  triHtml+=triCell(A,'','base',2,6)+triCell(B,'','base',3,6)+triCell(C,'','base',4,6)+triCell(D,'','base',5,6);
+  triHtml+=triCell(E,'','base',6,6)+triCell(F,'','base',7,6)+triCell(G,'','base',8,6)+triCell(H,'','base',9,6);
+  triHtml+=triCell(I,'','',3,5)+triCell(J,'','',4,5)+triCell(K,'','',6,5)+triCell(L,'','',7,5);
+  triHtml+=triCell(M,'父亲基因','',4,4)+triCell(N,'母亲基因','',6,4);
+  triHtml+=triCell(O,'主性格','apex',5,3);
+  triHtml+=triCell(Q,'','ext',4,2)+triCell(P,'','ext',6,2);
+  triHtml+=triCell(R,'人生目标','ext',5,1);
+  triHtml+=triCell(U,'21-40岁','side',1,1)+triCell(T,'','side',1,3)+triCell(S,'','side',1,5);
+  triHtml+=triCell(X,'61岁+','side',10,1)+triCell(V,'','side',10,3)+triCell(W,'','side',10,5);
+  document.getElementById('rTri').innerHTML=triHtml;
+
+  document.getElementById('ageZones').innerHTML=
+    '<div class="z"><b>21-40 岁</b>工作 · 朋友<br><span style="color:var(--muted)">T-S-U</span></div>'+
+    '<div class="z"><b>41-60 岁</b>下属 · 儿女<br><span style="color:var(--muted)">Q-P-R</span></div>'+
+    '<div class="z"><b>61 岁 +</b>晚年 · 家庭<br><span style="color:var(--muted)">V-W-X</span></div>';
+
+  document.getElementById('formulaList').innerHTML=
+    '<div style="color:var(--pri);font-weight:700;margin-bottom:8px;">核心公式拆解</div>'+
+    '<div class="fl-row">'+
+      '<div class="fl-item"><b>内心密码</b>=O+M+N='+innerCode+'</div>'+
+      '<div class="fl-item"><b>潜意识密码</b>=L+I+O='+subCode+'</div>'+
+      '<div class="fl-item"><b>外心密码</b>=U+R+X='+outerCode+'</div>'+
+    '</div>'+
+    '<div class="fl-row">'+
+      '<div class="fl-item"><b>左侧扩展</b>=T-S-U</div>'+
+      '<div class="fl-item"><b>顶部扩展</b>=Q-P-R</div>'+
+      '<div class="fl-item"><b>右侧扩展</b>=V-W-X</div>'+
+    '</div>'+
+    '<div class="fl-row">'+
+      '<div class="fl-item"><b>七魄</b>=I·J·K·L·M·N·O='+sevenSouls.join('·')+'</div>'+
+      '<div class="fl-item"><b>星位密码</b>=O·I·L='+starCode.join('·')+'</div>'+
+      '<div class="fl-item"><b>流年数</b>=当年根+月根+日根='+flow+'</div>'+
+    '</div>';
+  document.getElementById('triNote').innerHTML='上方为数字代码示意图；此图为你的专属生命密码：底部 <b>'+bottom.join('')+'</b> 为阳历生日数字，顶点 <b>'+O+'</b> 即主性格。';
+
+  // 12组联合码
+  function lhItem(label,code){
+    return '<div class="li-code"><span class="badge">'+label+'</span><b>'+code+'</b>'+lianheMean(code)+'</div>';
+  }
+  var lhHtml='';
+  for(var k in codes12) lhHtml+=lhItem(k,codes12[k]);
+  document.getElementById('rLianhe').innerHTML=lhHtml;
+
+  // 缺失
+  document.getElementById('rQue').innerHTML=
+    '<div class="kv"><span>正（出现1次）</span><b>'+(pos.length?pos.join('、'):'无')+'</b></div>'+
+    '<div class="kv"><span>负（出现>1次）</span><b>'+(neg.length?neg.join('、'):'无')+'</b></div>'+
+    '<div class="kv"><span>缺（未出现）</span><b>'+(miss.length?miss.join('、'):'无')+'</b></div>'+
+    (miss.length?'<div style="font-size:13px;color:var(--sub);margin-top:10px;"><b style="color:var(--warn);">缺失提示</b>'+miss.map(m=>'<p style="margin:6px 0 0;line-height:1.7;">'+m+' · '+QUESHI[m]+'</p>').join('')+'</div>':'');
+
+  // 五行
+  document.getElementById('rWx').innerHTML=
+    '<div class="kv"><span>主性格五行</span><b>'+wx.w+'</b></div>'+
+    '<div class="kv"><span>五行关系</span><b>'+wx.rel+'</b></div>'+
+    '<div class="kv"><span>内心密码</span><b>'+wx.inner+' 号 · '+NUM_DESC[wx.inner].n+'</b></div>'+
+    '<div style="font-size:13px;color:var(--sub);margin-top:8px;">'+wx.note+'</div>';
+
+  // 流年 & 黄金20年
+  var yHtml='<div class="kv"><span>'+yr+' 流年数字</span><b>'+flow+' · '+NUM_DESC[flow].n+'</b></div>'+
+    '<div style="font-size:13px;color:var(--sub);margin-top:8px;">'+LIUNIAN[flow]+'</div>';
+  if(hj){yHtml+='<div style="font-size:13px;color:var(--sub);margin-top:12px;"><b style="color:var(--gold);">黄金20年提示（按主性格'+main+'）：</b><br>'+
+    '· 21-40岁：'+hj['21-40']+'<br>· 41-60岁：'+hj['41-60']+'<br>· 61岁后：'+hj['61岁后']+'</div>';}
+  document.getElementById('rYear').innerHTML=yHtml;
+
+  // 夫妻码
+  var b2=resolveDate('birth2',calType2,0);
+  var fqCard=document.getElementById('rFqCard');
+  if(b2){var m2=lifeNumber(b2.y,b2.m,b2.d);var sum=digitalRoot(main+m2);
+    document.getElementById('rFq').innerHTML=
+      '<div class="kv"><span>你 '+main+' 号 · 伴侣 '+m2+' 号</span><b>夫妻码 = '+sum+'</b></div>'+
+      '<div style="font-size:13px;color:var(--sub);margin-top:8px;">'+FUQI[sum]+'</div>';
+    fqCard.classList.remove('hide');
+  }else{fqCard.classList.add('hide');}
+
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+};
+</script>
+</body>
+</html>
