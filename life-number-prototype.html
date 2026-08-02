@@ -1228,7 +1228,8 @@ function setupDate(prefix,isPartner){
   var yh=''; for(var y=1900;y<=2100;y++) yh+='<option value="'+y+'">'+y+'</option>'; ySel.innerHTML=yh;
   var mh=(isPartner?'<option value="">—</option>':''); for(var m=1;m<=12;m++) mh+='<option value="'+m+'">'+m+'</option>'; mSel.innerHTML=mh;
   var dh=(isPartner?'<option value="">—</option>':''); for(var d=1;d<=31;d++) dh+='<option value="'+d+'">'+(d<10?'0'+d:d)+'</option>'; dSel.innerHTML=dh;
-  if(!isPartner){ ySel.value=1976; mSel.value=6; dSel.value=16; }
+  if(!isPartner){ ySel.value=1986; mSel.value=6; dSel.value=18; }
+  else { ySel.value=1986; }
   mSel.onchange=function(){
     var solar=(prefix==='birth'?calType:calType2)==='solar';
     var maxD=solar?daysInMonth(+ySel.value,+mSel.value):30;
