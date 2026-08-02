@@ -16,7 +16,10 @@
     font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
     font-size:14.5px;line-height:1.75;}
   .app{max-width:460px;margin:0 auto;padding:16px 14px 70px;min-height:100vh;}
-  h1{font-size:22px;text-align:center;color:var(--brand);margin:10px 0 4px;letter-spacing:1px;}
+  h1{font-size:22px;text-align:center;color:var(--pri);margin:10px 0 4px;letter-spacing:1px;}
+  @supports ((-webkit-background-clip:text) or (background-clip:text)){
+    h1{background:linear-gradient(135deg,var(--pri),#B07D4E);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+  }
   .tag{text-align:center;font-size:13px;color:var(--sub);margin-bottom:18px;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;
     padding:18px;margin-bottom:14px;box-shadow:0 4px 18px rgba(45,33,24,.10);}
@@ -28,6 +31,10 @@
   .seg button.on{background:var(--pri-soft);color:var(--pri);font-weight:700;}
   input[type=date]{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;
     font-size:15px;background:var(--bg);color:var(--ink);}
+  .datepick{display:flex;align-items:center;gap:6px;}
+  .dp{flex:1;min-width:0;padding:12px 4px;border:1px solid var(--line);border-radius:12px;
+    font-size:15px;background:var(--bg);color:var(--ink);text-align:center;}
+  .dp-sep{font-size:14px;color:var(--sub);flex-shrink:0;}
   .row{display:flex;gap:10px;}
   .row>div{flex:1;}
   .calc{width:100%;margin-top:14px;padding:15px;border:0;border-radius:14px;
@@ -51,19 +58,19 @@
   .badge{font-size:11px;background:var(--pri-soft);color:var(--pri);border-radius:6px;padding:3px 7px;margin-right:8px;border:1px solid var(--line);}
 
   /* 正三角：按图示网格精确布局 */
-  .tri-wrap{position:relative;padding:10px 0 14px;margin-top:8px;overflow-x:auto;}
-  .tri-diagram{display:grid;grid-template-columns:44px repeat(8,1fr) 44px;
-    grid-template-rows:repeat(6,auto);gap:10px 3px;align-items:center;justify-items:center;
-    min-width:340px;font-variant-numeric:tabular-nums;}
+  .tri-wrap{position:relative;padding:10px 0 14px;margin-top:8px;overflow:visible;}
+  .tri-diagram{display:grid;grid-template-columns:repeat(10,1fr);
+    grid-template-rows:repeat(6,auto);gap:8px 2px;align-items:center;justify-items:center;
+    width:100%;font-variant-numeric:tabular-nums;}
   .tri-diagram .cell{display:flex;flex-direction:column;align-items:center;gap:2px;}
-  .tri-diagram .n{width:30px;height:30px;display:flex;align-items:center;justify-content:center;
-    border-radius:8px;background:var(--pri-soft);border:1px solid var(--line);font-weight:700;font-size:14px;}
+  .tri-diagram .n{width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+    border-radius:8px;background:var(--pri-soft);border:1px solid var(--line);font-weight:700;font-size:12px;}
   .tri-diagram .n.apex{background:linear-gradient(135deg,var(--gold),#D4A020);color:#2D2118;border:none;font-weight:800;box-shadow:0 0 18px rgba(184,134,11,.35);}
   .tri-diagram .n.base{background:var(--bg);color:var(--ink);border-color:var(--muted);}
   .tri-diagram .n.ext{background:var(--gold-soft);color:var(--gold);border-color:rgba(184,134,11,.25);}
   .tri-diagram .n.side{background:#EFE0CC;border-color:#D9C3A4;color:#9A6B3F;}
-  .tri-diagram .formula{font-size:10px;color:var(--muted);white-space:nowrap;}
-  .tri-diagram .label{font-size:10px;color:var(--sub);}
+  .tri-diagram .formula{font-size:9px;color:var(--muted);white-space:normal;line-height:1.15;}
+  .tri-diagram .label{font-size:9px;color:var(--sub);white-space:normal;line-height:1.15;}
   .tri-diagram .zone-label{font-size:10px;color:var(--warn);text-align:center;}
 
   .age-zones{display:flex;justify-content:space-around;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;}
@@ -100,7 +107,7 @@
 <body>
 <div class="app">
   <h1>生命数字密码</h1>
-  <div class="tag">输入生日，探索你的数字能量地图 · 原型 v5</div>
+  <div class="tag">输入生日，探索你的数字能量地图 · 原型 v7</div>
 
   <div class="warn-bar">本工具所有内容<b>仅供个人成长探索与娱乐参考</b>，不构成任何专业建议。请理性看待，切勿沉迷。</div>
 
@@ -112,7 +119,11 @@
       <button data-v="lunar">农历</button>
     </div>
     <label id="lblDate">选择阳历生日</label>
-    <input type="date" id="birth" value="1976-06-16" min="1900-01-01" max="2100-12-31">
+    <div class="datepick">
+      <select id="birthY" class="dp"></select><span class="dp-sep">年</span>
+      <select id="birthM" class="dp"></select><span class="dp-sep">月</span>
+      <select id="birthD" class="dp"></select><span class="dp-sep">日</span>
+    </div>
     <div class="row" style="margin-top:10px;">
       <div><label>性别（可选）</label>
         <div class="seg" id="gender">
@@ -133,8 +144,12 @@
       <button data-v="solar" class="on">阳历</button>
       <button data-v="lunar">农历</button>
     </div>
-    <label id="lblDate2">选择伴侣阳历生日</label>
-    <input type="date" id="birth2" min="1900-01-01" max="2100-12-31">
+    <label id="lblDate2">选择伴侣阳历生日（不选则不算夫妻码）</label>
+    <div class="datepick">
+      <select id="birth2Y" class="dp"></select><span class="dp-sep">年</span>
+      <select id="birth2M" class="dp"></select><span class="dp-sep">月</span>
+      <select id="birth2D" class="dp"></select><span class="dp-sep">日</span>
+    </div>
   </div>
 
   <button class="calc" id="go">生 成 我 的 生 命 密 码</button>
@@ -243,11 +258,11 @@
           <!-- 木 -->
           <circle cx="150" cy="50" r="30" fill="#7CB342" stroke="#fff" stroke-width="2"/>
           <text x="150" y="43" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">木</text>
-          <text x="150" y="63" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">49</text>
+          <text x="150" y="63" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">4/9</text>
           <!-- 火 -->
           <circle cx="245" cy="119" r="30" fill="#E53935" stroke="#fff" stroke-width="2"/>
           <text x="245" y="112" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">火</text>
-          <text x="245" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">38</text>
+          <text x="245" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">3/8</text>
           <!-- 土 -->
           <circle cx="209" cy="231" r="30" fill="#8D6E63" stroke="#fff" stroke-width="2"/>
           <text x="209" y="224" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">土</text>
@@ -255,11 +270,11 @@
           <!-- 金 -->
           <circle cx="91" cy="231" r="30" fill="#FBC02D" stroke="#fff" stroke-width="2"/>
           <text x="91" y="224" text-anchor="middle" fill="#5D4037" font-size="17" font-weight="700">金</text>
-          <text x="91" y="244" text-anchor="middle" fill="#5D4037" font-size="15" font-weight="700">16</text>
+          <text x="91" y="244" text-anchor="middle" fill="#5D4037" font-size="15" font-weight="700">1/6</text>
           <!-- 水 -->
           <circle cx="55" cy="119" r="30" fill="#1E88E5" stroke="#fff" stroke-width="2"/>
           <text x="55" y="112" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">水</text>
-          <text x="55" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">27</text>
+          <text x="55" y="132" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">2/7</text>
           <!-- 生/克 标签 -->
           <text x="232" y="42" fill="var(--pri)" font-size="11">生</text>
           <text x="268" y="175" fill="var(--pri)" font-size="11">生</text>
@@ -1207,12 +1222,28 @@ bindSeg('calType2',function(v){calType2=v;document.getElementById('lblDate2').te
 bindSeg('leap',function(v){leap=+v;});
 bindSeg('gender',function(){});
 
-function resolveDate(inputId,type,lp){
-  var v=document.getElementById(inputId).value; if(!v)return null;
-  var p=v.split('-');var y=+p[0],m=+p[1],d=+p[2];
+function daysInMonth(y,m){ if(m===2) return ((y%4===0&&y%100!==0)||y%400===0)?29:28; if(m===4||m===6||m===9||m===11) return 30; return 31; }
+function setupDate(prefix,isPartner){
+  var ySel=document.getElementById(prefix+'Y'), mSel=document.getElementById(prefix+'M'), dSel=document.getElementById(prefix+'D');
+  var yh=''; for(var y=1900;y<=2100;y++) yh+='<option value="'+y+'">'+y+'</option>'; ySel.innerHTML=yh;
+  var mh=(isPartner?'<option value="">—</option>':''); for(var m=1;m<=12;m++) mh+='<option value="'+m+'">'+m+'</option>'; mSel.innerHTML=mh;
+  var dh=(isPartner?'<option value="">—</option>':''); for(var d=1;d<=31;d++) dh+='<option value="'+d+'">'+(d<10?'0'+d:d)+'</option>'; dSel.innerHTML=dh;
+  if(!isPartner){ ySel.value=1976; mSel.value=6; dSel.value=16; }
+  mSel.onchange=function(){
+    var solar=(prefix==='birth'?calType:calType2)==='solar';
+    var maxD=solar?daysInMonth(+ySel.value,+mSel.value):30;
+    var cur=+dSel.value||1; var dh2=''; for(var d=1;d<=maxD;d++) dh2+='<option value="'+d+'">'+(d<10?'0'+d:d)+'</option>';
+    dSel.innerHTML=dh2; if(cur<=maxD) dSel.value=cur;
+  };
+}
+function resolveDate(prefix,type,lp){
+  var ySel=document.getElementById(prefix+'Y'), mSel=document.getElementById(prefix+'M'), dSel=document.getElementById(prefix+'D');
+  if(!ySel.value || !mSel.value || !dSel.value) return null;
+  var y=+ySel.value, m=+mSel.value, d=+dSel.value;
   if(type==='lunar'){return lunar2solar(y,m,d,lp===1);}
   return {y:y,m:m,d:d};
 }
+setupDate('birth',false); setupDate('birth2',true);
 
 function lianheMean(code){
   var txt=LIANHE[code];
@@ -1378,7 +1409,7 @@ document.getElementById('go').onclick=function(){
   var yHtml='<div class="kv"><span>'+yr+' 流年数字</span><b>'+flow+' · '+NUM_DESC[flow].n+'</b></div>'+
     '<div style="font-size:13px;color:var(--sub);margin-top:8px;">'+LIUNIAN[flow]+'</div>';
   if(hj){yHtml+='<div style="font-size:13px;color:var(--sub);margin-top:12px;"><b style="color:var(--gold);">黄金20年提示（按主性格'+main+'）：</b><br>'+
-    '· 21-40岁：'+hj['21-40']+'<br>· 41-60岁：'+hj['41-60']+'<br>· 61岁后：'+hj['61岁后']+'</div>';}
+    '· <b>21-40岁</b>：'+hj['21-40']+'<br>· <b>41-60岁</b>：'+hj['41-60']+'<br>· <b>61岁后</b>：'+hj['61岁后']+'</div>';}
   document.getElementById('rYear').innerHTML=yHtml;
 
   // 夫妻码
