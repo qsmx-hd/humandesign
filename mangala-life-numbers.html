@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>曼格拉生命数字地图 · 计算器 V14</title>
+<title>曼格拉生命数字地图 · 计算器 V15</title>
 <style>
   :root{
     --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
@@ -142,7 +142,6 @@
       <input id="iname" type="text" placeholder="如 邓勤敏 / DENG QINMIN" oninput="onNameInput()">
       <div id="py-preview" class="note"></div>
       <button class="primary" onclick="calc()">生成我的生命数字地图</button>
-      <div class="note">算法说明：年/月/日分别化简（保留主数 11/22/33）后求和；姓名按毕达哥拉斯字母表取值，支持中文姓名自动转拼音。本工具为自我觉察参考，非预测。</div>
     </div>
     <div id="core-out" class="init-hidden"></div>
   </section>
@@ -412,7 +411,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
 <script>
-const VERSION = 'V14';
+const VERSION = 'V15';
 document.getElementById('ver2').textContent = VERSION;
 
 const CURRENT_YEAR = 2026;
