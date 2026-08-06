@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>生命靈數自動分析系統</title>
+<title>生命灵数自动分析系统</title>
 <style>
   :root{
     --bg:#F5F0E8; --bg2:#EFE7D8; --surface:#FFFDF8; --surface2:#FBF6EC;
@@ -4536,10 +4536,14 @@
     var b = $('btn-simp');
     if (b) b.textContent = window.__SIMP__ ? '繁／簡：簡' : '繁／簡：繁';
   }
+  function updateTitle() {
+    document.title = window.__SIMP__ ? '生命灵数自动分析系统' : '生命靈數自動分析系統';
+  }
   function toggleSimp() {
     window.__SIMP__ = !window.__SIMP__;
     t2sWalk(document.querySelector('.wrap'), window.__SIMP__);
     updateSimpBtn();
+    updateTitle();
     try { localStorage.setItem('ns_simp', window.__SIMP__ ? '1' : '0'); } catch (e) {}
     toast(window.__SIMP__ ? '已切換為簡體中文' : '已切換為繁體中文');
   }
@@ -4558,6 +4562,7 @@
     window.__SIMP__ = true;
     try { if (localStorage.getItem('ns_simp') === '0') window.__SIMP__ = false; } catch (e) {}
     updateSimpBtn();
+    updateTitle();
     if (window.__SIMP__) t2sWalk(document.querySelector('.wrap'), true);
 
     // 版權頁版本號（動態帶入 VERSION）

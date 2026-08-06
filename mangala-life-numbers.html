@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>曼格拉生命数字地图 · 计算器 V11</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
+    --warn:#A8521C; --void:#B7A99A; --accent:#D4A574;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--dark);font-size:14px;line-height:1.65;}
+  .wrap{max-width:720px;margin:0 auto;padding:16px;}
+  header{text-align:center;margin:8px 0 16px;}
+  header h1{font-size:20px;margin:8px 0 4px;color:var(--dark);}
+  header .sub{color:var(--muted);font-size:13px;}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;justify-content:center;}
+  .tab{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:#fff;
+       font-size:14px;cursor:pointer;}
+  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .scene{display:none;}
+  .scene.active{display:block;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .card{border:1px solid var(--border);border-radius:12px;background:#fff;padding:14px;margin-top:12px;}
+  .card-title{font-size:15px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .badge{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;
+         padding:0 8px;border-radius:50%;background:var(--primary);color:#fff;font-size:18px;font-weight:700;}
+  .badge.sm{font-size:15px;min-width:28px;height:28px;}
+  .badge.void{background:var(--void);}
+  .badge.over{background:var(--dark);}
+  .badge.master{background:var(--accent);}
+  .badge.ref{background:#fff;color:var(--primary);border:1px dashed var(--primary);}
+  .val{font-size:14px;margin-top:4px;}
+  .note{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.5;}
+  .rule-text{font-size:13px;line-height:1.85;color:var(--dark);margin:8px 0;}
+  .rule-text p{margin:8px 0;}
+  .rule-text strong{color:var(--primary);}
+  .pos{color:var(--primary);font-size:13px;font-weight:700;margin:12px 0 4px;}
+  input,select,textarea{width:100%;padding:12px;font-size:14px;border:1px solid var(--border);
+       border-radius:8px;margin-top:6px;font-family:inherit;background:#fff;min-height:44px;color:var(--dark);}
+  textarea{min-height:72px;}
+  select{cursor:pointer;appearance:none;-webkit-appearance:none;
+         background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%238C7B6B' d='M2 4l4 4 4-4z'/%3e%3c/svg%3e");
+         background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+  button{padding:12px 16px;font-size:14px;border-radius:8px;border:none;cursor:pointer;}
+  .primary{background:var(--primary);color:#fff;width:100%;margin-top:12px;font-size:15px;font-weight:700;}
+  .row{display:flex;gap:8px;}
+  .row > div{flex:1;}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin:24px 0;line-height:1.8;}
+  footer .ft-line{display:block;}
+  .lib h3{font-size:15px;margin:16px 0 6px;color:var(--dark);}
+  .lib .core{font-size:14px;margin-bottom:4px;}
+  .lib .line{font-size:13px;margin:2px 0;}
+  .lib .tag{font-weight:700;}
+  .lib .over{color:var(--warn);} .lib .lack{color:#3C6E8F;} .lib .pure{color:var(--primary);}
+  details{margin:12px 0;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  details summary{cursor:pointer;font-size:15px;font-weight:700;padding:12px 14px;
+                  background:#fff;list-style:none;position:relative;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::after{content:"▾";position:absolute;right:14px;color:var(--muted);transition:transform .2s;}
+  details[open] summary::after{transform:rotate(180deg);}
+  details[open] summary{border-bottom:1px solid var(--border);}
+  details .content{padding:14px;background:#fff;font-size:14px;line-height:1.7;}
+  details .content p{margin:8px 0;}
+  details .content .quote{color:var(--primary);font-style:italic;}
+  details .content a{color:var(--primary);}
+  .alpha-block{margin-top:10px;}
+  .alpha-row{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:4px;}
+  .alpha-row .num{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+                   background:var(--primary);color:#fff;border-radius:6px;font-size:13px;font-weight:700;}
+  .alpha-row .let{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+                   background:var(--bg);border-radius:6px;font-size:14px;font-weight:700;}
+  .alpha-row .let.b{border:1px solid var(--border);background:#fff;}
+  table.letter-table, table.temper-table, table.business-table, table.print-summary{
+    width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
+  table.letter-table th, table.letter-table td,
+  table.temper-table th, table.temper-table td,
+  table.business-table th, table.business-table td,
+  table.print-summary th, table.print-summary td{
+    padding:8px;border:1px solid var(--border);text-align:center;}
+  table.letter-table th, table.temper-table th, table.business-table th, table.print-summary th{background:var(--bg);font-weight:700;}
+  table.letter-table td.vowel{color:var(--warn);font-weight:700;}
+  table.letter-table td.consonant{color:var(--primary);}
+  table.temper-table td, table.business-table td, table.print-summary td{font-size:18px;font-weight:700;color:var(--primary);}
+  .empty{color:var(--muted);font-size:14px;padding:20px 0;text-align:center;}
+  .init-hidden{display:none !important;}
+  .print-btn{margin-top:16px;}
+  @media (max-width:480px){
+    .grid{grid-template-columns:1fr;}
+    .row{flex-direction:column;}
+    header h1{font-size:18px;}
+    table.letter-table, table.temper-table, table.business-table{font-size:13px;}
+  }
+  @media print{
+    .tabs, .primary, .print-btn, header{display:none !important;}
+    /* footer 打印时正常显示（用户在汇总打印内需要三行签注）*/
+    footer{display:block !important;text-align:center;color:#2D2118;font-size:13px;margin:24px 0;line-height:1.8;}
+    footer .ft-line{display:block;color:#2D2118;}
+    body{background:#fff;}
+    .card{break-inside:avoid;box-shadow:none;border:1px solid #ccc;}
+    .scene{display:block !important;}
+    .init-hidden{display:block !important;}
+    .wrap{max-width:100%;padding:0;}
+    /* 让个人流年数字含义摘要卡等不要被分页割裂 */
+    .print-card-grid{display:block;}
+    /* V11：打印时强制隐藏 print-empty 空白占位卡（无内容但有边框，挤在备注和 footer 之间） */
+    #print-empty{display:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>曼格拉生命数字地图</h1>
+    <div class="sub">Mangala Life-Number Map · 毕达哥拉斯数字学传承体系 · 自我觉察工具</div>
+  </header>
+
+  <nav class="tabs">
+    <div class="tab active" data-tab="calc" onclick="switchTab('calc')">计算</div>
+    <div class="tab" data-tab="cycles" onclick="switchTab('cycles')">高峰·挑战·循环</div>
+    <div class="tab" data-tab="name" onclick="switchTab('name')">姓名学</div>
+    <div class="tab" data-tab="map" onclick="switchTab('map')">数字能量图</div>
+    <div class="tab" data-tab="lib" onclick="switchTab('lib')">解读库</div>
+    <div class="tab" data-tab="print" onclick="switchTab('print')">汇总打印</div>
+  </nav>
+
+  <!-- 计算 Tab -->
+  <section id="scene-calc" class="scene active">
+    <div class="card">
+      <div class="card-title">输入生日与姓名</div>
+      <div class="row">
+        <div><label class="note">出生年</label><select id="iyear"></select></div>
+        <div><label class="note">月</label><select id="imonth"></select></div>
+        <div><label class="note">日</label><select id="iday"></select></div>
+      </div>
+      <label class="note">姓名（可直接输入中文姓名，自动转拼音；或填姓名全拼如 DENG QINMIN）</label>
+      <input id="iname" type="text" placeholder="如 邓勤敏 / DENG QINMIN" oninput="onNameInput()">
+      <div id="py-preview" class="note"></div>
+      <button class="primary" onclick="calc()">生成我的生命数字地图</button>
+      <div class="note">算法说明：年/月/日分别化简（保留主数 11/22/33）后求和；姓名按毕达哥拉斯字母表取值，支持中文姓名自动转拼音。本工具为自我觉察参考，非预测。</div>
+    </div>
+    <div id="core-out" class="init-hidden"></div>
+  </section>
+
+  <!-- 高峰·挑战·循环 Tab -->
+  <section id="scene-cycles" class="scene">
+    <div id="cycles-summary" class="init-hidden"></div>
+    <div id="cycles-chart" class="init-hidden"></div>
+  </section>
+
+  <!-- 姓名学 Tab -->
+  <section id="scene-name" class="scene">
+    <div id="name-out" class="init-hidden"></div>
+  </section>
+
+  <!-- 数字能量图 Tab -->
+  <section id="scene-map" class="scene">
+    <div id="map-svg" class="init-hidden"></div>
+    <div id="hole-out" class="init-hidden"></div>
+  </section>
+
+  <!-- 解读库 Tab -->
+  <section id="scene-lib" class="scene lib">
+    <details>
+      <summary>曼格拉老师专访（新浪博客 · 默认折叠）</summary>
+      <div class="content">
+        <p>来源：<a href="https://blog.sina.com.cn/s/blog_6ab28b040100knbh.html" target="_blank" rel="noopener">blog.sina.com.cn/s/blog_6ab28b040100knbh.html</a>（《心灵成长杂志》第24期，2010-09-03，安子若采访）</p>
+        <p><strong>曼格拉简介：</strong>卓越的生命数字学、塔罗牌与直觉训练的导师，拥有三十五年以上的资深教学经验。许多塔罗牌、生命数字学咨询师都曾受业于她，这些曾经接受过她教导的人，如今在世界各国传递着因她而启动的内在直觉与智能。</p>
+        <p>她所传递的，不管是咨询还是工作坊，除了有她在生命数字学与塔罗牌上的独到见解与体会，还有多年来她透过自身内在成长所触及的心灵深度。</p>
+        <p>她著有《直觉式塔罗牌：一种增进意识的工具》，本书是学习克劳力拖特塔罗牌的必备宝典。</p>
+        <p class="quote">"曼格拉有一颗狮子的心，有一股能量在她灵魂的深处燃烧着。在生命数字学、塔罗牌与直觉训练的专业领域中，她是世界驰名的顶级导师，她是许多老师们的老师。"</p>
+        <p>她用她整个生命向人们传授着——去驾驭生命，开启灵魂的驱动力，让生命像一部最好的跑车那样上道。</p>
+        <p class="quote">"手上握着她所教授的'生命数字学'，就如同举起一小段点燃的蜡烛，虽然这意识的烛光并不稳定，常常因为生涩和紧张而左右摇晃着，但是那毕竟照亮了通往我潜意识地下室的台阶，哪怕只有眼前小小的几步。"</p>
+        <p>正是因为瞥见了这绝无仅有、珍贵的几步，令我们开始有勇气一步步地往下探索，那同时也意味着，我们正在将累世所积累的宝藏一层层的向上传送。</p>
+        <p><strong>曼格拉自述：</strong>当她还是一个少女时，她面临了要如何选择大学科系的问题，对于人类在想什么，她有强烈的兴趣，她想要去发现人生。所以她选择了行为心理学，接下来有好几年的时间，她都在实验室里忍受着、观察着白老鼠。直到有一天，她忽然觉悟到这样继续下去是行不通的。她有一个强烈的渴求想要去了解：人是什么？我是谁？</p>
+        <p>她展开了新的旅程——成为一家女性杂志的专栏作家，开始以记者的身分去四处寻求，探索各式各样的怪现象：大学教授、降神术专家、灵媒、催眠大师、占星学家、读茶叶的占卜者……</p>
+        <p>不久之后，她去了印度，有一天她去到了喜马拉雅山上避静……（专访完整内容请参考原文链接）</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>毕达哥拉斯字母表取值（A=1…I=9 循环）</summary>
+      <div class="content">
+        <p>毕达哥拉斯数字学将 26 个英文字母按 1-9 循环赋值，每个字母对应一个数字：</p>
+        <div class="alpha-block">
+          <div class="alpha-row">
+            <div class="num">1</div><div class="num">2</div><div class="num">3</div>
+            <div class="num">4</div><div class="num">5</div><div class="num">6</div>
+            <div class="num">7</div><div class="num">8</div><div class="num">9</div>
+          </div>
+          <div class="alpha-row">
+            <div class="let">A</div><div class="let">B</div><div class="let">C</div>
+            <div class="let">D</div><div class="let">E</div><div class="let">F</div>
+            <div class="let">G</div><div class="let">H</div><div class="let">I</div>
+          </div>
+          <div class="alpha-row">
+            <div class="let b">J</div><div class="let b">K</div><div class="let b">L</div>
+            <div class="let b">M</div><div class="let b">N</div><div class="let b">O</div>
+            <div class="let b">P</div><div class="let b">Q</div><div class="let b">R</div>
+          </div>
+          <div class="alpha-row">
+            <div class="let b">S</div><div class="let b">T</div><div class="let b">U</div>
+            <div class="let b">V</div><div class="let b">W</div><div class="let b">X</div>
+            <div class="let b">Y</div><div class="let b">Z</div><div class="let b" style="visibility:hidden">.</div>
+          </div>
+        </div>
+        <p style="margin-top:14px;"><strong>取值规则：</strong>每个字母按上表取对应数字（1-9 循环），再相加求和，化简到个位数（保留主数 11/22/33）。</p>
+        <p><strong>元音 vs 辅音：</strong></p>
+        <ul>
+          <li><strong>元音</strong>（A/E/I/O/U）：用于计算 <em>灵魂驱策 / 内驱数字</em>——内心真正渴望</li>
+          <li><strong>辅音</strong>（除元音外的所有字母）：用于计算 <em>人格数字 / 个人特质</em>——对外展现的面具</li>
+          <li><strong>全字母</strong>：用于计算 <em>表现数字</em>——天生擅长的能力</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>经典理论（国际通用毕达哥拉斯标准）</summary>
+      <div class="content">
+        <p><strong>来源：</strong><a href="https://www.astrovachmi.com/numerology-complete-guide" target="_blank" rel="noopener">astrovachmi.com/numerology-complete-guide</a>（Classical Numerology Complete Guide）等多源整理。</p>
+        <p><strong>一、化简规则（Digital Root）</strong></p>
+        <p>任何数字的"数字根"由其各位数字相加求得：例如 1997 → 1+9+9+7 = 26 → 2+6 = <strong>8</strong>。当中间结果为 11、22、33 时不被继续化简，称"主数"（Master Numbers）。</p>
+        <p><strong>二、核心数字（Core Numbers）</strong></p>
+        <p>国际通用毕达哥拉斯体系认定的核心位置共 6 个：</p>
+        <ul>
+          <li><strong>Life Path（生命道路）</strong>：生日年+月+日化简，代表此生主航道。</li>
+          <li><strong>Expression / Destiny（表现/命运）</strong>：姓名全字母取值化简，代表天生才华。</li>
+          <li><strong>Soul Urge（灵魂渴望）</strong>：姓名元音取值化简，代表内心动机。</li>
+          <li><strong>Personality（人格）</strong>：姓名辅音取值化简，代表对外形象。</li>
+          <li><strong>Birthday Number（生日数字）</strong>：出生日本身（1-31），代表天赋礼物。</li>
+          <li><strong>Maturity Number（成熟数字）</strong>：Life Path + Expression，代表后半生主题。</li>
+        </ul>
+        <p><strong>三、Pinnacles &amp; Challenges（高峰与挑战）</strong></p>
+        <p>将人生分为 4 个阶段，由月/日/年化简的三个循环数（Cycles）共同计算。每个阶段同时有一个高峰（Pinnacle）数字和挑战（Challenge）数字，反映该阶段的优势能量与必修课题。</p>
+        <p><strong>四、Personal Year（个人流年）</strong></p>
+        <p>个人流年 = 出生月 + 出生日 + 当前公历年份（分别化简后求和），9 年一循环，是最常用来规划年度节奏的工具。</p>
+        <p><strong>五、Master Numbers 11/22/33</strong></p>
+        <p>国际标准中三个主数被视为"高频数字"——它们在化简过程中如出现即保留（不再相加到个位），因其能量更强烈、需要更多自我功课。11 启蒙者、22 伟大的建造者、33 大师级教师，合称"三大主数"（Master Numbers）。</p>
+        <p><strong>六、与曼格拉体系的关系</strong></p>
+        <p>曼格拉（Mangala）生命数字学的核心算法、化简规则、字母取值均沿用上述国际通用毕达哥拉斯标准；本工具的所有算法与该标准完全一致，并叠加了曼格拉体系常用的"制约数字"（月+日化简）、"四大反复出现的挑战"等表达形式。</p>
+      </div>
+    </details>
+
+    <div class="card">
+      <div class="card-title">位置说明</div>
+      <div id="pos-lib"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">数字 1–9 含义（过多 / 不足 / 纯粹本质）</div>
+      <div id="num-lib"></div>
+    </div>
+  </section>
+
+  <!-- 汇总打印 Tab -->
+  <section id="scene-print" class="scene">
+    <div id="print-out" class="init-hidden"></div>
+    <div id="print-empty" class="card init-hidden"></div>
+  </section>
+
+  <footer>
+    <span class="ft-line">曼格拉生命数字地图 <span id="ver2">V10</span></span>
+    <span class="ft-line">仅供自我觉察参考，不作为心理诊断依据，请勿沉迷</span>
+    <span class="ft-line">Powered By Kan Man Tang</span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
+<script>
+const VERSION = 'V11';
+document.getElementById('ver2').textContent = VERSION;
+
+const CURRENT_YEAR = 2026;
+const MASTER = [11,22,33];
+
+function reduce(n, keepMaster){
+  n = Math.abs(parseInt(n,10));
+  if (isNaN(n)) return 0;
+  while (n > 9){
+    if (keepMaster && MASTER.indexOf(n) !== -1) return n;
+    let s = 0; while (n > 0){ s += n % 10; n = Math.floor(n/10); }
+    n = s;
+  }
+  return n;
+}
+function reduceParts(arr){
+  let sum = 0; arr.forEach(v => sum += reduce(v, true));
+  return reduce(sum, true);
+}
+const PY = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
+const VOWELS = ['A','E','I','O','U'];
+function pyValue(str, onlyVowels){
+  str = (str||'').toUpperCase().replace(/[^A-Z]/g,'');
+  let sum = 0;
+  for (const ch of str){
+    if (PY[ch] === undefined) continue;
+    if (onlyVowels && VOWELS.indexOf(ch) === -1) continue;
+    if (!onlyVowels && VOWELS.indexOf(ch) !== -1) continue;
+    sum += PY[ch];
+  }
+  return sum;
+}
+
+/* ---------- 21 位计算 ---------- */
+function calcMap(y, m, d, name){
+  y = parseInt(y,10); m = parseInt(m,10); d = parseInt(d,10);
+  const ry = reduce(y, true), rm = reduce(m, true), rd = reduce(d, true);
+  const lifePath = reduceParts([y, m, d]);
+  const expression = reduce(pyValue(name, false), true);
+  const soulUrge  = reduce(pyValue(name, true), true);
+  const personality = reduce(pyValue(name, false) - pyValue(name, true), true);
+  const maturity = reduceParts([lifePath, expression]);
+  const subconscious = reduceParts([m, d]);
+  const balance = reduce(d, true);
+  const personalYear = reduceParts([m, d, CURRENT_YEAR]);
+
+  // 循环 3 个：月/日/年
+  const cycles = [rm, rd, ry];
+
+  // 制约 = 第一循环 + 第二循环（即 subconscious）
+  const restraint = subconscious;
+  // 第二高峰 = 第二循环 + 第三循环
+  const pin2 = reduceParts([rd, ry]);
+  // 第三高峰 = 第一高峰 + 第二高峰
+  const pin3 = reduceParts([restraint, pin2]);
+  // 第四高峰 = 第一循环 + 第三循环
+  const pin4 = reduceParts([rm, ry]);
+  // V4 改：第一高峰 = 制约数
+  const pinnacles = [restraint, pin2, pin3, pin4];
+
+  // 高峰年龄：第一高峰年龄 = 36 - 生命道路，之后每段 +9
+  const pinnacleAges = [36 - lifePath];
+  pinnacleAges.push(pinnacleAges[0] + 9);
+  pinnacleAges.push(pinnacleAges[1] + 9);
+  pinnacleAges.push(pinnacleAges[2] + 9);
+
+  // 挑战：大数减小数
+  const ch1 = Math.abs(rm - rd);
+  const ch2 = Math.abs(rd - ry);
+  const ch3 = Math.abs(ch1 - ch2);
+  const ch4 = Math.abs(rm - ry);
+  const challenges = [ch1, ch2, ch3, ch4];
+
+  // 黑洞
+  const counted = [lifePath, expression, soulUrge, personality, maturity, subconscious,
+                   balance, personalYear, restraint,
+                   pinnacles[1], pinnacles[2], pinnacles[3],
+                   challenges[0], challenges[1], challenges[2], challenges[3],
+                   cycles[0], cycles[1], cycles[2]];
+  const holes = [];
+  for (let n = 1; n <= 9; n++) if (counted.indexOf(n) === -1) holes.push(n);
+
+  return {ry,rm,rd,lifePath,expression,soulUrge,personality,maturity,subconscious,
+          balance,personalYear,restraint,pinnacles,pinnacleAges,challenges,cycles,holes,name,
+          y,m,d,
+          birthDate:`${y}年${m}月${d}日`};
+}
+
+/* ---------- 姓名学辅助 ---------- */
+function nameLetters(pinyinStr){
+  const out = [];
+  for (const ch of (pinyinStr||'').toUpperCase()){
+    if (PY[ch] === undefined) continue;
+    out.push({ch, py: PY[ch], isVowel: VOWELS.indexOf(ch) !== -1, value: PY[ch]});
+  }
+  return out;
+}
+function nameCounts(pinyinStr){
+  const counts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0};
+  for (const ch of (pinyinStr||'').toUpperCase()){
+    if (PY[ch] !== undefined) counts[PY[ch]]++;
+  }
+  const total = Object.values(counts).reduce((a,b)=>a+b, 0);
+  return {
+    counts, total,
+    body: counts[4] + counts[5],
+    mind: counts[1] + counts[8],
+    emotion: counts[2] + counts[3] + counts[6],
+    intuition: counts[7] + counts[9]
+  };
+}
+function chain(n){
+  const arr = [n];
+  let cur = n;
+  while (cur > 9){
+    if (MASTER.indexOf(cur) !== -1) break; // 遇主数 11/22/33 立即停止（毕达哥拉斯原典）
+    let s = 0; let x = cur;
+    while (x > 0){ s += x%10; x = Math.floor(x/10); }
+    arr.push(s);
+    cur = s;
+  }
+  return arr.join(' → ');
+}
+
+/* ---------- 汉字→拼音 ---------- */
+function toPinyin(raw){
+  raw = (raw||'').trim();
+  if (!raw) return '';
+  if (/^[\u0000-\u024F\s]+$/.test(raw)) return raw;
+  if (window.pinyinPro && typeof window.pinyinPro.pinyin === 'function'){
+    try{
+      const arr = window.pinyinPro.pinyin(raw, { toneType:'none', type:'array', nonZh:'consecutive' });
+      const py = (Array.isArray(arr)?arr:[]).map(s=> s ? s.charAt(0).toUpperCase()+s.slice(1) : s).join(' ');
+      return py || null;
+    }catch(e){}
+  }
+  return null;
+}
+function onNameInput(){
+  const raw = document.getElementById('iname').value.trim();
+  const pv = document.getElementById('py-preview');
+  if (!raw){ pv.textContent = ''; return; }
+  if (/^[\u0000-\u024F\s]+$/.test(raw)){ pv.textContent = '（已识别为姓名全拼，直接计算）'; return; }
+  const py = toPinyin(raw);
+  if (py){ pv.textContent = '→ 已识别拼音：'+py; }
+  else { pv.textContent = '⚠ 拼音转换库未加载（可能离线），请手动输入姓名全拼'; }
+}
+
+/* ---------- 解读数据 ---------- */
+const POS = {
+  lifePath:{t:'生命道路', d:'此生要走的道路与核心特质，由生日年+月+日化简。在高峰金字塔中作为独立的参考量，不参与计算。'},
+  expression:{t:'表现数字', d:'天生擅长的能力与外在才华，由姓名全拼字母值相加化简。'},
+  soulUrge:{t:'灵魂驱策 / 内驱', d:'内心真正渴望与驱动力，由姓名元音字母相加化简。'},
+  personality:{t:'人格数字 / 个人特质', d:'对外展现的面具与互动风格，由姓名辅音字母相加化简。'},
+  maturity:{t:'成熟数字', d:'36 岁后逐渐显化的助力（表现数字 + 生命道路），唯一只有"纯粹本质"、无过多过少的数字。'},
+  subconscious:{t:'制约数字', d:'童年受教养与环境影响的模式、隐藏的创伤（月+日化简）。同时也是第一高峰数字。'},
+  balance:{t:'平衡 / 性情数字', d:'用来平衡人生不同层面的数字（出生日化简）。注：不同体系算法有差异，此处采用平衡数(Balance)定义。'},
+  personalYear:{t:'个人流年循环', d:'今年年度主题与能量节奏（出生月+日+当年年份化简），9 年一循环。'},
+  restraint:{t:'制约（高峰图）', d:'第一循环+第二循环相加化简（=制约数），同时作为第一高峰数字。'},
+  pinnacle:{t:'高峰数字 ×4', d:'第一高峰=制约数；高峰2=第二循环+第三循环；高峰3=第一高峰+高峰2；高峰4=第一循环+第三循环。'},
+  pinnacleAge:{t:'高峰年龄', d:'第一高峰年龄=36-生命道路，之后每段+9。'},
+  challenge:{t:'挑战数字 ×4', d:'大数减小数：第一挑战=|日-月|；第二挑战=|日-年|；第三挑战=|第一-第二|（主要挑战）；第四挑战=|月-年|。'},
+  cycle:{t:'循环数字 ×3（月/日/年）', d:'第一循环=月份所有数字相加化简；第二循环=日所有数字相加化简；第三循环=年份所有数字相加化简。'},
+  hole:{t:'黑洞数字', d:'1–9 中在生命地图其余位置从未出现的数字，代表你天生较弱、需有意识去发展的能量。'},
+  nameStudy:{t:'姓名学', d:'通过姓名每个字母的毕达哥拉斯值，统计表现/灵魂驱策/人格/成熟/性格分类/业力。'}
+};
+
+const NUM = {
+  1:{t:'开创者', core:'独立、领导、开创。你是天生的先行者，带着自我意志与行动力。',
+    over:'自我中心、控制欲强、听不进他人、易独断。', lack:'犹豫、依赖、难以独立做决定、缺乏自信。',
+    pure:'以健康的方式领导自己与他人，独立自主又不失合作。'},
+  2:{t:'协调者', core:'合作、平衡、敏感、关系。你天生擅长调和与陪伴。',
+    over:'过度迎合、失去边界、优柔寡断、情绪被他人牵动。', lack:'疏离、不愿合作、对关系冷漠、孤立。',
+    pure:'在关系中保持平衡，既能共鸣也守住自我。'},
+  3:{t:'表达者', core:'创意、表达、沟通、喜悦。你带来欢乐与灵感。',
+    over:'分散精力、言过其实、浅尝辄止、表演性。', lack:'压抑表达、内向封闭、不敢展现自己。',
+    pure:'用创意与表达服务世界，真诚而聚焦。'},
+  4:{t:'建设者', core:'稳固、纪律、秩序、务实。你是可靠的基石。',
+    over:'僵化、固执、抗拒变化、钻牛角尖。', lack:'散乱、缺乏规划、难落实、浮躁。',
+    pure:'在稳固中保持灵活，建立持久而有机的结构。'},
+  5:{t:'探险者', core:'自由、变化、好奇、适应。你渴求体验与突破。',
+    over:'善变、逃避责任、浮躁、易成瘾。', lack:'害怕改变、固守、缺乏冒险勇气。',
+    pure:'在自由中建立内在稳定，变通而不迷失。'},
+  6:{t:'守护者', core:'责任、照顾、家庭、爱与美。你温暖而有担当。',
+    over:'过度付出、控制欲、牺牲自己、干涉他人。', lack:'回避责任、疏于关怀、关系疏离。',
+    pure:'以健康的方式爱与照顾，付出而不耗竭。'},
+  7:{t:'探求者', core:'内省、智慧、灵性、分析。你寻求真相与深度。',
+    over:'过度思辨、孤僻、多疑、与世隔绝。', lack:'缺乏反思、浮躁、不愿深入。',
+    pure:'在独处与连结间平衡，以智慧服务。'},
+  8:{t:'成就者', core:'权力、物质、丰盛、影响力。你擅长落地与整合。',
+    over:'权力欲、功利、控制、忽视人情。', lack:'回避权力、财务混乱、缺乏自信。',
+    pure:'以责任与道德运用力量，丰盛而慷慨。'},
+  9:{t:'圆满者', core:'人道、智慧、完成、慈悲。你心怀宽广。',
+    over:'过度牺牲、情绪耗散、理想化、放不下。', lack:'自我中心、冷漠、难以完成。',
+    pure:'放手旧有、慈悲利他而不失自我。'},
+  11:{t:'启蒙者', core:'具有远见卓识、直觉敏锐，且心灵敏感。肩负着启发与启迪他人的使命。',
+    over:'神经过敏、过度理想化、陷入灵性逃避、难以落地。', lack:'缺乏方向感、容易随波逐流、灵感枯竭。',
+    pure:'以高远的视野与慈悲启发他人，敏锐而不失稳重。'},
+  22:{t:'伟大的建造者', core:'具有远见卓识，致力于打造规模宏大且经久不衰的建筑。',
+    over:'压力过大、自我要求苛刻、容易倦怠。', lack:'缺乏将理想落地的能力、眼高手低。',
+    pure:'把灵性愿景转化为具体、持久、可传承的伟大工程。'},
+  33:{t:'大师级教师', core:'无私奉献，致力于提升他人。',
+    over:'牺牲自我、过度承担他人业力、情绪耗竭。', lack:'回避教导责任、难以无私、灵性成长受阻。',
+    pure:'以慈悲与服务精神教导与疗愈他人，奉献而不耗竭。'}
+};
+
+/* ---------- 渲染：卡片 ---------- */
+function cardHTML(title, num, desc){
+  const master = MASTER.indexOf(num) !== -1;
+  const badgeCls = (num === 0) ? 'badge void sm' : (master ? 'badge master sm' : 'badge sm');
+  const numTxt = (num === 0) ? '—' : num;
+  return `<div class="card"><div class="card-title"><span class="${badgeCls}">${numTxt}</span>${title}</div>`+
+         (desc ? `<div class="val">${desc}</div>` : '')+
+         (NUM[num] ? `<div class="note">${NUM[num].core}</div>` : '')+`</div>`;
+}
+
+/* ---------- 渲染：计算 Tab ---------- */
+function renderCore(r){
+  const items = [
+    ['生命道路', r.lifePath, POS.lifePath.d],
+    ['表现数字', r.expression, POS.expression.d],
+    ['灵魂驱策 / 内驱', r.soulUrge, POS.soulUrge.d],
+    ['人格数字 / 个人特质', r.personality, POS.personality.d],
+    ['成熟数字', r.maturity, POS.maturity.d],
+    ['制约数字', r.subconscious, POS.subconscious.d],
+    ['平衡 / 性情', r.balance, POS.balance.d],
+    ['个人流年 ('+CURRENT_YEAR+')', r.personalYear, POS.personalYear.d]
+  ];
+  let html = '<div class="grid">';
+  items.forEach(it => html += cardHTML(it[0], it[1], it[2]));
+  html += '</div>';
+  document.getElementById('core-out').innerHTML = html;
+}
+
+/* ---------- 渲染：高峰·挑战·循环 摘要 ---------- */
+function renderCycles(r){
+  const pinLabel = ['第一高峰（=制约数）','第二高峰','第三高峰','第四高峰'];
+  const pinDesc = (i) => i===0
+      ? `数字=制约数 · ${r.pinnacleAges[0]}岁起 · 生命道路=${r.lifePath}（仅参考）`
+      : `${r.pinnacleAges[i]}岁起`;
+  let html = `<div class="card"><div class="card-title">${POS.pinnacle.t}</div>`+
+             `<div class="note">${POS.pinnacle.d}</div>`+
+             `<div class="note">${POS.pinnacleAge.d}</div>`+
+             `<div class="grid">`;
+  r.pinnacles.forEach((n,i)=> html += cardHTML(pinLabel[i]+' · '+r.pinnacleAges[i]+'岁', n, pinDesc(i)));
+  html += '</div></div>';
+
+  html += `<div class="card"><div class="card-title">${POS.challenge.t}</div><div class="note">${POS.challenge.d}</div><div class="grid">`;
+  const chLabel = ['第一挑战','第二挑战','第三挑战(主要)','第四挑战'];
+  r.challenges.forEach((n,i)=> html += cardHTML(chLabel[i], n, ''));
+  html += '</div></div>';
+
+  html += `<div class="card"><div class="card-title">${POS.cycle.t}</div><div class="note">${POS.cycle.d}</div><div class="grid">`;
+  const cyLabel = ['第一循环 (月)','第二循环 (日)','第三循环 (年)'];
+  r.cycles.forEach((n,i)=> html += cardHTML(cyLabel[i], n, ''));
+  html += '</div></div>';
+
+  // 挑战规则长文字：默认折叠，点击查看
+  html += `<details class="ch-rules"><summary>挑战数字——四大反复出现的障碍（点击展开详细说明）</summary>`+
+          `<div class="content"><div class="rule-text">`+
+          `<p>"巅峰"部分描述了人生各个阶段所存在的机遇，而"挑战数值"则指出了在那些阶段中必须面对的具体障碍与教训。这些数值是通过减法计算得出的——即两者之间的<strong>绝对差值</strong>。出生日期这些构成要素在数理命理学计算中是独一无二的，它体现了这样一种理念：挑战源于各种能量之间的矛盾与冲突，而非这些能量的简单相加。</p>`+
+          `<p><strong>如何计算它们：</strong></p>`+
+          `<p>第一个挑战 = |出生日 − 出生月|<br>`+
+          `第二个挑战 = |出生日 − 出生年份|<br>`+
+          `第三项挑战（主要挑战）= |第一项挑战 − 第二项挑战|<br>`+
+          `第四项挑战 = |出生月份 − 出生年份|</p>`+
+          `<p>当两个分量相等时出现的 0 这一数值所代表的挑战，被称为<strong>选择的挑战</strong>。这并非意味着没有挑战，而是体现了完全自由的沉重负担：人们必须在几乎没有任何外部约束的情况下自行选择道路，而这往往会让人感到极度迷茫。</p>`+
+          `<p>"挑战 1"要求人们学会独立站立，并相信自己的判断力。而"挑战 7"则意味着要面对孤独感、自我怀疑，以及更难以依赖内在直觉而非外界认可来做出决策的问题。这些挑战的编号往往能够解释为何某些模式——无论是在职业、人际关系还是心理层面——会如此顽固地反复出现于一个人的整个生命中。</p>`+
+          `</div></div></details>`;
+
+  document.getElementById('cycles-summary').innerHTML = html;
+  renderCyclesChart(r);
+}
+
+/* ---------- 渲染：高峰·挑战·循环 整体金字塔图（V8：删高峰连接线 + 中央列基准线 + 等腰三角形）---------- */
+function renderCyclesChart(r){
+  const W = 600, H = 1000;
+  const triColor = '#C4956A';
+  const masterColor = '#D4A574';
+  const txtColor = '#2D2118';
+  const labelColor = '#5F5E5A';
+  const refColor = '#8C7B6B';
+  const isM = n => MASTER.indexOf(n) !== -1;
+
+  // ===== 工具函数 =====
+  // 顶点朝上的三角（高峰用）
+  function triangle(cx, cy, size, num, label){
+    const h = size * 1.15;
+    const pts = `${cx-size/2},${cy+h/2} ${cx+size/2},${cy+h/2} ${cx},${cy-h/2}`;
+    const c = isM(num) ? masterColor : triColor;
+    let s = `<polygon points="${pts}" fill="#FFFFFF" stroke="${c}" stroke-width="2"/>`;
+    s += `<text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="24" font-weight="700" fill="${c}">${num}</text>`;
+    if (label) s += `<text x="${cx}" y="${cy+h/2+18}" text-anchor="middle" font-size="16" font-weight="600" fill="${labelColor}">${label}</text>`;
+    return s;
+  }
+  // 顶点朝下的三角（挑战用）
+  function triangleDown(cx, cy, size, num, label){
+    const h = size * 1.15;
+    const pts = `${cx-size/2},${cy-h/2} ${cx+size/2},${cy-h/2} ${cx},${cy+h/2}`;
+    const c = isM(num) ? masterColor : triColor;
+    let s = `<polygon points="${pts}" fill="#FFFFFF" stroke="${c}" stroke-width="2"/>`;
+    s += `<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="24" font-weight="700" fill="${c}">${num}</text>`;
+    if (label) s += `<text x="${cx}" y="${cy-h/2-8}" text-anchor="middle" font-size="16" font-weight="600" fill="${labelColor}">${label}</text>`;
+    return s;
+  }
+  function box(cx, cy, w, h, num, label, opts){
+    opts = opts || {};
+    const c = opts.muted ? refColor : (isM(num) ? masterColor : triColor);
+    const dash = opts.muted ? ' stroke-dasharray="4,3"' : '';
+    let s = `<rect x="${cx-w/2}" y="${cy-h/2}" width="${w}" height="${h}" rx="8" fill="#FFFFFF" stroke="${c}" stroke-width="2"${dash}/>`;
+    s += `<text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="22" font-weight="700" fill="${c}">${num}</text>`;
+    if (label) s += `<text x="${cx}" y="${cy+h/2+18}" text-anchor="middle" font-size="16" font-weight="600" fill="${opts.muted?refColor:labelColor}">${label}</text>`;
+    return s;
+  }
+
+  // ===== 坐标系：中央垂直基准线 CX=200；左右对称 ±90（4 元素：峰 1/2 + 挑战 1/2）=====
+  const CX = 200;          // 中央列基准线 X 坐标
+  const CX_REF = 500;      // 右侧独立区 X 坐标
+  const BW = 80, BH = 48;  // 循环/独立区框统一尺寸
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="高峰挑战循环整体图">`;
+
+  /* ====== 上半：高峰金字塔（等腰三角形）======
+     中央列基准线：第 4 高峰 → 第 3 高峰
+     左右对称：第 1 高峰(=制约) / 第 2 高峰（往中央收敛 CX±90）
+  */
+  svg += `<text x="${CX}" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">高峰金字塔</text>`;
+
+  // 顶层 + 第二层（中央列）— V9 统一三角尺寸 76，消除 V3-V8 的 60/70/80 混搭
+  const TRI = 76;
+  svg += triangle(CX,        80, TRI, r.pinnacles[3], '第四高峰');       // 顶端基准
+  svg += triangle(CX,       200, TRI, r.pinnacles[2], '第三高峰');       // 中央列
+  // 左右对称（V8 收敛到 ±90）
+  svg += triangle(CX-90,    320, TRI, r.pinnacles[0], '第一高峰(=制约)'); // 左
+  svg += triangle(CX+90,    320, TRI, r.pinnacles[1], '第二高峰');        // 右
+
+  /* ====== 中部：3 个循环方框（中央第2循环做基准线成员）======
+     CX±150 保留 V7 已扩大的间距（用户未提及，不动）
+  */
+  const baseY = 460;
+  svg += box(CX-150, baseY, BW, BH, r.cycles[0], '第一循环(月)');
+  svg += box(CX,     baseY, BW, BH, r.cycles[1], '第二循环(日)');
+  svg += box(CX+150, baseY, BW, BH, r.cycles[2], '第三循环(年)');
+
+  /* ====== 右侧独立区（V7 已稳定，不动）====== */
+  svg += box(CX_REF, 78, BW+30, BH, r.personalYear, '个人流年', {muted:true});
+  svg += box(CX_REF, baseY, BW+30, BH, r.lifePath, '生命道路', {muted:true});
+
+  /* ====== 中部分割线 ====== */
+  svg += `<line x1="40" y1="540" x2="${W-40}" y2="540" stroke="#E8DCC8" stroke-width="1" stroke-dasharray="4,4"/>`;
+
+  /* ====== 下半：挑战四面朝下 4 行布局（中央列基准线 + 左右对称）======
+     中央列基准线：第三挑战(主要) → 第四挑战
+     左右对称：第 1/2 挑战（往中央收敛 CX±90）
+  */
+  const R1_Y = 620;
+  const R2_Y = 750;
+  const R3_Y = 870;
+  svg += triangleDown(CX-90, R1_Y, TRI, r.challenges[0], '第一挑战');           // 左
+  svg += triangleDown(CX+90, R1_Y, TRI, r.challenges[1], '第二挑战');           // 右
+  svg += triangleDown(CX,    R2_Y, TRI, r.challenges[2], '第三挑战(主要)');     // 中央列
+  svg += triangleDown(CX,    R3_Y, TRI, r.challenges[3], '第四挑战');           // 中央列
+  // 末尾文字
+  svg += `<text x="${CX}" y="970" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">挑战金字塔</text>`;
+
+  svg += `</svg>`;
+  document.getElementById('cycles-chart').innerHTML = svg;
+}
+
+/* ---------- 渲染：数字能量图 3/6/9-2/5/8-1/4/7（出生圈）---------- */
+function renderMapChart(r){
+  const counts = {}; for (let n=1;n<=9;n++) counts[n]=0;
+  const list = [r.lifePath,r.expression,r.soulUrge,r.personality,r.maturity,r.subconscious,
+                r.balance,r.personalYear,r.restraint,
+                r.pinnacles[1],r.pinnacles[2],r.pinnacles[3],
+                r.challenges[0],r.challenges[1],r.challenges[2],r.challenges[3],
+                r.cycles[0],r.cycles[1],r.cycles[2]];
+  list.forEach(n=>{ if (counts[n] !== undefined) counts[n]++; });
+
+  const grid = [
+    [3, 6, 9],
+    [2, 5, 8],
+    [1, 4, 7]
+  ];
+  const layerLabels = ['心智层面', '灵魂层面', '身体层面'];
+  const layerSub = ['思考 · 心理', '感觉 · 灵性', '行动 · 务实'];
+  const selfLabels = ['自觉自我', '高我', '基本自我'];
+
+  const W = 600, H = 460;
+  const gridX = 200, gridY = 80;
+  const cellW = 90, cellH = 110, gap = 12;
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="数字能量分布出生圈">`;
+  svg += `<text x="${W/2}" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#2D2118">数字能量分布 · 出生圈（毕达哥拉斯 3×3）</text>`;
+
+  // 左列备注
+  for (let row=0; row<3; row++){
+    const y = gridY + row*(cellH+gap) + cellH/2;
+    svg += `<text x="30" y="${y-6}" font-size="16" font-weight="700" fill="#C4956A">${layerLabels[row]}</text>`;
+    svg += `<text x="30" y="${y+14}" font-size="16" fill="#8C7B6B">${layerSub[row]}</text>`;
+  }
+
+  // 右列备注
+  for (let row=0; row<3; row++){
+    const y = gridY + row*(cellH+gap) + cellH/2 + 4;
+    svg += `<text x="${W-30}" y="${y}" text-anchor="end" font-size="16" font-weight="700" fill="#2D2118">${selfLabels[row]}</text>`;
+  }
+
+  // 3×3 格子
+  for (let row=0; row<3; row++){
+    for (let col=0; col<3; col++){
+      const n = grid[row][col];
+      const c = counts[n];
+      const x = gridX + col*(cellW+gap);
+      const y = gridY + row*(cellH+gap);
+      const isVoid = (c===0);
+      const isOver = (c>=3);
+      const fill = isVoid ? '#B7A99A' : (isOver ? '#2D2118' : '#C4956A');
+      svg += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" rx="10" fill="#FFFFFF" stroke="${fill}" stroke-width="2"/>`;
+      svg += `<text x="${x+cellW/2}" y="${y+44}" text-anchor="middle" font-size="28" font-weight="700" fill="${fill}">${n}</text>`;
+      const state = isVoid ? '黑洞 · 缺失' : (isOver ? '过多 '+c+' 次' : '出现 '+c+' 次');
+      svg += `<text x="${x+cellW/2}" y="${y+76}" text-anchor="middle" font-size="16" fill="${isVoid?'#8C7B6B':(isOver?'#2D2118':'#C4956A')}">${state}</text>`;
+      const lbl = isVoid ? '需发展' : (isOver ? '需收束' : '平衡');
+      svg += `<text x="${x+cellW/2}" y="${y+96}" text-anchor="middle" font-size="16" fill="#5F5E5A">${lbl}</text>`;
+    }
+  }
+
+  svg += `</svg>`;
+  document.getElementById('map-svg').innerHTML = svg;
+}
+
+/* ---------- 渲染：姓名学 Tab ---------- */
+function renderNameStudy(r, pinyinStr){
+  const letters = nameLetters(pinyinStr);
+  const total = pyValue(pinyinStr, false);
+  const vowel = pyValue(pinyinStr, true);
+  const cons = total - vowel;
+  const {counts, total: letterCount, body, mind, emotion, intuition} = nameCounts(pinyinStr);
+
+  let html = `<div class="card">
+    <div class="card-title">四大数字的计算规则</div>
+    <div class="note" style="font-size:13px;line-height:1.85;color:var(--dark);">
+      <p style="margin:6px 0;"><strong>表现数字</strong>：出生姓名<strong>全字母</strong>（英文字母）按毕达哥拉斯字母表取值（1–9 循环）后求和，再化简到个位数（保留主数 11/22/33）。代表天生擅长的能力与外在才华。</p>
+      <p style="margin:6px 0;"><strong>灵魂驱策 / 内驱</strong>：取姓名中所有<strong>元音</strong>（A/E/I/O/U）对应的数字相加，再化简。代表内心真正渴望与驱动力。</p>
+      <p style="margin:6px 0;"><strong>人格数字 / 个人特质</strong>：取姓名中所有<strong>辅音</strong>对应的数字相加，再化简。代表对外展现的面具与互动风格。</p>
+      <p style="margin:6px 0;"><strong>成熟数字</strong>：表现数字 + 生命道路，再化简。36 岁后显化的助力，唯一只有"纯粹本质"、无过多过少的数字。</p>
+    </div>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-title">字母分解（毕达哥拉斯取值）</div>
+    <div class="note">姓名全拼：<strong>${pinyinStr.toUpperCase()}</strong></div>
+    <table class="letter-table">
+      <tr><th>字母</th><th>类型</th><th>对应数字</th></tr>
+      ${letters.map(l=>`<tr><td>${l.ch}</td><td class="${l.isVowel?'vowel':'consonant'}">${l.isVowel?'元音':'辅音'}</td><td>${l.value}</td></tr>`).join('')}
+      <tr><td colspan="2"><strong>合计</strong></td><td><strong>${total}</strong></td></tr>
+      <tr><td colspan="2">元音合计</td><td>${vowel}</td></tr>
+      <tr><td colspan="2">辅音合计</td><td>${cons}</td></tr>
+    </table>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-title">四大姓名数字</div>
+    <div class="grid">
+      ${cardHTML('表现数字', r.expression, '化简：'+chain(total))}
+      ${cardHTML('灵魂驱策', r.soulUrge, '化简：'+chain(vowel))}
+      ${cardHTML('人格数字', r.personality, '化简：'+chain(cons))}
+      ${cardHTML('成熟数字', r.maturity, `${r.expression} + ${r.lifePath}`)}
+    </div>
+    <div class="note">成熟数字是唯一只有"纯粹本质"、无过多过少的数字，一般 36 岁后发挥作用。</div>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-title">性格分类（身体 / 头脑 / 情绪 / 直觉）</div>
+    <div class="note">统计姓名中各组数字的<strong>出现次数总和</strong>。</div>
+    <table class="temper-table">
+      <tr><th>身体 (4+5)</th><th>头脑 (1+8)</th><th>情绪 (2+3+6)</th><th>直觉 (7+9)</th></tr>
+      <tr><td>${body}</td><td>${mind}</td><td>${emotion}</td><td>${intuition}</td></tr>
+    </table>
+    <div class="note">身体/头脑/情绪/直觉四类倾向，对应四元素<strong>土水风火</strong>、四种气质，反映你内在能量分布。</div>
+    <div class="note" style="color:var(--muted);font-size:12px;margin-top:4px;">※ 毕达哥拉斯四元素分类 · 经验性归纳，非官方流派标签。</div>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-title">业力图表（每个数字在姓名中的出现次数）</div>
+    <div class="note"><strong>业力</strong>：姓名中各字母对应数字 1–9 的出现次数与分布，反映你外在行为、处世方式的倾向。</div>
+    <table class="business-table">
+      <tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>合计</th></tr>
+      <tr>${[1,2,3,4,5,6,7,8,9].map(n=>`<td>${counts[n]}</td>`).join('')}<td>${letterCount}</td></tr>
+    </table>
+    <div class="note">合计应等于姓名总字母数（不含空格）。</div>
+  </div>`;
+
+  document.getElementById('name-out').innerHTML = html;
+}
+
+/* ---------- 渲染：黑洞 ---------- */
+function renderHole(r){
+  if (r.holes.length === 0){
+    document.getElementById('hole-out').innerHTML = `<div class="card"><div class="note">你的生命地图覆盖了 1–9 全部数字，能量比较均衡，无明显黑洞。</div></div>`;
+    return;
+  }
+  let html = `<div class="card"><div class="card-title">黑洞数字</div>`;
+  html += `<div class="val">${POS.hole.d}</div><div class="note">缺失：${r.holes.join('、')} 号能量</div></div>`;
+  document.getElementById('hole-out').innerHTML = html;
+}
+
+/* ---------- 渲染：汇总打印 ---------- */
+function renderPrint(r){
+  const rows = [
+    ['姓名', r.name],
+    ['出生日期', r.birthDate],
+    ['生命道路', r.lifePath],
+    ['表现数字', r.expression],
+    ['灵魂驱策', r.soulUrge],
+    ['人格数字', r.personality],
+    ['成熟数字', r.maturity],
+    ['制约数字', r.subconscious],
+    ['平衡数字', r.balance],
+    ['个人流年', r.personalYear + ' ('+CURRENT_YEAR+')'],
+    ['第一循环(月)', r.cycles[0]],
+    ['第二循环(日)', r.cycles[1]],
+    ['第三循环(年)', r.cycles[2]],
+    ['第一高峰(=制约) · '+r.pinnacleAges[0]+'岁', r.pinnacles[0]],
+    ['第二高峰 · '+r.pinnacleAges[1]+'岁', r.pinnacles[1]],
+    ['第三高峰 · '+r.pinnacleAges[2]+'岁', r.pinnacles[2]],
+    ['第四高峰 · '+r.pinnacleAges[3]+'岁', r.pinnacles[3]],
+    ['第一挑战', r.challenges[0]],
+    ['第二挑战', r.challenges[1]],
+    ['第三挑战(主要)', r.challenges[2]],
+    ['第四挑战', r.challenges[3]],
+    ['黑洞数字', r.holes.length ? r.holes.join('、') : '无']
+  ];
+
+  let html = `<div class="card" style="text-align:center;">
+    <div style="font-size:18px;font-weight:700;">曼格拉生命数字地图 · 个人档案</div>
+    <div class="note">姓名：${r.name.toUpperCase()} · 生成日期：${new Date().toLocaleDateString('zh-CN')}</div>
+  </div>`;
+
+  html += `<div class="card">
+    <div class="card-title">核心数字（毕达哥拉斯体系）</div>
+    <table class="print-summary">
+      <tr><th>位置</th><th>数字</th></tr>
+      ${rows.map(([k,v])=>`<tr><td style="text-align:left;">${k}</td><td>${v}</td></tr>`).join('')}
+    </table>
+  </div>`;
+
+  // 数字含义摘要
+  html += `<div class="card"><div class="card-title">核心数字含义摘要</div>`;
+  const keys = [['生命道路',r.lifePath],['表现数字',r.expression],['灵魂驱策',r.soulUrge],
+                ['人格数字',r.personality],['成熟数字',r.maturity],['制约数字',r.subconscious],
+                ['平衡数字',r.balance],['个人流年',r.personalYear]];
+  keys.forEach(([k,v])=>{
+    if (NUM[v]) html += `<div style="margin:8px 0;"><strong style="color:var(--primary);">${k}（${v}）</strong> · ${NUM[v].t}<div class="note">${NUM[v].core}</div></div>`;
+  });
+  html += `</div>`;
+
+  // 高峰/挑战/循环 摘要
+  html += `<div class="card">
+    <div class="card-title">高峰 · 挑战 · 循环</div>
+    <table class="print-summary">
+      <tr><th>阶段</th><th>高峰</th><th>挑战</th><th>年龄段</th></tr>
+      <tr><td>1</td><td>${r.pinnacles[0]}（=制约）</td><td>${r.challenges[0]}</td><td>${r.pinnacleAges[0]}岁起</td></tr>
+      <tr><td>2</td><td>${r.pinnacles[1]}</td><td>${r.challenges[1]}</td><td>${r.pinnacleAges[1]}岁起</td></tr>
+      <tr><td>3</td><td>${r.pinnacles[2]}</td><td>${r.challenges[2]}（主要）</td><td>${r.pinnacleAges[2]}岁起</td></tr>
+      <tr><td>4</td><td>${r.pinnacles[3]}</td><td>${r.challenges[3]}</td><td>${r.pinnacleAges[3]}岁起</td></tr>
+    </table>
+    <div class="note" style="margin-top:8px;">循环：第一循环(月)=${r.cycles[0]} · 第二循环(日)=${r.cycles[1]} · 第三循环(年)=${r.cycles[2]}</div>
+  </div>`;
+
+  // 黑洞
+  if (r.holes.length){
+    html += `<div class="card"><div class="card-title">黑洞数字</div>`;
+    html += `<div class="val">缺失：${r.holes.join('、')} 号能量 —— ${POS.hole.d}</div></div>`;
+  }
+
+  // 备注
+  html += `<div class="card"><div class="card-title">备注</div>`;
+  html += `<div class="note">本档案由「曼格拉生命数字地图」V${VERSION.replace('V','')} 自动生成，仅供自我觉察参考，不作为心理诊断依据。算法遵循国际通用毕达哥拉斯生命数字学标准。</div>`;
+  html += `</div>`;
+
+  html += `<button class="primary print-btn" onclick="window.print()">打印 / 导出 PDF</button>`;
+
+  document.getElementById('print-out').innerHTML = html;
+  document.getElementById('print-out').classList.remove('init-hidden');
+  document.getElementById('print-empty').classList.add('init-hidden');
+}
+
+/* ---------- 解读库（静态） ---------- */
+function renderLib(){
+  let ph = '';
+  Object.keys(POS).forEach(k=>{ ph += `<div class="line"><span class="tag">${POS[k].t}：</span>${POS[k].d}</div>`; });
+  document.getElementById('pos-lib').innerHTML = ph;
+  let nh = '';
+  // 1-9 + 11/22/33
+  const order = [1,2,3,4,5,6,7,8,9,11,22,33];
+  order.forEach(n=>{
+    const o = NUM[n];
+    nh += `<h3>${n} 号 · ${o.t}</h3><div class="core">核心：${o.core}</div>`+
+          `<div class="line over"><span class="tag">过多：</span>${o.over}</div>`+
+          `<div class="line lack"><span class="tag">不足：</span>${o.lack}</div>`+
+          `<div class="line pure"><span class="tag">纯粹本质：</span>${o.pure}</div>`;
+  });
+  document.getElementById('num-lib').innerHTML = nh;
+}
+
+/* ---------- Tab 切换 ---------- */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.getAttribute('data-tab')===name));
+  document.querySelectorAll('.scene').forEach(s=> s.classList.remove('active'));
+  const sc = document.getElementById('scene-'+name);
+  if (sc) sc.classList.add('active');
+}
+
+let lastResult = null;
+
+function calc(){
+  const y = document.getElementById('iyear').value;
+  const m = document.getElementById('imonth').value;
+  const d = document.getElementById('iday').value;
+  const raw = document.getElementById('iname').value.trim();
+  if (!y || !m || !d){ alert('请先选择完整的出生年/月/日'); return; }
+  if (!raw){ alert('请输入姓名（中文或拼音均可）'); return; }
+  const name = toPinyin(raw);
+  if (name === null){
+    alert('检测到中文姓名，但拼音转换库未加载（可能离线）。请手动输入姓名全拼，如 DENG QINMIN');
+    document.getElementById('py-preview').textContent = '⚠ 拼音库未加载，请手动输入姓名全拼';
+    return;
+  }
+  const pv = document.getElementById('py-preview');
+  if (raw !== name) pv.textContent = '→ 已识别拼音：'+name;
+  lastResult = calcMap(y, m, d, name);
+  renderCore(lastResult);
+  renderCycles(lastResult);
+  renderNameStudy(lastResult, name);
+  renderMapChart(lastResult);
+  renderHole(lastResult);
+  // 移除 init-hidden
+  ['core-out','cycles-summary','cycles-chart','name-out','map-svg','hole-out'].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('init-hidden');
+  });
+  switchTab('cycles');
+}
+
+/* ---------- 初始化 ---------- */
+(function init(){
+  const ySel = document.getElementById('iyear'), mSel = document.getElementById('imonth'), dSel = document.getElementById('iday');
+  for (let y=2015; y>=1930; y--){ const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); }
+  for (let m=1; m<=12; m++){ const o=document.createElement('option'); o.value=m; o.textContent=m; mSel.appendChild(o); }
+  for (let d=1; d<=31; d++){ const o=document.createElement('option'); o.value=d; o.textContent=d; dSel.appendChild(o); }
+  ySel.value=1997; mSel.value=9; dSel.value=27;
+  renderLib();
+  // 不预填姓名、不自动 calc —— 默认显示干净的输入面板，用户点击"生成"后才填内容
+})();
+
+/* resize 重绘 */
+let __rt;
+window.addEventListener('resize', ()=>{
+  clearTimeout(__rt);
+  __rt = setTimeout(()=>{
+    if (!lastResult) return;
+    if (document.getElementById('scene-map').classList.contains('active')) renderMapChart(lastResult);
+    if (document.getElementById('scene-cycles').classList.contains('active')) renderCyclesChart(lastResult);
+  }, 150);
+});
+
+/* 切到 print tab 时若已有结果就渲染 */
+document.querySelector('[data-tab="print"]').addEventListener('click', ()=>{
+  if (lastResult) renderPrint(lastResult);
+});
+</script>
+</body>
+</html>
