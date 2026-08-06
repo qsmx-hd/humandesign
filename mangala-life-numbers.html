@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>曼格拉生命数字地图 · 计算器 V11</title>
+<title>曼格拉生命数字地图 · 计算器 V14</title>
 <style>
   :root{
     --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
@@ -107,6 +107,9 @@
     .print-card-grid{display:block;}
     /* V11：打印时强制隐藏 print-empty 空白占位卡（无内容但有边框，挤在备注和 footer 之间） */
     #print-empty{display:none !important;}
+    /* V14：高峰·挑战·循环 SVG 等比缩图（原 1040 高 + 600 宽，按 A4 单列打印高度容易溢出 1 页）
+       强制 max-width:440 → 打印高 ≈ 440×(1040/600)=763px，加上前后内容 < 970px，控制在 1 页内 */
+    #cycles-chart svg{max-width:440px !important; width:100% !important;}
   }
 </style>
 </head>
@@ -159,24 +162,72 @@
   <section id="scene-map" class="scene">
     <div id="map-svg" class="init-hidden"></div>
     <div id="hole-out" class="init-hidden"></div>
+    <div id="karmic-out" class="init-hidden"></div>
   </section>
 
   <!-- 解读库 Tab -->
   <section id="scene-lib" class="scene lib">
     <details>
-      <summary>曼格拉老师专访（新浪博客 · 默认折叠）</summary>
+      <summary>曼格拉老师专访（新浪博客 · 全文 · 默认折叠）</summary>
       <div class="content">
-        <p>来源：<a href="https://blog.sina.com.cn/s/blog_6ab28b040100knbh.html" target="_blank" rel="noopener">blog.sina.com.cn/s/blog_6ab28b040100knbh.html</a>（《心灵成长杂志》第24期，2010-09-03，安子若采访）</p>
+        <p><strong>来源：</strong><a href="https://blog.sina.com.cn/s/blog_6ab28b040100knbh.html" target="_blank" rel="noopener">blog.sina.com.cn/s/blog_6ab28b040100knbh.html</a>（《心灵成长杂志》第24期，2010-09-03，安子若采访）· 全文收录于本工具，点击展开阅读。</p>
+
         <p><strong>曼格拉简介：</strong>卓越的生命数字学、塔罗牌与直觉训练的导师，拥有三十五年以上的资深教学经验。许多塔罗牌、生命数字学咨询师都曾受业于她，这些曾经接受过她教导的人，如今在世界各国传递着因她而启动的内在直觉与智能。</p>
-        <p>她所传递的，不管是咨询还是工作坊，除了有她在生命数字学与塔罗牌上的独到见解与体会，还有多年来她透过自身内在成长所触及的心灵深度。</p>
-        <p>她著有《直觉式塔罗牌：一种增进意识的工具》，本书是学习克劳力拖特塔罗牌的必备宝典。</p>
-        <p class="quote">"曼格拉有一颗狮子的心，有一股能量在她灵魂的深处燃烧着。在生命数字学、塔罗牌与直觉训练的专业领域中，她是世界驰名的顶级导师，她是许多老师们的老师。"</p>
-        <p>她用她整个生命向人们传授着——去驾驭生命，开启灵魂的驱动力，让生命像一部最好的跑车那样上道。</p>
+        <p>她所传递的，不管是咨询还是工作坊，除了有她在生命数字学与塔罗牌上的独到见解与体会，还有多年来她透过自身内在成长所触及的心灵深度。她著有《直觉式塔罗牌：一种增进意识的工具》，本书是学习克劳力拖特塔罗牌的必备宝典。</p>
+        <p class="quote">"曼格拉有一颗狮子的心，有一股能量在她灵魂的深处燃烧着。在生命数字学、塔罗牌与直觉训练的专业领域中，她是世界驰名的顶级导师，她是许多老师们的老师。她用她整个生命向人们传授着——去驾驭生命，开启灵魂的驱动力，让生命像一部最好的跑车那样上道。"</p>
+        <p>她用她纯净的眼神、狮子一样美丽的金发、自发性的动作震撼着你，只为了告诉你——生命如此热烈、强劲、充满了高峰与挑战，我们不应该错过它。进入她的生命数字体验式工作坊中，作者就像"噗"地一下被点燃了烛心的蜡烛一样，站在能量的烈焰中。</p>
+        <p class="quote">"直到我发现，原来迈向未来高峰的道路，常常是被卡在了过去（无意识）的大门里；如果生命给予我们的挑战对我们来说是困难的，那么意味着——这正是我们要去学习的。除了恐惧，没有甚么可以阻扰生命向前迈进。"</p>
         <p class="quote">"手上握着她所教授的'生命数字学'，就如同举起一小段点燃的蜡烛，虽然这意识的烛光并不稳定，常常因为生涩和紧张而左右摇晃着，但是那毕竟照亮了通往我潜意识地下室的台阶，哪怕只有眼前小小的几步。"</p>
-        <p>正是因为瞥见了这绝无仅有、珍贵的几步，令我们开始有勇气一步步地往下探索，那同时也意味着，我们正在将累世所积累的宝藏一层层的向上传送。</p>
-        <p><strong>曼格拉自述：</strong>当她还是一个少女时，她面临了要如何选择大学科系的问题，对于人类在想什么，她有强烈的兴趣，她想要去发现人生。所以她选择了行为心理学，接下来有好几年的时间，她都在实验室里忍受着、观察着白老鼠。直到有一天，她忽然觉悟到这样继续下去是行不通的。她有一个强烈的渴求想要去了解：人是什么？我是谁？</p>
-        <p>她展开了新的旅程——成为一家女性杂志的专栏作家，开始以记者的身分去四处寻求，探索各式各样的怪现象：大学教授、降神术专家、灵媒、催眠大师、占星学家、读茶叶的占卜者……</p>
-        <p>不久之后，她去了印度，有一天她去到了喜马拉雅山上避静……（专访完整内容请参考原文链接）</p>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid var(--border);"/>
+
+        <p><strong>安子若：</strong>中国现阶段的心灵成长领域，看上去似乎已经兵分两路了——一波人处于专业心理咨询领域；另外一波则是没有专业背景，但对身心灵成长充满热诚与兴趣的人群。两波人马问题都显现出来：专业知识丰富但大多停留在头脑层面；而另一波由于没有系统支持与深度研习容易流于灵性成长的肤浅与迷信。那么面对这样的情况，整合的路径可能是甚么？您的路又是怎样走的？</p>
+        <p><strong>Mangala（曼格拉）：</strong>当我还是一个少女时，我面临了要如何选择大学科系的问题，对于人类在想甚么，我有强烈的兴趣，我想要去发现人生。所以我选择了行为心理学，接下来有好几年的时间，我都在实验室里忍受着、观察着白老鼠。直到有一天，我忽然觉悟到这样继续下去是行不通的。我有一个强烈的渴求想要去了解：人是甚么？我是谁？然而，当时的专业心理科学并不能回答我这样的问题。</p>
+        <p>于是，我展开了新的旅程——成为一家女性杂志的专栏作家，开始以记者的身分去四处寻求，探索各式各样的怪现象：我曾经拜访过大学教授、降神术专家、灵媒、催眠大师、占星学家、读茶叶的占卜者，以及当时可以找到的不管是真还是假的通灵术士。不久之后，我去了印度，有一天我去到了喜马拉雅山上避静，突然间我就体验到"静心"是甚么了，它的感觉好像是回到家，虽然偶而的瞥见并没有扎根，但是那一扇门已经被打开了，它导致我生命的急速与根本的转变，它在我里面燃烧着。我从魔幻般的喜马拉雅山漫步下来，经过了两个月在印度境内的冒险旅行，我终于来到了普那的静心中心，在那里我开始了塔罗牌、生命数字学与直觉的训练。</p>
+
+        <p><strong>安子若：</strong>从中古世纪以来，就有数不清的女巫、灵媒与占卜师们运用各种不同的工具——塔罗牌、水晶灵摆之类——为人们预测命运，您做得有甚么不同吗？</p>
+        <p><strong>Mangala：</strong>我的工作完全不是算命和预测，而是一份纯粹的了解，我称我的工作——通往意识的工具。当我在使用这些工具的时候，例如塔罗牌，基本上就是进入那个我们称之为无意识的头脑，所谓无意识即意味着我们并没有觉知到它。我们真正运作的有意识头脑，如果幸运的话，只有百分之十。头脑的整个潜能，我们只觉察到百分之十。所以我们对自己的大部分，都是一无所知的；然而我们大部分的决定、选择、习惯模式却都是来自于这个我们一无所知的无意识头脑。</p>
+        <p>我多年的经验是：无论甚么时候，从牌面或其它占卜工具所反映出来的那个无意识层面只是最接近表面的，它已经快要浮出海面，及将成为有意识——也就是你即将就要发生的事情。这就是为甚么女巫与占卜师们能够利用塔罗牌或其它的占卜工具为人们算命的原理：他们只是从一个无意识的模式来做一个预测。而它们应验的理由并非来自某种神秘的力量，而只是头脑的本性。事实上任何算命占卜的艺术就是读出那些控制我们生命的无意识模式。</p>
+
+        <p><strong>安子若：</strong>请在"女巫算命"这个地方说得再慢一点、再清晰一点好吗？我想我有点晕了。</p>
+        <p><strong>Mangala：</strong>算命是对神秘学工作的真正用途的肤浅误解。它之所以有可能来"算命"，是因为我们都是透过无意识头脑在控制的。我们大多数人在大部分的时间里都是按着幼年时代的制约程序或过去的经验在生活，那是一种可以预测的生活。这就像是计算器里的软件：程序安装之后，当你按下按钮时会如何运作就是可预见的。所以一个人的行为根据他无意识的程序，就是可预测的。算命师基本上是使用工具告诉你，你的无意识会带着你所前进的方向；因为我们大部分人都是很无意识的，所以我们都很可以被预测。但当我们对我们的程序模式意识到了一个程度，我们就有选择要不要照着它做；它就不再能控制我们的生命。这些工具真正的用途，是为了令我们变得更有意识。</p>
+
+        <p><strong>安子若：</strong>一层又一层地探索我们的无意识，那里面正隐藏着即将就要发生的未来，并且这些无意识运作的模式，是可以被巫师们看到的。听到这里，真得令人吃惊啊。</p>
+        <p><strong>Mangala：</strong>所以当你剥除了一层，你就会看到，哦！这就是下面正在发生的，马上就要发生的。比如说，一个女人在跟男人交往的时候有一种模式，她相信男人都是不值得信任的——一旦男人做出一些破坏关系与信任的事情，她的这种信念就被加强了，然后她就永远不再信任他们了。当这个女人对这个模式是无意识的，那么她一定会再重复它，所以我们可以说她的"命运"就是会碰到不忠的男人，并且她的关系会破裂。</p>
+        <p>如果这个时候，她刚好去找一个算命的人，那个人告诉她说当一个男人对她不忠，她的关系就会破裂。事实上，这样的预测与解读对于事情是没有任何帮助的，甚至有时候具有破坏性与令人混乱的。如果这个女人可以觉知道这个模式，她可以使用这个机会来打破这个循环，在同样的情况下不选择决裂，而是学习原谅与信任，那么她的关系或许因为有了更深、更包容的爱而可以继续，或者她可以进入一个新的选择里面。</p>
+        <p>因此塔罗牌可以成为一个更深入去看自己的工具，它好像将一束强而有力的寻找之光转向内在，好让那个无意识的黑暗部份可以用觉知的意识来点亮。透过这个意识与了解，改变就可能发生。真理的本质就是如此——当我们将意识知光带到心灵的正向面，它就会变得更牢固；当我们对那些具有破坏性的面向变得更有意识，它们就会被融解掉。</p>
+
+        <p><strong>安子若：</strong>那么您的意思是说，人的命运可以被改变？</p>
+        <p><strong>Mangala：</strong>你可以开始觉察到你的惯性模式，你也可以开始了解为甚么会这样。在这条灵性道路之中，我们所拥有的工具就是我们的觉察，但是说我们可以改变、或者我们可以改善，这个并不真实。这里有一个误解，许多人都说我可以变成一个更好的人，或者我可以变成那个样子。那么这样的目标就会逼着你去成为一个你不是的人。这不是灵性。所谓的灵性就是，对于我们所运作的方式变得更有觉察。意识与觉察的本质就是光，当你可以把光带入你的惯性模式，或者说在你的无意识头脑里面，当我们真的看到那个运行模式，觉察到它，那么我们就有选择了。这是唯一成长的方式。</p>
+        <p>你没有办法只用这百分之十的有意识的头脑去改变你的行为，因为那只是一个很表层的改变而已。你可以去学这个、去学那个，你可以知道更多有关心灵成长方面的信息。但是如果你因为知道了更多的这方面的知识，而觉得自己更有灵性了，却是一个谎言。因为你还是老样子，你的无意识下面还是有着一层又一层的问题。</p>
+
+        <p><strong>安子若：</strong>那么我们如何区分我们所学习道的是平面知识，还是真正经验到内在深度的整理知识呢？我们如何区分这两者？</p>
+        <p><strong>Mangala：</strong>举例来说，当我在教生命数字，或者在教脉轮课程的时候，都是一种体验式的课程。在开始的时候，你是需要学习一些理论。但是除非你将这些理论实用在自己身上，不然的话，这些信息本身的价值并不高——你看计算机在许多方面都能做得比人脑还要好，所以知识甚么时候才能变得有用？唯有当这个知识是能用在我们自己身上来探索我们自己的时候，才是有价值的。事实上我们要看的是自己。灵性的道路是指，变得真正的有智慧。当我说我很有智慧，那是说我的知识是来自于我本身的体验，那是我的。这与只是知道信息的人是完全不一样的。</p>
+        <p>当一个人开始去学一些东西，他们只是想掘取更多的信息，这样做是很危险的，因为他们会以为他们已经知道了，但是没有任何一件事情因此而改变。所以知识必须要对你能产生影响，它必须要对你揭露出你自己。举例来说，对于做这一类心灵工作的咨询师，你只能协助你的来访者、学员到达你自己所能到达的深度。如果你没有这个深度的话，那么你就会走向所谓"新时代"的道路，以为获得越多的神秘学知识、知道"关于"这些事情就是终点。所以人们可以获得所有灵性信息的信息，以为他们得到了甚么，但事实上，它只是储存在头脑这个计算器内存档，那只是无用的知识。它并没有内化到我们的生命。它们是知识，而非智能。除非你知道如何将它们用在你的意识上，不然学习这些工具是没有意义的。变得更能意识到自己、你运作的模式，就是通往生命灵性层次的道路。</p>
+
+        <p><strong>安子若：</strong>关于体验这个问题，我想做一下区分。事实上，差不多所有的身心灵工作坊都充斥着各种各样的体验，而许多人会迷上这些体验——因为工作坊中有资深导师与团体成员们对一个人从情感到智力上的全面支持，而这些是我们在工作坊之外很难被经验到的。所以我的问题是一个人如何将在工作坊中所经验到的体验，带入真正的生活中去呢？</p>
+        <p><strong>Mangala：</strong>如果今天你没有办法将你在工作坊中所学习的东西带到你的生活中去的话，那么这种工作坊对你来说没有甚么价值。工作坊主要是营造一个环境、一个机会可以让你看到一些东西。但是如果你没有办法将这样一个"看见"带入你的日常生活当中，那么这也是没有价值的。的确，有些人会迷上他们在工作坊中所经历到的高峰体验，而有些人是在头脑层面的上瘾，或者是一种情绪上的上瘾——有些人只有觉得在工作坊中宣泄大叫、在情绪上发泄，他们才觉得他们是活着的。</p>
+        <p>但是，如果你不去实际上去活出你在工作坊中学到的，那就是无效的。所以不管是塔罗牌，或者是生命数字，或者任何其它的工作坊，都只是一个工具让你去看到，你这个个体是怎么样在活自己的生命。这是一个与意识成长有关的事情。任何事情，只要能让你在生活中觉察到更多的意识，那么它就是有意义的。无论是塔罗牌、生命数字学、直觉训练都是为了你在日常生活中能使用它们，而带入更多的觉察与意识。这样你就不用总是去找别人，让别人告诉你是谁，因为你已经拥有了工具，让你看见你是谁。</p>
+
+        <p><strong>安子若：</strong>所以除了学会使用这些工具之外，还有甚么能协助我们走上这条意识觉醒的道路呢？</p>
+        <p><strong>Mangala：</strong>我的团体工作坊里会有关于静心的技巧，和一些可以帮助人们去发展他们的直觉的技巧——而直觉意味着连上高层意识，我们的直觉可以像天线一样伸进高层意识。我这里所谈到的直觉分为好几个层次。有一种我们称之为直觉的，比较像是一种本能反应，就是有能力去听到情绪和身体上的某些讯息。但是，当我们的头脑接受了太多教育、或者太多信息的时候，我们就失去了与本能的连结——但是这只是直觉的一个低层次。</p>
+        <p>直觉还有一个更高的形式，比较是纯粹的直觉。那就是一个人能够向上、能和更高的意识、更高的觉知融和在一起的能力。更精微的直觉是，我们可以向上进入到一个更大的觉知，或者在那里有一个很大的信息库，我们每一个人都可以进入到那里。举例来说，如果我今天为一个人做个案，我虽然使用了一些工作塔罗牌阿、生命数字学，但基本上我是用我的直觉进入到那个人的高层意识之中，然后将我所看到的，像镜子一样的反射给他。我从一个更高的空间去感觉到关于他们自己的事情，然后像镜子一样的去反映出来给他们看。</p>
+
+        <p><strong>安子若：</strong>我必须诚实的告诉您，我并没有太明白您的更高直觉的意思。虽然您对高层直觉的诠释深深的触动了我，但是我的脑子忽然一片空白。您能再多说一些吗？</p>
+        <p><strong>Mangala：</strong>我想我们都有。这是我在教团体工作坊的时候的经验，每个人都有直觉，就像每个人都能看、每个人都能听、都能闻，每个人都有直觉。只是我们不知道怎么去辨识它、怎么去听到它，因为它被逻辑的头脑切断了。塔罗牌是一个训练直觉的很好的方式。因为你没有办法只是用逻辑的方法来解读塔罗牌——因为你没有办法将所有的事情，拼凑成一个完整的图像。因为逻辑头脑的天性是只能看到一小块碎片，它可以去分析，可以去看到细节，但是却没有办法看到一个整体的结构。</p>
+        <p>直觉是让我们连结整体的能力。它是我们进入世界意识、宇宙性头脑、存在或任何你选择称呼的天线。事实上我们人与人、与周遭发生的事情并非是不相关的，是逻辑头脑的妄想创造出这样的印象。当我们处在直觉头脑时，我们就是相连的，也就能如实的看见事物的本质，而不是透过我们微小理性头脑的滤镜。那么我们才能朝洞察力与了解敞开，那是在我们逻辑性头脑在控制时所不能及的。以直觉性头脑学习像生命数字、塔罗牌这样的事，表示你的学习不总是以逻辑的方式，学着信任非逻辑是没关系的。</p>
+        <p>我总是很惊奇当人被给予机会时，他们能以直觉所做到的事情——你信任自己知道某些事，就算你无法解释自己是如何得到那样的理解。随着经验，你会发现这部分的本质是多么有效与不可思议，那么你就能开始在生活中更加的信任这部分。我所有的团体都是强调使用直觉的头脑，但直觉团体则是学习纯粹的倾听与发展这个部分。</p>
+
+        <p><strong>安子若：</strong>直觉是否来自于右脑，这与开发我们的右脑是否有关系呢？</p>
+        <p><strong>Mangala：</strong>我们的创造力就是从右脑而来的，所以那些比较有创造力的人，他们是比较有直觉的。舞蹈、绘画、梦境可以让人来到一个非逻辑的头脑，让人能够可以来到自己感觉的边缘地带。例如说，我们在日常生活中常常会遇到一些棘手的事情，我们常是要把他想出来，尝试要把它做出来，尝试要把它达成，但是最后呢？却怎样也搞不出来了，于是我们就放弃了。而一旦逻辑性的头脑放弃的时候，突然间我们的直觉就来到了一个高层意识的空间，然后我们就灵光一闪："啊哈，我想到了！"这样的一个灵光之所以闪现，是因为我们已经不再尝试了，于是我们腾出了一个空间给与未知与可能性。就在这样的一个地方，我们与高层意识搭上了线——而直觉就是在那里。</p>
+
+        <p><strong>安子若：</strong>可是，那些看上去富有创造力的人、具有直觉力的人，在生活中他们也最容易进入疯狂与混乱的状态，我看他们的痛苦与那些理性刻版的人们比较起来，差不多一样多，甚至还要更多一些。</p>
+        <p><strong>Mangala：</strong>是的，我们也需要逻辑、理性这个部分的头脑，他们是很棒的随身计算机。我们所需要学习的是使用头脑而不是被头脑使用。有些人完全相信他们的理性头脑，他们卡在那里面，变得失去创意与活力；而另外一些很有直觉、但是不扎根的人则会陷入某种疯狂雨飘浮。关键在于我们有没有一个平衡——如果我太过于直觉、灵性那一边去了，并且没有根植于我的身体、没有根植于我周遭的世界，那就是一种发疯。</p>
+        <p>事实上，有一些人的直觉天生就比别人发达，在我的直觉训练团体里，通常会有那么一、两个人，他们使用直觉的能力，就好像鸭子对水那样自如。对于这些人来说，他们是十分容易就来到那样的一个直觉的空间，但是事实上我们要学习的是，将那个地方的信息往下带到人间，落实在这个世间。所以要强调的是扎根在我们身体里的能力，在这个当下去如实的经验。要不然就可能会发生一个非常有创造力、非常有直觉的人，在现实生活里却是一团混乱。</p>
+
+        <p><strong>安子若：</strong>您的意思是说把上下左右、理性的左脑、直觉的右脑；向上的及向下的能量都整合起来，并且落实到这个世界上，看上去这并不是一件很容易的事情。</p>
+        <p><strong>Mangala：</strong>我们可以藉由我们的七个脉轮系统来说这个。我们可以看到我们每一个能量的中心，都有它自己的运作方式与能量呈现，我们所要做得就是整合这所有的能量中心。而人们的情况是，要不就是卡在底层基础的能量里面——被困在生存、性、情绪啊；或者走到另一个极端，他们会假装这个底层基础的能量不存在，哪怕他连吃午餐的钱都没有了，他们也还飘浮在上面的几个能量中心上——灵性啊、直觉啊、天使、光啊……他们可以很有创造力、很有直觉，但是他们只是飘过，他们与自己的基础能量层面是切断的、分离的。所以我们需要整合这全部。</p>
+        <p>因为，我们是一个整体性的人，不是仅仅只有上面的能量、或者只有下面的能量。这并不容易，但是这就是我们要走的路啊，这就是灵性的道路啊。如果今天我们已经知道了应该怎么做了，那我们就不会降生在这个身体里面了。所以这是一个很长的旅程。这就是我们来到这里要学习的，然后看看我们能走多远。</p>
       </div>
     </details>
 
@@ -217,29 +268,121 @@
     </details>
 
     <details>
-      <summary>经典理论（国际通用毕达哥拉斯标准）</summary>
+      <summary>经典理论（Classical Numerology 完整指南 · 全文 · 默认折叠）</summary>
       <div class="content">
-        <p><strong>来源：</strong><a href="https://www.astrovachmi.com/numerology-complete-guide" target="_blank" rel="noopener">astrovachmi.com/numerology-complete-guide</a>（Classical Numerology Complete Guide）等多源整理。</p>
-        <p><strong>一、化简规则（Digital Root）</strong></p>
-        <p>任何数字的"数字根"由其各位数字相加求得：例如 1997 → 1+9+9+7 = 26 → 2+6 = <strong>8</strong>。当中间结果为 11、22、33 时不被继续化简，称"主数"（Master Numbers）。</p>
-        <p><strong>二、核心数字（Core Numbers）</strong></p>
-        <p>国际通用毕达哥拉斯体系认定的核心位置共 6 个：</p>
+        <p><strong>来源：</strong><a href="https://www.astrovachmi.com/numerology-complete-guide" target="_blank" rel="noopener">astrovachmi.com/numerology-complete-guide</a>（Classical Numerology — The Complete Guide to Your Core Numbers）· 全文收录于本工具，点击展开阅读。</p>
+
+        <p><strong>引言：什么是古典数字学？</strong></p>
+        <p>数字学是最古老的形而上学之一——它认为数字承载着固有的振动，出生日期与名字中编码的数字揭示了生命、性格与命运的结构。其根源横跨毕达哥拉斯希腊、古巴比伦、卡巴拉犹太神秘主义和印度吠陀传统，每一支都为今天的"古典数字学"贡献了独特的风味。现代实践由两大体系主导：<strong>毕达哥拉斯体系</strong>（按字母顺序将 1–9 赋给 A–Z）和更古老的<strong>迦勒底体系</strong>（基于振动频率而非字母顺序的不同映射）。两者结合产生丰富的数字星座——每个数字照亮你存在的不同面向。</p>
+
+        <p><strong>两种字母系统对照：</strong></p>
         <ul>
-          <li><strong>Life Path（生命道路）</strong>：生日年+月+日化简，代表此生主航道。</li>
-          <li><strong>Expression / Destiny（表现/命运）</strong>：姓名全字母取值化简，代表天生才华。</li>
-          <li><strong>Soul Urge（灵魂渴望）</strong>：姓名元音取值化简，代表内心动机。</li>
-          <li><strong>Personality（人格）</strong>：姓名辅音取值化简，代表对外形象。</li>
-          <li><strong>Birthday Number（生日数字）</strong>：出生日本身（1-31），代表天赋礼物。</li>
-          <li><strong>Maturity Number（成熟数字）</strong>：Life Path + Expression，代表后半生主题。</li>
+          <li><strong>毕达哥拉斯字母值：</strong>1—A/J/S；2—B/K/T；3—C/L/U；4—D/M/V；5—E/N/W；6—F/O/X；7—G/P/Y；8—H/Q/Z；9—I/R。</li>
+          <li><strong>迦勒底字母值：</strong>1—A/I/J/Q/Y；2—B/K/R；3—C/G/L/S；4—D/M/T；5—E/H/N/X；6—U/V/W；7—O/Z；8—F/P；9—不分配（视为神圣，不直接赋给字母）。</li>
+          <li><strong>化简规则：</strong>多位数之和化到个位（如 29→2+9=11→1+1=2），但主数 11/22/33 保留（毕达哥拉斯体系）。</li>
         </ul>
-        <p><strong>三、Pinnacles &amp; Challenges（高峰与挑战）</strong></p>
-        <p>将人生分为 4 个阶段，由月/日/年化简的三个循环数（Cycles）共同计算。每个阶段同时有一个高峰（Pinnacle）数字和挑战（Challenge）数字，反映该阶段的优势能量与必修课题。</p>
-        <p><strong>四、Personal Year（个人流年）</strong></p>
-        <p>个人流年 = 出生月 + 出生日 + 当前公历年份（分别化简后求和），9 年一循环，是最常用来规划年度节奏的工具。</p>
-        <p><strong>五、Master Numbers 11/22/33</strong></p>
-        <p>国际标准中三个主数被视为"高频数字"——它们在化简过程中如出现即保留（不再相加到个位），因其能量更强烈、需要更多自我功课。11 启蒙者、22 伟大的建造者、33 大师级教师，合称"三大主数"（Master Numbers）。</p>
-        <p><strong>六、与曼格拉体系的关系</strong></p>
-        <p>曼格拉（Mangala）生命数字学的核心算法、化简规则、字母取值均沿用上述国际通用毕达哥拉斯标准；本工具的所有算法与该标准完全一致，并叠加了曼格拉体系常用的"制约数字"（月+日化简）、"四大反复出现的挑战"等表达形式。</p>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid var(--border);"/>
+
+        <p><strong>1. 生命路径数（Life Path）—— 你生命的河流</strong></p>
+        <p>生命路径是数字学图表中最重要的数字，完全由出生日期导出，代表生命的主航道——你与生俱来的天赋、你生命应流向的主要方向。印度体系称之为 जन्मांक (Janmank)。计算：分别将日/月/年化简后求和再化简。例：1990-8-15 → 日 1+5=6；月 8；年 1+9+9+0=10→1 → 6+8+1=15→6（生命路径 6）。</p>
+        <p><strong>生命路径含义速览：</strong>1 先驱；2 外交家；3 创造者；4 建造者；5 自由探索者；6 养育者；7 探求者；8 力量型；9 人道主义者；11 启蒙者；22 大师建造者；33 大师教师。</p>
+
+        <p><strong>2. 出生数（Birth Number）—— 你的自然天赋</strong></p>
+        <p>出生数即出生日化简到个位（或主数）。它是生命路径的次级但重要的修饰——代表你带入此生的特定天赋礼物。印度体系称之为 मूलांक (Mulank)。若生于 7 日，出生数=7；若生于 29 日，化简 2+9=11（主数）或进一步到 2，依体系而定。生命路径描述生命全弧，出生数描述一个具体的、可用的天然能力。</p>
+
+        <p><strong>3. 表达/命运数（Expression / Destiny）—— 你的整体生命目的</strong></p>
+        <p>表达数（也称命运数）由出生证上的<strong>全名</strong>导出，代表你所能成为的全部——你的先天能力、潜力、你被指定在世界上扮演的角色。印度体系称之为 नामांक (Naamank) 或 भाग्यांक (Bhagyank)。计算：给每个字母赋毕达哥拉斯值，加总后化简。例：RAHUL SHARMA → R(9)+A(1)+H(8)+U(3)+L(3)=24；S(1)+H(8)+A(1)+R(9)+M(4)+A(1)=24；总 48→12→<strong>3</strong>。<strong>重要：</strong>经典数字学使用出生名因它编码进入此生那一刻的振动。婚名、昵称、法律改名有各自振动可单独分析，但出生名是灵魂的奠基性文档。在印度语境下，特别注意若人使用首字母（如 K. Suresh Kumar），应使用完整展开名而非首字母计算。</p>
+
+        <p><strong>4. 灵魂渴望数（Soul Urge / Heart's Desire）—— 你的内在动机</strong></p>
+        <p>灵魂渴望数由全名中仅取<strong>元音</strong>（A/E/I/O/U）计算。它代表你在最深层真正渴望的事物——驱动你选择的内在饥渴，常常在意识之下。它是你"无人观看时会做出的选择"——你真诚的召唤，而非你为世界扮演的角色。<strong>关于 Y：</strong>Y 是否作为元音依位置而定——若 Y 是音节中唯一的元音音（如 Lynn、Cynthia）则作元音，否则作辅音，需按名判断。</p>
+
+        <p><strong>5. 人格数（Personality）—— 你的外在面具</strong></p>
+        <p>人格数由全名中仅取<strong>辅音</strong>导出。它代表你给人的第一印象——你为世界展露的脸。人格不是"真正的你"——那是灵魂渴望；人格是守门人。一个人格 8 的人常投射自信、权威与物质能力，无论内在生活如何；人格 2 营造温和与平易近人的印象。这些第一印象深刻且常无意识地塑造每段关系、每次专业互动。</p>
+
+        <p><strong>6. 成熟数（Maturity Number）—— 35 岁后浮现的数字</strong></p>
+        <p>成熟数 = 生命路径数 + 表达数（化简）。它代表后半生浮现的最深层自我——通常在 35 岁后逐渐显化，45 岁后影响日增。年轻时生命路径与表达数主导；成熟时成熟数作为第三股整合力量浮现，解释了为何人们常在 40 多岁戏剧性地转向——灵魂在回应成熟数的召唤。</p>
+
+        <p><strong>7. 个人年数（Personal Year）—— 你的年度主题</strong></p>
+        <p>数字学不只静态描绘性格——它追踪时间循环。个人年数是最常用的时序工具，揭示任何一年的整体主题与能量节奏，按 9 年一循环运行。计算：日 + 月 + 当前公历年，化简。例：8-15 出生，2025 → 6+8+9=23→5（个人年 5——变化、自由与意外之年）。<strong>9 年循环：</strong>1 新开始、播种；2 合作与耐心；3 创造与社交；4 努力与巩固；5 变化与自由；6 责任与服务；7 内省与深化；8 成就与收获；9 完成与释放。</p>
+
+        <p><strong>8. 个人月数与个人天数（Personal Month / Day）</strong></p>
+        <p>在个人年的广大潮流中，每个月、每一天都有其子主题。这是数字学最细粒度的时序工具——用于择吉日、理解每天可用能量、精确计时决策。<strong>个人月：</strong>个人年数 + 当月数（化简），从你生日那天起算（不是从 1 月起算）。<strong>个人日：</strong>个人月数 + 当日数（化简）。经验丰富的数字学家用这些循环为婚姻、商业启动、旅行、医疗程序、重大财务决策等择吉——正如吠陀占星学用 Muhurta 一样。</p>
+
+        <p><strong>9. 平衡数（Balance Number）—— 你如何应对压力</strong></p>
+        <p>平衡数由全名的<strong>首字母</strong>导出——各名部分的首字母取毕达哥拉斯值加总化简。它揭示你在生活变得困难、不确定或情感紧绷时的本能反应。例：Rahul Mohan Sharma → R(9)+M(4)+S(1)=14→<strong>5</strong>。平衡数常被忽视但对理解压力下的行为模式极具价值——平衡 1 在压力下倾向独立进攻；平衡 2 退而寻求支持；平衡 7 退入分析与自省。知道你的平衡数帮助你自觉反应而非自动反应。</p>
+
+        <p><strong>10. 基石、顶石与首元音（Cornerstone / Capstone / First Vowel）</strong></p>
+        <p>这三个指标取自名字中的特定字母，提供聚焦的性格与生活取向视角。<strong>基石（首字母）：</strong>揭示你基本的生活取向——如何启动、如何回应机会、任何情况下第一本能的质量。A（值 1）暗示直接先驱式取向；R（值 9）暗示慈悲理想化反应。<strong>顶石（末字母）：</strong>揭示你如何完成——跟进力、结束循环的能力、如何处理结束。基石是起始能量，顶石是完成能量。<strong>首元音（首元音字母）：</strong>揭示最深的本能反应——理性介入前的本能。E（5）本能地伸手够向自由与体验；O（6）本能地伸手够向和谐与责任。</p>
+
+        <p><strong>11. 业力功课数（Karmic Lesson Numbers）—— 灵魂尚未掌握的</strong></p>
+        <p>当你计算全名每个字母的毕达哥拉斯值时，你会发现 1–9 中某些数字可能根本不出现。这些缺失数字称为<strong>业力功课数</strong>——代表灵魂在过往生命中较少练习的能量、能力和品质，这些在此生作为挑战与成长的领域出现。<strong>如何找到：</strong>列出 1–9，看哪些在全名中至少出现一次，未出现的就是业力功课。</p>
+        <ul>
+          <li><strong>缺失 1：</strong>主动性、自信心、表达自我的困难</li>
+          <li><strong>缺失 2：</strong>敏感性、耐心、合作——学习圆融</li>
+          <li><strong>缺失 3：</strong>自我表达、创造、沟通——发展声音</li>
+          <li><strong>缺失 4：</strong>纪律、规律、实务跟进——建立稳固</li>
+          <li><strong>缺失 5：</strong>适应、变化、自由——发展灵活</li>
+          <li><strong>缺失 6：</strong>责任、养育、承诺——学会关怀</li>
+          <li><strong>缺失 7：</strong>内省、分析、内在知晓——信任内在</li>
+          <li><strong>缺失 8：</strong>野心、物质管理、权威行使——建立物质自信</li>
+          <li><strong>缺失 9：</strong>慈悲、宏观视角、放手——发展无私</li>
+        </ul>
+        <p>拥有多个业力功课是常见的；一个都没有不寻常，意味着名字字母跨越九个数字频率——天然完整的表达。</p>
+
+        <p><strong>12. 隐藏热情数与潜意识自我数（Hidden Passion / Subconscious Self）</strong></p>
+        <p><strong>隐藏热情数：</strong>全名所有字母中出现频率最高的数字。它代表一个如此天然天赋与深度兴趣的领域，几乎强制性地运作——你一再返回的领域，常未完全意识到它的非凡。若多个数字共享最高频率，则都被视为隐藏热情。<strong>潜意识自我数：</strong>计数宽度——全名中至少出现一次的 1–9 数字有几个，结果在 1–9 之间。更高的潜意识自我（8 或 9）表示人有广泛均衡的振动场；更低（3 或 4）暗示更集中专精的能量签名。它也揭示人在紧急情况下的反应速度与信心。</p>
+
+        <p><strong>13. 顶峰数（Pinnacles）—— 生命的四大篇章</strong></p>
+        <p>顶峰是四个主要人生阶段，每个有其统御数字，塑造该阶段可用的外部环境与机会。它们是长期预测工具——关于环境与能量质量，不是性格。<strong>计算：</strong>使用化简的日/月/年。</p>
+        <ul>
+          <li><strong>第一顶峰 = 出生月 + 出生日。</strong>持续到 (36 − 生命路径数) 岁</li>
+          <li><strong>第二顶峰 = 出生日 + 出生年。</strong>持续第一顶峰结束后 9 年</li>
+          <li><strong>第三顶峰 = 第一顶峰 + 第二顶峰。</strong>持续第二顶峰结束后 9 年</li>
+          <li><strong>第四顶峰 = 出生月 + 出生年。</strong>持续第三顶峰结束直到去世</li>
+        </ul>
+        <p>每个顶峰数字与生命路径数字含义相同。顶峰特别有助于理解人生不同年代为何感觉如此根本不同。</p>
+
+        <p><strong>14. 挑战数（Challenge Numbers）—— 四种反复出现的障碍</strong></p>
+        <p>顶峰描述人生各阶段可用机会，挑战数则描述必须面对的具体障碍与功课。它由减法计算——出生日期成分之间的绝对差——这在数字学计算中独一无二，反映了挑战源于能量之间的张力而非总和。<strong>计算：</strong></p>
+        <ul>
+          <li><strong>第一挑战 = |出生日 − 出生月|</strong></li>
+          <li><strong>第二挑战 = |出生日 − 出生年|</strong></li>
+          <li><strong>第三挑战（主要挑战）= |第一挑战 − 第二挑战|</strong></li>
+          <li><strong>第四挑战 = |出生月 − 出生年|</strong></li>
+        </ul>
+        <p>当两个成分相等时挑战为 0，称"选择的挑战"（Challenge of Choice）——并非没有挑战，而是承担完全自由的负担。挑战 1 是学习独立站定；挑战 7 是面对孤立与自疑。挑战数常解释为何某些模式——职业、关系、心理——顽固地在生命中重复。</p>
+
+        <p><strong>15. 业力债务数（Karmic Debt）—— 13、14、16、19</strong></p>
+        <p>业力债务数是数字学中最被误解的概念之一。它们不是判决，而是表明灵魂在前世有未化解的业力，且此生提供强化的机会去解决。<strong>关键判断标准：</strong>业力债务不是作为最终个位结果出现，而是作为"最终化简之前"的两位中间值（出现在生命路径/表达/灵魂渴望/人格计算中）。</p>
+        <ul>
+          <li><strong>13（化简为 4）</strong>——懈怠之债。前世未能善用创造力、逃避勤劳。此生的功课是持续不懈的努力。工作对 13/4 的人比他人更艰苦——因为灵魂在偿还曾逃避的能量。</li>
+          <li><strong>14（化简为 5）</strong>——节制之债。前世滥用自由——物质、感官或个人自由损害他人。此生的功课是负责任地使用自由。</li>
+          <li><strong>16（化简为 7）</strong>——崩解之债。前世因 ego 导致从高位跌落。16 模式常带来突如其来的"自我崩塌"，强迫谦卑、灵性觉醒与拆除建立在虚假基础上的结构。</li>
+          <li><strong>19（化简为 1）</strong>——孤立之债。前世过度自我中心、将个人意志置于他人之上。此生的功课是发展真正的独立而不支配。</li>
+        </ul>
+        <p>不是每个人都携带业力债务。它的存在表明此生特定领域会更费力，但也携带异常成长的潜力。</p>
+
+        <p><strong>16. 迦勒底体系（Chaldean）—— 更古老的传统</strong></p>
+        <p>虽然毕达哥拉斯在西方更广泛传授，迦勒底体系——源于古巴比伦——被许多实践者认为在反映名字实际振动质量上更精确。<strong>与毕达哥拉斯的关键差异：</strong>9 不直接赋给任何字母（视为太神圣），但可作为结果出现；字母-数字映射基于声音振动而非字母顺序；更强调"常用名字"而非出生全名（因反映日常实际运作的振动）；双位数（复合数）在最终化简前有独立解读（如 14 和 23 作为独立实体而非仅是 5）。许多严肃实践者同时计算毕达哥拉斯与迦勒底结果并合并解读——毕达哥拉斯作为性格与命运的外层结构，迦勒底作为更精微的振动潜流。</p>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid var(--border);"/>
+
+        <p><strong>完整数字学图表的解读</strong></p>
+        <p>完整的数字学解读使用所有数字并综合成连贯画像。没有单一数字能讲述整个故事——艺术在于理解数字如何相互作用、放大、有时相互矛盾。一个实用的解读通常按层级推进：</p>
+        <ol>
+          <li><strong>核心身份层：</strong>生命路径 + 表达 + 灵魂渴望共同定义你的根本存在与目的。</li>
+          <li><strong>展示层：</strong>人格数 + 基石 + 顶石 + 首元音揭示你如何被他人体验与如何穿行世界。</li>
+          <li><strong>阴影与成长边缘：</strong>业力功课 + 业力债务 + 挑战数揭示灵魂何处有功课、哪些模式要警惕。</li>
+          <li><strong>时序层：</strong>个人年 + 个人月 + 个人日 + 顶峰数揭示当前活跃能量与每个生命阶段在召唤什么。</li>
+          <li><strong>整合层：</strong>成熟数 + 隐藏热情 + 潜意识自我 + 平衡数填充人如何整体运作的纹理。</li>
+        </ol>
+        <p>共同地——生命路径、出生数、表达、灵魂渴望、人格、成熟、个人年、个人月、个人日、平衡、基石、顶石、首元音、业力功课、隐藏热情、潜意识自我、顶峰、挑战、业力债务、迦勒底名——这些数字构成完整地图。不是牢笼，而是指南针。数字不决定你的选择；它们照亮你的选择将穿行的地形。<strong>Know your numbers. Know yourself.</strong></p>
+
+        <p><strong>印度语境下的数字学：</strong>印度有自己深厚的数字学传统，最著名的是 Ankashastra（数字科学）与吠陀数字学系统——后者基于行星关联：太阳主 1、月亮主 2、木星主 3、罗睺主 4、水星主 5、金星主 6、计都主 7、土星主 8、火星主 9。在该系统中"心理数字"（仅出自出生日）与"命运数字"（出自完整出生日期）是两大主要指标。许多印度家庭传统上在命名新生儿时同时咨询数字学家与占星家——首字母与全名被选中以确保名数字与心理/命运数字的和谐。名校正（修改拼写以将名数字推向更有利的振动）是广泛实践与接受的。</p>
+
+        <p style="color:var(--primary);font-weight:700;margin-top:14px;"><strong>📌 与曼格拉体系的关系</strong></p>
+        <p>曼格拉（Mangala）生命数字学的核心算法、化简规则、字母取值均沿用上述国际通用毕达哥拉斯标准；本工具的所有算法与该标准完全一致，并叠加了曼格拉体系常用的"制约数字"（月+日化简）、"四大反复出现的挑战"等表达形式。V13 起新增"业力债务数检测"（Karmic Debt 13/14/16/19），亦出自本节权威定义。</p>
       </div>
     </details>
 
@@ -269,7 +412,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
 <script>
-const VERSION = 'V11';
+const VERSION = 'V14';
 document.getElementById('ver2').textContent = VERSION;
 
 const CURRENT_YEAR = 2026;
@@ -307,10 +450,15 @@ function pyValue(str, onlyVowels){
 function calcMap(y, m, d, name){
   y = parseInt(y,10); m = parseInt(m,10); d = parseInt(d,10);
   const ry = reduce(y, true), rm = reduce(m, true), rd = reduce(d, true);
-  const lifePath = reduceParts([y, m, d]);
-  const expression = reduce(pyValue(name, false), true);
-  const soulUrge  = reduce(pyValue(name, true), true);
-  const personality = reduce(pyValue(name, false) - pyValue(name, true), true);
+  // 捕获"化简前中间总数"（业力数 Karmic Debt 检测用，13/14/16/19 出现在化简前的两位数）
+  const lifePathSum = ry + rm + rd;
+  const exprTotal = pyValue(name, false);
+  const soulTotal = pyValue(name, true);
+  const consTotal = exprTotal - soulTotal;
+  const lifePath = reduce(lifePathSum, true);
+  const expression = reduce(exprTotal, true);
+  const soulUrge  = reduce(soulTotal, true);
+  const personality = reduce(consTotal, true);
   const maturity = reduceParts([lifePath, expression]);
   const subconscious = reduceParts([m, d]);
   const balance = reduce(d, true);
@@ -352,8 +500,32 @@ function calcMap(y, m, d, name){
   const holes = [];
   for (let n = 1; n <= 9; n++) if (counted.indexOf(n) === -1) holes.push(n);
 
+  // 教科书「缺失数」：只看出生日期牌面数字（1–9 哪个没出现），与黑洞算法维度不同
+  const bdDigits = (''+y).split('').concat((''+m).split(''), (''+d).split('')).map(Number);
+  const bdSet = new Set(bdDigits);
+  const missingNumbers = [];
+  for (let n = 1; n <= 9; n++) if (!bdSet.has(n)) missingNumbers.push(n);
+
+  // 业力数检测（Karmic Debt Numbers）：当生命道路/表现/灵魂驱策/人格的
+  // "化简前中间总数" = 13/14/16/19 时即带业力；出生日本身 = 13/14/16/19 也是业力生日
+  const KARMIC = [13, 14, 16, 19];
+  const karmicDebts = [];
+  function checkKD(label, total, finalVal){
+    if (KARMIC.indexOf(total) !== -1){
+      karmicDebts.push({label, karmic: total, reduceTo: finalVal, notation: `${total}/${finalVal}`});
+    }
+  }
+  checkKD('生命道路', lifePathSum, lifePath);
+  checkKD('表现数字', exprTotal, expression);
+  checkKD('灵魂驱策', soulTotal, soulUrge);
+  checkKD('人格数字', consTotal, personality);
+  if (KARMIC.indexOf(d) !== -1){
+    karmicDebts.push({label:'出生日', karmic: d, reduceTo: reduce(d, true), notation: `${d}/${reduce(d, true)}（生日）`});
+  }
+
   return {ry,rm,rd,lifePath,expression,soulUrge,personality,maturity,subconscious,
-          balance,personalYear,restraint,pinnacles,pinnacleAges,challenges,cycles,holes,name,
+          balance,personalYear,restraint,pinnacles,pinnacleAges,challenges,cycles,holes,missingNumbers,
+          karmicDebts,name,
           y,m,d,
           birthDate:`${y}年${m}月${d}日`};
 }
@@ -434,7 +606,16 @@ const POS = {
   challenge:{t:'挑战数字 ×4', d:'大数减小数：第一挑战=|日-月|；第二挑战=|日-年|；第三挑战=|第一-第二|（主要挑战）；第四挑战=|月-年|。'},
   cycle:{t:'循环数字 ×3（月/日/年）', d:'第一循环=月份所有数字相加化简；第二循环=日所有数字相加化简；第三循环=年份所有数字相加化简。'},
   hole:{t:'黑洞数字', d:'1–9 中在生命地图其余位置从未出现的数字，代表你天生较弱、需有意识去发展的能量。'},
+  missing:{t:'教科书缺失数', d:'只看出生日期牌面数字（如 1997-9-27 含 1/2/7/9），1–9 中没出现的就是「缺失数」，代表需后天补强的能量方向。与「黑洞」算法维度不同，两者结果可能不一致。'},
   nameStudy:{t:'姓名学', d:'通过姓名每个字母的毕达哥拉斯值，统计表现/灵魂驱策/人格/成熟/性格分类/业力。'}
+};
+
+/* ---------- 业力数（Karmic Debt）解读库 ---------- */
+const KARMIC_INFO = {
+  13:{t:'13/4 懈怠之债', core:'前世未能善用创造力、以取巧逃避勤劳', shadow:'此生容易有"想走捷径"的诱惑，事事想轻松达成，结果常常更辛苦', suggest:'踏踏实实一步步来；戒取巧、勤勉本身就是业力的解药'},
+  14:{t:'14/5 节制之债', core:'前世滥用自由，沉溺感官、物质或不安定', shadow:'此生易陷入成瘾、放纵、变动频繁，难以建立稳定', suggest:'学习节制与责任；自由建立在自律之上，给承诺一个稳定容器'},
+  16:{t:'16/7 崩解之债', core:'前世因 ego 导致从高位跌落', shadow:'此生会有突如其来的"自我形象崩塌"事件，强迫谦卑与重生', suggest:'允许拆毁旧形象，从灵性与谦卑处重建；ego 放下就是解药'},
+  19:{t:'19/1 孤立之债', core:'前世过度自我中心、忽视他人', shadow:'此生容易极度独立、不愿求助，导致关系孤立', suggest:'独立但学习利他服务；愿意接受帮助本身也是一种力量'}
 };
 
 const NUM = {
@@ -546,7 +727,7 @@ function renderCycles(r){
 
 /* ---------- 渲染：高峰·挑战·循环 整体金字塔图（V8：删高峰连接线 + 中央列基准线 + 等腰三角形）---------- */
 function renderCyclesChart(r){
-  const W = 600, H = 1000;
+  const W = 600, H = 1040;
   const triColor = '#C4956A';
   const masterColor = '#D4A574';
   const txtColor = '#2D2118';
@@ -596,44 +777,45 @@ function renderCyclesChart(r){
      中央列基准线：第 4 高峰 → 第 3 高峰
      左右对称：第 1 高峰(=制约) / 第 2 高峰（往中央收敛 CX±90）
   */
-  svg += `<text x="${CX}" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">高峰金字塔</text>`;
+  // V13：顶部"高峰金字塔"文字上移至 y=20，整体下移 40px，让"文字→第四高峰顶点"留白与底部"第四挑战顶点→挑战金字塔"对称（≈56px）
+  svg += `<text x="${CX}" y="20" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">高峰金字塔</text>`;
 
   // 顶层 + 第二层（中央列）— V9 统一三角尺寸 76，消除 V3-V8 的 60/70/80 混搭
   const TRI = 76;
-  svg += triangle(CX,        80, TRI, r.pinnacles[3], '第四高峰');       // 顶端基准
-  svg += triangle(CX,       200, TRI, r.pinnacles[2], '第三高峰');       // 中央列
+  svg += triangle(CX,       120, TRI, r.pinnacles[3], '第四高峰');       // 顶端基准（+40）
+  svg += triangle(CX,       240, TRI, r.pinnacles[2], '第三高峰');       // 中央列（+40）
   // 左右对称（V8 收敛到 ±90）
-  svg += triangle(CX-90,    320, TRI, r.pinnacles[0], '第一高峰(=制约)'); // 左
-  svg += triangle(CX+90,    320, TRI, r.pinnacles[1], '第二高峰');        // 右
+  svg += triangle(CX-90,    360, TRI, r.pinnacles[0], '第一高峰(=制约)'); // 左（+40）
+  svg += triangle(CX+90,    360, TRI, r.pinnacles[1], '第二高峰');        // 右（+40）
 
   /* ====== 中部：3 个循环方框（中央第2循环做基准线成员）======
      CX±150 保留 V7 已扩大的间距（用户未提及，不动）
   */
-  const baseY = 460;
+  const baseY = 500;                                                       // +40
   svg += box(CX-150, baseY, BW, BH, r.cycles[0], '第一循环(月)');
   svg += box(CX,     baseY, BW, BH, r.cycles[1], '第二循环(日)');
   svg += box(CX+150, baseY, BW, BH, r.cycles[2], '第三循环(年)');
 
-  /* ====== 右侧独立区（V7 已稳定，不动）====== */
-  svg += box(CX_REF, 78, BW+30, BH, r.personalYear, '个人流年', {muted:true});
+  /* ====== 右侧独立区（V7 已稳定，不动；V13 同步 +40）====== */
+  svg += box(CX_REF, 118, BW+30, BH, r.personalYear, '个人流年', {muted:true});   // +40
   svg += box(CX_REF, baseY, BW+30, BH, r.lifePath, '生命道路', {muted:true});
 
   /* ====== 中部分割线 ====== */
-  svg += `<line x1="40" y1="540" x2="${W-40}" y2="540" stroke="#E8DCC8" stroke-width="1" stroke-dasharray="4,4"/>`;
+  svg += `<line x1="40" y1="580" x2="${W-40}" y2="580" stroke="#E8DCC8" stroke-width="1" stroke-dasharray="4,4"/>`;   // +40
 
   /* ====== 下半：挑战四面朝下 4 行布局（中央列基准线 + 左右对称）======
      中央列基准线：第三挑战(主要) → 第四挑战
      左右对称：第 1/2 挑战（往中央收敛 CX±90）
   */
-  const R1_Y = 620;
-  const R2_Y = 750;
-  const R3_Y = 870;
+  const R1_Y = 660;                                                        // +40
+  const R2_Y = 790;                                                        // +40
+  const R3_Y = 910;                                                        // +40
   svg += triangleDown(CX-90, R1_Y, TRI, r.challenges[0], '第一挑战');           // 左
   svg += triangleDown(CX+90, R1_Y, TRI, r.challenges[1], '第二挑战');           // 右
   svg += triangleDown(CX,    R2_Y, TRI, r.challenges[2], '第三挑战(主要)');     // 中央列
   svg += triangleDown(CX,    R3_Y, TRI, r.challenges[3], '第四挑战');           // 中央列
   // 末尾文字
-  svg += `<text x="${CX}" y="970" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">挑战金字塔</text>`;
+  svg += `<text x="${CX}" y="1010" text-anchor="middle" font-size="18" font-weight="700" fill="${txtColor}">挑战金字塔</text>`;   // +40
 
   svg += `</svg>`;
   document.getElementById('cycles-chart').innerHTML = svg;
@@ -659,7 +841,7 @@ function renderMapChart(r){
   const selfLabels = ['自觉自我', '高我', '基本自我'];
 
   const W = 600, H = 460;
-  const gridX = 200, gridY = 80;
+  const gridX = 168, gridY = 80;   /* V14：gridX 200→168，整组往左平移 32px（2 个汉字），与左列备注视觉对齐更居中 */
   const cellW = 90, cellH = 110, gap = 12;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:680px;display:block;margin:0 auto;" role="img" aria-label="数字能量分布出生圈">`;
@@ -675,7 +857,7 @@ function renderMapChart(r){
   // 右列备注
   for (let row=0; row<3; row++){
     const y = gridY + row*(cellH+gap) + cellH/2 + 4;
-    svg += `<text x="${W-30}" y="${y}" text-anchor="end" font-size="16" font-weight="700" fill="#2D2118">${selfLabels[row]}</text>`;
+    svg += `<text x="${W-62}" y="${y}" text-anchor="end" font-size="16" font-weight="700" fill="#2D2118">${selfLabels[row]}</text>`;
   }
 
   // 3×3 格子
@@ -749,7 +931,7 @@ function renderNameStudy(r, pinyinStr){
       <tr><th>身体 (4+5)</th><th>头脑 (1+8)</th><th>情绪 (2+3+6)</th><th>直觉 (7+9)</th></tr>
       <tr><td>${body}</td><td>${mind}</td><td>${emotion}</td><td>${intuition}</td></tr>
     </table>
-    <div class="note">身体/头脑/情绪/直觉四类倾向，对应四元素<strong>土水风火</strong>、四种气质，反映你内在能量分布。</div>
+    <div class="note">身体/头脑/情绪/直觉四类倾向，对应四元素<strong>土水风火</strong>四种气质，反映你内在能量分布。</div>
     <div class="note" style="color:var(--muted);font-size:12px;margin-top:4px;">※ 毕达哥拉斯四元素分类 · 经验性归纳，非官方流派标签。</div>
   </div>`;
 
@@ -761,20 +943,52 @@ function renderNameStudy(r, pinyinStr){
       <tr>${[1,2,3,4,5,6,7,8,9].map(n=>`<td>${counts[n]}</td>`).join('')}<td>${letterCount}</td></tr>
     </table>
     <div class="note">合计应等于姓名总字母数（不含空格）。</div>
+    <div class="note" style="color:var(--muted);font-size:12px;margin-top:6px;border-top:1px dashed var(--border);padding-top:6px;">※ 此表是<strong>姓名中数字能量分布</strong>（看哪类数字过多 / 平衡 / 缺失需调节），与「数字能量图」中的<strong>业力数字检测（Karmic Debt 13/14/16/19）</strong>是<strong>两个完全不同的维度</strong>——前者看姓名能量的偏移，后者看化简过程中"前世未还的债"。请勿混淆。</div>
   </div>`;
 
   document.getElementById('name-out').innerHTML = html;
 }
 
-/* ---------- 渲染：黑洞 ---------- */
+/* ---------- 渲染：黑洞（与教科书缺失数并列） ---------- */
 function renderHole(r){
-  if (r.holes.length === 0){
-    document.getElementById('hole-out').innerHTML = `<div class="card"><div class="note">你的生命地图覆盖了 1–9 全部数字，能量比较均衡，无明显黑洞。</div></div>`;
+  const holeBody = r.holes.length
+    ? `<div class="val" style="font-size:14px;">缺失：${r.holes.join('、')} 号能量</div>`
+    : `<div class="val" style="font-size:14px;">无（1–9 全覆盖，能量均衡）</div>`;
+  const missBody = r.missingNumbers.length
+    ? `<div class="val" style="font-size:14px;">缺失：${r.missingNumbers.join('、')} 号能量</div>`
+    : `<div class="val" style="font-size:14px;">无（出生日期已含 1–9 全部）</div>`;
+
+  let html = `<div class="grid">`;
+  html += `<div class="card"><div class="card-title">黑洞数字（21 位能量谱）</div>`;
+  html += `<div class="note">${POS.hole.d}</div><div style="margin-top:10px;">${holeBody}</div></div>`;
+  html += `<div class="card"><div class="card-title">教科书缺失数（出生日期）</div>`;
+  html += `<div class="note">${POS.missing.d}</div><div style="margin-top:10px;">${missBody}</div></div>`;
+  html += `</div>`;
+  html += `<div class="card"><div class="note">⚠ 两者算法维度不同：黑洞统计「21 位化简后能量谱」里缺失的数字；教科书缺失数只看「出生日期牌面数字」。例如 1997-9-27：黑洞可能缺 2/4/5/6，而教科书缺失数缺 3/4/5/6/8。请勿混为一谈。</div></div>`;
+  document.getElementById('hole-out').innerHTML = html;
+}
+
+/* ---------- 渲染：业力数（Karmic Debt Numbers）—— 不折叠独立模块 ---------- */
+function renderKarmic(r){
+  if (!r.karmicDebts || r.karmicDebts.length === 0){
+    document.getElementById('karmic-out').innerHTML = `<div class="card"><div class="note">✅ 你的人生地图中未检测到业力数（13/14/16/19），四个核心位和出生日的化简前总数都不含未还的业力课题。恭喜！</div></div>`;
     return;
   }
-  let html = `<div class="card"><div class="card-title">黑洞数字</div>`;
-  html += `<div class="val">${POS.hole.d}</div><div class="note">缺失：${r.holes.join('、')} 号能量</div></div>`;
-  document.getElementById('hole-out').innerHTML = html;
+  let html = `<div class="card"><div class="card-title">业力数字检测（Karmic Debt Numbers）</div>`;
+  html += `<div class="note">检测算法：当生命道路 / 表现 / 灵魂驱策 / 人格的"化简前中间总数" = 13 / 14 / 16 / 19 时，即带业力；出生日本身 = 13 / 14 / 16 / 19 也是业力生日。业力不是惩罚，是前世遗留的课题。</div>`;
+  html += `<div class="note" style="color:var(--muted);font-size:12px;margin-top:6px;border-top:1px dashed var(--border);padding-top:6px;">※ 这里检测的是<strong>化简过程中浮现的业力债务（13/14/16/19）</strong>，与「姓名学 → 业力图表」里的<strong>数字能量分布表</strong>是<strong>两个完全不同的维度</strong>——前者关注"债"，后者关注能量分布。请勿混淆。</div>`;
+  r.karmicDebts.forEach(kd => {
+    const info = KARMIC_INFO[kd.karmic];
+    if (!info) return;
+    html += `<div style="border-top:1px solid var(--border);padding-top:10px;margin-top:10px;">`;
+    html += `<div style="font-size:15px;font-weight:700;color:var(--primary);">${info.t}（${kd.label} = ${kd.notation}）</div>`;
+    html += `<div class="note" style="margin-top:4px;"><strong style="color:var(--dark);">核心功课：</strong>${info.core}</div>`;
+    html += `<div class="note"><strong style="color:var(--warn);">阴影面：</strong>${info.shadow}</div>`;
+    html += `<div class="note"><strong style="color:#3C6E8F;">成长建议：</strong>${info.suggest}</div>`;
+    html += `</div>`;
+  });
+  html += `</div>`;
+  document.getElementById('karmic-out').innerHTML = html;
 }
 
 /* ---------- 渲染：汇总打印 ---------- */
@@ -801,7 +1015,8 @@ function renderPrint(r){
     ['第二挑战', r.challenges[1]],
     ['第三挑战(主要)', r.challenges[2]],
     ['第四挑战', r.challenges[3]],
-    ['黑洞数字', r.holes.length ? r.holes.join('、') : '无']
+    ['黑洞数字（21位能量谱）', r.holes.length ? r.holes.join('、') : '无'],
+    ['教科书缺失数（出生日期）', r.missingNumbers.length ? r.missingNumbers.join('、') : '无']
   ];
 
   let html = `<div class="card" style="text-align:center;">
@@ -840,11 +1055,11 @@ function renderPrint(r){
     <div class="note" style="margin-top:8px;">循环：第一循环(月)=${r.cycles[0]} · 第二循环(日)=${r.cycles[1]} · 第三循环(年)=${r.cycles[2]}</div>
   </div>`;
 
-  // 黑洞
-  if (r.holes.length){
-    html += `<div class="card"><div class="card-title">黑洞数字</div>`;
-    html += `<div class="val">缺失：${r.holes.join('、')} 号能量 —— ${POS.hole.d}</div></div>`;
-  }
+  // 黑洞 + 教科书缺失数（并列）
+  html += `<div class="card"><div class="card-title">黑洞数字 vs 教科书缺失数</div>`;
+  html += `<div class="note"><strong style="color:var(--primary);">黑洞（21 位能量谱）</strong>：缺失 ${r.holes.length ? r.holes.join('、') : '无'} 号能量</div>`;
+  html += `<div class="note"><strong style="color:var(--primary);">教科书缺失数（出生日期）</strong>：缺失 ${r.missingNumbers.length ? r.missingNumbers.join('、') : '无'} 号能量</div>`;
+  html += `<div class="note">两者算法维度不同，结果可能不一致，详见「黑洞」Tab。</div></div>`;
 
   // 备注
   html += `<div class="card"><div class="card-title">备注</div>`;
@@ -907,8 +1122,9 @@ function calc(){
   renderNameStudy(lastResult, name);
   renderMapChart(lastResult);
   renderHole(lastResult);
+  renderKarmic(lastResult);
   // 移除 init-hidden
-  ['core-out','cycles-summary','cycles-chart','name-out','map-svg','hole-out'].forEach(id=>{
+  ['core-out','cycles-summary','cycles-chart','name-out','map-svg','hole-out','karmic-out'].forEach(id=>{
     const el = document.getElementById(id);
     if (el) el.classList.remove('init-hidden');
   });
