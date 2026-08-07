@@ -107,7 +107,7 @@
 <body>
 <div class="app">
   <h1>生命数字密码</h1>
-  <div class="tag">输入生日，探索你的数字能量地图 · 原型 v7</div>
+  <div class="tag">输入生日，探索你的数字能量地图 · 原型 <span id="verTagTop"></span></div>
 
   <div class="warn-bar">本工具所有内容<b>仅供个人成长探索与娱乐参考</b>，不构成任何专业建议。请理性看待，切勿沉迷。</div>
 
@@ -312,6 +312,9 @@
 </div>
 
 <script>
+/* ============ 版本号（统一管理，改版时只改这一处） ============ */
+var VERSION='V14';
+
 /* ============ 万年历：农历→阳历（1900-2100） ============ */
 var lunarInfo=[0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
 0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
@@ -383,6 +386,13 @@ var NUM_DESC={
   9:{n:'奉献者',c:'金黄',e:'圆满、博爱、智慧',light:'视野大、有灵性、乐于助人',shadow:'贪心、空想、边界模糊',guide:'聚焦一个使命深入服务，圆满来自深耕而非广博。'}
 };
 
+// 主数（Master Number）：11、22 为生命数字体系中保留不化简的特殊数
+// 它们自带放大版能量，同时蕴含化简后的根数课题（11→2、22→4）
+var MASTER_DESC={
+  11:{n:'灵感使者',e:'高维直觉、灵性洞察、启发他人',light:'灵感强、能看见别人看不见的关联、富有感染力',shadow:'焦虑、自我怀疑、想得多做得少',guide:'把灵感和洞察落地成具体创造，信任直觉但不困于焦虑。'},
+  22:{n:'卓越建造者',e:'把宏大愿景化为现实的承载力',light:'格局大、能统筹复杂工程、落地力强',shadow:'压力巨大、追求完美而拖延',guide:'把大目标拆成可执行步骤，先完成再完美。'}
+};
+
 var WUXING={
   1:{w:'金',rel:'金生水',inner:2,note:'外表刚硬独立，内心柔软渴望被懂；刀子嘴豆腐心，学会柔软表达。'},
   2:{w:'水',rel:'水生木',inner:4,note:'善沟通却直接，表面犹豫内心早有计划，缺自信时易随波逐流。'},
@@ -401,16 +411,35 @@ var EXT_DEF={
   sub:{name:'潜意识密码',desc:'公式 L+I+O，代表潜意识里的自动反应与隐藏驱力。'},
   outer:{name:'外心密码',desc:'公式 U+R+X，反映你面对外部世界的应激面具与社交形象。'},
   topR:{name:'人生目标 R',desc:'公式 R=Q+P，代表你此生最想活出的能量高度与终极目标。'},
-  talent:{name:'天赋数',desc:'生日全数相加取根，是你与生俱来的潜能资源库。'},
-  challenge:{name:'挑战数',desc:'由生日月份与日期取根相减所得，代表此生需要跨越的内在功课。'},
+  talent:{name:'天赋数',desc:'公式 = 出生「日」取根（国际数字学称 Birthday Number／生日数），例：18 日 → 1+8＝9。它是你与生俱来、随时可调用的一项具体天赋才能。注：出生于 11 日、22 日者保留「主数」不化简，写作 11/2、22/4。'},
+  challenge:{name:'挑战数',desc:'公式 = |出生月根 − 出生日根|，代表此生需要跨越的内在功课；结果为 0 时称「零挑战」。'},
   liunian:{name:'流年数',desc:'公式 = 当年年份根 + 出生月根 + 出生日根，代表当前年份的流动能量主题。'},
   star:{name:'星位密码',desc:'O、I、L 三数，代表命运星位上的关键能量锚点。'},
-  seven:{name:'七魄',desc:'I、J、K、L、M、N、O 七数，构成你完整的能量魂魄图谱。'}
+  seven:{name:'七魄',desc:'I、J、K、L、M、N、O 七数，构成你完整的能量魂魄图谱。'},
+  selfsub:{name:'自我潜意识数',desc:'公式 = 计数宽度——生日全部数字中，至少出现过一次的 1–9 数字有几个，结果在 1–9 之间。反映你的能量振动场是「广泛均衡」还是「集中专精」，也揭示紧急情况下的反应速度与信心。'}
 };
 
-function extMean(type,num){
-  var d=NUM_DESC[num]||NUM_DESC[1];
+function extMean(type,num,root,note){
   var base=EXT_DEF[type].desc;
+  if(note){base+='<br><span style="color:var(--pri);">本命推导：'+note+'</span><br>';}
+  if(type==='challenge' && num===0){
+    return base+' 当前挑战数为 <b>0</b>，即「零挑战」：它不指向某一项单一功课，而是九种课题同时在场——既意味着人生考题面更广，也意味着你天生具备应对全部课题的弹性。';
+  }
+  // 自我潜意识数：计数宽度——出现过的 1-9 数字个数
+  if(type==='selfsub'){
+    var ssLevel = num>=7 ? '较高的自我潜意识数表示你有<strong>广泛而均衡</strong>的能量振动场，面对突发状况时反应面广、信心足，能调动多种内在资源。'
+                  : num>=4 ? '中等的自我潜意识数表示你的能量场<strong>相对均衡但有所侧重</strong>：既有熟悉的领域可以依靠，也需要在少数缺口上刻意练习。'
+                  : '较低的自我潜意识数表示你的能量签名更<strong>集中、专精</strong>，在某些领域格外强势，但在陌生情境下可能需要更多准备来提升应变信心。';
+    var ssd=NUM_DESC[num]||NUM_DESC[1];
+    return base+' 当前自我潜意识数为 <b>'+num+'</b>（计数宽度）。'+ssLevel+' 对应能量「'+ssd.n+'」：'+ssd.e+'。提示：'+ssd.guide;
+  }
+  // 主数天赋（11/22）：保留不化简，同时解读其根数课题
+  if(type==='talent' && (num===11||num===22)){
+    var r=root||digitalRoot(num);
+    var dm=MASTER_DESC[num], dr=NUM_DESC[r]||NUM_DESC[1];
+    return base+' 当前为 <b>主数 '+num+'</b>（保留不化简，写作 '+num+'/'+r+'）：「'+dm.n+'」——'+dm.e+'。它同时蕴含根数「'+dr.n+'」（'+dr.e+'）的课题。天赋面是 '+dm.light+'；需注意的阴影是 '+dm.shadow+'。提示：'+dm.guide;
+  }
+  var d=NUM_DESC[num]||NUM_DESC[1];
   return base+' 当前数字 <b>'+num+'</b> 对应的能量是「'+d.n+'」：'+d.e+'。提示：'+d.guide;
 }
 
@@ -1258,16 +1287,18 @@ function lianheMean(code){
 function renderExtGrid(codes){
   var html='';
   codes.forEach(function(c){
-    html+='<div class="code-chip" data-type="'+c.type+'" data-num="'+c.num+'">'+
-      '<div class="cd">'+c.num+'</div><div class="nm">'+EXT_DEF[c.type].name+'</div></div>';
+    var disp=(c.disp!=null)?c.disp:c.num;
+    var root=(c.root!=null)?c.root:c.num;
+    html+='<div class="code-chip" data-type="'+c.type+'" data-num="'+c.num+'" data-disp="'+disp+'" data-root="'+root+'" data-note="'+(c.note||'')+'">'+
+      '<div class="cd">'+disp+'</div><div class="nm">'+EXT_DEF[c.type].name+'</div></div>';
   });
   document.getElementById('rExtGrid').innerHTML=html;
   document.querySelectorAll('#rExtGrid .code-chip').forEach(function(ch){
     ch.onclick=function(){
-      var type=this.dataset.type,num=+this.dataset.num;
+      var type=this.dataset.type,num=+this.dataset.num,root=+this.dataset.root,disp=this.dataset.disp,note=this.dataset.note||'';
       document.getElementById('rExtDetail').classList.remove('hide');
       document.getElementById('rExtDetail').innerHTML=
-        '<h4>'+EXT_DEF[type].name+' · '+num+'</h4>'+extMean(type,num);
+        '<h4>'+EXT_DEF[type].name+' · '+disp+'</h4>'+extMean(type,num,root,note);
     };
   });
 }
@@ -1295,13 +1326,32 @@ document.getElementById('go').onclick=function(){
   var starCode=[O,I,L];
   var sevenSouls=[I,J,K,L,M,N,O];
 
-  // 天赋数 / 挑战数（补充参考）
-  var talentRaw=(''+a.y+String(a.m).padStart(2,'0')+String(a.d).padStart(2,'0')).split('').reduce((x,c)=>x+ +c,0);
-  var talentNum=digitalRoot(talentRaw);
-  var challengeNum=Math.abs(digitalRoot(a.m)-digitalRoot(a.d))||9;
+  // 天赋数（生日数 Birthday Number）= 出生「日」逐位相加；中途落到 11/22 即保留主数，否则继续化简到个位数
+  // 注：主数集合 {11,22,33} 中的 33 不会出现在「日数」——日≤31，逐位相加最大只到 11（29 日）。33 是主命数 / 姓名数（表达数、灵数等）等全图其他位置的合法主数。
+  // 1-31 日中触发主数的只有：11 日、22 日、29 日（2+9=11）
+  var daySum=String(a.d).split('').reduce(function(x,c){return x+ +c;},0);
+  var talentMaster=(a.d===11||a.d===22||daySum===11||daySum===22);
+  var talentNum=talentMaster?((a.d===11||a.d===22)?a.d:daySum):digitalRoot(a.d); // 11/22/11，其余 1-9
+  var talentRoot=digitalRoot(talentNum);                                           // 主数取根：11→2，22→4
+  var talentDisp=talentMaster?(talentNum+'/'+talentRoot):(''+talentNum);
+  var talentNote;
+  if(a.d===11||a.d===22){
+    talentNote='出生日 '+a.d+' 为「主数（Master Number）」，保留不化简，写作 '+talentDisp+'；其根数为 '+talentRoot;
+  }else if(daySum===11||daySum===22){
+    talentNote='出生日 '+a.d+' → '+String(a.d).split('').join(' + ')+' = '+daySum+'，为主数（Master Number），保留不化简，写作 '+talentDisp+'；其根数为 '+talentRoot;
+  }else if(a.d>9){
+    talentNote='出生日 '+a.d+' → '+String(a.d).split('').join(' + ')+' = '+talentRoot;
+  }else{
+    talentNote='出生日 '+a.d+'，本身即为个位数，直接取用';
+  }
 
-  // 流年（当前年份 2026）
-  var yr=2026;
+  // 挑战数 = |出生月根 − 出生日根|，可为 0（零挑战），恒为 0-8
+  var mRoot=digitalRoot(a.m), dRoot=digitalRoot(a.d);
+  var challengeNum=Math.abs(mRoot-dRoot);
+  var challengeNote='月根 '+mRoot+'、日根 '+dRoot+' → | '+mRoot+' − '+dRoot+' | = '+challengeNum;
+
+  // 流年（跟随系统当前年份，自动更新）
+  var yr=new Date().getFullYear();
   var flow=digitalRoot(digitalRoot(yr)+digitalRoot(a.m)+digitalRoot(a.d));
 
   // 12组联合码
@@ -1312,11 +1362,16 @@ document.getElementById('go').onclick=function(){
     '晚年·家庭 KNV':''+K+N+V,'晚年·家庭 LNW':''+L+N+W,'61岁+ VWX':''+V+W+X
   };
 
-  // 缺失数字：只统计内码（七魄 I,J,K,L,M,N,O）
-  var inner7=[I,J,K,L,M,N,O];
-  var cnt={}; inner7.forEach(function(x){cnt[x]=(cnt[x]||0)+1;});
+  // 缺失数字：按「生日单字」口径统计（出生日期的 8 个数字 A-H，忽略 0，看 1-9 出现情况）
+  var birthDigits=tri[0]; // tri[0] = [A,B,C,D,E,F,G,H]
+  var cnt={}; birthDigits.forEach(function(x){if(x>0)cnt[x]=(cnt[x]||0)+1;});
   var pos=[],neg=[],miss=[];
   for(var k=1;k<=9;k++){if(cnt[k]===1)pos.push(k);else if(cnt[k]>1)neg.push(k+'(×'+cnt[k]+')');if(!cnt[k])miss.push(k);}
+
+  // 自我潜意识数 = 计数宽度：生日全部数字中至少出现过一次的 1–9 数字个数
+  var selfSub = Object.keys(cnt).length;
+  var appear = Object.keys(cnt).map(function(x){return +x;}).sort(function(a,b){return a-b;});
+  var selfSubNote = '生日数字 1–9 中出现的有 ' + appear.join('、') + '（共 '+appear.length+' 个），计数宽度 = '+selfSub;
 
   // 五行
   var wx=WUXING[main];
@@ -1337,7 +1392,9 @@ document.getElementById('go').onclick=function(){
   // 扩展码网格
   renderExtGrid([
     {type:'main',num:main},{type:'inner',num:innerCode},{type:'sub',num:subCode},{type:'outer',num:outerCode},
-    {type:'topR',num:R},{type:'liunian',num:flow},{type:'talent',num:talentNum},{type:'challenge',num:challengeNum}
+    {type:'topR',num:R},{type:'liunian',num:flow},
+    {type:'talent',num:talentNum,disp:talentDisp,root:talentRoot,note:talentNote},{type:'challenge',num:challengeNum,note:challengeNote},
+    {type:'selfsub',num:selfSub,note:selfSubNote}
   ]);
 
   // 用户具体生命数字三角形（只展示数字与标签，公式见上方示意图）
@@ -1381,6 +1438,11 @@ document.getElementById('go').onclick=function(){
       '<div class="fl-item"><b>七魄</b>=I·J·K·L·M·N·O='+sevenSouls.join('·')+'</div>'+
       '<div class="fl-item"><b>星位密码</b>=O·I·L='+starCode.join('·')+'</div>'+
       '<div class="fl-item"><b>流年数</b>=当年根+月根+日根='+flow+'</div>'+
+    '</div>'+
+    '<div class="fl-row">'+
+      '<div class="fl-item"><b>主性格</b>=三角顶点 O='+O+'</div>'+
+      '<div class="fl-item"><b>天赋数</b>=出生日取根='+talentDisp+'</div>'+
+      '<div class="fl-item"><b>挑战数</b>=|月根−日根|='+challengeNum+'</div>'+
     '</div>';
   document.getElementById('triNote').innerHTML='上方为数字代码示意图；此图为你的专属生命密码：底部 <b>'+bottom.join('')+'</b> 为阳历生日数字，顶点 <b>'+O+'</b> 即主性格。';
 
@@ -1425,6 +1487,9 @@ document.getElementById('go').onclick=function(){
 
   document.getElementById('result').scrollIntoView({behavior:'smooth'});
 };
+
+/* 版本号注入（仅顶部标签，footer 不显示版本） */
+document.getElementById('verTagTop').textContent=VERSION;
 </script>
 </body>
 </html>

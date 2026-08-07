@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hans">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -245,20 +245,20 @@
 <body>
 <div class="wrap">
   <header class="app">
-    <h1>生命靈數自動分析系統</h1>
-    <div class="sub">依據 David A. Phillips《生命靈數全書》演算法與原文內容開發</div>
+    <h1>生命灵数自动分析系统</h1>
+    <div class="sub">依据 David A. Phillips《生命灵数全书》演算法与原文内容开发</div>
   </header>
 
   <div class="app-actions">
-    <button class="abtn" id="btn-simp" type="button" title="切換繁體／簡體中文（不跳轉新頁）">繁／簡：繁</button>
-    <button class="abtn" id="btn-print" type="button">🖨 列印／匯出 PDF</button>
-    <button class="abtn" id="btn-share" type="button">🔗 複製分享連結</button>
+    <button class="abtn" id="btn-simp" type="button" title="切换繁体／简体中文（不跳转新页）">繁／简：简</button>
+    <button class="abtn" id="btn-print" type="button">🖨 打印／导出 PDF</button>
+    <button class="abtn" id="btn-share" type="button">🔗 复制分享链接</button>
   </div>
 
   <div class="card input-card">
     <div class="form-grid">
       <div class="field">
-        <label>出生年（公曆／陽曆）</label>
+        <label>出生年（公历／阳历）</label>
         <input id="in-year" type="number" inputmode="numeric" placeholder="例如 1973">
       </div>
       <div class="field">
@@ -273,23 +273,23 @@
     <div class="form-grid" style="margin-top:10px;">
       <div class="names">
         <div class="field" style="flex:1;">
-          <label>常用名字（中文名請輸入拼音）</label>
-          <input id="in-name1" type="text" placeholder="請輸入拼音（如 QINMIN）">
+          <label>常用名字（中文名请输入拼音）</label>
+          <input id="in-name1" type="text" placeholder="请输入拼音（如 QINMIN）">
         </div>
         <div class="field" style="flex:1;">
           <label>姓氏</label>
-          <input id="in-name2" type="text" placeholder="請輸入拼音（如 DENG）">
+          <input id="in-name2" type="text" placeholder="请输入拼音（如 DENG）">
         </div>
       </div>
     </div>
     <div class="form-grid" style="margin-top:10px;">
       <div class="field" style="flex:1 1 140px;">
-        <label>目標年份（流年）</label>
+        <label>目标年份（流年）</label>
         <input id="in-tyear" type="number" inputmode="numeric" placeholder="預設今年">
       </div>
     </div>
     <button class="btn" id="btn-go">開始分析</button>
-    <div class="hint">填寫出生年月日即可分析；姓名用於第 13 章姓名學。所有計算與解讀內容均直接取自原書。</div>
+    <div class="hint">填写出生年月日即可分析；姓名用于第 13 章姓名学。所有计算与解读内容均直接取自原书。</div>
   </div>
 
   <!-- 總覽卡 -->
@@ -305,16 +305,16 @@
   <main id="panels" class="before-analyze"></main>
 
   <footer>
-    本系統僅依《生命靈數全書》演算法與原文整理，供學習與參考之用。<br>
-    計算引擎、章節結構與解讀文字均對照原書目錄。<br>
-    生命靈數自動分析系統 V<span id="ver-num">12.0</span><br>
+    本系统仅依《生命灵数全书》演算法与原文整理，供学习与参考之用。<br>
+    计算引擎、章节结构与解读文字均对照原书目录。<br>
+    生命灵数自动分析系统 V<span id="ver-num">14.1</span><br>
     Powered By Kan Man Tang
   </footer>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<script>const VERSION = '12.0';</script>
+<script>const VERSION = '14.1';</script>
 <script>/* 生命靈數計算引擎 —— 嚴格依據《生命靈數全書》(David A. Phillips) 演算法
  * 出生圖佈局（九宮格）：
  *   3 6 9   ← 心智層面
@@ -2831,27 +2831,8 @@
     ]
   },
   "yRule": [
-    "從靈數上說，Y通常被認為是子音，其值為7。它通常以外在表達數出現，以諸如Kelly、Sally和Shirley等名字作為範例。但是，當Y的發音為I或E且名字中沒有出現真正的母音時，例外就出現了。只有在此時，我們才將Y作為母音進行分析，從而給名字一個7的靈魂內驅數，如Lyn和Ty、或Byrd、Hynd和Lynch等姓氏。❍ 外在表達數",
-    "要獲取每個名字的外在表達數，則遵循已為靈魂內驅數所建立起來的相同模式。透過將名字下面的子音的數值加在一起（如範例所示），可以求出它們的總數，然後輕鬆將它轉換為對等的個位數，即我們現在所認定的外在表達數。我們發現範例所使用的三個名字中，每一個都巧合地具有一個外在表達數5。",
-    "靈魂內驅數的範圍是1到11。除了22／4這個額外數字，外在表達數也是如此。經驗顯示，英文名字的母音不足以加到22；然而，要找到子音相加為此總數的名字並不罕見。",
-    "與每個外在表達數相關的特徵是：外在表達1",
-    "僅當名字具有單個J或S的子音時，才可能發生這種情況。很少有名字符合此限制，但在那些符合的名字中，Sue和Joe是最常用的名字。這個數字最顯著地表達出的特徵，可以從個人運動員或個人工作者身上看出。他們是需要自由設定自己的步調，以達到最大滿意度，並在體育活動中建立自信心的人。外在表達2",
-    "名字的例子有Samantha、Jose和Nicholas——子音總數為2或20的名字。這表示他們希望在快樂的環境中作為小組的一部分進行工作。他們是聰明的人，渴望開心和輕鬆的樂趣。這並不意謂著他們很膚淺，而是他們特別有能力享受有組織的活動。外在表達3",
-    "名字的例子有Sacha、Keith、Jody和Beth——子音總數為3、12、21或30的名字。外在表達數2表示一個人喜歡被娛樂，而3表示該人是娛樂者。他們從作為活躍聚會的靈魂人物中獲得極大的快樂，同時也為他人帶來很多樂趣，因為他們通常具有機智和開朗的態度。外在表達4",
-    "名字的例子有Eloise、Ada、Rod和Angus——子音總數為4、13或31的名字。這是一個極為務實的數字，屬於那些總是尋求用自己的手、腳或身體力行的行動者。他們特別喜歡運動和建造或修理東西。外在表達5",
-    "名字的例子有Dianna、Andrew、Stuart和Rachel——子音總數為5、14、23或32的名字。不受身體限制的自由是這些人經常需要的。然而，他們有時會讓誤解或羞怯來抑制他們表達的完整性。為了避免這種挫敗感，他們應該尋求不會局限他們的工作，以及與他們感到輕鬆的人的陪伴——簡單地說，他們需要和一群反應熱情、無拘無束的人在一起。外在表達6",
-    "名字的例子有James、Jane、Douglas和Angela——子音總數為6、15、24或33的名字。在這裡，人們總是傾向於將精力和注意力集中在家庭中。當然，這對於家庭來說似乎具有決定性的優勢，但同時也可能慣壞家人。必須謹慎行事，在寵愛家庭成員和滿足他們更現實的需求之間，保持務實的平衡，從而避免過度縱容。外在表達7",
-    "名字的例子有Oliver、Philip和Megan——子音總數為7、16、25或34的名字。這些人有自己做事的衝動，強烈地傾向於個人參與和根據自己的意願，和以自己的方式去學習，以此作為他們的動力。比起向他人學習的這種更順從的過程，他們更喜歡個人的成就感和自己去發現的滿足感。外在表達8",
-    "名字的例子有Adam、Samuel和Bill——子音總數為8、17、26或35的名字。在這裡，我們發現一股想要獨立表達的強烈渴望。這些人選擇獨立行事，只要有需要，他們就敢於與眾不同。以此方式，他們堅持自己強大的個性，因為他們覺察到，當認同於芸芸眾生的思想時，人類永遠無法實現高度的自我發展。外在表達9",
-    "名字的例子有Sarah、Pat和Don——子音總數為9、18、27或36的名字。無可否認，生活有其嚴肅和幽默的一面。平衡的個人生活是兩者成功地相互聯繫的結果。遺憾的是，擁有此外在表達數的人，往往過分強調生活的嚴肅面。如此一來，他們會吸引悲傷，有時會感到孤獨，這是由於沒有將生活中輕鬆美好的那一面，視為足夠重要的結果。他們能深思熟慮和進行穿透性的分析以及實現其崇高的理想，這些能力是很好的美德，但必須以一點點輕快的愉悅來平衡它們，才能使其身心恢復元氣。外在表達10",
-    "名字的例子有Craig、Paul、Shirley、Claude和Ann——子音總數為10、19、28或37。此數字的外在表達特徵，實際上與那些適用於9的特徵幾乎完全相反。在此要嚴防的是變得過於輕浮和膚淺，因為數字的真正功能，是適應生活中各種形勢和情況的變化。擁有這個外在表達數的人，應該準備發揮更大的決心，來履行自己在生活中的角色，因為只有在嚴肅與輕鬆中取得平衡，他們才能獲得成功。外在表達11",
-    "名字的例子有Allen、Joanne、Kara和Jonathan——子音總數為11或29的名字。這裡的主要需求是和諧。這個外在表達數，代表平衡的情感和靈性之表達。它的特殊目標，是在自己和他人心中灌輸一種要調和周圍環境、控制情緒，以及發展和分享對生活的深刻理解的渴望。只有遵循這條道路，個人才能被引導進入幸福的大門。外在表達22／4",
-    "名字的例子有Hamilton和Robert——少數幾個子音總數只為22的名字。我們知道這代表強大的組織力量，尤其是在商業和營利企業中。如果此人的主宰數是4、8或22／4，則必須特別注意保持平衡，因為這裡的強大傾向是過分強調賺錢，幾乎到了痴迷的地步。即使對於擁有其他主宰數的人，也適用於以下相同的建議：努力將組織技能擴展到商業以外的領域，在如值得信賴的慈善機構這種富有慈悲心的領域開展工作，特別是那些幫助弱勢兒童的，如果你希望獲得平衡的話。❍ 完整姓名數",
-    "姓名的靈數的第三個面向，是名字的整體實力的關鍵。這稱為完整姓名數。完整姓名數與主宰數有關，但力量不如主宰數大。",
-    "完整姓名數是透過將一個姓名的所有數字加在一起，然後以與獲得主宰數相同的方式，計算它們的總數而獲得的（請記住要使用你最認同的姓名，無論是你的名字、暱稱、中間名還是一個你選擇採用的新名字）。",
-    "完整姓名數的數值範圍是2到11，然後是22／4。完整姓名數的影響，程度在於其與主宰數的關係，而不是來自其自身的任何特定貢獻。完整姓名數可以平衡或增強主宰數的力量。如果完整姓名數在數值上與主宰數相同，則它將對主宰數提供最大的強化力道。如果完整姓名數與主宰數不同，但兩者都在同一層面上（身體層面為4、7和10；靈魂層面為2、5、8和11；心智層面為3、6和9；而22／4同時在身體層面和靈魂層面），則該層面會得到平衡的強化。",
-    "最後，如果完整姓名數與主宰數不在同一層面上，則將提供更大範圍的能量振動以開闊個性。姓名圖",
-    "分析人們姓名的靈魂內驅、外在表達和完整姓名數，將有助於你理解該名字對出生後的影響。姓名圖類似於為出生日期繪製的圖表，將揭示其對個性發展的貢獻的更多面向。"
+    "從靈數上說，Y 通常被認為是子音，其值為 7。它通常以外在表達數出現，以諸如 Kelly、Sally 和 Shirley 等名字作為範例。",
+    "但是，當 Y 的發音為 I 或 E 且名字中沒有出現真正的母音時，例外就出現了。只有在此時，我們才將 Y 作為母音進行分析，從而給名字一個 7 的靈魂內驅數，如 Lyn 和 Ty、或 Byrd、Hynd 和 Lynch 等姓氏。"
   ],
   "outerExpression": {
     "1": [
@@ -2894,48 +2875,50 @@
   "fullNameNumber": [
     "姓名的靈數的第三個面向，是名字的整體實力的關鍵。這稱為完整姓名數。完整姓名數與主宰數有關，但力量不如主宰數大。",
     "完整姓名數是透過將一個姓名的所有數字加在一起，然後以與獲得主宰數相同的方式，計算它們的總數而獲得的（請記住要使用你最認同的姓名，無論是你的名字、暱稱、中間名還是一個你選擇採用的新名字）。",
-    "完整姓名數的數值範圍是2到11，然後是22／4。完整姓名數的影響，程度在於其與主宰數的關係，而不是來自其自身的任何特定貢獻。完整姓名數可以平衡或增強主宰數的力量。如果完整姓名數在數值上與主宰數相同，則它將對主宰數提供最大的強化力道。如果完整姓名數與主宰數不同，但兩者都在同一層面上（身體層面為4、7和10；靈魂層面為2、5、8和11；心智層面為3、6和9；而22／4同時在身體層面和靈魂層面），則該層面會得到平衡的強化。",
-    "最後，如果完整姓名數與主宰數不在同一層面上，則將提供更大範圍的能量振動以開闊個性。姓名圖",
-    "分析人們姓名的靈魂內驅、外在表達和完整姓名數，將有助於你理解該名字對出生後的影響。姓名圖類似於為出生日期繪製的圖表，將揭示其對個性發展的貢獻的更多面向。"
+    "完整姓名數的數值範圍是 2 到 11，然後是 22／4。完整姓名數的影響，程度在於其與主宰數的關係，而不是來自其自身的任何特定貢獻。完整姓名數可以平衡或增強主宰數的力量。",
+    "如果完整姓名數在數值上與主宰數相同，則它將對主宰數提供最大的強化力道。如果完整姓名數與主宰數不同，但兩者都在同一層面上（身體層面為 4、7 和 10；靈魂層面為 2、5、8 和 11；心智層面為 3、6 和 9；而 22／4 同時在身體層面和靈魂層面），則該層面會得到平衡的強化。",
+    "最後，如果完整姓名數與主宰數不在同一層面上，則將提供更大範圍的能量振動以開闊個性。"
   ],
   "nameChart": [
     "分析人們姓名的靈魂內驅、外在表達和完整姓名數，將有助於你理解該名字對出生後的影響。姓名圖類似於為出生日期繪製的圖表，將揭示其對個性發展的貢獻的更多面向。",
-    "與姓名中各個字母對應的數字會放在圖表的正確位置，以顯示姓名的模式。為了說明這一點，我們將使用亞伯拉罕Abraham、伊莉莎白Elizabeth和約翰John的三個姓名例子，並構建姓名圖。",
+    "與姓名中各個字母對應的數字會放在圖表的正確位置，以顯示姓名的模式。為了說明這一點，我們將使用亞伯拉罕 Abraham、伊莉莎白 Elizabeth 和約翰 John 的三個姓名例子，並構建姓名圖。",
     "名字模式能顯著地幫助我們更全面地評估個性。當我們將姓名圖放在出生圖旁邊時，我們會尋找它們之間的關係。",
     "仔細檢查並列的姓名圖和出生圖，可以發現以下三種可能性：",
-    "．姓名圖是否提供任何優勢來平衡出生圖的弱點？這是姓名圖最理想的功能。例如，如果出生圖具有超敏感性之箭（數字2、5和8），而姓名圖具有情緒平衡之箭（2、5和8），則我們擁有最理想的平衡。如果姓名圖在靈魂層面上只有一個或兩個數字，則仍可以提供一些有價值的平衡。",
+    "．姓名圖是否提供任何優勢來平衡出生圖的弱點？這是姓名圖最理想的功能。例如，如果出生圖具有超敏感性之箭（數字 2、5 和 8），而姓名圖具有情緒平衡之箭（2、5 和 8），則我們擁有最理想的平衡。如果姓名圖在靈魂層面上只有一個或兩個數字，則仍可以提供一些有價值的平衡。",
     "．姓名圖是否增強了出生圖上已經存在的任何力量？這產生了最不希望出現的組合。例如，如果姓名圖具有與出生圖相同的箭頭、或者具有與出生圖上已經出現的數字相同的數字，則力量會過於集中。無論你在哪裡發生力量過分集中，總會發現複合的弱點——平衡才是更加需要。請記住，出生圖無法更改，但姓名可以更改。在這些情況下，明智的做法是對名字的結構進行修改，以嘗試提供更好的平衡。",
     "．姓名對出生圖毫無作用嗎？這種困境有時會發生。當姓名圖無法提供足夠的優勢，來平衡出生圖上的弱點、或者兩個圖表中都存在相同的弱點時，就會發生這種情況。無論哪種情況，該姓名沒有提供優點也沒有提供缺點。然而，通常只要拼寫略有變化、長度更改或名字互換就會帶來一定的優勢，以提供和諧與平衡。另一個選擇是，應考慮全面改名。",
-    "為了簡單地舉例說明，我們將採用以前使用過的合適人選的姓名以及出生日期——女王伊莉莎白二世（Queen Elizabeth II），於1926年4月21日出生。",
-    "最明顯的相似之處，是她的主宰數和完整姓名數均為7。這增強了主宰數，也表明在早期需要經歷許多個人犧牲，才能達到一定程度的適應力和自我控制，以及向他人傳授指導的能力。",
-    "此處表達最強烈的層面是靈性層面。它表明了直覺和敏感性之間的平衡（出生圖上的兩個2，被姓名圖上的雙倍的情緒平衡之箭所支持）。進一步的靈性力量，來自名字的靈魂內驅和外在表達數（分別為2和5），因為它們都是靈性數字。",
-    "女王的出生圖的心智層面，也很強大且十分平衡，儘管它沒有3，但透過她的日數3得到了補償。額外的心智平衡，由她的姓名圖的頂行指明出來。",
-    "她的心智和靈性平衡的結合，以及自我表達的能力（如她的出生圖上的兩個1所表明），揭示了她天生能夠輕鬆地表達自己想表達的內容和揭露的程度（姓名圖上的雙情緒平衡之箭），但是她的主宰數7和完整姓名數7，表明關於什麼應該和不應該在公開場合說，她還有很多地方要學習。她覺得這樣的順從很困難，因為她認為這樣做會限制她的自由。",
-    "她的出生圖上沒有任何力量箭頭。然而，她最強的內在指導源於她的直覺。這又是透過她的姓名圖中的兩個2（位於計畫者之箭的中心）來加強的。",
+    "【案例：女王伊莉莎白二世】",
+    "為了簡單地舉例說明，我們將採用以前使用過的合適人選的姓名以及出生日期——女王伊莉莎白二世（Queen Elizabeth II），於 1926 年 4 月 21 日出生。",
+    "最明顯的相似之處，是她的主宰數和完整姓名數均為 7。這增強了主宰數，也表明在早期需要經歷許多個人犧牲，才能達到一定程度的適應力和自我控制，以及向他人傳授指導的能力。",
+    "此處表達最強烈的層面是靈性層面。它表明了直覺和敏感性之間的平衡（出生圖上的兩個 2，被姓名圖上的雙倍的情緒平衡之箭所支持）。進一步的靈性力量，來自名字的靈魂內驅和外在表達數（分別為 2 和 5），因為它們都是靈性數字。",
+    "女王的出生圖的心智層面，也很強大且十分平衡，儘管它沒有 3，但透過她的日數 3 得到了補償。額外的心智平衡，由她的姓名圖的頂行指明出來。",
+    "她的心智和靈性平衡的結合，以及自我表達的能力（如她的出生圖上的兩個 1 所表明），揭示了她天生能夠輕鬆地表達自己想表達的內容和揭露的程度（姓名圖上的雙情緒平衡之箭），但是她的主宰數 7 和完整姓名數 7，表明關於什麼應該和不應該在公開場合說，她還有很多地方要學習。她覺得這樣的順從很困難，因為她認為這樣做會限制她的自由。",
+    "她的出生圖上沒有任何力量箭頭。然而，她最強的內在指導源於她的直覺。這又是透過她的姓名圖中的兩個 2（位於計畫者之箭的中心）來加強的。",
     "觀察一些有關伊莉莎白女王的個性的其他要點，將對靈數學的學生有所幫助：",
-    "．主宰數7的人，通常是最值得信賴和最誠實的人。這種美德在這裡尤為明顯，因為伊莉莎白女王非常重視自己作為「信仰守護者」的地位，並以毫不妥協的真誠努力履行其教會的道德準則。她很憎恨虛偽，因此她家庭中的衝突一定使她很不高興。女王由於對家庭的強烈責任感，而深深地感受到了這種不和諧感（由沒有3的出生圖上的6和9表示）。",
-    "．有關女王的圖表和金字塔的眾多因素表明，對她來說生活是非常嚴肅的事情。對於輕率之事，她幾乎沒有時間也沒有耐心。她強大的靈魂層面以及金字塔高峰的數字表明，她是一個永遠不會推卸責任的人。實際上，金字塔底部的最後一個數字9，表示她在人生的最後階段——成就期——還要承擔更多的責任。",
-    "．她敏銳的直覺（雙2）與主宰數7和完整姓名數7相結合，非常可靠地表明了她的決策方式。毫無疑問，許多女王的顧問抱怨，她沒有像她應該地那樣頻繁地諮詢他們。在她的心中，她並不需要這麼做，而且現在已經通過了金字塔的第三個高峰，並具有高度發展的成熟度，比起顧問指導她，她可能還可以指導顧問更多。",
-    "．她的出生圖上的雙1和雙2，表示女王有能力欣賞和理解他人的觀點。她可以很快速地理解一個有爭議的問題的雙面——在如此大量地與公眾人物打交道時，特別是政客，這是一個重要的屬性。",
-    "．她的皇室地位的嚴肅性，占據了伊莉莎白女王的大部分思想，因此她需要被鼓勵讓自己的生活加入一些消遣。菲利普親王的高度幽默感在這方面特別有幫助。在他的鼓勵下，女王很快就透過她的日數3，發現了她的「另一個」自我。她的外在表達數5的進一步影響表明，她有能力享受輕娛樂，並不時的渴望能自由地盡情享受於其中。",
-    "．分析菲利普親王的姓名和出生日期（1921年6月10日），可以為學生提供一個很好的練習。從這一點可以看出，他為女王提供了多少奉獻與支持，以及這給了她多麼大的幫助，使她能輕鬆地在公共生活的高位中優雅而親切地展現。這也將很清楚地看出，女王和她的丈夫是多麼的適合彼此。沒有他的支持，她的敏銳性可能導致伊莉莎白女王有些退縮。",
+    "．主宰數 7 的人，通常是最值得信賴和最誠實的人。這種美德在這裡尤為明顯，因為伊莉莎白女王非常重視自己作為「信仰守護者」的地位，並以毫不妥協的真誠努力履行其教會的道德準則。她很憎恨虛偽，因此她家庭中的衝突一定使她很不高興。女王由於對家庭的強烈責任感，而深深地感受到了這種不和諧感（由沒有 3 的出生圖上的 6 和 9 表示）。",
+    "．有關女王的圖表和金字塔的眾多因素表明，對她來說生活是非常嚴肅的事情。對於輕率之事，她幾乎沒有時間也沒有耐心。她強大的靈魂層面以及金字塔高峰的數字表明，她是一個永遠不會推卸責任的人。實際上，金字塔底部的最後一個數字 9，表示她在人生的最後階段——成就期——還要承擔更多的責任。",
+    "．她敏銳的直覺（雙 2）與主宰數 7 和完整姓名數 7 相結合，非常可靠地表明了她的決策方式。毫無疑問，許多女王的顧問抱怨，她沒有像她應該地那樣頻繁地諮詢他們。在她的心中，她並不需要這麼做，而且現在已經通過了金字塔的第三個高峰，並具有高度發展的成熟度，比起顧問指導她，她可能還可以指導顧問更多。",
+    "．她的出生圖上的雙 1 和雙 2，表示女王有能力欣賞和理解他人的觀點。她可以很快速地理解一個有爭議的問題的雙面——在如此大量地與公眾人物打交道時，特別是政客，這是一個重要的屬性。",
+    "．她的皇室地位的嚴肅性，占據了伊莉莎白女王的大部分思想，因此她需要被鼓勵讓自己的生活加入一些消遣。菲利普親王的高度幽默感在這方面特別有幫助。在他的鼓勵下，女王很快就透過她的日數 3，發現了她的「另一個」自我。她的外在表達數 5 的進一步影響表明，她有能力享受輕娛樂，並不時的渴望能自由地盡情享受於其中。",
+    "．分析菲利普親王的姓名和出生日期（1921 年 6 月 10 日），可以為學生提供一個很好的練習。從這一點可以看出，他為女王提供了多少奉獻與支持，以及這給了她多麼大的幫助，使她能輕鬆地在公共生活的高位中優雅而親切地展現。這也將很清楚地看出，女王和她的丈夫是多麼的適合彼此。沒有他的支持，她的敏銳性可能導致伊莉莎白女王有些退縮。",
     "這裡並不是要進行一個詳盡的分析，而是要指出靈數學各個面向之間的相互關係。女王被選為範例，是因為她享譽全球並擁有單一的名字。在一般情況下，我們至少要為一個人分析兩個名字（名字和姓氏）。如果他們從事演藝事業或出於專業原因而使用筆名或藝名，我們也必須分析這些名字，以確定各個名字之間的關係以及出生日期的特徵。"
   ],
   "nameChoosing": [
     "從以上分析可以明顯看出，伊莉莎白這個名字對女王有多麼大的幫助。當我們分析成功人士時，發現這是一個始終如一的事實：幾乎無一例外的，他們的名字將與他們天生的力量保持協調一致，並成為其力量的來源。",
     "一對夫婦要如何選擇新生嬰兒的名字呢？很少有人認為，有必要諮詢靈數學家來分析想取的名字，但是這種做法能夠透過在出生的特徵和名字的特徵之間，建立更多的和諧，而極大地促進孩子的個體性發展。",
     "在靈數實踐中，我們發現一些具有驚人啟發性的實例，即父母們在不知不覺中為孩子選擇了理想的名字。這就好似他們是因為某種他們幾乎或根本不知道的力量，而產生強烈印象要選擇這些名字。不幸的是，我們經常發現，人們的名字使得他們的個性缺乏理想的和諧或平衡。有些人已經意識到這個問題，並更改他們所使用的名字，並在之後獲得了成功。這通常發生在演藝圈和文學界。",
+    "【案例：演藝圈的改名故事】",
     "幾年前，一位迷人的年輕女子來找我尋求建議，關於如何改善自己的表演，從而在電影、電視劇和戲劇中得到更好的角色。她聽說，在數字上有可能以改名帶來她所說的「更好的運氣」。直到那時，她只設法在電視廣告中得到工作，但她想在戲劇中扮演浪漫的角色。",
     "她的靈數分析表明，她的問題的一個關鍵面向，是她的出生圖上的超敏感性之箭，但無論是她的主宰數（6）、姓名圖或靈魂內驅數和外在表達數都沒有抵消力。這抑制了她的情感表達。",
-    "補救措施是建議改名。這樣做的方式是，我讓她選擇一些讓她感覺舒服的其他藝名。從她下次來訪給我的清單中，我選擇了一個表現最突出的名字，能夠在她的敏感性與她的主宰數6所賦予的活躍創造力相結合時，為她提供更好的平衡表達。她喜歡這個新名字，並立即開始在專業場合使用它。一個月之內，她在一部浪漫的新電視劇中扮演了重要角色。這次的角色不是主角，不久之後，她出人意料地在一部戲劇中扮演了主角。",
+    "補救措施是建議改名。這樣做的方式是，我讓她選擇一些讓她感覺舒服的其他藝名。從她下次來訪給我的清單中，我選擇了一個表現最突出的名字，能夠在她的敏感性與她的主宰數 6 所賦予的活躍創造力相結合時，為她提供更好的平衡表達。她喜歡這個新名字，並立即開始在專業場合使用它。一個月之內，她在一部浪漫的新電視劇中扮演了重要角色。這次的角色不是主角，不久之後，她出人意料地在一部戲劇中扮演了主角。",
     "隨著人們逐漸意識到，名字在他們生活中的重要作用，他們將尋求指導來明智地選擇名字。靈數學家被諮詢的頻率開始增加，人們請他們為專業人士以及新生嬰兒、商人甚至是那些發現生活對他們不如自己預期那般友善的人，建議合適的名字。",
     "在考慮個人或組織對名字的接受度時，我們考慮以下因素：",
     "．名字應該為出生圖提供平衡，也就是在出生圖上存在弱點的地方，提供姓名圖上的力量。這有助於該人克服其天生的弱點。",
     "．在出生圖上出現力量的地方，姓名圖不應添加相同的力量，以免在特定方向上擁有過多力量而產生不平衡。",
     "．姓名圖的箭頭不應與出生圖的箭頭相同，因為這將無法平衡。",
     "以下範例清楚地說明了這些要點：",
-    "出生圖對心智層面的高度重視，由主宰數加以強調。明顯的主要弱點是在靈性（感覺）區域，如超敏感性之箭所示。選擇Keith這個名字對這個孩子的敏感性有很大幫助，可以透過在姓名圖上添加情緒平衡之箭來保持平衡。進一步的幫助來自完整姓名數（8）和靈魂內驅數（5），這兩個數字都是感覺數字。同時，名字給心智帶來最少的強調，從而避免在這個方向上失去平衡。總之，對於出生日期為1963年7月16日的孩子，很難想到比Keith更合適的名字。",
-    "當主宰數為4且在出生圖的務實層面上，具有如此大的權重時，明智的選擇是避免使用1、4、7或10的姓名數，或者是用太多數字填滿姓名圖的務實層面。Charles在這裡非常適合，因為它在務實層面上僅加了兩個1。更重要的是，這樣的名字提供並彌補了在出生圖中缺席的強大心智力量。姓名圖提供了出生圖上所有缺失的數字，但6除外。6同時出現在姓名中的靈魂內驅數和外在表達數。David會是一個非常不合適這個孩子的名字。請對其進行分析作為練習，看看它在務實層面上是多麼強大。還請注意，它是如何在極其物質主義的方向上，使得個人的力量失去平衡，而在靈魂和心智層面上幾乎沒有什麼可以補償的。"
+    "【範例 1】出生圖對心智層面的高度重視，由主宰數加以強調。明顯的主要弱點是在靈性（感覺）區域，如超敏感性之箭所示。選擇 Keith 這個名字對這個孩子的敏感性有很大幫助，可以透過在姓名圖上添加情緒平衡之箭來保持平衡。進一步的幫助來自完整姓名數（8）和靈魂內驅數（5），這兩個數字都是感覺數字。同時，名字給心智帶來最少的強調，從而避免在這個方向上失去平衡。總之，對於出生日期為 1963 年 7 月 16 日的孩子，很難想到比 Keith 更合適的名字。",
+    "【範例 2】當主宰數為 4 且在出生圖的務實層面上，具有如此大的權重時，明智的選擇是避免使用 1、4、7 或 10 的姓名數，或者是用太多數字填滿姓名圖的務實層面。Charles 在這裡非常適合，因為它在務實層面上僅加了兩個 1。更重要的是，這樣的名字提供並彌補了在出生圖中缺席的強大心智力量。姓名圖提供了出生圖上所有缺失的數字，但 6 除外。6 同時出現在姓名中的靈魂內驅數和外在表達數。David 會是一個非常不合適這個孩子的名字。請對其進行分析作為練習，看看它在務實層面上是多麼強大。還請注意，它是如何在極其物質主義的方向上，使得個人的力量失去平衡，而在靈魂和心智層面上幾乎沒有什麼可以補償的。"
   ],
   "relationship": [
     "形體外表經常會將兩個人吸引在一起，然後愛苗在彼此之間逐漸萌芽。有些人因瞬間的愛而一見鍾情，似乎在彼此的心中敲響了鐘聲。然而，也有其他伴侶是因為欽佩或仰慕彼此的思想或靈魂而在一起。不管那為你的關係增添精彩的愛情故事幾許，夫妻要在無盡的歲月中，持續在愛情、和平與互惠中共同生活，就要遵循嚴格的指導方針。",
@@ -3091,7 +3074,47 @@
       "• 你的<b>日數<\/b>和<b>出生圖上的數字分佈<\/b>：這些將提供比有箭頭的人更為細緻的個人化信息。",
       "• 沒有箭頭不是「缺失」——而是一種不同的能量配置。你擁有的是一張白紙，可以更自由地書寫自己的人生故事。"
     ]
-  }
+  },
+  "soulUrgeList": [
+    "將出生日期的各個數字相加，以獲得主宰數的相同方式，將姓名中每個母音的各個數字相加，以獲得靈魂內驅數，如上述三個範例中的母音數字所示。亞伯拉罕（Abraham）名字的靈魂內驅數是3；伊莉莎白（Elizabeth）是2；約翰（John）是6。一個人所使用的每個姓名都遵循此計算方法。",
+    "母音是一個單詞的靈魂，也可說是它的生命。每位訓練有素的歌手、演員和演說家都知道這一點。因此，很明顯地，一個人的名字的母音數值與該人的內在感覺有著密切的關係，內在感覺的本質，可以從母音數值的總數中辨別出來，該總數被適當地稱為靈魂內驅數。",
+    "從一個名字的靈魂內驅數中，我們可以了解一個個體的靈性敏感性、毅力和動力的一些更微妙的面向。這些可以透過多種方式表達：透過感覺、情感、欲望、幻想等。表達形式會因每個靈魂內驅數而有所不同。",
+    "靈魂內驅1\n這僅會在包含單個母音「A」的名字中表現出來：Ann、Jack、Jan和Chad。這裡指出了個人的表達自由的需求。要達到此目的的最好方法，將由該人的主宰數展現出來。總的來說，這個靈魂內驅數意謂著對自由的強烈渴望；也就是說，他們要給自己足夠的時間放鬆或進行某種個人的藝術表達。",
+    "靈魂內驅2\n代表性的名字是Anna、Elizabeth、Adam和Oliver——母音總數為2或20。這裡有一種以平衡的方式做事的衝動，以便在每個表達中都展現出和諧。這些人通常都是直覺很強的人，偏好自然的遠勝於人造的。在與他人打交道時，他們非常公平，並且出於同樣的原因，他們也期望得到同樣的回報。",
+    "靈魂內驅3\n代表性的名字是Amanda、Joanne和Samantha——母音總數分別為3、12或21。由於其重點總是錨定在心智上，作為靈魂內驅數的3，會將感覺與思考和評估結合在一起。結果通常是對人和情況的有效評估。這在商業和專業活動中可能會非常有益。",
+    "靈魂內驅4\n代表性的名字是Stuart、Una、Angus和Paul——母音總數為4或13。當務實的4在靈魂層面上進行表達時，表示該個人對涵蓋宗教、愛情、婚姻和生活等各種靈性和情感主題，保持非常有條理的保守意見。他們的觀點通常頗為正統，且不會有情感上的爆發。",
+    "靈魂內驅5\n代表性的名字是Mike、Shirley、Keith和Drew——母音總數為5或14。由於其自然力量來自於其在靈魂層面上的位置，因此5的出現作為靈魂內驅數，表示存在深刻的感受和對「自由和被接受」的需求，以更好地表達這些感受。無論涉及到生活的哪個方面，這些人都會對它產生強大的感受，並且會有自己的看法（除非出生圖中存在某些強烈的抑制作用，例如超敏感性之箭）。",
+    "靈魂內驅6\n代表性的名字是Charles、Allen、Megan和Jane——母音總數為6或15。愛和創造力是這裡的關鍵字。無論是在工作中、在業餘愛好中還是在家中，他們都應抓住一切機會創造性地表達自己。如果他們陷入過度焦慮，他們的力量將減退成絕望和折磨。",
+    "靈魂內驅7\n代表性的名字是Joan、Angela、Hamilton和Marianne——母音總數為7或16。在這裡，想要教導和幫助他人的衝動是主要動力。但是，他們對於教導他們的其他人卻不太友善，而是更喜歡根據自己的經驗學習。他們常常為此特權付出高昂的代價，直到他們了解，人類之間應該在雙向關係中互相幫助。",
+    "靈魂內驅8\n代表性的名字是Joanna、Bruce和Jonathan——母音總數為8或17。比起希望獨立行事，這些人經常會在心理上與不被常規所接受的習慣劃清界線，如果這些習慣在他們看來不合理的話。他們對個人的思想和自由有強烈偏愛，但必須謹防變得冷漠。生活教導我們的一個重要課題是，我們有必要參與社會，而不必受其束縛。",
+    "靈魂內驅9\n代表性的名字是Samuel、Claude和Jim——母音總數為9或18。在積極生活時，這些人總是在敏銳的人道主義責任感的指導下，尋求改善生活的品質。如果消極地生活，他們往往會變得過於雄心勃勃，而失衡的理想主義也會纏著他們從事許多以自我為中心（且常常是不成功的）的行為。這個數字的力量，應該得到尊重和做利他的利用，否則可能成為野蠻的監工。",
+    "靈魂內驅10\n代表性的名字是Lisa、Craig、David和Douglas——母音總數為10或19。形而上學的靈活性是此數字所賦予的力量，它的能力是能夠廣泛地發揮以靈魂為導向的力量。運用直覺、超視覺力、超聽覺力、思想轉移和星體投射等形而上學的天賦，將消除社會對這些人施加的那些「抑制人類的個體性表達」的諸多限制。在日常生活中有建設性地運用這些能力中的任何一種，都可以使這些人從被束縛於塵世的狀態中解放出來，並使人類覺知到神性——生命的本質。",
+    "靈魂內驅11\n代表性的名字是Robert、Errol和Cleo——母音總數只會是11。11的特殊靈性品質在這裡顯而易見。作為靈魂內驅數，它提供了寶貴的直覺強度，如果個人在出生圖上或其主宰數的一部分沒有直覺強度的話，則這將特別有用，它還可以增強慈悲心，使人能夠理解他人的感受。"
+  ],
+  "outerExpressionList": [
+    "要獲取每個名字的外在表達數，則遵循已為靈魂內驅數所建立起來的相同模式。透過將名字下面的子音的數值加在一起（如範例所示），可以求出它們的總數，然後輕鬆將它轉換為對等的個位數，即我們現在所認定的外在表達數。我們發現範例所使用的三個名字中，每一個都巧合地具有一個外在表達數5。",
+    "靈魂內驅數的範圍是1到11。除了22／4這個額外數字，外在表達數也是如此。經驗顯示，英文名字的母音不足以加到22；然而，要找到子音相加為此總數的名字並不罕見。",
+    "與每個外在表達數相關的特徵是：",
+    "外在表達1\n僅當名字具有單個J或S的子音時，才可能發生這種情況。很少有名字符合此限制，但在那些符合的名字中，Sue和Joe是最常用的名字。這個數字最顯著地表達出的特徵，可以從個人運動員或個人工作者身上看出。他們是需要自由設定自己的步調，以達到最大滿意度，並在體育活動中建立自信心的人。",
+    "外在表達2\n名字的例子有Samantha、Jose和Nicholas——子音總數為2或20的名字。這表示他們希望在快樂的環境中作為小組的一部分進行工作。他們是聰明的人，渴望開心和輕鬆的樂趣。這並不意謂著他們很膚淺，而是他們特別有能力享受有組織的活動。",
+    "外在表達3\n名字的例子有Sacha、Keith、Jody和Beth——子音總數為3、12、21或30的名字。外在表達數2表示一個人喜歡被娛樂，而3表示該人是娛樂者。他們從作為活躍聚會的靈魂人物中獲得極大的快樂，同時也為他人帶來很多樂趣，因為他們通常具有機智和開朗的態度。",
+    "外在表達4\n名字的例子有Eloise、Ada、Rod和Angus——子音總數為4、13或31的名字。這是一個極為務實的數字，屬於那些總是尋求用自己的手、腳或身體力行的行動者。他們特別喜歡運動和建造或修理東西。",
+    "外在表達5\n名字的例子有Dianna、Andrew、Stuart和Rachel——子音總數為5、14、23或32的名字。不受身體限制的自由是這些人經常需要的。然而，他們有時會讓誤解或羞怯來抑制他們表達的完整性。為了避免這種挫敗感，他們應該尋求不會局限他們的工作，以及與他們感到輕鬆的人的陪伴——簡單地說，他們需要和一群反應熱情、無拘無束的人在一起。",
+    "外在表達6\n名字的例子有James、Jane、Douglas和Angela——子音總數為6、15、24或33的名字。在這裡，人們總是傾向於將精力和注意力集中在家庭中。當然，這對於家庭來說似乎具有決定性的優勢，但同時也可能慣壞家人。必須謹慎行事，在寵愛家庭成員和滿足他們更現實的需求之間，保持務實的平衡，從而避免過度縱容。",
+    "外在表達7\n名字的例子有Oliver、Philip和Megan——子音總數為7、16、25或34的名字。這些人有自己做事的衝動，強烈地傾向於個人參與和根據自己的意願，和以自己的方式去學習，以此作為他們的動力。比起向他人學習的這種更順從的過程，他們更喜歡個人的成就感和自己去發現的滿足感。",
+    "外在表達8\n名字的例子有Adam、Samuel和Bill——子音總數為8、17、26或35的名字。在這裡，我們發現一股想要獨立表達的強烈渴望。這些人選擇獨立行事，只要有需要，他們就敢於與眾不同。以此方式，他們堅持自己強大的個性，因為他們覺察到，當認同於芸芸眾生的思想時，人類永遠無法實現高度的自我發展。",
+    "外在表達9\n名字的例子有Sarah、Pat和Don——子音總數為9、18、27或36的名字。無可否認，生活有其嚴肅和幽默的一面。平衡的個人生活是兩者成功地相互聯繫的結果。遺憾的是，擁有此外在表達數的人，往往過分強調生活的嚴肅面。如此一來，他們會吸引悲傷，有時會感到孤獨，這是由於沒有將生活中輕鬆美好的那一面，視為足夠重要的結果。他們能深思熟慮和進行穿透性的分析以及實現其崇高的理想，這些能力是很好的美德，但必須以一點點輕快的愉悅來平衡它們，才能使其身心恢復元氣。",
+    "外在表達10\n名字的例子有Craig、Paul、Shirley、Claude和Ann——子音總數為10、19、28或37。此數字的外在表達特徵，實際上與那些適用於9的特徵幾乎完全相反。在此要嚴防的是變得過於輕浮和膚淺，因為數字的真正功能，是適應生活中各種形勢和情況的變化。擁有這個外在表達數的人，應該準備發揮更大的決心，來履行自己在生活中的角色，因為只有在嚴肅與輕鬆中取得平衡，他們才能獲得成功。",
+    "外在表達11\n名字的例子有Allen、Joanne、Kara和Jonathan——子音總數為11或29的名字。這裡的主要需求是和諧。這個外在表達數，代表平衡的情感和靈性之表達。它的特殊目標，是在自己和他人心中灌輸一種要調和周圍環境、控制情緒，以及發展和分享對生活的深刻理解的渴望。只有遵循這條道路，個人才能被引導進入幸福的大門。",
+    "外在表達22／4\n名字的例子有Hamilton和Robert——少數幾個子音總數只為22的名字。我們知道這代表強大的組織力量，尤其是在商業和營利企業中。如果此人的主宰數是4、8或22／4，則必須特別注意保持平衡，因為這裡的強大傾向是過分強調賺錢，幾乎到了痴迷的地步。即使對於擁有其他主宰數的人，也適用於以下相同的建議：努力將組織技能擴展到商業以外的領域，在如值得信賴的慈善機構這種富有慈悲心的領域開展工作，特別是那些幫助弱勢兒童的，如果你希望獲得平衡的話。"
+  ],
+  "fullNameNumberIntro": [
+    "姓名的靈數的第三個面向，是名字的整體實力的關鍵。這稱為完整姓名數。完整姓名數與主宰數有關，但力量不如主宰數大。",
+    "完整姓名數是透過將一個姓名的所有數字加在一起，然後以與獲得主宰數相同的方式，計算它們的總數而獲得的（請記住要使用你最認同的姓名，無論是你的名字、暱稱、中間名還是一個你選擇採用的新名字）。",
+    "完整姓名數的數值範圍是 2 到 11，然後是 22／4。完整姓名數的影響，程度在於其與主宰數的關係，而不是來自其自身的任何特定貢獻。完整姓名數可以平衡或增強主宰數的力量。",
+    "如果完整姓名數在數值上與主宰數相同，則它將對主宰數提供最大的強化力道。如果完整姓名數與主宰數不同，但兩者都在同一層面上（身體層面為 4、7 和 10；靈魂層面為 2、5、8 和 11；心智層面為 3、6 和 9；而 22／4 同時在身體層面和靈魂層面），則該層面會得到平衡的強化。",
+    "最後，如果完整姓名數與主宰數不在同一層面上，則將提供更大範圍的能量振動以開闊個性。"
+  ]
 };</script>
 <script>/* 生命靈數分析系統 · 介面渲染邏輯
  * 依賴：window.Numerology（引擎）、window.BOOK（書籍原文 JSON）
@@ -3378,6 +3401,22 @@
   }
   function pill(t, cls) { return '<span class="pill ' + (cls || 'gold') + '">' + esc(t) + '</span>'; }
   function section(title, body) { return '<h2 class="ch">' + esc(title) + '</h2>' + (body || ''); }
+
+  // 通用渲染：將 list 中每條 "前綴N\n正文" 解析為帶 ● 標題的卡片；無前綴匹配視為引言段
+  function renderChapterEntry(item, prefix) {
+    var re = new RegExp('^' + prefix + '\\s*(\\S+)\\s*[\\n]?');
+    var m = item.match(re);
+    if (m) {
+      var num = m[1];
+      var body = item.substring(m[0].length).trim();
+      var card = '<div style="margin:8px 0;padding:10px 12px;background:#FAF6EE;border-radius:6px;border-left:3px solid #C4956A;">';
+      card += '<b style="color:var(--brown-d);font-size:13.5px;">● ' + esc(prefix) + esc(num) + '</b>';
+      card += '<p style="font-size:12.5px;line-height:1.75;margin:4px 0 0;">' + esc(body) + '</p>';
+      card += '</div>';
+      return card;
+    }
+    return '<p style="font-size:12.5px;color:#666;margin:6px 0;line-height:1.75;">' + esc(item) + '</p>';
+  }
   function emptyPerson(msg) {
     var m = msg || '請先填寫出生年月日並點擊「開始分析」，<br>此章節會依你的出生圖顯示專屬解讀。';
     return '<div class="empty"><div class="big">🔢</div>' + m + '</div>';
@@ -3407,7 +3446,94 @@
     return s;
   }
 
-  // ---------------- SVG：金字塔（仿原書P190-P193 四層金字塔模型） ----------------
+    // ---------------- SVG：金字塔（仿 mangala-life-numbers 樣式） ----------------
+  // 高峰 = 三角形 △  |  基底 = 圓角矩形 □
+  function svgPyramid(py) {
+    var TW = 68, TH = 60;
+    var BW = 64, BH = 46;
+    var gapX = 14, gapY = 16;
+    var rows = [
+      [{ v: py.peaks[3], label: '第四高峰', sub: '月+年·' + py.ages[3] + '歲', peak: true }],
+      [{ v: py.peaks[2], label: '第三高峰', sub: '高1+高2·' + py.ages[2] + '歲', peak: true }],
+      [{ v: py.peaks[0], label: '第一高峰(=制約)', sub: '月+日·' + py.ages[0] + '歲', peak: true }, { v: py.peaks[1], label: '第二高峰', sub: '日+年·' + py.ages[1] + '歲', peak: true }],
+      [{ v: py.base[0], label: '第一循環(月)', sub: '月基数', peak: false }, { v: py.base[1], label: '第二循環(日)', sub: '日基数', peak: false }, { v: py.base[2], label: '第三循環(年)', sub: '年基数', peak: false }]
+    ];
+    var maxCols = 3;
+    var pad = 30;
+    var W = maxCols * BW + (maxCols - 1) * gapX + pad * 2 + 80;
+    var totalRows = rows.length;
+    var H = totalRows * TH + (totalRows - 1) * gapY + pad * 2 + 20;
+    var centerX = W / 2 - 40;
+    var startY = pad + TH / 2 + 10;
+
+    function triCell(cx, cy, txt, lbl) {
+      var h = '';
+      var h2 = TH * 0.82;
+      var pts = [
+        (cx).toFixed(1) + ',' + (cy - h2 / 2).toFixed(1),
+        (cx - TW / 2).toFixed(1) + ',' + (cy + h2 / 2).toFixed(1),
+        (cx + TW / 2).toFixed(1) + ',' + (cy + h2 / 2).toFixed(1)
+      ].join(' ');
+      h += '<polygon points="' + pts + '" fill="#F5EDE4" stroke="#C4956A" stroke-width="2" stroke-linejoin="round"/>';
+      h += '<text x="' + cx.toFixed(1) + '" y="' + (cy + 4) + '" text-anchor="middle" font-size="24" font-weight="800" fill="#7A5230">' + esc(txt) + '</text>';
+      if (lbl) h += '<text x="' + cx.toFixed(1) + '" y="' + (cy + h2 / 2 + 18) + '" text-anchor="middle" font-size="11" fill="#7A5230" font-weight="600">' + esc(lbl) + '</text>';
+      return h;
+    }
+
+    function rectCell(cx, cy, txt, lbl) {
+      var x = cx - BW / 2, y = cy - BH / 2;
+      var c = '';
+      c += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + BW + '" height="' + BH + '" rx="10" fill="#FFF8F0" stroke="#C4956A" stroke-width="2"/>';
+      c += '<text x="' + cx.toFixed(1) + '" y="' + (cy + 6) + '" text-anchor="middle" font-size="22" font-weight="800" fill="#7A5230">' + esc(txt) + '</text>';
+      if (lbl) c += '<text x="' + cx.toFixed(1) + '" y="' + (cy + BH / 2 + 16) + '" text-anchor="middle" font-size="10.5" fill="#888" font-weight="500">' + esc(lbl) + '</text>';
+      return c;
+    }
+
+    var positions = [];
+    for (var r = 0; r < rows.length; r++) {
+      var row = rows[r];
+      var n = row.length;
+      var useW = row[0].peak ? TW : BW;
+      var rw = n * useW + (n - 1) * (row[0].peak ? 12 : gapX);
+      var rx = centerX - rw / 2;
+      var cy = startY + r * (TH + gapY);
+      for (var ci = 0; ci < n; ci++) {
+        positions.push({ cx: rx + ci * (useW + (row[0].peak ? 12 : gapX)) + useW / 2, cy: cy, rowIdx: r, colIdx: ci, data: row[ci] });
+      }
+    }
+
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="金字塔高峰" style="width:100%;max-width:' + W + 'px;background:transparent;">';
+
+    var pTop = positions.filter(function(p){ return p.rowIdx === 0; })[0];
+    var pBase = positions.filter(function(p){ return p.rowIdx === 3; });
+    var topPt = { x: pTop.cx, y: pTop.cy - TH * 0.42 };
+    var bl = { x: pBase[0].cx - BW / 2 - 8, y: pBase[0].cy + BH / 2 + 8 };
+    var br = { x: pBase[2].cx + BW / 2 + 8, y: pBase[2].cy + BH / 2 + 8 };
+    s += '<rect x="' + (bl.x - 8) + '" y="' + (topPt.y - 8) + '" width="' + (br.x - bl.x + 16) + '" height="' + (br.y - topPt.y + 16) + '" rx="8" fill="none" stroke="#D4765A" stroke-width="1.5" opacity="0.6"/>';
+    s += '<text x="' + centerX.toFixed(1) + '" y="' + (topPt.y - 14) + '" text-anchor="middle" font-size="15" font-weight="700" fill="#7A5230">高峰金字塔</text>';
+
+    var rightX = br.x + 30;
+    if (R && R.personalYear) {
+      s += '<rect x="' + rightX + '" y="' + (topPt.y + 10) + '" width="72" height="50" rx="8" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>';
+      s += '<text x="' + (rightX + 36) + '" y="' + (topPt.y + 34) + '" text-anchor="middle" font-size="20" font-weight="700" fill="#7A5230">' + R.personalYear.value + '</text>';
+      s += '<text x="' + (rightX + 36) + '" y="' + (topPt.y + 50) + '" text-anchor="middle" font-size="10" fill="#888">個人流年</text>';
+    }
+    if (R && R.ruling) {
+      s += '<rect x="' + rightX + '" y="' + (bl.y - 60) + '" width="72" height="50" rx="8" fill="none" stroke="#999" stroke-width="1.2" stroke-dasharray="4,3"/>';
+      s += '<text x="' + (rightX + 36) + '" y="' + (bl.y - 36) + '" text-anchor="middle" font-size="20" font-weight="700" fill="#7A5230">' + R.ruling.value + '</text>';
+      s += '<text x="' + (rightX + 36) + '" y="' + (bl.y - 20) + '" text-anchor="middle" font-size="10" fill="#888">生命道路</text>';
+    }
+
+    for (var i = 0; i < positions.length; i++) {
+      var p = positions[i];
+      if (p.data.peak)
+        s += triCell(p.cx, p.cy, p.data.v, p.data.label);
+      else
+        s += rectCell(p.cx, p.cy, p.data.v, p.data.label);
+    }
+    s += '</svg>';
+    return s;
+  }
   // 結構（從頂到底渲染，SVG的y軸向下增長）：
   //   第1行（頂峰）：[第4高峰=月+年]
   //   第2行：[第3高峰=高1+高2]
@@ -3664,7 +3790,7 @@
     h += paras(BOOK.dayNumberNote);
     h += '<h3 class="sub">日數對照表（出生日 → 日數）</h3><table class="tbl"><tr><th>日</th><th>日數</th><th>日</th><th>日數</th><th>日</th><th>日數</th></tr>';
     var t = BOOK.dayNumberTable;
-    for (var i = 1; i <= 31; i += 2) {
+    for (var i = 1; i <= 31; i += 3) {
       var a = t[String(i)], b = t[String(i + 1)], c = t[String(i + 2)];
       h += '<tr><td>' + i + '</td><td>' + esc(a) + '</td><td>' + (i + 1) + '</td><td>' + esc(b || '') + '</td><td>' + (i + 2) + '</td><td>' + esc(c || '') + '</td></tr>';
     }
@@ -3894,6 +4020,24 @@
       h += nameCompareBlock();
     }
     if (BOOK.yRule) h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">Y 的規則</summary><div style="margin-top:6px;">' + paras(BOOK.yRule) + '</div></details>';
+    // 靈魂內驅數（獨立折疊區域，默認折疊）
+    if (BOOK.soulUrgeList && BOOK.soulUrgeList.length > 0) {
+      h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">靈魂內驅數（1～11）</summary><div style="margin-top:6px">';
+      BOOK.soulUrgeList.forEach(function(item) { h += renderChapterEntry(item, '靈魂內驅'); });
+      h += '</div></details>';
+    }
+    // 外在表達數（獨立折疊區域，默認折疊）
+    if (BOOK.outerExpressionList && BOOK.outerExpressionList.length > 0) {
+      h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">外在表達數（1～22/4）</summary><div style="margin-top:6px">';
+      BOOK.outerExpressionList.forEach(function(item) { h += renderChapterEntry(item, '外在表達'); });
+      h += '</div></details>';
+    }
+    // 完整姓名數（獨立折疊區域，默認折疊）
+    if (BOOK.fullNameNumberIntro && BOOK.fullNameNumberIntro.length > 0) {
+      h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">完整姓名數</summary><div style="margin-top:6px">';
+      h += paras(BOOK.fullNameNumberIntro);
+      h += '</div></details>';
+    }
     if (BOOK.nameChart) h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">姓名圖（Name Chart）</summary><div style="margin-top:6px;">' + paras(BOOK.nameChart) + '</div></details>';
     if (BOOK.nameChoosing) h += '<details><summary style="cursor:pointer;font-weight:700;color:var(--brown);padding:10px 0;">如何為孩子取名</summary><div style="margin-top:6px;">' + paras(BOOK.nameChoosing) + '</div></details>';
     return h;
@@ -4475,12 +4619,29 @@
   }
 
   // ============ 繁／簡 切換（不跳轉新頁，客戶端即時轉換） ============
+  // 簡→繁 字元對照表（從 T2S 反轉，覆蓋本系統所需簡→繁映射）
+  var S2T = (function () {
+    var m = {};
+    for (var k in T2S) {
+      if (Object.prototype.hasOwnProperty.call(T2S, k)) m[T2S[k]] = k;
+    }
+    return m;
+  })();
   function convertT2S(str) {
     if (!str) return str;
     var out = '';
     for (var i = 0; i < str.length; i++) {
       var c = str.charAt(i);
       out += (T2S && T2S[c]) ? T2S[c] : c;
+    }
+    return out;
+  }
+  function convertS2T(str) {
+    if (!str) return str;
+    var out = '';
+    for (var i = 0; i < str.length; i++) {
+      var c = str.charAt(i);
+      out += (S2T && S2T[c]) ? S2T[c] : c;
     }
     return out;
   }
@@ -4498,9 +4659,15 @@
     var node;
     while ((node = walker.nextNode())) {
       if (toSimp) {
-        if (node.__orig === undefined) {
+        // 若已被 s2tWalk 標記過（__origS2T 存在），先還原；再嘗試繁→簡
+        if (node.__orig !== undefined) {
+          node.nodeValue = node.__orig;
+          node.__orig = undefined;
+        }
+        var conv = convertT2S(node.nodeValue);
+        if (conv !== node.nodeValue) {
           node.__orig = node.nodeValue;
-          node.nodeValue = convertT2S(node.nodeValue);
+          node.nodeValue = conv;
         }
       } else if (node.__orig !== undefined) {
         node.nodeValue = node.__orig;
@@ -4515,10 +4682,15 @@
           if (!el.hasAttribute(attr)) return;
           var v = el.getAttribute(attr);
           if (toSimp) {
-            if (!el.__origAttrs) el.__origAttrs = {};
-            if (el.__origAttrs[attr] === undefined) {
+            if (el.__origAttrs && el.__origAttrs[attr] !== undefined) {
+              el.setAttribute(attr, el.__origAttrs[attr]);
+              delete el.__origAttrs[attr];
+            }
+            var conv2 = convertT2S(v);
+            if (conv2 !== v) {
+              if (!el.__origAttrs) el.__origAttrs = {};
               el.__origAttrs[attr] = v;
-              el.setAttribute(attr, convertT2S(v));
+              el.setAttribute(attr, conv2);
             }
           } else if (el.__origAttrs && el.__origAttrs[attr] !== undefined) {
             el.setAttribute(attr, el.__origAttrs[attr]);
@@ -4528,24 +4700,87 @@
       })(els[i]);
     }
   }
+  // 簡→繁 walk：與 t2sWalk 對稱，__origS2T / __origAttrsS2T 用以記錄原文以便回退
+  function s2tWalk(root, toTrad) {
+    if (!root || !root.nodeType) return;
+    var filter = {
+      acceptNode: function (n) {
+        var p = n.parentNode;
+        if (p && (p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE' || p.nodeName === 'NOSCRIPT')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    };
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, filter, false);
+    var node;
+    while ((node = walker.nextNode())) {
+      if (toTrad) {
+        // 若已被 t2sWalk 標記過（__orig 存在），先還原；再嘗試簡→繁
+        if (node.__origS2T !== undefined) {
+          node.nodeValue = node.__origS2T;
+          node.__origS2T = undefined;
+        }
+        var conv = convertS2T(node.nodeValue);
+        if (conv !== node.nodeValue) {
+          node.__origS2T = node.nodeValue;
+          node.nodeValue = conv;
+        }
+      } else if (node.__origS2T !== undefined) {
+        node.nodeValue = node.__origS2T;
+        node.__origS2T = undefined;
+      }
+    }
+    var els = root.querySelectorAll('[placeholder],[title],[aria-label],[alt]');
+    for (var i = 0; i < els.length; i++) {
+      (function (el) {
+        ['placeholder', 'title', 'aria-label', 'alt'].forEach(function (attr) {
+          if (!el.hasAttribute(attr)) return;
+          var v = el.getAttribute(attr);
+          if (toTrad) {
+            if (el.__origAttrsS2T && el.__origAttrsS2T[attr] !== undefined) {
+              el.setAttribute(attr, el.__origAttrsS2T[attr]);
+              delete el.__origAttrsS2T[attr];
+            }
+            var conv2 = convertS2T(v);
+            if (conv2 !== v) {
+              if (!el.__origAttrsS2T) el.__origAttrsS2T = {};
+              el.__origAttrsS2T[attr] = v;
+              el.setAttribute(attr, conv2);
+            }
+          } else if (el.__origAttrsS2T && el.__origAttrsS2T[attr] !== undefined) {
+            el.setAttribute(attr, el.__origAttrsS2T[attr]);
+            delete el.__origAttrsS2T[attr];
+          }
+        });
+      })(els[i]);
+    }
+  }
   function applySimpToFresh(root) {
-    if (!window.__SIMP__) return;
-    t2sWalk(root || document.querySelector('.wrap'), true);
+    var r = root || document.querySelector('.wrap');
+    if (window.__SIMP__) t2sWalk(r, true);
+    else s2tWalk(r, true);
   }
   function updateSimpBtn() {
     var b = $('btn-simp');
-    if (b) b.textContent = window.__SIMP__ ? '繁／簡：簡' : '繁／簡：繁';
-  }
-  function updateTitle() {
-    document.title = window.__SIMP__ ? '生命灵数自动分析系统' : '生命靈數自動分析系統';
+    if (b) b.textContent = window.__SIMP__ ? '繁／简：简' : '繁／简：繁';
   }
   function toggleSimp() {
     window.__SIMP__ = !window.__SIMP__;
-    t2sWalk(document.querySelector('.wrap'), window.__SIMP__);
+    var root = document.querySelector('.wrap');
+    if (window.__SIMP__) {
+      // 切到简体方向：把可能被转成繁体的内容还原/转回简体
+      t2sWalk(root, true);
+    } else {
+      // 切到繁体方向：把简体转成繁体
+      s2tWalk(root, true);
+    }
+    // 同步 <title>（t2sWalk/s2tWalk 只走 body 內的 text 节点，不會處理 head 內的 title）
+    var titleEl = document.querySelector('title');
+    if (titleEl) {
+      titleEl.textContent = window.__SIMP__ ? convertT2S(titleEl.textContent) : convertS2T(titleEl.textContent);
+    }
     updateSimpBtn();
-    updateTitle();
     try { localStorage.setItem('ns_simp', window.__SIMP__ ? '1' : '0'); } catch (e) {}
-    toast(window.__SIMP__ ? '已切換為簡體中文' : '已切換為繁體中文');
+    toast(window.__SIMP__ ? '已切换为简体中文' : '已切换为繁体中文');
   }
 
   // ---------------- 啟動 ----------------
@@ -4562,8 +4797,16 @@
     window.__SIMP__ = true;
     try { if (localStorage.getItem('ns_simp') === '0') window.__SIMP__ = false; } catch (e) {}
     updateSimpBtn();
-    updateTitle();
-    if (window.__SIMP__) t2sWalk(document.querySelector('.wrap'), true);
+    // 預設 HTML 靜態文字為簡體，但 BOOK 原文、部分按鈕／標籤仍為繁體，需在載入時統一轉換：
+    // 偏好簡體（預設）→ 把繁體原文轉成簡體（t2sWalk）；偏好繁體 → 把簡體靜態轉成繁體（s2tWalk）
+    var _titleEl = document.querySelector('title');
+    if (window.__SIMP__) {
+      t2sWalk(document.querySelector('.wrap'), true);
+      if (_titleEl) _titleEl.textContent = convertT2S(_titleEl.textContent);
+    } else {
+      s2tWalk(document.querySelector('.wrap'), true);
+      if (_titleEl) _titleEl.textContent = convertS2T(_titleEl.textContent);
+    }
 
     // 版權頁版本號（動態帶入 VERSION）
     if ($('ver-num')) $('ver-num').textContent = VERSION;
