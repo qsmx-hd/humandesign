@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>曼格拉生命数字地图 · 计算器 V16</title>
+<title>曼格拉生命数字地图 · 计算器 V17</title>
 <style>
   :root{
     --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
@@ -48,7 +48,8 @@
   .primary{background:var(--primary);color:#fff;width:100%;margin-top:12px;font-size:15px;font-weight:700;}
   .row{display:flex;gap:8px;}
   .row > div, .row > input{flex:1;min-width:0;}
-  .card-title + .card-title{margin-top:12px;}
+  /* 居中型标题：放在两个区块之间，上下等距。覆盖 .card-title 默认的 margin-bottom:8px */
+  .card-title-centered{margin-top:14px;margin-bottom:14px;}
   footer{text-align:center;color:var(--muted);font-size:13px;margin:24px 0;line-height:1.8;}
   footer .ft-line{display:block;}
   .lib h3{font-size:15px;margin:16px 0 6px;color:var(--dark);}
@@ -141,11 +142,12 @@
         <input id="imonth" type="number" placeholder="月" min="1" max="12" inputmode="numeric" maxlength="2">
         <input id="iday" type="number" placeholder="日" min="1" max="31" inputmode="numeric" maxlength="2">
       </div>
-      <div class="card-title">输入常用名</div>
+      <div class="card-title card-title-centered">输入常用名</div>
       <input id="iname" type="text" placeholder="如 邓勤敏 / DENG QINMIN" oninput="onNameInput()">
       <div class="note">可直接输入中文姓名，自动转拼音；或填姓名全拼如 DENG QINMIN</div>
       <div id="py-preview" class="note"></div>
       <button class="primary" onclick="calc()">生成我的生命数字地图</button>
+      <div class="note" style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted);">系统算法遵循国际通用毕达哥拉斯生命数字学标准。</div>
     </div>
     <div id="core-out" class="init-hidden"></div>
   </section>
@@ -415,7 +417,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
 <script>
-const VERSION = 'V16';
+const VERSION = 'V17';
 document.getElementById('ver2').textContent = VERSION;
 
 const CURRENT_YEAR = 2026;
@@ -720,8 +722,17 @@ function renderCycles(r){
           `第二个挑战 = |出生日 − 出生年份|<br>`+
           `第三项挑战（主要挑战）= |第一项挑战 − 第二项挑战|<br>`+
           `第四项挑战 = |出生月份 − 出生年份|</p>`+
-          `<p>当两个分量相等时出现的 0 这一数值所代表的挑战，被称为<strong>选择的挑战</strong>。这并非意味着没有挑战，而是体现了完全自由的沉重负担：人们必须在几乎没有任何外部约束的情况下自行选择道路，而这往往会让人感到极度迷茫。</p>`+
-          `<p>"挑战 1"要求人们学会独立站立，并相信自己的判断力。而"挑战 7"则意味着要面对孤独感、自我怀疑，以及更难以依赖内在直觉而非外界认可来做出决策的问题。这些挑战的编号往往能够解释为何某些模式——无论是在职业、人际关系还是心理层面——会如此顽固地反复出现于一个人的整个生命中。</p>`+
+          `<p><strong>挑战数 0–8 逐项说明：</strong>（注：挑战数不会出现 9，因为差值最大为 8——这是计算规则本身的结果，不是缺失。）</p>`+
+          `<p><strong>挑战 0（选择的挑战）：</strong>当月、日、年化简值有相等时出现 0，称为"选择的挑战"。它并非没有功课，而是没有单一题目逼你——练习是主动选择一个值得深入的方向。体现为完全自由的沉重负担：必须自行选择道路，所以更容易迷茫。毕达哥拉斯体系把 0 视为"空无与一切并存"的符号性数字。</p>`+
+          `<p><strong>挑战 1：</strong>学会独立站立，并相信自己的判断力——同时不滑向专横。常在"不敢表态"与"过度主导"两极之间摆荡。突破点：在为自己发声时，保留他人的位置，建立健康的自信。</p>`+
+          `<p><strong>挑战 2：</strong>在关系中保持自我。挑战 2 的人对环境高度敏感（易嫉妒、易恐惧），需在敏感中保持界线。突破点：使用精准与外交手法处理细节，不让迁就变成讨好。</p>`+
+          `<p><strong>挑战 3：</strong>真实表达。环境会要求你运用想象力、音乐与艺术创造力，并建立更多自信。常在"压抑想法"与"过度表演"之间。突破点：勇敢说出真正的感受，让表达成为连接而非防御。</p>`+
+          `<p><strong>挑战 4：</strong>建立稳定基础。课题是发展伦理与价值体系、收起过强的固执己见。常在"逃避纪律"与"过度僵化"之间。突破点：在结构中找到自由，让稳定服务于真正的目标而非对失控的恐惧。</p>`+
+          `<p><strong>挑战 5：</strong>适应与节制。学会不固执、不僵化、避免不安与不耐烦。常在"害怕改变"与"过度放纵"之间。突破点：在自由中学会承诺，让变化成为主动选择而非被动逃逸。</p>`+
+          `<p><strong>挑战 6：</strong>责任与个人需求。课题是接受个人行动的责任，诚信、现实、履行承诺。常在"过度牺牲"与"控制型关爱"之间。突破点：设立健康的界线，区分"照顾他人"与"承担他人的人生"。</p>`+
+          `<p><strong>挑战 7：</strong>信任与内在探索。克服孤独感与自我怀疑，转化为感恩；不骄傲、不依赖外界认可。常在"过度怀疑"与"脱离现实"之间。突破点：平衡理性与直觉，信任内在声音，让独处成为力量的来源而非逃避。</p>`+
+          `<p><strong>挑战 8：</strong>权力与平衡。学会不炫耀、保持真诚、赋能他人。常在"物质执迷"与"自我限制"两极之间。突破点：有意识地使用影响力，让权力服务于更大的善而非个人膨胀。</p>`+
+          `<p>这些挑战的编号往往能够解释为何某些模式——无论是在职业、人际关系还是心理层面——会如此顽固地反复出现于一个人的整个生命中。把挑战数当成"可练习的模式"而不是终身标签，是它的正确使用方式。</p>`+
           `</div></div></details>`;
 
   document.getElementById('cycles-summary').innerHTML = html;
@@ -973,23 +984,24 @@ function renderHole(r){
 
 /* ---------- 渲染：业力数（Karmic Debt Numbers）—— 不折叠独立模块 ---------- */
 function renderKarmic(r){
-  if (!r.karmicDebts || r.karmicDebts.length === 0){
-    document.getElementById('karmic-out').innerHTML = `<div class="card"><div class="note">✅ 你的人生地图中未检测到业力数（13/14/16/19），四个核心位和出生日的化简前总数都不含未还的业力课题。恭喜！</div></div>`;
-    return;
-  }
+  // 算法说明 + 区分提示：无论是否有命中都默认显示，避免"看到业力就紧张"
   let html = `<div class="card"><div class="card-title">业力数字检测（Karmic Debt Numbers）</div>`;
-  html += `<div class="note">检测算法：当生命道路 / 表现 / 灵魂驱策 / 人格的"化简前中间总数" = 13 / 14 / 16 / 19 时，即带业力；出生日本身 = 13 / 14 / 16 / 19 也是业力生日。业力不是惩罚，是前世遗留的课题。</div>`;
-  html += `<div class="note" style="color:var(--muted);font-size:12px;margin-top:6px;border-top:1px dashed var(--border);padding-top:6px;">※ 这里检测的是<strong>化简过程中浮现的业力债务（13/14/16/19）</strong>，与「姓名学 → 业力图表」里的<strong>数字能量分布表</strong>是<strong>两个完全不同的维度</strong>——前者关注"债"，后者关注能量分布。请勿混淆。</div>`;
-  r.karmicDebts.forEach(kd => {
-    const info = KARMIC_INFO[kd.karmic];
-    if (!info) return;
-    html += `<div style="border-top:1px solid var(--border);padding-top:10px;margin-top:10px;">`;
-    html += `<div style="font-size:15px;font-weight:700;color:var(--primary);">${info.t}（${kd.label} = ${kd.notation}）</div>`;
-    html += `<div class="note" style="margin-top:4px;"><strong style="color:var(--dark);">核心功课：</strong>${info.core}</div>`;
-    html += `<div class="note"><strong style="color:var(--warn);">阴影面：</strong>${info.shadow}</div>`;
-    html += `<div class="note"><strong style="color:#3C6E8F;">成长建议：</strong>${info.suggest}</div>`;
-    html += `</div>`;
-  });
+  html += `<div class="note">检测算法：<strong>化简前中间总数</strong>（生命道路 / 表现 / 灵魂驱策 / 人格 各自相加后的那个两位数）等于 <strong>13 / 14 / 16 / 19</strong> 时，即带业力；出生日本身 = 13 / 14 / 16 / 19 也是<strong>业力生日</strong>。业力不是惩罚，是前世遗留的课题——看见它，是为了有意识地转化它。</div>`;
+  html += `<div class="note" style="color:var(--muted);font-size:12px;margin-top:6px;border-top:1px dashed var(--border);padding-top:6px;">※ 这里检测的是<strong>化简过程中浮现的业力债务（13/14/16/19）</strong>，与「姓名学 → 业力图表」里的<strong>数字能量分布表</strong>是<strong>两个完全不同的维度</strong>——前者关注"债"（化简前的中段值），后者关注姓名中数字能量的"分布"。请勿混淆。</div>`;
+  if (!r.karmicDebts || r.karmicDebts.length === 0){
+    html += `<div class="note" style="margin-top:8px;border-top:1px solid var(--border);padding-top:10px;">✅ 你的人生地图中<strong>未检测到业力数</strong>（13/14/16/19）——四个核心位和出生日的化简前总数都不含未还的业力课题。这并不影响你的完整生命图景，仅说明你在化简路径上没有明显的"前世债"显化。</div>`;
+  } else {
+    r.karmicDebts.forEach(kd => {
+      const info = KARMIC_INFO[kd.karmic];
+      if (!info) return;
+      html += `<div style="border-top:1px solid var(--border);padding-top:10px;margin-top:10px;">`;
+      html += `<div style="font-size:15px;font-weight:700;color:var(--primary);">${info.t}（${kd.label} = ${kd.notation}）</div>`;
+      html += `<div class="note" style="margin-top:4px;"><strong style="color:var(--dark);">核心功课：</strong>${info.core}</div>`;
+      html += `<div class="note"><strong style="color:var(--warn);">阴影面：</strong>${info.shadow}</div>`;
+      html += `<div class="note"><strong style="color:#3C6E8F;">成长建议：</strong>${info.suggest}</div>`;
+      html += `</div>`;
+    });
+  }
   html += `</div>`;
   document.getElementById('karmic-out').innerHTML = html;
 }
