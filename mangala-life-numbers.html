@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>曼格拉生命数字地图 · 计算器 V15</title>
+<title>曼格拉生命数字地图 · 计算器 V16</title>
 <style>
   :root{
     --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
@@ -47,7 +47,8 @@
   button{padding:12px 16px;font-size:14px;border-radius:8px;border:none;cursor:pointer;}
   .primary{background:var(--primary);color:#fff;width:100%;margin-top:12px;font-size:15px;font-weight:700;}
   .row{display:flex;gap:8px;}
-  .row > div{flex:1;}
+  .row > div, .row > input{flex:1;min-width:0;}
+  .card-title + .card-title{margin-top:12px;}
   footer{text-align:center;color:var(--muted);font-size:13px;margin:24px 0;line-height:1.8;}
   footer .ft-line{display:block;}
   .lib h3{font-size:15px;margin:16px 0 6px;color:var(--dark);}
@@ -87,6 +88,8 @@
   .empty{color:var(--muted);font-size:14px;padding:20px 0;text-align:center;}
   .init-hidden{display:none !important;}
   .print-btn{margin-top:16px;}
+  /* 移动端 input 字号提到 16px，避免 iOS Safari 自动缩放（<16px 触发） */
+  @media (max-width:600px){ input,select,textarea{font-size:16px;} }
   @media (max-width:480px){
     .grid{grid-template-columns:1fr;}
     .row{flex-direction:column;}
@@ -132,14 +135,15 @@
   <!-- 计算 Tab -->
   <section id="scene-calc" class="scene active">
     <div class="card">
-      <div class="card-title">输入生日与姓名</div>
-      <div class="row">
-        <div><label class="note">出生年</label><select id="iyear"></select></div>
-        <div><label class="note">月</label><select id="imonth"></select></div>
-        <div><label class="note">日</label><select id="iday"></select></div>
+      <div class="card-title">输入生日（公历/阳历）</div>
+      <div class="row date-row">
+        <input id="iyear" type="number" placeholder="年" min="1900" max="2100" inputmode="numeric" maxlength="4">
+        <input id="imonth" type="number" placeholder="月" min="1" max="12" inputmode="numeric" maxlength="2">
+        <input id="iday" type="number" placeholder="日" min="1" max="31" inputmode="numeric" maxlength="2">
       </div>
-      <label class="note">姓名（可直接输入中文姓名，自动转拼音；或填姓名全拼如 DENG QINMIN）</label>
+      <div class="card-title">输入常用名</div>
       <input id="iname" type="text" placeholder="如 邓勤敏 / DENG QINMIN" oninput="onNameInput()">
+      <div class="note">可直接输入中文姓名，自动转拼音；或填姓名全拼如 DENG QINMIN</div>
       <div id="py-preview" class="note"></div>
       <button class="primary" onclick="calc()">生成我的生命数字地图</button>
     </div>
@@ -411,7 +415,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
 <script>
-const VERSION = 'V15';
+const VERSION = 'V16';
 document.getElementById('ver2').textContent = VERSION;
 
 const CURRENT_YEAR = 2026;
@@ -1101,11 +1105,14 @@ function switchTab(name){
 let lastResult = null;
 
 function calc(){
-  const y = document.getElementById('iyear').value;
-  const m = document.getElementById('imonth').value;
-  const d = document.getElementById('iday').value;
+  const y = parseInt(document.getElementById('iyear').value, 10);
+  const m = parseInt(document.getElementById('imonth').value, 10);
+  const d = parseInt(document.getElementById('iday').value, 10);
   const raw = document.getElementById('iname').value.trim();
-  if (!y || !m || !d){ alert('请先选择完整的出生年/月/日'); return; }
+  if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)){ alert('请输入完整的出生年/月/日'); return; }
+  if (y < 1900 || y > 2100){ alert('年份需在 1900-2100 之间'); return; }
+  if (m < 1 || m > 12){ alert('月份需在 1-12 之间'); return; }
+  if (d < 1 || d > 31){ alert('日期需在 1-31 之间'); return; }
   if (!raw){ alert('请输入姓名（中文或拼音均可）'); return; }
   const name = toPinyin(raw);
   if (name === null){
@@ -1132,11 +1139,9 @@ function calc(){
 
 /* ---------- 初始化 ---------- */
 (function init(){
-  const ySel = document.getElementById('iyear'), mSel = document.getElementById('imonth'), dSel = document.getElementById('iday');
-  for (let y=2015; y>=1930; y--){ const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); }
-  for (let m=1; m<=12; m++){ const o=document.createElement('option'); o.value=m; o.textContent=m; mSel.appendChild(o); }
-  for (let d=1; d<=31; d++){ const o=document.createElement('option'); o.value=d; o.textContent=d; dSel.appendChild(o); }
-  ySel.value=1997; mSel.value=9; dSel.value=27;
+  const yEl = document.getElementById('iyear'), mEl = document.getElementById('imonth'), dEl = document.getElementById('iday');
+  // 默认填入示例日期（用户可手动改成实际日期；年范围 1900-2100，月 1-12，日 1-31）
+  yEl.value = 1997; mEl.value = 9; dEl.value = 27;
   renderLib();
   // 不预填姓名、不自动 calc —— 默认显示干净的输入面板，用户点击"生成"后才填内容
 })();
