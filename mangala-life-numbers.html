@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>曼格拉生命数字地图 · 计算器 V17</title>
+<title>曼格拉生命数字地图 · 计算器 V18</title>
 <style>
   :root{
     --bg:#F5F0E8; --primary:#C4956A; --dark:#2D2118; --border:#E8DCC8; --muted:#8C7B6B;
@@ -417,7 +417,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js" crossorigin="anonymous"></script>
 <script>
-const VERSION = 'V17';
+const VERSION = 'V18';
 document.getElementById('ver2').textContent = VERSION;
 
 const CURRENT_YEAR = 2026;
@@ -439,13 +439,16 @@ function reduceParts(arr){
 }
 const PY = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
 const VOWELS = ['A','E','I','O','U'];
-function pyValue(str, onlyVowels){
+function pyValue(str, mode){
+  /* mode: 'all' 全字母和（表现数字） | 'vowel' 元音和（灵魂驱策） | 'consonant' 辅音和（人格数字） */
   str = (str||'').toUpperCase().replace(/[^A-Z]/g,'');
   let sum = 0;
   for (const ch of str){
     if (PY[ch] === undefined) continue;
-    if (onlyVowels && VOWELS.indexOf(ch) === -1) continue;
-    if (!onlyVowels && VOWELS.indexOf(ch) !== -1) continue;
+    const isVowel = VOWELS.indexOf(ch) !== -1;
+    if (mode === 'vowel' && !isVowel) continue;
+    if (mode === 'consonant' && isVowel) continue;
+    /* mode === 'all' 时全部累加 */
     sum += PY[ch];
   }
   return sum;
@@ -457,9 +460,9 @@ function calcMap(y, m, d, name){
   const ry = reduce(y, true), rm = reduce(m, true), rd = reduce(d, true);
   // 捕获"化简前中间总数"（业力数 Karmic Debt 检测用，13/14/16/19 出现在化简前的两位数）
   const lifePathSum = ry + rm + rd;
-  const exprTotal = pyValue(name, false);
-  const soulTotal = pyValue(name, true);
-  const consTotal = exprTotal - soulTotal;
+  const exprTotal = pyValue(name, 'all');          /* V18 改标准毕达哥拉斯：表现 = 全字母和，不再是辅音和 */
+  const soulTotal = pyValue(name, 'vowel');         /* 灵魂驱策 = 元音和 */
+  const consTotal = pyValue(name, 'consonant');     /* 人格数字 = 辅音和（独立计算，不再用 expr-soul 减算，避免负数） */
   const lifePath = reduce(lifePathSum, true);
   const expression = reduce(exprTotal, true);
   const soulUrge  = reduce(soulTotal, true);
@@ -900,9 +903,9 @@ function renderMapChart(r){
 /* ---------- 渲染：姓名学 Tab ---------- */
 function renderNameStudy(r, pinyinStr){
   const letters = nameLetters(pinyinStr);
-  const total = pyValue(pinyinStr, false);
-  const vowel = pyValue(pinyinStr, true);
-  const cons = total - vowel;
+  const total = pyValue(pinyinStr, 'all');          /* V18 改标准毕达哥拉斯：合计 = 全字母和 */
+  const vowel = pyValue(pinyinStr, 'vowel');        /* 元音合计 */
+  const cons = pyValue(pinyinStr, 'consonant');      /* 辅音合计（独立计算，不再用 total-vowel 减算，避免负数） */
   const {counts, total: letterCount, body, mind, emotion, intuition} = nameCounts(pinyinStr);
 
   let html = `<div class="card">
