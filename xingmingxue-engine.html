@@ -107,7 +107,11 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
     <button type="button" id="btnLunar" style="flex:1;padding:8px;font-size:13px;font-weight:700;border:1px solid var(--primary);background:var(--primary);color:#fff;border-radius:8px;cursor:pointer">农历（默认）</button>
     <button type="button" id="btnSolar" style="flex:1;padding:8px;font-size:13px;font-weight:700;border:1px solid var(--border);background:#fff;color:var(--muted);border-radius:8px;cursor:pointer">阳历（公历）</button>
   </div>
-  <input type="date" id="birth" style="padding:12px 14px;font-size:16px">
+  <div style="display:flex;gap:6px">
+    <select id="birthY" style="flex:1.3;min-width:0;padding:12px 6px;font-size:15px;text-align:center"></select>
+    <select id="birthM" style="flex:1;min-width:0;padding:12px 6px;font-size:15px;text-align:center"></select>
+    <select id="birthD" style="flex:1;min-width:0;padding:12px 6px;font-size:15px;text-align:center"></select>
+  </div>
   <label>出生时辰（按出生钟表时间选对应时辰，自动映射）</label>
   <select id="birthh">
     <option value="">不填</option>
@@ -289,7 +293,7 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
 
 <footer>
   <div class="footer-disclaimer">
-    <div>姓名结构分析引擎 V10</div>
+    <div>姓名结构分析引擎 V12</div>
     <div>⚠️ 本工具为姓名学结构教学演示而专门开发，</div>
     <div>按康熙字典笔画推算五格数理，仅供研习与课堂讲解。</div>
   </div>
@@ -444,24 +448,24 @@ function lunarToSolar(ly, lm, ld, isLeap){
 // 当前日期模式：'lunar'(农历默认) 或 'solar'(阳历)
 let _dateMode='lunar';
 function getLunarDate(){
-  const d=$('birth').value; if(!d) return null;
-  const p=d.split('-').map(Number);
-  if(_dateMode==='lunar') return {y:p[0],m:p[1],d:p[2]};
+  const y=+$('birthY').value, m=+$('birthM').value, d=+$('birthD').value;
+  if(!y||!m||!d) return null;
+  if(_dateMode==='lunar') return {y,m,d};
   // 阳历→农历转换
-  return solarToLunar(p[0],p[1],p[2]);
+  return solarToLunar(y,m,d);
 }
 function getDateForBazi(){
   // 返回用于八字计算的日期（始终按农历年定生肖，按节气排月柱/日柱）
-  const d=$('birth').value; if(!d) return null;
-  const p=d.split('-').map(Number);
+  const y=+$('birthY').value, m=+$('birthM').value, d=+$('birthD').value;
+  if(!y||!m||!d) return null;
   if(_dateMode==='lunar'){
     // 农历输入 → 转为阳历再算八字（因为bazi函数内部用节气）
-    const solar=lunarToSolar(p[0],p[1],p[2],false);
-    return solar?{...solar,lunarY:p[0]}:{y:p[0],m:p[1],d:p[2],lunarY:p[0]};
+    const solar=lunarToSolar(y,m,d,false);
+    return solar?{...solar,lunarY:y}:{y,m,d,lunarY:y};
   }
   // 阳历输入 → 直接算，但记录农历年用于生肖修正
-  const lunar=solarToLunar(p[0],p[1],p[2]);
-  return {...lunar||{y:p[0],m:p[1],d:p[2]}, solarY:p[0]};
+  const lunar=solarToLunar(y,m,d);
+  return {...lunar||{y,m,d}, solarY:y};
 }
 
 // ===== 八字排盘（纯 JS，已与 lunar-javascript 交叉验证） =====
@@ -1091,11 +1095,47 @@ function setDateFormat(mode){
     btnLunar.style.background='#fff';btnLunar.style.color='var(--muted)';btnLunar.style.borderColor='var(--border)';
     birthHint.textContent='⚠ 填「阳历」日期，系统将自动换算为农历后计算';
   }
-  $('birth').value='';
+  refreshBirthDays();
   $('out').innerHTML='';
 }
 btnLunar.addEventListener('click',()=>setDateFormat('lunar'));
 btnSolar.addEventListener('click',()=>setDateFormat('solar'));
+
+// ===== 出生日期三下拉（年/月/日）+ 动态天数联动 =====
+// 手机端原生 type=date 滚轮不便，改为三个独立 select，年份可列表快速定位
+function refreshBirthDays(){
+  const ySel=$('birthY'), mSel=$('birthM'), dSel=$('birthD');
+  if(!ySel||!mSel||!dSel) return;
+  const y=+ySel.value, m=+mSel.value;
+  let max=31;
+  if(y&&m){
+    if(_dateMode==='lunar'){
+      const yi=y-1900;                       // 农历月真实天数（大月30/小月29）
+      max=(yi>=0&&yi<LUNAR_INFO.length)?lunarMonthDays(yi,m):30;
+    } else {
+      max=new Date(y,m,0).getDate();          // 阳历自然月天数（2月28/29等）
+    }
+  }
+  const cur=+dSel.value||1;
+  let html='<option value="">日</option>';
+  for(let d=1;d<=max;d++) html+='<option value="'+d+'">'+d+'日</option>';
+  dSel.innerHTML=html;
+  dSel.value=Math.min(cur,max);
+}
+(function initBirthSelects(){
+  const ySel=$('birthY'), mSel=$('birthM'), dSel=$('birthD');
+  let hy='<option value="">年</option>';
+  for(let y=1900;y<=2100;y++) hy+='<option value="'+y+'">'+y+'年</option>';
+  ySel.innerHTML=hy;
+  ySel.value='1988';
+  let hm='<option value="">月</option>';
+  for(let m=1;m<=12;m++) hm+='<option value="'+m+'">'+m+'月</option>';
+  mSel.innerHTML=hm;
+  mSel.value='1';
+  refreshBirthDays();
+  ySel.addEventListener('change',refreshBirthDays);
+  mSel.addEventListener('change',refreshBirthDays);
+})();
 
 // ===== Tab 切换（分析 / 解读库） =====
 document.querySelectorAll('.tabbtn').forEach(btn=>{
@@ -1221,7 +1261,7 @@ if($('kxQuery')) $('kxQuery').addEventListener('keydown',e=>{ if(e.key==='Enter'
 })();
 
 // 版本号
-const VERSION='V10';
+const VERSION='V12';
 $('title').textContent='姓名结构分析引擎';
 document.title='姓名结构分析引擎 '+VERSION+' · 教学演示';
 </script>
