@@ -314,7 +314,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script>const VERSION = '14.1';</script>
+<script>const VERSION = '15.1';</script>
 <script>/* 生命靈數計算引擎 —— 嚴格依據《生命靈數全書》(David A. Phillips) 演算法
  * 出生圖佈局（九宮格）：
  *   3 6 9   ← 心智層面
@@ -3129,7 +3129,7 @@
   var R = null;   // 當前（本人）分析結果
   var P2 = null;  // 第 14 章「對方」分析結果
   var partnerPrefill = null; // 來自分享連結的對方資料
-  var nmState = { new1: '', new2: '', result: null }; // 第 13 章「改名對比」狀態
+  var nmState = { new1: '', new2: '', result: null, filters: { len: '2', gender: 'all', lib: 'cn' }, sugPage: 0, suggestions: null, sugRandom: false, randomPool: null }; // 第 13 章「改名對比」與「改名建議」狀態
 
   // ============ 應用場景：綜合歸納層（參考 ima 知識庫「優化」思路，基於原書層面/主宰數屬性歸納） ============
   var PLANE_MAP = { '1': 'physical', '4': 'physical', '7': 'physical', '10': 'physical',
@@ -4137,26 +4137,64 @@
   }
 
   // ---------------- 姓名圖 × 出生圖 綜合診斷（P256-P268） ----------------
-  function nameChartDeepAnalysis() {
-    if (!R || !R.name || !R.chartCompare) return '';
-    var cc = R.chartCompare;
+  /** 計算某張圖在指定層面上「有出現的數字個數」 */
+  function planeCountOf(countsObj, plane) {
+    var n = 0;
+    Object.keys(PLANE_MAP).forEach(function (k) { if (PLANE_MAP[k] === plane && (countsObj[k] || 0) > 0) n++; });
+    return n;
+  }
+  /** 契合度評級文案（沿用原評分區間，確保原名／新名／推薦名三處一致） */
+  function fitRating(score) {
+    return score >= 6 ? '🌟 高度契合——這個名字與你的出生圖形成良好互補' :
+           score >= 4 ? '👍 良好搭配——名字在一定程度上平衡了出生圖' :
+           score >= 2 ? '⚖️ 基本可用——有部分補足，但仍有優化空間' :
+                        '💡 建議考慮調整——名字與出生圖的互補性有限';
+  }
+  /**
+   * 契合度評分（依原書第 13 章「選擇合適名字的三大原則」）
+   * base：沿用既有 4 項評分，決定評級文案（原名／新名／推薦名共用同一把尺）
+   * rank：加入更細的加減分，只用於窮舉排序，不改變評級文案
+   */
+  function nameFitScore(nameAn, Rr) {
+    var cc = N.chartComparison(Rr.counts, nameAn.counts);
+    var bp = birthWeakPlane(Rr);
+    var score = 0, lines = [];
+    if (cc.balances.length) { score += 2; lines.push('✅ 姓名圖補足出生圖缺失的數字：' + cc.balances.join('、')); }
+    if (cc.fixedWeaknesses.length) { score += 3; lines.push('✅ 姓名圖修復了出生圖的弱點之箭：' + cc.fixedWeaknesses.map(function (f) { return f.weakness; }).join('、')); }
+    if (cc.overloads.length <= 1) { score += 1; lines.push('✅ 兩圖重疊數字不多，未造成能量過載'); }
+    else { lines.push('⚠️ 兩圖重疊數字較多（' + cc.overloads.join('、') + '），該方向能量集中'); }
+    if (planeOf(nameAn.soulUrge.value) === bp.plane) { score += 2; lines.push('✅ 靈魂內驅數落在出生圖最弱層，內修時作用顯著'); }
+    // 原書第三原則：姓名圖的箭頭不應與出生圖的箭頭相同
+    if (cc.duplicateArrows.length) lines.push('⚠️ 姓名圖與出生圖出現相同的箭頭（' + cc.duplicateArrows.join('、') + '）——依原書第三原則，重複的箭頭無法帶來平衡');
+    else lines.push('✅ 姓名圖的箭頭未與出生圖重複，符合原書第三原則');
+    // 原書第二原則：出生圖已強之處，姓名圖不應再加同樣的力量
+    var over = [];
+    for (var n = 1; n <= 9; n++) { if ((Rr.counts[n] || 0) >= 2 && (nameAn.counts[n] || 0) >= 2) over.push(n); }
+    if (over.length) lines.push('⚠️ 數字 ' + over.join('、') + ' 在兩張圖上都重複出現，力量過分集中（原書第二原則）');
+
+    var strengthArrows = (nameAn.arrows || []).filter(function (a) { return a.type === 'strength'; });
+    var rel = N.nameRulingRelation(nameAn.fullName.value, Rr.ruling.value);
+    var rank = score * 10000;
+    rank += cc.balances.length * 120;
+    rank += cc.fixedWeaknesses.length * 400;
+    rank += strengthArrows.length * 150;
+    rank -= cc.duplicateArrows.length * 300;
+    rank -= over.length * 120;
+    rank += planeCountOf(nameAn.counts, bp.plane) * 90;
+    if (planeOf(nameAn.outerExpression.value) === bp.plane) rank += 60;
+    rank += (rel.type === 'same' ? 80 : rel.type === 'samePlane' ? 45 : 20);
+    return { base: score, rank: rank, lines: lines, cc: cc, rel: rel, over: over, strengthArrows: strengthArrows, weakPlane: bp };
+  }
+  /** 綜合診斷主體：三層面對比表 ＋ 綜合評估 ＋ 評估要點（原名／新名／推薦名共用同一形式） */
+  function nameChartDiagnosisBody(nameAn, Rr) {
+    var bp = birthWeakPlane(Rr);
+    var bNameCounts = nameAn.counts || {};
+    var birthCounts = Rr.counts || {};
+    var soulB = planeCountOf(birthCounts, 'soul'), soulN = planeCountOf(bNameCounts, 'soul');
+    var phyB = planeCountOf(birthCounts, 'physical'), phyN = planeCountOf(bNameCounts, 'physical');
+    var menB = planeCountOf(birthCounts, 'mental'), menN = planeCountOf(bNameCounts, 'mental');
+
     var h = '';
-    h += '<h3 class="sub" style="margin-top:16px;">📊 姓名圖 × 出生圖 綜合診斷</h3>';
-
-    // ---- 三層面對比表 ----
-    var bp = birthWeakPlane(R);
-    var bNameCounts = R.name.counts || {};
-    var birthCounts = R.counts || {};
-    // 計算姓名圖各層面數字數量
-    function planeCount(countsObj, plane) {
-      var n = 0;
-      Object.keys(PLANE_MAP).forEach(function(k) { if (PLANE_MAP[k] === plane && (countsObj[k]||0) > 0) n++; });
-      return n;
-    }
-    var soulB = planeCount(birthCounts, 'soul'), soulN = planeCount(bNameCounts, 'soul');
-    var phyB = planeCount(birthCounts, 'physical'), phyN = planeCount(bNameCounts, 'physical');
-    var menB = planeCount(birthCounts, 'mental'), menN = planeCount(bNameCounts, 'mental');
-
     h += '<div class="note" style="background:var(--surface1);"><b>三層面數字分佈對比</b></div>';
     h += '<table class="tbl compare"><thead><tr><th>層面</th><th>出生圖</th><th>姓名圖</th><th>診斷</th></tr></thead><tbody>';
     // 心智層（書中習慣：心智→靈魂→身體）
@@ -4173,20 +4211,16 @@
     h += '<tr><td class="l">身體層（1/4/7）</td><td>' + phyB + ' 個數字</td><td>' + phyN + ' 個數字</td><td class="l">' + pd + '</td></tr>';
     h += '</tbody></table>';
 
-    // ---- 綜合評估 ----
-    var score = 0;
-    var evalLines = [];
-    if (cc.balances.length) { score += 2; evalLines.push('✅ 姓名圖補足出生圖缺失的數字：' + cc.balances.join('、')); }
-    if (cc.fixedWeaknesses.length) { score += 3; evalLines.push('✅ 姓名圖修復了出生圖的弱點之箭：' + cc.fixedWeaknesses.map(function(f){return f.weakness;}).join('、')); }
-    if (cc.overloads.length <= 1) { score += 1; evalLines.push('✅ 兩圖重疊數字不多，未造成能量過載'); } else { evalLines.push('⚠️ 兩圖重疊數字較多（' + cc.overloads.join('、') + '），該方向能量集中'); }
-    if (planeOf(R.name.soulUrge.value) === bp.plane) { score += 2; evalLines.push('✅ 靈魂內驅數落在出生圖最弱層，內修時作用顯著'); }
-
-    var rating = score >= 6 ? '🌟 高度契合——這個名字與你的出生圖形成良好互補' :
-                 score >= 4 ? '👍 良好搭配——名字在一定程度上平衡了出生圖' :
-                 score >= 2 ? '⚖️ 基本可用——有部分補足，但仍有優化空間' :
-                 '💡 建議考慮調整——名字與出生圖的互補性有限';
-    h += '<div class="note" style="background:var(--surface1);border-left-color:var(--brown);font-size:13.5px;"><b>綜合評估：</b>' + rating + '</div>';
-    h += '<div class="fam" style="font-size:12.5px;">' + evalLines.join('<br>') + '</div>';
+    var fit = nameFitScore(nameAn, Rr);
+    h += '<div class="note" style="background:var(--surface1);border-left-color:var(--brown);font-size:13.5px;"><b>綜合評估：</b>' + fitRating(fit.base) + '</div>';
+    h += '<div class="fam" style="font-size:12.5px;">' + fit.lines.join('<br>') + '</div>';
+    return h;
+  }
+  function nameChartDeepAnalysis() {
+    if (!R || !R.name || !R.chartCompare) return '';
+    var h = '';
+    h += '<h3 class="sub" style="margin-top:16px;">📊 姓名圖 × 出生圖 綜合診斷</h3>';
+    h += nameChartDiagnosisBody(R.name, R);
 
     // ---- 伊麗莎白二世案例（原書P256-P259） ----
     if (BOOK.nameChartDetail && BOOK.nameChartDetail.caseStudy) {
@@ -4270,6 +4304,8 @@
         s += '<div class="note" style="font-size:11.5px;background:transparent;border-left-color:var(--line2);color:var(--muted);">※ 主導層面／調性／出生圖補丁／名字戰袍為綜合歸納的應用建議（參考 ima 知識庫優化思路），數值仍嚴格來自原書演算法。</div>';
       }
     }
+    // 改名建議（系統窮舉推薦）：隱藏於「改名對比」，點擊「比較新名字」後觸發
+    s += nameSuggestBlock();
     return s;
   }
 
@@ -4287,21 +4323,29 @@
       '<div class="note"><b>完整姓名數 × 主宰數：</b>' + esc(fnr.text) + '</div>';
     if (su) h += '<h4 class="nc-h">靈魂內驅數 ' + esc(d.soul) + '</h4>' + paras(su);
     if (oe) h += '<h4 class="nc-h">外在表達數 ' + esc(d.outer) + '</h4>' + paras(oe);
+    if (d.nameAn) {
+      h += '<h4 class="sub2" style="margin:12px 0 6px;">📊 姓名圖 × 出生圖 綜合診斷</h4>';
+      h += nameChartDiagnosisBody(d.nameAn, R);
+    }
     h += '</div>';
     return h;
   }
 
   function computeNameCompare() {
     if (!R || !R.name) { toast('請先完成「開始分析」並填寫名字'); return; }
-    var n1 = (document.getElementById('nm-new1').value || '').trim();
-    var n2 = (document.getElementById('nm-new2').value || '').trim();
-    if (!n1 && !n2) { toast('請至少輸入一個新名字'); return; }
+    var n1 = (document.getElementById('nm-new1') ? document.getElementById('nm-new1').value : '').trim();
+    var n2 = (document.getElementById('nm-new2') ? document.getElementById('nm-new2').value : '').trim();
     nmState.new1 = n1; nmState.new2 = n2;
+    // 系統窮舉推薦：依當前過濾條件檢索字庫並排序
+    var filters = nmState.filters || { len: '2', gender: 'all', lib: 'cn' };
+    nmState.filters = filters;
+    nmState.sugPage = 0; nmState.sugRandom = false; nmState.randomPool = null;
+    nmState.suggestions = searchNames(filters);
     function pack(raw) {
       if (!raw) return null;
       var a = N.analyzeName(raw);
       if (!a) return null;
-      return { raw: raw, soul: a.soulUrge.value, outer: a.outerExpression.value, full: a.fullName.value };
+      return { raw: raw, soul: a.soulUrge.value, outer: a.outerExpression.value, full: a.fullName.value, nameAn: _buildUnit(raw, raw, 'u') };
     }
     nmState.result = {
       orig: { soul: R.name.soulUrge.value, outer: R.name.outerExpression.value, full: R.name.fullName.value },
@@ -4313,10 +4357,251 @@
   }
 
   function resetNameCompare() {
-    nmState = { new1: '', new2: '', result: null };
+    nmState = { new1: '', new2: '', result: null, filters: { len: '2', gender: 'all', lib: 'cn' }, sugPage: 0, suggestions: null, sugRandom: false, randomPool: null };
     renderPanel('c13');
     updateHash();
     applySimpToFresh();
+  }
+
+  // ============ 第 13 章擴充：改名建議（系統窮舉推薦） ============
+  // —— 中文取名字庫（簡體 · 拼音大寫 · 性別傾向 g: m/f/u） ——
+  var NAME_LIB_CN = [
+    {han:'伟',py:'WEI',g:'m'},{han:'芳',py:'FANG',g:'f'},{han:'娜',py:'NA',g:'f'},{han:'秀',py:'XIU',g:'f'},
+    {han:'英',py:'YING',g:'f'},{han:'华',py:'HUA',g:'m'},{han:'明',py:'MING',g:'m'},{han:'静',py:'JING',g:'f'},
+    {han:'丽',py:'LI',g:'f'},{han:'强',py:'QIANG',g:'m'},{han:'磊',py:'LEI',g:'m'},{han:'军',py:'JUN',g:'m'},
+    {han:'洋',py:'YANG',g:'m'},{han:'勇',py:'YONG',g:'m'},{han:'艳',py:'YAN',g:'f'},{han:'杰',py:'JIE',g:'m'},
+    {han:'娟',py:'JUAN',g:'f'},{han:'涛',py:'TAO',g:'m'},{han:'超',py:'CHAO',g:'m'},{han:'霞',py:'XIA',g:'f'},
+    {han:'平',py:'PING',g:'m'},{han:'刚',py:'GANG',g:'m'},{han:'桂',py:'GUI',g:'f'},{han:'婷',py:'TING',g:'f'},
+    {han:'欣',py:'XIN',g:'f'},{han:'宇',py:'YU',g:'m'},{han:'浩',py:'HAO',g:'m'},{han:'晨',py:'CHEN',g:'u'},
+    {han:'睿',py:'RUI',g:'m'},{han:'萱',py:'XUAN',g:'f'},{han:'涵',py:'HAN',g:'f'},{han:'梓',py:'ZI',g:'f'},
+    {han:'轩',py:'XUAN',g:'m'},{han:'彤',py:'TONG',g:'f'},{han:'璐',py:'LU',g:'f'},{han:'琪',py:'QI',g:'f'},
+    {han:'琳',py:'LIN',g:'f'},{han:'瑶',py:'YAO',g:'f'},{han:'怡',py:'YI',g:'f'},{han:'然',py:'RAN',g:'u'},
+    {han:'悦',py:'YUE',g:'f'},{han:'霖',py:'LIN',g:'m'},{han:'泽',py:'ZE',g:'m'},{han:'航',py:'HANG',g:'m'},
+    {han:'嘉',py:'JIA',g:'u'},{han:'宸',py:'CHEN',g:'m'},{han:'宁',py:'NING',g:'u'},{han:'安',py:'AN',g:'u'},
+    {han:'乐',py:'LE',g:'u'},{han:'熙',py:'XI',g:'u'},{han:'辰',py:'CHEN',g:'m'},{han:'煜',py:'YU',g:'m'},
+    {han:'逸',py:'YI',g:'m'},{han:'朗',py:'LANG',g:'m'},{han:'翔',py:'XIANG',g:'m'},{han:'远',py:'YUAN',g:'m'},
+    {han:'达',py:'DA',g:'m'},{han:'博',py:'BO',g:'m'},{han:'文',py:'WEN',g:'m'},{han:'雅',py:'YA',g:'f'},
+    {han:'诗',py:'SHI',g:'f'},{han:'韵',py:'YUN',g:'f'},{han:'思',py:'SI',g:'u'},{han:'慧',py:'HUI',g:'f'},
+    {han:'敏',py:'MIN',g:'f'},{han:'倩',py:'QIAN',g:'f'},{han:'雪',py:'XUE',g:'f'},{han:'梅',py:'MEI',g:'f'},
+    {han:'兰',py:'LAN',g:'f'},{han:'竹',py:'ZHU',g:'f'},{han:'莲',py:'LIAN',g:'f'},{han:'枫',py:'FENG',g:'m'},
+    {han:'柏',py:'BAI',g:'m'},{han:'松',py:'SONG',g:'m'},{han:'岩',py:'YAN',g:'m'},{han:'峰',py:'FENG',g:'m'},
+    {han:'川',py:'CHUAN',g:'m'},{han:'海',py:'HAI',g:'m'},{han:'鸿',py:'HONG',g:'m'},{han:'鹏',py:'PENG',g:'m'},
+    {han:'龙',py:'LONG',g:'m'},{han:'凤',py:'FENG',g:'f'},{han:'燕',py:'YAN',g:'f'},{han:'蕊',py:'RUI',g:'f'},
+    {han:'蕾',py:'LEI',g:'f'},{han:'萌',py:'MENG',g:'f'},{han:'菲',py:'FEI',g:'f'},{han:'薇',py:'WEI',g:'f'},
+    {han:'芷',py:'ZHI',g:'f'},{han:'芸',py:'YUN',g:'f'},{han:'茜',py:'QIAN',g:'f'},{han:'露',py:'LU',g:'f'},
+    {han:'霜',py:'SHUANG',g:'f'},{han:'冰',py:'BING',g:'f'},{han:'清',py:'QING',g:'f'},{han:'澄',py:'CHENG',g:'m'},
+    {han:'澈',py:'CHE',g:'m'},{han:'沁',py:'QIN',g:'f'},{han:'润',py:'RUN',g:'m'},{han:'源',py:'YUAN',g:'m'},
+    {han:'溪',py:'XI',g:'f'},{han:'漫',py:'MAN',g:'f'},{han:'沛',py:'PEI',g:'f'},{han:'汐',py:'XI',g:'f'},
+    {han:'灿',py:'CAN',g:'m'},{han:'烁',py:'SHUO',g:'m'},{han:'炜',py:'WEI',g:'m'},{han:'烨',py:'YE',g:'m'},
+    {han:'灵',py:'LING',g:'f'},{han:'彩',py:'CAI',g:'f'},{han:'丹',py:'DAN',g:'f'},{han:'绮',py:'QI',g:'f'},
+    {han:'书',py:'SHU',g:'u'},{han:'墨',py:'MO',g:'m'},{han:'琴',py:'QIN',g:'f'},{han:'棋',py:'QI',g:'m'},
+    {han:'歌',py:'GE',g:'f'},{han:'舞',py:'WU',g:'f'},{han:'音',py:'YIN',g:'f'},{han:'梦',py:'MENG',g:'f'},
+    {han:'诺',py:'NUO',g:'u'},{han:'语',py:'YU',g:'f'},{han:'言',py:'YAN',g:'m'},{han:'译',py:'YI',g:'m'},
+    {han:'谊',py:'YI',g:'f'},{han:'谦',py:'QIAN',g:'m'},{han:'诚',py:'CHENG',g:'m'},{han:'仁',py:'REN',g:'m'},
+    {han:'智',py:'ZHI',g:'m'},{han:'德',py:'DE',g:'m'},{han:'贤',py:'XIAN',g:'m'},{han:'真',py:'ZHEN',g:'u'},
+    {han:'纯',py:'CHUN',g:'f'},{han:'洁',py:'JIE',g:'f'},{han:'璞',py:'PU',g:'m'},{han:'璇',py:'XUAN',g:'f'},
+    {han:'瑾',py:'JIN',g:'f'},{han:'玲',py:'LING',g:'f'},{han:'珍',py:'ZHEN',g:'f'},{han:'瑞',py:'RUI',g:'m'},
+    {han:'祥',py:'XIANG',g:'m'},{han:'恩',py:'EN',g:'u'},{han:'惠',py:'HUI',g:'f'},{han:'慈',py:'CI',g:'f'},
+    {han:'慕',py:'MU',g:'f'},{han:'恺',py:'KAI',g:'m'},{han:'恬',py:'TIAN',g:'f'},{han:'昭',py:'ZHAO',g:'m'},
+    {han:'昱',py:'YU',g:'m'},{han:'曦',py:'XI',g:'f'},{han:'昕',py:'XIN',g:'f'},{han:'晴',py:'QING',g:'f'},
+    {han:'晖',py:'HUI',g:'m'},{han:'晓',py:'XIAO',g:'f'},{han:'星',py:'XING',g:'m'},{han:'月',py:'YUE',g:'f'},
+    {han:'云',py:'YUN',g:'f'},{han:'锦',py:'JIN',g:'f'},{han:'绣',py:'XIU',g:'f'},{han:'桐',py:'TONG',g:'f'},
+    {han:'坤',py:'KUN',g:'m'},{han:'震',py:'ZHEN',g:'m'},{han:'霆',py:'TING',g:'m'},{han:'霄',py:'XIAO',g:'m'},{han:'昊',py:'HAO',g:'m'},{han:'晟',py:'SHENG',g:'m'},{han:'晋',py:'JIN',g:'m'},{han:'旭',py:'XU',g:'m'},{han:'昶',py:'CHANG',g:'m'},{han:'昂',py:'ANG',g:'m'},{han:'昆',py:'KUN',g:'m'},{han:'旻',py:'MIN',g:'m'},{han:'晏',py:'YAN',g:'m'},{han:'晗',py:'HAN',g:'m'},{han:'景',py:'JING',g:'m'},{han:'楷',py:'KAI',g:'m'},{han:'楠',py:'NAN',g:'m'},{han:'桦',py:'HUA',g:'m'},{han:'榛',py:'ZHEN',g:'m'},{han:'棣',py:'DI',g:'m'},{han:'桓',py:'HUAN',g:'m'},{han:'榕',py:'RONG',g:'m'},{han:'柯',py:'KE',g:'m'},{han:'栋',py:'DONG',g:'m'},{han:'森',py:'SEN',g:'m'},{han:'毅',py:'YI',g:'m'},{han:'骏',py:'JUN',g:'m'},{han:'骁',py:'XIAO',g:'m'},{han:'驰',py:'CHI',g:'m'},{han:'骐',py:'QI',g:'m'},{han:'骞',py:'QIAN',g:'m'},{han:'韬',py:'TAO',g:'m'},{han:'戈',py:'GE',g:'m'},{han:'戟',py:'JI',g:'m'},{han:'旌',py:'JING',g:'m'},{han:'恒',py:'HENG',g:'m'},{han:'翊',py:'YI',g:'m'},{han:'翱',py:'AO',g:'m'},{han:'翰',py:'HAN',g:'m'},{han:'麒',py:'QI',g:'m'},{han:'麟',py:'LIN',g:'m'},{han:'渊',py:'YUAN',g:'m'},{han:'澎',py:'PENG',g:'m'},{han:'滨',py:'BIN',g:'m'},{han:'洲',py:'ZHOU',g:'m'},{han:'澜',py:'LAN',g:'m'},{han:'屹',py:'YI',g:'m'},{han:'峻',py:'JUN',g:'m'},{han:'岚',py:'LAN',g:'m'},{han:'岳',py:'YUE',g:'m'},{han:'峥',py:'ZHENG',g:'m'},{han:'巍',py:'WEI',g:'m'},{han:'硕',py:'SHUO',g:'m'},{han:'琛',py:'CHEN',g:'m'},{han:'玺',py:'XI',g:'m'},{han:'珏',py:'JUE',g:'m'},{han:'璟',py:'JING',g:'m'},{han:'琨',py:'KUN',g:'m'},{han:'玮',py:'WEI',g:'m'},{han:'琰',py:'YAN',g:'m'},{han:'瑜',py:'YU',g:'m'},{han:'璋',py:'ZHANG',g:'m'},{han:'竣',py:'JUN',g:'m'},{han:'竑',py:'HONG',g:'m'},{han:'立',py:'LI',g:'m'},{han:'章',py:'ZHANG',g:'m'},{han:'端',py:'DUAN',g:'m'},{han:'秉',py:'BING',g:'m'},{han:'穆',py:'MU',g:'m'},{han:'维',py:'WEI',g:'m'},{han:'纬',py:'WEI',g:'m'},{han:'纲',py:'GANG',g:'m'},{han:'纶',py:'LUN',g:'m'},{han:'翎',py:'LING',g:'m'},{han:'翌',py:'YI',g:'m'},{han:'翼',py:'YI',g:'m'},{han:'致',py:'ZHI',g:'m'},{han:'蓬',py:'PENG',g:'m'},{han:'遥',py:'YAO',g:'m'},{han:'逾',py:'YU',g:'m'},{han:'遒',py:'QIU',g:'m'},{han:'邦',py:'BANG',g:'m'},{han:'郡',py:'JUN',g:'m'},{han:'都',py:'DOU',g:'m'},{han:'钊',py:'ZHAO',g:'m'},{han:'钧',py:'JUN',g:'m'},{han:'锐',py:'RUI',g:'m'},{han:'锋',py:'FENG',g:'m'},{han:'铮',py:'ZHENG',g:'m'},{han:'铠',py:'KAI',g:'m'},{han:'铸',py:'ZHU',g:'m'},{han:'锡',py:'XI',g:'m'},{han:'镇',py:'ZHEN',g:'m'},{han:'阔',py:'KUO',g:'m'},{han:'闯',py:'CHUANG',g:'m'},{han:'靖',py:'JING',g:'m'},{han:'顺',py:'SHUN',g:'m'},{han:'颂',py:'SONG',g:'m'},{han:'赫',py:'HE',g:'m'},{han:'齐',py:'QI',g:'m'},{han:'卓',py:'ZHUO',g:'m'},{han:'崇',py:'CHONG',g:'m'},{han:'嵘',py:'RONG',g:'m'},
+    {han:'黛',py:'DAI',g:'f'},{han:'嫣',py:'YAN',g:'f'},{han:'嫦',py:'CHANG',g:'f'},{han:'娥',py:'E',g:'f'},{han:'姬',py:'JI',g:'f'},{han:'姗',py:'SHAN',g:'f'},{han:'婉',py:'WAN',g:'f'},{han:'娅',py:'YA',g:'f'},{han:'婕',py:'JIE',g:'f'},{han:'婧',py:'JING',g:'f'},{han:'媛',py:'YUAN',g:'f'},{han:'宜',py:'YI',g:'f'},{han:'宓',py:'MI',g:'f'},{han:'宣',py:'XUAN',g:'f'},{han:'惜',py:'XI',g:'f'},{han:'盼',py:'PAN',g:'f'},{han:'瞳',py:'TONG',g:'f'},{han:'翩',py:'PIAN',g:'f'},{han:'萦',py:'YING',g:'f'},{han:'绚',py:'XUAN',g:'f'},{han:'缦',py:'MAN',g:'f'},{han:'翠',py:'CUI',g:'f'},{han:'芊',py:'QIAN',g:'f'},{han:'芯',py:'XIN',g:'f'},{han:'苒',py:'RAN',g:'f'},{han:'苑',py:'YUAN',g:'f'},{han:'茉',py:'MO',g:'f'},{han:'莜',py:'YOU',g:'f'},{han:'菁',py:'JING',g:'f'},{han:'萧',py:'XIAO',g:'f'},{han:'蔓',py:'MAN',g:'f'},{han:'萝',py:'LUO',g:'f'},{han:'蕙',py:'HUI',g:'f'},{han:'薰',py:'XUN',g:'f'},{han:'虹',py:'HONG',g:'f'},{han:'霓',py:'NI',g:'f'},{han:'霏',py:'FEI',g:'f'},{han:'霭',py:'AI',g:'f'},{han:'颍',py:'YING',g:'f'},{han:'飒',py:'SA',g:'f'},{han:'飏',py:'YANG',g:'f'},{han:'飘',py:'PIAO',g:'f'},{han:'馨',py:'XIN',g:'f'},{han:'滢',py:'YING',g:'f'},{han:'潇',py:'XIAO',g:'f'},{han:'珊',py:'SHAN',g:'f'},{han:'珀',py:'PO',g:'f'},{han:'珠',py:'ZHU',g:'f'},{han:'瑙',py:'NAO',g:'f'},{han:'琉',py:'LIU',g:'f'},{han:'璃',py:'LI',g:'f'},{han:'莹',py:'YING',g:'f'},{han:'琅',py:'LANG',g:'f'},{han:'珞',py:'LUO',g:'f'},{han:'珂',py:'KE',g:'f'},
+    {han:'凡',py:'FAN',g:'u'},{han:'子',py:'ZI',g:'u'},{han:'一',py:'YI',g:'u'},{han:'之',py:'ZHI',g:'u'},{han:'予',py:'YU',g:'u'},{han:'亦',py:'YI',g:'u'},{han:'允',py:'YUN',g:'u'},{han:'元',py:'YUAN',g:'u'},{han:'冉',py:'RAN',g:'u'},{han:'以',py:'YI',g:'u'},{han:'伊',py:'YI',g:'u'},{han:'佩',py:'PEI',g:'u'},{han:'佳',py:'JIA',g:'u'},{han:'依',py:'YI',g:'u'},{han:'儒',py:'RU',g:'u'},{han:'冠',py:'GUAN',g:'u'},{han:'千',py:'QIAN',g:'u'},{han:'可',py:'KE',g:'u'},{han:'哲',py:'ZHE',g:'u'},{han:'启',py:'QI',g:'u'},{han:'和',py:'HE',g:'u'},{han:'尚',py:'SHANG',g:'u'},{han:'易',py:'YI',g:'u'},{han:'昀',py:'YUN',g:'u'},{han:'知',py:'ZHI',g:'u'},{han:'玉',py:'YU',g:'u'},{han:'玥',py:'YUE',g:'u'},{han:'琬',py:'WAN',g:'u'},{han:'琼',py:'QIONG',g:'u'},{han:'琦',py:'QI',g:'u'},{han:'禾',py:'HE',g:'u'}
+  ];
+  // —— 英文取名字庫（性別傾向 g: m/f） ——
+  var NAME_LIB_EN = [
+    {name:'JAMES',g:'m'},{name:'JOHN',g:'m'},{name:'ROBERT',g:'m'},{name:'MICHAEL',g:'m'},{name:'DAVID',g:'m'},
+    {name:'WILLIAM',g:'m'},{name:'RICHARD',g:'m'},{name:'JOSEPH',g:'m'},{name:'THOMAS',g:'m'},{name:'CHARLES',g:'m'},
+    {name:'CHRISTOPHER',g:'m'},{name:'DANIEL',g:'m'},{name:'MATTHEW',g:'m'},{name:'ANTHONY',g:'m'},{name:'MARK',g:'m'},
+    {name:'DONALD',g:'m'},{name:'STEVEN',g:'m'},{name:'PAUL',g:'m'},{name:'ANDREW',g:'m'},{name:'JOSHUA',g:'m'},
+    {name:'KENNETH',g:'m'},{name:'KEVIN',g:'m'},{name:'BRIAN',g:'m'},{name:'GEORGE',g:'m'},{name:'EDWARD',g:'m'},
+    {name:'RONALD',g:'m'},{name:'TIMOTHY',g:'m'},{name:'JASON',g:'m'},{name:'JEFFREY',g:'m'},{name:'RYAN',g:'m'},
+    {name:'JACOB',g:'m'},{name:'GARY',g:'m'},{name:'NICHOLAS',g:'m'},{name:'ERIC',g:'m'},{name:'JONATHAN',g:'m'},
+    {name:'STEPHEN',g:'m'},{name:'LARRY',g:'m'},{name:'JUSTIN',g:'m'},{name:'SCOTT',g:'m'},{name:'BRANDON',g:'m'},
+    {name:'BENJAMIN',g:'m'},{name:'SAMUEL',g:'m'},{name:'GREGORY',g:'m'},{name:'ALEXANDER',g:'m'},{name:'PATRICK',g:'m'},
+    {name:'JACK',g:'m'},{name:'DENNIS',g:'m'},{name:'JERRY',g:'m'},{name:'TYLER',g:'m'},{name:'AARON',g:'m'},
+    {name:'HENRY',g:'m'},{name:'DOUGLAS',g:'m'},{name:'PETER',g:'m'},{name:'ADAM',g:'m'},{name:'NATHAN',g:'m'},
+    {name:'ZACHARY',g:'m'},{name:'MARY',g:'f'},{name:'PATRICIA',g:'f'},{name:'JENNIFER',g:'f'},{name:'LINDA',g:'f'},
+    {name:'ELIZABETH',g:'f'},{name:'BARBARA',g:'f'},{name:'SUSAN',g:'f'},{name:'JESSICA',g:'f'},{name:'SARAH',g:'f'},
+    {name:'KAREN',g:'f'},{name:'NANCY',g:'f'},{name:'LISA',g:'f'},{name:'MARGARET',g:'f'},{name:'BETTY',g:'f'},
+    {name:'SANDRA',g:'f'},{name:'ASHLEY',g:'f'},{name:'KIMBERLY',g:'f'},{name:'EMILY',g:'f'},{name:'DONNA',g:'f'},
+    {name:'MICHELLE',g:'f'},{name:'CAROL',g:'f'},{name:'AMANDA',g:'f'},{name:'MELISSA',g:'f'},{name:'DEBORAH',g:'f'},
+    {name:'STEPHANIE',g:'f'},{name:'REBECCA',g:'f'},{name:'LAURA',g:'f'},{name:'SHARON',g:'f'},{name:'CYNTHIA',g:'f'},
+    {name:'KATHLEEN',g:'f'},{name:'AMY',g:'f'},{name:'ANGELA',g:'f'},{name:'SHIRLEY',g:'f'},{name:'ANNA',g:'f'},
+    {name:'BRENDA',g:'f'},{name:'PAMELA',g:'f'},{name:'EMMA',g:'f'},{name:'NICOLE',g:'f'},{name:'HELEN',g:'f'},
+    {name:'SAMANTHA',g:'f'},{name:'KATHERINE',g:'f'},{name:'CHRISTINE',g:'f'},{name:'RACHEL',g:'f'},{name:'CAROLYN',g:'f'},
+    {name:'JANET',g:'f'},{name:'CATHERINE',g:'f'},{name:'MARIA',g:'f'},{name:'HEIDI',g:'f'},{name:'CHERYL',g:'f'},
+    {name:'ANDREA',g:'f'},{name:'ROSE',g:'f'},{name:'JULIE',g:'f'},{name:'VICTORIA',g:'f'},{name:'JOY',g:'f'},
+    {name:'ALICE',g:'f'},{name:'ABIGAIL',g:'f'},{name:'SOPHIA',g:'f'},{name:'GRACE',g:'f'},{name:'OLIVIA',g:'f'}
+  ];
+
+  // 單字預計算（母音/子音/數字計數），供組合時加性合併
+  var _nameUnitCache = null;
+  function _unitCounts(letters) { var c = {}; for (var i = 1; i <= 9; i++) c[i] = 0; letters.forEach(function (l) { c[l.value]++; }); return c; }
+  function _buildUnit(raw, han, g) {
+    var a = N.analyzeName(raw); if (!a) return null;
+    a.counts = _unitCounts(a.letters); a.arrows = N.detectArrows(a.counts);
+    a.han = han; a.g = g; a.rawUp = (raw || '').toUpperCase().replace(/[^A-Z]/g, '');
+    return a;
+  }
+  function _nameUnits() {
+    if (_nameUnitCache) return _nameUnitCache;
+    var cn = [], en = [];
+    NAME_LIB_CN.forEach(function (e) { var u = _buildUnit(e.py, e.han, e.g); if (u) cn.push(u); });
+    NAME_LIB_EN.forEach(function (e) { var u = _buildUnit(e.name, e.name, e.g); if (u) en.push(u); });
+    _nameUnitCache = { cn: cn, en: en };
+    return _nameUnitCache;
+  }
+  function _mergeUnits(a, b) {
+    var soulTotal = a.soulTotal + b.soulTotal, outerTotal = a.outerTotal + b.outerTotal, fullTotal = soulTotal + outerTotal;
+    var counts = {}; for (var i = 1; i <= 9; i++) counts[i] = a.counts[i] + b.counts[i];
+    return {
+      parts: [a, b], letters: a.letters.concat(b.letters), counts: counts,
+      soulUrge: N.reduceMaster(soulTotal), soulTotal: soulTotal,
+      outerExpression: N.reduceMaster(outerTotal), outerTotal: outerTotal,
+      fullName: N.reduceMaster(fullTotal), fullTotal: fullTotal,
+      arrows: N.detectArrows(counts)
+    };
+  }
+  /** 窮舉搜尋：依過濾條件組合字庫，計算契合度並排序 */
+  function searchNames(opts) {
+    opts = opts || {};
+    var lib = _nameUnits();
+    var pools = [];
+    if (opts.lib !== 'en') pools.push(lib.cn);
+    if (opts.lib !== 'cn') pools.push(lib.en);
+    var len = opts.len || '2', gender = opts.gender || 'all';
+    var userKey = (R.input.names || []).join('').toUpperCase().replace(/[^A-Z]/g, '');
+    var results = [], seen = {};
+    function okGender(u1, u2) { if (gender === 'all') return true; var gs = [u1.g, u2.g]; if (gs.indexOf('u') >= 0) return true; return gs.indexOf(gender) >= 0; }
+    function pushOne(u) {
+      if (!okGender(u, u)) return;
+      var key = u.rawUp; if (key === userKey || seen[key]) return; seen[key] = 1;
+      results.push({ disp: u.han, py: u.raw, nameAn: u, fit: nameFitScore(u, R), g: u.g });
+    }
+    function pushPair(a, b, da, db, pa, pb) {
+      if (!okGender(a, b)) return;
+      var merged = _mergeUnits(a, b);
+      var key = (pa + pb).toUpperCase().replace(/[^A-Z]/g, '');
+      if (key === userKey || seen[key]) return; seen[key] = 1;
+      results.push({
+        disp: da + db, py: (pa + ' ' + pb).trim(), nameAn: merged, fit: nameFitScore(merged, R),
+        g: (a.g === 'u' && b.g === 'u') ? 'u' : (a.g !== 'u' ? a.g : b.g)
+      });
+    }
+    if (len === '1') {
+      pools.forEach(function (p) { p.forEach(pushOne); });
+    } else {
+      pools.forEach(function (p) { for (var i = 0; i < p.length; i++) for (var j = i; j < p.length; j++) pushPair(p[i], p[j], p[i].han, p[j].han, p[i].raw, p[j].raw); });
+      if (pools.length === 2) { lib.cn.forEach(function (a) { lib.en.forEach(function (b) { pushPair(a, b, a.han, b.han, a.raw, b.raw); }); }); }
+    }
+    results.sort(function (x, y) { return y.fit.rank - x.fit.rank; });
+    return results;
+  }
+  /** 建立隨機池：Fisher-Yates 洗牌後按「不含重複漢字」貪心篩選，確保同一批/相鄰批視覺差異大 */
+  function _buildRandomPool(list) {
+    var pool = list.slice().map(function (it, idx) { return { it: it, idx: idx }; });
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    var used = {}, out = [];
+    pool.forEach(function (e) {
+      var chars = (e.it.disp || '').split('');
+      var han = chars.filter(function (c) { return /[\u4e00-\u9fa5]/.test(c); });
+      var conflict = false;
+      for (var k = 0; k < han.length; k++) { if (used[han[k]]) { conflict = true; break; } }
+      if (conflict) return;
+      han.forEach(function (c) { used[c] = 1; });
+      out.push(e.it);
+    });
+    return out;
+  }
+  /** 改名診斷（文學化口吻，呼應「姓名學專家」人設） */
+  function _sugDiagnostic() {
+    var cc = R.chartCompare, bp = birthWeakPlane(R);
+    var helps = (cc.balances.length > 0) || (cc.fixedWeaknesses.length > 0);
+    var soulPlane = planeOf(R.name.soulUrge.value), soulFillsWeak = (soulPlane === bp.plane);
+    var h = '<div class="note" style="font-size:13px;line-height:1.85;">';
+    h += '「名以载道，字以养气。」依阁下出生图，最需补养的是<b>' + bp.name + '</b>——';
+    if (helps) {
+      h += '可喜的是，阁下本名已在此处着力（补足数字 ' + (cc.balances.join('、') || '—') + (cc.fixedWeaknesses.length ? '，并修复弱箭 ' + cc.fixedWeaknesses.map(function (f) { return f.weakness; }).join('、') : '') + '）。';
+      if (soulFillsWeak) h += '更妙者，灵魂内驱数 ' + R.name.soulUrge.value + ' 正落于此层，改名非急务；但择一更贴合之名，可令气韵更顺。';
+      else h += '然本名灵魂内驱数 ' + R.name.soulUrge.value + ' 未直接落于最弱层，择名时仍可再补一线。';
+    } else {
+      h += '而阁下本名于此层着力有限（未见明显补足）。<b>改名，正是为这张图补上关键之笔。</b>';
+    }
+    h += '底下系统已替阁下遍检字库、穷举组合，筛出与出生图互补最佳之名。';
+    h += '</div>';
+    return h;
+  }
+  /** 選名處方箋（目標數字 / 避開數字 / 三原則） */
+  function _sugPrescription() {
+    var bp = birthWeakPlane(R), target = [], avoid = [];
+    for (var n = 1; n <= 9; n++) { if ((R.counts[n] || 0) === 0) target.push(n); if ((R.counts[n] || 0) >= 2) avoid.push(n); }
+    var h = '<div class="note" style="background:var(--surface1);border-left-color:var(--gold);font-size:13px;line-height:1.8;">';
+    h += '<b>📜 选名处方笺</b><br>';
+    h += '① <b>宜补之数</b>：' + (target.length ? target.join('、') : '出生图九数俱全，无明细缺口') + '（出生图所缺，名字当补）<br>';
+    h += '② <b>宜避之数</b>：' + (avoid.length ? avoid.join('、') : '无') + '（出生图已强，名字不宜再加同力，原书第二原则）<br>';
+    h += '③ <b>三原则</b>：补弱处 · 不强加已强 · 名字之箭不与出生图重叠。';
+    h += '</div>';
+    return h;
+  }
+  function _sugFilters() {
+    var f = nmState.filters || { len: '2', gender: 'all', lib: 'cn' };
+    function sel(v) { return v === f.len ? ' selected' : ''; }
+    var h = '<div class="form-grid" style="margin:12px 0;align-items:end;">';
+    h += '<div class="field"><label>字数</label><select id="nm-filter-len"><option value="1"' + sel('1') + '>单字</option><option value="2"' + sel('2') + '>双字（常用）</option></select></div>';
+    h += '<div class="field"><label>性别倾向</label><select id="nm-filter-gender"><option value="all"' + (f.gender === 'all' ? ' selected' : '') + '>不限</option><option value="m"' + (f.gender === 'm' ? ' selected' : '') + '>男</option><option value="f"' + (f.gender === 'f' ? ' selected' : '') + '>女</option></select></div>';
+    h += '<div class="field"><label>字库</label><select id="nm-filter-lib"><option value="cn"' + (f.lib === 'cn' ? ' selected' : '') + '>中文取名</option><option value="en"' + (f.lib === 'en' ? ' selected' : '') + '>英文取名</option><option value="both"' + (f.lib === 'both' ? ' selected' : '') + '>中英混合</option></select></div>';
+    h += '</div>';
+    return h;
+  }
+  function _sugCards() {
+    var isRand = nmState.sugRandom && nmState.randomPool && nmState.randomPool.length;
+    var list = isRand ? nmState.randomPool : (nmState.suggestions || []), PAGE = 6, page = nmState.sugPage || 0;
+    if (!list.length) return '<div class="note" style="font-size:12.5px;color:var(--muted);">本组过滤条件下未检得合适名字，请调整字数／性别／字库后再试。</div>';
+    var total = list.length, start = page * PAGE, slice = list.slice(start, start + PAGE);
+    var h = '<div class="nc-grid">';
+    slice.forEach(function (it) {
+      var na = it.nameAn;
+      var fnr = N.nameRulingRelation(String(na.fullName.value), R.ruling.value);
+      h += '<div class="card-3 rec-card">';
+      h += '<div class="nc-title">' + esc(it.disp) + '　<span class="nc-raw">' + esc(it.py) + '</span></div>';
+      h += '<div class="nc-nums">' + pill('靈魂 ' + na.soulUrge.value, 'gold') + pill('外在 ' + na.outerExpression.value, 'gold') + pill('完整 ' + na.fullName.value, 'brown') + '</div>';
+      h += '<div class="note" style="font-size:12.5px;"><b>人設：</b>' + namePersonality(na.soulUrge.value, na.outerExpression.value) + '　<b>出生圖補丁：</b>' + esc(namePatch({ soul: na.soulUrge.value, outer: na.outerExpression.value, full: na.fullName.value }, R)) + '</div>';
+      h += '<div class="note" style="font-size:12.5px;"><b>完整姓名數 × 主宰數：</b>' + esc(fnr.text) + '</div>';
+      h += '<h4 class="sub2" style="margin:10px 0 4px;">📊 姓名圖 × 出生圖 綜合診斷</h4>';
+      h += nameChartDiagnosisBody(na, R);
+      h += '</div>';
+    });
+    h += '</div>';
+    var pages = Math.ceil(total / PAGE);
+    var info = isRand
+      ? '第 ' + (page + 1) + ' / ' + pages + ' 批（共 ' + total + ' 个随机候选，已按汉字去重）'
+      : '第 ' + (page + 1) + ' / ' + pages + ' 批（共 ' + total + ' 个穷举候选，依契合度排序）';
+    h += '<div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;">';
+    h += '<button class="btn btn-ghost" id="nm-sug-prev"' + (page <= 0 ? ' disabled' : '') + '>← 上一批</button>';
+    h += '<span style="font-size:12.5px;color:var(--muted);">' + info + '</span>';
+    h += '<button class="btn btn-ghost" id="nm-sug-next"' + (page >= pages - 1 ? ' disabled' : '') + '>换一批 →</button>';
+    h += '<button class="btn" id="nm-sug-random">随机查看 →</button>';
+    h += '</div>';
+    return h;
+  }
+  /** 改名建議主區塊（隱藏於「改名對比」中，點擊「比較新名字」後觸發） */
+  function nameSuggestBlock() {
+    if (!R || !R.name) return '';
+    var h = '<div class="card" style="margin:18px 0;background:var(--surface2);border-left:4px solid var(--gold);">';
+    h += '<div class="sub" style="margin-top:0;color:var(--brown);">💡 改名建议 · 系统穷举推荐</div>';
+    h += _sugDiagnostic();
+    h += _sugPrescription();
+    h += _sugFilters();
+    h += _sugCards();
+    h += '<div class="note" style="font-size:11.5px;background:transparent;border-left-color:var(--line2);color:var(--muted);">※ 推荐名由字库穷举组合、依「姓名图 × 出生图」契合度排序而生；数值严格来自原书算法，文辞为综合归纳的应用建议。</div>';
+    h += '</div>';
+    return h;
   }
 
   // ---------------- 第14章 親密關係（互動配對） ----------------
@@ -4817,6 +5102,36 @@
       else if (e.target && e.target.id === 'p2-reset') { e.preventDefault(); resetPair(); }
       else if (e.target && e.target.id === 'nm-compare') { e.preventDefault(); computeNameCompare(); }
       else if (e.target && e.target.id === 'nm-reset') { e.preventDefault(); resetNameCompare(); }
+      else if (e.target && e.target.id === 'nm-sug-prev') {
+        e.preventDefault();
+        if ((nmState.sugPage || 0) > 0) { nmState.sugPage--; renderPanel('c13'); applySimpToFresh(); }
+      }
+      else if (e.target && e.target.id === 'nm-sug-next') {
+        e.preventDefault();
+        var _sp = ((nmState.sugRandom ? nmState.randomPool : nmState.suggestions) || []).length, _pg = Math.ceil(_sp / 6);
+        if ((nmState.sugPage || 0) < _pg - 1) { nmState.sugPage++; renderPanel('c13'); applySimpToFresh(); }
+      }
+      else if (e.target && e.target.id === 'nm-sug-random') {
+        e.preventDefault();
+        if (!nmState.suggestions || !nmState.suggestions.length) { toast('暂无可随机抽取的候选'); return; }
+        nmState.sugRandom = true;
+        nmState.randomPool = _buildRandomPool(nmState.suggestions);
+        nmState.sugPage = 0;
+        renderPanel('c13');
+        applySimpToFresh();
+      }
+    });
+    // 改名建議：過濾條件變更（事件委託，跨越重新渲染）
+    document.addEventListener('change', function (e) {
+      var id = e.target && e.target.id;
+      if (id === 'nm-filter-len' || id === 'nm-filter-gender' || id === 'nm-filter-lib') {
+        nmState.filters = nmState.filters || {};
+        if (id === 'nm-filter-len') nmState.filters.len = e.target.value;
+        if (id === 'nm-filter-gender') nmState.filters.gender = e.target.value;
+        if (id === 'nm-filter-lib') nmState.filters.lib = e.target.value;
+        nmState.sugPage = 0; nmState.sugRandom = false; nmState.randomPool = null;
+        if (R && R.name) { nmState.suggestions = searchNames(nmState.filters); renderPanel('c13'); applySimpToFresh(); }
+      }
     });
 
     // 預填書中案例
