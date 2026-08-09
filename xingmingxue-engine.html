@@ -63,7 +63,7 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
 /* ===== Tab 导航（参考曼格拉式分区） ===== */
 .tabbar{display:flex;gap:8px;margin-bottom:14px}
 .tabbtn{flex:1;padding:11px;font-size:15px;font-weight:700;border:1px solid var(--border);
-  background:var(--card);color:var(--muted);border-radius:10px;cursor:pointer}
+  background:var(--card);color:var(--muted);border-radius:10px;cursor:pointer;white-space:nowrap}
 .tabbtn.active{background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;border-color:transparent}
 .tabpanel.hidden{display:none}
 .hint{display:block;font-size:12px;color:var(--gold);font-weight:600;margin-top:3px}
@@ -78,6 +78,28 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
 .lib-table th{background:#F0E6D6;color:var(--dark);font-weight:600;text-align:center}
 .lib-table td.c{text-align:center}
 .lib-code{font-size:12.5px;background:#F0E6D6;border-radius:8px;padding:8px 10px;color:var(--dark);line-height:1.6;margin:6px 0}
+.sancai-matrix{width:100%;margin:6px 0;table-layout:fixed}.sancai-matrix td,.sancai-matrix th{text-align:center;font-size:13px;padding:8px 4px}
+.lib-yun-table td{vertical-align:middle;line-height:1.8}
+.scq-sel{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.scq-label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:3px;font-weight:600}
+.scq-sel .half{margin-bottom:4px}
+.sancai-combo td,.sancai-combo th{text-align:center}
+.sancai-combo td.g-daji{background:#D8EAD8;color:#2E6B2E;font-weight:700}
+.sancai-combo td.g-ji{background:#E3F0D8;color:#3B7A3B;font-weight:700}
+.sancai-combo td.g-banji{background:#FBF1CF;color:#8A6D1B;font-weight:700}
+.sancai-combo td.g-xiong{background:#F6D6D6;color:#A33333;font-weight:700}
+.sancai-combo td.g-daxiong{background:#F0B6B6;color:#8E1E1E;font-weight:700}
+.lib-sub{font-size:13.5px;font-weight:700;color:var(--primary);margin:18px 0 4px;border-left:3px solid var(--gold);padding-left:8px}
+.lib-yun{background:#F0E6D6;border-radius:8px;padding:7px 10px;margin:6px 0;font-size:12.5px;line-height:1.8;color:var(--dark)}
+.lib-yun b{color:var(--primary)}
+.lib-grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.lib-grid,.lib-grid-h{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;min-width:330px}
+.lib-grid-h span{text-align:center;font-size:11px;color:var(--muted);font-weight:600}
+.lib-grid .gc{text-align:center;font-size:12.5px;padding:7px 0;border-radius:6px;color:#fff;font-weight:600}
+.lib-grid .g-吉{background:var(--wood)} .lib-grid .g-半吉{background:var(--earth)} .lib-grid .g-凶{background:var(--fire)}
+.t-yun{background:var(--primary)}
+.ynote{display:block;font-size:12px;color:var(--muted);line-height:1.7;margin:3px 0 2px 2px}
+.gender-consolidated{background:#FFF8E7;border-left:3px solid #C4956A;padding:10px 12px;margin:8px 0;font-size:12.5px;line-height:1.9;color:var(--dark)}
 </style>
 </head>
 <body>
@@ -89,8 +111,9 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
 
 <nav class="tabbar" id="tabbar">
   <button class="tabbtn active" data-tab="panel-analyze">分析</button>
-  <button class="tabbtn" data-tab="panel-lib">📖 解读库</button>
-  <button class="tabbtn" data-tab="panel-kx">🔍 康熙字典</button>
+  <button class="tabbtn" data-tab="panel-lib">解读库</button>
+  <button class="tabbtn" data-tab="panel-kx">康熙字典</button>
+  <button class="tabbtn" data-tab="panel-sancai">三才配置</button>
 </nav>
 
 <div class="tabpanel active" id="panel-analyze">
@@ -163,7 +186,32 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
       <tr><th>尾数</th><td>1、2</td><td>3、4</td><td>5、6</td><td>7、8</td><td>9、0</td></tr>
       <tr><th>五行</th><td>木</td><td>火</td><td>土</td><td>金</td><td>水</td></tr>
     </table>
-    <p class="lib-note">三才组合共 125 种。本工具按「五行生克」做简化总评（大吉 / 吉 / 平 / 凶 / 大凶），与流派专属「三才配置吉凶表」口径略有差异，仅供教学参考，故不在结果页直接给「吉凶定论」。</p>
+
+    <div class="lib-sub">三才吉凶的核心：看两对生克关系</div>
+    <p class="lib-p">三才格局由「天格 / 人格 / 地格」三者五行构成，吉凶取决于两对相邻生克：</p>
+    <div class="lib-code">天 → 人（成功运轴）：天格五行 对 人格五行<br>人 → 地（基础运轴）：人格五行 对 地格五行<br><br>每一对的判定：<br><b>相生</b>＝吉（两对皆生＝大吉）；<br><b>比和</b>（同五行）＝平 / 吉（流派常判吉）；<br><b>相克</b>＝凶（两对皆克＝大凶）</div>
+
+    <div class="lib-sub">五行生克 → 三才单对评级矩阵</div>
+    <p class="lib-note">下表为「源五行 → 目标五行」单对关系评级（行＝源，列＝目标）。<span style="color:#2E6B2E;font-weight:700">生</span>＝相生(吉) ｜<span style="color:#8A6D1B;font-weight:700">和</span>＝比和(吉) ｜<span style="color:#A33333;font-weight:700">克</span>＝相克(凶)。</p>
+    <table class="lib-table sancai-matrix">
+      <tr><th></th><th>木</th><th>火</th><th>土</th><th>金</th><th>水</th></tr>
+      <tr><th>木</th><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">生</td><td style="background:#F6D6D6;color:#A33333">克</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td></tr>
+      <tr><th>火</th><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">生</td><td style="background:#F6D6D6;color:#A33333">克</td><td style="background:#D8EAD8;color:#2E6B2E">和</td></tr>
+      <tr><th>土</th><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">生</td><td style="background:#F6D6D6;color:#A33333">克</td></tr>
+      <tr><th>金</th><td style="background:#F6D6D6;color:#A33333">克</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">生</td></tr>
+      <tr><th>水</th><td style="background:#D8EAD8;color:#2E6B2E">生</td><td style="background:#F6D6D6;color:#A33333">克</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td><td style="background:#D8EAD8;color:#2E6B2E">和</td></tr>
+    </table>
+
+    <div class="lib-sub">基础运 · 成功运 · 社交运（衍生三运）</div>
+    <p class="lib-p">五格标准输出里，由三才五行再派生出三项「运」，分别看不同格之间的生克：</p>
+    <table class="lib-table lib-yun-table">
+      <tr><th>衍生运</th><th>取哪两格</th><th>影响领域</th><th>吉（生/和）</th><th>凶（克）</th></tr>
+      <tr><td><b>成功运</b></td><td>天格 ↔ 人格<br>（天→人轴）</td><td>事业顺逆<br>上级 / 长辈助力</td><td>得助<br>顺势而上</td><td>阻力大<br>怀才不遇</td></tr>
+      <tr><td><b>基础运</b></td><td>人格 ↔ 地格<br>（人→地轴）</td><td>安定性<br>家庭 / 下属根基</td><td>根基稳<br>内外和睦</td><td>动荡<br>亲缘疏离</td></tr>
+      <tr><td><b>社交运</b></td><td>人格 ↔ 外格</td><td>人际<br>外界评价</td><td>人缘佳<br>外援多</td><td>易生误会<br>孤立</td></tr>
+    </table>
+
+    <p class="lib-note">⚠ <b>口径统一：</b>本引擎【分析】页 ③ 三才卡片与「三才配置」查询器现已统一采用<b>流派专属评级</b>——「比和」亦判为<b>吉</b>（生/和＝吉，克＝凶），三才组合共 125 种（5×5×5）。总体评级（大吉/吉/半吉/凶/大凶）的九型合成表见「三才配置」标签页。</p>
     <div class="svgbox" id="svg-lib-wuxing"></div>
   </div>
 
@@ -171,6 +219,38 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
     <h2>三、81 数理吉凶速查表</h2>
     <p class="lib-note">下表由引擎内置的 N81 数据直接生成，与分析结果共用同一数据源，保证一致。吉凶分「吉 / 半吉 / 凶」三档。</p>
     <table class="lib-table" id="lib81"><thead><tr><th>数理</th><th>吉凶</th><th>简义</th></tr></thead><tbody id="lib81body"></tbody></table>
+
+  <!-- 81 数理规律总结（自动生成矩阵 + 文字规律） -->
+  <div class="lib-sub">9×9 吉凶分布矩阵（按尾数分列）</div>
+  <div class="lib-grid-wrap"><div id="lib81grid"></div></div>
+  <div class="lib-note">绿＝吉｜黄＝半吉｜红＝凶。矩阵共 10 列（尾数 1、2…9、0），同一尾数落在同一列，便于观察「规律二」。</div>
+
+  <div class="lib-sub">规律一 · 整体分布有倾向，但非随机</div>
+  <p class="lib-p">吉（绿）<b>37</b> 个、半吉（黄）<b>5</b> 个、凶（红）<b>39</b> 个（本引擎 N81 实际统计）。吉凶大致对半，但「大吉」集中、凶数分散，没有哪个区间「全是吉」或「全是凶」。</p>
+
+  <div class="lib-sub">规律二 · 按「尾数」聚类（矩阵看列最明显）</div>
+  <table class="lib-table">
+    <tr><th>尾数</th><td>1</td><td>3</td><td>5</td><td>7</td><td>8</td><td>0/10</td><td>4</td></tr>
+    <tr><th>该列数字</th><td>1…81</td><td>3…73</td><td>5…75</td><td>7…77</td><td>8…78</td><td>10…80</td><td>4…74</td></tr>
+    <tr><th>整体倾向</th><td>几乎全吉</td><td>偏吉</td><td>偏吉</td><td>偏吉</td><td>偏吉</td><td>几乎全凶</td><td>几乎全凶</td></tr>
+  </table>
+  <p class="lib-note">第一线索：尾数 1、3、5、7、8 多半好；尾数 4、0 多半糟。例：尾数 1 整列最整齐（1,11,21,31,41,51,61,71,81 几乎全吉）；尾数 0（10,20…80）几乎全凶。</p>
+
+  <div class="lib-sub">规律三 · 为什么是「81」——模 80 循环</div>
+  <p class="lib-p">古人以「九为阳极，九九为极阳」，认为 1–81 涵盖命运能量所有模式。实务上姓名总格极少超 81；<b>一旦超了，减 80 取尾数</b>（如 95→15）。因此 81 表本质是「模 80 循环」，规律二「看尾数」由此成立。</p>
+
+  <div class="lib-sub">规律四 · 每个数不是单一标签，而是「叠加运」</div>
+  <p class="lib-p">吉数往往同时带多个「运」标签（交叉叠加），而非非吉即凶。下表为主流《五格剖象法》口径（各流派略有出入）：</p>
+  <div id="libyun"></div>
+
+  <div class="lib-sub">规律五 · 男女异论（同一数，男女吉凶相反）</div>
+  <p class="lib-p">有些数男性用主「独立领袖、权威」，传统却认为女性用过刚则「克夫 / 孤寡 / 夫妻不和」。例如 <b>女性孤寡运：21、23、26、28、29、33、39</b>——男性首选之数，女性用名时需配柔数化解。</p>
+
+  <div class="lib-sub">澄清误区</div>
+  <p class="lib-p">本引擎的「笔画五行」（木1/2·火3/4·土5/6·金7/8·水9/0）是<b>另一套</b>，用于「三才配置」的天·人·地五行生克，<b>不是</b> 81 数理吉凶的生成规则。81 表的吉凶由「字诀体系 + 经验」定（如 1＝太极之数、21＝明月中天、34＝破家最大凶），纯五行公式推不出来。</p>
+
+  <div class="lib-sub">两个提醒</div>
+  <p class="lib-p">① 不同流派（熊崎式 / 其他姓名学）对个别数的分类略有出入，上表用主流《五格剖象法》口径。<br>② 上面「特殊运标签」已同步进分析页输出（见各格 81 数理含义处），并标注其算法逻辑：源于字诀体系与经验，非五行公式推导。</p>
   </div>
 
   <div class="lib-section">
@@ -270,7 +350,32 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
   </div>
 
   <div class="lib-section">
-    <h2>十、使用须知 · 免责声明</h2>
+    <h2>十、综合解读方法论（如何读一份姓名报告）</h2>
+    <p class="lib-p">五格、三才、81 数理、特殊运各有侧重，单独看任一格都片面。教学上建议按「格局 → 数理 → 加成」三层叠加阅读。</p>
+
+    <div class="lib-sub">① 五格权重（哪格说了算）</div>
+    <div class="lib-code">人格（主运）＞ 总格（总运，36 岁后格局）＞ 地格（前运，早年）＞ 天格（祖运，先天影响最小）＞ 外格（副运，最弱）</div>
+    <p class="lib-p">人格是核心，决定一生主调；总格管中晚年大势；地格管早年与家庭根基；天格属祖先遗传、几乎不可改；外格最弱，仅作旁证。</p>
+
+    <div class="lib-sub">② 三才 vs 81 数理（格局与细节）</div>
+    <p class="lib-p">三才配置是「两对生克决定的<b>态势格局</b>」，回答「整体顺不顺」；81 数理是「每个格数字的<b>单点吉凶</b>」，回答「这一格好不好」。两者结合：<b>三才定大势，81 定细节。</b></p>
+
+    <div class="lib-sub">③ 冲突处理（当吉凶打架时）</div>
+    <table class="lib-table">
+      <tr><th>冲突情形</th><th>解读口径</th></tr>
+      <tr><td>总格吉 但 三才凶</td><td>数理佳、晚年稳，但格局有损，过程易有波折</td></tr>
+      <tr><td>人格（核心）凶</td><td>无论其他多吉，主运受制，宜配柔数化解</td></tr>
+      <tr><td>三才大吉 但 某格 81 凶</td><td>格局好，但特定格有短板（如外格凶影响最弱）</td></tr>
+      <tr><td>女性孤寡运数（21/23/26/28/29/33/39）</td><td>男用主权威，女用需配柔数（如 5、6、15）化解</td></tr>
+    </table>
+
+    <div class="lib-sub">④ 推荐阅读顺序</div>
+    <div class="lib-code">1) 看人格（核心主运）→ 2) 看三才总评（格局顺逆）→ 3) 查各格 81 数理含义 → 4) 叠加特殊运标签（首领 / 财富 / 女德 / 孤寡…）→ 5) 结合生肖、八字等客观信息</div>
+    <p class="lib-note">以上为文化教学框架，所有吉凶类结论仅供參考，不构成任何决策依据（详见第十一节免责声明）。</p>
+  </div>
+
+  <div class="lib-section">
+    <h2>十一、使用须知 · 免责声明</h2>
     <p class="lib-p">本工具为<b>姓名学结构教学演示</b>，由邓勤敏老师用于课堂讲解，定位是<b>汉字文化与命名结构的研习工具</b>，而非命运预测器。</p>
     <p class="lib-note">纯前端单机运行，计算在浏览器本地完成，不上传、不存储、无后端，用户数据不出本机。</p>
     <div class="lib-code">五格剖象法系 1918 年日本熊崎健翁所创近代民俗数术，并非中国传统周易古法，无现代科学实证支撑。生肖字根喜忌属民间对自然规律的朴素投射。
@@ -290,10 +395,37 @@ footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-
   </div>
   <div id="kxOut"></div>
 </div><!-- /panel-kx -->
+<div class="tabpanel hidden" id="panel-sancai">
+  <div class="card">
+    <h2>三才配置查询器</h2>
+    <p class="lib-p">分别选择「天格 / 人格 / 地格 / 外格」的五行，引擎按<b>流派专属三才评级法</b>（五行生克：生＝吉、比和＝吉、克＝凶）实时计算<b>成功运 · 基础运 · 社交运</b>三项衍生运与<b>三才总体评级</b>。改任一下拉即实时刷新。</p>
+    <div class="scq-sel">
+      <div class="half"><label class="scq-label">天格五行</label><select id="scq-tian"><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></div>
+      <div class="half"><label class="scq-label">人格五行</label><select id="scq-ren"><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></div>
+      <div class="half"><label class="scq-label">地格五行</label><select id="scq-di"><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></div>
+      <div class="half"><label class="scq-label">外格五行</label><select id="scq-wai"><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></div>
+    </div>
+    <button class="btn" id="scq-btn">查询三才评级</button>
+    <div id="scq-out"></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3 style="margin-top:0">流派三才配置评级法（说明）</h3>
+    <p class="lib-p">三才由「天 / 人 / 地」三格五行构成，吉凶取决于两对相邻生克：<b>天→人</b>（成功运轴）与<b>人→地</b>（基础运轴）。每对关系按五行生克定级：</p>
+    <div class="lib-code">相生 或 比和（同五行）＝吉 ｜ 相克＝凶<br>总体评级＝（天→人评级）与（人→地评级）合成：<br>双双吉→大吉 ｜ 含比和且无克→吉 ｜ 一生一克→半吉 ｜ 一吉一被克或双克→凶 / 大凶</div>
+    <div class="lib-sub">三才总体评级（天→人 × 人→地，共 9 型）</div>
+    <table class="lib-table sancai-combo">
+      <tr><th>天→人 ＼ 人→地</th><th>生</th><th>比和</th><th>克</th></tr>
+      <tr><th>生</th><td class="g-daji">大吉</td><td class="g-daji">大吉</td><td class="g-banji">半吉</td></tr>
+      <tr><th>比和</th><td class="g-daji">大吉</td><td class="g-ji">吉</td><td class="g-xiong">凶</td></tr>
+      <tr><th>克</th><td class="g-banji">半吉</td><td class="g-xiong">凶</td><td class="g-daxiong">大凶</td></tr>
+    </table>
+    <p class="lib-note">三才组合共 125 种（5×5×5）。本表为教学化表达：以五行生克原理直接推导评级，与经典《三才配置吉凶表》同源（该表即在生克基础上结合经验微调）。社交运＝人格↔外格，单独成轴，不计入总体评级。</p>
+  </div>
+</div>
 
 <footer>
   <div class="footer-disclaimer">
-    <div>姓名结构分析引擎 V12.3</div>
+    <div>姓名结构分析引擎 V14.3</div>
     <div>⚠️ 本工具为姓名学结构教学演示而专门开发，</div>
     <div>按康熙字典笔画推算五格数理，仅供研习与课堂讲解。</div>
   </div>
@@ -608,6 +740,25 @@ const N81=[
 const N81MAP={}; N81.forEach(([n,jx,txt])=>{ N81MAP[n]={jx:jx, txt:txt, n:n}; });
 function numInfo(n){ const it=N81MAP[((n-1)%81+81)%81+1]; return it||{jx:'-',txt:'超出 1–81',n}; }
 
+// ===== 81 数理「特殊运」叠加标签（主流五格剖象法口径） =====
+// 同一数常叠加多个运标签；吉凶与运标签相互独立。源于「字诀体系 + 经验」标注，非由尾数五行公式推导。
+// 各流派（熊崎式 / 其他）对个别数的分类略有出入，此处用主流口径。
+const WUGE_YUN=[
+  {key:'首领', name:'首领运', desc:'主独立、领导力、权威', core:'独立果决、有领导力和权威', nums:[3,13,16,21,23,29,31,37,39,41,45,47]},
+  {key:'财富', name:'财富运', desc:'主财气、聚财', core:'财气旺、善聚财', nums:[15,16,24,29,32,33,41,52]},
+  {key:'艺能', name:'艺能运', desc:'主才艺、表达、创造', core:'才艺表达力强、富创造性', nums:[13,14,18,26,29,33,35,38,48]},
+  {key:'女德', name:'女德运', desc:'温厚包容、人缘和睦、性格温润、善于协调、柔性领导力、亲和力，男女通用', core:'温厚包容、人缘和睦、性格温润、善于协调、柔性领导力、亲和力（男女通用）', nums:[5,6,11,13,15,16,24,32,35]},
+  {key:'双妻', name:'双妻运', desc:'感情丰富、魅力强、对感情有较高追求、对伴侣要求高、感情经历可能较波折，男女通用', core:'感情丰富、魅力强、对感情有较高追求、对伴侣要求高、感情经历可能较波折（男女通用）', nums:[5,6,15,16,32,39,41]},
+  {key:'刚情', name:'刚情运', desc:'意气用事、刚强倔强', core:'刚强倔强、意气用事', nums:[7,17,18,25,27,28,37,47]},
+  {key:'孤寡', name:'女性孤寡运', desc:'女用需谨慎，宜配柔数化解', core:'独立性强、不喜依赖（传统特指女性用名宜谨慎）', nums:[21,23,26,28,29,33,39]},
+];
+const GENDER_NOTE={
+  '女德':{'男':'传统冠以「女德」之名（旧时视温良包容为女子之德），实则男女皆宜；男性得之主性格温润、善于协调、家人和睦。'},
+  '双妻':{'女':'「双妻」为传统男性婚姻视角表述；女性同理可解为感情丰富、魅力强、对感情有较高追求，未必字面指二婚。'},
+  '孤寡':{'男':'「女性孤寡运」传统特指女性用名宜谨慎；男性得之无此特指，可解为独立性强、不喜依赖。'}
+};
+function yunLabels(n,gender){ const m=((n-1)%81+81)%81+1; const r=[]; WUGE_YUN.forEach(y=>{ if(y.nums.indexOf(m)>=0){ let note=''; if(gender && GENDER_NOTE[y.key] && GENDER_NOTE[y.key][gender]) note=GENDER_NOTE[y.key][gender]; r.push({name:y.name, key:y.key, core:y.core||y.desc, note:note}); } }); return r; }
+
 // ===== 生肖姓名学（辅助，参考） =====
 // 三合：申子辰 亥卯未 寅午戌 巳酉丑 ；六合；冲；害
 const SANHE={'子':['申','辰'],'丑':['巳','酉'],'寅':['午','戌'],'卯':['亥','未'],'辰':['申','子'],'巳':['酉','丑'],'午':['寅','戌'],'未':['亥','卯'],'申':['子','辰'],'酉':['巳','丑'],'戌':['寅','午'],'亥':['卯','未']};
@@ -889,20 +1040,36 @@ function calcWuge(surname, given, wageMode){
   return {S,G,nS,nG,tian,ren,di,wai,zong,unknown,waiNote};
 }
 
-// 三才：天/人/地 五行（取尾数五行）
-function sancai(w){
-  const wxT=numWX(w.tian), wxR=numWX(w.ren), wxD=numWX(w.di);
-  // 上(天→人) 下(人→地)
-  function rel(a,b){ if(SHENG[a]===b) return '生'; if(KE[a]===b) return '克'; return '和'; }
-  const up=rel(wxT,wxR), down=rel(wxR,wxD);
-  let level;
-  const g=(up==='生'?1:0)+(down==='生'?1:0), k=(up==='克'?1:0)+(down==='克'?1:0);
-  if(k===0 && g>=1) level = g===2?'大吉':'吉';
-  else if(k===0) level='平';
-  else if(k===1 && g===0) level='凶';
-  else level='大凶';
-  return {wxT,wxR,wxD,up,down,level};
+// 三才：流派专属评级法（五行生克：生＝吉、比和＝吉、克＝凶）
+function wxRel(a,b){
+  if(a===b) return '和';
+  if(SHENG[a]===b) return '生';       // a 生 b
+  if(SHENG[b]===a) return '被生';      // b 生 a（a 被 b 生）
+  if(KE[a]===b) return '克';           // a 克 b
+  return '被克';                        // b 克 a（a 被 b 克）
 }
+function relGrade(r){ return (r==='克'||r==='被克') ? '凶' : '吉'; }
+function pairScore(r){ return (r==='生'||r==='被生')?2 : r==='和'?1 : -2; }
+function overallLevel(r1,r2){
+  const t=pairScore(r1)+pairScore(r2);
+  if(t>=3) return '大吉';
+  if(t===2) return '吉';
+  if(t<=-3) return '大凶';
+  if(t===-1||t===-2) return '凶';
+  return '半吉'; // t===0
+}
+function sanCaiFull(wxT,wxR,wxD,wxWai){
+  const up=wxRel(wxT,wxR), down=wxRel(wxR,wxD), social=wxRel(wxR,wxWai);
+  const score=pairScore(up)+pairScore(down);
+  return {wxT,wxR,wxD,wxWai,up,down,social,score,level:overallLevel(up,down)};
+}
+const SC_DESC={
+  '大吉':'三才配置极佳，成功运、基础运俱旺，顺遂如意，宜乘势进取。',
+  '吉':'配置良好，发展顺遂，偶有波折亦可化解，主运稳健。',
+  '半吉':'配置平常，吉凶参半，宜稳扎稳打、借外力补足短板。',
+  '凶':'配置欠佳，阻力较多，需以柔数或后天努力化解（详见综合方法论）。',
+  '大凶':'配置不利，波折较重，传统文化中视为需谨慎对待的组合。'
+};
 
 // ===== 渲染 =====
 const $=id=>document.getElementById(id);
@@ -921,7 +1088,7 @@ function analyze(){
     const u=out.appendChild(divCard('⚠ 笔画未知提示',''));
     u.querySelector('.body').innerHTML='<div class="warn">以下字未在康熙字典笔画库中收录，其五格结果可能不准：<b>'+escapeHtml(w.unknown.join('、'))+'</b>。可手填笔画后再算（高级功能待接入）。</div>';
   }
-  renderWuge(out,w);
+  renderWuge(out,w, $('gender').value);
   renderSancai(out,w);
   renderZodiac(out);
   renderBazi(out);
@@ -937,7 +1104,7 @@ function divCard(title,bodyHtml){
 }
 
 // 五格卡片 + SVG
-function renderWuge(out,w){
+function renderWuge(out,w,gender){
   const items=[['天格',w.tian],['人格',w.ren],['地格',w.di],['外格',w.wai],['总格',w.zong]];
   // 繁简对照信息块（始终显示，这是关键信息）
   let infoBlock='';
@@ -967,8 +1134,25 @@ function renderWuge(out,w){
   c.querySelector('.body').insertAdjacentHTML('beforeend',tbl);
   // 81 数理含义
   let mean='<h3>各格 81 数理含义</h3>';
+  mean+='<div class="note">算法逻辑：下表「特殊运标签」取自主流《五格剖象法》字诀体系（基于经验与象数传统标注），<b>非由尾数五行公式推导</b>，亦不同步于吉凶判定。同一数常叠加多个运标签（如 29 同时属首领/财富/艺能/孤寡）。注意<b>男女异论</b>：「女性孤寡运」的数女用名时宜配柔数化解。</div>';
   items.forEach(([t,n])=>{ const info=numInfo(((n-1)%81+81)%81+1);
-    mean+='<div class="note"><b>'+t+' '+n+'：</b><span class="tag t-'+info.jx+'">'+info.jx+'</span> '+info.txt+'</div>'; });
+    const ys=yunLabels(n,gender);
+    const ystr=ys.length ? ys.map(y=>'<span class="tag t-yun" title="本义：'+y.core+'">'+y.name+'</span>').join('') : '<span class="note">（无特殊运标签）</span>';
+    mean+='<div class="note"><b>'+t+' '+n+'：</b><span class="tag t-'+info.jx+'">'+info.jx+'</span> '+info.txt+'<br>特殊运：'+ystr+'</div>'; });
+  // 敏感标签统一说明（女德/双妻/孤寡 — 总格之后一次性展示）
+  const SENSITIVE_KEYS=['女德','双妻','孤寡'];
+  let hitKeys=new Set();
+  items.forEach(([t,n])=>{ yunLabels(n,gender).forEach(y=>{ if(SENSITIVE_KEYS.indexOf(y.key)>=0) hitKeys.add(y.key); }); });
+  if(hitKeys.size>0){
+    let lines=['<div class="note gender-consolidated">'];
+    lines.push('<b>⚠ 关于「女德运」「双妻运」「女性孤寡运」的说明</b>');
+    lines.push('以上标签源自传统《五格剖象法》命名框架，名称带有旧时代性别视角。实际数字能量为中性，解读如下：');
+    if(hitKeys.has('女德')) lines.push('<br><b>· 女德运</b> — 主温厚包容、人缘和睦、性格温润、善于协调、柔性领导力、亲和力。传统冠以"女德"之名（旧时视此类性情为女子之德），实则男女皆宜；男性得之主性格温润、善于协调、家人和睦。');
+    if(hitKeys.has('双妻')) lines.push('<br><b>· 双妻运</b> — 主感情丰富、魅力强、对感情有较高追求、对伴侣要求高、感情经历可能较波折。"双妻"为传统男性婚姻视角表述，女性同理可解为感情丰富、魅力强，未必字面指二婚。男女通用。');
+    if(hitKeys.has('孤寡')) lines.push('<br><b>· 女性孤寡运</b> — 主独立性强、不喜依赖。传统特指女性用名宜谨慎（需配柔数化解）；男性得之无此特指，可解为独立自主、不喜受束缚。');
+    lines.push('</div>');
+    mean+=lines.join('');
+  }
   c.querySelector('.body').insertAdjacentHTML('beforeend',mean);
   out.appendChild(c);
 }
@@ -1000,37 +1184,60 @@ function currentGiven(){return $('given').value.trim();}
 
 // 三才
 function renderSancai(out,w){
-  const sc=sancai(w);
-  const relTxt=r=>r==='生'?'生（吉）':r==='克'?'克（凶）':'比和（平）';
-  const col=r=>r==='生'?'var(--wood)':r==='克'?'var(--fire)':'var(--earth)';
+  const sc=sanCaiFull(numWX(w.tian),numWX(w.ren),numWX(w.di),numWX(w.wai));
+  const relTxt=r=>{const g=relGrade(r); return r+'（'+g+'）';};
+  const col=r=>relGrade(r)==='吉'?'var(--wood)':'var(--fire)';
+  const tag=lv=>(lv==='吉'||lv==='大吉')?'吉':(lv==='半吉'?'半吉':'凶');
   let html='<div class="grip">'+
     '<div class="gbox"><div class="gt">天格五行</div><div class="gn wx-'+sc.wxT+'">'+sc.wxT+'</div></div>'+
     '<div class="gbox"><div class="gt">人格五行</div><div class="gn wx-'+sc.wxR+'">'+sc.wxR+'</div></div>'+
-    '<div class="gbox"><div class="gt">地格五行</div><div class="gn wx-'+sc.wxD+'">'+sc.wxD+'</div></div></div>';
-  html+='<div class="note">天→人：<b style="color:'+col(sc.up)+'">'+relTxt(sc.up)+'</b> ｜ 人→地：<b style="color:'+col(sc.down)+'">'+relTxt(sc.down)+'</b></div>';
-  html+='<div class="note">三才总评（五行生克判断）：<span class="tag t-'+(sc.level==='大吉'||sc.level==='吉'?'吉':(sc.level==='平'?'半吉':'凶'))+'">'+sc.level+'</span> <span class="note">（注：此处按五行生克简化判断，与流派专属「三才配置吉凶表」略有差异，仅供教学参考）</span></div>';
+    '<div class="gbox"><div class="gt">地格五行</div><div class="gn wx-'+sc.wxD+'">'+sc.wxD+'</div></div>'+
+    '<div class="gbox"><div class="gt">外格五行</div><div class="gn wx-'+sc.wxWai+'">'+sc.wxWai+'</div></div></div>';
+  html+='<div class="note">成功运（天→人）：<b style="color:'+col(sc.up)+'">'+relTxt(sc.up)+'</b> ｜ 基础运（人→地）：<b style="color:'+col(sc.down)+'">'+relTxt(sc.down)+'</b></div>';
+  html+='<div class="note">社交运（人格↔外格）：<b style="color:'+col(sc.social)+'">'+relTxt(sc.social)+'</b></div>';
+  html+='<div class="note">三才总体评级（天→人 × 人→地，流派专属）：<span class="tag t-'+tag(sc.level)+'">'+sc.level+'</span> '+SC_DESC[sc.level]+'</div>';
   html+='<div class="svgbox" id="svg-sancai"></div>';
-  const c=divCard('③ 三才配置（天·人·地）',html);
+  const c=divCard('③ 三才配置（天·人·地·外）',html);
   out.appendChild(c);
-  renderSancaiSVG(sc);
+  drawSancaiSVG('svg-sancai',sc);
 }
 
-function renderSancaiSVG(sc){
-  const W=360,H=150; let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:360px;display:block;margin:0 auto;">';
+// 三才 SVG（天/人/地 三角，和＝金/比和色）
+function drawSancaiSVG(targetId,sc){
+  const W=360,H=158; let s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:360px;display:block;margin:0 auto;">';
   const col=wx=>'var(--'+(wx==='木'?'wood':wx==='火'?'fire':wx==='土'?'earth':wx==='金'?'metal':'water')+')';
-  // 天(上) 人(中) 地(下)
   const pts=[{x:W/2,y:34,w:sc.wxT,t:'天'},{x:90,y:108,w:sc.wxR,t:'人'},{x:270,y:108,w:sc.wxD,t:'地'}];
-  s+='<line x1="'+pts[0].x+'" y1="'+pts[0].y+'" x2="'+pts[1].x+'" y2="'+pts[1].y+'" stroke="'+col(sc.up==='生'?'wood':sc.up==='克'?'fire':'earth')+'" stroke-width="3"/>';
-  s+='<line x1="'+pts[0].x+'" y1="'+pts[0].y+'" x2="'+pts[2].x+'" y2="'+pts[2].y+'" stroke="'+col(sc.up==='生'?'wood':sc.up==='克'?'fire':'earth')+'" stroke-width="3"/>';
-  s+='<line x1="'+pts[1].x+'" y1="'+pts[1].y+'" x2="'+pts[2].x+'" y2="'+pts[2].y+'" stroke="'+col(sc.down==='生'?'wood':sc.down==='克'?'fire':'earth')+'" stroke-width="3"/>';
+  s+='<line x1="'+pts[0].x+'" y1="'+pts[0].y+'" x2="'+pts[1].x+'" y2="'+pts[1].y+'" stroke="'+col(sc.up==='生'?'wood':sc.up==='克'?'fire':'gold')+'" stroke-width="3"/>';
+  s+='<line x1="'+pts[0].x+'" y1="'+pts[0].y+'" x2="'+pts[2].x+'" y2="'+pts[2].y+'" stroke="'+col(sc.up==='生'?'wood':sc.up==='克'?'fire':'gold')+'" stroke-width="3"/>';
+  s+='<line x1="'+pts[1].x+'" y1="'+pts[1].y+'" x2="'+pts[2].x+'" y2="'+pts[2].y+'" stroke="'+col(sc.down==='生'?'wood':sc.down==='克'?'fire':'gold')+'" stroke-width="3"/>';
   pts.forEach(p=>{
     s+='<circle cx="'+p.x+'" cy="'+p.y+'" r="22" fill="#fff" stroke="'+col(p.w)+'" stroke-width="2.5"/>';
     s+='<text x="'+p.x+'" y="'+(p.y-2)+'" font-size="13" text-anchor="middle" fill="#7A6A58">'+p.t+'</text>';
     s+='<text x="'+p.x+'" y="'+(p.y+15)+'" font-size="16" font-weight="700" text-anchor="middle" fill="'+col(p.w)+'">'+p.w+'</text>';
   });
-  s+='<text x="'+W/2+'" y="'+H-6+'" font-size="13" text-anchor="middle" fill="#7A6A58">总评：'+sc.level+'（五行生克简化判断）</text>';
+  s+='<text x="'+W/2+'" y="'+(H-6)+'" font-size="13" text-anchor="middle" fill="#7A6A58">三才总体：'+sc.level+'（流派专属评级）</text>';
   s+='</svg>';
-  $('svg-sancai').innerHTML=s;
+  $(targetId).innerHTML=s;
+}
+
+// ===== 三才配置查询器 =====
+function renderScq(){
+  const wxT=$('scq-tian').value, wxR=$('scq-ren').value, wxD=$('scq-di').value, wxWai=$('scq-wai').value;
+  const sc=sanCaiFull(wxT,wxR,wxD,wxWai);
+  const relTxt=r=>{const g=relGrade(r); return r+'（'+g+'）';};
+  const col=r=>relGrade(r)==='吉'?'var(--wood)':'var(--fire)';
+  const tag=lv=>(lv==='吉'||lv==='大吉')?'吉':(lv==='半吉'?'半吉':'凶');
+  let h='<div class="grip">'+
+    '<div class="gbox"><div class="gt">天格</div><div class="gn wx-'+wxT+'">'+wxT+'</div></div>'+
+    '<div class="gbox"><div class="gt">人格</div><div class="gn wx-'+wxR+'">'+wxR+'</div></div>'+
+    '<div class="gbox"><div class="gt">地格</div><div class="gn wx-'+wxD+'">'+wxD+'</div></div>'+
+    '<div class="gbox"><div class="gt">外格</div><div class="gn wx-'+wxWai+'">'+wxWai+'</div></div></div>';
+  h+='<div class="note">成功运（天→人）：<b style="color:'+col(sc.up)+'">'+relTxt(sc.up)+'</b> ｜ 基础运（人→地）：<b style="color:'+col(sc.down)+'">'+relTxt(sc.down)+'</b></div>';
+  h+='<div class="note">社交运（人格↔外格）：<b style="color:'+col(sc.social)+'">'+relTxt(sc.social)+'</b></div>';
+  h+='<div class="note">三才总体评级（天→人 × 人→地，流派专属）：<span class="tag t-'+tag(sc.level)+'">'+sc.level+'</span> '+SC_DESC[sc.level]+'</div>';
+  h+='<div class="svgbox" id="svg-scq"></div>';
+  $('scq-out').innerHTML=h;
+  drawSancaiSVG('svg-scq',sc);
 }
 
 // 生肖
@@ -1181,6 +1388,14 @@ document.querySelectorAll('.tabbtn').forEach(btn=>{
     window.scrollTo(0,0);
   });
 });
+// ===== 三才配置查询器：实时刷新 =====
+['scq-tian','scq-ren','scq-di','scq-wai'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.addEventListener('change', renderScq);
+});
+var scqBtn=document.getElementById('scq-btn');
+if(scqBtn) scqBtn.addEventListener('click', renderScq);
+renderScq();
 
 // ===== 康熙字典查询 =====
 function queryKangxi(){
@@ -1231,6 +1446,36 @@ if($('kxQuery')) $('kxQuery').addEventListener('keydown',e=>{ if(e.key==='Enter'
     html+='<tr><td class="c">'+n+'</td><td class="c"><span class="tag '+cls[jx]+'">'+jx+'</span></td><td>'+txt+'</td></tr>';
   });
   tb.innerHTML=html;
+})();
+
+// ===== 解读库：81 数理 9×9 分布矩阵（按尾数分列，复用 N81 保证一致） =====
+(function fillLib81Grid(){
+  const el=document.getElementById('lib81grid'); if(!el) return;
+  // 10 列：尾数 1,2…9,0；每列竖向排对应数
+  const cols=[];
+  for(let d=1; d<=9; d++){ const a=[]; for(let n=d;n<=81;n+=10) a.push(n); cols.push(a); }
+  const a0=[]; for(let n=10;n<=81;n+=10) a0.push(n); cols.push(a0); // 尾数0
+  const maxLen=Math.max.apply(null, cols.map(c=>c.length));
+  let html='<div class="lib-grid-h">';
+  cols.forEach((c,i)=>{ html+='<span>'+(i<9?(i+1):0)+'</span>'; });
+  html+='</div><div class="lib-grid">';
+  for(let r=0;r<maxLen;r++){
+    cols.forEach(col=>{
+      const n=col[r];
+      if(!n){ html+='<span class="gc" style="background:transparent"></span>'; }
+      else { const jx=N81MAP[n].jx; html+='<span class="gc g-'+jx+'">'+n+'</span>'; }
+    });
+  }
+  html+='</div>';
+  el.innerHTML=html;
+})();
+
+// ===== 解读库：特殊运标签表（复用 WUGE_YUN） =====
+(function fillLibYun(){
+  const el=document.getElementById('libyun'); if(!el) return;
+  let html='';
+  WUGE_YUN.forEach(y=>{ html+='<div class="lib-yun"><b>'+y.name+'</b>（'+y.desc+'）：'+y.nums.join('、')+'</div>'; });
+  el.innerHTML=html;
 })();
 
 // ===== 解读库：五行可视化图（圆形五边形，含生克箭头） =====
@@ -1296,7 +1541,7 @@ if($('kxQuery')) $('kxQuery').addEventListener('keydown',e=>{ if(e.key==='Enter'
 })();
 
 // 版本号
-const VERSION='V12.3';
+const VERSION='V14.3';
 $('title').textContent='姓名结构分析引擎';
 document.title='姓名结构分析引擎 '+VERSION+' · 教学演示';
 </script>
