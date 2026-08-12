@@ -225,15 +225,15 @@
       color: #f4a234; font-size: 12px; font-weight: 700; letter-spacing: 1px;
       margin-bottom: 6px; padding-left: 4px;
     }
-    /* 通用条目（触控目标 ≥46px） */
-    .m-link {
-      display: flex; align-items: center; min-height: 46px;
-      padding: 8px 14px; margin-bottom: 4px;
-      color: rgba(255,255,255,0.82); text-decoration: none;
-      font-size: 15px; border-radius: 12px;
-      background: rgba(255,255,255,0.04); white-space: nowrap;
+    /* 通用条目：JS 生成的裸 <a> 直接套用，确保每个链接独占一行、白色、触控目标 ≥46px */
+    .m-link, .m-block a, .m-section-body a {
+      display: flex; align-items: center; min-height: 48px;
+      padding: 10px 14px; margin-bottom: 6px;
+      color: #fff; text-decoration: none;
+      font-size: 15px; line-height: 1.4; border-radius: 12px;
+      background: rgba(255,255,255,0.05);
     }
-    .m-link:active { background: rgba(255,255,255,0.12); }
+    .m-link:active, .m-block a:active, .m-section-body a:active { background: rgba(255,255,255,0.14); }
 
     /* 手风琴分类 */
     .m-section {
@@ -250,7 +250,7 @@
     .m-section.expanded .m-section-head .caret { transform: rotate(180deg); }
     .m-section-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
     .m-section.expanded .m-section-body { max-height: 1400px; }
-    .m-section-body .m-link { margin: 0 8px 4px; background: rgba(255,255,255,0.03); }
+    .m-section-body a { margin: 0 8px 6px; background: rgba(255,255,255,0.04); }
     .m-sub-title {
       color: #f4a234; font-size: 11px; font-weight: 700; letter-spacing: 1px;
       padding: 8px 14px 2px; opacity: .85;
