@@ -186,7 +186,7 @@
     .mobile-menu-backdrop {
       display: block; position: fixed; inset: 0;
       background: rgba(0,0,0,0.55); opacity: 0; visibility: hidden;
-      transition: opacity .3s; z-index: 1000;
+      transition: opacity .3s; z-index: 9998;
     }
     .mobile-menu-backdrop.open { opacity: 1; visibility: visible; }
 
@@ -198,9 +198,11 @@
       border-left: 1px solid rgba(255,255,255,0.10);
       box-shadow: -10px 0 40px rgba(0,0,0,0.5);
       transform: translateX(100%); transition: transform .3s ease;
-      z-index: 1001;
+      z-index: 9999; isolation: isolate;
     }
     .mobile-menu.open { transform: translateX(0); }
+    /* 抽屉打开时强制把首行导航沉到最底层，确保抽屉绝对浮在最上层、不被首行遮挡 */
+    body.drawer-open nav { z-index: 0 !important; }
     .mobile-menu-head {
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -1990,7 +1992,9 @@ function showTab(tab) {
       var html = '';
       // 快捷入口：行内普通链接 + 预约按钮
       var quick = [];
-      row.querySelectorAll(':scope > a').forEach(function (a) { quick.push(a.outerHTML); });
+      Array.prototype.forEach.call(row.children, function (el) {
+        if (el.tagName === 'A') quick.push(el.outerHTML);
+      });
       var start = row.querySelector('.nav-start');
       if (start) start.querySelectorAll('a').forEach(function (a) { quick.push(a.outerHTML); });
       html += '<div class="m-block"><div class="m-block-title">快捷入口</div>' + quick.join('') + '</div>';
@@ -2015,15 +2019,16 @@ function showTab(tab) {
       });
       scroll.innerHTML = html;
     }
-    buildMenu();
 
     function openMenu() {
       menu.classList.add('open'); backdrop.classList.add('open');
+      document.body.classList.add('drawer-open');
       menu.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
     function closeMenu() {
       menu.classList.remove('open'); backdrop.classList.remove('open');
+      document.body.classList.remove('drawer-open');
       menu.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
@@ -2049,6 +2054,9 @@ function showTab(tab) {
     window.addEventListener('resize', function () {
       if (window.innerWidth > 768) closeMenu();
     });
+
+    // 菜单内容构建放在最后：即使构建失败，也不影响汉堡开关与抽屉浮层
+    try { buildMenu(); } catch (e) { console.error('buildMenu error:', e); }
   })();
 </script>
 </body>
