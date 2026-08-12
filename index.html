@@ -193,7 +193,7 @@
     /* 右侧滑出抽屉 */
     .mobile-menu {
       display: flex; flex-direction: column; position: fixed; top: 0; right: 0;
-      width: min(86%, 360px); height: 100%;
+      width: min(86%, 360px); height: 100vh; height: 100dvh;
       background: rgba(22,15,42,0.99); backdrop-filter: blur(16px);
       border-left: 1px solid rgba(255,255,255,0.10);
       box-shadow: -10px 0 40px rgba(0,0,0,0.5);
@@ -945,8 +945,9 @@
       </div>
     </div>
   </div>
+</nav>
 
-  <!-- ===== 移动端汉堡抽屉菜单 ===== -->
+  <!-- ===== 移动端汉堡抽屉菜单（置于 nav 之外：nav 的 backdrop-filter 会形成 fixed 包含块，把抽屉按 nav 高度压扁，导致只能在首行看到品牌、目录无法滚动/点击。移出后 position:fixed 才相对视口）===== -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <div class="mobile-menu-head">
       <span class="nav-brand">勤思妙享 · 勤敏人类图</span>
@@ -955,7 +956,6 @@
     <div class="mobile-menu-scroll" id="mobileMenuScroll"></div>
   </div>
   <div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
-</nav>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="overview">
