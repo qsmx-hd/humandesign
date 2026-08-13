@@ -85,6 +85,17 @@
   .rem.done{opacity:.55;}
   .rem.done .t{text-decoration:line-through;}
 
+  /* ====== 日期选择器（三级下拉+快捷按钮） ====== */
+  .date-picker{background:#FAF5ED;border-radius:10px;padding:12px;margin-top:8px;}
+  .dp-row{display:flex;align-items:center;gap:6px;}
+  .dp-row select{flex:1;padding:10px 8px;font-size:15px;text-align:center;
+    -webkit-appearance:none;appearance:none;background:#fff;
+    border:1px solid var(--border);border-radius:8px;color:var(--dark);}
+  .dp-quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .dp-quick button{font-size:13px;padding:7px 12px;border-radius:18px;border:1px solid var(--border);
+    background:#fff;color:var(--muted);cursor:pointer;font-weight:500;white-space:nowrap;}
+  .dp-quick button:hover,.dp-quick button.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+
   /* ====== 看板统计 ====== */
   .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
   .stat{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow);}
@@ -399,7 +410,17 @@
         <option>保单续期</option><option>客户回访</option><option>生日祝福</option><option>加保机会</option><option>理赔关怀</option><option>方案讲解</option><option>保单检视</option>
       </select>
       <label>日期</label>
-      <input type="date" id="remDate">
+      <div class="date-picker">
+        <div class="dp-row">
+          <select id="remYear" onchange="syncDayOptions()"></select>
+          <span style="font-size:14px;color:var(--muted);align-self:center;">年</span>
+          <select id="remMonth" onchange="syncDayOptions()"></select>
+          <span style="font-size:14px;color:var(--muted);align-self:center;">月</span>
+          <select id="remDay"></select>
+          <span style="font-size:14px;color:var(--muted);align-self:center;">日</span>
+        </div>
+        <div class="dp-quick" id="dpQuick"></div>
+      </div>
       <label>备注</label>
       <input id="remNote" placeholder="如：发送家庭保障体检方案">
       <button class="primary" onclick="addReminder()">添加提醒</button>
@@ -523,6 +544,69 @@ function normPhone(phone){ return (''+phone).replace(/\D/g,'').slice(-11); }
 function todayStr(){
   const d=new Date(); const m=(''+(d.getMonth()+1)).padStart(2,'0'); const day=(''+(d.getDate())).padStart(2,'0');
   return d.getFullYear()+'-'+m+'-'+day;
+}
+
+// ================================================================
+//  日期选择器（三级下拉 + 快捷按钮）
+// ================================================================
+function initDatePicker(){
+  const ySel = document.getElementById('remYear');
+  const mSel = document.getElementById('remMonth');
+  const dSel = document.getElementById('remDay');
+  const qBox = document.getElementById('dpQuick');
+
+  // 年：当前年 ±3
+  const cy = new Date().getFullYear();
+  for(let y=cy-1; y<=cy+3; y++){
+    const o=document.createElement('option'); o.value=y; o.textContent=y+'年';
+    if(y===cy) o.selected=true; ySel.appendChild(o);
+  }
+  // 月
+  for(let m=1; m<=12; m++){
+    const o=document.createElement('option'); o.value=m; o.textContent=m+'月';
+    if(m===new Date().getMonth()+1) o.selected=true; mSel.appendChild(o);
+  }
+  // 日（初始化后由 syncDayOptions 填充）
+  syncDayOptions();
+
+  // 快捷预设按钮
+  const presets = [
+    {l:'今天',d:0},{l:'明天',d:1},{l:'3天后',d:3},
+    {l:'下周',d:7},{l:'两周后',d:14},{l:'下月',d:30}
+  ];
+  qBox.innerHTML = presets.map(p=>
+    `<button type="button" onclick="setQuickDate(${p.d})">${p.l}</button>`
+  ).join('');
+}
+
+function daysInMonth(y,m){ return new Date(y,m,0).getDate(); }
+
+function syncDayOptions(){
+  const y = parseInt(document.getElementById('remYear').value);
+  const m = parseInt(document.getElementById('remMonth').value);
+  const dSel = document.getElementById('remDay');
+  const curD = parseInt(dSel.value) || new Date().getDate();
+  const max = daysInMonth(y,m);
+  dSel.innerHTML='';
+  for(let d=1; d<=max; d++){
+    const o=document.createElement('option'); o.value=d; o.textContent=d+'日';
+    if(d===Math.min(curD,max)) o.selected=true; dSel.appendChild(o);
+  }
+}
+
+function getRemDateStr(){
+  const y=document.getElementById('remYear').value;
+  const m=(''+document.getElementById('remMonth').value).padStart(2,'0');
+  const d=(''+document.getElementById('remDay').value).padStart(2,'0');
+  return y+'-'+m+'-'+d;
+}
+
+function setQuickDate(offsetDays){
+  const t=new Date(); t.setDate(t.getDate()+offsetDays);
+  document.getElementById('remYear').value=t.getFullYear();
+  document.getElementById('remMonth').value=t.getMonth()+1;
+  syncDayOptions();
+  document.getElementById('remDay').value=t.getDate();
 }
 
 // ================================================================
@@ -1141,7 +1225,7 @@ function addReminder(){
   const c = clients.find(x=>x.id==cSel.value);
   if(!c){ alert('请先在「名单」页导入客户。'); return; }
   const type = document.getElementById('remType').value;
-  const date = document.getElementById('remDate').value || todayStr();
+  const date = getRemDateStr();
   const note = document.getElementById('remNote').value;
   rid++;
   reminders.push({id:rid,clientId:c.id,clientName:c.name,type,date,note,done:false});
@@ -1301,6 +1385,8 @@ function doImportSilent(){
 
   refreshAll();
 }
+// 初始化日期选择器
+initDatePicker();
 </script>
 </body>
 </html>

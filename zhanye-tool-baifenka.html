@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>展业工具 · 百分卡 V5.2</title>
+<style>
+  :root{
+    --navy:#1e3a5f;
+    --navy-2:#2c5282;
+    --blue:#4472c4;
+    --blue-soft:#dbe5f1;
+    --blue-row:#eaf0f8;
+    --gold:#c8963e;
+    --gold-soft:#f5ecd9;
+    --ink:#1a202c;
+    --gray:#5b6671;
+    --gray-2:#8a96a3;
+    --line:#d8e0ea;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --ok:#2f855a;
+    --ok-soft:#e6f4ec;
+    --warn:#c05621;
+    --warn-soft:#fbece1;
+    --bad:#c53030;
+    --bad-soft:#fce8e6;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    font-size:15.5px;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  input,textarea,select{font-family:inherit;font-size:inherit;color:inherit;}
+  .topbar{
+    position:sticky;top:0;z-index:999;
+    display:flex;align-items:center;justify-content:flex-end;
+    padding:8px 14px;background:transparent;border-bottom:none;
+    box-shadow:none;min-height:0;
+  }
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand .logo{
+    width:38px;height:38px;border-radius:9px;
+    background:linear-gradient(135deg,var(--blue) 0%,var(--navy) 100%);
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:800;letter-spacing:1px;
+  }
+  .brand-title{font-size:17px;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:1px;}
+  .brand-sub{font-size:11.5px;color:var(--gray-2);margin-top:2px;letter-spacing:0.5px;}
+  .hamburger{
+    width:36px;height:36px;border-radius:8px;background:transparent;
+    font-size:20px;color:var(--navy);display:flex;align-items:center;justify-content:center;
+    border:1px solid transparent;margin-left:auto;
+  }
+  .hamburger:hover{background:var(--blue-soft);border-color:var(--blue-soft);}
+  /* Hero 下方的快速导航行（原 second row，整体搬到这） */
+  .quick-nav{
+    display:none;
+    margin:16px 0 6px;
+    width:100%;
+  }
+  .quick-nav a{
+    font-size:14px;color:var(--gray);text-decoration:none;
+    padding:10px 6px;border-radius:8px;
+    background:#fff;border:1px solid var(--line);
+    text-align:center;
+    line-height:1.3;
+    transition:all .15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .quick-nav a:hover{background:var(--blue-soft);color:var(--navy);border-color:var(--blue-soft);}
+  .quick-nav a.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  @media (min-width:900px){
+    .hamburger{display:none;}
+    .quick-nav{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+  }
+  .drawer-backdrop{
+    position:fixed;inset:0;background:rgba(15,30,50,.45);
+    opacity:0;visibility:hidden;transition:opacity .25s;z-index:9998;
+  }
+  .drawer-backdrop.open{opacity:1;visibility:visible;}
+  .drawer{
+    position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:340px;
+    background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);
+    transform:translateX(100%);transition:transform .28s ease;z-index:9999;
+    display:flex;flex-direction:column;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 18px;border-bottom:1px solid var(--line);
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;
+  }
+  .drawer-header .ttl{font-size:16px;font-weight:700;}
+  .drawer-close{
+    width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.15);
+    color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;
+  }
+  .drawer-nav{padding:10px;overflow-y:auto;flex:1;}
+  .drawer-nav-group{padding:8px 6px 4px;font-size:11.5px;color:var(--gray-2);font-weight:700;letter-spacing:1px;}
+  .drawer-nav a{
+    display:flex;align-items:center;gap:11px;
+    padding:11px 12px;font-size:14.5px;color:var(--ink);text-decoration:none;
+    border-radius:9px;min-height:42px;line-height:1.25;
+  }
+  .drawer-nav a .ic{font-size:18px;flex-shrink:0;width:24px;text-align:center;}
+  .drawer-nav a .lbl{display:block;font-weight:600;}
+  .drawer-nav a .sub{display:block;font-size:11.5px;color:var(--gray-2);font-weight:400;margin-top:1px;}
+  .drawer-nav a:hover,.drawer-nav a.active{background:var(--blue-soft);color:var(--navy);}
+  .drawer-foot{padding:14px 18px;border-top:1px solid var(--line);font-size:12px;color:var(--gray-2);text-align:center;}
+  body.drawer-open .topbar{z-index:0 !important;}
+  body.drawer-open{overflow:hidden;}
+  .wrap{max-width:980px;margin:0 auto;padding:24px 18px 80px;}
+  .hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 60%,var(--blue) 100%);
+    color:#fff;border-radius:14px;padding:32px 26px 28px;margin-bottom:18px;
+    position:relative;overflow:hidden;
+    text-align:center;
+  }
+  .hero::before{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);}
+  .hero::after{content:"";position:absolute;right:30px;bottom:-60px;width:160px;height:160px;border-radius:50%;background:rgba(200,150,62,.12);}
+  .hero .eyebrow{
+    display:inline-block;background:rgba(200,150,62,.2);color:var(--gold);
+    border:1px solid rgba(200,150,62,.4);
+    font-size:12px;letter-spacing:2px;padding:4px 12px;border-radius:999px;
+    margin:0 auto 18px;
+  }
+  .hero h1{font-size:30px;line-height:1.3;margin:0 auto 14px;font-weight:800;letter-spacing:1.5px;position:relative;display:block;}
+  .hero .sub{font-size:15.5px;color:#d7e2ef;margin:0 auto 22px;max-width:680px;position:relative;text-align:center;}
+  .hero-stats{display:flex;gap:14px;flex-wrap:wrap;position:relative;justify-content:center;}
+  .hero-stat{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    border-radius:10px;padding:14px 18px;min-width:150px;backdrop-filter:blur(4px);
+    text-align:left;
+  }
+  .hero-stat .n{font-size:26px;font-weight:800;color:var(--gold);line-height:1.1;}
+  .hero-stat .l{font-size:12.5px;color:#cdd9e6;margin-top:5px;}
+  section{padding:18px 0 6px;}
+  h2.sec{
+    font-size:21px;color:var(--navy);margin:8px 0 14px;font-weight:800;
+    padding-left:14px;border-left:5px solid var(--gold);
+    display:flex;align-items:center;gap:10px;
+  }
+  h2.sec .num{color:var(--gold);font-size:18px;}
+  h3{font-size:16.5px;color:var(--navy-2);margin:20px 0 8px;font-weight:700;}
+  h4{font-size:15px;color:var(--ink);margin:14px 0 6px;font-weight:700;}
+  p{margin:8px 0;}
+  .lead{font-size:15.5px;color:var(--gray);background:#fff;border:1px solid var(--line);
+    border-left:4px solid var(--gold);padding:14px 18px;border-radius:9px;margin:12px 0 4px;}
+  .quote{background:var(--gold-soft);border-radius:9px;padding:13px 17px;margin:12px 0;
+    font-size:14.5px;color:#5a4a2c;border-left:4px solid var(--gold);}
+  .card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin:14px 0;
+    box-shadow:0 1px 3px rgba(30,58,95,.04);}
+  .act-grid{display:grid;grid-template-columns:1fr;gap:11px;margin:12px 0;}
+  .act{
+    display:flex;align-items:flex-start;gap:13px;
+    background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    transition:transform .15s,box-shadow .15s;
+  }
+  .act:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(30,58,95,.08);}
+  .act .pts{
+    flex-shrink:0;width:54px;height:54px;border-radius:12px;
+    background:linear-gradient(135deg,var(--blue) 0%,var(--navy) 100%);
+    color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-weight:700;
+  }
+  .act .pts .p{font-size:20px;line-height:1;}
+  .act .pts .u{font-size:9.5px;opacity:.85;margin-top:2px;letter-spacing:0.5px;}
+  .act .info{flex:1;}
+  .act .name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+  .act .desc{font-size:13.5px;color:var(--gray);line-height:1.7;}
+  @media (min-width:600px){
+    .act-grid{grid-template-columns:1fr 1fr;}
+  }
+  .case-tabs{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:12px 0 16px;
+    background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px;
+  }
+  .case-tab{
+    padding:9px 4px;border-radius:8px;
+    font-size:13px;font-weight:700;color:var(--gray);
+    background:transparent;border:1px solid transparent;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    cursor:pointer;line-height:1.15;text-align:center;
+  }
+  .case-tab .tag{font-size:10.5px;color:var(--gray-2);font-weight:500;}
+  .case-tab:hover{background:var(--bg);}
+  .case-tab.active{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.2);}
+  .case-tab.active .tag{color:#a8bdd0;}
+  .case-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:10px;}
+  .case-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .case-title{font-size:17px;font-weight:800;color:var(--navy);}
+  .case-badge{font-size:12px;padding:3px 10px;border-radius:999px;font-weight:600;}
+  .badge-good{background:var(--ok-soft);color:var(--ok);}
+  .badge-warn{background:var(--warn-soft);color:var(--warn);}
+  .badge-bad{background:var(--bad-soft);color:var(--bad);}
+  .bfk{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;background:#fff;table-layout:fixed;font-variant-numeric:tabular-nums;}
+  .bfk th,.bfk td{border:1px solid var(--blue-soft);padding:5px 3px;text-align:center;vertical-align:middle;word-break:break-all;line-height:1.2;}
+  .bfk thead th{background:var(--blue-soft);color:var(--navy);font-weight:700;font-size:12px;}
+  .bfk .row-label{background:var(--blue-row);color:var(--navy);font-weight:700;text-align:left;padding:6px 8px;font-size:13px;width:96px;}
+  .bfk .sub{font-size:10px;color:var(--gray-2);font-weight:500;letter-spacing:0;}
+  .bfk .pts-col{background:var(--blue-row);color:var(--navy);font-weight:700;width:28px;font-size:12px;}
+  .bfk .total{background:var(--gold-soft);font-weight:700;color:var(--navy);}
+  .bfk .tt{background:var(--gold-soft);color:var(--navy);font-weight:700;font-size:12px;}
+  .bfk .day-label{background:var(--blue-soft);color:var(--navy);font-size:11.5px;}
+  /* 可编辑单元（2 位数自动换行，不扩列宽） */
+  .bfk div.cell-t{
+    display:table-cell;width:100%;min-height:26px;padding:1px 0;border:0;
+    text-align:center;background:transparent;color:var(--ink);
+    font-size:11.5px;line-height:1.1;letter-spacing:0;
+    word-break:break-all;overflow-wrap:anywhere;white-space:pre-wrap;
+    cursor:text;outline:none;font-variant-numeric:tabular-nums;
+    -webkit-user-select:text;user-select:text;
+  }
+  .bfk div.cell-t:focus{background:rgba(200,150,62,.18);box-shadow:inset 0 0 0 1.5px var(--blue);border-radius:4px;}
+  .bfk div.cell-t:empty::before{content:'0';color:#cdd5e0;font-size:10.5px;}
+  .bfk div.cell-t *{display:none;} /* 防止粘贴进来 HTML */
+  .ratio-row{display:grid;grid-template-columns:80px 1fr 70px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px;}
+  .ratio-row:last-child{border-bottom:none;}
+  .ratio-name{color:var(--navy);font-weight:600;}
+  .ratio-bar{height:18px;background:var(--bg);border-radius:4px;overflow:hidden;position:relative;}
+  .ratio-bar .fill-act{height:100%;background:var(--blue);border-radius:4px;transition:width .4s;}
+  .ratio-bar .fill-base{position:absolute;top:0;height:100%;border-right:2px dashed var(--gold);}
+  .ratio-val{text-align:right;font-weight:700;color:var(--navy);font-size:13px;}
+  .case-analysis{
+    background:var(--gold-soft);border-radius:9px;padding:13px 16px;margin-top:10px;
+    font-size:14px;color:#5a4a2c;border-left:4px solid var(--gold);
+  }
+  .case-analysis b{color:var(--navy);}
+  .diag-form{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:10px;}
+  .diag-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+  .diag-row label{font-size:13.5px;color:var(--gray);display:block;margin-bottom:4px;}
+  .diag-row input{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;
+    font-size:16px;background:var(--bg);text-align:center;font-weight:700;color:var(--navy);
+  }
+  .diag-row input:focus{outline:none;border-color:var(--blue);background:#fff;}
+  .diag-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;}
+  .btn{
+    padding:12px 20px;border-radius:9px;font-size:14px;font-weight:600;
+    background:var(--navy);color:#fff;flex:1;min-width:120px;
+  }
+  .btn:hover{background:var(--navy-2);}
+  .btn.alt{background:var(--blue-soft);color:var(--navy);}
+  .btn.alt:hover{background:var(--blue);color:#fff;}
+  .btn.warn{background:var(--bad-soft);color:var(--bad);}
+  .diag-out{display:none;margin-top:14px;}
+  .diag-out.show{display:block;animation:fadeIn .35s;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .diag-summary{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);
+    color:#fff;border-radius:10px;padding:16px 18px;margin-bottom:12px;
+  }
+  .diag-summary .big{font-size:34px;font-weight:800;color:var(--gold);line-height:1;}
+  .diag-summary .lbl{font-size:13px;color:#cdd9e6;margin-top:4px;}
+  .diag-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:12px;}
+  .diag-stats .item{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;text-align:center;}
+  .diag-stats .item .n{font-size:18px;font-weight:800;color:#fff;}
+  .diag-stats .item .l{font-size:11.5px;color:#aebfd0;margin-top:3px;}
+  .diag-list{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .diag-item{padding:11px 0;border-bottom:1px dashed var(--line);display:flex;gap:11px;align-items:flex-start;}
+  .diag-item:last-child{border-bottom:none;}
+  .diag-item .ic{font-size:18px;flex-shrink:0;width:26px;text-align:center;}
+  .diag-item .txt{font-size:13.5px;color:var(--ink);line-height:1.7;}
+  .diag-item .txt b{color:var(--navy);}
+  .mycard-bar{
+    background:var(--gold-soft);border-radius:10px;padding:12px 16px;margin:10px 0;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  }
+  .mycard-bar .left{font-size:14px;color:var(--navy);font-weight:600;}
+  .mycard-bar .right{display:flex;gap:8px;flex-wrap:wrap;}
+  .mini-btn{
+    padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600;
+    background:#fff;color:var(--navy);border:1px solid var(--gold);
+  }
+  .mini-btn:hover{background:var(--gold);color:#fff;}
+  .mycard-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  .mycard-meta label{font-size:13px;color:var(--gray);display:block;margin-bottom:6px;font-weight:600;}
+  .mycard-meta input{
+    width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;
+    font-size:16px;background:#fff;min-height:48px;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  .mycard-meta input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(68,114,196,.15);}
+  /* date 选择器优化：放大日历按钮、避免手机被 zoom 阻挡 */
+  .mycard-meta input[type="date"]{
+    position:relative;cursor:pointer;color:var(--ink);font-weight:500;
+    background:linear-gradient(180deg,#fff 0%,#fafbfd 100%);
+  }
+  .mycard-meta input[type="date"]:hover{border-color:var(--blue);}
+  .mycard-meta input[type="date"]::-webkit-calendar-picker-indicator{
+    width:32px;height:32px;cursor:pointer;opacity:.7;
+    margin-left:4px;padding:6px;border-radius:6px;
+  }
+  .mycard-meta input[type="date"]::-webkit-calendar-picker-indicator:hover{
+    opacity:1;background:var(--blue-soft);
+  }
+  /* iOS Safari 需要 placeholder 颜色更明显 */
+  .mycard-meta input::placeholder{color:#9aa6b3;}
+  /* 手机端单列填满 + 表格紧凑 */
+  @media (max-width:480px){
+    .mycard-meta{grid-template-columns:1fr;gap:14px;}
+    .bfk{font-size:11.5px;}
+    .bfk th,.bfk td{padding:4px 2px;}
+    .bfk thead th{font-size:10.5px;}
+    .bfk .row-label{font-size:11.5px;padding:4px 6px;width:78px;}
+    .bfk .sub{font-size:9.5px;}
+    .bfk .pts-col{width:22px;font-size:11px;}
+    .bfk .day-label{font-size:10px;}
+    .bfk .tt{font-size:11px;}
+    .bfk div.cell-t{font-size:10.5px;line-height:1.05;min-height:22px;}
+  }
+  .mentor-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;}
+  .mentor-step{
+    display:flex;gap:12px;align-items:flex-start;background:#fff;
+    border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  }
+  .mentor-step .n{
+    flex-shrink:0;width:36px;height:36px;border-radius:50%;
+    background:linear-gradient(135deg,var(--blue) 0%,var(--navy) 100%);
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:800;
+  }
+  .mentor-step .txt{font-size:14px;color:var(--ink);line-height:1.7;}
+  .mentor-step .txt b{color:var(--navy);}
+  @media (min-width:600px){
+    .mentor-grid{grid-template-columns:1fr 1fr;}
+  }
+  .about-box{
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  }
+  .about-box p{font-size:14px;color:var(--gray);margin:8px 0;line-height:1.65;}
+  .about-box .src{
+    background:var(--blue-soft);border-radius:8px;padding:10px 14px;margin-top:12px;
+    font-size:12px;color:var(--navy);line-height:1.55;
+  }
+  .about-box .src a{
+    color:var(--navy);text-decoration:underline;word-break:break-all;overflow-wrap:anywhere;
+    display:inline-block;
+  }
+  .about-box .src .link-short{display:block;margin-top:4px;font-size:11.5px;color:var(--gray-2);}
+  footer{
+    text-align:center;color:var(--gray-2);font-size:12.5px;
+    padding:14px 18px 18px;border-top:1px solid var(--line);margin-top:10px;
+    background:transparent;
+  }
+  footer .brand-foot{color:var(--gray-2);font-size:11.5px;letter-spacing:0.5px;margin-top:4px;}
+  footer .small{color:var(--navy);font-size:13px;font-weight:700;letter-spacing:1px;}
+  @media print{
+    .topbar,.quick-nav,.drawer,.drawer-backdrop,.mycard-bar,
+    .diag-actions,.diag-form,.hero,.mentor-grid,.about-box,
+    .case-tabs,footer,.hamburger{display:none !important;}
+    body{background:#fff;}
+    section{padding:0;}
+    .wrap{max-width:100%;padding:0;}
+    .mycard-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+    .bfk{font-size:11px;}
+    .bfk th,.bfk td{padding:3px 2px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="打开菜单">☰</button>
+</header>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <span class="ttl">展业工具 · 百分卡 · 导航</span>
+    <button class="drawer-close" id="drawerCloseBtn" aria-label="关闭">✕</button>
+  </div>
+  <nav class="drawer-nav" id="drawerNav"></nav>
+  <div class="drawer-foot" id="drawerFoot">V5.2 · Powered By Kan Man Tang</div>
+</aside>
+
+<main class="wrap">
+
+  <section id="hero">
+    <div class="hero">
+      <h1 id="heroTitle">展业工具 · 百分卡</h1>
+      <span class="eyebrow">KAI 关键活动指标管理工具</span>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="n">20 / 100</div><div class="l">每日 20 分 · 每周 100 分</div></div>
+        <div class="hero-stat"><div class="n">10:5:3:1:1</div><div class="l">黄金转化比例（诊断断点）</div></div>
+        <div class="hero-stat"><div class="n">≈ 30元/分</div><div class="l">每 1 分 ≈ 30 元 FYC（首年佣金）</div></div>
+      </div>
+    </div>
+
+    <nav class="quick-nav" id="quickNav" aria-label="快速导航">
+      <a href="#howto">怎么用</a>
+      <a href="#cases">经典案例</a>
+      <a href="#diagnose">自我诊断</a>
+      <a href="#mycard">我的百分卡</a>
+      <a href="#mentor">导师指引</a>
+      <a href="#about">关于</a>
+    </nav>
+
+    <div class="lead">
+      <b>百分卡是"照妖镜"。</b>它能照出从业者真正的问题——但在照出"妖"之前，必须先经过一段枯燥无味的"每天填写"的过程。
+    </div>
+    <p class="sub">把销售过程拆成 6 个关键动作，用"分"代替"感觉"——让代理人每天 2 分钟记录，主管一眼看穿断点。</p>
+  </section>
+
+  <section id="howto">
+    <h2 class="sec"><span class="num">01</span>怎么用：6 个关键动作</h2>
+    <div class="lead">
+      每日工作完毕后，<b>只登记已进行或已发生的活动</b>（准保户答应约见却没露面，不给分）。在 <b>T（次数）</b>栏打勾/填数，<b>P（分数）</b>栏自动 = 次数 × 单项分值；日合计 / 周合计 = 当周得分。
+    </div>
+
+    <div class="act-grid" id="actGrid"></div>
+
+    <div class="quote">
+      💡 <b>使用提醒：</b>每日 20 分是维持中等业绩的最低要求，希望更优异请自定更高目标。多数从业者知道"收保费就能赚佣金"，却从未想过佣金是"接触 → 面谈 → 建议书 → 签投保书 → 收保费"这一串动作的结果——这串指标叫做 <b>KAI（Key Activity Indicator, 关键活动指标）</b>。
+    </div>
+  </section>
+
+  <section id="cases">
+    <h2 class="sec"><span class="num">02</span>5 个经典案例</h2>
+
+    <div class="case-tabs" id="caseTabs"></div>
+    <div id="caseContainer"></div>
+  </section>
+
+  <section id="diagnose">
+    <h2 class="sec"><span class="num">03</span>自我诊断引擎</h2>
+    <div class="lead">
+      填入你<b>本周累计</b>的 6 个动作次数（次数，不是分数），系统自动算：总分、FYC 估算、各环节转化率、是否达标、断点在哪里。
+    </div>
+
+    <div class="diag-form">
+      <div class="diag-row">
+        <div><label>接触/电话约访（次）</label><input type="number" min="0" inputmode="numeric" id="in_t1" placeholder="0" /></div>
+        <div><label>取得面谈（次）</label><input type="number" min="0" inputmode="numeric" id="in_t2" placeholder="0" /></div>
+      </div>
+      <div class="diag-row">
+        <div><label>递送建议书（次）</label><input type="number" min="0" inputmode="numeric" id="in_t3" placeholder="0" /></div>
+        <div><label>取得 3 位准客户名单（次）</label><input type="number" min="0" inputmode="numeric" id="in_t4" placeholder="0" /></div>
+      </div>
+      <div class="diag-row">
+        <div><label>签投保书（次）</label><input type="number" min="0" inputmode="numeric" id="in_t5" placeholder="0" /></div>
+        <div><label>收取保费（次）</label><input type="number" min="0" inputmode="numeric" id="in_t6" placeholder="0" /></div>
+      </div>
+      <div class="diag-actions">
+        <button class="btn" id="btnDiag">开始诊断</button>
+        <button class="btn alt" id="btnReset">清空</button>
+      </div>
+      <div class="diag-out" id="diagOut"></div>
+    </div>
+  </section>
+
+  <section id="mycard">
+    <h2 class="sec"><span class="num">04</span>我的百分卡（互动模板）</h2>
+    <div class="lead">
+      一周一张。填入你<b>每天的活动次数（T）</b>，系统自动算<b>每日/每周得分</b>，可保存到本机、可打印。可复制给团队成员使用。
+    </div>
+
+    <div class="mycard-meta">
+      <div><label>姓名 / 工号</label><input type="text" id="mc_name" placeholder="例如：王小明 / 10001" /></div>
+      <div><label>本周起始日（周一）</label><input type="date" id="mc_date" /></div>
+    </div>
+
+    <div class="mycard-bar">
+      <div class="left">💾 数据自动保存在本机浏览器（localStorage），关闭页面不丢失</div>
+      <div class="right">
+        <button class="mini-btn" id="btnSave">保存</button>
+        <button class="mini-btn" id="btnClear">清空</button>
+        <button class="mini-btn" id="btnPrint">🖨 打印</button>
+        <button class="mini-btn" id="btnFillA">载入案例 A</button>
+      </div>
+    </div>
+
+    <table class="bfk" id="myBfk"></table>
+  </section>
+
+  <section id="mentor">
+    <h2 class="sec"><span class="num">05</span>导师指引（写给主管）</h2>
+    <div class="lead">百分卡用得好不好，<b>七分在主管怎么用</b>。下面是 5 步使用建议，源自原文与一线辅导经验。</div>
+    <div class="mentor-grid">
+      <div class="mentor-step"><div class="n">1</div><div class="txt"><b>让组员自己先看见自己的数据</b>。数据用于辅导而非督导，是百分卡能否被填下去的关键。</div></div>
+      <div class="mentor-step"><div class="n">2</div><div class="txt"><b>盯比例，不盯数量</b>。10:5:3:1:1 是黄金诊断线；偏离在哪一环，问题就在哪一环。</div></div>
+      <div class="mentor-step"><div class="n">3</div><div class="txt"><b>未取得准客户名单 = 警报</b>。无论分数高低，没有"3 位名单"就意味着未来 1–2 个月将"无客户可拜访"。</div></div>
+      <div class="mentor-step"><div class="n">4</div><div class="txt"><b>陪访诊断优于批评</b>。例如签了投保书但收不回保费，往往是"强迫画押"——陪访一次比批评十次有效。</div></div>
+      <div class="mentor-step"><div class="n">5</div><div class="txt"><b>周一周会统一分析</b>。把上周百分卡按组员铺开看，比开会念数字更能找到"共性短板"。</div></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="sec"><span class="num">06</span>关于</h2>
+    <div class="about-box">
+      <p><b>百分卡</b>是几乎每家保险公司都会提供的经典活动量管理工具。</p>
+      <p>本工具由 <b>邓勤敏老师原创开发</b>，集成 5 个经典案例 + 互动诊断 + 空白模板 + 导师指引。</p>
+      <p>如果你是非保险从业者（任何销售/销售管理工作），其中的<b>过程管理逻辑完全相通</b>——拆解出本行业的关键活动指标，量化打分即可。</p>
+      <p>能力和工具都可以迁移。</p>
+      <div class="src">
+        📖 方法出处：<br>
+        《保险业绩提升神器：百分卡（销售行业通用，附模版下载）》<br>
+        勤思妙享 · 2021.10.28<br>
+        <a href="https://mp.weixin.qq.com/s/gncnIi55SDWg4mNUX_jesA" target="_blank" rel="noopener">mp.weixin.qq.com/s/gncnIi55SDWg4mNUX_jesA</a>
+        <span class="link-short">点击查看原文（微信链接，复制到浏览器打开）</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="small" id="footVer">展业工具 · 百分卡V5.2</div>
+  <div class="brand-foot">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+const VERSION = 'V5.2';
+document.getElementById('footVer').textContent = '展业工具 · 百分卡' + VERSION;
+
+const ACTS = [
+  { id:'t1', name:'接触/电话约访', pts:1, desc:'以电话争取或安排一次短期确定的拜访，无论有无成功约到都给分。' },
+  { id:'t2', name:'取得面谈',       pts:2, desc:'真正与客户见面，并谈到与保险相关的事。' },
+  { id:'t3', name:'递送建议书',     pts:3, desc:'提出一份特别为准保户规划的建议书。' },
+  { id:'t4', name:'取得 3 位准客户名单', pts:3, desc:'从保户、朋友或业务来往人处，得到的转介绍准保户名单（前 3 位）。' },
+  { id:'t5', name:'签投保书',       pts:4, desc:'使准保户完成填写一份投保书，或安排做一次体检。' },
+  { id:'t6', name:'收取保费',       pts:5, desc:'收到保费，保单承保。' },
+];
+
+function renderActs(){
+  const html = ACTS.map(a=>`
+    <div class="act">
+      <div class="pts"><div class="p">${a.pts}</div><div class="u">分/次</div></div>
+      <div class="info">
+        <div class="name">${a.name}</div>
+        <div class="desc">${a.desc}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('actGrid').innerHTML = html;
+}
+
+const CASES = [
+  {
+    key:'A', name:'案例 1 · 稳健型',
+    total:103, badge:'badge-good', badgeText:'比例正常',
+    rows:[
+      { name:'接触/电话约访', pts:1, t:[5,5,8,5,0,10,0] },
+      { name:'取得面谈',     pts:2, t:[3,4,3,2,0,2,0] },
+      { name:'递送建议书',   pts:3, t:[2,3,2,1,0,0,0] },
+      { name:'取得3位准客户名单',pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'签投保书',     pts:4, t:[1,0,0,1,0,0,0] },
+      { name:'收取保费',     pts:5, t:[1,0,0,1,0,0,0] },
+    ],
+    analysis:`<b>本周完成 103 分，成交 2 件保单，成功收取保费。</b><br>
+      （1）各项指标<b>比例正常</b>，如能维持分数及比例，应能达成正常合理绩效；<br>
+      （2）<b>应注意本周未取得新准客户名单</b>，不久即会面对无客户可拜访之困难，建议改进。`
+  },
+  {
+    key:'B', name:'案例 2 · 送单高手',
+    total:102, badge:'badge-warn', badgeText:'转化断点',
+    rows:[
+      { name:'接触/电话约访', pts:1, t:[5,5,5,3,4,0,0] },
+      { name:'取得面谈',     pts:2, t:[3,4,2,3,4,0,0] },
+      { name:'递送建议书',   pts:3, t:[3,4,2,3,4,0,0] },
+      { name:'取得3位准客户名单',pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'签投保书',     pts:4, t:[0,0,0,0,0,0,0] },
+      { name:'收取保费',     pts:5, t:[0,0,0,0,0,0,0] },
+    ],
+    analysis:`<b>本周完成 102 分，送出 16 份建议书，未成交任何保单。</b><br>
+      （1）16 份建议书至少应成交 2–3 件，但未成交——表示<b>说明建议书的方式需加强</b>；<br>
+      （2）有可能在<b>一见面就希望能送建议书</b>，客户有被勉强感，所以也不愿意签约；<br>
+      （3）<b>未取得新准客户名单</b>，不久即会面对无客户可拜访之困难。`
+  },
+  {
+    key:'C', name:'案例 3 · 假勤型',
+    total:140, badge:'badge-bad', badgeText:'拜访障碍',
+    rows:[
+      { name:'接触/电话约访', pts:1, t:[20,20,20,20,20,20,20] },
+      { name:'取得面谈',     pts:2, t:[0,0,0,0,0,0,0] },
+      { name:'递送建议书',   pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'取得3位准客户名单',pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'签投保书',     pts:4, t:[0,0,0,0,0,0,0] },
+      { name:'收取保费',     pts:5, t:[0,0,0,0,0,0,0] },
+    ],
+    analysis:`<b>本周完成 140 分，未见任何客户，也未成交任何保单。</b><br>
+      （1）如果<b>周周均如此</b>，表示虽然努力，但有<b>拜访障碍</b>；<br>
+      （2）<b>未取得新准客户名单</b>，不久即会面对无客户可拜访之困难。`
+  },
+  {
+    key:'D', name:'案例 4 · 签后失收',
+    total:151, badge:'badge-warn', badgeText:'收尾失手',
+    rows:[
+      { name:'接触/电话约访', pts:1, t:[5,5,8,5,5,0,0] },
+      { name:'取得面谈',     pts:2, t:[3,4,3,3,3,0,0] },
+      { name:'递送建议书',   pts:3, t:[2,3,2,3,3,0,0] },
+      { name:'取得3位准客户名单',pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'签投保书',     pts:4, t:[2,3,2,3,3,0,0] },
+      { name:'收取保费',     pts:5, t:[0,0,0,0,0,0,0] },
+    ],
+    analysis:`<b>本周完成 151 分，16 次面谈，送出 13 份建议书，发了 13 份投保书，但未收取到保费。</b><br>
+      从业人员各环节动作漂亮，但<b>在签投保书时的说法需检视</b>，可能存在"签了却收不回钱"的问题。`
+  },
+  {
+    key:'E', name:'案例 5 · 心态低落',
+    total:28, badge:'badge-bad', badgeText:'严重不足',
+    rows:[
+      { name:'接触/电话约访', pts:1, t:[3,2,1,5,5,0,0] },
+      { name:'取得面谈',     pts:2, t:[1,1,1,0,0,0,0] },
+      { name:'递送建议书',   pts:3, t:[0,1,1,0,0,0,0] },
+      { name:'取得3位准客户名单',pts:3, t:[0,0,0,0,0,0,0] },
+      { name:'签投保书',     pts:4, t:[0,0,0,0,0,0,0] },
+      { name:'收取保费',     pts:5, t:[0,0,0,0,0,0,0] },
+    ],
+    analysis:`<b>本周完成 28 分，16 次电话约访，3 次面谈，2 次建议书，未成交保单。</b><br>
+      （1）<b>未完成 100 分</b>，未来堪虑；<br>
+      （2）<b>应了解本人目前心态情况</b>——分数全面偏低且中断，多半不是技巧问题。`
+  },
+];
+
+function renderBfkTable(rows, editable){
+  let html = '<thead><tr>';
+  html += '<th class="row-label" rowspan="2">销售活动</th>';
+  html += '<th class="pts-col" rowspan="2">分数</th>';
+  html += '<th colspan="2">周一</th><th colspan="2">周二</th><th colspan="2">周三</th>';
+  html += '<th colspan="2">周四</th><th colspan="2">周五</th><th colspan="2">周六</th><th colspan="2">周日</th>';
+  html += '<th class="total" colspan="2">总分</th>';
+  html += '</tr><tr>';
+  for(let i=0;i<7;i++) html += '<th class="sub">T</th><th class="sub">P</th>';
+  html += '<th class="sub tt">T</th><th class="sub tt">P</th>';
+  html += '</tr></thead><tbody>';
+
+  rows.forEach((r,ri)=>{
+    html += `<tr><td class="row-label">${r.name}</td><td class="pts-col">${r.pts}</td>`;
+    for(let d=0; d<7; d++){
+      const v = (r.t && r.t[d] != null) ? r.t[d] : 0;
+      if(editable){
+        html += `<td><div contenteditable inputmode="numeric" data-r="${ri}" data-d="${d}" class="cell-t" data-val="${v||0}">${v||''}</div></td>`;
+        html += `<td class="auto-p" data-r="${ri}" data-d="${d}">${(v*r.pts)||0}</td>`;
+      } else {
+        html += `<td>${v||''}</td><td>${(v*r.pts)||''}</td>`;
+      }
+    }
+    const sumT = r.t ? r.t.reduce((a,b)=>a+(+b||0),0) : 0;
+    const sumP = sumT * r.pts;
+    if(editable){
+      html += `<td class="auto-t-row" data-r="${ri}">${sumT||''}</td><td class="auto-p-row" data-r="${ri}">${sumP||''}</td>`;
+    } else {
+      html += `<td class="tt">${sumT||''}</td><td class="tt">${sumP||''}</td>`;
+    }
+    html += '</tr>';
+  });
+
+  html += '<tr class="total"><td class="row-label" style="background:var(--gold-soft);">总分</td><td class="pts-col">—</td>';
+  for(let d=0; d<7; d++){
+    let dayT=0, dayP=0;
+    rows.forEach(r=>{
+      const v = r.t && r.t[d] ? +r.t[d] : 0;
+      dayT += v; dayP += v * r.pts;
+    });
+    if(editable){
+      html += `<td class="auto-day-t" data-d="${d}">${dayT||''}</td><td class="auto-day-p" data-d="${d}">${dayP||''}</td>`;
+    } else {
+      html += `<td>${dayT||''}</td><td>${dayP||''}</td>`;
+    }
+  }
+  let weekT=0, weekP=0;
+  rows.forEach(r=>{
+    const sumT = r.t ? r.t.reduce((a,b)=>a+(+b||0),0) : 0;
+    weekT += sumT; weekP += sumT * r.pts;
+  });
+  html += `<td class="tt">${weekT||''}</td><td class="tt">${weekP||''}</td>`;
+  html += '</tr></tbody>';
+  return html;
+}
+
+let currentCase = 0;
+function renderCaseTabs(){
+  const html = CASES.map((c,i)=>`
+    <button class="case-tab ${i===currentCase?'active':''}" data-i="${i}">
+      <div>${c.key}</div><div class="tag">${c.total} 分</div>
+    </button>
+  `).join('');
+  document.getElementById('caseTabs').innerHTML = html;
+  document.querySelectorAll('.case-tab').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      currentCase = +el.dataset.i;
+      renderCaseTabs();
+      renderCaseDetail();
+    });
+  });
+}
+function renderCaseDetail(){
+  const c = CASES[currentCase];
+  const t = c.rows.map(r => r.t.reduce((a,b)=>a+(+b||0),0));
+  const ratios = [
+    { name:'接触 → 面谈',     a:t[0], b:t[1], base:10 },
+    { name:'面谈 → 建议书',   a:t[1], b:t[2], base:5 },
+    { name:'建议书 → 签单',   a:t[2], b:t[4], base:3 },
+    { name:'签单 → 收保费',   a:t[4], b:t[5], base:1 },
+  ];
+  const ratioHTML = ratios.map(r=>{
+    if(!r.a){ return `<div class="ratio-row"><div class="ratio-name">${r.name}</div><div class="ratio-bar"><div class="fill-act" style="width:0%"></div></div><div class="ratio-val">—</div></div>`; }
+    const pct = Math.min(100, Math.round(r.b / r.a * 100));
+    const basePct = Math.round(r.base / 10 * 100);
+    return `<div class="ratio-row">
+      <div class="ratio-name">${r.name}</div>
+      <div class="ratio-bar">
+        <div class="fill-act" style="width:${pct}%"></div>
+        <div class="fill-base" style="left:${basePct}%;display:${basePct<=100?'block':'none'};"></div>
+      </div>
+      <div class="ratio-val">${r.b} / ${r.a} = ${pct}%</div>
+    </div>`;
+  }).join('');
+
+  const fyc = c.total * 30;
+
+  document.getElementById('caseContainer').innerHTML = `
+    <div class="case-card">
+      <div class="case-head">
+        <div class="case-title">${c.name}</div>
+        <div class="case-badge ${c.badge}">${c.badgeText} · 估算 FYC ≈ ¥${fyc.toLocaleString()}</div>
+      </div>
+      <table class="bfk">${renderBfkTable(c.rows, false)}</table>
+      <h4 style="margin-top:14px;">📊 实际转化比例 vs 黄金比例 10:5:3:1:1</h4>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 14px;">
+        ${ratioHTML}
+        <div style="font-size:12px;color:var(--gray-2);margin-top:6px;">💡 虚线为黄金比例基准（10%），实色条为实际转化率</div>
+      </div>
+      <div class="case-analysis">${c.analysis}</div>
+    </div>
+  `;
+}
+
+const FYC_PER_POINT = 30;
+const TARGET = 100;
+
+function runDiag(){
+  const get = id => Math.max(0, parseInt(document.getElementById(id).value || '0', 10) || 0);
+  const t = [get('in_t1'), get('in_t2'), get('in_t3'), get('in_t4'), get('in_t5'), get('in_t6')];
+  const pts = [1,2,3,3,4,5];
+  const total = t.reduce((a,b,i)=>a + b*pts[i], 0);
+  const fyc = total * FYC_PER_POINT;
+
+  const issues = [];
+  const goods = [];
+
+  if(total >= TARGET) goods.push(`本周总分 <b>${total}</b> 分，达到 100 分基准 ✓`);
+  else issues.push(`本周总分 <b>${total}</b> 分，<b>未达 100 分基准</b>，差距 ${TARGET - total} 分`);
+
+  if(t[0] === 0) issues.push('接触/电话约访 = 0，<b>完全没有外联动作</b>，属于"坐商"心态');
+  else if(t[0] < 10) issues.push(`接触仅 <b>${t[0]}</b> 次，访量不足——"所有业务的最前端入口"必须保证每天至少 5–10 次接触`);
+  else goods.push(`接触 <b>${t[0]}</b> 次，外联动作充足 ✓`);
+
+  if(t[0] > 0){
+    const r = t[1] / t[0];
+    if(t[1] === 0) issues.push('有接触但<b>面谈 = 0</b>，可能有<b>约访障碍</b>，需检视话术与名单质量');
+    else if(r < 0.5) issues.push(`接触→面谈转化率 <b>${(r*100).toFixed(0)}%</b>（基准 50%），约访能力待加强`);
+    else goods.push(`接触→面谈转化率 <b>${(r*100).toFixed(0)}%</b> ✓`);
+  }
+
+  if(t[1] > 0){
+    const r = t[2] / t[1];
+    if(t[2] === 0) issues.push('面谈后<b>未送出任何建议书</b>，可能存在"面谈未聚焦需求"，需检视需求定位');
+    else if(r < 0.6) issues.push(`面谈→建议书转化率 <b>${(r*100).toFixed(0)}%</b>（基准 60%），需检视需求分析与方案呈现`);
+    else goods.push(`面谈→建议书转化率 <b>${(r*100).toFixed(0)}%</b> ✓`);
+  }
+
+  if(t[2] > 0){
+    const r = t[4] / t[2];
+    if(t[4] === 0) issues.push('建议书送出不少但<b>签投保书 = 0</b>，<b>说明建议书的方式需加强</b>——可能"一见就送"让客户勉强');
+    else if(r < 0.33) issues.push(`建议书→签单转化率 <b>${(r*100).toFixed(0)}%</b>（基准 33%），异议处理或促成话术待加强`);
+    else if(t[4] > 0) goods.push(`建议书→签单转化率 <b>${(r*100).toFixed(0)}%</b> ✓`);
+  }
+
+  if(t[4] > 0){
+    if(t[5] === 0) issues.push('签了投保书但<b>收不回保费</b>，原文提示"签投保书时的说法需检视"，<b>切勿"强迫画押"</b>，建议陪访诊断');
+    else if(t[5] < t[4]) issues.push(`签了 ${t[4]} 单但只收回 ${t[5]} 单保费，签后收尾能力需检视`);
+    else goods.push(`签单 ${t[4]} 单、收保费 ${t[5]} 单，闭环完整 ✓`);
+  }
+
+  if(t[3] === 0){
+    if(total > 50) issues.push('⚠️ <b>未取得 3 位准客户名单</b>——原文反复强调："不久即会面对<b>无客户可拜访</b>之困难"，是<b>最重要的预警信号</b>');
+    else issues.push('本周未取得 3 位准客户名单，<b>下周务必补上</b>');
+  } else {
+    goods.push(`已取得 ${t[3]} 批准客户名单 ✓`);
+  }
+
+  const issuesHTML = issues.map(s=>`<div class="diag-item"><div class="ic" style="color:var(--warn);">!</div><div class="txt">${s}</div></div>`).join('');
+  const goodsHTML  = goods.map(s=>`<div class="diag-item"><div class="ic" style="color:var(--ok);">✓</div><div class="txt">${s}</div></div>`).join('');
+
+  document.getElementById('diagOut').classList.add('show');
+  document.getElementById('diagOut').innerHTML = `
+    <div class="diag-summary">
+      <div class="big">${total} 分</div>
+      <div class="lbl">本周总分 · ${total >= TARGET ? '达标 ✓' : '未达标 · 差 ' + (TARGET-total) + ' 分'}</div>
+      <div class="diag-stats">
+        <div class="item"><div class="n">¥${fyc.toLocaleString()}</div><div class="l">估算 FYC</div></div>
+        <div class="item"><div class="n">${t.reduce((a,b)=>a+b,0)}</div><div class="l">总动作次数</div></div>
+        <div class="item"><div class="n">${t[5]}</div><div class="l">已收保费</div></div>
+      </div>
+    </div>
+    ${goodsHTML ? `<div class="diag-list" style="margin-bottom:10px;"><h4 style="margin:0 0 6px;color:var(--ok);">✓ 做得不错</h4>${goodsHTML}</div>` : ''}
+    ${issuesHTML ? `<div class="diag-list"><h4 style="margin:0 0 6px;color:var(--warn);">⚠ 需要关注 / 改进</h4>${issuesHTML}</div>` : '<div class="diag-list" style="background:var(--ok-soft);"><div class="diag-item"><div class="ic" style="color:var(--ok);">★</div><div class="txt"><b>所有指标都健康！</b>建议把本周经验写成"最佳实践"，复制给团队其他成员。</div></div></div>'}
+  `;
+  document.getElementById('diagOut').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+document.getElementById('btnDiag').addEventListener('click', runDiag);
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  ['in_t1','in_t2','in_t3','in_t4','in_t5','in_t6'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('diagOut').classList.remove('show');
+});
+
+const STORAGE_KEY = 'baifenka_v1';
+const myBfk = document.getElementById('myBfk');
+const meta = {
+  name: document.getElementById('mc_name'),
+  date: document.getElementById('mc_date'),
+};
+
+// 把 cell-t（contenteditable div）的内容解析为整数
+function getCellVal(sel){
+  const el = myBfk.querySelector(sel);
+  if(!el) return 0;
+  const raw = (el.textContent || '').replace(/\D/g, '');
+  return parseInt(raw || '0', 10) || 0;
+}
+// 同步 cell-t 显示与 data-val（保存时去掉已渲染的多余内容）
+function syncCellDisplay(el){
+  const v = parseInt((el.textContent||'').replace(/\D/g,'') || '0', 10) || 0;
+  const s = String(v);
+  // 2 位以上数字：用空格分隔，确保窄列自动垂直堆叠
+  el.textContent = s.length >= 2 ? s.split('').join(' ') : s;
+  el.dataset.val = String(v);
+  return v;
+}
+
+function buildMyBfk(){
+  const rows = ACTS.map(a => ({ name:a.name, pts:a.pts, t:[0,0,0,0,0,0,0] }));
+  myBfk.innerHTML = renderBfkTable(rows, true);
+  myBfk.querySelectorAll('.cell-t').forEach(el=>{
+    // 限制只允许数字键入，去掉粘贴的非数字
+    el.addEventListener('beforeinput', e=>{
+      if(e.dataType === 'insertText' && /\D/.test(e.data||'')) e.preventDefault();
+    });
+    el.addEventListener('input', ()=>{
+      const r = +el.dataset.r, d = +el.dataset.d;
+      // 去掉刚粘贴进去的非数字
+      const cleaned = (el.textContent||'').replace(/\D/g,'').slice(0,3);
+      if((el.textContent||'') !== cleaned){
+        el.textContent = cleaned;
+      }
+      const v = syncCellDisplay(el);
+      myBfk.querySelector(`.auto-p[data-r="${r}"][data-d="${d}"]`).textContent = v * ACTS[r].pts;
+      recomputeTotals();
+    });
+    // 失焦自动换行展示
+    el.addEventListener('blur', ()=>{ syncCellDisplay(el); recomputeTotals(); });
+    // 阻止粘贴富文本
+    el.addEventListener('paste', e=>{
+      e.preventDefault();
+      const txt = (e.clipboardData||window.clipboardData).getData('text') || '';
+      const cleaned = txt.replace(/\D/g,'').slice(0,3);
+      document.execCommand('insertText', false, cleaned);
+    });
+  });
+  loadFromStorage();
+}
+
+function recomputeTotals(){
+  ACTS.forEach((a,ri)=>{
+    let rowT=0, rowP=0;
+    for(let d=0; d<7; d++){
+      const v = getCellVal(`.cell-t[data-r="${ri}"][data-d="${d}"]`);
+      rowT += v; rowP += v * a.pts;
+    }
+    myBfk.querySelector(`.auto-t-row[data-r="${ri}"]`).textContent = rowT || '';
+    myBfk.querySelector(`.auto-p-row[data-r="${ri}"]`).textContent = rowP || '';
+  });
+  let weekT=0, weekP=0;
+  for(let d=0; d<7; d++){
+    let dayT=0, dayP=0;
+    ACTS.forEach((a,ri)=>{
+      const v = getCellVal(`.cell-t[data-r="${ri}"][data-d="${d}"]`);
+      dayT += v; dayP += v * a.pts;
+    });
+    myBfk.querySelector(`.auto-day-t[data-d="${d}"]`).textContent = dayT || '';
+    myBfk.querySelector(`.auto-day-p[data-d="${d}"]`).textContent = dayP || '';
+    weekT += dayT; weekP += dayP;
+  }
+  const tts = myBfk.querySelectorAll('tr.total .tt');
+  if(tts[0]) tts[0].textContent = weekT || '';
+  if(tts[1]) tts[1].textContent = weekP || '';
+}
+
+function saveToStorage(){
+  const data = { name: meta.name.value, date: meta.date.value, cells: [] };
+  ACTS.forEach((a,ri)=>{
+    for(let d=0; d<7; d++){
+      data.cells.push(getCellVal(`.cell-t[data-r="${ri}"][data-d="${d}"]`));
+    }
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  flashSaveHint();
+}
+function loadFromStorage(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    meta.name.value = data.name || '';
+    meta.date.value = data.date || '';
+    ACTS.forEach((a,ri)=>{
+      for(let d=0; d<7; d++){
+        const v = data.cells[ri*7 + d] || 0;
+        const el = myBfk.querySelector(`.cell-t[data-r="${ri}"][data-d="${d}"]`);
+        if(!el) continue;
+        el.textContent = String(v);
+        if(v >= 10){ const s = String(v).split('').join(' '); el.textContent = s; }
+        el.dataset.val = String(v);
+        myBfk.querySelector(`.auto-p[data-r="${ri}"][data-d="${d}"]`).textContent = v * a.pts;
+      }
+    });
+    recomputeTotals();
+  } catch(e){}
+}
+function clearMyBfk(){
+  if(!confirm('确定要清空本张百分卡吗？')) return;
+  ACTS.forEach(()=>{
+    for(let d=0; d<7; d++){
+      const el = myBfk.querySelector(`.cell-t[data-r="${Math.random()}"][data-d="${d}"]`);
+      // 不使用上面错误的 query；按行清空
+    }
+  });
+  ACTS.forEach((a,ri)=>{
+    for(let d=0; d<7; d++){
+      const el = myBfk.querySelector(`.cell-t[data-r="${ri}"][data-d="${d}"]`);
+      if(!el) continue;
+      el.textContent = '';
+      el.dataset.val = '0';
+    }
+  });
+  meta.name.value = ''; meta.date.value = '';
+  localStorage.removeItem(STORAGE_KEY);
+  recomputeTotals();
+}
+function fillFromCase(idx){
+  const c = CASES[idx];
+  meta.name.value = '案例 ' + c.key;
+  ACTS.forEach((a,ri)=>{
+    for(let d=0; d<7; d++){
+      const v = c.rows[ri].t[d] || 0;
+      const el = myBfk.querySelector(`.cell-t[data-r="${ri}"][data-d="${d}"]`);
+      if(!el) continue;
+      el.textContent = v >= 10 ? String(v).split('').join(' ') : String(v);
+      el.dataset.val = String(v);
+      myBfk.querySelector(`.auto-p[data-r="${ri}"][data-d="${d}"]`).textContent = v * a.pts;
+    }
+  });
+  recomputeTotals();
+  document.getElementById('mycard').scrollIntoView({behavior:'smooth'});
+}
+function flashSaveHint(){
+  const btn = document.getElementById('btnSave');
+  const orig = btn.textContent;
+  btn.textContent = '已保存 ✓';
+  btn.style.background = 'var(--ok)';
+  btn.style.color = '#fff';
+  btn.style.borderColor = 'var(--ok)';
+  setTimeout(()=>{
+    btn.textContent = orig;
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }, 1500);
+}
+
+document.getElementById('btnSave').addEventListener('click', saveToStorage);
+document.getElementById('btnClear').addEventListener('click', clearMyBfk);
+document.getElementById('btnPrint').addEventListener('click', ()=>window.print());
+document.getElementById('btnFillA').addEventListener('click', ()=>fillFromCase(0));
+meta.name.addEventListener('change', saveToStorage);
+meta.date.addEventListener('change', saveToStorage);
+
+const drawer = document.getElementById('drawer');
+const backdrop = document.getElementById('drawerBackdrop');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+const drawerNav = document.getElementById('drawerNav');
+
+function openDrawer(){
+  drawer.classList.add('open');
+  backdrop.classList.add('open');
+  document.body.classList.add('drawer-open');
+  drawer.setAttribute('aria-hidden','false');
+}
+function closeDrawer(){
+  drawer.classList.remove('open');
+  backdrop.classList.remove('open');
+  document.body.classList.remove('drawer-open');
+  drawer.setAttribute('aria-hidden','true');
+}
+hamburgerBtn.addEventListener('click', openDrawer);
+drawerCloseBtn.addEventListener('click', closeDrawer);
+backdrop.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+const NAV_ITEMS = [
+  { href:'#hero',    label:'首页',      icon:'🏠', sub:'3 大数字卡速览' },
+  { href:'#howto',   label:'怎么用',    icon:'📋', sub:'6 动作 + 分值规则' },
+  { href:'#cases',   label:'经典案例',  icon:'📚', sub:'5 案例原文诊断' },
+  { href:'#diagnose',label:'自我诊断',  icon:'🔍', sub:'断点预警引擎' },
+  { href:'#mycard',  label:'我的百分卡',icon:'📝', sub:'6×7 互动模板' },
+  { href:'#mentor',  label:'导师指引',  icon:'🎓', sub:'主管 5 步法' },
+  { href:'#about',   label:'关于',      icon:'ℹ️', sub:'方法出处致谢' },
+];
+
+function buildMenu(){
+  try{
+    const desk = document.getElementById('quickNav');
+    if(desk) desk.innerHTML = NAV_ITEMS.map(i=>`<a href="${i.href}">${i.label}</a>`).join('');
+    drawerNav.innerHTML = NAV_ITEMS.map(i=>`<a href="${i.href}"><span class="ic">${i.icon}</span><span><span class="lbl">${i.label}</span><span class="sub">${i.sub}</span></span></a>`).join('');
+
+    const allLinks = document.querySelectorAll('.quick-nav a, .drawer-nav a');
+    allLinks.forEach(a=>a.addEventListener('click', ()=>{
+      document.querySelectorAll('.drawer-nav a').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.quick-nav a').forEach(x=>x.classList.remove('active'));
+      closeDrawer();
+    }));
+    const sections = NAV_ITEMS.map(i=>document.querySelector(i.href)).filter(Boolean);
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          const id = '#' + en.target.id;
+          document.querySelectorAll('.quick-nav a, .drawer-nav a').forEach(a=>{
+            a.classList.toggle('active', a.getAttribute('href')===id);
+          });
+        }
+      });
+    }, { rootMargin:'-30% 0px -60% 0px' });
+    sections.forEach(s=>obs.observe(s));
+  } catch(err){
+    console.error('buildMenu error', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderActs();
+  renderCaseTabs();
+  renderCaseDetail();
+  buildMyBfk();
+  buildMenu();
+});
+if(document.readyState !== 'loading'){
+  renderActs();
+  renderCaseTabs();
+  renderCaseDetail();
+  buildMyBfk();
+  buildMenu();
+}
+</script>
+
+</body>
+</html>
