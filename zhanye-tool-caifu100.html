@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>展业工具·财富100</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#A87B4F; --dark:#2D2118;
+    --border:#E8DCC8; --muted:#8C7B6B; --paper:#FBF8F2;
+    --accent:#7C9A78; --warn:#B5573B; --gold:#D4A84B;
+    --shadow:0 2px 10px rgba(45,33,24,.08);
+    --red-bg:#C94A3B; --red-text:#FFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--dark);font-size:15px;line-height:1.65;}
+  .wrap{max-width:720px;margin:0 auto;padding:16px 16px 90px;}
+
+  /* ====== 顶部品牌条 ====== */
+  .topbar{display:flex;align-items:center;gap:8px;padding:6px 0 10px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .topbar .logo{width:14px;height:14px;border-radius:50%;background:var(--primary);}
+  .topbar h1{font-size:18px;margin:0;font-weight:800;}
+  .topbar .ver{margin-left:auto;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--border);padding:3px 9px;border-radius:20px;}
+
+  /* ====== 卡片 ====== */
+  .card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .card-title{font-size:16px;font-weight:700;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+  .card-title .ic{font-size:18px;}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 0 12px;}
+
+  /* ====== 表单 ====== */
+  textarea,input,select{width:100%;padding:13px;font-size:15px;border:1px solid var(--border);
+       border-radius:10px;margin-top:8px;font-family:inherit;background:#fff;color:var(--dark);}
+  textarea{min-height:96px;line-height:1.5;}
+  label{font-size:14px;font-weight:600;color:var(--dark);display:block;margin-top:10px;}
+  .row{display:flex;gap:10px;}
+  .row>*{flex:1;}
+
+  button{font-family:inherit;font-size:15px;padding:13px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:600;}
+  .primary{background:var(--primary);color:#fff;width:100%;margin-top:12px;}
+  .ghost{background:#fff;color:var(--primary-d);border:1px solid var(--primary);}
+  .mini{font-size:13px;padding:8px 12px;border-radius:8px;background:var(--primary);color:#fff;width:auto;}
+  .mini.alt{background:#fff;color:var(--primary-d);border:1px solid var(--primary);}
+  .mini.red{background:var(--warn);color:#fff;}
+  .mini.gold{background:var(--gold);color:#fff;}
+
+  .check{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5;}
+  .check input{width:auto;margin-top:3px;}
+
+  /* ====== 客户卡片 ====== */
+  .cli{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:10px;}
+  .ava{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none;}
+  .ava.gold{background:var(--gold);}
+  .ava.a{background:var(--accent);}
+  .cli .info{flex:1;min-width:0;}
+  .cli .nm{font-size:15px;font-weight:700;}
+  .cli .ph{font-size:13.5px;color:var(--muted);margin-top:2px;}
+  .cli .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{font-size:12px;padding:2px 9px;border-radius:20px;background:#F0E6D6;color:var(--primary-d);white-space:nowrap;}
+  .chip.v{background:#EBF1E8;color:var(--accent);}
+  .chip.s{background:#F7E9E3;color:var(--warn);}
+  .chip.g{background:#FDF3DB;color:#B8860B;}
+  .cli .act{flex:none;display:flex;flex-direction:column;gap:6px;}
+
+  /* ====== 标签筛选 ====== */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .fbtn{font-size:13px;padding:8px 13px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;}
+  .fbtn.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+  /* ====== 阶段选择 ====== */
+  .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .seg button{font-size:13px;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:#fff;color:var(--muted);flex:0 0 auto;}
+  .seg button.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+  /* ====== 提醒项 ====== */
+  .rem{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:10px;}
+  .rem .dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex:none;background:var(--accent);}
+  .rem.over .dot{background:var(--warn);}
+  .rem .body{flex:1;}
+  .rem .t{font-size:14.5px;font-weight:700;}
+  .rem .d{font-size:13px;color:var(--muted);margin-top:2px;}
+  .rem.over .d{color:var(--warn);}
+  .rem.done{opacity:.55;}
+  .rem.done .t{text-decoration:line-through;}
+
+  /* ====== 看板统计 ====== */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .stat{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow);}
+  .stat .n{font-size:26px;font-weight:800;color:var(--primary-d);line-height:1.1;}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:5px;}
+
+  /* ====== 漏斗(CSS) ====== */
+  .funnel{margin-top:6px;}
+  .fn{display:flex;align-items:center;gap:10px;margin:9px 0;}
+  .fn .lab{width:74px;font-size:13px;color:var(--dark);text-align:right;flex:none;}
+  .fn .bar{height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;}
+
+  /* ====== 圆环(CSS conic) ====== */
+  .donut{width:140px;height:140px;border-radius:50%;margin:6px auto;}
+
+  /* ====== 评分卡 ====== */
+  .score-row{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);gap:10px;}
+  .score-row:last-child{border-bottom:none;}
+  .score-row .sl{flex:1;font-size:14px;}
+  .score-row .sr{width:50px;text-align:center;font-size:15px;font-weight:700;color:var(--primary-d);}
+  .score-select{flex:1;padding:9px 11px;font-size:14px;border:1px solid var(--border);border-radius:8px;background:#fff;margin:4px 0;}
+  .score-total{font-size:32px;font-weight:800;text-align:center;padding:16px;color:var(--primary-d);}
+  .score-grade{text-align:center;font-size:18px;font-weight:700;margin:8px 0;padding:10px;border-radius:12px;}
+  .grade-a{background:#EBF1E8;color:var(--accent);}
+  .grade-b{background:#FDF3DB;color:#B8860B;}
+  .grade-c{background:#F7E9E3;color:var(--warn);}
+  .grade-d{background:#F0E6D6;color:var(--muted);}
+
+  /* ====== 支出表格 ====== */
+  .exp-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;}
+  .exp-table th{background:#F0E6D6;padding:9px 10px;text-align:left;font-size:13px;font-weight:700;border:1px solid var(--border);}
+  .exp-table td{padding:8px 10px;border:1px solid var(--border);vertical-align:middle;}
+  .exp-table td:first-child{font-weight:600;width:50%;}
+  .exp-input{width:100%;padding:7px 9px;font-size:14px;border:1px solid var(--border);border-radius:6px;background:#fff;vertical-align:middle;}
+  .exp-cat{background:#FAF5ED;font-weight:700;font-size:14px;}
+  .exp-cat td{border-top:2px solid var(--primary) !important;}
+  .exp-total{background:#F0E6D6;font-weight:800;font-size:15px;}
+  .exp-total td{border-top:2px solid var(--primary-d) !important;}
+
+  /* ====== 子Tab（档案内） ====== */
+  .subtabs{display:flex;gap:0;margin-bottom:14px;border-bottom:2px solid var(--border);}
+  .subtab{flex:1;text-align:center;padding:10px 6px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+  .subtab.on{color:var(--primary-d);border-bottom-color:var(--primary);}
+  .sub-content{margin-top:12px;}
+
+  /* ====== 使命页 ====== */
+  .mission-page{background:linear-gradient(135deg,#C94A3B 0%,#A63A2E 100%);color:#fff;border-radius:16px;padding:32px 24px;margin-bottom:14px;text-align:center;}
+  .mission-page h2{font-size:20px;margin:0 0 20px;font-weight:800;letter-spacing:2px;}
+  .mission-page .poem{font-size:15px;line-height:2;text-align:left;max-width:480px;margin:0 auto;}
+  .mission-page .poem .stanza{margin-bottom:18px;}
+  .mission-page .poem .stanza-title{font-weight:700;font-size:14px;opacity:.85;margin-bottom:6px;}
+  .mission-page .footer-text{margin-top:24px;font-size:12px;opacity:.7;letter-spacing:1px;}
+
+  /* ====== 通用 ====== */
+  .note{border-left:4px solid var(--primary);background:#F3EADB;border-radius:0 10px 10px 0;padding:12px 14px;font-size:13px;color:var(--dark);margin:10px 0;}
+  .note.warn{border-left-color:var(--warn);background:#F7E9E3;}
+  .empty{text-align:center;color:var(--muted);font-size:13.5px;padding:24px 0;}
+
+  /* ====== 底部 Tab（6个） ====== */
+  .tabbar{position:fixed;bottom:0;left:0;right:0;max-width:720px;margin:0 auto;
+          display:flex;background:var(--paper);border-top:1px solid var(--border);
+          box-shadow:0 -2px 10px rgba(45,33,24,.06);z-index:50;}
+  .tabbar .tb{flex:1;text-align:center;padding:7px 0 9px;cursor:pointer;color:var(--muted);font-size:11px;}
+  .tabbar .tb .ic{font-size:18px;display:block;line-height:1.1;}
+  .tabbar .tb.on{color:var(--primary-d);font-weight:700;}
+
+  .scene{display:none;}
+  .scene.on{display:block;}
+
+  @media (max-width:480px){
+    .stats{grid-template-columns:1fr 1fr;}
+    .row{flex-direction:column;gap:0;}
+    .tabbar .tb{font-size:10px;padding:6px 0 8px;}
+    .tabbar .tb .ic{font-size:16px;}
+    .exp-table{font-size:13px;}
+    .exp-table th,.exp-table td{padding:6px 7px;}
+  }
+  @media print{ .tabbar{display:none;} .wrap{padding-bottom:16px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ 顶部品牌条 ============ -->
+  <div class="topbar" style="justify-content:center;flex-direction:column;align-items:center;gap:2px;border-bottom:none;margin-bottom:10px;">
+    <h1 style="font-size:20px;letter-spacing:3px;">展业工具<span style="margin:0 2px;">·</span>财富100</h1>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:6px;">客户名单梳理工具</div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:4px;">Powered By Kan Man Tang</div>
+  </div>
+
+  <!-- ==================== ① 名单 ==================== -->
+  <section class="scene on" id="scene-list">
+    <div class="card">
+      <div class="card-title"><span class="ic">📇</span> 名单导入 / 清洗 / 去重</div>
+      <p class="lead">粘贴名单（每行：姓名,手机号,来源），或载入示例。系统自动去重、字段标准化，手机号默认脱敏。</p>
+      <textarea id="importBox" placeholder="示例格式（逗号分隔）：&#10;张伟,13800138000,老客户转介绍&#10;李娜,13900139000,活动报名&#10;王芳,13700137000,微信好友"></textarea>
+      <div class="check">
+        <input type="checkbox" id="authChk">
+        <span>我已获得客户授权，仅用于本人合规的客户经营与跟进（符合《个人信息保护法》最小必要原则）。</span>
+      </div>
+      <button class="primary" onclick="doImport()">导入并清洗</button>
+      <div class="row" style="margin-top:10px;">
+        <button class="ghost" onclick="loadSample()">载入示例名单</button>
+        <button class="ghost" onclick="clearAll()">清空</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ic">👥</span> 客户列表 <span id="listCount" style="font-size:13px;color:var(--muted);font-weight:400;"></span></div>
+      <input id="searchBox" placeholder="搜索姓名 / 手机号 / 标签…" oninput="renderList()">
+      <div id="listBox" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ② 档案（黄金30 + 支出计划） ==================== -->
+  <section class="scene" id="scene-profile">
+    <div class="card">
+      <div class="card-title"><span class="ic">👤</span> 客户档案</div>
+      <label>选择客户</label>
+      <select id="profClient" onchange="renderProfile()"></select>
+
+      <!-- 子Tab：黄金30信息表 / 支出计划表 -->
+      <div class="subtabs" style="margin-top:14px;">
+        <div class="subtab on" data-sub="basic" onclick="switchSub('basic')">📋 黄金30信息表</div>
+        <div class="subtab" data-sub="expense" onclick="switchSub('expense')">💰 支出计划表</div>
+      </div>
+
+      <!-- ---- 黄金30信息表 ---- -->
+      <div id="sub-basic" class="sub-content">
+        <div id="profEmpty" class="empty">请先在「名单」页导入客户。</div>
+        <div id="profForm" style="display:none;">
+          <div style="background:#FAF5ED;border-radius:10px;padding:14px;margin-bottom:12px;">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px;" id="profName">—</div>
+            <div style="font-size:13px;color:var(--muted);" id="profPhone">—</div>
+            <div class="tags" style="margin-top:6px;" id="profGradeChip"></div>
+          </div>
+
+          <label>性别</label>
+          <select id="pGender" class="score-select" onchange="saveProfile()"><option value="">请选择</option><option value="男">男</option><option value="女">女</option></select>
+          <div class="row">
+            <div><label>年龄</label><input type="number" id="pAge" class="score-select" placeholder="例：35" onchange="saveProfile()"></div>
+            <div><label>预计年收入（万）</label><input type="number" id="pIncome" class="score-select" placeholder="例：30" onchange="saveProfile()"></div>
+          </div>
+          <div class="row">
+            <div><label>工作单位</label><input id="pCompany" class="score-select" placeholder="公司/单位名称" onchange="saveProfile()"></div>
+            <div><label>所属行业</label><input id="pIndustry" class="score-select" placeholder="行业" onchange="saveProfile()"></div>
+          </div>
+          <label>家庭结构</label>
+          <textarea id="pFamily" style="min-height:60px;" placeholder="例：已婚，一子一女，父母同住" onchange="saveProfile()"></textarea>
+
+          <label>人生阶段</label>
+          <div class="seg" id="pLifeStage"></div>
+
+          <label>已有保障</label>
+          <textarea id="pExisting" style="min-height:72px;" placeholder="记录客户已购买的保险产品及保额…" onchange="saveProfile()"></textarea>
+
+          <label>保障需求</label>
+          <textarea id="pNeeds" style="min-height:72px;" placeholder="根据沟通记录填写客户的保障缺口…" onchange="saveProfile()"></textarea>
+
+          <label>切入话题</label>
+          <textarea id="pTopic" style="min-height:60px;" placeholder="下次拜访的切入点/话题…" onchange="saveProfile()"></textarea>
+
+          <label>预估方案</label>
+          <textarea id="pPlan" style="min-height:72px;" placeholder="拟推荐的方案框架…" onchange="saveProfile()"></textarea>
+
+          <label>主管辅导意见</label>
+          <textarea id="pAdvice" style="min-height:60px;" placeholder="主管的建议与指导…" onchange="saveProfile()"></textarea>
+
+          <button class="primary" onclick="saveProfile();alert('档案已保存。')">保存档案</button>
+        </div>
+      </div>
+
+      <!-- ---- 支出计划表 ---- -->
+      <div id="sub-expense" class="sub-content" style="display:none;">
+        <div id="expEmpty" class="empty">请先选择客户。</div>
+        <div id="expForm" style="display:none;">
+          <p class="lead" style="margin-bottom:10px;">说明：表格所列项均为年度支出，帮助梳理客户家庭财务全貌，从中发现保障缺口。</p>
+          <table class="exp-table" id="expTable">
+            <!-- 由 JS 动态生成 -->
+          </table>
+          <div style="margin-top:14px;display:flex;gap:10px;">
+            <button class="ghost" onclick="calcExpenseTotal()" style="flex:1;">计算合计</button>
+            <button class="primary" onclick="saveExpense();alert('支出计划已保存。');" style="flex:1;">保存</button>
+          </div>
+          <div id="expSummary" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ③ 财富100评分 ==================== -->
+  <section class="scene" id="scene-score">
+
+    <!-- ============ 使用指南（前置，可折叠） ============ -->
+    <div class="card" id="guideCard">
+      <div class="card-title" style="cursor:pointer;" onclick="toggleGuide()">
+        <span class="ic">📖</span> 财富100 · 使用指南
+        <span id="guideArrow" style="margin-left:auto;font-size:13px;color:var(--muted);">▼ 展开</span>
+      </div>
+      <div id="guideBody" style="display:none;margin-top:12px;">
+        <div style="font-size:14px;line-height:1.8;">
+
+          <div style="font-weight:700;color:var(--primary-d);margin:10px 0 4px;">🎯 目的</div>
+          <p style="margin:0 0 8px;">在每次大量接触客户后，「财富100」能帮助你了解市场形态、明确去哪里寻找准客户并开展销售。它也能帮助主管分析、核定每位营销员的训练成绩。你记录下来的名字，代表了你目前认识的所有人。之后，你还将学到有效的方法去结识新朋友，从而拓展你的客户市场。</p>
+
+          <div style="font-weight:700;color:var(--primary-d);margin:14px 0 4px;">📋 一般规则</div>
+          <ol style="margin:0;padding-left:20px;">
+            <li>本手册的标准可填写<strong>100个名字</strong>，请填满。</li>
+            <li>不要提前预设条件。例如：此人不会买保险？仅列出你认识的名字即可。</li>
+            <li>写每个名字前考虑其资料。下列的表可帮助你完成名单。例如：个人通讯录、校庆通讯录、俱乐部会员名册和一些熟悉的联系人等。（QQ群、微信群）</li>
+            <li><strong>职业：</strong></li>
+          </ol>
+
+          <div style="background:#FAF5ED;border-radius:8px;padding:12px;margin:6px 0;font-size:13px;">
+            <b>客户中的职业分类：</b>直接影响保险营销员的销售成果，而通过职业分类，业务员容易选取自己的销售市场。
+            <ul style="margin:4px 0;padding-left:18px;">
+              <li>(1) 企业主与董事会成员。</li>
+              <li>(2) 高层管理人员。例如：企业总经理、副总经理、销售总监。</li>
+              <li>(3) 专业人士。例如：医师、律师、高级销售代表。</li>
+              <li>(4) 自由职业者。例如：投资者、独立咨询师等。</li>
+              <li>(5) 中层管理人员 / 文职人员。例如：普通职员、秘书、中介人员、邮务人员、船务代理职员。</li>
+              <li>(6) 家庭主妇 / 服务行业。例如：家庭主妇、理发师、保姆、家政、警察、服务员。</li>
+              <li>(7) 军公教人员。例如：军人、公务员、教师。</li>
+              <li>(8) 制造行业基层 / 劳工。例如：面包师、技师、水电工、公共交通驾驶员、卡车司机、加油工。</li>
+            </ul>
+          </div>
+
+          <ol start="5" style="margin:0;padding-left:20px;">
+            <li><strong>月收入：</strong><br>收入高的人，也是理想的客户，因为收入会影响其保险计划的财政预算。</li>
+            <li><strong>年龄：</strong><br>年龄的意思是<strong>可能存在代沟</strong>，如果差距太大，会影响彼此的沟通。所以在计算方面会按保险营销员的岁数与客户的差距作区别。</li>
+            <li><strong>婚姻状况：</strong><br>如果是对方已婚及有子女，可能是最合适的准客户。当然，单身人士也不能忽视。</li>
+            <li><strong>认识时间：</strong><br>认识的时间越长，了解相对深入，对业务就有帮助。</li>
+            <li><strong>认识程度：</strong><br>保单的基础就是信任、交往越深，越能取得对方的信任，对于保险的销售就更能事半功倍。</li>
+            <li><strong>一年内见面次数：</strong><br>见面的次数越多即说明你们的机会越高，成交机会和推荐客户的可能性就越大。</li>
+            <li><strong>接触程度：</strong><br>优质准客户的条件之一就是容易接触。</li>
+            <li><strong>推荐客户的能力/意愿：</strong><br>不断地获得<strong>新的准增员名单</strong>是保险营销员生存之道，而有推荐能力的人士，能帮助你踏上成功之路。推荐分两类：「客户推荐」和「影响力中心」，后者影响力最大。</li>
+            <li><strong>总分：</strong><br>帮助保险营销员筛选优质的准客户，并确定自己的目标市场。分数越高，成功机率越大。</li>
+            <li><strong>建议分数：</strong><br>为了便于客户管理，以下是分级标准及状况说明：<br>
+              • A级：基本条件甚好，签单机会最高的准客户。<br>
+              • B级：基本条件良好，善加培养即可跻身A级。<br>
+              • C级：基本条件尚可，可加强培养。<br>
+              • D级：基本条件较差，须精心耐心地培养。
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ic">📊</span> 财富100 · 客户价值评分卡</div>
+      <p class="lead">从 11 个维度对客户进行量化评分，自动计算总分并定级（A/B/C/D），帮助你识别高价值客户、合理分配精力。</p>
+      <label>选择客户</label>
+      <select id="scoreClient" onchange="renderScore()"></select>
+
+      <div id="scoreEmpty" class="empty">请先在「名单」页导入客户。</div>
+      <div id="scoreForm" style="display:none;">
+        <!-- 评分维度由 JS 动态生成 -->
+        <div id="scoreDimensions"></div>
+
+        <div class="score-total" id="scoreTotalDisplay">0 <span style="font-size:14px;font-weight:400;color:var(--muted);">/ 114 分</span></div>
+        <div class="score-grade" id="scoreGradeDisplay">—</div>
+
+        <div class="note" style="margin-top:14px;overflow-wrap:break-word;word-break:break-all;">
+          <b>评级标准：</b>A级 ≥85分（重点经营）· B级 65–84分（持续跟进）· C级 45–64分（维护保持）· D级 &lt;44分（低优先）
+        </div>
+        <button class="primary" onclick="saveScore();alert('评分已保存。');" style="margin-top:10px;">保存评分</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ic">🏆</span> 评分排行榜</div>
+      <div id="scoreRankList"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ④ 分层标签 ==================== -->
+  <section class="scene" id="scene-seg">
+    <div class="card">
+      <div class="card-title"><span class="ic">🏷️</span> 客户分层与标签</div>
+      <p class="lead">多维度标签体系。先选客户打标签，再按标签筛选查看。</p>
+      <label>选择客户</label>
+      <select id="segClient" onchange="renderSegCurrent()"></select>
+      <div id="segCurrent" style="margin:10px 0;"></div>
+
+      <label>生命阶段</label>
+      <div class="seg" id="segStage"></div>
+      <label>价值分层</label>
+      <div class="seg" id="segValue"></div>
+      <label>接触难度</label>
+      <div class="seg" id="segSens"></div>
+      <label>渠道偏好</label>
+      <div class="seg" id="segChannel"></div>
+      <button class="primary" onclick="saveTags()">保存标签</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">分层筛选 / 概览</div>
+      <div class="filters" id="segFilters"></div>
+      <div id="segResult"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ⑤ 提醒 ==================== -->
+  <section class="scene" id="scene-rem">
+    <div class="card">
+      <div class="card-title"><span class="ic">🔔</span> 跟进提醒</div>
+      <p class="lead">为关键节点设置提醒，避免线索冷却。到期/逾期自动高亮。</p>
+      <label>客户</label>
+      <select id="remClient"></select>
+      <label>提醒类型</label>
+      <select id="remType">
+        <option>保单续期</option><option>客户回访</option><option>生日祝福</option><option>加保机会</option><option>理赔关怀</option><option>方案讲解</option><option>保单检视</option>
+      </select>
+      <label>日期</label>
+      <input type="date" id="remDate">
+      <label>备注</label>
+      <input id="remNote" placeholder="如：发送家庭保障体检方案">
+      <button class="primary" onclick="addReminder()">添加提醒</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">今日待跟进 / 全部提醒</div>
+      <div id="remList"></div>
+    </div>
+  </section>
+
+  <!-- ==================== ⑥ 看板 + 使命 ==================== -->
+  <section class="scene" id="scene-dash">
+    <div class="mission-page">
+      <h2>献给所有保险人的一首诗</h2>
+      <div class="poem">
+        <div class="stanza">
+          你们是晨曦中赶路的人，<br>
+          手提包里装着千家万户的安宁。<br>
+          传递信任，播种安宁，<br>
+          只为在风雨来临前，先撑好一把伞。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 老有所养，病有所医——</div>
+          让白发有尊严，让病榻有希望。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 幼有所护，壮有所倚——</div>
+          让童年不被惊扰，让奋斗不怕跌倒。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 亲有所奉，残有所仗——</div>
+          替游子尽孝，为折翼者筑墙。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 钱有所积，产有所保——</div>
+          把小钱酿成酒，把家业守成钢。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 当意外敲门，当疾病突降——</div>
+          你们传递出的不是纸张，是承诺的重量。
+        </div>
+        <div class="stanza">
+          <div class="stanza-title">◆ 财有所承，爱有所继——</div>
+          让血脉里的责任，穿越岁月流淌。
+        </div>
+        <div class="stanza" style="margin-top:20px;">
+          也许耕耘终化作春风，<br>
+          那安心的目光，便是最高的认可。<br>
+          披星戴月的保险人啊，<br>
+          你们守护的不是保单，是人间不灭的光。
+        </div>
+      </div>
+      <div class="footer-text">—— 致每一位坚守的保险人 ——</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ic">📈</span> 经营看板</div>
+      <div class="stats">
+        <div class="stat"><div class="n" id="kTotal">0</div><div class="l">客户总数</div></div>
+        <div class="stat"><div class="n" id="kTagged">0</div><div class="l">已分层</div></div>
+        <div class="stat"><div class="n" id="kScored">0</div><div class="l">已评分</div></div>
+        <div class="stat"><div class="n" id="kRem">0</div><div class="l">待跟进</div></div>
+        <div class="stat"><div class="n" id="kOver">0</div><div class="l">逾期</div></div>
+        <div class="stat"><div class="n" id="kGradeA">0</div><div class="l">A级客户</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">价值分层分布</div>
+      <div class="donut" id="donut"></div>
+      <div id="donutLegend" style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">转化漏斗（示意）</div>
+      <div class="funnel" id="funnel"></div>
+      <div class="note">工具价值在于把纸质表格数字化，让「名单→档案→评分→分层→提醒」形成闭环，减少遗忘型流失。</div>
+    </div>
+
+    <div class="note warn">合规提示：手机号默认脱敏；数据存储于本地浏览器；导出功能仅在合规审批后开放。</div>
+  </section>
+
+</div>
+
+<!-- ============ 底部 Tab（6个） ============ -->
+<nav class="tabbar">
+  <div class="tb on" data-tab="list" onclick="switchTab('list')"><span class="ic">📇</span>名单</div>
+  <div class="tb" data-tab="profile" onclick="switchTab('profile')"><span class="ic">👤</span>档案</div>
+  <div class="tb" data-tab="score" onclick="switchTab('score')"><span class="ic">📊</span>评分</div>
+  <div class="tb" data-tab="seg" onclick="switchTab('seg')"><span class="ic">🏷️</span>分层</div>
+  <div class="tb" data-tab="rem" onclick="switchTab('rem')"><span class="ic">🔔</span>提醒</div>
+  <div class="tb" data-tab="dash" onclick="switchTab('dash')"><span class="ic">📈</span>看板</div>
+</nav>
+
+<script>
+const VERSION = '展业工具·财富100';
+
+// ================================================================
+//  数据模型
+// ================================================================
+const STAGES  = ['单身期','家庭形成期','家庭成长期','家庭成熟期','新单冷静期','首年保','13–24月','25月+','临近缴费','理赔后'];
+const VALUES  = ['高净值(A)','核心(B)','中坚(C)','培育(D)'];
+const SENS    = ['容易接触','一般','较难','很难'];
+const CHANNELS= ['微信优先','电话优先','面谈优先','混合'];
+
+let clients = [];     // {id,name,phone,source,tags:{stage,value,sens,channel},audit:[], profile:{...}, expense:{...}, score:{...}}
+let reminders = [];   // {id,clientId,clientName,type,date,note,done}
+let rid = 0, cid = 0;
+
+// ================================================================
+//  工具函数
+// ================================================================
+function mask(phone){
+  if(!phone) return '—';
+  const p = (''+phone).replace(/\D/g,'');
+  if(p.length<7) return p;
+  return p.slice(0,3) + '****' + p.slice(-4);
+}
+function normPhone(phone){ return (''+phone).replace(/\D/g,'').slice(-11); }
+function todayStr(){
+  const d=new Date(); const m=(''+(d.getMonth()+1)).padStart(2,'0'); const day=(''+(d.getDate())).padStart(2,'0');
+  return d.getFullYear()+'-'+m+'-'+day;
+}
+
+// ================================================================
+//  ① 名单导入
+// ================================================================
+function parseImport(text){
+  const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+  const out=[];
+  lines.forEach(line=>{
+    const parts = line.split(/[,，\t]/).map(s=>s.trim());
+    if(parts.length<2) return;
+    const name = parts[0];
+    const phone = parts[1].replace(/\D/g,'');
+    const source = parts[2] || '手动添加';
+    if(!name || phone.length<7) return;
+    out.push({name,phone,source});
+  });
+  return out;
+}
+function doImport(){
+  if(!document.getElementById('authChk').checked){
+    alert('请先勾选「已获得客户授权」后再导入。');
+    return;
+  }
+  const raw = document.getElementById('importBox').value;
+  if(!raw.trim()){ alert('请先粘贴名单或点击「载入示例名单」。'); return; }
+  const parsed = parseImport(raw);
+  let added=0, dup=0;
+  parsed.forEach(p=>{
+    const key = normPhone(p.phone);
+    if(clients.some(c=>normPhone(c.phone)===key)){ dup++; return; }
+    cid++;
+    clients.push({
+      id:cid, name:p.name, phone:p.phone, source:p.source,
+      tags:{stage:'',value:'',sens:'',channel:''}, audit:[],
+      profile:{gender:'',age:'',income:'',company:'',industry:'',family:'',lifeStage:'',existing:'',needs:'',topic:'',plan:'',advice:''},
+      expense:{},
+      score:{dims:{},total:0,grade:''}
+    });
+    added++;
+  });
+  document.getElementById('importBox').value='';
+  alert('导入完成：新增 '+added+' 条，去重跳过 '+dup+' 条重复。');
+  refreshAll();
+}
+function loadSample(){
+  document.getElementById('authChk').checked = true;
+  document.getElementById('importBox').value =
+"张伟,13800138000,老客户转介绍\n李娜,13900139000,活动报名\n王芳,13700137000,微信好友\n刘强,13600136000,车友群\n陈静,13500135000,同事推荐\n赵磊,13400134000,展会留资\n孙莉,13300133000,老客户转介绍\n周涛,13200132000,微信好友\n吴敏,13100131000,活动报名\n郑浩,13000130000,车友群";
+}
+function clearAll(){
+  if(!confirm('确定清空所有客户与提醒？')) return;
+  clients=[]; reminders=[]; refreshAll();
+}
+
+// ================================================================
+//  列表渲染
+// ================================================================
+function renderList(){
+  const q = (document.getElementById('searchBox').value||'').toLowerCase();
+  const box = document.getElementById('listBox');
+  if(clients.length===0){ box.innerHTML='<div class="empty">暂无客户，先导入或载入示例名单。</div>'; updateCount(); return; }
+  const list = clients.filter(c=>{
+    if(!q) return true;
+    const tagStr = [c.tags.stage,c.tags.value,c.tags.sens,c.tags.channel].join(' ');
+    return (c.name+c.phone+tagStr+c.source).toLowerCase().includes(q);
+  });
+  if(list.length===0){ box.innerHTML='<div class="empty">没有匹配的客户。</div>'; updateCount(); return; }
+  box.innerHTML = list.map(c=>{
+    const chips=[];
+    if(c.tags.stage) chips.push('<span class="chip">'+c.tags.stage+'</span>');
+    if(c.tags.value) chips.push('<span class="chip v">'+c.tags.value+'</span>');
+    if(c.tags.sens)  chips.push('<span class="chip s">'+c.tags.sens+'</span>');
+    if(c.tags.channel)chips.push('<span class="chip">'+c.tags.channel+'</span>');
+    if(c.score && c.score.grade) chips.push('<span class="chip g">'+c.score.grade+'级</span>');
+    const avaClass = (c.score && c.score.grade==='A') ? 'gold' : ((c.score && c.score.grade==='B') ? '' : '');
+    return `<div class="cli">
+      <div class="ava ${avaClass}">${c.name.slice(0,1)}</div>
+      <div class="info">
+        <div class="nm">${c.name}</div>
+        <div class="ph">${mask(c.phone)} · ${c.source}</div>
+        <div class="tags">${chips.join('')||'<span class="chip">未分层</span>'}</div>
+      </div>
+      <div class="act">
+        <button class="mini alt" onclick="revealPhone(${c.id})">号码</button>
+        <button class="mini gold" onclick="goProfile(${c.id})">档案</button>
+        <button class="mini" onclick="goScore(${c.id})">评分</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateCount();
+}
+function updateCount(){ document.getElementById('listCount').textContent = '（共 '+clients.length+' 人）'; }
+function revealPhone(id){
+  const c = clients.find(x=>x.id===id); if(!c) return;
+  c.audit.push(todayStr()+' 查看完整号码');
+  alert('完整号码：'+c.phone+'\n（已记入审计日志，共 '+c.audit.length+' 次查看）');
+}
+function goProfile(id){
+  document.getElementById('profClient').value = id;
+  switchTab('profile'); renderProfile();
+}
+function goScore(id){
+  document.getElementById('scoreClient').value = id;
+  switchTab('score'); renderScore();
+}
+
+// ================================================================
+//  ② 档案 — 黄金30信息表 + 支出计划表
+// ================================================================
+const LIFE_STAGES_OPT = [
+  {v:'单身期',l:'单身期（22–28岁左右）'},
+  {v:'家庭形成期',l:'家庭形成期（25–35岁左右）'},
+  {v:'家庭成长期',l:'家庭成长期（28–50岁左右）'},
+  {v:'家庭成熟期',l:'家庭成熟期（50岁左右+）'}
+];
+
+function buildLifeStageButtons(){
+  const el = document.getElementById('pLifeStage');
+  el.innerHTML = LIFE_STAGES_OPT.map(s =>
+    `<button type="button" data-v="${s.v}" onclick="pickLifeStage(this)">${s.l}</button>`
+  ).join('');
+}
+function pickLifeStage(btn){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // save will be called on main save button
+}
+
+// 支出计划表结构（来自资料图1）
+const EXPENSE_CATS = [
+  {
+    name:'日常家庭开销',
+    items:[
+      {key:'zhufang_danjihua',label:'购房计划'},
+      {key:'zhufang_daikuan',label:'房屋贷款'},
+      {key:'zhufang_zhuangxiu',label:'房屋装修'},
+      {key:'zhufang_zufang',label:'租房'}
+    ]
+  },
+  {
+    name:'行',
+    items:[
+      {key:'xing_che',label:'购换车计划或车贷'},
+      {key:'xing_lvyou',label:'旅游计划'},
+      {key:'xing_richang',label:'日常账费或油费'},
+      {key:'xing_baoyang',label:'车保养及修理费'}
+    ]
+  },
+  {
+    name:'穿',
+    items:[
+      {key:'chuan_yifu',label:'日常家庭衣鞋购置'}
+    ]
+  },
+  {
+    name:'吃',
+    items:[
+      {key:'chi_rikou',label:'家庭日常预计及请客'}
+    ]
+  },
+  {
+    name:'子女教育',
+    items:[
+      {key:'jiaoyu_xuefei',label:'学费'},
+      {key:'jiaoyu_peixun',label:'培训费'},
+      {key:'jiaoyu_ziliao',label:'资料费'}
+    ]
+  },
+  {
+    name:'父母赡养',
+    items:[
+      {key:'yanglao_jieri',label:'节日费'},
+      {key:'yanglao_richang',label:'日常赡养'},
+      {key:'yanglao_qita',label:'其他费用'}
+    ]
+  },
+  {
+    name:'经营成本',
+    items:[
+      {key:'jingying_kehu',label:'客户经营费用'}
+    ]
+  },
+  {
+    name:'保险费',
+    items:[
+      {key:'baoxian_yuan_jiankang',label:'原有·健康',sub:true},
+      {key:'baoxian_yuan_yanglao',label:'原有·养老',sub:true},
+      {key:'baoxian_yuan_jiaoyu',label:'原有·教育',sub:true},
+      {key:'baoxian_yuan_touzi',label:'原有·投资',sub:true},
+      {key:'baoxian_zeng_jiankang',label:'增加·健康',sub:true},
+      {key:'baoxian_zeng_yanglao',label:'增加·养老',sub:true},
+      {key:'baoxian_zeng_jiaoyu',label:'增加·教育',sub:true},
+      {key:'baoxian_zeng_touzi',label:'增加·投资',sub:true}
+    ]
+  },
+  {
+    name:'其他费用',
+    items:[
+      {key:'qita_meirong',label:'美容费用（含化妆品/美服饰）'},
+      {key:'qita_jianshen',label:'健身费用'},
+      {key:'qita_renqing',label:'人情支出'},
+      {key:'qita_yiliao',label:'医疗费'},
+      {key:'qita_haikuan',label:'还贷款'},
+      {key:'qita_tongxun',label:'通讯费/手机换代'},
+      {key:'qita_other',label:'其他'}
+    ]
+  }
+];
+
+function buildExpenseTable(){
+  let html = '';
+  EXPENSE_CATS.forEach(cat => {
+    html += '<tr class="exp-cat"><td colspan="2">'+cat.name+'</td></tr>';
+    cat.items.forEach(item => {
+      const indent = item.sub ? '&nbsp;&nbsp;' : '';
+      html += `<tr><td>${indent}${item.label}</td><td><input type="number" class="exp-input" data-key="${item.key}" placeholder="0"></td></tr>`;
+    });
+  });
+  // 合计行
+  html += '<tr class="exp-total"><td><b>合计</b></td><td><b id="expTotalVal">0</b></td></tr>';
+  // 目标行（仅保留月收入目标）
+  html += '<tr><td>我的月收入：</td><td><input class="exp-input" data-key="goal_monthly" placeholder="元/月"></td></tr>';
+  document.getElementById('expTable').innerHTML = html;
+}
+
+function renderProfile(){
+  const sel = document.getElementById('profClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c){
+    document.getElementById('profEmpty').style.display='';
+    document.getElementById('profForm').style.display='none';
+    document.getElementById('expEmpty').style.display='';
+    document.getElementById('expForm').style.display='none';
+    return;
+  }
+  document.getElementById('profEmpty').style.display='none';
+  document.getElementById('profForm').style.display='';
+  document.getElementById('expEmpty').style.display='none';
+  document.getElementById('expForm').style.display='';
+
+  // 基本信息
+  document.getElementById('profName').textContent = c.name;
+  document.getElementById('profPhone').textContent = mask(c.phone) + ' · ' + c.source;
+  const p = c.profile || {};
+  document.getElementById('pGender').value = p.gender || '';
+  document.getElementById('pAge').value = p.age || '';
+  document.getElementById('pIncome').value = p.income || '';
+  document.getElementById('pCompany').value = p.company || '';
+  document.getElementById('pIndustry').value = p.industry || '';
+  document.getElementById('pFamily').value = p.family || '';
+  document.getElementById('pExisting').value = p.existing || '';
+  document.getElementById('pNeeds').value = p.needs || '';
+  document.getElementById('pTopic').value = p.topic || '';
+  document.getElementById('pPlan').value = p.plan || '';
+  document.getElementById('pAdvice').value = p.advice || '';
+
+  // 人生阶段按钮同步
+  if(p.lifeStage){
+    document.querySelectorAll('#pLifeStage button').forEach(b=>{
+      b.classList.toggle('on', b.getAttribute('data-v')===p.lifeStage);
+    });
+  }
+
+  // 评分等级标签
+  const gradeChip = document.getElementById('profGradeChip');
+  if(c.score && c.score.grade){
+    const gc = c.score.grade==='A'?'grade-a':c.score.grade==='B'?'grade-b':c.score.grade==='C'?'grade-c':'grade-d';
+    gradeChip.innerHTML = '<span class="chip g" style="font-size:13px;padding:4px 12px;">财富100：'+c.score.grade+'级 · '+c.score.total+'分</span>';
+  } else {
+    gradeChip.innerHTML = '<span class="chip">尚未评分</span>';
+  }
+
+  // 支出表填充
+  const exp = c.expense || {};
+  document.querySelectorAll('#expTable .exp-input').forEach(inp => {
+    const k = inp.getAttribute('data-key');
+    if(exp[k] !== undefined && exp[k] !== '') inp.value = exp[k];
+    else inp.value = '';
+  });
+  calcExpenseTotal();
+}
+
+function saveProfile(){
+  const sel = document.getElementById('profClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c) return;
+  if(!c.profile) c.profile={};
+  c.profile.gender = document.getElementById('pGender').value;
+  c.profile.age = document.getElementById('pAge').value;
+  c.profile.income = document.getElementById('pIncome').value;
+  c.profile.company = document.getElementById('pCompany').value;
+  c.profile.industry = document.getElementById('pIndustry').value;
+  c.profile.family = document.getElementById('pFamily').value;
+  c.profile.existing = document.getElementById('pExisting').value;
+  c.profile.needs = document.getElementById('pNeeds').value;
+  c.profile.topic = document.getElementById('pTopic').value;
+  c.profile.plan = document.getElementById('pPlan').value;
+  c.profile.advice = document.getElementById('pAdvice').value;
+  // life stage
+  const activeBtn = document.querySelector('#pLifeStage button.on');
+  c.profile.lifeStage = activeBtn ? activeBtn.getAttribute('data-v') : '';
+}
+
+function saveExpense(){
+  const sel = document.getElementById('profClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c) return;
+  if(!c.expense) c.expense={};
+  document.querySelectorAll('#expTable .exp-input').forEach(inp => {
+    c.expense[inp.getAttribute('data-key')] = inp.value;
+  });
+}
+
+function calcExpenseTotal(){
+  let total = 0;
+  document.querySelectorAll('#expTable .exp-input[data-key]').forEach(inp => {
+    const k = inp.getAttribute('data-key');
+    if(k.startsWith('goal_')) return; // skip goals
+    const v = parseFloat(inp.value) || 0;
+    total += v;
+  });
+  document.getElementById('expTotalVal').textContent = total.toLocaleString();
+  const summary = document.getElementById('expSummary');
+  const goalM = parseFloat(document.querySelector('[data-key="goal_monthly"]')?.value) || 0;
+  if(goalM > 0 && total > 0){
+    const ratio = ((total/12)/goalM*100).toFixed(1);
+    summary.innerHTML = '<div class="note">月均支出约 <b>'+Math.round(total/12).toLocaleString()+'</b> 元，占月收入目标的 <b>'+ratio+'%</b>。若占比超过70%，建议关注保障配置缺口。</div>';
+  } else {
+    summary.innerHTML = '';
+  }
+}
+
+// 子Tab切换（档案页：黄金30 / 支出计划）
+function switchSub(name){
+  document.querySelectorAll('.subtab').forEach(t=>t.classList.toggle('on', t.getAttribute('data-sub')===name));
+  document.getElementById('sub-basic').style.display = name==='basic' ? '' : 'none';
+  document.getElementById('sub-expense').style.display = name==='expense' ? '' : 'none';
+}
+
+// ================================================================
+//  ③ 财富100 评分卡（来自资料图3）
+// ================================================================
+const SCORE_DIMS = [
+  {
+    key:'source', label:'来源渠道',
+    options:[
+      {l:'微信朋友圈',s:0},{l:'线上活动',s:0},{l:'老客户转介绍',s:0},
+      {l:'微信陌生加',s:0},{l:'缘故/亲友',s:0},{l:'线下活动',s:0},
+      {l:'车友群/社群',s:0},{l:'展会留资',s:0},{l:'电话陌生',s:0},{l:'其他',s:0}
+    ]
+  },
+  {
+    key:'occupation', label:'职业',
+    options:[
+      {l:'企业主/高管/金领',s:15},{l:'专业人员(律师/医生/会计师等)',s:14},
+      {l:'自由职业者',s:13},{l:'中层管理人员/销售行业',s:12},
+      {l:'企业基层人员/文职',s:8},{l:'家庭主妇/待业',s:6},
+      {l:'军人/公务员',s:4},{l:'刚跨行业/应届',s:2},{l:'农民/学生/退休',s:1}
+    ]
+  },
+  {
+    key:'income', label:'月收入',
+    options:[
+      {l:'10万以上',s:20},{l:'7万–10万',s:15},{l:'3万–5万',s:10},
+      {l:'1万–3万',s:8},{l:'1万以下',s:4}
+    ]
+  },
+  {
+    key:'age', label:'年龄',
+    options:[
+      {l:'45岁以上',s:4},{l:'35–44岁',s:3},{l:'25–34岁',s:2},{l:'25岁以下',s:1}
+    ]
+  },
+  {
+    key:'ageGap', label:'与自己的年龄差',
+    options:[
+      {l:'±5岁以内',s:6},{l:'±6–10岁',s:4},{l:'±11–15岁',s:2},{l:'±16岁以上',s:1}
+    ]
+  },
+  {
+    key:'marriage', label:'婚姻状况',
+    options:[
+      {l:'已婚有小孩',s:10},{l:'已婚无小孩',s:10},{l:'单身有小资',s:15},{l:'单身',s:5}
+    ]
+  },
+  {
+    key:'knowTime', label:'认识时间',
+    options:[
+      {l:'5年以上',s:8},{l:'2–5年',s:6},{l:'2年以下',s:4}
+    ]
+  },
+  {
+    key:'knowDepth', label:'认识程度',
+    options:[
+      {l:'亲戚朋友',s:8},{l:'一般朋友',s:6},{l:'点头之交',s:4}
+    ]
+  },
+  {
+    key:'meetCount', label:'一年内见面次数',
+    options:[
+      {l:'5次以上',s:10},{l:'3–4次',s:6},{l:'1–2次',s:4},{l:'完全没有',s:2}
+    ]
+  },
+  {
+    key:'contactEase', label:'接触程度',
+    options:[
+      {l:'非常容易',s:8},{l:'相当容易',s:6},{l:'有点困难',s:4},{l:'相当困难',s:2}
+    ]
+  },
+  {
+    key:'referral', label:'推荐客户的能力/意愿',
+    options:[
+      {l:'很好（可推10人+）',s:6},{l:'可以（6–9人）',s:4},
+      {l:'还可以（1–5人）',s:2},{l:'不能',s:0}
+    ]
+  }
+];
+
+function buildScoreDimensions(){
+  const box = document.getElementById('scoreDimensions');
+  box.innerHTML = SCORE_DIMS.map(dim => `
+    <div style="margin:12px 0;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px;">${dim.label}</div>
+      <select class="score-select" data-dim="${dim.key}" onchange="recalcScore()">
+        <option value="">— 请选择 —</option>
+        ${dim.options.map(o=>`<option value="${o.s}">${dim.key==='source'?o.l:o.l+'（'+o.s+'分）'}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function recalcScore(){
+  let total = 0;
+  document.querySelectorAll('#scoreDimensions select').forEach(sel => {
+    const dim = sel.getAttribute('data-dim');
+    if(dim === 'source') return; // 来源渠道不参与计分
+    const v = parseInt(sel.value) || 0;
+    total += v;
+  });
+  document.getElementById('scoreTotalDisplay').innerHTML =
+    total + ' <span style="font-size:14px;font-weight:400;color:var(--muted);">/ 100 分</span>';
+
+  let grade = '', cls = '';
+  if(total >= 85){ grade='A级（重点经营）'; cls='grade-a'; }
+  else if(total >= 65){ grade='B级（持续跟进）'; cls='grade-b'; }
+  else if(total >= 45){ grade='C级（维护保持）'; cls='grade-c'; }
+  else{ grade='D级（低优先）'; cls='grade-d'; }
+
+  const el = document.getElementById('scoreGradeDisplay');
+  el.textContent = grade;
+  el.className = 'score-grade ' + cls;
+
+  return {total, grade};
+}
+
+function renderScore(){
+  const sel = document.getElementById('scoreClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c){
+    document.getElementById('scoreEmpty').style.display='';
+    document.getElementById('scoreForm').style.display='none';
+    return;
+  }
+  document.getElementById('scoreEmpty').style.display='none';
+  document.getElementById('scoreForm').style.display='';
+
+  // 填充已有评分
+  const sc = c.score || {dims:{},total:0,grade:''};
+  SCORE_DIMS.forEach(dim => {
+    const selEl = document.querySelector(`[data-dim="${dim.key}"]`);
+    if(selEl && sc.dims[dim.key]) selEl.value = sc.dims[dim.key];
+    else if(selEl) selEl.value = '';
+  });
+  recalcScore();
+
+  // 显示客户名
+  const headerNote = document.querySelector('#scoreForm .lead');
+}
+
+function saveScore(){
+  const sel = document.getElementById('scoreClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c) return;
+  if(!c.score) c.score={dims:{},total:0,grade:''};
+  SCORE_DIMS.forEach(dim => {
+    const selEl = document.querySelector(`[data-dim="${dim.key}"]`);
+    c.score.dims[dim.key] = selEl ? parseInt(selEl.value)||0 : 0;
+  });
+  const result = recalcScore();
+  c.score.total = result.total;
+  c.score.grade = result.grade.charAt(0); // A/B/C/D
+
+  // 更新列表中的等级显示
+  renderList();
+  renderScoreRank();
+}
+
+function renderScoreRank(){
+  const box = document.getElementById('scoreRankList');
+  const scored = clients.filter(c=>c.score && c.score.total > 0)
+    .sort((a,b)=>b.score.total - a.score.total);
+  if(scored.length === 0){
+    box.innerHTML = '<div class="empty">暂无评分记录，去「评分」页为客户打分吧。</div>';
+    return;
+  }
+  box.innerHTML = scored.map((c,i) => {
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+    const gc = c.score.grade==='A'?'grade-a':c.score.grade==='B'?'grade-b':c.score.grade==='C'?'grade-c':'grade-d';
+    return `<div class="cli">
+      <div class="ava ${c.score.grade==='A'?'gold':''}">${medal}</div>
+      <div class="info">
+        <div class="nm">${c.name}</div>
+        <div class="ph">${c.score.total}分 · ${c.score.grade}级</div>
+      </div>
+      <div class="act">
+        <span class="chip g" style="${gc.includes('grade-')?'background:'+getGradeBg(c.score.grade)+';color:'+getGradeColor(c.score.grade):''}">${c.score.grade}级</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+function getGradeBg(g){ return g==='A'?'#EBF1E8':g==='B'?'#FDF3DB':g==='C'?'#F7E9E3':'#F0E6D6'; }
+function getGradeColor(g){ return g==='A'?'#7C9A78':g==='B'?'#B8860B':g==='C'?'#B5573B':'#8C7B6B'; }
+
+function toggleGuide(){
+  const body = document.getElementById('guideBody');
+  const arrow = document.getElementById('guideArrow');
+  if(body.style.display === 'none'){
+    body.style.display = '';
+    arrow.textContent = '▲ 收起';
+  } else {
+    body.style.display = 'none';
+    arrow.textContent = '▼ 展开';
+  }
+}
+
+// ================================================================
+//  ④ 分层标签
+// ================================================================
+function buildSeg(containerId, arr, group){
+  const el = document.getElementById(containerId);
+  el.innerHTML = arr.map(v=>`<button data-g="${group}" data-v="${v}" onclick="toggleSeg(this)">${v}</button>`).join('');
+}
+function toggleSeg(btn){
+  const grp = btn.getAttribute('data-g');
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const sel = document.getElementById('segClient');
+  const c = clients.find(x=>x.id==sel.value); if(!c) return;
+  c.tags[grp] = btn.getAttribute('data-v');
+}
+function renderSegCurrent(){
+  const sel = document.getElementById('segClient');
+  const c = clients.find(x=>x.id==sel.value);
+  const box = document.getElementById('segCurrent');
+  if(!c){ box.innerHTML='<div class="empty">请先选择客户。</div>'; return; }
+  const t = c.tags;
+  const cur = [];
+  if(t.stage) cur.push(t.stage); if(t.value) cur.push(t.value);
+  if(t.sens) cur.push(t.sens); if(t.channel) cur.push(t.channel);
+  box.innerHTML = '<div style="font-size:14px;">当前客户：<b>'+c.name+'</b> · '+mask(c.phone)+
+    '<div class="tags" style="margin-top:6px;">'+
+    (cur.map(x=>'<span class="chip">'+x+'</span>').join('')||'<span class="chip">未分层</span>')+'</div></div>';
+  syncSeg('segStage','stage',t.stage);
+  syncSeg('segValue','value',t.value);
+  syncSeg('segSens','sens',t.sens);
+  syncSeg('segChannel','channel',t.channel);
+}
+function syncSeg(cid_,grp,val){
+  document.getElementById(cid_).querySelectorAll('button').forEach(b=>{
+    b.classList.toggle('on', b.getAttribute('data-v')===val);
+  });
+}
+function saveTags(){
+  const sel = document.getElementById('segClient');
+  const c = clients.find(x=>x.id==sel.value);
+  if(!c){ alert('请先选择客户。'); return; }
+  if(!c.tags.stage && !c.tags.value && !c.tags.sens && !c.tags.channel){
+    alert('请至少打一个标签。'); return;
+  }
+  alert('已保存 '+c.name+' 的标签。');
+  buildSegFilters(); renderList(); refreshDash();
+}
+
+let activeFilter = '';
+function buildSegFilters(){
+  const all = [];
+  [...STAGES,...VALUES,...SENS,...CHANNELS].forEach(v=>{ if(clients.some(c=>Object.values(c.tags).includes(v))) all.push(v); });
+  const box = document.getElementById('segFilters');
+  box.innerHTML = '<button class="fbtn '+(activeFilter===''?'on':'')+'" onclick="setFilter(\'\')">全部</button>'+
+    all.map(v=>`<button class="fbtn ${activeFilter===v?'on':''}" onclick="setFilter('${v}')">${v}</button>`).join('');
+  renderSegResult();
+}
+function setFilter(v){ activeFilter=v; buildSegFilters(); }
+function renderSegResult(){
+  const box=document.getElementById('segResult');
+  let list = clients;
+  if(activeFilter) list = clients.filter(c=>Object.values(c.tags).includes(activeFilter));
+  if(list.length===0){ box.innerHTML='<div class="empty">该分层暂无客户。</div>'; return; }
+  box.innerHTML = list.map(c=>{
+    const chips=[];
+    if(c.tags.stage) chips.push('<span class="chip">'+c.tags.stage+'</span>');
+    if(c.tags.value) chips.push('<span class="chip v">'+c.tags.value+'</span>');
+    if(c.tags.sens)  chips.push('<span class="chip s">'+c.tags.sens+'</span>');
+    if(c.tags.channel)chips.push('<span class="chip">'+c.tags.channel+'</span>');
+    return `<div class="cli"><div class="ava">${c.name.slice(0,1)}</div>
+      <div class="info"><div class="nm">${c.name}</div><div class="tags">${chips.join('')||'<span class="chip">未分层</span>'}</div></div></div>`;
+  }).join('');
+}
+
+// ================================================================
+//  ⑤ 提醒
+// ================================================================
+function addReminder(){
+  const cSel = document.getElementById('remClient');
+  const c = clients.find(x=>x.id==cSel.value);
+  if(!c){ alert('请先在「名单」页导入客户。'); return; }
+  const type = document.getElementById('remType').value;
+  const date = document.getElementById('remDate').value || todayStr();
+  const note = document.getElementById('remNote').value;
+  rid++;
+  reminders.push({id:rid,clientId:c.id,clientName:c.name,type,date,note,done:false});
+  document.getElementById('remNote').value='';
+  renderReminders();
+}
+function renderReminders(){
+  const box=document.getElementById('remList');
+  if(reminders.length===0){ box.innerHTML='<div class="empty">暂无提醒，添加一条吧。</div>'; refreshDash(); return; }
+  const t = todayStr();
+  const sorted = [...reminders].sort((a,b)=>a.date<b.date?-1:1);
+  box.innerHTML = sorted.map(r=>{
+    const over = (!r.done && r.date < t);
+    return `<div class="rem ${over?'over':''} ${r.done?'done':''}">
+      <div class="dot"></div>
+      <div class="body">
+        <div class="t">${r.clientName} · ${r.type}</div>
+        <div class="d">${r.date}${r.note?' · '+r.note:''}${over?' · 已逾期':''}</div>
+      </div>
+      <button class="mini alt" onclick="toggleDone(${r.id})">${r.done?'↺':'完成'}</button>
+    </div>`;
+  }).join('');
+  refreshDash();
+}
+function toggleDone(id){
+  const r=reminders.find(x=>x.id===id); if(r) r.done=!r.done;
+  renderReminders();
+}
+
+// ================================================================
+//  ⑥ 看板
+// ================================================================
+function refreshDash(){
+  document.getElementById('kTotal').textContent = clients.length;
+  document.getElementById('kTagged').textContent = clients.filter(c=>Object.values(c.tags).some(Boolean)).length;
+  document.getElementById('kScored').textContent = clients.filter(c=>c.score && c.score.total > 0).length;
+  document.getElementById('kGradeA').textContent = clients.filter(c=>c.score && c.score.grade==='A').length;
+
+  const t=todayStr();
+  document.getElementById('kRem').textContent = reminders.filter(r=>!r.done).length;
+  document.getElementById('kOver').textContent = reminders.filter(r=>!r.done && r.date<t).length;
+
+  // 价值分层圆环
+  const counts = VALUES.map(v=>clients.filter(c=>c.tags.value===v).length);
+  const total = counts.reduce((a,b)=>a+b,0)||1;
+  const colors=['#C4956A','#A87B4F','#7C9A78','#D9C3A3'];
+  let acc=0, stops=[];
+  counts.forEach((c,i)=>{ const pct=c/total*100; stops.push(colors[i]+' '+(acc).toFixed(1)+'% '+(acc+pct).toFixed(1)+'%'); acc+=pct; });
+  const donut=document.getElementById('donut');
+  donut.style.background = 'conic-gradient('+stops.join(',')+')';
+  donut.style.display = total>0 ? 'block':'none';
+  document.getElementById('donutLegend').innerHTML = VALUES.map((v,i)=>
+    `<span style="display:inline-block;margin:0 6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${colors[i]};"></span> ${v} ${counts[i]}</span>`
+  ).join('');
+
+  // 漏斗
+  const n = clients.length||0;
+  const f = [
+    ['名单导入', 100, 'var(--primary-d)'],
+    ['建立档案', n?85:0, 'var(--primary)'],
+    ['评分分级', n?65:0, '#C9A36E'],
+    ['有效触达', n?42:0, '#B98A52'],
+    ['出单转化', n?22:0, 'var(--accent)'],
+  ];
+  document.getElementById('funnel').innerHTML = f.map(([l,v,c])=>
+    `<div class="fn"><div class="lab">${l}</div><div class="bar" style="width:${v}%;background:${c}">${v}%</div></div>`
+  ).join('');
+
+  // 更新评分排行
+  renderScoreRank();
+}
+
+// ================================================================
+//  下拉同步
+// ================================================================
+function fillSelects(){
+  const opts = clients.map(c=>`<option value="${c.id}">${c.name} · ${mask(c.phone)}</option>`).join('');
+  const emptyOpt = '<option>请先导入客户</option>';
+  const o = opts || emptyOpt;
+  document.getElementById('profClient').innerHTML = o;
+  document.getElementById('scoreClient').innerHTML = o;
+  document.getElementById('segClient').innerHTML = o;
+  document.getElementById('remClient').innerHTML = o;
+}
+
+function refreshAll(){
+  fillSelects(); renderList(); renderSegCurrent(); buildSegFilters(); renderReminders(); refreshDash();
+  renderProfile(); renderScore(); renderScoreRank();
+}
+
+// ================================================================
+//  Tab 切换
+// ================================================================
+function switchTab(name){
+  document.querySelectorAll('.tb').forEach(t=>t.classList.toggle('on', t.getAttribute('data-tab')===name));
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('on'));
+  document.getElementById('scene-'+name).classList.add('on');
+  if(name==='seg'){ renderSegCurrent(); buildSegFilters(); }
+  if(name==='dash'){ refreshDash(); }
+  if(name==='profile'){ renderProfile(); }
+  if(name==='score'){ renderScore(); renderScoreRank(); }
+}
+
+// ================================================================
+//  初始化
+// ================================================================
+buildSeg('segStage',STAGES,'stage');
+buildSeg('segValue',VALUES,'value');
+buildSeg('segSens',SENS,'sens');
+buildSeg('segChannel',CHANNELS,'channel');
+buildLifeStageButtons();
+buildExpenseTable();
+buildScoreDimensions();
+loadSample(); doImportSilent();
+
+function doImportSilent(){
+  const parsed = parseImport(document.getElementById('importBox').value);
+  parsed.forEach(p=>{
+    if(!clients.some(c=>normPhone(c.phone)===normPhone(p.phone))){
+      cid++; clients.push({
+        id:cid, name:p.name, phone:p.phone, source:p.source,
+        tags:{stage:'',value:'',sens:'',channel:''}, audit:[],
+        profile:{gender:'',age:'',income:'',company:'',industry:'',family:'',lifeStage:'',existing:'',needs:'',topic:'',plan:'',advice:''},
+        expense:{},
+        score:{dims:{},total:0,grade:''}
+      });
+    }
+  });
+  document.getElementById('importBox').value='';
+
+  // 预置演示数据
+  if(clients[0]){
+    clients[0].tags={stage:'家庭成长期',value:'核心(B)',sens:'容易接触',channel:'微信优先'};
+    clients[0].profile={gender:'男',age:'38',income:'50',company:'某科技公司',industry:'互联网',family:'已婚，一子一女',lifeStage:'家庭成长期',existing:'重疾险30万+医疗险',needs:'寿险缺口+教育金+养老金',topic:'孩子教育金规划',plan:'终身寿险+年金组合',advice:'重点跟进，可切入家庭全保障'};
+    clients[0].score={dims:{source:'15',occupation:'14',income:'20',age:'2',ageGap:'6',marriage:'10',knowTime:'8',knowDepth:'8',meetCount:'10',contactEase:'8',referral:'6'},total:107,grade:'A'};
+  }
+  if(clients[1]){
+    clients[1].tags={stage:'家庭形成期',value:'中坚(C)',sens:'一般',channel:'微信优先'};
+    clients[1].profile={gender:'女',age:'30',income:'25',company:'某贸易公司',industry:'贸易',family:'已婚未育',lifeStage:'家庭形成期',existing:'仅有社保',needs:'重疾+医疗+意外+定期寿险',topic:'婚礼后保障升级',plan:'基础四险套餐',advice:'适合标准套餐切入'};
+    clients[1].score={dims:{source:'12',occupation:'12',income:'15',age:'2',ageGap:'4',marriage:'10',knowTime:'6',knowDepth:'6',meetCount:'6',contactEase:'6',referral:'4'},total:77,grade:'A'};
+  }
+  if(clients[2]){
+    clients[2].tags={stage:'家庭成熟期',value:'高净值(A)',sens:'容易接触',channel:'面谈优先'};
+    clients[2].score={dims:{source:'13',occupation:'15',income:'20',age:'3',ageGap:'4',marriage:'10',knowTime:'8',knowDepth:'8',meetCount:'8',contactEase:'8',referral:'6'},total:99,grade:'A'};
+  }
+  if(clients[3]){
+    clients[3].tags={stage:'单身期',value:'培育(D)',sens:'较难',channel:'微信优先'};
+    clients[3].score={dims:{source:'10',occupation:'8',income:'8',age:'1',ageGap:'2',marriage:'5',knowTime:'4',knowDepth:'4',meetCount:'4',contactEase:'4',referral:'2'},total:46,grade:'B'};
+  }
+
+  const t=todayStr();
+  rid=1; reminders.push({id:1,clientId:clients[0].id,clientName:clients[0].name,type:'保单续期',date:t,note:'发送家庭保障体检',done:false});
+  rid=2; reminders.push({id:2,clientId:clients[1].id,clientName:clients[1].name,type:'客户回访',date:t,note:'加保机会点',done:false});
+  rid=3; const d=new Date(); d.setDate(d.getDate()-2); const dm=(''+(d.getMonth()+1)).padStart(2,'0'); const dd=(''+(d.getDate())).padStart(2,'0');
+  reminders.push({id:3,clientId:clients[2].id,clientName:clients[2].name,type:'生日祝福',date:d.getFullYear()+'-'+dm+'-'+dd,note:'生日问候',done:false});
+  rid=4; reminders.push({id:4,clientId:clients[0].id,clientName:clients[0].name,type:'方案讲解',date:t,note:'黄金30档案已完善，预约面谈',done:false});
+
+  refreshAll();
+}
+</script>
+</body>
+</html>
