@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保险展业赋能工具箱 · AI异议陪练 V4.1</title>
+<style>
+  :root{
+    /* 淡蓝色配色（保险展业赋能系列） */
+    --bg:#EAF2FB; --bg2:#F4F8FD; --card:#FFFFFF;
+    --primary:#3B82C4; --primary-deep:#2563A8; --primary-soft:#DCEAFB;
+    --accent:#5BA3E0;
+    --text:#1E2A3A; --text-soft:#5C6B7C;
+    --border:#CFE0F2;
+    --danger:#D9534F; --ok:#3FA66A; --warn:#E0A23B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;}
+  .wrap{max-width:720px;margin:0 auto;padding:14px 16px 28px;}
+  header.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+       padding:10px 0;border-bottom:1px solid var(--border);}
+  .brand{font-size:18px;font-weight:800;color:var(--primary-deep);}
+  .brand .badge{font-size:11px;background:var(--primary);color:#fff;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle;}
+  .topnav{display:flex;flex-wrap:wrap;gap:8px;}
+  .topnav button{background:var(--bg2);color:var(--primary-deep);border:1px solid var(--border);
+       border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;}
+  .topnav button:active{background:var(--primary-soft);}
+  .hamburger{display:none;align-items:center;justify-content:center;width:46px;height:46px;border:1px solid var(--border);
+       border-radius:10px;background:var(--bg2);color:var(--primary-deep);font-size:20px;cursor:pointer;}
+  .hamburger:active{background:var(--primary-soft);}
+  .drawer{position:fixed;top:0;right:0;width:280px;height:100vh;height:100dvh;background:var(--card);
+       border-left:1px solid var(--border);box-shadow:-4px 0 16px rgba(30,42,58,0.18);z-index:9999;
+       transform:translateX(100%);transition:transform .25s ease;overflow-y:auto;}
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);}
+  .drawer-head .drawer-title{font-size:17px;font-weight:800;color:var(--primary-deep);}
+  .drawer-close{width:40px;height:40px;border:none;background:transparent;color:var(--text-soft);font-size:24px;cursor:pointer;}
+  .drawer-menu{display:flex;flex-direction:column;padding:10px 16px 24px;gap:6px;}
+  .drawer-item{display:flex;align-items:center;min-height:48px;padding:0 14px;border-radius:10px;font-size:15.5px;font-weight:700;
+       color:var(--text);text-decoration:none;background:var(--bg2);border:1px solid var(--border);}
+  .drawer-item:active{background:var(--primary-soft);}
+  .drawer-backdrop{position:fixed;inset:0;background:rgba(30,42,58,0.35);z-index:9998;display:none;}
+  .drawer-backdrop.open{display:block;}
+  body.drawer-open{overflow:hidden;}
+  body.drawer-open nav{position:relative;z-index:0 !important;}
+  body.drawer-open .topbar{position:relative;z-index:0 !important;}
+  h1.page-title{font-size:21px;margin:18px 0 4px;color:var(--primary-deep);}
+  .sub{color:var(--text-soft);font-size:14px;margin-bottom:8px;}
+  .card{border:1px solid var(--border);border-radius:14px;background:var(--card);padding:16px;margin-top:14px;
+       box-shadow:0 1px 3px rgba(37,99,168,0.05);}
+  .card-title{font-size:16px;font-weight:800;margin-bottom:10px;color:var(--primary-deep);}
+  .hint{background:var(--primary-soft);border-left:4px solid var(--primary);border-radius:8px;
+       padding:10px 12px;font-size:13.5px;color:var(--text);margin:10px 0;}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .scn{border:1px solid var(--border);border-radius:12px;background:var(--bg2);padding:14px;cursor:pointer;
+       transition:.15s;display:flex;flex-direction:column;gap:6px;}
+  .scn:hover{background:var(--primary-soft);border-color:var(--primary);}
+  .scn .ico{font-size:26px;}
+  .scn .nm{font-weight:800;font-size:15px;color:var(--primary-deep);}
+  .scn .pd{font-size:12.5px;color:var(--text-soft);}
+  .scn .tag{display:inline-block;font-size:11px;background:var(--primary);color:#fff;border-radius:20px;padding:2px 9px;align-self:flex-start;}
+  .scn.custom{border-style:dashed;background:#FAFCFF;}
+  .section-hd{font-size:14px;font-weight:800;color:var(--primary-deep);margin:18px 0 8px;display:flex;align-items:center;gap:8px;}
+  .add-card{border:2px dashed var(--primary);border-radius:12px;background:#fff;padding:18px;text-align:center;cursor:pointer;color:var(--primary-deep);font-weight:700;}
+  .add-card:active{background:var(--primary-soft);}
+  label{display:block;font-size:14px;font-weight:600;margin-top:10px;color:var(--text);}
+  input,textarea,select{width:100%;padding:12px;font-size:15px;border:1px solid var(--border);
+       border-radius:9px;margin-top:5px;font-family:inherit;background:#fff;color:var(--text);}
+  textarea{min-height:72px;resize:vertical;}
+  .btn{width:100%;padding:13px 16px;font-size:15px;border-radius:10px;border:none;cursor:pointer;margin-top:12px;font-weight:700;}
+  .btn.primary{background:var(--primary);color:#fff;}
+  .btn.primary:active{background:var(--primary-deep);}
+  .btn.primary:disabled{background:var(--text-soft);cursor:not-allowed;}
+  .btn.ghost{background:#fff;color:var(--primary-deep);border:1px solid var(--primary);}
+  .btn.danger{background:var(--danger);color:#fff;}
+  .btn.row{margin-top:0;}
+  .voice-wrap{position:relative;}
+  .voice-btn{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;color:var(--primary-deep);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 3px rgba(37,99,168,0.12);}
+  .voice-btn:active{background:var(--primary-soft);}
+  .voice-btn.recording{background:var(--danger);color:#fff;border-color:var(--danger);animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,83,79,0.45);}70%{box-shadow:0 0 0 10px rgba(217,83,79,0);}100%{box-shadow:0 0 0 0 rgba(217,83,79,0);}}
+  .voice-status{font-size:12.5px;color:var(--text-soft);margin-top:6px;min-height:20px;}
+  .row2{display:flex;gap:10px;}
+  .row2 .btn{margin-top:12px;}
+  .mode-pill{display:inline-block;font-size:11.5px;border-radius:20px;padding:2px 9px;font-weight:700;}
+  .mode-rule{background:var(--primary-soft);color:var(--primary-deep);}
+  .mode-ai{background:#E7F6EC;color:var(--ok);}
+  /* 对话气泡 */
+  .chat{display:flex;flex-direction:column;gap:10px;margin-top:6px;max-height:50vh;overflow-y:auto;padding:4px;}
+  .bubble{max-width:82%;padding:11px 13px;border-radius:14px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;}
+  .bubble.cust{align-self:flex-start;background:var(--primary-soft);color:var(--text);border-bottom-left-radius:4px;}
+  .bubble.agent{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:4px;}
+  .who{font-size:11px;color:var(--text-soft);margin-bottom:2px;}
+  .turnbar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-soft);
+       padding:6px 2px;border-top:1px solid var(--border);margin-top:8px;}
+  .legend{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
+  .legend th,.legend td{border:1px solid var(--border);padding:9px 10px;text-align:left;}
+  .legend th{background:var(--bg2);color:var(--primary-deep);font-size:13px;}
+  .legend .sc{font-weight:800;font-size:15px;width:54px;text-align:center;}
+  .band-ok{color:var(--ok);} .band-warn{color:var(--warn);} .band-bad{color:var(--danger);}
+  .tip{font-size:13.5px;color:var(--text);background:var(--bg2);border:1px dashed var(--border);border-radius:10px;padding:10px 12px;margin-top:8px;}
+  .tip b{color:var(--primary-deep);}
+  .redflag{background:#FCEDED;border:1px solid var(--danger);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px;color:var(--danger);}
+  .hist-item{display:flex;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid var(--border);
+       border-radius:10px;margin-top:10px;font-size:14px;background:var(--bg2);}
+  .hist-item .meta{color:var(--text-soft);font-size:12.5px;}
+  .hidden{display:none !important;}
+  .key-note{font-size:12.5px;color:var(--text-soft);background:#FFF7E8;border:1px solid #F3D79A;border-radius:10px;padding:10px 12px;margin-top:10px;}
+  .kyc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .kyc-grid.full{grid-template-columns:1fr;}
+  .kyc-sec{margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);}
+  .kyc-sec:first-of-type{border-top:none;padding-top:0;}
+  .kyc-sec-title{font-size:14.5px;font-weight:800;color:var(--primary-deep);margin-bottom:8px;}
+  .kyc-help{font-size:12.5px;color:var(--text-soft);margin-top:4px;}
+  footer{text-align:center;color:var(--text-soft);font-size:12.5px;margin:26px 0 6px;line-height:1.7;}
+  .view{display:none;}
+  .view.active{display:block;}
+  @media (max-width:768px){ .topnav{display:none;} .hamburger{display:flex;} }
+  @media (max-width:560px){ .grid{grid-template-columns:1fr;} .kyc-grid{grid-template-columns:1fr;} .brand{font-size:16px;} }
+  @media (max-width:480px){ .row2{flex-direction:column;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">AI异议陪练<span class="badge" id="verBadge">V4.2</span></div>
+    <nav class="topnav" id="desktopNav">
+      <button data-target="home" onclick="showView('home')">首页</button>
+      <button data-target="settings" onclick="showView('settings')">⚙ 模型</button>
+      <button data-target="history" onclick="showView('history')">历史</button>
+      <button data-target="about" onclick="showView('about')">关于</button>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" onclick="openDrawer()" aria-label="打开菜单">☰</button>
+  </header>
+
+  <!-- ============ 首页 ============ -->
+  <section id="view-home" class="view active">
+    <h1 class="page-title">AI异议陪练 · 话术实战模拟器</h1>
+    <div class="sub">保险展业赋能工具箱 · 打开即练 · AI客户刁难 + 五维点评 + 能力雷达</div>
+    <div class="hint">你是保险顾问，系统扮演"难搞的客户"。你打字或开口回应，客户反击；几轮后从
+      <b>表达力 / 需求挖掘 / 异议处理 / 成交推进 / 合规</b> 五维打分并画出雷达图。
+      V4 新增<b>自定义客户画像</b>：按 KYC 录入真实客户，AI 或规则引擎就会按这个人设陪你练。</div>
+
+    <div class="card">
+      <div class="card-title">选择演练场景</div>
+      <div class="section-hd">内置画像</div>
+      <div class="grid" id="builtInGrid"></div>
+      <div class="section-hd">准客户的自定义画像 <span style="font-weight:400;color:var(--text-soft);font-size:12.5px;">（基于 KYC 要素生成）</span></div>
+      <div id="customList"></div>
+      <div class="add-card" onclick="newCustomScn()">+ 新建自定义画像</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">怎么用（30秒看懂）</div>
+      <p style="font-size:14px;margin:0;">① 选客户画像（内置或自定义） → ② 看 briefing（背景/顾虑/目标/KYC摘要） → ③ 对话，打字或点话筒开口说
+      → ④ 客户反击，你继续接招（最多6轮）→ ⑤ 结束看五维评分与雷达图 → ⑥ "再练一次"对比进步。</p>
+      <div class="hint" style="margin-top:12px;">💡 想让客户更真实，先去 <b>⚙ 模型</b> 切到"大模型版"。DeepSeek API Key 由服务端云函数持有，<b>不会出现在前端</b>；未配置服务端时自动回落规则版。</div>
+      <div style="font-size:12.5px;color:var(--text-soft);margin-top:12px;">免责声明：AI点评仅供参考，不构成销售建议；合规责任由使用者自行承担。</div>
+    </div>
+  </section>
+
+  <!-- ============ 新建/编辑自定义画像 ============ -->
+  <section id="view-kyc" class="view">
+    <div class="card">
+      <div class="card-title" id="kycTitle">新建自定义客户画像</div>
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">场景定位</div>
+        <div class="kyc-grid">
+          <div>
+            <label for="kycName">画像名称</label>
+            <input id="kycName" placeholder="例如：张总-企业主-年金意向">
+          </div>
+          <div>
+            <label for="kycProduct">主要险种/场景</label>
+            <select id="kycProduct">
+              <option value="重疾险">重疾险</option>
+              <option value="百万医疗">百万医疗</option>
+              <option value="年金/养老">年金/养老</option>
+              <option value="寿险/传承">寿险/传承</option>
+              <option value="意外险">意外险</option>
+              <option value="教育金">教育金</option>
+              <option value="团险/企业">团险/企业</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+        </div>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycIcon">图标（emoji 一个）</label>
+            <input id="kycIcon" placeholder="👨‍💼" value="👤">
+          </div>
+          <div>
+            <label for="kycTag">标签（一句话定位）</label>
+            <input id="kycTag" placeholder="例如：高净值·谨慎·已有社保">
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">基础信息</div>
+        <div class="kyc-grid">
+          <div>
+            <label for="kycBaseName">客户姓名</label>
+            <input id="kycBaseName" placeholder="王先生">
+          </div>
+          <div>
+            <label for="kycBaseAge">年龄</label>
+            <input id="kycBaseAge" type="number" placeholder="35" min="18" max="99">
+          </div>
+        </div>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycBaseGender">性别</label>
+            <select id="kycBaseGender">
+              <option value="男">男</option>
+              <option value="女">女</option>
+            </select>
+          </div>
+          <div>
+            <label for="kycBaseCity">所在城市</label>
+            <input id="kycBaseCity" placeholder="上海">
+          </div>
+        </div>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycBaseJob">职业/行业</label>
+            <input id="kycBaseJob" placeholder="互联网产品经理">
+          </div>
+          <div>
+            <label for="kycBaseRole">家庭角色</label>
+            <input id="kycBaseRole" placeholder="家中经济支柱，有一女3岁">
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">家庭与财务</div>
+        <div class="kyc-grid">
+          <div>
+            <label for="kycFamily">家庭结构</label>
+            <input id="kycFamily" placeholder="已婚，妻子全职，女儿3岁，父母农村无退休金">
+          </div>
+          <div>
+            <label for="kycIncome">年收入（万元）</label>
+            <input id="kycIncome" type="number" placeholder="50" min="0">
+          </div>
+        </div>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycAssets">资产负债</label>
+            <input id="kycAssets" placeholder="一套房贷150万，车无贷，存款30万">
+          </div>
+          <div>
+            <label for="kycInvest">投资风格</label>
+            <select id="kycInvest">
+              <option value="保守">保守</option>
+              <option value="稳健">稳健</option>
+              <option value="平衡">平衡</option>
+              <option value="进取">进取</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">保障现状</div>
+        <label for="kycExisting">已购保险（险种、保额、年缴）</label>
+        <textarea id="kycExisting" placeholder="例如：仅有公司团险意外险30万；社保；无重疾险、无寿险、无医疗险。"></textarea>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycPremium">年缴保费（元）</label>
+            <input id="kycPremium" type="number" placeholder="0" min="0">
+          </div>
+          <div>
+            <label for="kycGap">保障缺口</label>
+            <input id="kycGap" placeholder="重疾/寿险/医疗缺口大">
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">需求与沟通风格</div>
+        <label for="kycCoreNeed">核心需求/痛点</label>
+        <textarea id="kycCoreNeed" placeholder="例如：担心万一生大病，房贷和家庭生活没着落；希望用保险锁定收入风险。"></textarea>
+        <label for="kycResistance">主要异议/阻力</label>
+        <textarea id="kycResistance" placeholder="例如：觉得现在还年轻，重疾离自己远；网上说保险理赔难；想先比较产品。"></textarea>
+        <div class="kyc-grid" style="margin-top:10px;">
+          <div>
+            <label for="kycDecision">决策周期</label>
+            <select id="kycDecision">
+              <option value="快速">快速（1周内）</option>
+              <option value="中等">中等（1-4周）</option>
+              <option value="缓慢">缓慢（1-3月）</option>
+              <option value="观望">观望（不确定）</option>
+            </select>
+          </div>
+          <div>
+            <label for="kycInfoStyle">信息接受方式</label>
+            <select id="kycInfoStyle">
+              <option value="数据型">数据型（要数字、条款）</option>
+              <option value="故事型">故事型（要案例、感受）</option>
+              <option value="关系型">关系型（要信任、推荐）</option>
+              <option value="简洁型">简洁型（要结论、少废话）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-sec">
+        <div class="kyc-sec-title">演练剧本（用于规则版离线陪练）</div>
+        <label for="kycOpeners">客户开场白（每行一句，系统随机选）</label>
+        <textarea id="kycOpeners" placeholder="例如：&#10;我身体挺好的，应该不用买重疾吧？&#10;网上说保险理赔特别难，是真的吗？"></textarea>
+        <label for="kycConcerns">客户可能反复提到的顾虑（每行一条）</label>
+        <textarea id="kycConcerns" placeholder="例如：&#10;保费会不会白交？&#10;现在买是不是太早？&#10;你们公司靠谱吗？"></textarea>
+        <label for="kycGoal">本次演练目标（你想练什么）</label>
+        <textarea id="kycGoal" placeholder="例如：练习把"我还年轻"转化为风险量化，并处理理赔信任异议。"></textarea>
+        <label for="kycTips">话术锦囊</label>
+        <textarea id="kycTips" placeholder="例如：用"房贷余额÷年收入"算出风险敞口；讲理赔时效数据；强调保单现金价值。"></textarea>
+      </div>
+
+      <button class="btn primary" onclick="saveCustomScn()">保存画像</button>
+      <button class="btn ghost" onclick="cancelKyc()">取消</button>
+    </div>
+  </section>
+
+  <!-- ============ Briefing ============ -->
+  <section id="view-brief" class="view">
+    <div class="card">
+      <div class="card-title" id="briefName">场景</div>
+      <div id="briefBody"></div>
+      <button class="btn primary" onclick="startChat()">开始演练 →</button>
+      <button class="btn ghost" onclick="showView('home')">← 换个场景</button>
+    </div>
+  </section>
+
+  <!-- ============ 对话 ============ -->
+  <section id="view-chat" class="view">
+    <div class="card">
+      <div class="card-title" id="chatTitle">对话中</div>
+      <div id="chatBox"></div>
+      <div class="turnbar">
+        <span id="turnInfo">第 1 / 6 轮</span>
+        <span id="chatHint"></span>
+      </div>
+      <label for="agentInput">你的回应（以保险顾问身份打字，或点右下角话筒开口说）</label>
+      <div class="voice-wrap">
+        <textarea id="agentInput" placeholder="例如：王哥，您是家里顶梁柱，正因身体好才最该把风险转嫁出去…"></textarea>
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="语音输入">🎤</button>
+      </div>
+      <div class="voice-status" id="voiceStatus"></div>
+      <div class="row2">
+        <button class="btn primary row" id="sendBtn" onclick="sendAgent()">发送回应</button>
+        <button class="btn danger row" onclick="endChat()">结束并点评</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 结果 ============ -->
+  <section id="view-result" class="view">
+    <div class="card">
+      <div class="card-title" id="resultTitle">演练点评</div>
+      <div id="radar" style="margin:6px 0;"></div>
+      <table class="legend" id="scoreTable"></table>
+      <div id="redBox"></div>
+      <div id="adviceBox"></div>
+      <div class="row2">
+        <button class="btn primary row" onclick="repractice()">再练一次</button>
+        <button class="btn ghost row" onclick="showView('home')">换场景</button>
+      </div>
+      <button class="btn ghost" onclick="showView('history')">查看历史记录</button>
+    </div>
+  </section>
+
+  <!-- ============ 模型设置 ============ -->
+  <section id="view-settings" class="view">
+    <div class="card">
+      <div class="card-title">⚙ 模型设置</div>
+      <label for="modeSel">对话模式</label>
+      <select id="modeSel">
+        <option value="rule" selected>规则版（离线可用，预设分支，无需配置）</option>
+        <option value="deepseek">大模型版（DeepSeek 动态客户 + AI 点评 · 需配置代理）</option>
+      </select>
+      <button class="btn primary" onclick="saveSettings()">保存设置</button>
+      <div class="key-note">🔐 <b>安全提示</b>：DeepSeek API Key <b>不保存在前端</b>，由服务端代理持有。
+      选择"大模型版"需先配置代理地址（代码中 DEFAULT_PROXY_URL），未配置时自动使用 <b>规则版</b> 离线运行。</div>
+      <div class="tip" id="setTips">当前模式：<span id="curMode" class="mode-pill mode-rule">规则版</span></div>
+      <button class="btn ghost" onclick="showView('home')">← 返回首页</button>
+    </div>
+  </section>
+
+  <!-- ============ 历史 ============ -->
+  <section id="view-history" class="view">
+    <div class="card">
+      <div class="card-title">我的演练历史</div>
+      <div id="histBox"></div>
+      <button class="btn ghost" onclick="showView('home')">← 返回首页</button>
+    </div>
+  </section>
+
+  <!-- ============ 关于 ============ -->
+  <section id="view-about" class="view">
+    <div class="card">
+      <div class="card-title">关于本工具</div>
+      <p style="font-size:14px;"><b>AI异议陪练V1.0</b>是保险展业赋能工具箱的一员，定位为<b>保险代理人的轻量级话术实战模拟器</b>——
+      打开即用、无需企业部署、3分钟完成一轮演练。</p>
+      <p style="font-size:14px;"><b>V2.0</b>接入 DeepSeek 大模型：开启"大模型版"后，客户由大模型动态扮演（不按预设剧本出牌），
+      结束后的五维点评与改进建议也由 AI 生成。DeepSeek API Key <b>由服务端代理通过环境变量持有，不在前端显示或存储</b>；未配置代理时自动回落 <b>规则版</b>，离线照样能练。</p>
+      <p style="font-size:14px;"><b>V3.0</b>增加<b>语音输入</b>：点击话筒可直接开口说，系统自动转文字填入输入框（浏览器端基于 Web Speech API；微信小程序端可替换为 wx.getRecorderManager + ASR）。</p>
+      <p style="font-size:14px;"><b>V4.0</b>新增<b>自定义客户画像</b>：参考客户名单分析的 KYC 要素，你可以录入真实客户的信息、家庭财务、保障现状、需求痛点与沟通风格，系统会按这个人设陪你练。</p>
+      <div class="redflag">⚠️ <b>合规提示</b>：本工具的点评与话术仅供个人练习参考，<b>切勿对客承诺</b>。一切对客表述须以监管规定及您所在机构的合规口径为准。</div>
+    </div>
+  </section>
+
+  <footer>
+    保险展业赋能工具箱 · AI异议陪练 V4.2<br>
+    Powered By Kan Man Tang
+  </footer>
+</div>
+
+<!-- 移动端抽屉菜单（在 nav 与 wrap 之外，避免被 backdrop-filter 包含块压扁） -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="菜单">
+  <div class="drawer-head">
+    <div class="drawer-title">菜单</div>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="关闭">✕</button>
+  </div>
+  <nav class="drawer-menu" id="drawerMenu"></nav>
+</div>
+
+<script>
+const VERSION = '4.2';
+const LS_KEY = 'aoc_v4';
+const DS_API = 'https://api.deepseek.com/chat/completions';
+const DS_MODEL = 'deepseek-chat';
+// 默认代理地址：由服务端云函数/代理持有 DeepSeek Key，前端不显示密钥。
+// 如需启用大模型版（DeepSeek），请将下方替换为你的云函数 URL 或本地代理地址。
+// 留空即表示"未配置"，页面将以规则版离线模式运行。
+const DEFAULT_PROXY_URL = '';
+const SAMPLE = { express:72, discover:65, handle:70, close:55, compliance:90 };
+const AXES = ['表达力','需求挖掘','异议处理','成交推进','合规'];
+const KEYS = ['express','discover','handle','close','compliance'];
+
+/* ============ 内置客户画像 ============ */
+const BUILT_IN = [
+  {
+    id:'_biz_cri', ico:'👔', name:'45岁企业中层 · 重疾', product:'重疾险',
+    tags:['家庭支柱','体况焦虑','比价'],
+    base:{name:'王建国', gender:'男', age:45, city:'杭州', job:'制造业部门经理', role:'家中顶梁柱，儿子高三'},
+    family:{marital:'已婚', children:'一子17岁', support:'赡养农村父母'},
+    finance:{income:35, assets:'两套房贷120万，存款20万', liquidity:'一般', investStyle:'稳健'},
+    protection:{existing:'公司团险意外险30万，无重疾', premium:0, gap:'重疾/寿险缺口大'},
+    need:{coreNeed:'担心体检异常后买不了重疾，想锁定保障', motivation:'同部门同事刚确诊肺癌', resistance:'觉得保费高、要比较三四家产品', decisionCycle:'中等', riskAppetite:'保守', infoStyle:'数据型'},
+    opener:'我最近体检指标不太好，重疾险是不是要加钱了？',
+    openingLines:['我最近体检指标不太好，重疾险是不是要加钱了？','现在买重疾是不是太晚了？保费会不会很贵？','我能不能先买医疗险，重疾以后再说？'],
+    concerns:['保费会不会白交？','你们产品比别家贵在哪里？','理赔会不会卡得很严？'],
+    goal:'把客户从"比价"引导到"风险缺口量化"，并处理体况告知问题。',
+    tips:'用"房贷+教育金+父母赡养"算出风险敞口；强调重疾险确诊即赔的现金流价值；提醒如实告知才是理赔安全的底线。'
+  },
+  {
+    id:'_mom_med', ico:'👩‍👧', name:'30岁宝妈 · 百万医疗', product:'百万医疗',
+    tags:['新手妈妈','网络比价','理赔敏感'],
+    base:{name:'李婷', gender:'女', age:30, city:'成都', job:'互联网公司运营', role:'新手妈妈，女儿8个月'},
+    family:{marital:'已婚', children:'一女8个月', support:'双方父母均有退休金'},
+    finance:{income:18, assets:'一套房少量贷款，存款8万', liquidity:'紧张', investStyle:'保守'},
+    protection:{existing:'宝宝有少儿医保，自己仅有社保', premium:0, gap:'全家医疗/重疾缺口'},
+    need:{coreNeed:'怕孩子生病和自叽大病一夜返贫', motivation:'朋友圈众筹看病案例', resistance:'网上说百万医疗理赔难、免赔额高', decisionCycle:'快速', riskAppetite:'保守', infoStyle:'故事型'},
+    opener:'我主要看的是百万医疗，价格便宜，但网上说理赔很坑，是真的吗？',
+    openingLines:['我主要看的是百万医疗，价格便宜，但网上说理赔很坑，是真的吗？','给宝宝买还是给我和老公先买？','免赔额1万是不是太高了？'],
+    concerns:['理赔会不会拒赔？','续保会不会不让续？','免赔额怎么算？'],
+    goal:'建立理赔安全感，把百万医疗定位为社保补丁而非终极方案。',
+    tips:'讲理赔率数据；强调免赔额是降低保费的设计；适时引导重疾险做收入损失补偿。'
+  },
+  {
+    id:'_ret_ann', ico:'🧓', name:'55岁临退 · 年金养老', product:'年金/养老',
+    tags:['临退休','收益敏感','怕被骗'],
+    base:{name:'陈淑芬', gender:'女', age:55, city:'南京', job:'中学教师（临近退休）', role:'独居倾向，女儿在外地工作'},
+    family:{marital:'丧偶', children:'一女已独立', support:'无赡养压力'},
+    finance:{income:15, assets:'一套房无贷，存款60万，公积金余额20万', liquidity:'较好', investStyle:'稳健'},
+    protection:{existing:'社保+教师补充医疗', premium:0, gap:'养老金替代率不足，无稳定现金流'},
+    need:{coreNeed:'希望退休后有稳定的、与生命等长的现金流', motivation:'看到同事退休金不够花', resistance:'怕被保险骗、收益不如银行理财、钱锁太久', decisionCycle:'缓慢', riskAppetite:'保守', infoStyle:'关系型'},
+    opener:'我有60万存款，买年金是不是比存银行划算？',
+    openingLines:['我有60万存款，买年金是不是比存银行划算？','钱放保险里是不是拿不出来了？','收益有没有保证？会不会比国债还低？'],
+    concerns:['本金安全吗？','收益能不能跑赢通胀？','中途急用钱怎么办？'],
+    goal:'把年金从"收益产品"重新定位为"终身现金流工具"，并处理流动性顾虑。',
+    tips:'用"寿命不确定性"解释年金价值；强调保底+分红的结构；提醒不要拿全部存款买保险。'
+  }
+];
+
+/* ============ 关键词分类库（规则版） ============ */
+const KW = {
+  discover:['家庭','收入','房贷','孩子','父母','支出','缺口','风险','预算','保障','负债','担心什么','为什么考虑'],
+  handle:['贵','坑','骗','考虑一下','比较','再看看','不着急','以后再说','网上说','理赔难','收益低','不划算','犹豫'],
+  close:['怎么买','买多少','方案','投保','签单','安排','先办一份','多少钱','保费多少','确定','可以'],
+  redline:['保本','保证收益','肯定赔','避税','避债','返佣','送礼','内部价','监管不管','国家兜底','零风险','稳赚']
+};
+const REDLINE_WORDS = KW.redline;
+
+/* 通用客户反击池（规则版，所有画像共享，但开场/目标/顾虑来自画像） */
+const COMMON_REACT = {
+  discover:[
+    '你说的这些，跟我家里情况不完全一样吧？',
+    '我大概明白了，你直接说建议怎么配吧。',
+    '我们家收入还可以，但支出也大，你帮我算算缺口。',
+    '那我目前最缺的是哪一块保障？'
+  ],
+  handle:[
+    '我再考虑考虑，过几天回复你。',
+    '你这款产品比我在网上看的贵不少啊。',
+    '我之前听朋友说保险理赔特别麻烦。',
+    '我现在手头紧，能不能明年再买？',
+    '你说的这些数据，有保证吗？'
+  ],
+  close:[
+    '行吧，我先了解一下方案，不急着买。',
+    '你能不能先发我一份计划书，我拿回去商量。',
+    '这个保费能不能再便宜点？',
+    '如果我买了之后后悔，能退吗？'
+  ],
+  redline:[
+    '你刚才这么承诺，那是不是写进合同里的？',
+    '你这么说我反而有点担心，不会违规吧？',
+    '你确定能保本？我不能接受亏损。'
+  ],
+  generic:['嗯，然后呢？','你继续说。','我没太听懂，能不能通俗点？','这个我不太感兴趣。']
+};
+
+/* ============ 状态 ============ */
+let state = {
+  scenario: null,
+  msgs: [],
+  turn: 0,
+  lastScore: null,
+  prevScore: null,
+  custom: [],
+  _idx: { discover:0, handle:0, close:0, redline:0, generic:0 }
+};
+
+/* ============ 工具函数 ============ */
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+function escapeHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function uid(){ return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function fmtDate(ts){ const d=new Date(ts); return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+
+function init(){
+  // 清理旧版本可能残留的 key
+  lsDel('aoc_key');
+  // 加载自定义画像
+  try{
+    const raw = lsGet('aoc_custom_scenarios');
+    state.custom = raw ? JSON.parse(raw) : [];
+  }catch(e){ state.custom = []; }
+  renderScnGrid();
+  renderRadar(SAMPLE);
+  refreshSettings();
+}
+
+/* ============ 视图切换 ============ */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + id);
+  if (el) el.classList.add('active');
+  if (id === 'history') renderHistory();
+  if (id === 'settings') refreshSettings();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ============ 场景选择 ============ */
+function allScenarios(){ return BUILT_IN.concat(state.custom || []); }
+
+function scenarioCard(s, isCustom){
+  const tags = (s.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+  return '<div class="scn ' + (isCustom ? 'custom' : '') + '" onclick="selectScn(\'' + s.id + '\')">'
+    + '<div class="ico">' + (s.ico || '👤') + '</div>'
+    + '<div class="nm">' + escapeHtml(s.name) + '</div>'
+    + '<div class="pd">' + escapeHtml(s.product || '') + '</div>'
+    + '<div>' + tags + '</div>'
+    + '</div>';
+}
+
+function renderScnGrid(){
+  const built = document.getElementById('builtInGrid');
+  built.innerHTML = BUILT_IN.map(s => scenarioCard(s, false)).join('');
+  const list = document.getElementById('customList');
+  if (!state.custom || state.custom.length === 0){
+    list.innerHTML = '<div style="font-size:13.5px;color:var(--text-soft);padding:8px 0;">暂无自定义画像，点击下方按钮新建。</div>';
+  } else {
+    list.innerHTML = '<div class="grid">' + state.custom.map(s => scenarioCard(s, true)).join('') + '</div>';
+  }
+}
+
+function selectScn(id){
+  const s = allScenarios().find(x => x.id === id);
+  if (!s) return;
+  state.scenario = s;
+  renderBrief(s);
+  showView('brief');
+}
+
+function renderBrief(s){
+  document.getElementById('briefName').textContent = s.ico + ' ' + s.name;
+  let html = '';
+  // KYC 摘要
+  html += '<div style="font-size:14px;line-height:1.8;">';
+  html += '<p><b>客户：</b>' + escapeHtml((s.base && s.base.name) || '—') + '，' + ((s.base && s.base.age) || '—') + '岁，' + escapeHtml((s.base && s.base.city) || '') + '，' + escapeHtml((s.base && s.base.job) || '') + '</p>';
+  html += '<p><b>家庭角色：</b>' + escapeHtml((s.base && s.base.role) || '—') + '</p>';
+  html += '<p><b>家庭结构：</b>' + escapeHtml((s.family && s.family.marital) ? (s.family.marital + '，' + (s.family.children || '') + '，' + (s.family.support || '')) : '—') + '</p>';
+  html += '<p><b>财务状况：</b>年收入 ' + ((s.finance && s.finance.income) || '—') + ' 万；' + escapeHtml((s.finance && s.finance.assets) || '') + '；投资风格 ' + ((s.finance && s.finance.investStyle) || '—') + '</p>';
+  html += '<p><b>保障现状：</b>' + escapeHtml((s.protection && s.protection.existing) || '—') + '</p>';
+  html += '<p><b>核心需求：</b>' + escapeHtml((s.need && s.need.coreNeed) || '—') + '</p>';
+  html += '<p><b>主要异议：</b>' + escapeHtml((s.need && s.need.resistance) || '—') + '</p>';
+  html += '<p><b>沟通风格：</b>' + escapeHtml((s.need && (s.need.infoStyle + ' / ' + s.need.decisionCycle + '决策')) || '—') + '</p>';
+  html += '</div>';
+  html += '<div class="tip"><b>本次目标：</b>' + escapeHtml(s.goal || '按五维话术标准完成一轮异议处理练习。') + '</div>';
+  html += '<div class="tip"><b>话术锦囊：</b>' + escapeHtml(s.tips || '真诚、先问后说、量化缺口、合规表述。') + '</div>';
+  if (s.concerns && s.concerns.length){
+    html += '<div style="margin-top:10px;font-size:13.5px;"><b>常见顾虑：</b>' + s.concerns.map(c => '· ' + escapeHtml(c)).join(' ') + '</div>';
+  }
+  document.getElementById('briefBody').innerHTML = html;
+}
+
+/* ============ 自定义画像 ============ */
+let editingId = null;
+
+function newCustomScn(){
+  editingId = null;
+  document.getElementById('kycTitle').textContent = '新建自定义客户画像';
+  clearKycForm();
+  showView('kyc');
+}
+
+function editCustomScn(id, ev){
+  if (ev) ev.stopPropagation();
+  const s = (state.custom || []).find(x => x.id === id);
+  if (!s) return;
+  editingId = id;
+  document.getElementById('kycTitle').textContent = '编辑自定义客户画像';
+  fillKycForm(s);
+  showView('kyc');
+}
+
+function deleteCustomScn(id, ev){
+  if (ev) ev.stopPropagation();
+  if (!confirm('确定删除这个自定义画像吗？')) return;
+  state.custom = (state.custom || []).filter(x => x.id !== id);
+  lsSet('aoc_custom_scenarios', JSON.stringify(state.custom));
+  renderScnGrid();
+}
+
+function clearKycForm(){
+  ['kycName','kycIcon','kycTag','kycBaseName','kycBaseAge','kycBaseCity','kycBaseJob','kycBaseRole','kycFamily','kycIncome','kycAssets','kycExisting','kycPremium','kycGap','kycCoreNeed','kycResistance','kycOpeners','kycConcerns','kycGoal','kycTips'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('kycProduct').value = '重疾险';
+  document.getElementById('kycBaseGender').value = '男';
+  document.getElementById('kycInvest').value = '稳健';
+  document.getElementById('kycDecision').value = '中等';
+  document.getElementById('kycInfoStyle').value = '数据型';
+  document.getElementById('kycIcon').value = '👤';
+}
+
+function fillKycForm(s){
+  document.getElementById('kycName').value = s.name || '';
+  document.getElementById('kycProduct').value = s.product || '重疾险';
+  document.getElementById('kycIcon').value = s.ico || '👤';
+  document.getElementById('kycTag').value = (s.tags || []).join('·') || '';
+  if (s.base){
+    document.getElementById('kycBaseName').value = s.base.name || '';
+    document.getElementById('kycBaseAge').value = s.base.age || '';
+    document.getElementById('kycBaseGender').value = s.base.gender || '男';
+    document.getElementById('kycBaseCity').value = s.base.city || '';
+    document.getElementById('kycBaseJob').value = s.base.job || '';
+    document.getElementById('kycBaseRole').value = s.base.role || '';
+  }
+  if (s.family){
+    document.getElementById('kycFamily').value = [s.family.marital, s.family.children, s.family.support].filter(Boolean).join('，') || '';
+  }
+  if (s.finance){
+    document.getElementById('kycIncome').value = s.finance.income || '';
+    document.getElementById('kycAssets').value = s.finance.assets || '';
+    document.getElementById('kycInvest').value = s.finance.investStyle || '稳健';
+  }
+  if (s.protection){
+    document.getElementById('kycExisting').value = s.protection.existing || '';
+    document.getElementById('kycPremium').value = s.protection.premium || '';
+    document.getElementById('kycGap').value = s.protection.gap || '';
+  }
+  if (s.need){
+    document.getElementById('kycCoreNeed').value = s.need.coreNeed || '';
+    document.getElementById('kycResistance').value = s.need.resistance || '';
+    document.getElementById('kycDecision').value = s.need.decisionCycle || '中等';
+    document.getElementById('kycInfoStyle').value = s.need.infoStyle || '数据型';
+  }
+  document.getElementById('kycOpeners').value = (s.openingLines || []).join('\n');
+  document.getElementById('kycConcerns').value = (s.concerns || []).join('\n');
+  document.getElementById('kycGoal').value = s.goal || '';
+  document.getElementById('kycTips').value = s.tips || '';
+}
+
+function parseFamily(s){
+  const parts = (s || '').split(/[,，]/).map(p => p.trim()).filter(Boolean);
+  return { marital: parts[0] || '', children: parts[1] || '', support: parts.slice(2).join('，') };
+}
+
+function saveCustomScn(){
+  const name = document.getElementById('kycName').value.trim();
+  if (!name){ alert('请填写画像名称'); return; }
+  const s = {
+    id: editingId || uid(),
+    name: name,
+    product: document.getElementById('kycProduct').value,
+    ico: document.getElementById('kycIcon').value.trim() || '👤',
+    tags: document.getElementById('kycTag').value.split(/[·\/]/).map(t => t.trim()).filter(Boolean),
+    base:{
+      name: document.getElementById('kycBaseName').value.trim() || '客户',
+      age: Number(document.getElementById('kycBaseAge').value) || 35,
+      gender: document.getElementById('kycBaseGender').value,
+      city: document.getElementById('kycBaseCity').value.trim(),
+      job: document.getElementById('kycBaseJob').value.trim(),
+      role: document.getElementById('kycBaseRole').value.trim()
+    },
+    family: parseFamily(document.getElementById('kycFamily').value),
+    finance:{
+      income: Number(document.getElementById('kycIncome').value) || 0,
+      assets: document.getElementById('kycAssets').value.trim(),
+      liquidity: '',
+      investStyle: document.getElementById('kycInvest').value
+    },
+    protection:{
+      existing: document.getElementById('kycExisting').value.trim(),
+      premium: Number(document.getElementById('kycPremium').value) || 0,
+      gap: document.getElementById('kycGap').value.trim()
+    },
+    need:{
+      coreNeed: document.getElementById('kycCoreNeed').value.trim(),
+      motivation: '',
+      resistance: document.getElementById('kycResistance').value.trim(),
+      decisionCycle: document.getElementById('kycDecision').value,
+      riskAppetite: '',
+      infoStyle: document.getElementById('kycInfoStyle').value
+    },
+    opener: '',
+    openingLines: document.getElementById('kycOpeners').value.split('\n').map(x => x.trim()).filter(Boolean),
+    concerns: document.getElementById('kycConcerns').value.split('\n').map(x => x.trim()).filter(Boolean),
+    goal: document.getElementById('kycGoal').value.trim(),
+    tips: document.getElementById('kycTips').value.trim(),
+    createdAt: Date.now()
+  };
+  if (!s.openingLines.length) s.openingLines = ['你好，我想了解一下保险。'];
+  if (!s.concerns.length) s.concerns = ['我再考虑考虑。'];
+  if (editingId){
+    const idx = state.custom.findIndex(x => x.id === editingId);
+    if (idx >= 0) state.custom[idx] = s;
+  } else {
+    state.custom.push(s);
+  }
+  lsSet('aoc_custom_scenarios', JSON.stringify(state.custom));
+  renderScnGrid();
+  showView('home');
+}
+
+function cancelKyc(){ showView('home'); }
+
+/* ============ 对话引擎 ============ */
+function useDeepSeek(){ return lsGet('aoc_mode') === 'deepseek'; }
+function getProxyUrl(){ return (lsGet('aoc_proxy') || DEFAULT_PROXY_URL).trim(); }
+function isProxyConfigured(){ const u = getProxyUrl(); return !!u && u.length > 10; }
+
+function startChat(){
+  const s = state.scenario;
+  if (!s) return;
+  state.msgs = [];
+  state.turn = 0;
+  state._idx = { discover:0, handle:0, close:0, redline:0, generic:0 };
+  const openers = s.openingLines && s.openingLines.length ? s.openingLines : [s.opener || '你好，我想了解一下保险。'];
+  openers.forEach(o => state.msgs.push({ who:'cust', text:o }));
+  document.getElementById('chatTitle').textContent = s.ico + ' ' + s.name + ' · 实战对话';
+  document.getElementById('agentInput').value = '';
+  const aiReady = useDeepSeek() && isProxyConfigured();
+  const pill = aiReady
+    ? '<span class="mode-pill mode-ai">大模型版 · 已连接</span>'
+    : '<span class="mode-pill mode-rule">规则版 · 离线</span>';
+  document.getElementById('chatHint').innerHTML = pill;
+  renderChat();
+  updateTurn();
+  showView('chat');
+}
+
+function updateTurn(){ document.getElementById('turnInfo').textContent = '第 ' + (state.turn + 1) + ' / 6 轮'; }
+
+function renderChat(){
+  const box = document.getElementById('chatBox');
+  let html = '';
+  state.msgs.forEach(m => {
+    const label = m.who === 'cust' ? '客户' : '保险顾问（你）';
+    html += '<div class="bubble ' + (m.who === 'cust' ? 'cust' : 'agent') + '">'
+      + '<div class="who">' + label + '</div>' + escapeHtml(m.text) + '</div>';
+  });
+  box.innerHTML = html;
+  box.scrollTop = box.scrollHeight;
+}
+
+function classify(msg){
+  const m = msg.toLowerCase();
+  if (KW.redline.some(k => m.indexOf(k) >= 0)) return 'redline';
+  if (KW.close.some(k => m.indexOf(k) >= 0)) return 'close';
+  if (KW.handle.some(k => m.indexOf(k) >= 0)) return 'handle';
+  if (KW.discover.some(k => m.indexOf(k) >= 0)) return 'discover';
+  return 'generic';
+}
+
+function ruleReact(msg, s){
+  const cat = classify(msg);
+  let pool = COMMON_REACT[cat] || COMMON_REACT.generic;
+  // 自定义画像若有concerns，在 handle 时混合加入
+  if (cat === 'handle' && s.concerns && s.concerns.length){
+    pool = pool.concat(s.concerns);
+  }
+  const idx = state._idx[cat] % pool.length;
+  state._idx[cat]++;
+  return pool[idx];
+}
+
+function detectRedline(msg){
+  const m = msg.toLowerCase();
+  return REDLINE_WORDS.filter(w => m.indexOf(w) >= 0);
+}
+
+async function sendAgent(){
+  const ta = document.getElementById('agentInput');
+  const msg = (ta.value || '').trim();
+  if (!msg) return;
+  if (state.turn >= 6){ alert('已达到6轮上限，请点击"结束并点评"'); return; }
+  state.msgs.push({ who:'agent', text:msg });
+  state.turn++;
+  ta.value = '';
+  renderChat();
+  updateTurn();
+
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true; btn.textContent = '客户思考中…';
+
+  let reply;
+  try {
+    if (useDeepSeek()){
+      reply = await dsCustomerReply();
+    } else {
+      reply = ruleReact(msg, state.scenario);
+      await new Promise(r => setTimeout(r, 400));
+    }
+  } catch (e) {
+    reply = ruleReact(msg, state.scenario);
+  }
+  state.msgs.push({ who:'cust', text:reply });
+  renderChat();
+  btn.disabled = false; btn.textContent = '发送回应';
+}
+
+/* ============ DeepSeek 通用调用（仅代理） ============ */
+async function dsChat(messages, maxTokens){
+  const proxy = getProxyUrl();
+  if (!proxy || proxy.length < 10) throw new Error('proxy not configured');
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => { try { ctrl.abort(); } catch (e) {} }, 20000);
+  let res;
+  try {
+    res = await fetch(proxy, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: DS_MODEL, messages: messages, temperature: 0.9, max_tokens: maxTokens || 400 }),
+      signal: ctrl.signal
+    });
+  } finally { clearTimeout(timer); }
+  if (!res || !res.ok) throw new Error('http ' + (res ? res.status : 'null'));
+  const data = await res.json();
+  if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) throw new Error('bad resp');
+  return data.choices[0].message.content;
+}
+
+function buildPersonaPrompt(){
+  const s = state.scenario;
+  const b = s.base || {};
+  const f = s.family || {};
+  const fi = s.finance || {};
+  const p = s.protection || {};
+  const n = s.need || {};
+  return [
+    '你是保险销售演练中的"客户"，请严格按以下人设回应，不要暴露你是AI。',
+    '人设：' + b.name + '，' + b.gender + '，' + b.age + '岁，住在' + b.city + '，职业是' + b.job + '。',
+    '家庭角色：' + (b.role || '—') + '。家庭结构：' + (f.marital || '') + '，' + (f.children || '') + '，' + (f.support || '') + '。',
+    '财务状况：年收入约' + (fi.income || '—') + '万；' + (fi.assets || '—') + '；投资风格' + (fi.investStyle || '—') + '。',
+    '保障现状：' + (p.existing || '—') + '；年缴保费约' + (p.premium || '0') + '元；保障缺口：' + (p.gap || '—') + '。',
+    '核心需求：' + (n.coreNeed || '—') + '。',
+    '主要异议/阻力：' + (n.resistance || '—') + '。',
+    '沟通风格：' + (n.infoStyle || '—') + '；决策周期' + (n.decisionCycle || '—') + '。',
+    '本次演练目标：' + (s.goal || '练习保险顾问的话术与异议处理') + '。',
+    '规则：',
+    '1. 用口语化中文，每次回复 1-3 句话，保持"难搞但合理"的客户状态。',
+    '2. 你要自然提出顾虑、反问、拖延或比较，不要一次就同意购买。',
+    '3. 如果保险顾问提到"保本/保证收益/避税/返佣/国家兜底/零风险"等违规表述，你要表现出警觉并追问。',
+    '4. 不要替保险顾问总结话术，只扮演客户。',
+    '5. 若顾问的回答明显敷衍或合规违规，你可以直接结束兴趣或表达不信任。'
+  ].join('\n');
+}
+
+async function dsCustomerReply(){
+  const hist = state.msgs.slice(-8).map(m => ({
+    role: m.who === 'cust' ? 'assistant' : 'user',
+    content: m.text
+  }));
+  const messages = [
+    { role:'system', content: buildPersonaPrompt() },
+    ...hist
+  ];
+  return await dsChat(messages, 250);
+}
+
+/* ============ 结束与评分 ============ */
+function endChat(){
+  if (state.turn < 2 && !confirm('才练了 ' + state.turn + ' 轮，确定要结束吗？')) return;
+  if (useDeepSeek()){
+    dsEndScore().then(showResult).catch(() => ruleScoreShow());
+  } else {
+    ruleScoreShow();
+  }
+}
+
+function ruleScore(){
+  const agentMsgs = state.msgs.filter(m => m.who === 'agent').map(m => m.text);
+  const txt = agentMsgs.join(' ');
+  const all = agentMsgs.length || 1;
+  const discover = Math.min(100, Math.round(((KW.discover.filter(k => txt.indexOf(k) >= 0).length) / Math.min(4, all) * 80) + 50));
+  const handle = Math.min(100, Math.round(((KW.handle.filter(k => txt.indexOf(k) >= 0).length) / Math.min(3, all) * 70) + 55));
+  const close = Math.min(100, Math.round(((KW.close.filter(k => txt.indexOf(k) >= 0).length) / Math.min(2, all) * 70) + 45));
+  const express = Math.min(100, Math.round(60 + agentMsgs.filter(m => m.text.length >= 20).length * 8));
+  const red = detectRedline(txt);
+  const compliance = Math.max(0, 100 - red.length * 45);
+  return { express, discover, handle, close, compliance, violations:red };
+}
+
+async function dsEndScore(){
+  const transcript = state.msgs.map(m => (m.who === 'cust' ? '客户：' : '顾问：') + m.text).join('\n');
+  const s = state.scenario;
+  const prompt = [
+    '你是一位保险销售培训督导，请根据以下演练对话，从五个维度给保险顾问打分并给出改进建议。',
+    '客户画像：' + s.name + '；核心需求：' + ((s.need && s.need.coreNeed) || '—') + '；主要异议：' + ((s.need && s.need.resistance) || '—') + '。',
+    '评分标准：',
+    '- 表达力（0-100）：语言是否清晰、有亲和力、不过度推销',
+    '- 需求挖掘（0-100）：是否问到家庭、收入、缺口、预算、决策人',
+    '- 异议处理（0-100）：是否正面回应客户顾虑、有逻辑、有案例或数据',
+    '- 成交推进（0-100）：是否适时提出下一步、确认需求、不强迫',
+    '- 合规（0-100）：是否出现"保本/保证收益/避税/返佣/零风险/国家兜底"等违规表述，每出现一次扣45分',
+    '请严格按以下 JSON 格式返回，不要输出其他内容：',
+    '{"express":75,"discover":70,"handle":72,"close":60,"compliance":90,"violations":["保本"],"advice":{"表达力":"...","需求挖掘":"...","异议处理":"...","成交推进":"...","合规":"..."}}',
+    '对话记录：',
+    transcript
+  ].join('\n');
+  const content = await dsChat([{role:'user', content:prompt}], 800);
+  return parseScoreJson(content);
+}
+
+function parseScoreJson(raw){
+  let clean = raw.trim();
+  if (clean.indexOf('```') >= 0){
+    const m = clean.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (m) clean = m[1].trim();
+  }
+  const start = clean.indexOf('{');
+  const end = clean.lastIndexOf('}');
+  if (start >= 0 && end > start) clean = clean.slice(start, end + 1);
+  try {
+    const obj = JSON.parse(clean);
+    const out = {};
+    KEYS.forEach(k => out[k] = clampNum(obj[k]));
+    out.violations = Array.isArray(obj.violations) ? obj.violations : [];
+    out.advice = obj.advice || {};
+    return out;
+  } catch (e) {
+    const fallback = ruleScore();
+    fallback.advice = {};
+    return fallback;
+  }
+}
+
+function clampNum(v){ const n = Number(v); return isNaN(n) ? 60 : Math.max(0, Math.min(100, Math.round(n))); }
+
+function ruleScoreShow(){ showResult(ruleScore()); }
+
+function showResult(score){
+  state.prevScore = state.lastScore;
+  state.lastScore = score;
+  saveHistory(score);
+  document.getElementById('resultTitle').textContent = state.scenario.ico + ' ' + state.scenario.name + ' · 演练点评';
+  renderRadar(score, state.prevScore);
+  renderScoreTable(score);
+  const red = document.getElementById('redBox');
+  if (score.violations && score.violations.length){
+    red.innerHTML = '<div class="redflag">⚠️ 检测到违规表述：' + score.violations.map(v => '「' + escapeHtml(v) + '」').join('、') +
+      '<br>合规分已重扣。正式对客时请严格避免此类承诺。</div>';
+  } else red.innerHTML = '';
+  const adv = document.getElementById('adviceBox');
+  let advHtml = '';
+  if (score.advice){
+    advHtml += '<table class="legend"><tr><th>维度</th><th>改进建议</th></tr>';
+    AXES.forEach((a,i) => {
+      const k = KEYS[i];
+      const text = score.advice[k] || '继续保持，注意与客户需求对齐。';
+      advHtml += '<tr><td><b>' + a + '</b></td><td>' + escapeHtml(text) + '</td></tr>';
+    });
+    advHtml += '</table>';
+  }
+  adv.innerHTML = advHtml;
+  showView('result');
+}
+
+function renderScoreTable(score){
+  const t = document.getElementById('scoreTable');
+  let html = '<tr><th>维度</th><th>得分</th><th>评级</th></tr>';
+  AXES.forEach((a,i) => {
+    const k = KEYS[i];
+    const v = score[k];
+    const band = v >= 80 ? 'band-ok' : (v >= 60 ? 'band-warn' : 'band-bad');
+    const label = v >= 80 ? '优秀' : (v >= 60 ? '及格' : '需改进');
+    html += '<tr><td><b>' + a + '</b></td><td class="sc ' + band + '">' + v + '</td><td class="' + band + '">' + label + '</td></tr>';
+  });
+  t.innerHTML = html;
+}
+
+function repractice(){ startChat(); }
+
+/* ============ 雷达图（内联 SVG） ============ */
+function renderRadar(curr, prev){
+  const W = 360, H = 280, CX = W / 2, CY = H / 2 + 8, R = 90;
+  const axes = AXES;
+  const n = axes.length;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="auto" style="max-width:360px;display:block;margin:0 auto;">';
+  // 网格
+  for (let lv = 1; lv <= 4; lv++){
+    const r = R * lv / 4;
+    let d = '';
+    for (let i = 0; i < n; i++){
+      const ang = Math.PI / 2 + i * 2 * Math.PI / n;
+      const x = CX + r * Math.cos(ang);
+      const y = CY - r * Math.sin(ang);
+      d += (i ? ' L ' : 'M ') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    d += ' Z';
+    s += '<path d="' + d + '" fill="none" stroke="#CFE0F2" stroke-width="1"/>';
+  }
+  // 轴线
+  for (let i = 0; i < n; i++){
+    const ang = Math.PI / 2 + i * 2 * Math.PI / n;
+    const x = CX + R * Math.cos(ang);
+    const y = CY - R * Math.sin(ang);
+    s += '<line x1="' + CX + '" y1="' + CY + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '" stroke="#CFE0F2" stroke-width="1"/>';
+  }
+  // 上一轮虚线
+  if (prev){
+    let d = '';
+    for (let i = 0; i < n; i++){
+      const ang = Math.PI / 2 + i * 2 * Math.PI / n;
+      const v = prev[KEYS[i]] || 0;
+      const r = R * v / 100;
+      const x = CX + r * Math.cos(ang);
+      const y = CY - r * Math.sin(ang);
+      d += (i ? ' L ' : 'M ') + x.toFixed(1) + ' ' + y.toFixed(1);
+    }
+    d += ' Z';
+    s += '<path d="' + d + '" fill="rgba(91,163,224,0.08)" stroke="#5BA3E0" stroke-width="2" stroke-dasharray="5,4"/>';
+  }
+  // 当前轮
+  let d = '';
+  for (let i = 0; i < n; i++){
+    const ang = Math.PI / 2 + i * 2 * Math.PI / n;
+    const v = curr[KEYS[i]] || 0;
+    const r = R * v / 100;
+    const x = CX + r * Math.cos(ang);
+    const y = CY - r * Math.sin(ang);
+    d += (i ? ' L ' : 'M ') + x.toFixed(1) + ' ' + y.toFixed(1);
+    s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="4" fill="#2563A8"/>';
+  }
+  d += ' Z';
+  s += '<path d="' + d + '" fill="rgba(37,99,168,0.18)" stroke="#2563A8" stroke-width="2"/>';
+  // 标签
+  for (let i = 0; i < n; i++){
+    const ang = Math.PI / 2 + i * 2 * Math.PI / n;
+    const x = CX + (R + 26) * Math.cos(ang);
+    const y = CY - (R + 26) * Math.sin(ang);
+    const anchor = Math.abs(x - CX) < 5 ? 'middle' : (x > CX ? 'start' : 'end');
+    s += '<text x="' + x.toFixed(1) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="' + anchor + '" font-size="14" font-weight="700" fill="#1E2A3A">' + axes[i] + '</text>';
+  }
+  // 图例
+  s += '<g transform="translate(' + (W - 110) + ',20)">';
+  s += '<rect x="0" y="0" width="12" height="12" fill="rgba(37,99,168,0.35)" stroke="#2563A8"/>';
+  s += '<text x="18" y="11" font-size="13" fill="#1E2A3A">本次</text>';
+  if (prev){
+    s += '<rect x="0" y="20" width="12" height="12" fill="rgba(91,163,224,0.15)" stroke="#5BA3E0" stroke-dasharray="3,2"/>';
+    s += '<text x="18" y="31" font-size="13" fill="#1E2A3A">上次</text>';
+  }
+  s += '</g>';
+  s += '</svg>';
+  document.getElementById('radar').innerHTML = s;
+}
+
+/* ============ 历史记录 ============ */
+function saveHistory(score){
+  try{
+    const arr = JSON.parse(lsGet('aoc_history') || '[]');
+    arr.unshift({
+      ts: Date.now(),
+      name: state.scenario.name,
+      ico: state.scenario.ico,
+      score: score
+    });
+    if (arr.length > 50) arr.pop();
+    lsSet('aoc_history', JSON.stringify(arr));
+  }catch(e){}
+}
+
+function renderHistory(){
+  try{
+    const arr = JSON.parse(lsGet('aoc_history') || '[]');
+    const box = document.getElementById('histBox');
+    if (!arr.length){ box.innerHTML = '<div class="tip">暂无记录，先完成一轮演练。</div>'; return; }
+    box.innerHTML = arr.map(h => {
+      const total = Math.round(((h.score.express + h.score.discover + h.score.handle + h.score.close + h.score.compliance) / 5));
+      return '<div class="hist-item">'
+        + '<div><b>' + (h.ico || '👤') + ' ' + escapeHtml(h.name) + '</b><div class="meta">' + fmtDate(h.ts) + ' · 综合 ' + total + ' 分</div></div>'
+        + '<div style="font-weight:800;color:var(--primary-deep);">' + total + '</div>'
+        + '</div>';
+    }).join('');
+  }catch(e){
+    document.getElementById('histBox').innerHTML = '<div class="tip">读取历史失败。</div>';
+  }
+}
+
+/* ============ 语音输入 ============ */
+let recognition = null;
+function ensureRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  if (!recognition){
+    recognition = new SR();
+    recognition.lang = 'zh-CN';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = e => {
+      const t = e.results[0][0].transcript;
+      const ta = document.getElementById('agentInput');
+      if (ta) ta.value = (ta.value ? ta.value + '，' : '') + t;
+      setVoiceStatus('');
+      setRec(false);
+    };
+    recognition.onerror = e => {
+      setVoiceStatus('语音识别失败：' + (e.error || 'unknown'));
+      setRec(false);
+    };
+    recognition.onend = () => setRec(false);
+  }
+  return recognition;
+}
+function setVoiceStatus(t){ const el = document.getElementById('voiceStatus'); if (el) el.textContent = t; }
+function setRec(on){ const btn = document.getElementById('voiceBtn'); if (btn) btn.classList.toggle('recording', !!on); }
+function toggleVoice(){
+  const r = ensureRecognition();
+  if (!r){ setVoiceStatus('当前浏览器不支持语音输入'); return; }
+  try {
+    r.start();
+    setRec(true);
+    setVoiceStatus('正在听，请说话…');
+  } catch (e) {
+    setVoiceStatus('无法启动语音识别');
+    setRec(false);
+  }
+}
+
+/* ============ 设置 ============ */
+function refreshSettings(){
+  const mode = lsGet('aoc_mode') || 'rule';
+  const ms = document.getElementById('modeSel'); if (ms) ms.value = mode;
+  const cur = document.getElementById('curMode');
+  const aiReady = mode === 'deepseek' && isProxyConfigured();
+  if (cur) cur.outerHTML = '<span id="curMode" class="mode-pill ' + (aiReady ? 'mode-ai' : 'mode-rule') + '">'
+    + (aiReady ? '大模型版 · 已连接' : '规则版 · 离线') + '</span>';
+}
+function saveSettings(){
+  const ms = document.getElementById('modeSel');
+  if (ms) lsSet('aoc_mode', ms.value);
+  // 前端不暴露代理地址输入框，统一使用代码内置的 DEFAULT_PROXY_URL
+  // 如需启用大模型版，请在代码中将 DEFAULT_PROXY_URL 替换为真实代理地址
+  lsSet('aoc_proxy', DEFAULT_PROXY_URL);
+  refreshSettings();
+  // 页面内提示（不再弹 alert 阻断操作）
+  const tip = document.getElementById('setTips');
+  if (ms && ms.value === 'deepseek' && !isProxyConfigured()){
+    if (tip) tip.innerHTML = '当前模式：<span id="curMode" class="mode-pill mode-rule">规则版 · 离线</span> <small style="color:#e67e22;">⚠ 大模型版未配置代理，已自动使用规则版。如需启用请在代码中设置 DEFAULT_PROXY_URL</small>';
+  } else {
+    if (tip) tip.innerHTML = '当前模式：<span id="curMode" class="mode-pill mode-ai">已保存 ✓</span>';
+    setTimeout(function(){ refreshSettings(); }, 1500);
+  }
+}
+
+/* ============ 移动端抽屉菜单 ============ */
+function openDrawer(){
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('drawerBackdrop');
+  const menu = document.getElementById('drawerMenu');
+  if (!drawer || !backdrop || !menu) return;
+  buildDrawerMenu();
+  document.body.classList.add('drawer-open');
+  backdrop.classList.add('open');
+  drawer.classList.add('open');
+}
+function closeDrawer(){
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('drawerBackdrop');
+  if (drawer) drawer.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+  document.body.classList.remove('drawer-open');
+}
+function buildDrawerMenu(){
+  const menu = document.getElementById('drawerMenu');
+  const nav = document.getElementById('desktopNav');
+  if (!menu || !nav) return;
+  menu.innerHTML = '';
+  Array.from(nav.children).forEach(function(btn){
+    const target = btn.getAttribute('data-target');
+    const label = btn.textContent || '';
+    const item = document.createElement('a');
+    item.className = 'drawer-item';
+    item.href = '#';
+    item.textContent = label;
+    item.onclick = function(e){
+      e.preventDefault();
+      closeDrawer();
+      if (target) showView(target);
+    };
+    menu.appendChild(item);
+  });
+}
+try {
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeDrawer();
+  });
+} catch (e) {}
+
+/* ============ 初始化 ============ */
+init();
+</script>
+</body>
+</html>
