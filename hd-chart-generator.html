@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 · 出生数据出图测评（M1/M2/M3 原型 V6）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --card:#FFFFFF; --ink:#2D2118; --muted:#7A6A58;
+    --gold:#C4956A; --gold-l:#F3E6D6; --amber:#B5762A; --amber-l:#F8ECDA;
+    --clay:#C05A2E; --clay-l:#F6E2D6; --line:#E8DCC8;
+    --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:14px}
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,#3A2A1C,#2D2118);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  nav .brand{font-weight:800;font-size:16px;letter-spacing:.04em}
+  nav .brand small{display:block;font-size:12px;font-weight:600;color:var(--amber-l);letter-spacing:.12em;margin-top:1px}
+  nav .hamb{display:none;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:20px;line-height:1;padding:6px 11px;cursor:pointer}
+  nav .menu{display:flex;gap:6px;flex-wrap:wrap}
+  nav .menu a{color:#F3E6D6;text-decoration:none;font-size:13px;padding:5px 10px;border-radius:8px;white-space:nowrap}
+  nav .menu a:hover{background:rgba(255,255,255,.12)}
+  body.drawer-open nav{z-index:0 !important}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:80%;max-width:320px;background:#2D2118;z-index:9999;transform:translateX(100%);transition:transform .28s ease;padding:64px 0 20px;overflow-y:auto}
+  .drawer.open{transform:translateX(0)}
+  .drawer a{display:block;color:#F3E6D6;text-decoration:none;padding:14px 22px;font-size:15px;border-bottom:1px solid rgba(255,255,255,.08);min-height:48px}
+  .drawer a:hover{background:rgba(255,255,255,.06)}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:none}
+  .drawer-close{position:absolute;top:14px;right:14px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:18px;width:38px;height:38px;cursor:pointer}
+  body.drawer-open .mask{display:block}
+  body.drawer-open{overflow:hidden}
+  @media (max-width:768px){nav .menu{display:none} nav .hamb{display:inline-block}}
+  .wrap{max-width:980px;margin:0 auto;padding:18px 14px}
+  .hero{background:linear-gradient(135deg,#2D2118,#4A3728);color:#fff;padding:26px 22px;border-radius:14px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+  .hero h1{margin:0 0 10px;font-size:22px}
+  .hero p{margin:6px 0 0;color:#E8DCC8;font-size:14px;line-height:1.8}
+  .hero .sub-tagline{font-size:13px;color:#C4956A;font-style:italic;letter-spacing:.04em;border-top:1px dashed rgba(196,149,106,.35);padding-top:10px;margin-top:12px}
+  .badge{display:inline-block;background:rgba(196,149,106,.25);color:#F3E6D6;border:1px solid rgba(196,149,106,.4);padding:2px 10px;border-radius:20px;font-size:12px;margin-right:5px}
+  .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:18px 18px 20px;margin-bottom:16px;border:1px solid var(--line)}
+  .card h2{margin:0 0 8px;font-size:18px;color:var(--ink);border-left:4px solid var(--gold);padding-left:10px}
+  .card .sub{font-size:13px;color:var(--muted);margin-bottom:10px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  @media (max-width:560px){.grid3{grid-template-columns:1fr 1fr}}
+  @media (max-width:420px){.grid3{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+  .field input,.field select{padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;background:#fff;color:var(--ink);width:100%}
+  .field input:focus,.field select:focus{border-color:var(--gold);outline:0}
+  .btn{display:inline-block;padding:13px 22px;border:0;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:#fff}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--amber));box-shadow:0 4px 14px rgba(181,118,42,.25)}
+  .btn-gold:hover{transform:translateY(-1px)}
+  .btn-line{background:transparent;border:1.5px solid var(--gold);color:var(--gold)}
+  .disc{border-left:3px dashed var(--line);background:#FBF6EE;padding:11px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--muted);margin-top:10px}
+  .disc b{color:var(--ink)}
+  .err{background:#F6E2D6;color:#8B3A1F;padding:11px 14px;border-left:3px solid var(--clay);border-radius:0 8px 8px 0;font-size:13px}
+  .ok{background:#E6F1E2;color:#2D5A1E;padding:11px 14px;border-left:3px solid #5A8A3F;border-radius:0 8px 8px 0;font-size:13px}
+  .warn{background:#F8ECDA;color:#7A501A;padding:11px 14px;border-left:3px solid var(--amber);border-radius:0 8px 8px 0;font-size:13px}
+  /* 4 行星卡片 */
+  .planet4{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  @media (max-width:560px){.planet4{grid-template-columns:1fr}}
+  .plcard{background:#FBF6EE;border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .plcard.pers{background:linear-gradient(135deg,#F3E6D6,#FBF6EE);border-color:var(--gold)}
+  .plcard.desg{background:linear-gradient(135deg,#E8F0F8,#FBF6EE);border-color:#7898B0}
+  .plcard .role{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+  .plcard .head{display:flex;align-items:center;gap:10px}
+  .plcard .glyph{width:48px;height:48px;background:var(--gold);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0}
+  .plcard.desg .glyph{background:#7898B0}
+  .plcard .gt{font-size:22px;font-weight:800;color:var(--ink)}
+  .plcard .gt small{font-size:13px;color:var(--muted);font-weight:600;margin-left:6px}
+  .plcard .ln{font-size:12px;color:var(--amber);font-weight:700}
+  .plcard .hx{font-size:15px;font-weight:700;color:var(--ink);margin-top:2px}
+  .plcard .th{font-size:12px;color:var(--muted)}
+  .plcard .hexwrap{display:flex;align-items:center;gap:12px;margin-top:6px}
+  .plcard svg.hex{width:56px;height:auto;flex-shrink:0}
+  .plcard .hexmeta{flex:1;line-height:1.5}
+  .plcard .hxcname{font-size:14px;font-weight:700;color:var(--ink)}
+  .plcard .hxctip{font-size:12px;color:var(--muted);margin-top:3px}
+  /* 新增：爻位解读区 */
+  .plcard .expl{margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+  .plcard .expl-tag{display:inline-block;background:var(--gold-l);color:var(--amber);font-weight:800;font-size:12px;padding:2px 9px;border-radius:12px;margin-bottom:5px;letter-spacing:.04em}
+  .plcard .expl-tag.desg{background:#E8F0F8;color:#406880}
+  .plcard .expl-text{font-size:13px;color:var(--ink);line-height:1.65;margin:4px 0 5px}
+  .plcard .expl-quote{font-size:12px;color:var(--muted);font-style:italic;border-left:2px solid var(--amber);padding-left:8px;margin:4px 0 0}
+  /* 表单/选择 */
+  .selrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media (max-width:560px){.selrow{grid-template-columns:1fr}}
+  .pill{display:inline-block;background:var(--gold-l);color:var(--gold);font-weight:700;font-size:12px;padding:3px 10px;border-radius:14px;margin-right:5px}
+  .mblock{background:#FBF6EE;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 8px 8px 0;margin-top:10px;font-size:13px}
+  .mblock.clay{background:var(--clay-l);border-left-color:var(--clay)}
+  .mblock.gold{background:var(--gold-l);border-left-color:var(--gold)}
+  .big{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px}
+  .loading{display:inline-block;width:18px;height:18px;border:2px solid var(--gold-l);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  footer{text-align:center;color:var(--muted);padding:24px 16px 40px;font-size:12px;line-height:1.9}
+  footer .line1{font-weight:700;color:var(--ink)}
+  footer .line2{opacity:.85}
+  footer .line3{opacity:.75}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">人类图领导力<small>HD-LEADERSHIP · M1/M2/M3 出图测评</small></div>
+  <div class="menu">
+    <a href="#sec1">① 出生数据</a>
+    <a href="#sec2">② 4 行星图谱</a>
+    <a href="#m1">M1 报告</a>
+    <a href="#m2">M2 报告</a>
+    <a href="#m3">M3 报告</a>
+  </div>
+  <button class="hamb" id="hamb">☰</button>
+</nav>
+
+<!-- 抽屉置nav外 -->
+<div class="drawer-portal">
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" id="closex">✕</button>
+    <a href="#sec1">① 出生数据</a>
+    <a href="#sec2">② 4 行星图谱</a>
+    <a href="#m1">M1 报告</a>
+    <a href="#m2">M2 报告</a>
+    <a href="#m3">M3 报告</a>
+    <a href="#" onclick="closeDrawer();return false;" style="color:var(--amber-l);margin-top:18px">关闭菜单</a>
+  </div>
+  <div class="mask" id="mask"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>人类图领导力 · 出生数据出图测评 <span class="badge" id="verBadge">V6</span></h1>
+    <p>输入精确出生数据 → 调取 Human Code 完整图 API → 输出你的 4 个核心行星（个性太阳/地球 + 设计太阳/地球）→ 卦象 + 爻线。</p>
+    <div class="sub-tagline">源自全球公认的人类图实践体系，遵循「成熟框架为体、人类图为用」的领导力课程定位。</div>
+  </div>
+
+  <!-- ① 出生数据 -->
+  <section class="card" id="sec1">
+    <h2>① 出生数据</h2>
+    <div class="sub">越精确，爻线越接近你本人。请用 24 小时制填时分。可选填城市（用于自动选时区）。</div>
+    <div class="grid3">
+      <div class="field"><label>姓名 / 称呼</label><input id="name" type="text" placeholder="如 Kan Man Tang" value="Kan Man Tang"></div>
+      <div class="field"><label>城市（可选）</label><input id="city" type="text" placeholder="如 上海 / Shanghai" value="Shanghai"></div>
+      <div class="field"><label>时区</label>
+        <select id="tz">
+          <option value="Asia/Shanghai" selected>Asia/Shanghai (UTC+8)</option>
+          <option value="Asia/Hong_Kong">Asia/Hong_Kong (UTC+8)</option>
+          <option value="Asia/Taipei">Asia/Taipei (UTC+8)</option>
+          <option value="Asia/Tokyo">Asia/Tokyo (UTC+9)</option>
+          <option value="Asia/Singapore">Asia/Singapore (UTC+8)</option>
+          <option value="Asia/Kolkata">Asia/Kolkata (UTC+5:30)</option>
+          <option value="Europe/London">Europe/London (UTC+0/+1)</option>
+          <option value="Europe/Berlin">Europe/Berlin (UTC+1/+2)</option>
+          <option value="America/New_York">America/New_York (UTC-5/-4)</option>
+          <option value="America/Los_Angeles">America/Los_Angeles (UTC-8/-7)</option>
+          <option value="Australia/Sydney">Australia/Sydney (UTC+10/+11)</option>
+          <option value="UTC">UTC</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:10px">
+      <div class="field"><label>出生年</label><input id="y" type="number" placeholder="1996" value="1996" min="1900" max="2099"></div>
+      <div class="field"><label>出生月</label><input id="mo" type="number" placeholder="6" value="6" min="1" max="12"></div>
+      <div class="field"><label>出生日</label><input id="d" type="number" placeholder="18" value="18" min="1" max="31"></div>
+    </div>
+    <div class="grid3" style="margin-top:10px">
+      <div class="field"><label>出生时 (24h)</label><input id="h" type="number" placeholder="12" value="12" min="0" max="23"></div>
+      <div class="field"><label>出生分（可选）</label><input id="mi" type="number" placeholder="31" value="31" min="0" max="59"></div>
+      <div class="field" style="justify-content:flex-end"><label>&nbsp;</label><button class="btn btn-gold" id="gen" style="width:100%"><span id="genTxt">生成我的 4 行星图谱 →</span></button></div>
+    </div>
+    <div id="msg" style="margin-top:10px"></div>
+  </section>
+
+  <!-- 结果容器 -->
+  <div id="result" style="display:none">
+
+    <!-- ② 4 行星图谱 -->
+    <section class="card" id="sec2">
+      <h2>② 你的 4 个核心行星</h2>
+      <div class="sub" id="chartSub">个性太阳 = 你今生「有意识」展现的主题 · 个性地球 = 与之对冲的「人格锚点」。<br>设计太阳 = 你天生「无意识」的健康状态 · 设计地球 = 与之对冲的「身体记忆」。</div>
+      <div class="planet4" id="planetCards"></div>
+      <div class="disc" style="margin-top:10px">
+        🛡️ <b>精度说明：</b>本工具仅输出 4 行星 + 卦象爻线，与正式人类图软件（Jovian Archive / myBodygraph）的 13 行星全图相比省略月亮、水星、金星、火星、木星、土星、北交、南交等次要行星。如需 9 中心定义、36 通道、类型与权威的完整计算，请使用上述专业工具或人工解读。
+      </div>
+    </section>
+
+    <!-- ③ 类型策略 + ④ 内在权威 + ⑤ 人生角色 Profile（合并到一处，符合调用逻辑） -->
+    <section class="card" id="sec3">
+      <h2>③ 类型策略 + ④ 内在权威 + ⑤ 人生角色 Profile</h2>
+      <div class="field" style="margin-top:8px">
+        <label>③ 能量类型</label>
+        <select id="selType">
+          <option value="">— 选择你的类型 —</option>
+          <option value="manifestor">显示者 Manifestor</option>
+          <option value="generator">生产者 Generator</option>
+          <option value="mg">显示生产者 Manifesting Generator</option>
+          <option value="projector">投射者 Projector</option>
+          <option value="reflector">反映者 Reflector</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>④ 内在权威（顺序：情绪 → 荐骨 → 脾 → 自我/心 → G 中心 → 环境 → 无权威·末位）</label>
+        <select id="selAuth">
+          <option value="">— 选择你的内在权威 —</option>
+          <option value="emotional">情绪权威 (Solar Plexus)</option>
+          <option value="sacral">荐骨权威 (Sacral)</option>
+          <option value="splenic">脾权威 (Splenic)</option>
+          <option value="ego">自我/心权威 (Heart)</option>
+          <option value="gcenter">G 中心权威 (Self)</option>
+          <option value="environment">环境权威 (Environment)</option>
+          <option value="none">无权威（反映者 · 朔望周期）</option>
+        </select>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>⑤ 人生角色 Profile</label>
+        <select id="selProfile">
+          <option value="">— 选择你的人生角色 —</option>
+          <option value="1/3">1/3 · 研究者 / 烈士</option>
+          <option value="1/4">1/4 · 研究者 / 机会主义者</option>
+          <option value="2/4">2/4 · 隐士 / 机会主义者</option>
+          <option value="2/5">2/5 · 隐士 / 异端者</option>
+          <option value="3/5">3/5 · 烈士 / 异端者</option>
+          <option value="3/6">3/6 · 烈士 / 角色模范</option>
+          <option value="4/1">4/1 · 机会主义者 / 研究者</option>
+          <option value="4/6">4/6 · 机会主义者 / 角色模范</option>
+          <option value="5/1">5/1 · 异端者 / 研究者</option>
+          <option value="5/2">5/2 · 异端者 / 隐士</option>
+          <option value="6/2">6/2 · 角色模范 / 隐士</option>
+          <option value="6/3">6/3 · 角色模范 / 烈士</option>
+        </select>
+        <div id="profileDesc" class="sub" style="margin-top:6px;min-height:18px;color:var(--ink);font-weight:600"></div>
+      </div>
+      <button class="btn btn-gold" id="genReport" style="margin-top:14px;width:100%;background:linear-gradient(135deg,var(--gold),var(--clay))">生成 M1 / M2 / M3 领导力报告 →</button>
+    </section>
+
+    <!-- M1 -->
+    <section class="card" id="m1">
+      <h2>M1 · 类型与策略 = 你的领导本色</h2>
+      <div class="sub">认识你的设计：类型决定你的「领导动作」，策略是你与世界互动的正确方式。</div>
+      <div id="m1body"><div class="disc">请先在上方选择或确认你的「类型」，再点「生成报告」。</div></div>
+    </section>
+
+    <!-- M2 -->
+    <section class="card" id="m2">
+      <h2>M2 · 内在权威与决策力</h2>
+      <div class="sub">用「时中 / 持经达变」对应你的权威——在正确的节奏里做决定，才是真领导。</div>
+      <div id="m2body"><div class="disc">请先在上方选择或确认你的「内在权威」，再点「生成报告」。</div></div>
+    </section>
+
+    <!-- M3 -->
+    <section class="card" id="m3">
+      <h2>M3 · 人生角色 Profile = 你活成的样子就是别人的路</h2>
+      <div class="sub">认识你的「舞台方式」——领导力不只是做什么，更是「用什么样的身段做」。</div>
+      <div id="m3body"><div class="disc">请先在上方选择或确认你的「人生角色 Profile」，再点「生成报告」。</div></div>
+    </section>
+
+    <div class="disc">
+      🛡️ <b>原型边界声明：</b>本工具为首门课《人类图领导力》M1/M2 的<b>教学体验原型</b>。4 行星图通过授权 API 实时计算；类型/权威解读由教研团队预先编写并由你的正式人类图作为校准。本工具<b>不替代专业人类图解读</b>，亦不构成任何医学/心理/职业建议。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="line1">人类图领导力课程 · 出图测评原型 <span id="verF1">V6</span></div>
+  <div class="line2">© 2026 HD-Leadership</div>
+  <div class="line3">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+const VERSION = "V6";
+document.getElementById('verF1').textContent = VERSION;
+document.getElementById('verBadge').textContent = VERSION;
+
+// 全局错误兜底：任何脚本错误都显示为可见横幅，避免"点击无反应"被静默吞掉
+window.addEventListener('error', function(e){
+  const m = document.getElementById('msg');
+  if(m) m.innerHTML = '<div class="err"><b>页面脚本出错：</b>' + escapeHtml(e.message) + (e.lineno?('（行 '+e.lineno+'）'):'') + '。请刷新重试；若持续，请用真实浏览器（Chrome/Safari）打开本文件。</div>';
+});
+
+// ============== 字典 ==============
+// 64 卦（文王序 = 人类图闸门 1-64 通用对应）
+const HEX = ["","乾为天","坤为地","水雷屯","山水蒙","水天需","天水讼","地水师","水地比","风天小畜","天泽履","地天泰","天地否","天火同人","火天大有","地山谦","雷地豫","泽雷随","山风蛊","地泽临","风地观","火雷噬嗑","山火贲","山地剥","地雷复","天雷无妄","山天大畜","山雷颐","泽风大过","坎为水","离为火","泽山咸","雷风恒","天山遁","雷天大壮","火地晋","地火明夷","风火家人","火泽睽","水山蹇","雷水解","山泽损","风雷益","泽天夬","天风姤","泽地萃","地风升","泽水困","水风井","泽火革","火风鼎","震为雷","艮为山","风山渐","雷泽归妹","雷火丰","火山旅","巽为风","兑为泽","风水涣","水泽节","风泽中孚","雷山小过","水火既济","火水未济"];
+const THEME = ["","开创","承载","始生","启蒙","等待","慎争","领军","亲辅","蓄势","慎行","通达","闭塞","和同","丰盛","谦德","预备","顺势","整治","督导","省视","决断","文饰","止剥","回归","率真","厚积","养正","担当","习坎","明丽","感应","恒常","退避","强盛","进升","韬光","齐家","求同","止难","纾解","克制","增益","果决","防微","汇聚","上升","处困","养源","变革","稳定","震动","止静","渐进","定位","丰盛","变通","谦入","悦泽","流通","节制","诚信","小成","守成","续行"];
+
+// ============== 爻位通用解读（领导力视角，用《易经》乾卦六爻阶段赋给任何卦）==============
+const LINE_NOTE = {
+  1:{ stage:'潜藏阶段',  tag:'积累期 · 勿抢跑',   advice:'初爻初动，潜龙勿用——你正处蓄势期，方向对但时机未到。把事情做扎实，无需急于被看见。', poem:'初九：潜龙勿用' },
+  2:{ stage:'起步被看见',tag:'起步期 · 被赏识',   advice:'见龙在田，利见大人——你的价值正被环境识别，正是播种影响、建立识人的好时机。',         poem:'九二：见龙在田，利见大人' },
+  3:{ stage:'过桥阶段',tag:'考验期 · 绷住',       advice:'终日乾乾，夕惕若厉——你正处人生最紧张的位置。这是过不去就退回、过则跃升的关键节点，不要松懈。', poem:'九三：君子终日乾乾，夕惕若厉，无咎' },
+  4:{ stage:'临界抉择',tag:'抉择期 · 站位',       advice:'或跃在渊——你站在跃升与退缩之间。不是所有"高位"都该去；看清环境再决定，错了还能回来。',     poem:'九四：或跃在渊，无咎' },
+  5:{ stage:'黄金阶段',tag:'黄金期 · 展才',       advice:'飞龙在天，利见大人——你正处最佳领导位置。充分发挥所长，让更多人聚拢来；这位置不常有。',         poem:'九五：飞龙在天，利见大人' },
+  6:{ stage:'顶峰戒满',tag:'收官期 · 谦退',       advice:'亢龙有悔——已到顶，物极必反。开始交棒、播种下一个周期，把智慧传下去而不是继续扩张。',         poem:'上九：亢龙有悔' }
+};
+
+// ============== 64 闸门 · "你"视角一句话（闸门 = 卦）==============
+// 闸门编号 = 易经卦序。每条用 8–16 字说"你是谁"。
+const GATE_NOTE = {
+  1:'你是"开创 + 自我表达"的人——你的存在本身就是给别人方向。',
+ 2:'你是"顺流 + 接收"的人——听内在信号，不勉强、不催促。',
+ 3:'你是"突变 + 革新"的人——在混沌中磨出新秩序（屯难处见生机）。',
+ 4:'你是"逻辑 + 形式化"的人——把复杂思维变成可读的答案。',
+ 5:'你是"耐心等待"的人——你的时间表在天空，不在你手里。',
+ 6:'你是"摩擦 + 韧性"的人——冲突被你看成打磨材料的炉子。',
+ 7:'你是"自我角色"的人——通过扮演找到真我，别在大我里迷失。',
+ 8:'你是"统一表达"的人——把物质、精神、贡献三合为一。',
+ 9:'你是"小处的精修者"——饮食、睡眠、细节都是你的修行场。',
+ 10:'你是"行为之主"的人——别被念头主导，要在世上活出来。',
+ 11:'你是"念头背后的耳语"者——旧世界的"蒸气"在你脑中升起。',
+ 12:'你是"审慎表达"的人——话不多，句句入土；站着合适。',
+ 13:'你是"合众向新"的人——在天火（光明+联络）里照亮团体方向。',
+ 14:'你是"做大能量"的人——把已有的小事变成奔腾的洪流。',
+ 15:'你是"接纳 + 包容"的人——爱地球（坤为地）不走样的温柔。',
+ 16:'你是"心灵活跃"者——对前世、对更高维度持续感应，能与异象同行。',
+ 17:'你是"团队眼光"的人——跟在"好的理由"后面，专注以成事。',
+ 18:'你是"改正 + 改良"者——发现错误、改善错误、保护家人。',
+ 19:'你是"根植 + 滋养"的人——与人亲近，让人想回来。',
+ 20:'你是"当下自我表达"者——活在当下、不解释，语言的玫瑰。',
+ 21:'你是"控制 + 掌舵"者——尖锐的嘴碎，在掌控里保护疆域。',
+ 22:'你是"开怀 + 情绪深沉"的人——情绪丰富、外温而心峻。',
+ 23:'你是"原始流露 + 言说"的人——把内在击碎成可讲的语言。',
+ 24:'你是"返魅 + 反复"的人——不扬弃、不重复，安静揭出。',
+ 25:'你是"天真灵性"的人——灵魂不落肉，不被限制。',
+ 26:'你是"累积 + 传授"者——把祖辈的智慧传递下去。',
+ 27:'你是"关怀 + 供给"者——看见他人需要，主动承担。',
+ 28:'你是"目的的游戏"者——在严肃里找到玩心，进入"卷大游戏"。',
+ 29:'你是"过度 + 坚持"的人——从水底向上跃起，九次不放弃。',
+ 30:'你是"欲望 + 火焰"者——变渴望为光，回应当下的火。',
+ 31:'你是"领导力"的人——先走一步，让别人跟你。',
+ 32:'你是"稳守 + 持续"者——相信过长时间定会有大改变。',
+ 33:'你是"退隐 + 见证"者——见证他人成功，也是大业。',
+ 34:'你是"先天蛮劲"者——把强力集合在一线，把意志用在最重要的事上。',
+ 35:'你是"日常探险"者——在每件事里找深意 + 新意。',
+ 36:'你是"危机 + 暗影"者——在暗处认出 + 走出危机。',
+ 37:'你是"家庭 + 友谊"的人——通过社群的体温确认自身温度。',
+ 38:'你是"对立 + 斗争"的人——在矛盾中认识自己，反对为觉悟。',
+ 39:'你是"斗争中独立"的人——在捍卫中走出思路。',
+ 40:'你是"集体承担 + 释放"者——为族群去载重、放下。',
+ 41:'你是"幻想 + 下降"者——把灵性的灵感带回物质。',
+ 42:'你是"成长 + 增长"者——欢愉地吃掉限制，让生命伸展。',
+ 43:'你是"独见 + 突破"者——用新门道戳破旧秩序。',
+ 44:'你是"发明的警觉"者——识别形态、预知未来。',
+ 45:'你是"分配 + 治理"的人——把资源、关系摆到对的位置。',
+ 46:'你是"挚爱 + 上行"的人——把心交给"对的方向"。',
+ 47:'你是"幻灭 + 实现"者——在最悬的时刻，让生命拧出意义。',
+ 48:'你是"深井 + 更新"者——从深处汲取，打破困局。',
+ 49:'你是"拒绝 + 革命"者——在关键节点说不，重新开始的信仰。',
+ 50:'你是"价值之熔"者——在反复淘洗中炼出黄金。',
+ 51:'你是"震荡 + 启动"者——用干脆开头让事情发生。',
+ 52:'你是"静止 + 提示"者——不动的山在水面下稳住一切。',
+ 53:'你是"起点 + 渐进"者——一件接一件，拖出未来。',
+ 54:'你是"奢华 + 浮沫"者——烈火煮酒，抽去虚浮。',
+ 55:'你是"蓄丰盛的人"——早撒下种子，到点收获巨大。',
+ 56:'你是"闲聊 + 漫游"者——在话语的漫游中，找到突破口。',
+ 57:'你是"清晰 + 教化"者——地面上的耳朵、开阔的空气。',
+ 58:'你是"喜悦 + 修正"者——把人、物、事发生地矫正。',
+ 59:'你是"亲密 + 透渗"者——通过交合让界限消失。',
+ 60:'你是"接受 + 限制"者——在限制里看见创造性。',
+ 61:'你是"神秘 + 内在"者——在内心深处遇见完美。',
+ 62:'你是"具体 + 语言"者——把抽象说成可读的话。',
+ 63:'你是"怀疑 + 结尾"者——用最后一个疑问结尾，找到根源。',
+ 64:'你是"未完 + 原型"者——在最后困惑中开启新开始。'
+};
+
+// ============== 12 种人生角色 Profile（人类图通用定义）==============
+const PROFILE_NOTE = {
+  "1/3":"扎根实证型：在试错中建立信任。领导靠「我验证过」——不空谈，用反复打磨出的真东西服人。",
+  "1/4":"深度+网络型：先钻深再借圈子放大。领导靠「扎实研究 × 人脉网络」，让对的人帮你把成果推开。",
+  "2/4":"内修+被邀型：内在有召唤，等对的网络来敲门。领导靠「被需要才出手」，不主动推销自己。",
+  "2/5":"天选公众型：被环境投射为「代表」。领导靠「等邀请再代表大家」，别抢麦克风。",
+  "3/5":"救火经验型：在混乱中找出路，常被委以「救火」。领导靠「用经验服人」，先活下来再谈理想。",
+  "3/6":"晚成楷模型：前半生试错、后半生（约 30 / 50 岁后）成榜样。领导靠「时间给你的权威」。",
+  "4/1":"人脉+根本型：朋友是你资源的入口，但最终回到扎实基础。领导靠「从圈子汲取、回根本落地」。",
+  "4/6":"人脉+长期楷模：你活成别人跟随的样本。领导靠「用长期一致的行为建立信任网络」。",
+  "5/1":"公众+研究型：被推到台前，用深度支撑代表权。领导靠「用扎实研究撑住你的公众角色」。",
+  "5/2":"被投射的隐者：被期待领导却不主动。领导靠「等被需要才出手，做而少说」。",
+  "6/2":"天生楷模型（尤其 30 岁后）：「做自己」就是领导。不教别人，活成样本让人跟随。",
+  "6/3":"成熟回炉型：资深楷模回到人间试炼。领导靠「用阅历 + 谦逊带人」，不端架子。"
+};
+
+// ============== M3 报告专用：12 种人生角色 Profile 详解 ==============
+// 每种给「领导本色 / 角色解读 / 非我陷阱 / M3 微练习」，与 M1/M2 结构一致。
+const PROFILES = {
+  "1/3":{label:"1/3 · 研究者 / 烈士", style:"实证驱动型",
+    body:"你前半生在反复试错中打磨出真本事。别人觉得你「折腾」，其实你在做最严谨的自我实验——只有撞过的墙才信得过。",
+    warn:"非我陷阱：怕失败迟迟不动，或为面子不认错，把「烈士」活成无谓的牺牲。",
+    tip:"M3 微练习：把过去的「失败」列成清单——你会发现它们正是你今天被信任的原因。"},
+  "1/4":{label:"1/4 · 研究者 / 机会主义者", style:"深度网络型",
+    body:"你先钻深再借圈子放大。扎实研究是骨架，人脉网络是放大器；没有深根，网络只是虚热闹。",
+    warn:"非我陷阱：只研究不借力（闷头做），或只社交没根底（随风倒）。",
+    tip:"M3 微练习：把当前卡住的课题发给三个不同圈子的人——答案往往在意想不到的那封回信里。"},
+  "2/4":{label:"2/4 · 隐士 / 机会主义者", style:"内修被邀型",
+    body:"内在有清晰的召唤，但需要对的圈子来敲门。领导靠「被需要才出手」——主动推销自己会让你打折。",
+    warn:"非我陷阱：还没被邀请就冲出来自我推销，或被迫登台失去自己的节奏。",
+    tip:"M3 微练习：列出三个你曾被真心邀约的时刻——它们的共同点就是你做领导的方式。"},
+  "2/5":{label:"2/5 · 隐士 / 异端者", style:"天选公众型",
+    body:"你被环境投射为「代表」。但你内在是隐士，一切准备都不在台前。等对的邀请来代表大家，别抢麦克风。",
+    warn:"非我陷阱：错把投射当授权，半推半就答应，结果无法兑现被反噬。",
+    tip:"M3 微练习：每次被点名「你代表一下」时，先问「以什么身份、什么时候要回」再答。"},
+  "3/5":{label:"3/5 · 烈士 / 异端者", style:"救火经验型",
+    body:"你在混乱中找出路，常被委以「救火」。领导靠「用经验服人」——先活下来再谈理想。",
+    warn:"非我陷阱：每次都靠救火出名，结果被困在救火里，没有真正的大成就。",
+    tip:"M3 微练习：在被喊去救火前，先评估「这个坑是不是本来就该塌」——不是所有坑都该你填。"},
+  "3/6":{label:"3/6 · 烈士 / 角色模范", style:"晚成楷模型",
+    body:"前半生试错、后半生（约 30 岁后、尤其 50 岁后）成榜样。领导靠「时间给你的权威」——笑到最后的那个。",
+    warn:"非我陷阱：年轻时急着用经验和阅历「装老成」，反而失去试错空间。",
+    tip:"M3 微练习：把 50 岁想被谁看见的目标写下来——用那个倒推今天的活法。"},
+  "4/1":{label:"4/1 · 机会主义者 / 研究者", style:"网络根本型",
+    body:"朋友是你资源的入口，但最终回到扎实基础。你的人脉会自然把机会送来——别急着变现，先把根扎稳。",
+    warn:"非我陷阱：纯靠圈子吃饭，圈一动你自己也跟着动，失去主心骨。",
+    tip:"M3 微练习：把现在最熟的三个人脉画一张图——哪些是真关系、哪些只是渠道？深耕哪几条？"},
+  "4/6":{label:"4/6 · 机会主义者 / 角色模范", style:"长期楷模型",
+    body:"你活成别人跟随的样本。领导靠「用长期一致的行为建立信任网络」，不靠一句口号。",
+    warn:"非我陷阱：年轻时为了被人看见做表面功夫，晚年发现没真东西可传。",
+    tip:"M3 微练习：把每天最有原则的那件小事记下来——这些就是 30 年后你留给世界的签名。"},
+  "5/1":{label:"5/1 · 异端者 / 研究者", style:"公众研究型",
+    body:"被推到台前，你用深度支撑代表权。领导靠「用扎实研究撑住你的公众角色」——你让人信，因为说的每句都有底。",
+    warn:"非我陷阱：被推到台前却急着回应，研究没做完先表态，公信力受损。",
+    tip:"M3 微练习：所有公开表态都过一遍——不确定的就说「我回去研究一下」，慢答反而提升公信力。"},
+  "5/2":{label:"5/2 · 异端者 / 隐士", style:"被投射的隐者",
+    body:"被期待领导却不主动。领导靠「等被需要才出手，做而少说」，不抢镜、不喧哗。",
+    warn:"非我陷阱：错把被投射当真实期望，去回应一个本不该由你回应的场。",
+    tip:"M3 微练习：当别人期待你站出来时，先问「这是真需要，还是别人的投射？」再决定。"},
+  "6/2":{label:"6/2 · 角色模范 / 隐士", style:"天生楷模型（30 岁后）",
+    body:"「做自己」就是领导。不教别人，活成样本让人跟随。30 岁前还在积累，30 岁后才开始成为榜样。",
+    warn:"非我陷阱：年轻时为了被人看见强行登台，反而失去默默积累的天然优势。",
+    tip:"M3 微练习：把注意力从「如何让别人跟随」移开——专注「如何在每个当下活成自己」。"},
+  "6/3":{label:"6/3 · 角色模范 / 烈士", style:"成熟回炉型",
+    body:"资深楷模回到人间试炼。领导靠「用阅历 + 谦逊带人」，做给他们看就好，不需要说「我是过来人」。",
+    warn:"非我陷阱：端着「我走过的路比你多」的态度，反而让人远你。",
+    tip:"M3 微练习：把每一段「再回到地面」的开始都视为完整旅程——6/3 的回头不是失败，是设计。"}
+};
+
+// GATE_ANGLES（来自 genekeys.html · 与 Human Code API 完全对齐）
+const GATE_ANGLES = {1:45.0000,2:225.0000,3:241.8750,4:129.3750,5:22.5000,6:95.6250,7:135.0000,8:213.7500,9:16.8750,10:0.0000,11:5.6250,12:185.6250,13:315.0000,14:33.7500,15:180.0000,16:202.5000,17:264.3750,18:84.3750,19:320.6250,20:208.1250,21:258.7500,22:281.2500,23:219.3750,24:230.6250,25:270.0000,26:11.2500,27:236.2500,28:61.8750,29:123.7500,30:303.7500,31:146.2500,32:67.5000,33:140.6250,34:28.1250,35:196.8750,36:275.6250,37:292.5000,38:348.7500,39:168.7500,40:112.5000,41:326.2500,42:247.5000,43:39.3750,44:50.6250,45:191.2500,46:90.0000,47:101.2500,48:78.7500,49:309.3750,50:56.2500,51:253.1250,52:174.3750,53:163.1250,54:343.1250,55:298.1250,56:151.8750,57:73.1250,58:354.3750,59:118.1250,60:331.8750,61:337.5000,62:157.5000,63:286.8750,64:106.8750};
+
+// 64 卦的六爻结构（自下而上：1=初爻，6=上爻）。1=阳爻，0=阴爻。
+// 来源：标准《易经》文王卦序。
+const HEX_LINES = {
+1:[1,1,1,1,1,1],
+2:[0,0,0,0,0,0],
+3:[1,0,0,0,1,0],
+4:[0,1,0,0,0,1],
+5:[1,1,1,0,1,0],
+6:[0,1,0,1,1,1],
+7:[0,1,0,0,0,0],
+8:[0,0,0,0,1,0],
+9:[1,1,1,0,1,1],
+10:[1,1,0,1,1,1],
+11:[1,1,1,0,0,0],
+12:[0,0,0,1,1,1],
+13:[1,0,1,1,1,1],
+14:[1,1,1,1,0,1],
+15:[0,0,1,0,0,0],
+16:[0,0,0,1,0,0],
+17:[1,0,0,1,1,0],
+18:[0,1,1,0,0,1],
+19:[1,1,0,0,0,0],
+20:[0,0,0,0,1,1],
+21:[1,0,0,1,0,1],
+22:[1,0,1,0,0,1],
+23:[0,0,1,0,0,0],
+24:[1,0,0,0,0,0],
+25:[1,0,0,1,1,1],
+26:[1,1,1,0,0,1],
+27:[1,0,0,0,0,1],
+28:[0,1,1,1,1,0],
+29:[0,1,0,0,1,0],
+30:[1,0,1,1,0,1],
+31:[0,0,1,1,1,0],
+32:[0,1,1,1,0,0],
+33:[0,0,1,1,1,1],
+34:[1,1,1,1,0,0],
+35:[0,0,0,1,0,1],
+36:[1,0,1,0,0,0],
+37:[1,0,1,0,1,1],
+38:[1,1,0,1,0,1],
+39:[0,0,1,0,1,0],
+40:[0,1,0,1,0,0],
+41:[1,1,0,0,0,1],
+42:[1,0,0,0,1,1],
+43:[1,1,1,1,1,0],
+44:[0,1,1,1,1,1],
+45:[0,0,0,1,1,0],
+46:[0,1,1,0,0,0],
+47:[0,1,0,1,1,0],
+48:[0,1,1,0,1,0],
+49:[1,0,1,1,1,0],
+50:[0,1,1,1,0,1],
+51:[1,0,0,1,0,0],
+52:[0,0,1,0,0,1],
+53:[0,0,1,0,1,1],
+54:[1,1,0,1,0,0],
+55:[1,0,1,1,0,0],
+56:[0,0,1,1,0,1],
+57:[0,1,1,0,1,1],
+58:[1,1,0,1,1,0],
+59:[0,1,0,0,1,1],
+60:[1,1,0,0,1,0],
+61:[1,1,0,0,1,1],
+62:[0,0,1,1,0,0],
+63:[1,0,1,0,1,0],
+64:[0,1,0,1,0,1]
+};
+
+// ============== 工具 ==============
+const PLANET_GLYPH = {Sun:"☉",Earth:"⊕",Moon:"☽",Mercury:"☿",Venus:"♀",Mars:"♂",Jupiter:"♃",Saturn:"♄",Uranus:"♅",Neptune:"♆",Pluto:"♇","true Node":"☊","south Node":"☋"};
+const PLANET_CN = {Sun:"太阳",Earth:"地球",Moon:"月亮",Mercury:"水星",Venus:"金星",Mars:"火星",Jupiter:"木星",Saturn:"土星",Uranus:"天王星",Neptune:"海王星",Pluto:"冥王星","true Node":"北交","south Node":"南交"};
+
+function escapeHtml(s){return String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));}
+
+// 爻线计算：从黄经 + 闸门中心角 → 爻（1-6）
+function computeLine(gate, longitude){
+  const center = GATE_ANGLES[gate];
+  if(center === undefined) return null;
+  if(longitude === null || longitude === undefined || isNaN(longitude)) return null;
+  const start = (center - 2.8125 + 360) % 360;     // 闸门起点 = 中心 - 半宽
+  const offset = ((longitude - start + 360) % 360); // 闸门内偏移
+  const line = Math.floor(offset / 0.9375) + 1;    // 每爻 0.9375°
+  if(isNaN(line)) return null;
+  return Math.max(1, Math.min(6, line));
+}
+
+// 提取行星（多重路径容错）
+function pickPlanet(arr, name){
+  if(!Array.isArray(arr)) return null;
+  let p = arr.find(x => x && x.planet && (x.planet.name === name || x.planet.name_en === name));
+  if(!p) p = arr.find(x => x && (x.name === name || x.planet_name === name));
+  if(!p) return null;
+  // geneKey 是浮点 gate.line（如 47.6 = 闸门 47 · 第 6 爻），这是权威来源，优先拆解
+  const rawGate = p.geneKey ?? p.gate ?? null;
+  const longitude = (p.planet && (p.planet.position?.location ?? p.planet.longitude)) ?? p.position?.location ?? p.longitude ?? null;
+  if(rawGate === null || rawGate === undefined || isNaN(rawGate)) return { gate:null, line:null, longitude };
+  const gk = parseFloat(rawGate);
+  const gate = Math.floor(gk);
+  const frac = gk - gate;
+  // geneKey 小数位即爻线（47.6 → 第 6 爻）；极端边界无小数时返回 null，交由上层兜底
+  const lineFromKey = frac > 0.001 ? Math.min(6, Math.max(1, Math.round(frac * 10))) : null;
+  return { gate, line: lineFromKey, longitude };
+}
+
+// 城市 → 时区
+const CITY_TZ = {"shanghai":"Asia/Shanghai","shenzhen":"Asia/Shanghai","beijing":"Asia/Shanghai","hongkong":"Asia/Hong_Kong","taipei":"Asia/Taipei","tokyo":"Asia/Tokyo","singapore":"Asia/Singapore","newyork":"America/New_York","losangeles":"America/Los_Angeles","london":"Europe/London","sydney":"Australia/Sydney"};
+
+// ============== 导航 ==============
+document.getElementById('hamb').addEventListener('click',()=>document.body.classList.add('drawer-open'));
+function closeDrawer(){document.body.classList.remove('drawer-open');}
+document.getElementById('closex').addEventListener('click',closeDrawer);
+document.getElementById('mask').addEventListener('click',closeDrawer);
+document.querySelectorAll('.drawer a').forEach(a=>a.addEventListener('click',closeDrawer));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+document.getElementById('city').addEventListener('change',e=>{
+  const k = String(e.target.value||'').toLowerCase().replace(/\s+/g,'');
+  if(CITY_TZ[k]) document.getElementById('tz').value = CITY_TZ[k];
+});
+
+// ============== API ==============
+async function fetchChart(birth){
+  const apiData = { year: birth.y, month: birth.mo, day: birth.d, hour: birth.h, minute: birth.mi, timezone: birth.tz };
+  const ctrl = ('AbortController' in window) ? new AbortController() : null;
+  const timer = setTimeout(() => { if(ctrl) ctrl.abort(); }, 8000);  // 8 秒超时，避免请求卡死导致"无反应"
+  try {
+    const resp = await fetch("https://seismic.myhumancode.com/genekeys", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(apiData),
+      signal: ctrl ? ctrl.signal : undefined
+    });
+    if(!resp.ok) throw new Error("HTTP " + resp.status);
+    return { ok:true, data: await resp.json() };
+  } catch(e){
+    return { ok:false, error:String(e.message||e) };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ============== V1 回退算法 ==============
+function digitRoot(n){ while(n>=10) n = String(n).split('').reduce((a,b)=>a+ +b,0); return n; }
+function calcV1(y,mo,d,h){
+  const cSun = ((digitRoot(y)*7 + digitRoot(mo)*5 + digitRoot(d)*3) % 64) || 64;
+  const cEarth = 65 - cSun;
+  const dSun = ((digitRoot(mo)*11 + digitRoot(d)*13 + digitRoot(h)*2) % 64) || 64;
+  const dEarth = 65 - dSun;
+  return {
+    personality: { Sun:{ gate:cSun, line: digitRoot(h) || 1 }, Earth:{ gate:cEarth, line: digitRoot(mo) || 1 } },
+    design:      { Sun:{ gate:dSun, line: digitRoot(d) || 1 }, Earth:{ gate:dEarth, line: digitRoot(y) || 1 } },
+    source: 'V1'
+  };
+}
+
+// ============== 主流程 ==============
+let CHART = null;
+
+document.getElementById('gen').addEventListener('click', async () => {
+ try {
+  const name = document.getElementById('name').value.trim();
+  const y = +document.getElementById('y').value;
+  const mo = +document.getElementById('mo').value;
+  const d = +document.getElementById('d').value;
+  const h = +document.getElementById('h').value;
+  const mi = +document.getElementById('mi').value || 0;
+  const tz = document.getElementById('tz').value;
+  const city = document.getElementById('city').value.trim();
+
+  const msg = document.getElementById('msg');
+  msg.innerHTML = `<div class="warn"><span class="loading"></span>正在调取 Human Code 完整人类图 API（出生 ${y}/${mo}/${d} ${h}:${String(mi).padStart(2,'0')} ${tz}）...</div>`;
+  document.getElementById('genTxt').textContent = '正在出图…';
+
+  const r = await fetchChart({y,mo,d,h,mi,tz});
+
+  let result = null;
+  let source = 'API';
+
+  if(r.ok && r.data){
+    // 尝试多重路径抓 4 行星
+    const personalityArr = r.data.geneKeys?.personality || r.data.personality_planets || r.data.planetary_data?.personality_planets || [];
+    const designArr = r.data.geneKeys?.design || r.data.design_planets || r.data.planetary_data?.design_planets || [];
+
+    const pSun = pickPlanet(personalityArr, 'Sun');
+    const pEarth = pickPlanet(personalityArr, 'Earth');
+    const dSun = pickPlanet(designArr, 'Sun');
+    const dEarth = pickPlanet(designArr, 'Earth');
+
+    // 只要 4 行星都能取到有效闸门，就采用 API 的权威闸门 + 爻线（来自 geneKey 浮点）
+    // 注意：绝不可因"爻线算不出"就把闸门丢给 V1 重算——那会让闸门数字全变（上一版回归的根因）
+    if(pSun && pEarth && dSun && dEarth && [pSun,pEarth,dSun,dEarth].every(p => p.gate)){
+      const build = pt => ({
+        gate: pt.gate,
+        // 爻线优先用 geneKey 小数（权威）；仅在极个别无小数时兜底为 1，闸门始终保留 API 值
+        line: (pt.line && !isNaN(pt.line)) ? pt.line : 1
+      });
+      result = {
+        personality: {
+          Sun:   build(pSun),
+          Earth: build(pEarth)
+        },
+        design: {
+          Sun:   build(dSun),
+          Earth: build(dEarth)
+        },
+        character_type: r.data.character_type || null,
+        source: 'API'
+      };
+    } else {
+      msg.innerHTML = `<div class="warn">⚠️ API 返回结构未识别（已尝试 <code>geneKeys.personality/design</code>、<code>personality_planets</code> 等路径）。将自动回退到 V1 入门算法，确保你有结果可用。<br><span style="font-size:12px;color:var(--muted)">调试信息：personalityArr.length=${personalityArr.length}, designArr.length=${designArr.length}</span></div>`;
+      await new Promise(r=>setTimeout(r,1200));
+      result = calcV1(y,mo,d,h);
+      source = 'V1-fallback';
+    }
+  } else {
+    msg.innerHTML = `<div class="err"><b>API 调取失败：</b>${r.error}。将自动回退到 V1 入门算法（精度有限但可展示 4 行星卦象主题）。</div>`;
+    await new Promise(r=>setTimeout(r,1200));
+    result = calcV1(y,mo,d,h);
+    source = 'V1-fallback';
+  }
+
+  CHART = result;
+  // 成功时不再在顶部堆 OK 条；只让错误信息保留在 msg 区域。
+  msg.innerHTML = '';
+  document.getElementById('genTxt').textContent = '重新生成图谱 ↻';
+
+  renderPlanets(result);
+  autoFill(result);
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('sec2').scrollIntoView({behavior:'smooth'});
+ } catch(err) {
+  const msg = document.getElementById('msg');
+  if(msg) msg.innerHTML = '<div class="err"><b>出图过程出错：</b>' + escapeHtml(err && err.message ? err.message : String(err)) + '。已尝试恢复——请再次点击重试；若持续，请刷新页面。</div>';
+  console.error('gen handler error:', err);
+ }
+});
+
+// ============== 渲染 4 行星 ==============
+function renderPlanets(data){
+  const list = [
+    {key:'personality.Sun',   role:'人格 · 太阳', cn:'个性太阳', gate:data.personality.Sun.gate, line:data.personality.Sun.line, kind:'pers'},
+    {key:'personality.Earth', role:'人格 · 地球', cn:'个性地球', gate:data.personality.Earth.gate, line:data.personality.Earth.line, kind:'pers'},
+    {key:'design.Sun',        role:'设计 · 太阳', cn:'设计太阳', gate:data.design.Sun.gate, line:data.design.Sun.line, kind:'desg'},
+    {key:'design.Earth',      role:'设计 · 地球', cn:'设计地球', gate:data.design.Earth.gate, line:data.design.Earth.line, kind:'desg'},
+  ];
+  const html = list.map(p => planetCard(p)).join('');
+  document.getElementById('planetCards').innerHTML = html;
+}
+
+function planetCard(p){
+  const g = p.gate;
+  const ln = (typeof p.line === 'number' && p.line >= 1 && p.line <= 6) ? p.line : 1;
+  const hex = HEX[g] || '—';
+  const th = THEME[g] || '';
+  const lines = HEX_LINES[g] || [1,1,1,1,1,1];
+  const lnNote = LINE_NOTE[ln] || LINE_NOTE[1];
+  const gateNote = GATE_NOTE[g] || '';
+  const who = p.kind === 'pers'
+    ? '「<b>有意识</b>」展现：你今生意识去活的一面。'
+    : '「<b>无意识</b>」健康状态：你天生自足、不必努力就有的一面。';
+  return `
+    <div class="plcard ${p.kind}">
+      <div class="role">${p.role}</div>
+      <div class="head">
+        <div class="glyph">${g}</div>
+        <div>
+          <div class="gt">闸门 ${g} · 第 ${ln} 爻</div>
+          <div class="hx">${hex}</div>
+          <div class="th">主题 · ${th}</div>
+        </div>
+      </div>
+      <div class="hexwrap">
+        ${hexagramSVG(lines, ln)}
+        <div class="hexmeta">
+          <div class="hxcname">${hex}（第 ${ln} 爻）</div>
+          <div class="hxctip">${who}</div>
+          <div class="hxctip" style="margin-top:6px">右侧数字 = 爻位，<span style="color:var(--amber);font-weight:700">高亮</span> = 当前爻</div>
+        </div>
+      </div>
+      <div class="expl">
+        <span class="expl-tag ${p.kind==='desg'?'desg':''}">第 ${ln} 爻 · ${lnNote.stage}</span>
+        <div class="expl-text">${lnNote.advice}</div>
+        <div class="expl-quote">📜 ${lnNote.poem}</div>
+      </div>
+      <div class="expl" style="border-top-color:var(--gold)">
+        <span class="expl-tag">闸门 ${g} · 易经 · "${hex}"</span>
+        <div class="expl-text"><b>对你而言：</b>${escapeHtml(gateNote)}</div>
+        <div class="expl-quote">🪜 易经第 ${g} 卦「${hex}」对应人类图闸门 ${g}</div>
+      </div>
+    </div>`;
+}
+
+// 画正确的六爻卦形（自下而上：初爻=1，上爻=6）。阳爻=整条实线；阴爻=断为两短截。当前爻高亮加粗。
+function hexagramSVG(lines, activeLine){
+  const top=7, slot=13, barH=5, W=60;
+  let s = `<svg class="hex" viewBox="0 0 ${W} 86" role="img" aria-label="卦象">`;
+  for(let L=1; L<=6; L++){
+    const idx = L-1;                       // 0 = 初爻（最下）
+    const y = top + (6 - L) * slot;        // L=6 顶 → y=7；L=1 底 → y=72
+    const yang = lines[idx] === 1;
+    const active = (L === activeLine);
+    const fill = active ? 'var(--amber)' : 'var(--ink)';
+    const h = active ? 7 : barH;
+    if(yang){
+      s += `<rect x="8" y="${y}" width="44" height="${h}" rx="2.5" fill="${fill}"/>`;
+    } else {
+      s += `<rect x="8" y="${y}" width="19" height="${h}" rx="2.5" fill="${fill}"/><rect x="33" y="${y}" width="19" height="${h}" rx="2.5" fill="${fill}"/>`;
+    }
+    s += `<text x="57" y="${y + h - 1}" font-size="6.5" fill="var(--muted)" text-anchor="end">${L}</text>`;
+  }
+  s += `</svg>`;
+  return s;
+}
+
+// ============== 自动填类型/权威 ==============
+function autoFill(data){
+  const ct = (data.character_type) || {};
+  const typeKey = mapTypeKey(ct.type || ct.name || '');
+  const authKey = mapAuthorityKey(ct.authority || ct.inner_authority || '');
+  const profile = ct.profile || '';
+  if(typeKey) document.getElementById('selType').value = typeKey;
+  if(authKey) document.getElementById('selAuth').value = authKey;
+  const selP = document.getElementById('selProfile');
+  if(selP){ selP.value = profile || ''; updateProfileDesc(profile); }
+}
+// 人生角色 Profile 说明（12 种）
+function updateProfileDesc(key){
+  const el = document.getElementById('profileDesc');
+  if(!el) return;
+  el.textContent = (key && PROFILE_NOTE[key]) ? PROFILE_NOTE[key] : '';
+}
+document.getElementById('selProfile').addEventListener('change', e => updateProfileDesc(e.target.value));
+function mapTypeKey(s){
+  const t = String(s||'').toLowerCase();
+  if(t.includes('manifesting generator')||t.includes('mg')) return 'mg';
+  if(t.includes('manifestor')) return 'manifestor';
+  if(t.includes('projector')) return 'projector';
+  if(t.includes('reflector')) return 'reflector';
+  if(t.includes('generator')) return 'generator';
+  return '';
+}
+function mapAuthorityKey(s){
+  const t = String(s||'').toLowerCase();
+  if(t.includes('emotional')||t.includes('solar plexus')||t.includes('情绪')) return 'emotional';
+  if(t.includes('sacral')||t.includes('荐骨')||t.includes('骶骨')) return 'sacral';
+  if(t.includes('splenic')||t.includes('脾')) return 'splenic';
+  if(t.includes('ego')||t.includes('heart')||t.includes('意志')||t.includes('心权威')) return 'ego';
+  if(t.includes('g')&&t.includes('self')||t.includes('g 中心')||t.includes('gcenter')) return 'gcenter';
+  if(t.includes('environment')||t.includes('环境')) return 'environment';
+  if(t.includes('none')||t.includes('lunar')||t.includes('无权威')||t.includes('朔望')) return 'none';
+  return '';
+}
+
+// ============== M1 / M2 ==============
+const TYPES = {
+  manifestor:{label:"显示者 Manifestor", strat:"告知周围（Inform before you act）", style:"发起破局型",
+    body:"你天生是「点火的人」。显示者的能量是脉冲式的——看到该做的事，先动起来、<b>主动告知相关者</b>。",
+    warn:"非我陷阱：不告知就行动 → 引发他人抵触；或压抑自己变成「隐性显示者」内耗。",
+    tip:"领导练习：每个重大决策前，先花 3 分钟列「我需要告知谁」，发出去再行动。"},
+  generator:{label:"生产者 Generator", strat:"等待回应（Respond）", style:"执行持续型",
+    body:"你是组织的「能量引擎」。靠<b>对外部刺激产生「嗯/不」的回应</b>启动——被问到、被需要、看到机会才满电。",
+    warn:"非我陷阱：主动发起（没被邀请就冲）→ 挫败、半途而废。",
+    tip:"领导练习：用一周记录「我今天是被刺激后回应，还是自己硬发起的？」感受精力差别。"},
+  mg:{label:"显示生产者 Manifesting Generator", strat:"等待回应（Respond）", style:"多线程推进型",
+    body:"你是生产者的升级版——<b>多线推进、快速试错</b>，但启动方式仍要「等回应」。",
+    warn:"非我陷阱：同时开太多头、答应太快又后悔。",
+    tip:"领导练习：重大承诺前先「等一夜的荐骨回应」；用小步快跑代替大跃进。"},
+  projector:{label:"投射者 Projector", strat:"等待邀请（Wait for the Invitation）", style:"顾问赋能型",
+    body:"你是「识人用人的眼睛」。投射者没有定义的荐骨，能量不靠自己执行，而靠<b>看清系统、引导他人</b>。",
+    warn:"非我陷阱：没被邀请就「教别人做事」→ 被无视或招反感。",
+    tip:"领导练习：把「我主动给建议」改成「我先建立信任，让对方来问」。"},
+  reflector:{label:"反映者 Reflector", strat:"等待朔望周期（Lunar）", style:"感知节律型",
+    body:"你是「组织的镜子」。9 大中心全开放，能精准映照团队与环境的真实状态。",
+    warn:"非我陷阱：在嘈杂中急于决定 → 被他人情绪带跑。",
+    tip:"领导练习：重大决策至少放一个朔望周期（约 28 天）。"}
+};
+const AUTH = {
+  emotional:{label:"情绪权威（Solar Plexus）", rhythm:"等待情绪波浪平息，再做决定",
+    body:"情绪中心有定义，决策像海浪——当下说的「要/不要」会随情绪起伏。<b>真正的清晰在波浪退去后才出现。</b>",
+    tip:"对接「时中」：不硬拍板于情绪高点。给重要决定 24-48 小时。",
+    warn:"陷阱：在情绪高点承诺、在低点反悔，团队失去对你的可预测性。"},
+  sacral:{label:"荐骨权威（Sacral）", rhythm:"听身体的即时 yes / no",
+    body:"决策靠<b>身体的本能回应</b>——「嗯（gut yes）」或沉默/「呃（no）」。它只活在当下。",
+    tip:"对接「简易」：把决定权交回身体，少在脑中反复推演。",
+    warn:"陷阱：用头脑逻辑替荐骨做决定 → 选了不对的事，事后身体抗拒。"},
+  splenic:{label:"脾权威（Splenic）", rhythm:"当下、一次性的直觉",
+    body:"你的权威是<b>瞬间的生存直觉</b>——「现在走 / 现在停」。它只响一次。",
+    tip:"对接「变易」：信任那一下子的直觉，别等逻辑追上来把它合理化掉。",
+    warn:"陷阱：用头脑把直觉「再想想」→ 直觉消散，错失良机。"},
+  ego:{label:"自我 / 心权威（Heart）", rhythm:"来自承诺与意志",
+    body:"少数人的权威在心脏中心——你通过<b>是否真心承诺</b>来决策。",
+    tip:"对接「不易」：守住你真正愿意用意志去兑现的承诺，不滥许。",
+    warn:"陷阱：为讨好而承诺超出意志的事 → 自我耗竭。"},
+  gcenter:{label:"G 中心权威（Self）", rhythm:"方向与爱是固定的",
+    body:"当一件事与你的<b>方向 / 爱 / 身份</b>一致时，决定自然成立。",
+    tip:"对接「不易」：你的决策锚是「这是不是我」——是则行，否则止。",
+    warn:"陷阱：在没方向感的环境里盲目跟随他人 → 失去自我引领。"},
+  environment:{label:"环境权威（Environment）", rhythm:"身处正确的地点",
+    body:"对的决定只在「对的地方」浮出来。换房间/城市，答案就变。",
+    tip:"对接「位」：善用爻位智慧——找对场景再做决定。",
+    warn:"陷阱：在错误的环境里硬想答案 → 永远想不通。"},
+  none:{label:"无权威（反映者 · 朔望周期）", rhythm:"用 28-29 天月亮周期决定",
+    body:"你 9 中心全开放，没有固定内在权威，需借<b>时间</b>酝酿清晰。",
+    tip:"对接「待时而动」：你是团队的节律镜，把决定交给周期的沉淀。",
+    warn:"陷阱：在嘈杂中急于决定 → 被他人情绪带跑。"}
+};
+document.getElementById('genReport').addEventListener('click',()=>{
+  const t = document.getElementById('selType').value;
+  const a = document.getElementById('selAuth').value;
+  const p = document.getElementById('selProfile').value;
+  const m1 = document.getElementById('m1body');
+  if(t && TYPES[t]){
+    const T=TYPES[t];
+    m1.innerHTML = `<div class="big">${T.label}</div>
+      <div>策略：<span class="pill">${T.strat}</span> 领导本色：<span class="pill">${T.style}</span></div>
+      <div class="mblock"><b>类型解读：</b>${T.body}</div>
+      <div class="mblock clay"><b>非我陷阱：</b>${T.warn}</div>
+      <div class="mblock gold"><b>M1 微练习：</b>${T.tip}</div>`;
+  } else {
+    m1.innerHTML = `<div class="disc">M1 需要你选择「类型」才能生成。</div>`;
+  }
+  const m2 = document.getElementById('m2body');
+  if(a && AUTH[a]){
+    const A=AUTH[a];
+    m2.innerHTML = `<div class="big">${A.label}</div>
+      <div>决策节奏：<span class="pill">${A.rhythm}</span></div>
+      <div class="mblock"><b>权威解读：</b>${A.body}</div>
+      <div class="mblock gold"><b>对接易经「时中」：</b>${A.tip}</div>
+      <div class="mblock clay"><b>非我决策陷阱：</b>${A.warn}</div>`;
+  } else {
+    m2.innerHTML = `<div class="disc">M2 需要你选择「内在权威」才能生成。</div>`;
+  }
+  const m3 = document.getElementById('m3body');
+  if(p && PROFILES[p]){
+    const P=PROFILES[p];
+    m3.innerHTML = `<div class="big">${P.label}</div>
+      <div>领导本色：<span class="pill">${P.style}</span></div>
+      <div class="mblock"><b>角色解读：</b>${P.body}</div>
+      <div class="mblock clay"><b>非我陷阱：</b>${P.warn}</div>
+      <div class="mblock gold"><b>M3 微练习：</b>${P.tip}</div>`;
+  } else {
+    m3.innerHTML = `<div class="disc">M3 需要你选择「人生角色 Profile」才能生成。</div>`;
+  }
+  document.getElementById('m1').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>

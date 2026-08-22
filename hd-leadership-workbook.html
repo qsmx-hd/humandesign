@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 · 练习手册（M0–M10 微练习 + 日志）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --card:#FFFFFF; --ink:#2D2118; --muted:#7A6A58;
+    --gold:#C4956A; --gold-l:#F3E6D6; --amber:#B5762A; --amber-l:#F8ECDA;
+    --clay:#C05A2E; --clay-l:#F6E2D6; --line:#E8DCC8; --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;font-size:14px}
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,#3A2A1C,#2D2118);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  nav .brand{font-weight:800;font-size:15px}
+  nav .brand small{display:block;font-size:12px;font-weight:600;color:var(--amber-l);letter-spacing:.1em}
+  nav .hamb{display:none;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:20px;line-height:1;padding:6px 11px;cursor:pointer}
+  nav .menu{display:flex;gap:6px;flex-wrap:wrap}
+  nav .menu a{color:#F3E6D6;text-decoration:none;font-size:13px;padding:5px 9px;border-radius:8px}
+  nav .menu a:hover{background:rgba(255,255,255,.12)}
+  body.drawer-open nav{z-index:0 !important}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:330px;background:#2D2118;z-index:9999;transform:translateX(100%);transition:transform .28s ease;padding:64px 0 20px;overflow-y:auto}
+  body.drawer-open .drawer{transform:translateX(0)}
+  .drawer a{display:block;color:#F3E6D6;text-decoration:none;font-size:14.5px;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600}
+  .drawer .closex{position:absolute;top:14px;right:16px;background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .28s}
+  body.drawer-open .mask{opacity:1;pointer-events:auto}
+  @media(max-width:768px){nav .hamb{display:block}nav .menu{display:none}}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+  .hero{background:linear-gradient(135deg,#FBF6EC,#F3E6D6);border:1px solid var(--line);border-radius:18px;padding:22px 20px;box-shadow:var(--shadow);margin-bottom:18px}
+  .hero h1{margin:0 0 6px;font-size:20px;color:#3A2A1C}
+  .hero p{margin:0;color:var(--muted);font-size:13.5px}
+  .badge{display:inline-block;background:var(--clay-l);color:var(--clay);font-weight:700;font-size:12px;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;box-shadow:var(--shadow);margin-bottom:16px}
+  .card h2{margin:0 0 10px;font-size:17px;color:#3A2A1C}
+  .pcard{border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:14px 15px;margin-bottom:14px;background:#FFFDF9;page-break-inside:avoid}
+  .pcard .ph{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .pcard .code{background:linear-gradient(135deg,var(--gold),var(--amber));color:#fff;font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;white-space:nowrap}
+  .pcard .pt{font-weight:800;font-size:15px;color:#3A2A1C}
+  .pcard .micro{background:var(--amber-l);border-radius:10px;padding:9px 12px;font-size:13.5px;margin:6px 0}
+  .pcard .micro b{color:var(--clay)}
+  .pcard .q{font-size:13px;color:#3A2A1C;margin:4px 0;padding-left:18px;position:relative}
+  .pcard .q:before{content:"？";position:absolute;left:0;color:var(--gold);font-weight:800}
+  .pcard .ck{margin-top:8px;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+  .pcard .ck .box{display:inline-block;width:15px;height:15px;border:1.5px solid var(--muted);border-radius:4px;vertical-align:-2px;margin-right:5px}
+  .logbook{background:#FFFDF9;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;page-break-inside:avoid}
+  .logbook .lh{font-weight:800;font-size:14px;color:var(--clay);margin-bottom:8px;border-bottom:2px solid var(--clay-l);padding-bottom:6px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fld{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .line{border-bottom:1px solid var(--line);height:22px;margin-top:3px}
+  .energy{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .energy .bar{flex:1;display:flex;gap:3px}
+  .energy .bar span{flex:1;height:12px;border:1px solid var(--line);border-radius:3px}
+  .phase{display:flex;gap:0;margin:6px 0 12px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .phase div{flex:1;padding:12px 10px;font-size:12.5px;text-align:center;color:#3A2A1C}
+  .phase .p1{background:var(--gold-l)}
+  .phase .p2{background:var(--amber-l)}
+  .phase .p3{background:var(--clay-l)}
+  .phase b{display:block;font-size:13.5px;margin-bottom:3px}
+  .maprow{display:flex;align-items:center;gap:10px;font-size:13px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .maprow .wk{font-weight:800;color:var(--clay);min-width:54px}
+  .maprow .do{color:var(--muted);font-size:12.5px}
+  .disc{background:#FBF1E4;border:1px dashed var(--gold);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--muted);margin:14px 0}
+  .printbtn{display:block;width:100%;background:linear-gradient(135deg,var(--clay),var(--amber));color:#fff;font-weight:800;font-size:15px;border:none;border-radius:12px;padding:13px;cursor:pointer;margin-bottom:18px}
+  @media print{
+    nav,.printbtn,.disc{display:none !important}
+    body{background:#fff;font-size:12px}
+    .wrap{max-width:none;padding:0}
+    .card,.pcard,.logbook{box-shadow:none;break-inside:avoid}
+    .hero{border:none;background:#fff;padding:0}
+  }
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 16px 40px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">人类图领导力 · 练习手册<small>WORKBOOK · M0–M10</small></div>
+  <button class="hamb" id="hamb">☰</button>
+  <div class="menu"><a href="#guide">使用指南</a><a href="#cards">微练习卡</a><a href="#log">周日志</a><a href="#map">90天地图</a></div>
+</nav>
+<div class="drawer" id="drawer"><button class="closex" id="closex">✕</button>
+  <a href="#guide">使用指南</a><a href="#cards">微练习卡 M0–M10</a><a href="#log">周觉察日志模板</a><a href="#map">90 天实践地图</a>
+</div>
+<div class="mask" id="mask"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">课程开发包 V1 · 学员手中物</span>
+    <h1>《人类图领导力》练习手册</h1>
+    <p>11 张微练习卡（M0–M10）+ 可复用的周觉察日志 + 90 天实践地图。配套《课程开发蓝图》使用，建议每模块学完即做对应卡片。</p>
+  </header>
+
+  <button class="printbtn" onclick="window.print()">🖨 打印 / 存 PDF 我的练习手册</button>
+
+  <section class="card" id="guide">
+    <h2>使用指南</h2>
+    <div class="pcard" style="border-left-color:var(--gold)">
+      <div class="ph"><span class="code">HOW</span><span class="pt">三步循环，把"知道"变"做到"</span></div>
+      <div class="q before">① <b>学完即练</b>：每模块结束当天，做对应微练习卡（约 15 分钟）。</div>
+      <div class="q before">② <b>每周复盘</b>：用「周觉察日志」记录权威自检 + 能量评分（10 分钟）。</div>
+      <div class="q before">③ <b>90 天内化</b>：按「90 天实践地图」分阶段推进，让新行为成为本能。</div>
+      <div class="ck"><span class="box"></span>承诺：不追求完美，追求"每周至少一次按设计行动"。打卡比正确更重要。</div>
+    </div>
+  </section>
+
+  <section class="card" id="cards">
+    <h2>微练习卡（M0–M10）</h2>
+    <div class="sub" style="color:var(--muted);font-size:13px;margin-bottom:12px">每张卡含：今日微练习 · 反思三问 · 本周打卡。</div>
+    <div id="cardList"></div>
+  </section>
+
+  <section class="card" id="log">
+    <h2>周觉察日志模板</h2>
+    <div class="sub" style="color:var(--muted);font-size:13px;margin-bottom:12px">建议每周日傍晚填写一份（可复印多份）。</div>
+    <div class="logbook">
+      <div class="lh">第 ____ 周 · 日期 ______ 至 ______</div>
+      <div class="row2">
+        <div><div class="fld">本周主修模块</div><div class="line"></div></div>
+        <div><div class="fld">微练习完成度</div><div class="line"></div></div>
+      </div>
+      <div class="fld">权威自检记录（本周重大决策，用的是头脑还是内在权威？）</div><div class="line"></div><div class="line"></div>
+      <div class="fld">能量评分（1–10，10 为充盈）</div>
+      <div class="energy"><span>1</span><span class="bar"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span>10</span></div>
+      <div class="fld">一句话反思 / 下周小目标</div><div class="line"></div><div class="line"></div>
+    </div>
+  </section>
+
+  <section class="card" id="map">
+    <h2>90 天实践地图</h2>
+    <div class="phase">
+      <div class="p1"><b>奠基期</b>第 1–30 天<br>出图 · 认类型 · 建日志</div>
+      <div class="p2"><b>实践期</b>第 31–60 天<br>按策略决策 · 团队设计地图</div>
+      <div class="p3"><b>内化期</b>第 61–90 天<br>非我复位 · 真实领导 · 毕业项目</div>
+    </div>
+    <div id="mapList"></div>
+  </section>
+
+  <div class="disc">📌 本手册为《人类图领导力》课程配套练习工具（V1 原型）。练习设计基于人类图类型 / 策略 / 权威 / 非我主题等公开体系与易经领导智慧，不构成心理或医学建议。正式解读请以认证人类图从业者为准。</div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图领导力课程 · 练习手册 V1</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+</div>
+
+<script>
+const VERSION="V1";
+const MODS=[
+ {c:"M0",t:"易经智慧与领导之道（开篇）",m:'画出你团队的「爻位金字塔」：谁是初爻（新人）、五爻（一把手）、上爻（退居顾问）？',q:['我团队里，谁在"五爻"位置却总被当新人用？','我自己在组织里处于几爻？是否"在其位谋其政"？','我曾有过"亢龙有悔"的时刻吗——登高后哪里翻了车？']},
+ {c:"M1",t:"类型与策略（L1）",m:'制作你的「类型卡」：类型+策略+领导本色，贴在工作台显眼处。',q:['我的类型是？它的正确策略是什么？','本周我有多少次"按策略"做决定、多少次"逆行"？','同伴眼中的我的领导风格，和我自我认知一致吗？']},
+ {c:"M2",t:"内在权威与决策（L1）",m:'下一次重大决定，先做"权威自检"再拍板（情绪权威者至少等 24h）。',q:['今天做的关键决定，用的是头脑还是内在权威？','我的权威节奏是什么？我给过它时间吗？','我的"非我决策陷阱"最常长什么样？']},
+ {c:"M3",t:"爻位与位势",m:'画一张「我的位势图」：组织位置 × 个人设计，标注"顺势区 / 逆势区"。',q:['我现在的"位"与我的"设计"匹配吗？','哪里是"伴君如虎"（四爻）的人际张力点？','我该如何"在其位"又不"失其本"？']},
+ {c:"M4",t:"中心与盲区",m:'标出你的「定义中心」与「开放中心」，写一句"开放中心不背锅"宣言。',q:['我的开放中心常吸收谁的焦虑？','我会不会用"头脑中心"替该安静的中心硬做决定？','我的精力管理协议第一条是什么？']},
+ {c:"M5",t:"非我主题与抗倦怠",m:'列出你的「非我清单」3 条 + 对应「复位动作」1 条，贴在冰箱上。',q:['我的非我主题是什么？它何时最容易被触发？','当我背离设计时，身体 / 情绪最先报警的是哪里？','21 天复位计划，今天做到第几天？']},
+ {c:"M6",t:"通道与天赋",m:'从你的定义通道里挑 1 条，写"我的领导优势一句话"。',q:['我最被忽视的天赋通道是哪条？','我是否在用天赋，还是在硬补短板？','我的团队因我的哪条通道而受益？']},
+ {c:"M7",t:"团队设计地图",m:'用"类型 + 策略"给团队 3 位成员各写一句"正确带法"。',q:['谁是显化者（要告知）？谁是投射者（要邀请）？','我是否在用同一种方式带所有人？','团队的能量排布，哪里缺了哪类人？']},
+ {c:"M8",t:"组织设计",m:'选一个组织卡点，用"设计地图"画一张诊断一页纸。',q:['我们组织的"非我"卡点在哪里？','哪个环节在逼人逆行自己的策略？','如果用人类图重排，哪里会不同？']},
+ {c:"M9",t:"真实领导（谦卦）",m:'写你的「领导宣言」：我是谁、我不做什么、我如何修己安人。',q:['我的领导是"修己安人"还是"管理他人"？','我是否"德位相当"——能力与位置匹配吗？','我最近一次"谦"（低调成事）是什么时候？']},
+ {c:"M10",t:"毕业项目",m:'在自家组织落一个「设计驱动」领导实验，记录前后数据。',q:['我的实验假设是什么？','数据对比显示"图真的有用"吗？','我准备把这套方法带去影响谁？']}
+];
+document.getElementById('cardList').innerHTML = MODS.map(x=>`
+  <div class="pcard">
+    <div class="ph"><span class="code">${x.c}</span><span class="pt">${x.t}</span></div>
+    <div class="micro"><b>今日微练习：</b>${x.m}</div>
+    <div class="q">${x.q[0]}</div>
+    <div class="q">${x.q[1]}</div>
+    <div class="q">${x.q[2]}</div>
+    <div class="ck"><span class="box"></span>本周打卡：□ 完成微练习　□ 写下一句洞察　□ 分享给一位同伴</div>
+  </div>`).join('');
+
+const MAP=[
+ {w:"第 1–10 天",d:"出正式人类图，确认类型 / 策略 / 权威；制作类型卡贴工作台。"},
+ {w:"第 11–20 天",d:"启动周觉察日志；每天记录 1 次"按策略 vs 逆行"的决定。"},
+ {w:"第 21–30 天",d:"M2 权威自检固化；识别自己的非我决策陷阱并命名。"},
+ {w:"第 31–45 天",d:"在团队中用"类型策略"差异化带人；画团队设计地图初稿。"},
+ {w:"第 46–60 天",d:"M5 抗倦怠：21 天非我复位打卡；建立精力管理协议。"},
+ {w:"第 61–75 天",d:"M9 真实领导：写领导宣言，在 1 次冲突中实践"修己安人"。"},
+ {w:"第 76–90 天",d:"M10 毕业项目：落 1 个设计驱动实验，产出前后数据对比。"}
+];
+document.getElementById('mapList').innerHTML = MAP.map(x=>`
+  <div class="maprow"><span class="wk">${x.w}</span><span class="do">${x.d}</span></div>`).join('');
+
+document.getElementById('hamb').addEventListener('click',()=>document.body.classList.add('drawer-open'));
+function closeDrawer(){document.body.classList.remove('drawer-open');}
+document.getElementById('closex').addEventListener('click',closeDrawer);
+document.getElementById('mask').addEventListener('click',closeDrawer);
+document.querySelectorAll('.drawer a').forEach(a=>a.addEventListener('click',closeDrawer));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+</script>
+</body>
+</html>

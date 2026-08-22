@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 · 工具索引 V1</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#2D2118; --border:#E8DCC8;
+    --amber:#C8702D; --amber-l:#F3D9BE; --gold:#B8893B; --gold-l:#F2E3C4;
+    --ink:#3A2E22; --muted:#7A6A58; --card:#FFFDF8;
+    --clay:#B5532A; --clay-l:#F1D3C2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;line-height:1.68;font-size:15px;-webkit-text-size-adjust:100%}
+
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(45,33,24,.2)}
+  nav .brand{font-size:15px;font-weight:800}
+  nav .brand small{display:block;font-size:12px;font-weight:600;color:var(--amber-l);letter-spacing:.1em}
+  nav .menu{display:flex;gap:4px;flex-wrap:wrap}
+  nav .menu a{color:#EADFCD;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;white-space:nowrap}
+  nav .menu a:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav .hamb{display:none;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:20px;line-height:1;padding:6px 11px;cursor:pointer}
+  body.drawer-open nav{z-index:0 !important}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:330px;background:#2D2118;z-index:9999;transform:translateX(100%);transition:transform .28s ease;padding:64px 0 20px;overflow-y:auto}
+  body.drawer-open .drawer{transform:translateX(0)}
+  .drawer a{display:block;color:#F3E6D6;text-decoration:none;font-size:14.5px;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600}
+  .drawer a:hover{background:rgba(255,255,255,.08);color:#fff}
+  .drawer .closex{position:absolute;top:14px;right:16px;background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .28s}
+  body.drawer-open .mask{opacity:1;pointer-events:auto}
+
+  .wrap{max-width:880px;margin:0 auto;padding:22px 16px 48px}
+
+  header{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;border-radius:16px;padding:26px 22px;margin-bottom:18px;box-shadow:0 6px 20px rgba(45,33,24,.18);text-align:center}
+  header .kicker{font-size:12px;letter-spacing:.16em;color:var(--amber-l);font-weight:700;text-transform:uppercase}
+  header h1{font-size:24px;margin:8px 0 6px;line-height:1.32}
+  header p{font-size:13.5px;color:#EADFCD;max-width:64ch;margin:0 auto}
+  header .emph{display:inline-block;background:linear-gradient(135deg,var(--gold-l),var(--amber-l));color:var(--primary-d);font-weight:800;padding:7px 16px;border-radius:10px;margin-top:10px;font-size:13.5px;letter-spacing:.02em}
+
+  .note{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--amber);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--muted)}
+  .note b{color:var(--ink)}
+
+  .group-h{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+  .group-h .ico{background:var(--primary);color:#fff;font-size:13px;font-weight:800;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .group-h b{color:var(--primary-d);font-size:16px}
+  .group-h small{color:var(--muted);font-size:12px}
+
+  /* 工具栅格 — 默认 2×2（4 卡），主工具 6 卡用 3×2 = 3 列布局 */
+  .tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:6px}
+  .tcards.t2x2{grid-template-columns:repeat(2,1fr)}
+
+  .tcard{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:12px;padding:14px 14px;box-shadow:0 2px 8px rgba(45,33,24,.05);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:.2s}
+  .tcard:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(45,33,24,.12);border-left-color:var(--clay)}
+  .tcard .tag{display:inline-block;background:var(--gold-l);color:var(--gold);font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;align-self:flex-start}
+  .tcard h3{font-size:14.5px;color:var(--primary-d);line-height:1.4}
+  .tcard p{font-size:12.5px;color:var(--muted)}
+  .tcard .go{font-size:12px;color:var(--clay);font-weight:700;margin-top:auto}
+
+  .back{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:var(--primary-d);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:700;text-decoration:none;margin-bottom:18px}
+  .back:hover{background:var(--amber-l)}
+
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+  footer .v{color:var(--primary-d);font-weight:700}
+
+  @media(max-width:768px){
+    nav .hamb{display:block}
+    nav .menu{display:none}
+    .tcards,.tcards.t2x2{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    body{font-size:14.5px}
+    .wrap{padding:18px 12px 40px}
+    header h1{font-size:20px}
+    .tcards,.tcards.t2x2{grid-template-columns:1fr}
+    .tcard h3{font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">人类图领导力 · 工具索引<small>TOOLS HUB</small></div>
+  <div class="menu">
+    <a href="hd-leadership-course.html">← 返回课程蓝图</a>
+    <a href="humandesign-leadership-feasibility.html">可研报告</a>
+    <a href="yijing-leadership-map.html">易经领导力</a>
+    <a href="hd-chart-generator.html">出图测评</a>
+    <a href="hd-course-matrix.html">课程矩阵</a>
+    <a href="hd-leadership-workbook.html">练习手册</a>
+  </div>
+  <button class="hamb" id="hamb" aria-label="打开菜单">☰</button>
+</nav>
+<div class="drawer" id="drawer"><button class="closex" id="closex" aria-label="关闭">✕</button>
+  <a href="hd-leadership-course.html">← 返回课程蓝图</a>
+  <a href="humandesign-leadership-feasibility.html">可研报告</a>
+  <a href="yijing-leadership-map.html">易经领导力</a>
+  <a href="hd-chart-generator.html">出图测评</a>
+  <a href="hd-course-matrix.html">课程矩阵</a>
+  <a href="hd-leadership-workbook.html">练习手册</a>
+</div>
+<div class="mask" id="mask"></div>
+
+<div class="wrap">
+
+   <header>
+    <div class="kicker">Tools Hub · 全部配套工具索引</div>
+    <h1>人类图领导力 · 工具索引</h1>
+    <p>本页汇总《人类图领导力课程》全部配套工具。</p>
+    <p class="emph">6 张主工具为附录默认加载项；5 张辅工具为商业/训练过程的进阶抓手。</p>
+  </header>
+
+  <div class="note">
+    <b>主工具 vs 辅工具：</b>主工具是课程<b>必装</b>——招生、学习、毕业全流程都要用到；辅工具是<b>选装</b>——商业洞察 / 内部训练 / 个案咨询 / 助教脚本等场景按需取用。
+  </div>
+
+  <!-- 主工具 6 张 -->
+  <div class="group-h">
+    <span class="ico">★</span>
+    <b>主工具 · 6 张</b>
+    <small>— 招生 · 学习 · 毕业全流程必装</small>
+  </div>
+  <div class="tcards">
+    <a class="tcard" href="humandesign-leadership-feasibility.html">
+      <span class="tag">战略</span>
+      <h3>可研报告</h3>
+      <p>可行性研究报告：市场痛点 · Toastmasters / LMI 模式借鉴 · 商业模式 · 12 节数据 + 2 个差异化护城河。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="yijing-leadership-map.html">
+      <span class="tag">文化桥</span>
+      <h3>易经领导力</h3>
+      <p>易经领导力体系图谱：太极 · 64 卦结构 · 三易 · 爻位金字塔 + 与人类图闸门意象的融合落点。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-chart-generator.html">
+      <span class="tag">出图</span>
+      <h3>出图测评</h3>
+      <p>人类图出生数据出图测评：输入数据 → 调取 API → 4 个核心行星（个性太阳/地球 + 设计太阳/地球）+ 卦象 + 爻线 + M1/M2/M3 报告。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-course-matrix.html">
+      <span class="tag">招生</span>
+      <h3>课程矩阵</h3>
+      <p>M0–M10 课程矩阵速览：11 模块 × 四级认证 HD-L1~L4 闭环速览，可作招生彩页 / 学习路径图单独转发。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-leadership-workbook.html">
+      <span class="tag">训练</span>
+      <h3>练习手册</h3>
+      <p>M0–M10 微练习 + 决策日志 + 团队位势图 + 领导宣言模板 —— 学员每天照着做，Toastmasters 式高频练习闭环。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-tools-hub.html">
+      <span class="tag">索引</span>
+      <h3>工具索引</h3>
+      <p>本页。所有工具的一站式入口：新工具上线后只改这里一处，全站同步。</p>
+      <div class="go">已在当前页</div>
+    </a>
+  </div>
+
+  <!-- 辅工具 5 张 -->
+  <div class="group-h">
+    <span class="ico">+</span>
+    <b>辅工具 · 5 张</b>
+    <small>— 商业 / 训练过程按需取用</small>
+  </div>
+  <div class="tcards t2x2">
+    <a class="tcard" href="hd-business-onepager.html">
+      <span class="tag">商业</span>
+      <h3>商业一页纸</h3>
+      <p>HD × 教练双业务一图看懂：客单价 · 交付形态 · 价值主张 · 招生漏斗。给潜在渠道 / 投资人 60 秒讲明白。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-coach-vs-leadership.html">
+      <span class="tag">辨析</span>
+      <h3>教练 vs 领导力</h3>
+      <p>教练课（第三人称陪个体找自己）vs 领导力课（第一人称带团队出绩效）的边界、受众、出口认证与导流策略。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-funnel-timeline.html">
+      <span class="tag">漏斗</span>
+      <h3>招生漏斗时间线</h3>
+      <p>潜在学员 → 工作坊 → 深度营 → 认证讲师 → 企业授权 —— 升学时间线 + 各阶段转化率预估。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-lmi-franchise-wheel.html">
+      <span class="tag">借鉴</span>
+      <h3>LMI 加盟飞轮</h3>
+      <p>LMI 加盟结构 / 加盟商干什么 / 飞轮怎么转 / 与麦当劳同构 —— 课程「加盟 / 认证讲师」的可借鉴模型。</p>
+      <div class="go">打开 →</div>
+    </a>
+    <a class="tcard" href="hd-module-script-m0m1.html">
+      <span class="tag">脚本</span>
+      <h3>M0 / M1 助教脚本</h3>
+      <p>M0 易经开篇 + M1 类型与策略的模块详细脚本（讲师 / 助教逐字稿），配套练习手册使用。</p>
+      <div class="go">打开 →</div>
+    </a>
+  </div>
+
+  <div class="note" style="margin-top:18px">
+    <b>维护规则：</b>以后每做一个新工具页，就在「主工具 6 张」或「辅工具 5 张」里加一张卡，并把这个页面 nav 的菜单同步加一行——保持单一入口即找即用。
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图领导力 · 工具索引 <span class="v" id="ver">V1</span></div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+
+<script>
+  const VERSION = "V1";
+  try{ document.getElementById('ver').textContent = VERSION; }catch(e){}
+
+  // 移动端汉堡抽屉
+  try{
+    const hamb = document.getElementById('hamb');
+    const open = ()=>document.body.classList.add('drawer-open');
+    const close = ()=>document.body.classList.remove('drawer-open');
+    if(hamb){
+      hamb.addEventListener('click', open);
+      document.getElementById('closex').addEventListener('click', close);
+      document.getElementById('mask').addEventListener('click', close);
+      document.querySelectorAll('.drawer a').forEach(a=>a.addEventListener('click', close));
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+    }
+  }catch(e){ console.warn('drawer init fail', e); }
+</script>
+</body>
+</html>

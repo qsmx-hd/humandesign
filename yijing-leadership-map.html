@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易经领导力体系图谱 · I Ching × Leadership · V2</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#2D2118; --border:#E8DCC8;
+    --amber:#C8702D; --amber-l:#F3D9BE; --gold:#B8893B; --gold-l:#F2E3C4;
+    --ink:#3A2E22; --muted:#7A6A58; --card:#FFFDF8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;line-height:1.68;font-size:15px;-webkit-text-size-adjust:100%}
+  .wrap{max-width:780px;margin:0 auto;padding:22px 16px 44px}
+  header{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;border-radius:16px;padding:26px 22px 24px;margin-bottom:16px;box-shadow:0 6px 20px rgba(45,33,24,.18);text-align:center}
+  header .kicker{font-size:12px;letter-spacing:.16em;color:var(--amber-l);font-weight:700;text-transform:uppercase;display:inline-block}
+  header h1{font-size:23px;margin:8px 0 8px;line-height:1.35}
+  header .lead{font-size:14px;color:#EADFCD;margin:0 auto;max-width:64ch}
+  header .sub{font-size:13px;color:#F2E3C4;margin:8px auto 0;max-width:64ch;padding-top:10px;border-top:1px dashed rgba(243,217,190,.35);font-style:italic}
+  .note{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--amber);border-radius:12px;padding:14px 16px;margin-bottom:22px;font-size:13px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  .note.amber{background:linear-gradient(135deg,#FFFDF8,var(--amber-l));border-left-color:var(--gold)}
+  .sec{margin-bottom:26px}
+  .sec h2{font-size:18px;color:var(--primary-d);margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .sec h2 .idx{background:var(--primary);color:#fff;font-size:13px;font-weight:800;min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .sec .sub{font-size:12.5px;color:var(--muted);margin-bottom:13px;padding-left:33px}
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .tcard{background:var(--card);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:12px;padding:14px 14px;box-shadow:0 2px 8px rgba(45,33,24,.05)}
+  .tcard h3{font-size:15px;color:var(--primary-d);margin-bottom:6px}
+  .tcard .zh{font-size:13px;color:var(--amber);font-weight:700;margin-bottom:6px}
+  .tcard p{font-size:12.5px;color:var(--muted)}
+  /* 阴阳平衡 */
+  .yy{display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .yy svg{width:128px;height:128px;display:block;margin:0 auto}
+  .yy .txt p{font-size:13px;color:var(--ink);margin-bottom:8px}
+  .yy .txt p:last-child{margin-bottom:0}
+  .yy .txt b{color:var(--amber)}
+  /* 乾卦阶梯 */
+  .ladder{position:relative;padding-left:6px}
+  .step{display:grid;grid-template-columns:54px 1fr;gap:12px;margin-bottom:11px;align-items:stretch}
+  .step .yao{background:linear-gradient(135deg,var(--gold),var(--amber));color:#fff;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;min-height:62px;box-shadow:0 2px 6px rgba(45,33,24,.12)}
+  .step .yao .num{font-size:18px;font-weight:800;line-height:1}
+  .step .yao .lab{font-size:12px;margin-top:3px;opacity:.95}
+  .step .body{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:10px;padding:10px 13px}
+  .step .body .tt{font-size:14px;font-weight:700;color:var(--primary-d)}
+  .step .body .ci{font-size:12.5px;color:var(--amber);margin:2px 0 4px}
+  .step .body .me{font-size:12.5px;color:var(--muted)}
+  .step.peak .body{border-left-color:var(--primary);background:linear-gradient(135deg,#FFFDF8,var(--amber-l))}
+  .step.top .yao{background:linear-gradient(135deg,var(--primary-d),#4A3623)}
+  /* 爻位金字塔 */
+  .pyr{display:flex;flex-direction:column;align-items:stretch;gap:6px;margin:4px auto 0;max-width:360px;width:100%}
+  .tier{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 6px rgba(45,33,24,.05);width:100%}
+  .tier .yl{font-size:14px;font-weight:800;color:var(--primary-d);white-space:nowrap}
+  .tier .rl{font-size:12.5px;color:var(--muted);text-align:right}
+  .tier.t5{background:linear-gradient(135deg,#FFFDF8,var(--gold-l));border-color:var(--gold);border-left:5px solid var(--gold)}
+  .tier.t5 .yl{color:var(--amber)}
+  .tier.tu{background:linear-gradient(135deg,var(--primary-d),#4A3623);border:none}
+  .tier.tu .yl,.tier.tu .rl{color:#EADFCD}
+  /* 坤卦 */
+  .four{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .kcard{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:10px;padding:11px 13px}
+  .kcard .tt{font-size:13.5px;font-weight:700;color:var(--primary-d);margin-bottom:3px}
+  .kcard .me{font-size:12.5px;color:var(--muted)}
+  /* 两仪变易小条 */
+  .twoline{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .tl{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+  .tl h3{font-size:14px;color:var(--primary-d);margin-bottom:5px}
+  .tl p{font-size:12.5px;color:var(--muted)}
+  .tl b{color:var(--amber)}
+  /* 融合映射 */
+  .mapgrid{display:grid;gap:10px}
+  .mrow{display:grid;grid-template-columns:1.05fr 1.15fr 1.6fr;gap:0;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .mrow .c{padding:10px 12px;font-size:12.5px;border-right:1px solid var(--border)}
+  .mrow .c:last-child{border-right:none}
+  .mrow .c .h{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+  .mrow .c.a{background:linear-gradient(135deg,#FFFDF8,var(--gold-l));font-weight:700;color:var(--primary-d)}
+  .mrow .c.b{color:var(--amber);font-weight:700}
+  .mrow .c.d{color:var(--ink)}
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:30px;padding-top:16px;border-top:1px solid var(--border)}
+  footer .v{color:var(--primary-d);font-weight:700}
+  @media(max-width:560px){
+    body{font-size:14.5px}
+    .wrap{padding:18px 12px 38px}
+    header h1{font-size:20px}
+    .three,.four,.twoline{grid-template-columns:1fr}
+    .yy{grid-template-columns:1fr;justify-items:center;text-align:center}
+    .yy .txt{text-align:left}
+    .mrow{grid-template-columns:1fr}
+    .mrow .c{border-right:none;border-bottom:1px solid var(--border)}
+    .mrow .c:last-child{border-bottom:none}
+    .sec h2{font-size:17px}
+    .step .body .tt{font-size:14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">I Ching × Leadership · 易经领导力体系</div>
+    <h1>易经领导力体系图谱</h1>
+    <p class="lead">人类图只是"借用"了易经的闸门意象；而易经本身作为一套完整的领导哲学，在中文领导力训练圈早已是成熟赛道。</p>
+    <p class="sub">本图谱梳理其核心体系，并标注与「人类图领导力课程」的融合落点。</p>
+  </header>
+
+  <div class="note amber">
+    <b>一句话定位：</b>市面上的易经课讲「泛化的天道」，人类图课讲「你个人的设计」——两者合起来 = <b>「用东方智慧开篇、用你的基因收口」</b>，是 CCL / DDI / LMI 都没占的「东方 + 个性化」交叉位。
+  </div>
+
+  <!-- 一、三易 -->
+  <div class="sec">
+    <h2><span class="idx">1</span>三易 · 总纲</h2>
+    <div class="sub">《周易》"易"之三义，是整部经的领导哲学底层逻辑。</div>
+    <div class="three">
+      <div class="tcard"><h3>变易</h3><div class="zh">万事流变</div><p>万物恒动、无常不变。领导者要"达变"——拥抱变化、敏捷调整、不固守旧法。</p></div>
+      <div class="tcard"><h3>简易</h3><div class="zh">道至至简</div><p>复杂问题抓本质。一流领导力是"化繁为简"，把混沌收敛成可执行的少数要务。</p></div>
+      <div class="tcard"><h3>不易</h3><div class="zh">常道恒存</div><p>变化中有不变之常道——核心原则、价值观、使命恒定。领导者"持经"方能"达变"。</p></div>
+    </div>
+  </div>
+
+  <!-- 二、阴阳平衡 -->
+  <div class="sec">
+    <h2><span class="idx">2</span>阴阳平衡 · 刚柔并济</h2>
+    <div class="sub">"一阴一阳之谓道"——孤阴不生，独阳不长。</div>
+    <div class="yy">
+      <svg viewBox="0 0 120 120" role="img" aria-label="太极阴阳图">
+        <!-- 阴（米色）底圆 -->
+        <circle cx="60" cy="60" r="56" fill="#F2E3C4" stroke="#C4956A" stroke-width="2"/>
+        <!-- 阳（深色）鱼身：右半大圆 + 左下小弧（凸左）+ 右上小弧（凸右），构成标准 S 形边界 -->
+        <path d="M60,4 A56,56 0 0,1 60,116 A28,28 0 0,1 60,60 A28,28 0 0,0 60,4 Z" fill="#2D2118"/>
+        <!-- 上方阴点（白色 · 嵌于阳鱼头） -->
+        <circle cx="60" cy="32" r="9" fill="#FFFFFF" stroke="#C4956A" stroke-width="1.2"/>
+        <!-- 下方阳点（白色 · 用户要求「2 个白色圆点」） -->
+        <circle cx="60" cy="88" r="9" fill="#FFFFFF" stroke="#C4956A" stroke-width="1.2"/>
+      </svg>
+      <div class="txt">
+        <p><b>阴阳互根</b>：没有暗就无所谓明，没有静就显不出动。领导者的"决断(阳)"须与"包容(阴)"并存。</p>
+        <p><b>刚柔并济</b>：进取与守成、权威与倾听、推动与赋能——偏任一端都会失衡。非此即彼是领导的常见陷阱。</p>
+        <p><b>课程落点</b>：用"阴阳"讲精力管理——定义中心(阳·动)与非定义中心(阴·容)的能量互补。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三、乾卦九五进阶 -->
+  <div class="sec">
+    <h2><span class="idx">3</span>乾卦九五 · 一把手成长曲线</h2>
+    <div class="sub">从"潜龙"到"飞龙"，最经典的一把手进阶六阶；用九"群龙无首"是最高境界。</div>
+    <div class="ladder">
+      <div class="step"><div class="yao"><span class="num">初</span><span class="lab">九</span></div><div class="body"><div class="tt">潜龙勿用</div><div class="ci">潜伏期 · 积蓄</div><div class="me">新任/蓄势：不妄动、沉淀实力、等待时机。领导力第一课是"忍"。</div></div></div>
+      <div class="step"><div class="yao"><span class="num">二</span><span class="lab">九</span></div><div class="body"><div class="tt">见龙在田</div><div class="ci">初露 · 需贵人</div><div class="me">初展锋芒：利见大人(上级/导师提携)。开始被看见，但根基未稳。</div></div></div>
+      <div class="step"><div class="yao"><span class="num">三</span><span class="lab">九</span></div><div class="body"><div class="tt">终日乾乾</div><div class="ci">中层 · 扛压</div><div class="me">君子终日勤勉、夕惕若厉(如履薄冰)。中层是"劳而无功仍须兢慎"的修练。</div></div></div>
+      <div class="step"><div class="yao"><span class="num">四</span><span class="lab">九</span></div><div class="body"><div class="tt">或跃在渊</div><div class="ci">候补 · 待时</div><div class="me">可进可退、审时度势。高管候补：跃则飞、不跃则守渊，关键在"知止"。</div></div></div>
+      <div class="step peak"><div class="yao"><span class="num">五</span><span class="lab">九</span></div><div class="body"><div class="tt">飞龙在天</div><div class="ci">鼎盛 · 九五之尊</div><div class="me">一把手在位：资源与威望齐备。但位极则易骄——接"上九"警示。</div></div></div>
+      <div class="step"><div class="yao"><span class="num">上</span><span class="lab">九</span></div><div class="body"><div class="tt">亢龙有悔</div><div class="ci">盈满 · 防衰</div><div class="me">盈不可久、过犹不及。居高位须知进退，否则"贵而无位、高而无民"。</div></div></div>
+      <div class="step top"><div class="yao"><span class="num">用</span><span class="lab">九</span></div><div class="body"><div class="tt">群龙无首 · 吉</div><div class="ci">至境 · 赋能</div><div class="me">团队中各龙各当其位、不必唯我独尊。最高领导境界 = 授权成网、而非一人独大。</div></div></div>
+    </div>
+  </div>
+
+  <!-- 四、爻位时位金字塔 -->
+  <div class="sec">
+    <h2><span class="idx">4</span>爻位 · 时位 — 你在组织的"位与势"</h2>
+    <div class="sub">六爻自下而上对应组织层级：初爻新人 → 五爻 CEO → 上爻退居。在其位，谋其政。</div>
+    <div class="pyr">
+      <div class="tier tu"><span class="yl">上爻</span><span class="rl">退居 / 顾问 · 功成身退</span></div>
+      <div class="tier t5"><span class="yl">五爻</span><span class="rl">CEO / 一把手 · 九五之尊 · 核心决策</span></div>
+      <div class="tier"><span class="yl">四爻</span><span class="rl">副总 · 近君位 · 伴君如虎</span></div>
+      <div class="tier"><span class="yl">三爻</span><span class="rl">经理 · 多凶 · 伴上如伴虎</span></div>
+      <div class="tier"><span class="yl">二爻</span><span class="rl">主管 · 独当一面</span></div>
+      <div class="tier"><span class="yl">初爻</span><span class="rl">新人 · 踏实积累</span></div>
+    </div>
+  </div>
+
+  <!-- 五、坤卦 -->
+  <div class="sec">
+    <h2><span class="idx">5</span>坤卦 · 二把手的承载与执行</h2>
+    <div class="sub">"地势坤，君子以厚德载物"——与乾之创始相对，坤是承载、包容、顺势。</div>
+    <div class="four">
+      <div class="kcard"><div class="tt">初六 · 履霜坚冰至</div><div class="me">见微知著、防微杜渐。小征象已露，须早做预案。</div></div>
+      <div class="kcard"><div class="tt">六二 · 直方大</div><div class="me">守正、包容、厚德。不习(不刻意)而无不利——真承载力来自本性。</div></div>
+      <div class="kcard"><div class="tt">六四 · 括囊</div><div class="me">慎言收敛、不妄出头。"伴君如伴虎"时的自保与分寸。</div></div>
+      <div class="kcard"><div class="tt">上六 · 龙战于野</div><div class="me">阴极阳生、阴阳交争的警示。承载过当反成对抗，须守柔。</div></div>
+    </div>
+  </div>
+
+  <!-- 六、泰否既济未济 -->
+  <div class="sec">
+    <h2><span class="idx">6</span>泰否 · 既济未济 — 物极必反</h2>
+    <div class="sub">盛衰相循、盈满则亏。领导者的风险意识来自对"变"的敬畏。</div>
+    <div class="twoline">
+      <div class="tl"><h3>泰 ↔ 否</h3><p><b>泰</b>(地天泰)：小往大来、通泰；<b>否</b>(天地否)：大往小来、闭塞。泰极否来、否极泰来——居安思危。</p></div>
+      <div class="tl"><h3>既济 ↔ 未济</h3><p><b>既济</b>(水火既济)：事已成，但"初吉终乱"；<b>未济</b>(火水未济)：事未成，却"物不可穷"、生生不息。成功是新的起点。</p></div>
+    </div>
+  </div>
+
+  <!-- 七、谦卦 -->
+  <div class="sec">
+    <h2><span class="idx">7</span>谦卦 · 修己安人</h2>
+    <div class="sub">六十四卦中唯一"六爻皆吉"之卦——谦尊而光，卑而不可逾。</div>
+    <div class="note">
+      <b>管理本质 = 修己安人，德位相当。</b>《易经》的领导学不在"权术"而在"德行"：位愈高、德愈配。谦非软弱，是"尊而光"(受人敬仍能发光)、"卑而不可逾"(谦下却无人能越)。这与现代"仆人式领导 / 真实领导"高度同构，也是易经领导力最常被企业引用的一卦。
+    </div>
+  </div>
+
+  <!-- 八、融合映射 -->
+  <div class="sec">
+    <h2><span class="idx">8</span>易经 × 人类图 · 融合映射</h2>
+    <div class="sub">把"天道"落到"你的设计"——这是本课区别于纯易经课、纯 HD 课的核心创新。</div>
+    <div class="mapgrid">
+      <div class="mrow"><div class="c a"><span class="h">易经</span>乾坤 · 阴阳</div><div class="c b"><span class="h">人类图</span>类型 / 策略 / 权威</div><div class="c d"><span class="h">课程用法</span>用卦性讲"你的领导本色"(显化者=乾之动、反映者=坤之容)。</div></div>
+      <div class="mrow"><div class="c a"><span class="h">易经</span>爻位 · 时位</div><div class="c b"><span class="h">人类图</span>人生角色 Profile</div><div class="c d"><span class="h">课程用法</span>用爻位讲"你在组织的位与势"，自然过渡到团队角色排布。</div></div>
+      <div class="mrow"><div class="c a"><span class="h">易经</span>持经达变 · 时中</div><div class="c b"><span class="h">人类图</span>内在权威决策</div><div class="c d"><span class="h">课程用法</span>用"时中"讲决策节奏(投射者待时、反映者 lunar 周期)。</div></div>
+      <div class="mrow"><div class="c a"><span class="h">易经</span>亢龙有悔 · 盈不可久</div><div class="c b"><span class="h">人类图</span>非我主题</div><div class="c d"><span class="h">课程用法</span>用卦象讲"背离本性的代价"(如显化者非我=急躁挫败)。</div></div>
+      <div class="mrow"><div class="c a"><span class="h">易经</span>阴阳平衡</div><div class="c b"><span class="h">人类图</span>中心 / 能量管理</div><div class="c d"><span class="h">课程用法</span>用阴阳讲精力管理(定义中心=阳动、非定义=阴容)。</div></div>
+      <div class="mrow"><div class="c a"><span class="h">易经</span>待时而动</div><div class="c b"><span class="h">人类图</span>反映者 / 投射者</div><div class="c d"><span class="h">课程用法</span>用"时"讲等待与授权——不硬冲、等对的时机与邀请。</div></div>
+    </div>
+  </div>
+
+  <!-- 九、加入课程设计 -->
+  <div class="sec">
+    <h2><span class="idx">9</span>加入本课设计的四条建议</h2>
+    <div class="sub">让"东方智慧"成为课程的认知入口，再用 HD 完成个性化收口。</div>
+    <div class="note">
+      <b>① 开篇共鸣：</b>用"三易 + 乾坤"建立中国学员的文化亲切感，再导入 HD 个人设计，降低陌生感。<br>
+      <b>② 决策力模块：</b>以"时中 / 持经达变"对应内在权威，比纯讲 HD 更易被中文管理者接受。<br>
+      <b>③ 抗倦怠模块：</b>以"亢龙有悔 / 盈不可久"对应非我主题——东方语境下"过犹不及"比"不是你自己"更有说服力。<br>
+      <b>④ 团队模块：</b>以"爻位 · 时位"对应 Profile / 类型排布，自然过渡到组织设计地图。
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">《易经领导力体系图谱》独立图卡 · 配套《人类图领导力课程》<span class="v">· V2</span></div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>

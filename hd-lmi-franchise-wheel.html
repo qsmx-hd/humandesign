@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMI 特许经营飞轮 · 人类图领导力课程对照标杆</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#2D2118; --border:#E8DCC8;
+    --amber:#C8702D; --amber-l:#F3D9BE; --gold:#B8893B; --gold-l:#F2E3C4;
+    --ink:#3A2E22; --muted:#7A6A58; --ok:#5C7A4A; --ok-l:#E4EEDB;
+    --card:#FFFDF8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;line-height:1.7;font-size:15px;-webkit-text-size-adjust:100%}
+  .wrap{max-width:760px;margin:0 auto;padding:22px 16px 40px}
+  header{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;border-radius:16px;padding:24px 22px;margin-bottom:22px;box-shadow:0 6px 20px rgba(45,33,24,.18)}
+  header .kicker{font-size:12px;letter-spacing:.18em;color:var(--amber-l);font-weight:700;text-transform:uppercase}
+  header h1{font-size:23px;margin:8px 0 6px;line-height:1.35}
+  header p{font-size:14px;color:#EADFCD;max-width:60ch}
+  .clear{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--amber);border-radius:12px;padding:16px 18px;margin-bottom:22px}
+  .clear h2{font-size:16px;color:var(--primary-d);margin-bottom:8px}
+  .clear p{font-size:13.5px;color:var(--muted)}
+  .clear b{color:var(--ink)}
+  .table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;font-size:13.5px}
+  .table th,.table td{padding:11px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}
+  .table thead th{background:var(--primary-d);color:#F3E7D6;font-size:13px}
+  .table tbody tr:nth-child(even){background:#FBF6EE}
+  .table td:first-child{font-weight:700;color:var(--primary-d);white-space:nowrap}
+  .section-title{font-size:18px;color:var(--primary-d);margin:26px 0 12px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .section-title::before{content:"";width:6px;height:20px;background:var(--amber);border-radius:3px;display:inline-block}
+  /* 飞轮步骤 */
+  .wheel{display:flex;flex-direction:column;gap:0;margin-bottom:8px}
+  .step{position:relative;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 16px 15px 60px;margin-bottom:10px;box-shadow:0 2px 8px rgba(45,33,24,.05)}
+  .step .num{position:absolute;left:14px;top:14px;width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center}
+  .step h4{font-size:15px;color:var(--primary-d);margin-bottom:3px}
+  .step p{font-size:13px;color:var(--muted)}
+  .step .arrow{font-size:18px;color:var(--amber);text-align:center;margin:-2px 0 8px 28px}
+  .step.loop{background:var(--ok-l);border-color:#C9DDB8;border-left:5px solid var(--ok)}
+  .step.loop .num{background:var(--ok)}
+  /* 加盟结构卡 */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 15px}
+  .card h4{font-size:14.5px;color:var(--primary-d);margin-bottom:6px}
+  .card p{font-size:13px;color:var(--muted)}
+  .card b{color:var(--ink)}
+  .highlight{background:var(--gold-l);border:1px solid #E2C98E;border-left:5px solid var(--gold);border-radius:12px;padding:15px 17px;margin-bottom:22px}
+  .highlight h3{font-size:15.5px;color:var(--primary-d);margin-bottom:7px}
+  .highlight p{font-size:13.5px;color:var(--ink)}
+  .highlight b{color:var(--amber)}
+  .analogy{background:var(--card);border:1px dashed var(--primary);border-radius:12px;padding:14px 16px;margin-bottom:24px;font-size:13.5px;color:var(--ink)}
+  .analogy b{color:var(--primary-d)}
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:30px;padding-top:16px;border-top:1px solid var(--border)}
+  footer .v{color:var(--primary-d);font-weight:700}
+  @media(max-width:560px){
+    body{font-size:14.5px}
+    .wrap{padding:18px 12px 36px}
+    header h1{font-size:20px}
+    .grid{grid-template-columns:1fr}
+    .table{font-size:12.5px}
+    .table th,.table td{padding:9px 10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">LMI Franchise Wheel</div>
+    <h1>LMI 特许经营飞轮</h1>
+    <p>领导管理国际（Leadership Management International）的轻资产规模化模型——人类图领导力课程最该抄的「飞轮结构」对照标杆。</p>
+  </header>
+
+  <div class="clear">
+    <h2>⚠️ 先澄清：特许经营 ≠ 直销 / 传销</h2>
+    <p>常被中文语境混为一谈，但两者<b>本质不同</b>：特许经营是授权方把「品牌 + 成熟商业模式 + IP」许可给被授权方，后者在自己地盘<b>独立经营一家本地企业</b>、向企业客户卖服务赚钱，再向总部交加盟费 + royalty；直销 / 多层营销（MLM，如安利、玫琳凯）则是个人销售代表直接向消费者卖货、靠层级返利抽成。LMI 连续 7 年登《企业家》杂志 <b>Franchise 500（特许经营 500 强）</b>——这是加盟榜，不是直销榜。</p>
+  </div>
+
+  <div class="section-title">飞轮怎么转（六步闭环）</div>
+  <div class="wheel">
+    <div class="step"><div class="num">1</div><h4>低门槛加盟</h4><p>~$2 万总投资、可家庭办公 / 兼职，吸引大量本地创业者成为加盟商。</p></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="num">2</div><h4>加盟商替总部承担获客</h4><p>加盟商去本地企业卖 B2B 培训（自己找客户、自己交付），总部不养直营销售团队。</p></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="num">3</div><h4>总部收「授权 + royalty」</h4><p>加盟商交初始加盟费（约 $15,000）+ 持续 <b>royalty 6%</b> + 教材 / IP 授权费，轻资产收租。</p></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="num">4</div><h4>训练出 measurable 结果</h4><p>多感官课程系统（EPP / EPL / EML / ESL）带来可衡量改变，客户有体感、愿续费。</p></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="num">5</div><h4>复售率 &gt;50%</h4><p>英国数据：老客户复售率超 50%。加盟商赚到钱、口碑扩散，网络自我生长。</p></div>
+    <div class="arrow">↓</div>
+    <div class="step loop"><div class="num">↻</div><h4>飞轮加速（回到第 1 步）</h4><p>加盟商赚钱 → 扩区 / 续约 → 更多加盟商加入 → 网络越密、总部 IP 成本越摊薄、越值钱。</p></div>
+  </div>
+
+  <div class="section-title">加盟结构（标准特许经营）</div>
+  <div class="grid">
+    <div class="card"><h4>创立与规模</h4><p>1966 年 Paul J. Meyer 于美国德州 Waco 创立，<b>400+ 加盟点</b>（美国 100+），特许经营始于 1966 年。</p></div>
+    <div class="card"><h4>区域独家权</h4><p>加盟商买的是<b>区域独家经营权</b>（exclusive territory），在自己地盘独立做生意，不与总部抢客户。</p></div>
+    <div class="card"><h4>费用结构</h4><p>初始加盟费约 <b>$15,000</b>（来源区间 $9.5k–$25k）；总投资 <b>$20k–$27.5k</b>；royalty <b>6%</b>。</p></div>
+    <div class="card"><h4>合同与续约</h4><p>合同期 <b>5 年</b>、可续约；低 overhead，多数加盟商家庭办公、可兼职起步。</p></div>
+  </div>
+
+  <div class="section-title">总部给加盟商什么</div>
+  <table class="table">
+    <thead><tr><th>支持项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>培训</td><td>40 小时培训 + 导师（mentor）一对一陪跑</td></tr>
+      <tr><td>物料</td><td>视频 / 手册 / 专有软件 / 多感官课程系统</td></tr>
+      <tr><td>获客</td><td>客户开拓方法、销售组织建设（franchise build-up）</td></tr>
+      <tr><td>社群</td><td>区域会议、全球加盟商网络互通最佳实践</td></tr>
+    </tbody>
+  </table>
+
+  <div class="analogy">
+    <b>与麦当劳同构：</b>麦当劳不靠直营餐厅赚钱，靠品牌授权 + 抽成；LMI 不靠总部顾问飞到企业做项目，靠 IP 授权 + royalty 躺着收租。核心都是——<b>把获客与交付成本甩给本地节点，总部轻资产规模化</b>。
+  </div>
+
+  <div class="highlight">
+    <h3>💡 对你的可借鉴点（人类图 HD-L / HD-C）</h3>
+    <p>你做 <b>HD-L / HD-C 认证课程</b>（IP 在总部）→ 认证出的教练 / 内训师成为你的<b>本地合作节点</b>，去各自企业客户交付 → 你收<b>认证费 + 教材 / IP 授权 + 网络续费</b>（类 6% royalty）→ 他们拿「可收费接个案 / 企业内训」身份赚钱，同时替你完成<b>市场下沉与获客</b>。这比 CCL / DDI 那种「总部顾问飞企业做项目」轻得多、可规模化得多，且与你报告里的「教练认证体系 + 实践圈」天然同构。</p>
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图领导力课程 · LMI 特许经营飞轮对照图（独立图表）</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>

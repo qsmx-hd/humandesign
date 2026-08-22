@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 × 教练 · 商业摘要（1页）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --paper:#FFFFFF; --primary:#C4956A; --dark:#2D2118;
+    --border:#E8DCC8; --gold:#B8860B; --muted:#7A6A58;
+    --lead:#C8743C; --coach:#6B4E8A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--dark); font-size:14.5px; line-height:1.7;
+    padding:24px 12px 40px}
+  .sheet{max-width:820px; margin:0 auto; background:var(--paper);
+    border:1px solid var(--border); border-radius:14px; overflow:hidden;
+    box-shadow:0 4px 20px rgba(45,33,24,.10)}
+
+  /* 顶栏 + 信任背书 (前置) */
+  .top{background:linear-gradient(135deg,#3A2B1E,#5A4129); color:#F5E9D8; padding:22px 26px}
+  .top .eyebrow{font-size:12.5px; letter-spacing:2px; color:var(--primary); margin-bottom:6px}
+  .top h1{font-size:24px; line-height:1.35; font-weight:800; color:#FBF3E6}
+  .top .sub{font-size:14px; color:#E4D4BE; margin-top:7px}
+  .badge{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
+  .badge .b{background:rgba(196,149,106,.22); border:1px solid var(--primary);
+    color:#FBE9D2; border-radius:30px; padding:7px 15px; font-size:13.5px; font-weight:700}
+  .badge .b b{color:#FFD9A8}
+
+  /* 一句话定位横幅 */
+  .pitch{background:#FBF3E6; border-bottom:1px solid var(--border);
+    padding:16px 26px; font-size:15px; line-height:1.7}
+  .pitch b{color:var(--lead)}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:0}
+  .cell{padding:18px 26px; border-top:1px solid var(--border)}
+  .cell:nth-child(odd){border-right:1px solid var(--border)}
+  .cell.full{grid-column:1 / -1}
+  h2{font-size:16px; color:var(--dark); margin-bottom:9px;
+    display:flex; align-items:center; gap:8px}
+  h2::before{content:""; width:10px; height:10px; border-radius:2px; background:var(--gold)}
+  .cell p{font-size:14px; color:#3a2f25; line-height:1.7}
+  .cell p + p{margin-top:7px}
+  .cell ul{margin:4px 0 0 18px; font-size:13.5px; color:#3a2f25}
+  .cell ul li{margin-bottom:5px}
+  .hl{color:var(--lead); font-weight:700}
+  .kpi{display:flex; gap:14px; flex-wrap:wrap; margin-top:4px}
+  .kpi .k{flex:1; min-width:120px; background:#FBF7F0; border:1px solid var(--border);
+    border-radius:10px; padding:10px 12px}
+  .kpi .k .n{font-size:20px; font-weight:800; color:var(--lead)}
+  .kpi .k .l{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+  /* 课程矩阵两列 */
+  .matrix{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:4px}
+  .m{border-radius:10px; padding:13px 14px}
+  .m.lead{background:#FBEDE2; border:1px solid #F0CFB8}
+  .m.coach{background:#F1ECF6; border:1px solid #D9C9EC}
+  .m .mt{font-weight:800; font-size:14.5px; margin-bottom:5px}
+  .m.lead .mt{color:var(--lead)} .m.coach .mt{color:var(--coach)}
+  .m .md{font-size:13px; color:#3a2f25; line-height:1.6}
+
+  .moat{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px}
+  .moat .x{background:#FBF7F0; border:1px solid var(--border); border-left:4px solid var(--primary);
+    border-radius:8px; padding:10px 12px; font-size:13px; line-height:1.6}
+  .moat .x b{color:var(--dark)}
+
+  /* 路线图 */
+  .road{display:flex; gap:8px; margin-top:6px; flex-wrap:wrap}
+  .road .r{flex:1; min-width:140px; background:#FBF7F0; border:1px solid var(--border);
+    border-radius:10px; padding:11px 12px}
+  .road .r .ph{font-size:12.5px; font-weight:800; color:var(--primary); letter-spacing:1px}
+  .road .r .t{font-size:14px; font-weight:800; color:var(--dark); margin:3px 0 4px}
+  .road .r .d{font-size:12.5px; color:var(--muted); line-height:1.55}
+
+  .cta{background:linear-gradient(135deg,#3A2B1E,#5A4129); color:#F5E9D8;
+    padding:18px 26px; text-align:center}
+  .cta .t{font-size:16px; font-weight:800; color:#FBF3E6}
+  .cta .d{font-size:13.5px; color:#E4D4BE; margin-top:6px}
+
+  footer{padding:12px 26px; font-size:12px; color:var(--muted); text-align:center;
+    border-top:1px solid var(--border); line-height:1.6}
+
+  @media(max-width:600px){
+    .grid{grid-template-columns:1fr}
+    .cell:nth-child(odd){border-right:none}
+    .matrix,.moat{grid-template-columns:1fr}
+    .top h1{font-size:21px}
+  }
+  @media print{
+    body{background:#fff; padding:0}
+    .sheet{box-shadow:none; border:none; border-radius:0; max-width:100%}
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <!-- 顶栏 + 信任背书前置 -->
+  <div class="top">
+    <div class="eyebrow">HUMAN DESIGN LEADERSHIP · 商业摘要</div>
+    <h1>人类图领导力 × 教练 课程矩阵</h1>
+    <div class="sub">把"能量类型 + 决策权威"做成领导力的底层操作系统</div>
+    <div class="badge">
+      <div class="b">设计者 <b>邓勤敏</b></div>
+      <div class="b">Toastmasters 深耕 <b>12 年</b></div>
+      <div class="b"><b>3×DTM</b>（全球＜1% 一次）</div>
+      <div class="b">人类图大师 · 领导力教练</div>
+    </div>
+  </div>
+
+  <!-- 一句话定位 -->
+  <div class="pitch">
+    🎯 <b>不是另一套领导力理论，而是让你活出"正确领导方式"的能量操作系统——并用量化结果证明它有效。</b>
+    以经典框架（CCL / 富兰克林柯维 / Toastmasters 式实践圈）保公信力，以人类图保差异化，形成"领导 → 教练"课程矩阵。
+  </div>
+
+  <div class="grid">
+
+    <!-- 市场机会 -->
+    <div class="cell">
+      <h2>市场机会</h2>
+      <div class="kpi">
+        <div class="k"><div class="n">$810亿</div><div class="l">领导力发展市场 2027 预计</div></div>
+        <div class="k"><div class="n">71%</div><div class="l">领导者压力更大（DDI 2025）</div></div>
+        <div class="k"><div class="n">40%</div><div class="l">因倦怠考虑离职</div></div>
+        <div class="k"><div class="n">29%</div><div class="l">员工信任上司</div></div>
+      </div>
+      <p style="margin-top:10px">头部品牌都做"行为 / 能力"，<span class="hl">没有任何一家从"能量类型 + 决策权威"讲领导力</span>——这是蓝海占位。</p>
+    </div>
+
+    <!-- 解决方案 -->
+    <div class="cell">
+      <h2>解决方案：课程矩阵</h2>
+      <div class="matrix">
+        <div class="m lead"><div class="mt">🟠 HD-Leadership 领导力</div>
+          <div class="md">第一人称 · 带出团队合力。决策矩阵、按类型授权、抗倦怠节奏、团队角色排布。</div></div>
+        <div class="m coach"><div class="mt">🟤 HD-Coaching 教练</div>
+          <div class="md">第三人称 · 陪你找到自己。ICF 八项能力 + HD-COACH 七步模型，可收费接个案。</div></div>
+      </div>
+      <p style="margin-top:9px">两门课<b>受众几乎不重叠</b>，却共享同一批用户的全生命周期价值。</p>
+    </div>
+
+    <!-- 护城河 -->
+    <div class="cell full">
+      <h2>差异化护城河</h2>
+      <div class="moat">
+        <div class="x"><b>① 能量型领导力（蓝海）</b>：从"类型 / 权威 / 剖像"出发，头部品牌均无此维度。</div>
+        <div class="x"><b>② 训练有效性可量化</b>：测评→具身练习→70-20-10 真实实验→问责陪伴→混合交付→追踪。</div>
+        <div class="x"><b>③ Toastmasters 式实践圈</b>：高频、同伴、角色、认证、顶点项目，闭环留存 1–2 年。</div>
+        <div class="x"><b>④ 设计者信任资产</b>：12 年 / 3×DTM，来自全球最大领导力训练体系之一的顶级内部实践者。</div>
+      </div>
+    </div>
+
+    <!-- 商业模式 -->
+    <div class="cell">
+      <h2>商业模式</h2>
+      <ul>
+        <li><span class="hl">认证课程费</span>：HD-L 四级 + HD-C（HDCC）分级收费</li>
+        <li><span class="hl">企业内训 / 工作坊</span>：以"抗倦怠 + 决策力 + 真实领导"三支点切入</li>
+        <li><span class="hl">教练网络续费</span>：认证教练社群订阅 + 个案抽成（类 LMI 飞轮）</li>
+        <li><span class="hl">高阶营 / 复训</span>：深化模块与行业垂直版</li>
+      </ul>
+    </div>
+
+    <!-- 路线图 -->
+    <div class="cell">
+      <h2>落地路线图</h2>
+      <div class="road">
+        <div class="r"><div class="ph">M0–M2</div><div class="t">MVP 验证</div><div class="d">小班跑数据、出图测评、收集有效性证据</div></div>
+        <div class="r"><div class="ph">M3–M6</div><div class="t">HD-L 上线</div><div class="d">四级认证 + 实践圈，企业试点</div></div>
+        <div class="r"><div class="ph">M7–M12</div><div class="t">HD-C 进阶</div><div class="d">课程矩阵成形，教练网络启动</div></div>
+      </div>
+    </div>
+
+    <!-- 信任背书 -->
+    <div class="cell full">
+      <h2>信任背书（核心资产）</h2>
+      <p>设计者<b>邓勤敏</b>在 Toastmasters International 深耕 <b>12 年</b>、<b>3 次获 DTM（杰出会员）</b>——全球 <b>不到 1%</b> 会员能拿一次，3 次极罕见。这意味着课程的"训练闭环"不是纸上谈兵，而是来自地球上运行最久、验证最充分的领导力训练体系之一的<b>内部顶级实践者</b>。这是相比 LMI / CCL 等"外部采购框架"所不具备的独有壁垒。</p>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="t">合作方式：企业内训 · 认证课程代理 · 教练网络共建</div>
+    <div class="d">以小班结果数据说话，再放大——欢迎企业 HR / 培训机构 / 投资人洽谈。</div>
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图领导力 × 教练 · 商业摘要（1 页）</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>

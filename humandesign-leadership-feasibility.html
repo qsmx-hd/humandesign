@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力课程 · 可行性研究报告 · V9</title>
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --bg2:#FBF7F0;
+    --primary:#C4956A;
+    --primary-d:#A8764A;
+    --dark:#2D2118;
+    --muted:#6B5B4A;
+    --border:#E8DCC8;
+    --gold:#B8860B;
+    --card:#FFFFFF;
+    --shadow:0 2px 12px rgba(45,33,24,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--dark);
+    font-size:16px;line-height:1.85;
+    -webkit-text-size-adjust:100%;
+  }
+  /* ===== Top bar + hamburger drawer ===== */
+  #topbar{
+    position:sticky;top:0;z-index:999;
+    background:var(--dark);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;
+  }
+  #topbar .brand{font-size:16px;font-weight:700;letter-spacing:.5px;color:#fff}
+  #topbar .brand small{display:block;font-size:12px;font-weight:400;color:var(--primary);letter-spacing:1px;margin-top:2px}
+  #hamburger{
+    background:none;border:1px solid rgba(255,255,255,.35);
+    color:#fff;font-size:20px;line-height:1;
+    width:44px;height:44px;border-radius:8px;cursor:pointer;
+  }
+  #overlay{
+    position:fixed;inset:0;background:rgba(45,33,24,.5);
+    z-index:9998;opacity:0;visibility:hidden;transition:.25s;
+  }
+  #overlay.show{opacity:1;visibility:visible}
+  #drawer{
+    position:fixed;top:0;right:0;height:100dvh;width:80%;max-width:320px;
+    background:var(--bg2);z-index:9999;
+    transform:translateX(100%);transition:transform .28s ease;
+    box-shadow:-4px 0 24px rgba(45,33,24,.25);
+    display:flex;flex-direction:column;
+  }
+  #drawer.show{transform:translateX(0)}
+  #drawer .dh{
+    background:var(--dark);color:#fff;padding:16px;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  #drawer .dh b{font-size:15px}
+  #drawer .close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+  #drawer nav{padding:8px 0;overflow-y:auto}
+  #drawer nav a{
+    display:block;padding:14px 20px;color:var(--dark);
+    text-decoration:none;font-size:15px;border-bottom:1px solid var(--border);
+  }
+  #drawer nav a:active{background:var(--border)}
+  body.drawer-open nav#topbar{z-index:0 !important}
+  /* ===== Layout ===== */
+  .wrap{max-width:880px;margin:0 auto;padding:24px 18px 80px}
+  header.hero{
+    background:linear-gradient(135deg,var(--dark),#3d2c1f);
+    color:#fff;border-radius:16px;padding:34px 26px;margin-bottom:26px;
+    box-shadow:var(--shadow);text-align:center;
+  }
+  header.hero .kicker{color:var(--primary);font-size:13px;letter-spacing:2px;font-weight:600;display:inline-block}
+  header.hero h1{font-size:25px;line-height:1.35;margin:10px 0 14px;font-weight:800}
+  header.hero p{color:#e9ddcd;font-size:15px;line-height:1.7;margin:0 auto;max-width:64ch}
+  header.hero .tags{text-align:center}
+  .tag{display:inline-block;background:rgba(196,149,106,.22);color:var(--primary);
+    border:1px solid rgba(196,149,106,.5);padding:4px 12px;border-radius:999px;font-size:12.5px;margin:10px 6px 0 0}
+  section{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:24px 20px;margin-bottom:20px;box-shadow:var(--shadow);
+    scroll-margin-top:70px;
+  }
+  h2{font-size:20px;color:var(--dark);margin-bottom:6px;font-weight:800;
+    border-left:5px solid var(--primary);padding-left:12px;line-height:1.4}
+  h2 .en{display:block;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:1px;margin-top:3px}
+  h3{font-size:16px;color:var(--primary-d);margin:18px 0 8px;font-weight:700}
+  p{margin:10px 0;font-size:15px}
+  .lead{font-size:15.5px;color:var(--muted)}
+  ul,ol{margin:10px 0 10px 4px;padding-left:20px}
+  li{margin:7px 0;font-size:14.5px}
+  strong{color:var(--dark)}
+  .hl{background:linear-gradient(transparent 60%,rgba(196,149,106,.35) 0);font-weight:700}
+  /* cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:14px 0}
+  /* 4 卡 3+1 → 2×2（项目铁律：默认 3+1 形式一律改 2×2，详见 ~/.workbuddy/MEMORY.md）*/
+  .grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .card h4{font-size:15px;color:var(--primary-d);margin-bottom:6px}
+  .card p{font-size:13.5px;color:var(--muted);margin:0}
+  /* table */
+  .tbl-scroll{overflow-x:auto;margin:14px 0;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+  th,td{border:1px solid var(--border);padding:10px 11px;text-align:left;vertical-align:top}
+  th{background:var(--dark);color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+  tr:nth-child(even) td{background:#FBF7F0}
+  /* callout */
+  .note{background:rgba(184,134,11,.10);border-left:4px solid var(--gold);
+    padding:14px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:14.5px}
+  .note b{color:var(--gold)}
+  .verdict{background:var(--dark);color:#fff;border-radius:12px;padding:18px 20px;margin:14px 0}
+  .verdict b{color:var(--primary)}
+  /* model steps */
+  .model{display:flex;flex-direction:column;gap:0;margin:16px 0}
+  .model .step{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--border)}
+  .model .step:last-child{border-bottom:none}
+  .model .num{flex:0 0 38px;height:38px;border-radius:50%;background:var(--primary);
+    color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .model .stxt h4{font-size:15px;margin:0 0 4px;color:var(--dark)}
+  .model .stxt p{font-size:13.5px;margin:0;color:var(--muted)}
+  /* footer */
+  footer{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 10px 0;line-height:1.8}
+  .legend{font-size:12px;color:var(--muted);margin-top:6px}
+  @media(max-width:600px){
+    body{font-size:15.5px}
+    .wrap{padding:16px 12px 70px}
+    header.hero{padding:26px 18px}
+    header.hero h1{font-size:22px}
+    section{padding:20px 15px}
+    h2{font-size:18px}
+  }
+</style>
+</head>
+<body>
+
+<nav id="topbar">
+  <div class="brand">人类图领导力 · 可研报告<small>HUMAN DESIGN LEADERSHIP</small></div>
+  <button id="hamburger" aria-label="菜单">☰</button>
+</nav>
+
+<div id="overlay"></div>
+<aside id="drawer">
+  <div class="dh"><b>目录</b><button class="close" aria-label="关闭">✕</button></div>
+  <nav>
+    <a href="#summary">一、可行性结论</a>
+    <a href="#market">二、市场与痛点</a>
+    <a href="#top10">三、主要品牌（含 LMI / 中国市场）</a>
+    <a href="#tm">四、Toastmasters 模式借鉴</a>
+    <a href="#framework">五、人类图×领导力融合框架</a>
+    <a href="#points">六、七大结合点</a>
+    <a href="#effect">七、训练有效性设计</a>
+    <a href="#innovate">八、创新融合打法</a>
+    <a href="#curriculum">九、建议课程架构</a>
+    <a href="#biz">十、商业模式</a>
+    <a href="#risk">十一、风险与对策</a>
+    <a href="#roadmap">十二、落地路线图</a>
+    <a href="#vscoach">十三、与「人类图教练」课程的定位区分</a>
+    <a href="#yijing">十四、易经智慧与领导力训练体系</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">FEASIBILITY STUDY · 可行性研究报告</div>
+  <h1>把人类图做成领导力的<br>「底层操作系统」</h1>
+  <p>面向企业领导者与教练群体，以"能量类型 + 内在权威 + 真实领导"为核心差异化，融合全球成熟领导力训练体系的可行性论证。</p>
+  <div class="tags">
+    <span class="tag">能量型领导力（蓝海）</span>
+    <span class="tag">抗倦怠 / 决策力</span>
+    <span class="tag">规模化个性化</span>
+    <span class="tag">教练认证</span>
+  </div>
+</header>
+
+<!-- 一、结论 -->
+<section id="summary">
+  <h2>一、可行性结论<span class="en">EXECUTIVE SUMMARY</span></h2>
+  <p class="lead">结论先行：<span class="hl">可行，且具备明显的"蓝海"差异化空间</span>，但不宜以"人类图替代领导力训练"，而应以"成熟领导力框架为体、人类图为用（个性化与能量层）"的混合定位切入。</p>
+  <div class="verdict">
+    <p>✅ <b>市场窗口真实存在</b>：全球领导力发展市场 2027 年预计达 <b>810 亿美元</b>；同时 71% 领导者压力更大、40% 因倦怠考虑离职、仅 29% 员工信任上司——这是现有头部品牌尚未被充分解决的"能量与真实性"空白。</p>
+    <p>✅ <b>人类图提供稀缺维度</b>：现有十大品牌均基于"行为/能力/测评"，<b>没有任何一家从"能量类型 + 决策权威"讲领导力</b>。这是天然的差异点。</p>
+    <p>⚠️ <b>最大风险是科学公信力</b>：人类图缺乏同行评审实证。必须以"实践型自我觉察与能量框架"定位，配套自有结果数据，避免与头部研究型机构正面争夺"循证"心智。</p>
+    <p>🎯 <b>推荐路径</b>：先以 B2B 小班 + 教练试点跑出可量化结果，再以"认证体系 + 数字化 App"规模化。</p>
+  </div>
+</section>
+
+<!-- 二、市场 -->
+<section id="market">
+  <h2>二、市场与痛点<span class="en">MARKET & PAIN POINTS</span></h2>
+  <div class="grid grid-2x2">
+    <div class="card"><h4>市场规模</h4><p>全球领导力发展市场 2027 年预计达 <b>810 亿美元</b>（Future Market Insights / PRS）。头部三家（哈佛、卡内基、CCL）约占 55% 份额。</p></div>
+    <div class="card"><h4>领导者倦怠</h4><p>DDI《2025 全球领导力预测》：<b>71%</b> 领导者感到压力更大，<b>40%</b> 因倦怠考虑离职。</p></div>
+    <div class="card"><h4>信任危机</h4><p>仅 <b>29%</b> 员工信任自己的上司——领导者的"连接与真实"能力普遍缺位。</p></div>
+    <div class="card"><h4>行业趋势</h4><p>AI 教练、混合式交付、个性化、体验式、可量化结果，成为头部机构共同加码方向。</p></div>
+  </div>
+  <div class="note"><b>洞察：</b>现有头部品牌擅长"行为与能力"，却普遍不触及"能量可持续性"与"决策的内在机制"。而这两点，正是人类图最擅长的领域——这就是课程的切入点。</div>
+</section>
+
+<!-- 三、Top10 -->
+<section id="top10">
+  <h2>三、全球及中国主要领导力训练品牌（11家）<span class="en">TOP BRANDS · INCL. LMI</span></h2>
+  <p class="lead">综合 Vistage 2025 榜单、Training Industry「Top 20 Leadership Training Companies」、Future Market Insights、DDI 全球领导力预测、MindWire 2026、Entrepreneur Franchise 500、《企业家》特许经营榜等多源交叉验证。以下 11 家在独立来源中反复出现、公信力最强；其中 <b>LMI（领导管理国际）</b> 是中国市场最具存在感的外来品牌之一（与富兰克林柯维并列），原榜单因偏重欧美企业级供应商而漏列，特此补正。</p>
+  <div class="tbl-scroll">
+    <table>
+      <thead>
+        <tr><th>#</th><th>品牌（中文）</th><th>成立/总部</th><th>拳头产品 / 方法论</th><th>核心特色</th><th>最适合场景</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><b>CCL 创意领导力中心</b></td><td>1970 / 美国</td><td>LDP®、360°反馈、70-20-10 模型</td><td>研究驱动、测评严谨，服务过 2/3 财富 1000 强</td><td>大型企业高管发展与测评</td></tr>
+        <tr><td>2</td><td><b>卡内基训练 Dale Carnegie</b></td><td>1912 / 美国</td><td>戴尔·卡内基课程、沟通与人际关系</td><td>百年经典、自信与人际技能、覆盖 100+ 国</td><td>一线/中层沟通与影响力</td></tr>
+        <tr><td>3</td><td><b>富兰克林柯维 FranklinCovey</b></td><td>1997 / 美国</td><td>高效能人士的七个习惯、4DX、信任的速度</td><td>习惯养成、执行力、90% 财富 500 强采用</td><td>全员执行力与问责文化</td></tr>
+        <tr><td>4</td><td><b>LMI 领导管理国际</b></td><td>1966 / 美国德州</td><td>The Total Leader Solution®（EPP/EPL/EML/ESL 四门核心课）</td><td>教练式辅导、100% 定制、行为改变；连续 7 年（2020–2026）登《企业家》特许经营 500 强"培训项目"榜首；1998 入华</td><td>中高层领导者系统养成、可衡量行为改变</td></tr>
+        <tr><td>5</td><td><b>布兰佳 The Ken Blanchard</b></td><td>1979 / 美国</td><td>SLII® 情境领导</td><td>简单易记的管理框架、授权领导</td><td>管理者情境化带人</td></tr>
+        <tr><td>6</td><td><b>光辉国际 Korn Ferry</b></td><td>1969 / 美国</td><td>Leadership Architect、人才架构</td><td>端到端人才战略：测评+继任+猎头</td><td>大型组织人才体系</td></tr>
+        <tr><td>7</td><td><b>DDI 智睿咨询</b></td><td>1970 / 美国</td><td>全球领导力预测、行为测评</td><td>数据驱动、测评到行动、管线上万管理者</td><td>大规模梯队与继任</td></tr>
+        <tr><td>8</td><td><b>哈佛商学院高管教育</b></td><td>美国</td><td>案例教学法、AMP 高管项目</td><td>学术权威、品牌、校友网络</td><td>高管战略思维</td></tr>
+        <tr><td>9</td><td><b>BetterUp</b></td><td>2013 / 美国</td><td>AI 匹配教练平台</td><td>行为科学+人类教练+规模化、月订阅制</td><td>全员可负担的个性化教练</td></tr>
+        <tr><td>10</td><td><b>关键对话 Crucial Learning</b></td><td>美国</td><td>Crucial Conversations、关键影响力</td><td>对话与问责技能、福布斯 2000 近半采用</td><td>关键对话与问责文化</td></tr>
+        <tr><td>11</td><td><b>威尔逊学习 Wilson Learning</b></td><td>1965 / 美国</td><td>领导力与销售力、组织效能</td><td>50 国 30 语言、连续 16 年入选 Top 20</td><td>跨文化全球领导力部署</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="legend">注：Training Industry 年度「Top 20 Leadership Training Companies」是行业权威风向标；BetterUp 代表"技术驱动的教练平台"新势力，虽非传统训练机构，但其市场声量与方向性不可忽视。</p>
+  <div class="note"><b>中国市场视角（回应 LMI 之问）：</b>你身边以「富兰克林柯维 + LMI」最常见，这非常准确。LMI 采用<b>特许教练网络</b>模式（1966 年创立、90+ 国、30 种语言），在欧美"企业级供应商"榜单（如 Training Industry Top 20）中曝光度低于 CCL/DDI，但在中国扎根极深——1998 年入华、28 年历史、100+ 认证教练、累计辅导数万领导者、95% 客户复购。若面向中国企业客户，LMI 与富兰克林柯维应并列视为"第一梯队外来品牌"。本土强势品牌还包括：<b>行动教育、凯洛格 KeyLogic、AMA、企顾司 CEGOS、时代光华</b>等（据中国报告大厅《2025 企业管理培训品牌榜》）。</div>
+  <div class="note"><b>对标启示：</b>头部品牌的共同成功要素是——<b>① 可量化结果 ② 行为科学基础 ③ 能力真实迁移 ④ 按层级定制 ⑤ 持续陪伴</b>。本课程若要有效，必须在这五点上达标，而非仅靠"人类图很神奇"。</div>
+</section>
+
+<!-- 五、框架 -->
+<!-- 四、Toastmasters -->
+<section id="tm">
+  <h2>四、Toastmasters 模式借鉴<span class="en">THE TOASTMASTERS MODEL</span></h2>
+  <p class="lead">Toastmasters International（国际演讲会）是<b>全球规模最大的领导力训练组织（按会员人数计）</b>，却几乎不出现在 CCL / DDI / Training Industry 这类"企业级供应商"排行榜上。原因很简单：它走的是「社区协会 + 同伴互助」模式，不卖大班企业课。对你这门课而言，它恰恰是最值得拆解的"<span class="hl">有效性标本</span>"——更妙的是，你本人就是它的顶级实践者。</p>
+
+  <div class="grid grid-2x2">
+    <div class="card"><h4>创立与规模</h4><p>1924 年创立（Ralph C. Smedley，加州）。约 <b>27 万</b> 会员、<b>1.4 万+</b> 俱乐部、覆盖 <b>140+</b> 国家。</p></div>
+    <div class="card"><h4>学习体系</h4><p><b>Pathways</b> 数字化学习，含 Presentation Mastery 演讲精通、Dynamic Leadership 动态领导力等多条路径，每条 5 级（Level 1–5）。</p></div>
+    <div class="card"><h4>最高荣誉</h4><p><b>DTM（杰出会员）</b>——全球 <b>不到 1%</b> 会员能达成。需完成 2 条路径 + 俱乐部/大区干事任职 + 导师/教练 + 顶点项目。</p></div>
+    <div class="card"><h4>成本结构</h4><p>年费约 <b>45–100 美元</b>，志愿者运营，<b>ROI 极高</b>。这是它能规模化到 27 万人的底层原因。</p></div>
+  </div>
+
+  <div class="note"><b>为什么主流榜单看不到它？</b>它本质是「会员制非营利协会」，而非「企业供应商」，所以 Training Industry / Vistage 按"卖给企业的培训产品"排序时天然漏掉它。但若论<b>实际训练过的领导者绝对数量</b>，它远超任何一家商业机构——是名副其实的"隐形领导力巨头"。它和你身处的 LMI / 富兰克林柯维是<b>两种范式</b>：前者靠"同伴社群密度"，后者靠"特许教练网络"。</div>
+
+  <h3>Toastmasters 的 7 大"有效性机制" → 本课程的借鉴</h3>
+  <p>它之所以能让普通人坚持数年、真实长出领导力，靠的不是某套理论，而是一套<b>可复制的训练运营系统</b>。下表把这套系统逐条翻译成人类图课程的"借用点"：</p>
+  <table>
+    <thead><tr><th style="width:42%">Toastmasters 有效性机制</th><th>对人类图领导力课程的借鉴</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 高频刻意练习</b><br>每周例会，人人上台，真实"练手"而非听课</td><td>设 <span class="hl">「人类图实践圈」周例会</span>：按能量类型布置当周微练习（如投射者练"等待邀请"、显化者练"先告知"）。</td></tr>
+      <tr><td><b>② 角色即领导</b><br>当俱乐部干事 / 小区总监，在"做"中学领导</td><td>用人类图<b>类型分配圈内角色</b>：显化者发起、投射者顾问、生成者执行、反映者季度复盘——把"类型"直接变成团队分工实验。</td></tr>
+      <tr><td><b>③ 同伴即时反馈</b><br>每次演讲都有评估员给结构性反馈</td><td>建立 <span class="hl">「类型觉察互评」</span>机制：同伴按你的设计图指出"你今天是否偏离了自身策略/权威"。</td></tr>
+      <tr><td><b>④ 渐进式徽章 / 认证</b><br>Level 1–5、数字证书、雇主信、DTM 顶点</td><td>设 <b>HD-L 四级认证</b>（启航→探路→显化→大师）+ <span class="hl">DTM 式毕业项目</span>，用"可见进度"留住人 1–2 年。</td></tr>
+      <tr><td><b>⑤ 安全实验室 + 社群问责</b><br>俱乐部是零风险练习场，同伴既托底又push</td><td>低成本、高黏性的<b>"实验室社群"</b>：比 BetterUp 教练便宜，比企业大班课有温度。</td></tr>
+      <tr><td><b>⑥ 自定节奏但结构化</b><br>Pathways 给路径，你按自己速度走</td><td><b>个性化路径 + 统一里程碑</b>：人类图定"练什么"，统一节奏保"练到位"。</td></tr>
+      <tr><td><b>⑦ 顶点项目</b><br>DTM Project：自主设计并落地一个重大项目</td><td>学员在<b>自家组织</b>落地一个"设计驱动"领导实验，并用量化指标交卷——直接证明"图有用"。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note"><b>HD × TM = 本课的"个性化实验室"模式（最大创新）：</b><br>
+  ① Toastmasters 给了「<b>怎么做才有效</b>」的运营骨架（高频、同伴、角色、认证、顶点项目）；<br>
+  ② 人类图给了「<b>练什么才对每个人有效</b>」的个性化内核（类型 / 权威 / 剖像）；<br>
+  ③ 传统领导力课 + TM 都缺"按个人能量设计"；纯人类图圈又缺"结构化训练闭环"。<br>
+  <b>两者结合 = 既有效、又个性化，且成本可控、可规模化</b>——这正是头部品牌都没占的位置。</div>
+
+  <div class="note"><b>信任资产（差异化卖点）：</b>本课设计者<b>在 Toastmasters 深耕 12 年、3 次获 DTM</b>——全球不到 1% 会员能拿一次。这意味着课程的"训练闭环"不是纸上谈兵，而是来自地球上运行最久、验证最充分的领导力训练体系之一的<b>内部顶级实践者</b>。这是相比 LMI / CCL 等"外部采购框架"所不具备的独有信任背书，应在品牌叙事中前置。</div>
+</section>
+
+<section id="framework">
+  <h2>五、人类图×领导力 融合框架<span class="en">INTEGRATION FRAMEWORK</span></h2>
+  <p>人类图（Human Design）用一张"出生设计图"呈现一个人的<span class="hl">能量类型、决策权威、人格剖像、中心定义状态与天赋主题</span>。把它映射到领导力，相当于给每位领导者一份"出厂说明书"。</p>
+  <h3>人类图核心变量 → 领导力学含义</h3>
+  <div class="grid">
+    <div class="card"><h4>类型 Type（5种）</h4><p>显示者 / 生产者 / 显化生产者 / 投射者 / 反映者——决定领导能量节奏与正确行动方式。</p></div>
+    <div class="card"><h4>策略 Strategy</h4><p>告知 / 回应 / 等待邀请 / 等待月相——领导者的"正确触发键"。</p></div>
+    <div class="card"><h4>内在权威 Authority</h4><p>情绪 / 荐骨 / 脾 / 自我 / G中心等——压力下做对决定的内在机制。</p></div>
+    <div class="card"><h4>剖像 Profile（12种）</h4><p>如 2/4、5/1——领导人格与被团队"投射"的方式。</p></div>
+    <div class="card"><h4>定义/空白中心</h4><p>定义=稳定特质；空白=被制约处，也是智慧来源（观察而非吸收）。</p></div>
+    <div class="card"><h4>非我主题 Not-Self</h4><p>愤怒/挫败/苦涩/失望——偏离设计时的"倦怠信号灯"。</p></div>
+    <div class="card"><h4>闸门 / 通道</h4><p>具体天赋与决策主题，用于团队天赋排布。</p></div>
+    <div class="card"><h4>变量 Variables</h4><p>信息接收偏好（环境/视角/动机/认知）——个性化教练的依据。</p></div>
+  </div>
+</section>
+
+<!-- 六、结合点 -->
+<section id="points">
+  <h2>六、七大结合点<span class="en">SEVEN INTEGRATION POINTS</span></h2>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>人类图维度</th><th>对应领导力学</th><th>训练切入点</th></tr></thead>
+      <tbody>
+        <tr><td><b>类型 Type</b></td><td>领导风格 / 能量管理</td><td>"你的领导操作系统"——别让生产者硬学显示者，先活对自己的节奏</td></tr>
+        <tr><td><b>策略 Strategy</b></td><td>决策触发 / 行动节奏</td><td>何时发起、何时回应、何时等待邀请——减少"用力过猛"与"错位行动"</td></tr>
+        <tr><td><b>内在权威 Authority</b></td><td>决策质量</td><td>压力下"正确决策机制"训练——直接提升关键决策质量</td></tr>
+        <tr><td><b>剖像 Profile</b></td><td>领导人格与被感知</td><td>真实领导力呈现：你如何被团队看见、如何发挥天然影响力</td></tr>
+        <tr><td><b>定义/空白中心</b></td><td>优势区 / 盲点</td><td>把空白中心从"被制约"转为"智慧"——读懂他人情绪不等于自己有情绪波</td></tr>
+        <tr><td><b>非我主题 Not-Self</b></td><td>倦怠 / 毒性模式</td><td>抗倦怠与状态觉察——把"愤怒/挫败/苦涩"当作可识别的预警信号</td></tr>
+        <tr><td><b>变量 Variables</b></td><td>信息接收偏好</td><td>个性化教练：用对方最能接收信息的方式给反馈</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 七、有效性 -->
+<section id="effect">
+  <h2>七、训练有效性设计<span class="en">TRAINING EFFECTIVENESS</span></h2>
+  <p class="lead">"强调训练的有效性"是本课程能否立足的关键。借鉴头部品牌的成功要素，并叠加人类图的具身（embodied）特性：</p>
+  <div class="model">
+    <div class="step"><div class="num">1</div><div class="stxt"><h4>基线测评</h4><p>每人生成人类图 + 360° / 能量与倦怠基线，输出个体化《领导设计与发展计划》。对标 MindWire「先搞清人是如何被"接线"的」。</p></div></div>
+    <div class="step"><div class="num">2</div><div class="stxt"><h4>体验式 / 具身练习</h4><p>人类图是"身体本位"的——用身体扫描、决策实验、能量审计让学习"长进身体"，比纯认知模型更黏。</p></div></div>
+    <div class="step"><div class="num">3</div><div class="stxt"><h4>70-20-10 真实工作实验</h4><p>两次工作坊之间布置"本周只从荐骨回应决策""作为投射者，先等邀请再给建议"等实战任务。</p></div></div>
+    <div class="step"><div class="num">4</div><div class="stxt"><h4>问责与陪伴</h4><p>小班同伴组（类 Vistage 私董会）+ 教练，设置目标与复盘节点，确保"学了能用"。</p></div></div>
+    <div class="step"><div class="num">5</div><div class="stxt"><h4>混合交付</h4><p>工作坊 + App 每日微练习 + 教练，呼应行业"混合式 / AI 陪伴"趋势。</p></div></div>
+    <div class="step"><div class="num">6</div><div class="stxt"><h4>量化追踪</h4><p>前/中/后测量：决策质量、非我主题出现频率、团队信任度，用数据证明"图真的有用"。</p></div></div>
+    <div class="step"><div class="num">7</div><div class="stxt"><h4>认证体系</h4><p>建立"人类图领导力教练"认证，保证交付质量、形成口碑与复购飞轮。</p></div></div>
+  </div>
+</section>
+
+<!-- 八、创新 -->
+<section id="innovate">
+  <h2>八、创新融合打法<span class="en">INNOVATION ANGLES</span></h2>
+  <div class="grid">
+    <div class="card"><h4>① 能量型领导力（蓝海）</h4><p>没有头部品牌从"能量类型"讲领导力。这是独一无二的心智占位。</p></div>
+    <div class="card"><h4>② 人类图作"操作系统"</h4><p>叠加成熟模型：SLII 情境领导 + 人类图类型、七个习惯 + 内在权威、关键对话 + 空白中心触发。</p></div>
+    <div class="card"><h4>③ 规模化个性化</h4><p>出生数据一键出图 → 千人千面的发展计划，对应行业对"按人定制"的强烈需求。</p></div>
+    <div class="card"><h4>④ 决策力训练</h4><p>把"内在权威"做成可练习的决策机制，直击高管最贵的决策质量。</p></div>
+    <div class="card"><h4>⑤ 抗倦怠领导力</h4><p>直接变现于 40% 领导者倦怠离职的庞大痛点，B2B 买单意愿强。</p></div>
+    <div class="card"><h4>⑥ 组织级"设计地图"</h4><p>团队类型排布与授权建议——可扩展为独立的组织诊断 B2B 产品。</p></div>
+    <div class="card"><h4>⑦ 新职业认证</h4><p>创造"人类图领导力教练"新职业，认证费 + 续证形成持续收入。</p></div>
+    <div class="card"><h4>⑧ 数字化陪伴</h4><p>类 BetterUp 的 App + AI 教练，把单次工作坊变成持续订阅。</p></div>
+  </div>
+</section>
+
+<!-- 九、课程 -->
+<section id="curriculum">
+  <h2>九、建议课程架构<span class="en">PROPOSED CURRICULUM</span></h2>
+  <div class="model">
+    <div class="step"><div class="num">0</div><div class="stxt"><h4>启航测评 · 你的领导设计图</h4><p>出图 + 基线测评，建立个体化发展计划与小组契约。</p></div></div>
+    <div class="step"><div class="num">1</div><div class="stxt"><h4>自我觉察 · 类型与策略</h4><p>读懂你的能量类型与正确行动节奏，停止"错位努力"。</p></div></div>
+    <div class="step"><div class="num">2</div><div class="stxt"><h4>决策力 · 活出内在权威</h4><p>在压力与不确定性中，用正确机制做高质量决策。</p></div></div>
+    <div class="step"><div class="num">3</div><div class="stxt"><h4>精力与抗倦怠 · 走出非我</h4><p>识别非我主题预警信号，建立可持续的领导精力系统。</p></div></div>
+    <div class="step"><div class="num">4</div><div class="stxt"><h4>真实领导力 · 剖像与中心</h4><p>发挥天然影响力，用"被感知方式"优化领导呈现。</p></div></div>
+    <div class="step"><div class="num">5</div><div class="stxt"><h4>团队设计 · 读懂团队的图</h4><p>类型排布、授权节奏、沟通偏好——把图用在带人上。</p></div></div>
+    <div class="step"><div class="num">6</div><div class="stxt"><h4>融合实战 · HD × 经典模型</h4><p>与情境领导 / 七个习惯 / 关键对话对接，输出个人行动计划。</p></div></div>
+    <div class="step"><div class="num">7</div><div class="stxt"><h4>教练与复盘</h4><p>同伴教练 + 教练复盘，固化行为改变。</p></div></div>
+  </div>
+</section>
+
+<!-- 十、商业 -->
+<section id="biz">
+  <h2>十、商业模式<span class="en">BUSINESS MODEL</span></h2>
+  <div class="grid grid-2x2">
+    <div class="card"><h4>B2B 企业项目</h4><p>高管/中层小班工作坊、组织级"设计地图"诊断，客单价高、背书强。</p></div>
+    <div class="card"><h4>B2C 公开课</h4><p>公众工作坊 + 深度营，低门槛引流、建立口碑。</p></div>
+    <div class="card"><h4>数字化订阅</h4><p>App + AI 教练，把单次交付转为持续收入（对标 BetterUp）。</p></div>
+    <div class="card"><h4>教练认证</h4><p>"人类图领导力教练"认证与年审，形成飞轮与分销网络。</p></div>
+  </div>
+  <div class="note"><b>分层路径：</b>入门工作坊（引流）→ 深度实操营（转化）→ 教练认证（规模化 & 复购）→ 企业授权许可（B2B 放大）。</div>
+
+  <h3>对照标杆：LMI 的「特许经营飞轮」——本课最该抄的飞轮结构</h3>
+  <div class="note"><b>先澄清一个常见误会：特许经营 ≠ 直销/传销。</b>特许经营（Franchising）是授权方把「品牌 + 成熟商业模式 + IP」许可给被授权方，后者在自己地盘<b>独立经营一家本地企业</b>、向企业客户卖服务赚钱，再向总部交加盟费 + royalty；直销/多层营销（MLM，如安利、玫琳凯）是个人销售代表直接向消费者卖货、靠层级返利抽成。LMI 是 B2B 培训授权网络，不是发展下线卖货。<br><b>另注口径（重要更正）：</b>LMI 在《企业家》Franchise 500 官方归类于 <b>「Business Services 商业服务」类、综合榜整体约 #215</b>（2026 数据：总投资约 $20,000、加盟费 $15,000、497 家加盟点、royalty 6%、合同 5 年）。它对外宣传的「连续 7 年 Training Programs 榜首」是其基于 Entrepreneur「Business Training Programs」子类<b>自行宣称的荣誉</b>，并非该榜单当前公开的独立子类排名——因此「培训类第一」是<b>品牌话术</b>，请勿等同于综合榜或官方子类冠军。Franchise 500 综合榜（2026 #1 Jersey Mike's、#10 McDonald's）由餐饮 / 零售 / 服务主导，与「领导力训练」不在同一赛道。</div>
+  <div class="grid grid-2x2">
+    <div class="card"><h4>加盟结构</h4><p>1966 年 Paul J. Meyer 创立，<b>400+ 加盟点</b>、区域独家经营权。初始加盟费约 <b>$15,000</b>，总投资 $20k–$27.5k（可家庭办公 / 兼职），<b>royalty 6%</b>，合同期 5 年可续。</p></div>
+    <div class="card"><h4>加盟商干什么</h4><p>用 LMI「多感官」课程系统（EPP 有效个人生产力 / EPL 有效自我领导 / EML 有效激励式领导 / ESL 有效战略领导）去企业做陪练式训练；总部给 40h 培训 + 导师 + 专有软件 + 获客方法。</p></div>
+    <div class="card"><h4>飞轮怎么转</h4><p>低门槛加盟 → 加盟商替总部承担获客、去企业卖 B2B 培训 → 总部收 6% royalty + IP 授权 → 客户有 measurable 结果、<b>复售率 &gt;50%</b> → 加盟商赚钱扩区 → 网络越密、总部越值钱。</p></div>
+    <div class="card"><h4>与麦当劳同构</h4><p>麦当劳不靠直营餐厅赚钱，靠品牌授权 + 抽成；LMI 不靠总部顾问飞到企业做项目，靠 IP 授权 + royalty 躺着收租。<b>把获客成本甩给本地节点，总部轻资产规模化。</b></p></div>
+  </div>
+  <div class="note hl"><b>对你的可借鉴点：</b>你做 HD-L / HD-C 认证课程（IP 在总部）→ 认证出的教练 / 内训师成为你的<b>本地合作节点</b>，去各自企业客户交付 → 你收认证费 + 教材 / IP 授权 + 网络续费（类 6% royalty）→ 他们拿「可收费接个案 / 企业内训」身份赚钱，同时替你完成市场下沉与获客。这比 CCL / DDI 那种「总部顾问飞企业做项目」轻得多、可规模化得多，且与你报告里的「教练认证体系 + 实践圈」天然同构。</div>
+</section>
+
+<!-- 十一、风险 -->
+<section id="risk">
+  <h2>十一、风险与对策<span class="en">RISKS & MITIGATION</span></h2>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>风险</th><th>说明</th><th>对策</th></tr></thead>
+      <tbody>
+        <tr><td><b>科学公信力</b></td><td>人类图源于 1987 年灵性体系，缺同行评审实证，易被贴"不严谨"标签</td><td>定位为"实践型自我觉察与能量框架"；与研究者合作；自建结果数据库</td></tr>
+        <tr><td><b>交付质量参差</b></td><td>人类图解读水平良莠不齐，误读易引发误导</td><td>严格教练认证 + 督导 + 案例复盘，把控交付标准</td></tr>
+        <tr><td><b>市场教育成本</b></td><td>企业 L&D 对企业图认知低，需从"能量/决策/抗倦怠"切入而非直接讲图</td><td>用痛点语言（倦怠、决策、信任）包装，而非玄学语言</td></tr>
+        <tr><td><b>合规与边界</b></td><td>不得作医学/诊断/就业歧视用途</td><td>明确"发展工具非测评甄别"；出具使用伦理与边界声明</td></tr>
+        <tr><td><b>头部挤压</b></td><td>CCL/DDI 等具品牌、规模与数据优势</td><td>差异化蓝海（能量层），不与研究型机构正面争夺"循证"心智</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 十二、路线图 -->
+<section id="roadmap">
+  <h2>十二、落地路线图<span class="en">ROADMAP</span></h2>
+  <div class="model">
+    <div class="step"><div class="num">1</div><div class="stxt"><h4>阶段一 · 试点验证（0–6月）</h4><p>招募 2–3 家企业小班 + 公开体验课，跑通课程与交付，收集前/后测量数据。</p></div></div>
+    <div class="step"><div class="num">2</div><div class="stxt"><h4>阶段二 · 打磨与认证（6–12月）</h4><p>基于数据迭代课程，建立教练认证与督导体系，沉淀案例与白皮书。</p></div></div>
+    <div class="step"><div class="num">3</div><div class="stxt"><h4>阶段三 · 数字化与规模化（12–24月）</h4><p>上线 App + AI 陪伴，拓展企业 B2B 与认证分销，形成飞轮。</p></div></div>
+  </div>
+  <div class="verdict">
+    <p>📌 <b>一句话定位：</b>"不是另一套领导力理论，而是让你活出自己正确领导方式的能量操作系统——并用量化结果证明它有效。"</p>
+    <p>📌 <b>给邓勤敏的建议：</b>以"抗倦怠 + 决策力 + 真实领导"三支点切入企业市场，用经典框架保公信力、用人类图保差异化，先用小班数据说话，再放大。</p>
+  </div>
+</section>
+
+<section id="vscoach">
+  <h2>十三、与「人类图教练」课程的定位区分<span class="en">HD-COACHING vs HD-LEADERSHIP</span></h2>
+  <p class="lead">2026-07 我们已设计过《人类图教练课程》（<code>hd-coaching-course.html</code>，已完成至 V4）：融合 <b>ICF 八项核心能力 + 人类图</b>，六大模块 + 四级认证（HDCC-F/P/A/M），招牌方法 <b>HD-COACH 七步对话模型</b>；其 L4 / 模块六（BG5 商业教练）已覆盖"组织动力、团队教练、领导力发展、360° 评估、合伙人匹配"。<br>两门课若不做区分，会互相抢受众、稀释品牌。本章给出"咬死<b>姿态与主语</b>、而非内容"的区分框架——结论是：<span class="hl">辨识度足够，且能反手做成升学导流</span>。</p>
+
+  <h3>一、教练技术 vs 领导力：本体就不同</h3>
+  <p>两者常被混为一谈，是因为现代领导力包含"教练式领导"（Goleman 教练型风格、情境领导）。但<b>本体清晰</b>：教练是一种<b>关系姿态</b>（facilitation，激发客户自己的答案）；领导是一种<b>影响功能</b>（mobilization，动员一群人朝目标前进）。你可以教练式地领导，但你不能在领导时完全教练式——有些决定必须你拍板、对结果负责。</p>
+  <table>
+    <thead><tr><th style="width:22%">维度</th><th>教练技术 Coaching</th><th>领导力 Leadership</th></tr></thead>
+    <tbody>
+      <tr><td><b>本质</b></td><td>通过对话伙伴关系 + 提问，<b>激发客户自己的觉察与行动</b>；教练是"过程"专家，不越界做客户领域专家</td><td>通过方向与影响，<b>动员一群人朝共同目标前进</b>；是一种功能/责任，不是雇来的角色</td></tr>
+      <tr><td><b>核心姿态</b></td><td><span class="hl">非指导</span>：不替客户给答案，客户是自己问题的专家</td><td><span class="hl">可指导</span>：该拍板拍板、该给方向给方向、对结果负责</td></tr>
+      <tr><td><b>作用单位</b></td><td>主要<b>个体</b>（1:1）</td><td><b>群体 / 组织</b></td></tr>
+      <tr><td><b>交付物</b></td><td>客户的清晰、承诺、行为改变</td><td>团队绩效、文化、结果</td></tr>
+      <tr><td><b>时间性</b></td><td>常围绕目标 / 转折，episodic（阶段性）</td><td>持续、系统性</td></tr>
+    </tbody>
+  </table>
+
+  <h3>二、两门课的辨识度：三轴拆法</h3>
+  <p>内容层面两门课都用到"类型 / 权威 / 剖像"，真正的辨识度来自<b>主语与姿态</b>。下表把两门课沿七个维度拉开：</p>
+  <table>
+    <thead><tr><th style="width:18%">维度</th><th>人类图教练课程（HD-Coaching）</th><th>人类图领导力课程（HD-Leadership）</th></tr></thead>
+    <tbody>
+      <tr><td><b>主语 / 视角</b></td><td><b>第三人称</b>：我作为教练，服务"他"的客户</td><td><b>第一人称</b>：我作为领导者，经营"我"的团队</td></tr>
+      <tr><td><b>给不给答案</b></td><td><b>不给</b>——提问、陪伴，陪客户自己走出来</td><td><b>给</b>——做决策、定方向、对结果负责</td></tr>
+      <tr><td><b>改变单位</b></td><td>个体觉察与转化</td><td>团队 / 组织绩效与合力</td></tr>
+      <tr><td><b>人类图用法</b></td><td>把图当"<b>客户的地图</b>"，教练陪走</td><td>把图当"<b>自己和团队的操作系统</b>"，用来带人</td></tr>
+      <tr><td><b>受众身份</b></td><td>想助人 / 已是教练、咨询师、解读师、OD 顾问</td><td>在带人、有团队的管理者 / 创业者 / 团队长</td></tr>
+      <tr><td><b>出口认证</b></td><td>人类图教练（HDCC 四级，可收费接个案）</td><td>更符合设计的高效领导者（HD-L 四级 + 实践圈）</td></tr>
+      <tr><td><b>训练形态</b></td><td>1:1 督导、个案演练、毕业案例分析</td><td>实践圈 / 团队实验室（Toastmasters 式）、组织设计项目</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note"><b>辨识度最强的一句话区分：</b><br>
+  🟤 <b>HD 教练 =「向内 · 陪你找到自己」</b>（非指导、1:1、个体转化）<br>
+  🟠 <b>HD 领导力 =「向外 · 带出团队合力」</b>（指导、团队、绩效结果）<br>
+  一个 HR 想转型做教练 → 上教练课；一个部门经理想带好团队 → 上领导力课。<b>受众几乎不重叠</b>，这是最硬的辨识度。</div>
+
+  <h3>三、必须处理的"内容重叠"——BG5 / 团队模块</h3>
+  <p>教练课 L4 / BG5 已碰"团队 / 领导力发展"，若与领导力课打架会自相残杀。三条边界即可干净划界：</p>
+  <div class="grid">
+    <div class="card"><h4>① 领导力课只做"应用层"</h4><p>不重教 BG5 / OC16 机制（那是教练课地盘），而是<b>假设领导者已自知其设计</b>，聚焦决策矩阵、按类型授权、按类型设计会议、抗倦怠节奏、团队角色排布。</p></div>
+    <div class="card"><h4>② 教练课 BG5 标注"顾问视角"</h4><p>教练课的 BG5 模块明确标注为<b>"以教练 / 顾问身份服务组织"</b>——与"领导者第一人称经营"区分开，视角不同，内容不冲突。</p></div>
+    <div class="card"><h4>③ 设计成互补 + 进阶</h4><p>管理者先上 HD-Leadership 带好团队；想转型做教练 / 顾问者，再上 HD-Coaching。两门课<b>互相导流而非互抢</b>。</p></div>
+  </div>
+
+  <h3>四、互补升学路径（让两门课互相导流）</h3>
+  <div class="note">📈 <b>「领导 → 教练」升学 / 转职路径：</b><br>
+  ① <b>入口管理者</b>：先修 HD-Leadership（带好现有团队、活出自身设计）；<br>
+  ② <b>想进阶者</b>：若想"助人 / 对外收费"，续修 HD-Coaching（把带人经验转化为教练能力，ICF 八项能力 + HD-COACH 模型）；<br>
+  ③ <b>毕业出口</b>：HD-Leadership 出"高效领导者"，HD-Coaching 出"可收费人类图教练"——两条认证链独立、数据互通，形成<b>课程矩阵而非两门孤立课</b>。<br>
+  这样既守住辨识度，又把同一批用户<b>生命周期价值</b>从一门课拉长到两门。</div>
+
+  <h3>五、品牌视觉辨识建议</h3>
+  <p>在统一棕金体系内，用<b>副色</b>强化两门课的视觉区隔（具体由你定）：</p>
+  <div class="grid">
+    <div class="card"><h4>🟤 HD 教练</h4><p>深棕沉静 + <b>金紫</b>点缀——传递"向内、陪伴、静水深流"的气质。</p></div>
+    <div class="card"><h4>🟠 HD 领导力</h4><p>赤陶 / <b>琥珀活力</b>——传递"向外、行动、带团队出结果"的能量。</p></div>
+  </div>
+  <div class="note"><b>小结：</b>两门课的辨识度<b>足够</b>，前提是咬死"姿态与主语"而非"内容"。教练课是第三人称、非指导、陪个体找自己；领导力课是第一人称、要拍板、带团队出绩效。内容上的 BG5 重叠，用"顾问视角 vs 经营者视角 + 领导力课只做应用层"即可干净划界，并反手做成"领导 → 教练"的升学导流。这正呼应本报告第三部分"成熟框架为体、人类图为用"的总策略。</div>
+</section>
+
+<section id="yijing">
+  <h2>十四、易经智慧与领导力训练体系<span class="en">I-CHING LEADERSHIP</span></h2>
+  <p class="lead">人类图目前只"借用"了易经的闸门意象，但易经作为一整套领导哲学——三易、阴阳、爻位、乾坤——在中文领导力训练圈本就是成熟赛道。本节把它的体系梳理出来，并给出与人类图的映射，作为课程<b>本土化的文化锚点</b>：面向中国企业市场时，易经是比人类图更接地气的认知桥。</p>
+
+  <h3>一、易经领导力在国内外都是成熟赛道（资料核实）</h3>
+  <div class="grid grid-2x2">
+    <div class="card"><h4>国内：国学领导力大赛道</h4><p>曾仕强《易经的奥秘 / 完全通》"中国式管理之父"；杨子《易经智慧与领导艺术》系统讲爻位 + 乾卦九五 + 坤卦二当家 + 阴阳五行八卦 + 象数理占；清华周易总裁班、北清国学董事长研习社、北大国学商道领袖班（学费 6.9 万）、北大领导力哲学班（8.8 万，含周易 + 阳明心学 + 老庄）。</p></div>
+    <div class="card"><h4>国际：英文易经领导课</h4><p>summitsedu《Mastering Leadership with I Ching Wisdom》（2 天，阴阳平衡 / 卦象解读 / 伦理领导 / 战略决策）；新加坡 Aventis《The Yijing Leadership Guide》（1 天，"7000 年智慧" + 战略思维与决策）。说明这套智慧已出海。</p></div>
+    <div class="card"><h4>付费意愿已被验证</h4><p>高校国学领导力班收费 7–9 万元、企业家趋之若鹜，证明"东方智慧 + 领导提升"在中国有强付费意愿与高端客群——这正是本课面向企业市场的天然入口。</p></div>
+    <div class="card"><h4>与人类图的差异</h4><p>现有易经领导力课多偏"义理讲授 + 案例"，少有"个性化 + 能量层"；这正是人类图能补的空缺——用 HD 做"每个人的易经"，把泛化智慧落到个人设计。</p></div>
+  </div>
+
+  <h3>二、易经领导力的核心体系（梳理）</h3>
+  <div class="grid">
+    <div class="card"><h4>① 三易（总纲）</h4><p><b>变易</b>（唯一不变是变化）、<b>简易</b>（化繁为简）、<b>不易</b>（把握不变本质）→ 领导者"持经达变"。</p></div>
+    <div class="card"><h4>② 阴阳平衡</h4><p>"一阴一阳之谓道，孤阴不生独阳不长" → 刚柔并济、进退有度、包容与决断并存、授权与把控同体。</p></div>
+    <div class="card"><h4>③ 爻位与领导层级（时位）</h4><p>初爻（新人·初难知）→ 二爻（主管·多誉）→ 三爻（经理·多凶）→ 四爻（副总·多惧，伴君如虎）→ 五爻（CEO·多功，九五之尊）→ 上爻（退居二线）。"在其位、谋其政"，看时与位做决策。</p></div>
+    <div class="card"><h4>④ 乾卦九五（一把手成长曲线）</h4><p>潜龙勿用 → 见龙在田 → 终日乾乾 → 或跃在渊 → 飞龙在天 → 亢龙有悔；用九"群龙无首"（授权而不控）。最经典的领导力进阶模型。</p></div>
+    <div class="card"><h4>⑤ 坤卦（二把手 / 承载执行）</h4><p>履霜坚冰至（防微杜渐）/ 直方大 / 无成有终 / 括囊（慎言授权）/ 黄裳（荣誉分享）/ 龙战于野 / 用六（持续）。厚德载物。</p></div>
+    <div class="card"><h4>⑥ 泰否 · 既济未济</h4><p>居安思危、变通、风险管理，"物极必反、盈不可久"。领导者在顺境预埋逆境的支点。</p></div>
+    <div class="card"><h4>⑦ 谦卦 · 修己安人</h4><p>"谦德吉顺"，领导者谦逊受益；管理本质 = 修己安人（曾仕强）。德位相当：有其德方居其位。</p></div>
+  </div>
+
+  <h3>三、易经 × 人类图 融合映射（本课创新点）</h3>
+  <table>
+    <thead><tr><th>易经领导力维度</th><th>人类图对应</th><th>融合用法</th></tr></thead>
+    <tbody>
+      <tr><td>乾（显化/君）· 坤（承载/臣）· 阴阳</td><td>类型 / 策略 / 权威</td><td>用卦性讲"你的领导本色"</td></tr>
+      <tr><td>爻位 / 时位</td><td>人生角色 Profile（如 1/3、2/4）</td><td>用爻位讲"你在组织的位与势"</td></tr>
+      <tr><td>持经达变 · 时中</td><td>内在权威做决策</td><td>用"时中"讲决策节奏与定力</td></tr>
+      <tr><td>亢龙有悔 · 盈不可久 · 物极必反</td><td>非我主题（苦涩/挫败/怨恨/失望）</td><td>用卦象讲"背离本性的代价"</td></tr>
+      <tr><td>阴阳平衡 · 刚柔并济</td><td>中心定义 / 能量管理</td><td>用阴阳讲精力与压力管理</td></tr>
+      <tr><td>少阴少阳 · 待时而动</td><td>反映者 / 投射者</td><td>用"时"讲等待、邀请与授权</td></tr>
+    </tbody>
+  </table>
+
+  <h3>四、加入课程设计的建议</h3>
+  <div class="note"><b>用易经做"桥"，用人类图做"体"。</b>不替代 HD，而是给 HD 一个中国人听得懂的语境：① 开场用<b>乾卦九五</b>讲领导成长曲线，比直接讲 HD 类型更接地气；② 用<b>爻位</b>对应"组织中的位子"，把 Profile / 类型翻译成"时位"语言；③ 用<b>亢龙有悔 / 盈不可久</b>对应"非我主题"，给学员文化共鸣的警示框架；④ 用<b>阴阳平衡</b>对应"中心能量管理"。这再次呼应本报告总策略"<b>成熟框架为体、人类图为用</b>"——只不过这次，"成熟框架"多了一个东方智慧之体。</div>
+  <div class="note hl"><b>差异化小结：</b>市面上易经领导力课讲"泛化的天道"，人类图领导力课讲"你个人的设计"；把两者合起来 = "<b>用东方智慧开篇、用你的基因收口</b>"——既有文化势能、又有个性化落点，是头部品牌（CCL / DDI / LMI）都没占的"东方 + 个性化"交叉位。</div>
+</section>
+
+<footer>
+  <div style="font-weight:700;color:var(--ink)">人类图领导力课程 · 可行性研究报告（V9）</div>
+  <div>© 2026 HD-Leadership</div>
+  <div style="opacity:.75">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var hb=document.getElementById('hamburger'),
+      dr=document.getElementById('drawer'),
+      ov=document.getElementById('overlay');
+  function open(){dr.classList.add('show');ov.classList.add('show');document.body.classList.add('drawer-open');}
+  function close(){dr.classList.remove('show');ov.classList.remove('show');document.body.classList.remove('drawer-open');}
+  try{hb.addEventListener('click',open);}catch(e){}
+  try{ov.addEventListener('click',close);}catch(e){}
+  try{document.querySelector('#drawer .close').addEventListener('click',close);}catch(e){}
+  try{dr.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});}catch(e){}
+  try{document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});}catch(e){}
+})();
+</script>
+</body>
+</html>

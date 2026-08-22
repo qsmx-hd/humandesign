@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 · 课程矩阵（M0–M10 速览）V1</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#2D2118; --border:#E8DCC8;
+    --amber:#C8702D; --amber-l:#F3D9BE; --gold:#B8893B; --gold-l:#F2E3C4;
+    --ink:#3A2E22; --muted:#7A6A58; --card:#FFFDF8;
+    --clay:#B5532A; --clay-l:#F1D3C2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;line-height:1.68;font-size:15px;-webkit-text-size-adjust:100%}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(45,33,24,.2)}
+  nav .brand{font-size:15px;font-weight:800}
+  nav .brand small{display:block;font-size:12px;font-weight:600;color:var(--amber-l);letter-spacing:.1em}
+  nav .menu{display:flex;gap:4px;flex-wrap:wrap}
+  nav .menu a{color:#EADFCD;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;white-space:nowrap}
+  nav .menu a:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav .hamb{display:none;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:20px;line-height:1;padding:6px 11px;cursor:pointer}
+  body.drawer-open nav{z-index:0 !important}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:330px;background:#2D2118;z-index:9999;transform:translateX(100%);transition:transform .28s ease;padding:64px 0 20px;overflow-y:auto}
+  body.drawer-open .drawer{transform:translateX(0)}
+  .drawer a{display:block;color:#F3E6D6;text-decoration:none;font-size:14.5px;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600}
+  .drawer a:hover{background:rgba(255,255,255,.08);color:#fff}
+  .drawer .closex{position:absolute;top:14px;right:16px;background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .28s}
+  body.drawer-open .mask{opacity:1;pointer-events:auto}
+
+  .wrap{max-width:840px;margin:0 auto;padding:22px 16px 48px}
+
+  header{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;border-radius:16px;padding:26px 22px;margin-bottom:18px;box-shadow:0 6px 20px rgba(45,33,24,.18);text-align:center}
+  header .kicker{font-size:12px;letter-spacing:.16em;color:var(--amber-l);font-weight:700;text-transform:uppercase}
+  header h1{font-size:24px;margin:8px 0 6px;line-height:1.32}
+  header p{font-size:13.5px;color:#EADFCD;max-width:64ch;margin:0 auto}
+  header .emph{display:inline-block;background:linear-gradient(135deg,var(--gold-l),var(--amber-l));color:var(--primary-d);font-weight:800;padding:7px 16px;border-radius:10px;margin-top:10px;font-size:13.5px;letter-spacing:.02em}
+
+  .note{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--amber);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  .note.amber{background:linear-gradient(135deg,#FFFDF8,var(--amber-l));border-left-color:var(--gold)}
+
+  /* 矩阵表（自适应） */
+  .mtable{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:13px}
+  .mtable th,.mtable td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  .mtable th{background:var(--primary-d);color:#fff;font-size:12.5px;font-weight:700}
+  .mtable tr:last-child td{border-bottom:none}
+  .mtable td .code{display:inline-block;background:var(--gold);color:var(--primary-d);font-weight:800;font-size:12px;padding:2px 10px;border-radius:8px;margin-right:6px}
+  .mtable td .lv{display:inline-block;background:var(--clay-l);color:var(--clay);font-weight:700;font-size:12px;padding:2px 9px;border-radius:10px;white-space:nowrap;margin-right:4px}
+  .mtable td .hd{display:inline-block;background:#efe6d6;color:var(--ink);font-size:12px;padding:2px 8px;border-radius:8px;margin-right:4px}
+  .mtable tbody tr:nth-child(even){background:#FBF6EE}
+
+  /* 模块分组 */
+  .lvl-bar{display:flex;align-items:center;gap:8px;margin:18px 0 8px;padding:10px 12px;background:linear-gradient(135deg,var(--clay-l),#FFFDF8);border-radius:10px;border:1px solid var(--border)}
+  .lvl-bar b{color:var(--primary-d);font-size:15px}
+  .lvl-bar small{color:var(--muted);font-size:12px}
+
+  /* 工具返回栏 */
+  .back{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:var(--primary-d);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:700;text-decoration:none;margin-bottom:18px}
+  .back:hover{background:var(--amber-l)}
+
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+  footer .v{color:var(--primary-d);font-weight:700}
+
+  @media(max-width:768px){
+    nav .hamb{display:block}
+    nav .menu{display:none}
+  }
+  @media(max-width:560px){
+    body{font-size:14.5px}
+    .wrap{padding:18px 12px 40px}
+    header h1{font-size:20px}
+    .mtable{display:block;overflow-x:auto;white-space:nowrap}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">人类图领导力 · 课程矩阵<small>COURSE MATRIX · M0–M10</small></div>
+  <div class="menu">
+    <a href="hd-leadership-course.html">← 返回课程蓝图</a>
+    <a href="humandesign-leadership-feasibility.html">可研报告</a>
+    <a href="yijing-leadership-map.html">易经领导力</a>
+    <a href="hd-chart-generator.html">出图测评</a>
+    <a href="hd-leadership-workbook.html">练习手册</a>
+    <a href="hd-tools-hub.html">更多工具</a>
+  </div>
+  <button class="hamb" id="hamb" aria-label="打开菜单">☰</button>
+</nav>
+<div class="drawer" id="drawer"><button class="closex" id="closex" aria-label="关闭">✕</button>
+  <a href="hd-leadership-course.html">← 返回课程蓝图</a>
+  <a href="humandesign-leadership-feasibility.html">可研报告</a>
+  <a href="yijing-leadership-map.html">易经领导力</a>
+  <a href="hd-chart-generator.html">出图测评</a>
+  <a href="hd-leadership-workbook.html">练习手册</a>
+  <a href="hd-tools-hub.html">更多工具</a>
+</div>
+<div class="mask" id="mask"></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Course Matrix · M0–M10 Overview</div>
+    <h1>《人类图领导力》课程矩阵速览</h1>
+    <p>M0 开篇 → M10 毕业项目，11 个模块横跨四级认证 HD-L1~L4。</p>
+    <p class="emph">每一行都对应「训练目标 + HD 知识点 + 领导力落点」。</p>
+  </header>
+
+  <div class="note amber">
+    <b>使用建议：</b>本速览是「蓝图第 3 节」的独立卡片化版本——可作为<b>招生彩页</b>、<b>学习路径地图</b>、<b>模块选择器</b>单独打印 / 转发，也可点上方链接切回蓝图看每个模块的"训练练习 · 时长 · 评估"完整设计。
+  </div>
+
+  <!-- M0 -->
+  <div class="lvl-bar"><b>开篇 · L0</b><small>— 文化入口（不碰 HD 术语，纯东方智慧降低陌生感）</small></div>
+  <table class="mtable">
+    <thead><tr><th style="width:8%">模块</th><th style="width:30%">主题</th><th style="width:14%">级别</th><th style="width:48%">核心落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">M0</span></td><td>易经智慧与领导之道</td><td><span class="lv">开篇</span></td><td>三易（变易 / 简易 / 不易）· 乾坤 · 时中 — 东方领导哲学入门；为后续"类型=你的领导本色"埋伏笔。</td></tr>
+    </tbody>
+  </table>
+
+  <!-- L1 -->
+  <div class="lvl-bar"><b>L1 · 启航</b><small>— 读懂自己的设计</small></div>
+  <table class="mtable">
+    <thead><tr><th style="width:8%">模块</th><th style="width:30%">主题</th><th style="width:14%">级别</th><th style="width:48%">核心落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">M1</span></td><td>认识你的设计：类型与策略</td><td><span class="lv">L1</span></td><td>5 种类型对应领导本色：显示者（发起破局）/ 生产者（执行持续）/ 显示生产者 / 投射者（顾问赋能）/ 反映者（感知节律）。</td></tr>
+      <tr><td><span class="code">M2</span></td><td>内在权威与决策力</td><td><span class="lv">L1</span></td><td>7 类权威（情绪 / 荐骨 / 脾 / 自我 / G / 环境 / 无权威）× 决策节奏；时中 / 持经达变 → 决策质量。</td></tr>
+      <tr><td><span class="code">M3</span></td><td>人生角色与领导位势</td><td><span class="lv">L1·L2</span></td><td>12 种 Profile（1/3 烈士 · 2/4 隐士 · 4/6 楷模 …）→ 你在组织的位与势。</td></tr>
+    </tbody>
+  </table>
+
+  <!-- L2 -->
+  <div class="lvl-bar"><b>L2 · 实践</b><small>— 带好你的团队</small></div>
+  <table class="mtable">
+    <thead><tr><th style="width:8%">模块</th><th style="width:30%">主题</th><th style="width:14%">级别</th><th style="width:48%">核心落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">M4</span></td><td>能量中心与领导盲区</td><td><span class="lv">L2</span></td><td>9 大中心定义 / 未定义 → 精力管理；未定义 G 中心 = 共情雷达也是耗竭点。</td></tr>
+      <tr><td><span class="code">M5</span></td><td>非我主题与抗倦怠</td><td><span class="lv">L2</span></td><td>显化者=愤怒 / 生成者=挫败 / 投射者=苦涩 / 反映者=失望；亢龙有悔 → 可持续领导节奏。</td></tr>
+      <tr><td><span class="code">M6</span></td><td>通道闸门与天赋领导</td><td><span class="lv">L2</span></td><td>36 条通道 / 闸门 → 领导优势变现；"各正性命"让对的人在对的位置发光。</td></tr>
+    </tbody>
+  </table>
+
+  <!-- L3 -->
+  <div class="lvl-bar"><b>L3 · 精通</b><small>— 团队设计地图</small></div>
+  <table class="mtable">
+    <thead><tr><th style="width:8%">模块</th><th style="width:30%">主题</th><th style="width:14%">级别</th><th style="width:48%">核心落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">M7</span></td><td>团队设计地图</td><td><span class="lv">L3</span></td><td>类型排布 · 按类型授权 · 会议设计 → 团队设计地图（企业端高客单钩子）。</td></tr>
+      <tr><td><span class="code">M8</span></td><td>组织设计与文化</td><td><span class="lv">L3</span></td><td>BG5 / OC16 轻量应用层（深讲留给教练课）—— 组织也有类型。</td></tr>
+      <tr><td><span class="code">M9</span></td><td>真实领导与仆人式领导</td><td><span class="lv">L3·L4</span></td><td>谦卦 · 修己安人 · 德位相当 → 真实 / 仆人式领导；六爻皆吉的谦是管理本质。</td></tr>
+    </tbody>
+  </table>
+
+  <!-- L4 -->
+  <div class="lvl-bar"><b>L4 · 导师</b><small>— 毕业项目 / 顶点交付</small></div>
+  <table class="mtable">
+    <thead><tr><th style="width:8%">模块</th><th style="width:30%">主题</th><th style="width:14%">级别</th><th style="width:48%">核心落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">M10</span></td><td>毕业项目：设计驱动领导实验</td><td><span class="lv">L4</span></td><td>8 周真实组织实验 + 路演答辩 + 同伴评审；前测 / 后测数据证明"图真的有用"。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:18px">
+    <b>逻辑闭环：</b>开篇 M0（文化桥）→ L1 自我觉察（M1-M3）→ L2 团队应用（M4-M6）→ L3 组织设计（M7-M9）→ L4 毕业交卷（M10）。遵循"<b>觉察 → 应用 → 组织 → 认证</b>"递进，每一级都可独立成课，也可串成完整进阶。
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">《人类图领导力》课程矩阵 <span class="v" id="ver">V1</span></div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+
+<script>
+  const VERSION = "V1";
+  try{ document.getElementById('ver').textContent = VERSION; }catch(e){}
+
+  // 移动端汉堡抽屉
+  try{
+    const hamb = document.getElementById('hamb');
+    const open = ()=>document.body.classList.add('drawer-open');
+    const close = ()=>document.body.classList.remove('drawer-open');
+    if(hamb){
+      hamb.addEventListener('click', open);
+      document.getElementById('closex').addEventListener('click', close);
+      document.getElementById('mask').addEventListener('click', close);
+      document.querySelectorAll('.drawer a').forEach(a=>a.addEventListener('click', close));
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+    }
+  }catch(e){ console.warn('drawer init fail', e); }
+</script>
+</body>
+</html>

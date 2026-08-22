@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>领导 → 教练 升学漏斗 · 招生路径时间轴</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --paper:#FBF7F0; --primary:#C4956A; --dark:#2D2118;
+    --border:#E8DCC8; --gold:#B8860B; --muted:#7A6A58;
+    --lead:#C8743C; --lead2:#B5611F; --lead-bg:#FBEDE2;
+    --coach:#6B4E8A; --coach2:#5A4170; --coach-bg:#F1ECF6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--dark); font-size:15px; line-height:1.75;
+    padding:0 0 48px}
+  .wrap{max-width:760px; margin:0 auto; padding:0 16px}
+
+  header{background:linear-gradient(135deg,#3A2B1E,#5A4129); color:#F5E9D8;
+    padding:28px 16px 24px; text-align:center; border-bottom:4px solid var(--primary)}
+  header .kicker{font-size:13px; letter-spacing:3px; color:var(--primary); margin-bottom:8px}
+  header h1{font-size:22px; line-height:1.4; font-weight:800; color:#FBF3E6}
+  header p{font-size:14px; color:#E4D4BE; margin-top:9px}
+
+  section{margin-top:30px}
+  h2{font-size:18px; color:var(--dark); margin-bottom:6px;
+    padding-left:12px; border-left:5px solid var(--primary)}
+  .lead-txt{font-size:14.5px; color:var(--muted); margin:8px 0 18px}
+
+  /* 漏斗 */
+  .funnel{display:flex; flex-direction:column; align-items:center; gap:6px; margin-top:8px}
+  .stage{width:100%; border-radius:10px; color:#fff; padding:16px 16px;
+    text-align:center; box-shadow:0 2px 8px rgba(45,33,24,.12);
+    clip-path:polygon(0 0,100% 0,94% 100%,6% 100%)}
+  .stage .stage-no{font-size:12.5px; opacity:.85; letter-spacing:1px}
+  .stage .stage-name{font-size:17px; font-weight:800; margin:3px 0 4px}
+  .stage .stage-desc{font-size:13px; line-height:1.6; opacity:.95}
+  .stage .stage-meta{display:inline-block; margin-top:8px; font-size:12.5px;
+    background:rgba(255,255,255,.22); padding:3px 11px; border-radius:20px; font-weight:700}
+  .s1{background:linear-gradient(135deg,#D98A4E,var(--lead))}
+  .s2{background:linear-gradient(135deg,var(--lead),var(--lead2)); width:82%}
+  .s3{background:linear-gradient(135deg,#9A6FA8,var(--coach)); width:60%}
+  .s4{background:linear-gradient(135deg,var(--coach),var(--coach2)); width:42%}
+
+  .funnel-note{font-size:13px; color:var(--muted); text-align:center; margin-top:10px}
+  .funnel-note b{color:var(--lead2)}
+
+  /* 时间轴 */
+  .timeline{background:var(--paper); border:1px solid var(--border); border-radius:14px;
+    padding:20px 16px 6px; margin-top:8px}
+  .tl-axis{position:relative; display:flex; justify-content:space-between;
+    border-top:3px solid var(--primary); margin:14px 6px 4px; padding-top:10px}
+  .tl-axis::before{content:""; position:absolute; top:-3px; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--lead),var(--coach))}
+  .tl-phase{flex:1; text-align:center; position:relative; padding:0 4px}
+  .tl-phase .dot{width:16px; height:16px; border-radius:50%; background:#fff;
+    border:4px solid var(--lead); margin:0 auto 10px; position:relative; top:-19px}
+  .tl-phase:nth-child(2) .dot{border-color:var(--lead2)}
+  .tl-phase:nth-child(3) .dot{border-color:var(--coach)}
+  .tl-phase .ph-t{font-size:14px; font-weight:800; color:var(--dark)}
+  .tl-phase .ph-m{font-size:12.5px; color:var(--muted); margin-top:2px}
+  .tl-phase .ph-d{font-size:12.5px; color:var(--muted); margin-top:5px; line-height:1.55}
+
+  .note{background:#FBF3E6; border:1px solid var(--border); border-left:5px solid var(--gold);
+    border-radius:10px; padding:14px 16px; font-size:14px; line-height:1.8; margin-top:18px}
+  .note b{color:var(--lead2)}
+  .note .h{font-weight:800; color:var(--dark); display:block; margin-bottom:6px}
+
+  .legend{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:14px}
+  .legend span{font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px}
+  .legend i{width:14px; height:14px; border-radius:3px; display:inline-block}
+  .legend .l{background:var(--lead)}
+  .legend .c{background:var(--coach)}
+
+  footer{margin-top:34px; text-align:center; font-size:12.5px; color:var(--muted);
+    border-top:1px solid var(--border); padding-top:18px; line-height:1.7}
+  footer b{color:var(--dark)}
+
+  @media(max-width:560px){
+    header h1{font-size:19px}
+    .tl-axis{flex-direction:column; border-top:none; border-left:3px solid var(--primary);
+      margin:14px 0 4px; padding:0 0 0 18px; gap:18px}
+    .tl-axis::before{top:0; bottom:0; left:-3px; right:auto; width:3px; height:100%;
+      background:linear-gradient(180deg,var(--lead),var(--coach))}
+    .tl-phase{text-align:left; padding:0}
+    .tl-phase .dot{position:absolute; left:-26px; top:2px; margin:0}
+    .stage .stage-name{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">HUMAN DESIGN · 课程矩阵</div>
+  <h1>领导 → 教练 升学漏斗</h1>
+  <p>招生路径 · 时间轴 · 互相导流不互抢</p>
+</header>
+
+<div class="wrap">
+
+  <!-- 漏斗 -->
+  <section>
+    <h2>一、招生漏斗（带自我筛选）</h2>
+    <p class="lead-txt">同一批学员从"带团队"起步，随动机自我筛选逐步收窄——漏斗越往下，客单价与黏性越高。比例为示意值，用于呈现结构。</p>
+
+    <div class="funnel">
+      <div class="stage s1">
+        <div class="stage-no">第 1 层 · 市场池</div>
+        <div class="stage-name">潜在学员池</div>
+        <div class="stage-desc">管理者 / 创业者 / 团队长——有团队、想带好人的人</div>
+        <div class="stage-meta">基数 100%</div>
+      </div>
+      <div class="stage s2">
+        <div class="stage-no">第 2 层 · 入门</div>
+        <div class="stage-name">修读 HD-Leadership</div>
+        <div class="stage-desc">带好现有团队、活出自身设计（四级认证 + 实践圈）</div>
+        <div class="stage-meta">约 82% 完成</div>
+      </div>
+      <div class="stage s3">
+        <div class="stage-no">第 3 层 · 进阶</div>
+        <div class="stage-name">进阶 HD-Coaching</div>
+        <div class="stage-desc">想"助人 / 对外收费"者——把带人经验转化为教练能力</div>
+        <div class="stage-meta">约 60% 进阶</div>
+      </div>
+      <div class="stage s4">
+        <div class="stage-no">第 4 层 · 毕业</div>
+        <div class="stage-name">认证人类图教练 HDCC</div>
+        <div class="stage-desc">可收费接个案、进入认证教练网络 / 企业内训师</div>
+        <div class="stage-meta">约 42% 认证</div>
+      </div>
+    </div>
+
+    <p class="funnel-note">📉 漏斗收窄 = <b>动机自然筛选</b>，不是流失：越往下客单价越高、续费与转介绍越强。</p>
+
+    <div class="legend">
+      <span><i class="l"></i> HD-Leadership（领导 · 赤陶琥珀）</span>
+      <span><i class="c"></i> HD-Coaching（教练 · 金紫）</span>
+    </div>
+  </section>
+
+  <!-- 时间轴 -->
+  <section>
+    <h2>二、成长时间轴（约 12 个月 +）</h2>
+    <p class="lead-txt">从"带好团队"到"可收费教练"的标准节奏，可按学员速度弹性伸缩。</p>
+    <div class="timeline">
+      <div class="tl-axis">
+        <div class="tl-phase">
+          <div class="dot"></div>
+          <div class="ph-t">阶段一</div>
+          <div class="ph-m">第 1–6 月</div>
+          <div class="ph-d">HD-Leadership：四级认证 + 实践圈，活出自身设计的领导方式</div>
+        </div>
+        <div class="tl-phase">
+          <div class="dot"></div>
+          <div class="ph-t">阶段二</div>
+          <div class="ph-m">第 7–12 月</div>
+          <div class="ph-d">HD-Coaching：HDCC 进阶、1:1 督导、个案演练</div>
+        </div>
+        <div class="tl-phase">
+          <div class="dot"></div>
+          <div class="ph-t">毕业</div>
+          <div class="ph-m">第 12 月+</div>
+          <div class="ph-d">双认证 · 进入认证教练网络 / 企业内训师</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    <span class="h">为什么这是"互相导流"而非"抢人"？</span>
+    管理者<b>先上 HD-Leadership 带好团队</b>（解决当下痛点）；其中想"助人 / 对外收费"的，再<b>续修 HD-Coaching</b>。两门课主语与姿态不同（领导=第一人称经营 / 教练=第三人称服务），受众几乎不重叠，却共享同一批用户的<b>全生命周期价值</b>——单门课做不到。这正是课程矩阵的飞轮。
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">领导 → 教练 升学漏斗 · 招生路径时间轴</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 · 模块逐字稿样章（M0 + M1）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --card:#FFFFFF; --ink:#2D2118; --muted:#7A6A58;
+    --gold:#C4956A; --gold-l:#F3E6D6; --amber:#B5762A; --amber-l:#F8ECDA;
+    --clay:#C05A2E; --clay-l:#F6E2D6; --line:#E8DCC8; --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:14px}
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,#3A2A1C,#2D2118);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+  nav .brand{font-weight:800;font-size:15px}
+  nav .brand small{display:block;font-size:12px;font-weight:600;color:var(--amber-l);letter-spacing:.1em}
+  nav .hamb{display:none;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;font-size:20px;line-height:1;padding:6px 11px;cursor:pointer}
+  nav .menu{display:flex;gap:6px;flex-wrap:wrap}
+  nav .menu a{color:#F3E6D6;text-decoration:none;font-size:13px;padding:5px 9px;border-radius:8px}
+  nav .menu a:hover{background:rgba(255,255,255,.12)}
+  body.drawer-open nav{z-index:0 !important}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:330px;background:#2D2118;z-index:9999;transform:translateX(100%);transition:transform .28s ease;padding:64px 0 20px;overflow-y:auto}
+  body.drawer-open .drawer{transform:translateX(0)}
+  .drawer a{display:block;color:#F3E6D6;text-decoration:none;font-size:14.5px;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600}
+  .drawer .closex{position:absolute;top:14px;right:16px;background:transparent;border:none;color:#fff;font-size:26px;cursor:pointer}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9998;opacity:0;pointer-events:none;transition:opacity .28s}
+  body.drawer-open .mask{opacity:1;pointer-events:auto}
+  @media(max-width:768px){nav .hamb{display:block}nav .menu{display:none}}
+  .wrap{max-width:840px;margin:0 auto;padding:22px 16px 60px}
+  .hero{background:linear-gradient(135deg,#FBF6EC,#F3E6D6);border:1px solid var(--line);border-radius:18px;padding:22px 20px;box-shadow:var(--shadow);margin-bottom:18px}
+  .hero h1{margin:0 0 6px;font-size:20px;color:#3A2A1C}
+  .hero p{margin:0;color:var(--muted);font-size:13.5px}
+  .badge{display:inline-block;background:var(--clay-l);color:var(--clay);font-weight:700;font-size:12px;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;box-shadow:var(--shadow);margin-bottom:16px}
+  .card h2{margin:0 0 4px;font-size:17px;color:#3A2A1C}
+  .card .sub{color:var(--muted);font-size:13px;margin-bottom:12px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .meta span{background:var(--gold-l);color:var(--amber);font-weight:700;font-size:12px;padding:3px 10px;border-radius:20px}
+  .seg{border-left:4px solid var(--gold);background:#FFFDF9;border-radius:0 12px 12px 0;padding:12px 14px;margin:12px 0}
+  .seg .t{font-weight:800;font-size:13.5px;color:var(--clay);margin-bottom:6px}
+  .seg .t .tm{float:right;font-size:12px;color:var(--muted);font-weight:600}
+  .say{background:var(--amber-l);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:14px;position:relative;padding-left:46px}
+  .say:before{content:"讲师";position:absolute;left:10px;top:11px;background:var(--clay);color:#fff;font-size:12px;font-weight:700;padding:2px 6px;border-radius:6px}
+  .act{background:var(--clay-l);border:1px dashed var(--clay);border-radius:10px;padding:10px 13px;margin:8px 0;font-size:13.5px}
+  .act b{color:var(--clay)}
+  .tr{color:var(--amber);font-size:12.5px;font-weight:700;margin:6px 0}
+  .tr:before{content:"↳ 转场："}
+  .ref{background:#FBF1E4;border:1px dashed var(--gold);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--muted);margin-top:8px}
+  .ref b{color:var(--clay)}
+  .printbtn{display:block;width:100%;background:linear-gradient(135deg,var(--clay),var(--amber));color:#fff;font-weight:800;font-size:15px;border:none;border-radius:12px;padding:13px;cursor:pointer;margin-bottom:18px}
+  @media print{
+    nav,.printbtn{display:none !important}
+    body{background:#fff;font-size:12.5px}
+    .wrap{max-width:none;padding:0}
+    .card,.seg,.say,.act{box-shadow:none;break-inside:avoid}
+    .hero{border:none;background:#fff;padding:0}
+  }
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 16px 40px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">人类图领导力 · 模块逐字稿<small>SCRIPT · M0 + M1 样章</small></div>
+  <button class="hamb" id="hamb">☰</button>
+  <div class="menu"><a href="#m0">M0 易经开篇</a><a href="#m1">M1 类型策略</a><a href="#note">使用说明</a></div>
+</nav>
+<div class="drawer" id="drawer"><button class="closex" id="closex">✕</button>
+  <a href="#m0">M0 · 易经智慧与领导之道</a><a href="#m1">M1 · 类型与策略</a><a href="#note">样章使用说明</a>
+</div>
+<div class="mask" id="mask"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">课程开发包 V1 · 内容生产管线样章</span>
+    <h1>模块逐字稿样章（M0 + M1）</h1>
+    <p>以讲师口吻撰写，含时间轴分段、可直接照读的台词、互动动作与转场提示。本样章用于验证「逐字稿 + PPT」内容生产格式，后续 M2–M10 按同一模板铺开。</p>
+  </header>
+  <button class="printbtn" onclick="window.print()">🖨 打印 / 存 PDF 逐字稿</button>
+
+  <!-- M0 -->
+  <section class="card" id="m0">
+    <h2>M0 · 易经智慧与领导之道（开篇 · 文化入口）</h2>
+    <div class="sub">纯文化桥，不碰人类图术语；为后续"类型=你的领导本色"埋伏笔。</div>
+    <div class="meta"><span>时长 90 分钟</span><span>线上</span><span>评估：提交"我的位与势"一页纸</span></div>
+
+    <div class="seg">
+      <div class="t">① 开场破冰<span class="tm">00:00–10:00</span></div>
+      <div class="say">各位好。先问大家一个问题——你有没有过这种时刻：明明很努力，团队却像"推石头上山"？今天这门课，我们不急着学"怎么做 leader"，先学"怎么看领导这件事"。</div>
+      <div class="say">我是中国人类图大师、也是一名领导力教练。但今天前两节，我一个人类图术语都不讲。为什么？因为我想先给你一副中国人都看得懂的眼镜——易经。等下你被说到心坎里，我再告诉你：你的"设计"其实早就写好了答案。</div>
+      <div class="act"><b>互动：</b>让学员在聊天区打一个词——"你心中最好的领导，像什么自然物？"（树 / 水 / 山 / 火…）</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">② 三易：变易 / 简易 / 不易<span class="tm">10:00–35:00</span></div>
+      <div class="say">易经讲三易。第一，变易——唯一不变的是变化。第二，简易——再复杂的事，底层逻辑都简单。第三，不易——变化之中，有不变的根本。领导者要做的，就是"持经达变"：守住根本，灵活应变。</div>
+      <div class="say">你们公司去年定的战略，今年还全适用吗？大概率不适用。但"让对的人在对的位置"，这条经，三千年没变过。这就是不易。</div>
+      <div class="tr">把"三易"写在白板中央，后面 M1 讲类型时回指这一句。</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">③ 乾坤阴阳：刚柔并济<span class="tm">35:00–60:00</span></div>
+      <div class="say">乾是天、是创造、是主动；坤是地、是承载、是执行。一个好的团队，不能全是乾，也不能全是坤。孤阴不生，独阳不长。你呢？你是那个"发起"的人，还是"托住"的人？</div>
+      <div class="act"><b>互动：</b>请学员用 1 分钟想一个自己"刚过头"或"柔过头"的真实场景，待会儿小组分享。</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">④ 互动：画团队爻位金字塔<span class="tm">60:00–75:00</span></div>
+      <div class="say">现在，拿出练习手册 M0 卡。在纸上画一个金字塔：最底下是初爻（刚进来的新人），往上是二爻主管、三爻经理、四爻副总（伴君如虎）、五爻是一把手（九五之尊）、上爻是退居的顾问。</div>
+      <div class="say">把你团队里关键的人，放进对应那一爻。你会发现：很多人"位"不对——五爻的人被当新人用，或者上爻的人还赖在决策位不肯退。这就是"在其位谋其政"的反面。</div>
+      <div class="ref"><b>配套：</b>练习手册 M0 微练习卡 · 反思三问（谁在五爻却被当新人？我在几爻？我曾"亢龙有悔"吗？）</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">⑤ 收尾：导入"你的设计"<span class="tm">75:00–90:00</span></div>
+      <div class="say">今天我们讲的是"天道"——放之四海皆准的道理。但下一节，我要讲"你道"——你这个人，天生该怎么领导。易经说"乾道变化，各正性命"，每个人都有自己的位和性。</div>
+      <div class="say">下次课，我会让你输入出生数据，看到你自己的类型、策略、内在权威。那张图，就是你的"领导使用说明书"。今天先带着"爻位金字塔"回家，下周见。</div>
+      <div class="tr">结束前提醒：本周作业是练习手册 M0 卡 + 小组分享"我的位与势"一页纸。</div>
+    </div>
+  </section>
+
+  <!-- M1 -->
+  <section class="card" id="m1">
+    <h2>M1 · 认识你的设计：类型与策略（L1）</h2>
+    <div class="sub">整门课锚点——"类型=你的领导本色"。让学员有"被读懂"的体检感。</div>
+    <div class="meta"><span>时长 90 分钟</span><span>线上</span><span>评估：类型卡 + 实践日志</span></div>
+
+    <div class="seg">
+      <div class="t">① 回顾 + 引出"领导本色"<span class="tm">00:00–10:00</span></div>
+      <div class="say">上节课我们讲爻位——你在组织里的"位置"。今天讲更深的一层：你的"本性"。同样是一把手位，显化者坐上去是破局，投射者坐上去是赋能，反映者坐上去是照见。位置决定责任，本性决定你怎么扛这个责任。</div>
+      <div class="say">人类图把人分成 5 种类型。类型不是标签，是你的"正确运作方式"。违背它，你越努力越累；顺着它，你事半功倍。</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">② 五种类型与策略<span class="tm">10:00–40:00</span></div>
+      <div class="say">第一种，显化者。你们身边那种"说干就干"的人。他的策略是"告知"——先告诉相关的人他要做什么，否则别人会抵触。第二种，生成者，组织的能量引擎，策略是"等待回应"，被刺激了才满电。</div>
+      <div class="say">第三种，显化生成者，多线程的那位，策略同样"等待回应"但动起来飞快。第四种，投射者，没有能量引擎，靠看清系统、引导别人，策略是"等待邀请"——没人请他，他的智慧就被浪费。第五种，反映者，全开放，像镜子，策略是"等待一个周期"再决定。</div>
+      <div class="act"><b>互动：</b>让学员猜"我可能是哪种"，不做定论——等出图工具跑完再看。</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">③ 小组：类型觉察互评（Toastmasters 式）<span class="tm">40:00–60:00</span></div>
+      <div class="say">现在分 4 人小组。每个人用 2 分钟说："我觉得我是__类型，因为__"。其他人只做一件事——反馈你观察到的他。不评判、不指导，就像 Toastmasters 的评估那样，只照镜。</div>
+      <div class="say">你会发现，别人眼里的你，常常比你以为的更像你的真实类型。这就是"同伴即时反馈"的威力。</div>
+      <div class="ref"><b>配套：</b>练习手册 M1 卡 · 反思"同伴眼中的我，和我自我认知一致吗？"</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">④ 策略 × 领导落点<span class="tm">60:00–75:00</span></div>
+      <div class="say">把类型翻译成领导语言：显化者=发起破局型，团队卡住时你冲；生成者=执行持续型，你是稳定输出的主心骨；投射者=顾问赋能型，你让对的人做对的事；反映者=感知节律型，你是团队的环境雷达。</div>
+      <div class="say">记住一句话：类型不评优劣，只评"对的方式"。一个公司如果全是显化者会撞车，全是投射者会没人动手。你要先认自己的型，再认团队的型。</div>
+    </div>
+
+    <div class="seg">
+      <div class="t">⑤ 布置微练习<span class="tm">75:00–90:00</span></div>
+      <div class="say">本周任务：第一，用出图工具（M1/M2 测评原型）确认你的类型，做一张"类型卡"贴工作台；第二，连续 7 天，每天记录一次"我今天是按策略做的，还是逆行了的？"</div>
+      <div class="say">逆行不可耻，不自知才可惜。下周我们把日志带来，看谁先摸到自己的"正确节奏"。</div>
+      <div class="tr">收尾回指 M0 的"三易"：类型就是你的"不易"，策略就是你的"简易"运作法。</div>
+    </div>
+  </section>
+
+  <section class="card" id="note">
+    <h2>样章使用说明</h2>
+    <div class="sub">本样章定义「逐字稿 + PPT」内容生产格式，供后续 M2–M10 批量铺开。</div>
+    <div class="say" style="padding-left:14px">格式约定：每模块 = 模块信息（时长/评估）+ 5 段式时间轴（开场/主体×2–3/互动/收尾）；每段含「讲师」蓝底台词（可照读）、「互动动作」橙框、「转场」提示、「配套」练习手册引用。</div>
+    <div class="act"><b>规模化建议：</b>讲师口吻统一、互动动作统一用 Toastmasters 式"只照镜不指导"、每段收尾回指上一模块锚点（如 M1 收尾回指 M0 三易），保证 11 模块叙事连贯。</div>
+  </section>
+
+  <div class="ref" style="margin-top:14px"><b>配套交付：</b>本逐字稿与练习手册（hd-leadership-workbook.html）、出图测评工具（hd-chart-generator.html）及 M0–M1 演示文稿（tencent-pptx 生成）共同构成课程开发包 V1 的内容生产管线样章。</div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图领导力课程 · 模块逐字稿 V1（M0+M1 样章）</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+</div>
+
+<script>
+document.getElementById('hamb').addEventListener('click',()=>document.body.classList.add('drawer-open'));
+function closeDrawer(){document.body.classList.remove('drawer-open');}
+document.getElementById('closex').addEventListener('click',closeDrawer);
+document.getElementById('mask').addEventListener('click',closeDrawer);
+document.querySelectorAll('.drawer a').forEach(a=>a.addEventListener('click',closeDrawer));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+</script>
+</body>
+</html>

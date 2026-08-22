@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领导力 V2</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --primary:#C4956A; --primary-d:#2D2118; --border:#E8DCC8;
+    --amber:#C8702D; --amber-l:#F3D9BE; --gold:#B8893B; --gold-l:#F2E3C4;
+    --ink:#3A2E22; --muted:#7A6A58; --card:#FFFDF8;
+    --clay:#B5532A; --clay-l:#F1D3C2;   /* 领导=赤陶琥珀 */
+    --violet:#7A5C8A; --violet-l:#E7DCEC; /* 教练=金紫，仅对照用 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;line-height:1.68;font-size:15px;-webkit-text-size-adjust:100%}
+
+  /* ===== 顶部导航 + 汉堡菜单（移动端纪律：抽屉置于 nav 外、drawer-open 强制 nav 沉底、100dvh） ===== */
+  nav{position:sticky;top:0;z-index:999;background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 2px 10px rgba(45,33,24,.2)}
+  nav .brand{font-size:16px;font-weight:800;letter-spacing:.02em}
+  nav .brand small{font-size:12px;font-weight:600;color:var(--amber-l);display:block;letter-spacing:.12em}
+  nav .menu{display:flex;gap:4px;flex-wrap:wrap}
+  nav .menu a{color:#EADFCD;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;white-space:nowrap}
+  nav .menu a:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav .hamburger{display:none;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:22px;line-height:1;width:42px;height:42px;border-radius:10px;cursor:pointer}
+  .drawer-mask{position:fixed;inset:0;background:rgba(45,33,24,.5);z-index:9998;opacity:0;visibility:hidden;transition:.25s}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:84%;max-width:340px;background:var(--bg);z-index:9999;transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column;box-shadow:-6px 0 24px rgba(45,33,24,.25);overflow-y:auto}
+  .drawer .dhead{background:var(--primary-d);color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+  .drawer .dhead b{font-size:15px}
+  .drawer .dclose{background:rgba(255,255,255,.16);border:none;color:#fff;font-size:22px;width:38px;height:38px;border-radius:9px;cursor:pointer}
+  .drawer .dgroup{border-bottom:1px solid var(--border)}
+  .drawer .dgroup > .gt{width:100%;text-align:left;background:var(--card);border:none;padding:13px 18px;font-size:14.5px;font-weight:700;color:var(--primary-d);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .drawer .dgroup > .gt .ar{transition:.2s;color:var(--muted)}
+  .drawer .dgroup.open > .gt .ar{transform:rotate(90deg)}
+  .drawer .dgroup .items{max-height:0;overflow:hidden;transition:.25s;background:var(--bg)}
+  .drawer .dgroup.open .items{max-height:600px}
+  .drawer .dgroup .items a{display:block;padding:9px 18px 9px 30px;font-size:13.5px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border)}
+  .drawer .dgroup .items a:last-child{border-bottom:none}
+  body.drawer-open .drawer-mask{opacity:1;visibility:visible}
+  body.drawer-open .drawer{transform:translateX(0)}
+  body.drawer-open nav{z-index:0 !important}
+
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 48px}
+  /* ===== Header 居中 + 副标题独立成段（V2 改版） ===== */
+  header{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;border-radius:16px;padding:26px 22px;margin-bottom:16px;box-shadow:0 6px 20px rgba(45,33,24,.18);text-align:center}
+  header .kicker{font-size:12px;letter-spacing:.16em;color:var(--amber-l);font-weight:700;text-transform:uppercase}
+  header h1{font-size:24px;margin:8px 0 6px;line-height:1.32}
+  header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:8px auto 4px;line-height:1.72;word-wrap:break-word;overflow-wrap:anywhere}
+  header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:6px auto 0;font-style:italic;border-top:1px dashed rgba(243,217,190,.32);padding-top:9px;line-height:1.7;word-wrap:break-word;overflow-wrap:anywhere}
+  .note{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--amber);border-radius:12px;padding:14px 16px;margin-bottom:22px;font-size:13px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  .note.amber{background:linear-gradient(135deg,#FFFDF8,var(--amber-l));border-left-color:var(--gold)}
+  .note.clay{background:linear-gradient(135deg,#FFFDF8,var(--clay-l));border-left-color:var(--clay)}
+
+  .sec{margin-bottom:28px;scroll-margin-top:64px}
+  .sec h2{font-size:19px;color:var(--primary-d);margin-bottom:4px;display:flex;align-items:center;gap:9px;scroll-margin-top:64px}
+  .sec h2 .idx{background:var(--primary);color:#fff;font-size:13px;font-weight:800;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .sec .sub{font-size:12.5px;color:var(--muted);margin-bottom:14px;padding-left:35px}
+
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 15px;box-shadow:0 2px 8px rgba(45,33,24,.05)}
+  .card h3{font-size:15px;color:var(--primary-d);margin-bottom:6px}
+  .card p{font-size:12.5px;color:var(--muted)}
+  .card .tag{display:inline-block;background:var(--gold-l);color:var(--gold);font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;margin-bottom:7px}
+
+  /* 四级认证 */
+  .lvl{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+  .lvl .l{background:var(--card);border:1px solid var(--border);border-top:4px solid var(--clay);border-radius:12px;padding:13px 12px;text-align:center}
+  .lvl .l .n{font-size:13px;font-weight:800;color:var(--clay);margin-bottom:3px}
+  .lvl .l .t{font-size:14px;font-weight:700;color:var(--primary-d);margin-bottom:5px}
+  .lvl .l .d{font-size:12px;color:var(--muted)}
+
+  /* 模块矩阵表 */
+  .mtable{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:12.5px}
+  .mtable th,.mtable td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  .mtable th{background:var(--primary-d);color:#fff;font-size:12px;font-weight:700}
+  .mtable tr:last-child td{border-bottom:none}
+  .mtable td .lv{display:inline-block;background:var(--clay-l);color:var(--clay);font-weight:700;font-size:12px;padding:1px 7px;border-radius:10px;white-space:nowrap}
+  .mtable tbody tr:nth-child(even){background:#FBF6EE}
+
+  /* 模块详细 */
+  .mod{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px rgba(45,33,24,.05)}
+  .mod .mh{background:linear-gradient(135deg,var(--primary-d),#4A3623);color:#fff;padding:13px 16px;display:flex;align-items:center;gap:10px}
+  .mod .mh .code{background:var(--gold);color:var(--primary-d);font-weight:800;font-size:13px;min-width:42px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .mod .mh .tt{font-size:15.5px;font-weight:700}
+  .mod .mb{padding:14px 16px}
+  .mod .row{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:7px 0;border-bottom:1px dashed var(--border)}
+  .mod .row:last-child{border-bottom:none}
+  .mod .row .k{font-size:12px;font-weight:700;color:var(--amber);padding-top:1px}
+  .mod .row .v{font-size:12.5px;color:var(--ink)}
+  .mod .row .v b{color:var(--primary-d)}
+  .mod .ex{background:var(--amber-l);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--primary-d);margin-top:8px}
+  .mod .ex b{color:var(--clay)}
+
+  /* 训练闭环 */
+  .loop{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .loop .s{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 13px;position:relative}
+  .loop .s .no{position:absolute;top:-10px;left:12px;background:var(--clay);color:#fff;font-weight:800;font-size:12px;min-width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .loop .s h4{font-size:13.5px;color:var(--primary-d);margin:6px 0 4px}
+  .loop .s p{font-size:12px;color:var(--muted)}
+
+  /* 实践圈 */
+  .pc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pc .b{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:10px;padding:12px 14px}
+  .pc .b h4{font-size:13.5px;color:var(--primary-d);margin-bottom:5px}
+  .pc .b p{font-size:12px;color:var(--muted)}
+
+  /* 升学漏斗（复用 CSS 梯形） */
+  .funnel{display:flex;flex-direction:column;align-items:center;gap:5px;margin:6px 0}
+  .fstep{background:linear-gradient(135deg,var(--clay),var(--amber));color:#fff;border-radius:10px;padding:11px 14px;text-align:center;box-shadow:0 2px 8px rgba(45,33,24,.12)}
+  .fstep .t{font-size:14px;font-weight:700}
+  .fstep .s{font-size:12px;opacity:.95;margin-top:2px}
+  .fstep.w1{width:100%}.fstep.w2{width:82%}.fstep.w3{width:64%}.fstep.w4{width:46%}
+  .fstep.coach{background:linear-gradient(135deg,var(--violet),#5E4570)}
+
+  /* 课时表 */
+  .sched{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sched .c{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+  .sched .c h4{font-size:14px;color:var(--primary-d);margin-bottom:4px}
+  .sched .c .meta{font-size:12px;color:var(--amber);font-weight:700;margin-bottom:5px}
+  .sched .c p{font-size:12px;color:var(--muted)}
+
+  /* KPI */
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .kpi .k{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+  .kpi .k .v{font-size:20px;font-weight:800;color:var(--clay)}
+  .kpi .k .l{font-size:12px;color:var(--muted);margin-top:3px}
+
+  /* =====【附录】工具卡（V2 新增） ===== */
+  .appx{margin-top:36px;scroll-margin-top:64px}
+  .appx .idx{background:var(--clay)}
+  .tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  .tcard{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:12px;padding:15px 14px;box-shadow:0 2px 8px rgba(45,33,24,.05);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:.2s}
+  .tcard:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(45,33,24,.12);border-left-color:var(--clay)}
+  .tcard .tg{display:inline-block;background:var(--gold-l);color:var(--gold);font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;align-self:flex-start}
+  .tcard h3{font-size:14.5px;color:var(--primary-d);line-height:1.4}
+  .tcard p{font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tcard .go{font-size:12px;color:var(--clay);font-weight:700;margin-top:auto;padding-top:4px}
+  .tcard.self{border-left-color:var(--gold);background:linear-gradient(135deg,#FFFDF8,var(--gold-l))}
+  .tcard.self .go{color:var(--primary-d)}
+
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+  footer .v{color:var(--primary-d);font-weight:700}
+
+  @media(max-width:680px){
+    nav .menu{display:none}
+    nav .hamburger{display:block}
+    .tcards{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    body{font-size:14.5px}
+    .wrap{padding:18px 12px 40px}
+    header h1{font-size:20px}
+    .grid3,.grid2,.loop,.pc,.sched,.kpi{grid-template-columns:1fr}
+    .lvl{grid-template-columns:1fr 1fr}
+    .mtable{display:block;overflow-x:auto;white-space:nowrap}
+    .sec h2{font-size:17px}
+    .mod .row{grid-template-columns:84px 1fr}
+    .mod .mh .tt{font-size:14.5px}
+    .tcards{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">人类图领导力<small>HUMAN DESIGN LEADERSHIP</small></div>
+  <div class="menu" id="deskMenu">
+    <a href="#pos">定位</a><a href="#arch">架构</a><a href="#matrix">模块</a>
+    <a href="#mods">详细设计</a><a href="#eff">训练</a><a href="#circle">实践圈</a>
+    <a href="#path">升学</a><a href="#deliver">交付</a><a href="#kpi">评估</a>
+    <a href="#appx" style="color:var(--gold-l)">★ 附录</a>
+  </div>
+  <button class="hamburger" id="hamBtn" aria-label="菜单">☰</button>
+</nav>
+<div class="drawer-mask" id="mask"></div>
+<aside class="drawer" id="drawer">
+  <div class="dhead"><b>目录</b><button class="dclose" id="closeBtn" aria-label="关闭">✕</button></div>
+  <div id="drawerBody"></div>
+</aside>
+
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Course Development Blueprint · V2</div>
+    <h1>《人类图领导力》课程开发蓝图</h1>
+    <p class="lead">由全球顶尖人类图体系 × 领导力教练双视角开发。用东方智慧开篇、用你的基因收口</p>
+    <p class="sub">——全球首个「人类图 × 领导力 × 易经」三融合的领导力训练体系。</p>
+  </header>
+
+  <div class="note amber">
+    <b>开发总纲：</b>不替代成熟领导力训练，而是「<b>成熟框架为体、人类图为用</b>」——用 CCL / 富兰克林柯维 / LMI 的"行为科学 + 可量化结果"保公信力，用人类图的"个性化 + 能量层"做差异化，用易经做中国学员的文化入口。训练有效性以 Toastmasters 式「高频练习 + 同伴反馈 + 渐进认证」闭环为骨架。
+  </div>
+
+  <!-- 一、定位 -->
+  <div class="sec" id="pos">
+    <h2><span class="idx">1</span>课程定位与差异化护城河</h2>
+    <div class="sub">先想清楚"我们不做什么、我们唯一占什么位"。</div>
+    <div class="note clay">
+      <b>一句话定位：</b>《人类图领导力》= 一门教领导者「<b>先活出自己的设计，再带出团队的合力</b>」的体验式训练课。它不教通用管理技巧，而教"对你这个特定能量构造，什么领导方式才真正有效"。
+    </div>
+    <div class="grid2">
+      <div class="card"><span class="tag">护城河 1</span><h3>能量型领导力（蓝海）</h3><p>头部品牌都做"行为/能力"，<b>没有任何一家从"能量类型 + 决策权威"讲领导力</b>。这是你的稀缺占位。</p></div>
+      <div class="card"><span class="tag">护城河 2</span><h3>抗倦怠变现</h3><p>用"非我主题 / 亢龙有悔"把抽象倦怠变成可操作的能量管理，直击 DDI 数据里 71% 高压、40% 想离职的痛点。</p></div>
+      <div class="card"><span class="tag">护城河 3</span><h3>组织设计地图</h3><p>用类型排布 + 按类型授权 + 会议设计，产出可落地的"团队设计诊断"，企业端高客单。</p></div>
+      <div class="card"><span class="tag">护城河 4</span><h3>东方 + 个性化</h3><p>易经做文化桥、人类图做个人体。CCL/DDI/LMI 均无此交叉位，且最贴合中国企业市场。</p></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>与「人类图教练课」的辨识度（避免互抢）：</b>教练课 = 第三人称、非指导、<b>陪个体找自己</b>（1:1、出口 HDCC 认证）；领导力课 = 第一人称、要拍板、<b>带团队出绩效</b>（团队、出口 HD-L 认证）。两者受众几乎不重叠，且可设计为「领导 → 教练」升学导流。
+    </div>
+  </div>
+
+  <!-- 二、架构 -->
+  <div class="sec" id="arch">
+    <h2><span class="idx">2</span>课程总架构 · 四级认证 HD-L</h2>
+    <div class="sub">参照 LMI 的渐进认证 + Toastmasters 的 DTM 式毕业项目，设计可量化、可晋级的认证体系。</div>
+    <div class="lvl">
+      <div class="l"><div class="n">HD-L1</div><div class="t">启航</div><div class="d">自我觉察<br>读懂自己的设计</div></div>
+      <div class="l"><div class="n">HD-L2</div><div class="t">实践</div><div class="d">团队应用<br>带好你的团队</div></div>
+      <div class="l"><div class="n">HD-L3</div><div class="t">精通</div><div class="d">组织设计<br>团队设计地图</div></div>
+      <div class="l"><div class="n">HD-L4</div><div class="t">导师</div><div class="d">认证讲师<br>可独立授课</div></div>
+    </div>
+    <div class="note">
+      <b>分层路径：</b>入门工作坊（引流）→ 深度实操营（转化）→ 教练/讲师认证（规模化 & 复购）→ 企业授权许可（B2B 放大）。每一级都可独立成课，也可串成完整进阶。
+    </div>
+  </div>
+
+  <!-- 三、模块矩阵 -->
+  <div class="sec" id="matrix">
+    <h2><span class="idx">3</span>课程模块总览矩阵</h2>
+    <div class="sub">M0–M10 共 11 个模块，横跨四级认证，遵循"觉察 → 应用 → 组织 → 认证"递进。</div>
+    <table class="mtable">
+      <thead><tr><th>模块</th><th>主题</th><th>级别</th><th>核心落点</th></tr></thead>
+      <tbody>
+        <tr><td>M0</td><td>易经智慧与领导之道</td><td><span class="lv">开篇</span></td><td>三易 / 乾坤 / 时中 — 文化入口</td></tr>
+        <tr><td>M1</td><td>认识你的设计：类型与策略</td><td><span class="lv">L1</span></td><td>五种类型对应领导风格</td></tr>
+        <tr><td>M2</td><td>内在权威与决策力</td><td><span class="lv">L1</span></td><td>时中 / 持经达变 → 决策质量</td></tr>
+        <tr><td>M3</td><td>人生角色与领导位势</td><td><span class="lv">L1·L2</span></td><td>爻位 / Profile → 你在组织的位</td></tr>
+        <tr><td>M4</td><td>能量中心与领导盲区</td><td><span class="lv">L2</span></td><td>定义/未定义中心 → 精力管理</td></tr>
+        <tr><td>M5</td><td>非我主题与抗倦怠</td><td><span class="lv">L2</span></td><td>亢龙有悔 → 背离本性的代价</td></tr>
+        <tr><td>M6</td><td>通道闸门与天赋领导</td><td><span class="lv">L2</span></td><td>天赋通道 → 领导优势变现</td></tr>
+        <tr><td>M7</td><td>团队设计地图</td><td><span class="lv">L3</span></td><td>类型排布 / 按类型授权 / 会议</td></tr>
+        <tr><td>M8</td><td>组织设计与文化</td><td><span class="lv">L3</span></td><td>BG5/OC16 轻量应用层</td></tr>
+        <tr><td>M9</td><td>真实领导与仆人式领导</td><td><span class="lv">L3·L4</span></td><td>谦卦 / 修己安人 → 信任</td></tr>
+        <tr><td>M10</td><td>毕业项目：设计驱动领导实验</td><td><span class="lv">L4</span></td><td>顶点项目 + 量化交卷</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 四、详细模块设计 -->
+  <div class="sec" id="mods">
+    <h2><span class="idx">4</span>模块详细设计（M0–M10）</h2>
+    <div class="sub">每个模块含：目标 · 人类图知识点 · 领导力落点 · 训练练习 · 时长 · 评估。</div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M0</span><span class="tt">易经智慧与领导之道（开篇 · 文化入口）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">用中国学员熟悉的语言降低陌生感，建立"领导力是修为"的认知框架。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">无（纯文化桥）；为后续"类型=你的领导本色"埋伏笔。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">三易（变易/简易/不易）→ 持经达变；乾坤阴阳 → 刚柔并济；时中 → 决策节奏。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 画出自己团队的"爻位金字塔"（谁在几爻）；② 分享一个"亢龙有悔"的真实教训。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟线上 + 1 次小组分享 / 提交"我的位与势"一页纸。</span></div>
+        <div class="ex"><b>设计要点：</b>此处不碰人类图术语，纯讲东方智慧；待学员被"说到心坎"后，再导入"你的设计"——转化阻力最小。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M1</span><span class="tt">认识你的设计：类型与策略（L1）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">学员能准确说出自己的类型、策略、内在权威，并识别其在团队中的领导风格。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">5 种类型与策略：显化者(告知)/生成者(等待回应)/显化生成者(等待回应)/投射者(等待邀请)/反映者(等待 Lunar)。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">显化者=发起破局型；生成者=执行持续型；投射者=顾问赋能型；反映者=感知节律型。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 画自己的"类型卡"；② 小组"类型觉察互评"(Toastmasters 式同伴反馈)；③ 微练习：一周按自己策略决策并记日志。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟线上 + 1 周实践 / 类型卡提交 + 实践日志。</span></div>
+        <div class="ex"><b>设计要点：</b>"类型=你的领导本色"是整门课锚点，须让学员有"被读懂"的体检感。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M2</span><span class="tt">内在权威与决策力（L1）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">学员掌握用自己的内在权威做决策，提升决策质量与速度。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">情绪/ sacra/ 脾/ 直觉/ G 中心/ 无权威(反映者) 等 7 类内在权威及其决策节奏。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">用"时中 / 持经达变"对应权威——投射者待邀请、反映者等周期，避免"硬拍板"的内耗。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 决策日志(记录每次重大决定用的是头脑还是权威)；② 同伴互查"你的决策陷阱"。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟 + 2 周决策日志 / 提交"我的决策节奏说明书"。</span></div>
+        <div class="ex"><b>设计要点：</b>这是抗"非我决策"的核心，直接对接 DDI"仅 29% 员工信任上司决策"的痛点。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M3</span><span class="tt">人生角色与领导位势（L1·L2）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">用 Profile(人生角色)理解自己在组织中的"位与势"，减少错位焦虑。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">12 种 Profile(如 1/3 研究者·烈士、2/4 隐士·机会主义者、4/6 机会主义者·角色模型等)。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">爻位·时位 → "在其位谋其政"；角色模型(4/6)不必 early prove，烈士(1/3)靠试错成长。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 把团队画成"爻位金字塔"；② 写"我在组织的真实位势 vs 我以为的位势"。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">75 分钟 / 提交团队位势图 + 个人反思。</span></div>
+        <div class="ex"><b>设计要点：</b>与 M0 易经爻位呼应，形成"东方框架→个人设计"的闭环。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M4</span><span class="tt">能量中心与领导盲区（L2）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">识别定义/未定义中心带来的"强项"与"盲区"，做好精力管理。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">9 大能量中心；定义=稳定能量，未定义=开放吸收/易过载；如未定义 G 中心→方向感外求。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">阴阳平衡 → 定义中心(阳·动)与非定义(阴·容)；未定义中心是"共情雷达"也是"耗竭点"。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 标出自己的中心图；② 同伴互评"你的能量盲点在哪次会议爆发"。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟 / 中心图 + "我的精力管理协议"。</span></div>
+        <div class="ex"><b>设计要点：</b>精力管理是抗倦怠的前置，直接服务护城河 2。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M5</span><span class="tt">非我主题与抗倦怠（L2）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">识别"非我主题"(背离本性的代价)，建立可持续的领导节奏。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">各类型的非我主题：显化者=愤怒(被阻)、生成者=挫败(错的事)、投射者=苦涩(误认)、反映者=失望(环境)。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">亢龙有悔 / 盈不可久 → "过犹不及"；用东方语境让学员接纳"不是我自己"的消耗。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 写"我的非我触发清单"；② 设计"每周能量复位仪式"(如反映者 Lunar 复盘)。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟 + 21 天复位打卡 / 非我清单 + 复位计划。</span></div>
+        <div class="ex"><b>设计要点：</b>本课程最易出"aha"与口碑的模块，也是企业端高复购入口。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M6</span><span class="tt">通道闸门与天赋领导（L2）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">把天赋通道转化为可表达的"领导优势"，而非埋没或过度透支。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">36 条通道与闸门含义；定义通道=天赋资产，未定义=可学可借的学习力。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">易经"各正性命"→ 让对的人在对的位置发光；团队天赋互补而非整齐划一。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 标出自己的定义通道；② 小组"天赋互见"——别人眼中你的通道如何助力团队。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟 / 天赋卡 + "我的领导优势一句话"。</span></div>
+        <div class="ex"><b>设计要点：</b>人类图"借易经闸门意象"在此显化——可点出闸门与卦象的文化关联(点到即止)。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M7</span><span class="tt">团队设计地图（L3）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">为真实团队产出"设计地图"，按类型排布角色、授权与会议。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">团队类型分布诊断；投射者适合顾问位、生成者扛执行、显化者破局、反映者做感知复盘。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">爻位→排兵布阵；按类型授权(投射者需先被邀请再建言)；按类型设计会议节奏。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 导入自己团队 3–8 人出生数据出图；② 产出"团队设计地图 + 授权清单"。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">半日工作坊 + 2 周落地 / 提交团队设计地图(企业端可收费交付物)。</span></div>
+        <div class="ex"><b>设计要点：</b>护城河 3 的兑现点，企业内训的"高客单钩子"。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M8</span><span class="tt">组织设计与文化（L3）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">把个人设计升维到组织动力与文化建设(轻量应用层，不重教 BG5/OC16 机制)。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">BG5/OC16 概念掠影(作为"顾问视角"引子，深度留给教练课)，聚焦"组织也有类型"。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">文化=集体非我主题的抵消系统；用设计视角诊断组织瓶颈与继任。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 用"组织类型"框架复盘自家公司；② 写"文化修正 3 条"。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">半日工作坊 / 组织诊断一页纸。</span></div>
+        <div class="ex"><b>设计要点：</b>明确"BG5 深讲是教练课地盘"，领导力课只做应用层，避免与教练课打架。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M9</span><span class="tt">真实领导与仆人式领导（L3·L4）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">把"活出设计"升华为"以德服人"的真实领导，重建团队信任。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">无新增术语；综合前 8 模块，落到"真实(authentic)领导"。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">谦卦"修己安人 / 德位相当"→ 真实领导、仆人式领导；六爻皆吉的谦是管理本质。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 写"我的领导宣言"(基于真实设计，非抄模板)；② 同伴互评真实性。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">90 分钟 / 领导宣言 + 同伴认证。</span></div>
+        <div class="ex"><b>设计要点：</b>收束全课——从"读懂自己"到"成就他人"，呼应易经修己安人。</div>
+      </div>
+    </div>
+
+    <div class="mod">
+      <div class="mh"><span class="code">M10</span><span class="tt">毕业项目：设计驱动领导实验（L4）</span></div>
+      <div class="mb">
+        <div class="row"><span class="k">模块目标</span><span class="v">学员在自家组织落地一项"设计驱动"的领导实验，量化交卷(类 Toastmasters 顶点项目)。</span></div>
+        <div class="row"><span class="k">HD 知识点</span><span class="v">综合应用：选一个痛点(决策/授权/倦怠/团队)用设计视角重构。</span></div>
+        <div class="row"><span class="k">领导落点</span><span class="v">70-20-10 的"10"实践；用前测/后测数据证明"图真的有用"。</span></div>
+        <div class="row"><span class="k">训练练习</span><span class="v">① 立项(假设+指标)；② 8 周实验；③ 路演答辩 + 同伴评审。</span></div>
+        <div class="row"><span class="k">时长 / 评估</span><span class="v">8 周 + 答辩 / 项目报告 + 数据对比(达标获 HD-L4 认证讲师资格)。</span></div>
+        <div class="ex"><b>设计要点：</b>这是"训练有效性"的终局证明，也是课程自有结果数据的采集口。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 五、训练有效性 -->
+  <div class="sec" id="eff">
+    <h2><span class="idx">5</span>训练有效性设计 · 七步闭环</h2>
+    <div class="sub">你特别强调"训练的有效性"——以下七步直接对标头部品牌的"可量化结果 + 行为科学 + 持续陪伴"。</div>
+    <div class="loop">
+      <div class="s"><span class="no">1</span><h4>基线测评</h4><p>入学即出个人设计图 + 领导力前测(决策质量/团队信任/倦怠度)。</p></div>
+      <div class="s"><span class="no">2</span><h4>具身练习</h4><p>每个模块配"微练习"，把图上的认知变成身体记忆。</p></div>
+      <div class="s"><span class="no">3</span><h4>70-20-10 实验</h4><p>10% 课堂 + 20% 同伴 + 70% 真实工作实验(毕业项目即此)。</p></div>
+      <div class="s"><span class="no">4</span><h4>实践圈陪伴</h4><p>Toastmasters 式「HD 实践圈」周例会，按类型布置练习、同伴反馈。</p></div>
+      <div class="s"><span class="no">5</span><h4>问责机制</h4><p>1:1 督导 + 同伴问责搭档，未完成练习进"复练组"。</p></div>
+      <div class="s"><span class="no">6</span><h4>混合交付</h4><p>线上自学(图/理论) + 线下实践圈 + 企业工作坊，降低门槛。</p></div>
+      <div class="s"><span class="no">7</span><h4>量化追踪</h4><p>后测对比前测，产出"我的领导改变报告"，数据回流课程迭代。</p></div>
+    </div>
+  </div>
+
+  <!-- 六、实践圈 -->
+  <div class="sec" id="circle">
+    <h2><span class="idx">6</span>HD 实践圈运营（Toastmasters 式）</h2>
+    <div class="sub">HD × TM =「个性化实验室」：TM 给"怎么做训练才有效"的骨架，HD 给"练什么才对每个人有效"的内核。</div>
+    <div class="pc">
+      <div class="b"><h4>角色按类型分配</h4><p>显化者=发起破冰；生成者=执行推进；投射者=顾问复盘；反映者=感知调频。让圈内角色本身成为练习。</p></div>
+      <div class="b"><h4>周例会与微练习</h4><p>每周 60 分钟：分享本周"按设计领导"的一件小事 + 同伴即时反馈(类型觉察互评)。</p></div>
+      <div class="b"><h4>渐进认证</h4><p>HD-L 四级 + 毕业项目答辩，类 DTM 式里程碑，制造持续进阶的"游戏化"动力。</p></div>
+      <div class="b"><h4>安全实验室</h4><p>比 BetterUp 便宜、比企业大班课有温度的黏性社群，是复购与转介绍的发生地。</p></div>
+    </div>
+  </div>
+
+  <!-- 七、升学路径 -->
+  <div class="sec" id="path">
+    <h2><span class="idx">7</span>认证与升学路径（领导 → 教练）</h2>
+    <div class="sub">同一批用户从一门课拉长到两门课，做成可相互导流的生命周期飞轮。</div>
+    <div class="funnel">
+      <div class="fstep w1"><div class="t">潜在学员池</div><div class="s">管理者 / 创业者 / 团队长 · 100%</div></div>
+      <div class="fstep w2"><div class="t">HD-L 领导力认证</div><div class="s">带好自己团队 · 82%</div></div>
+      <div class="fstep w3"><div class="t">HD-C 教练认证</div><div class="s">转型助人/顾问 · 60%</div></div>
+      <div class="fstep coach w4"><div class="t">双认证 · 教练网络</div><div class="s">可收费接个案/企业内训 · 42%</div></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>飞轮逻辑：</b>漏斗收窄是<b>动机自然筛选而非流失</b>——越往下客单价与续费越强(呼应 LMI 复售率>50% 的加盟飞轮)。管理者先上 HD-L，想转型做教练/顾问再上 HD-C，两门课互相导流、互不抢食。
+    </div>
+  </div>
+
+  <!-- 八、交付形态 -->
+  <div class="sec" id="deliver">
+    <h2><span class="idx">8</span>交付形态与课时安排</h2>
+    <div class="sub">按"引流 → 转化 → 规模化"分层，适配个人与企业两类市场。</div>
+    <div class="sched">
+      <div class="c"><h4>入门工作坊</h4><div class="meta">1–2 天 · 引流</div><p>体验式：出图 + M0/M1/M5 精要 + 一次非我觉醒。低价或企业内购，转化到深度营。</p></div>
+      <div class="c"><h4>深度实操营</h4><div class="meta">8 周 · 转化</div><p>线上自学 + 线下实践圈 + M1–M9 全模块，含团队设计地图工作坊。主利润池。</p></div>
+      <div class="c"><h4>认证讲师营</h4><div class="meta">12 周 · 规模化</div><p>HD-L4 路径 + 毕业项目答辩，产出可独立授课的认证讲师，构成加盟/合作节点。</p></div>
+      <div class="c"><h4>企业内训 / 授权</h4><div class="meta">定制 · B2B 放大</div><p>团队设计地图 + 组织诊断，按企业规模收费；认证讲师下沉交付，总部收授权+续费。</p></div>
+    </div>
+  </div>
+
+  <!-- 九、评估 -->
+  <div class="sec" id="kpi">
+    <h2><span class="idx">9</span>评估与结果指标</h2>
+    <div class="sub">用数据证明"图真的有用"，对冲人类图科学公信力的质疑。</div>
+    <div class="kpi">
+      <div class="k"><div class="v">↓压力</div><div class="l">领导者主观压力评分(前/后测)</div></div>
+      <div class="k"><div class="v">↑决策</div><div class="l">决策质量/速度自评+同伴评</div></div>
+      <div class="k"><div class="v">↑信任</div><div class="l">团队对上司信任度(29%→目标↑)</div></div>
+      <div class="k"><div class="v">↓倦怠</div><div class="l">非我触发频次/能量复位达成率</div></div>
+    </div>
+    <div class="note amber" style="margin-top:14px">
+      <b>信任背书前置：</b>本课程由「邓勤敏」开发——Toastmasters 12 年、3 次 DTM(全球&lt;1% 一次)的顶级内部实践者。课程的"训练闭环"不是纸上谈兵，而是来自地球上运行最久的领导力训练体系之一的顶级资历。这是区别于 LMI / CCL / DDI 所有竞品的独有信任壁垒。
+    </div>
+  </div>
+
+  <!-- 十、附录 · 配套工具卡（V2 新增） -->
+  <div class="sec appx" id="appx">
+    <h2><span class="idx">★</span>附录 · 配套工具卡</h2>
+    <div class="sub">本页外的 6 张工具页 —— 招 / 学 / 练 / 评 / 商业全流程配套，按需取用。</div>
+
+    <div class="tcards">
+      <a class="tcard" href="humandesign-leadership-feasibility.html">
+        <span class="tg">战略</span>
+        <h3>可研报告</h3>
+        <p>可行性研究报告：市场痛点 · Toastmasters / LMI 模式借鉴 · 商业模式 · 12 节数据 + 2 个差异化护城河。</p>
+        <div class="go">打开 →</div>
+      </a>
+      <a class="tcard" href="yijing-leadership-map.html">
+        <span class="tg">文化桥</span>
+        <h3>易经领导力</h3>
+        <p>易经领导力体系图谱：太极 · 64 卦结构 · 三易 · 爻位金字塔 + 与人类图闸门意象的融合落点。</p>
+        <div class="go">打开 →</div>
+      </a>
+      <a class="tcard" href="hd-chart-generator.html">
+        <span class="tg">出图</span>
+        <h3>出图测评</h3>
+        <p>人类图出生数据出图测评：输入数据 → 调取 API → 4 行星（个性太阳/地球 + 设计太阳/地球）+ 卦象 + 爻线 + M1/M2/M3 报告。</p>
+        <div class="go">打开 →</div>
+      </a>
+      <a class="tcard" href="hd-course-matrix.html">
+        <span class="tg">招生</span>
+        <h3>课程矩阵</h3>
+        <p>M0–M10 课程矩阵速览：11 模块 × 四级认证 HD-L1~L4 闭环速览，可作招生彩页 / 学习路径图单独转发。</p>
+        <div class="go">打开 →</div>
+      </a>
+      <a class="tcard" href="hd-leadership-workbook.html">
+        <span class="tg">训练</span>
+        <h3>练习手册</h3>
+        <p>M0–M10 微练习 + 决策日志 + 团队位势图 + 领导宣言模板 —— 学员每天照着做，Toastmasters 式高频练习闭环。</p>
+        <div class="go">打开 →</div>
+      </a>
+      <a class="tcard self" href="hd-tools-hub.html">
+        <span class="tg">索引</span>
+        <h3>更多工具</h3>
+        <p>全部配套工具的一站式入口：6 张主工具 + 5 张辅工具（商业 / 辨析 / 漏斗 / 借鉴 / 脚本），按需取用。</p>
+        <div class="go">打开 →</div>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">《人类图领导力》课程开发蓝图 <span id="ver">V2</span></div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+
+<script>
+  const VERSION = "V2";
+  try{ document.getElementById('ver').textContent = VERSION; }catch(e){}
+
+  /* ===== 移动端汉堡抽屉：菜单由桌面导航动态生成（try-catch 包裹，先注册开关，最后 buildMenu） ===== */
+  (function(){
+    try{
+      var ham = document.getElementById('hamBtn');
+      var mask = document.getElementById('mask');
+      var close = document.getElementById('closeBtn');
+      var drawer = document.getElementById('drawer');
+      function openDrawer(){ document.body.classList.add('drawer-open'); }
+      function closeDrawer(){ document.body.classList.remove('drawer-open'); }
+      if(ham) ham.addEventListener('click', openDrawer);
+      if(close) close.addEventListener('click', closeDrawer);
+      if(mask) mask.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeDrawer(); });
+
+      // 构建抽屉菜单（手风琴分组）
+      var groups = [
+        {t:'定位与架构', items:[['pos','课程定位'],['arch','四级认证 HD-L'],['matrix','模块矩阵']]},
+        {t:'模块设计', items:[['mods','M0–M10 详细设计']]},
+        {t:'训练与运营', items:[['eff','七步训练闭环'],['circle','HD 实践圈'],['path','升学路径']]},
+        {t:'交付与评估', items:[['deliver','交付形态'],['kpi','评估指标'],['appx','附录 · 工具卡']]}
+      ];
+      var body = document.getElementById('drawerBody');
+      if(body){
+        groups.forEach(function(g, gi){
+          var gdiv = document.createElement('div'); gdiv.className='dgroup';
+          var gt = document.createElement('button'); gt.className='gt';
+          gt.innerHTML = g.t + ' <span class="ar">›</span>';
+          var items = document.createElement('div'); items.className='items';
+          g.items.forEach(function(it){
+            var a = document.createElement('a'); a.href='#'+it[0]; a.textContent=it[1];
+            a.addEventListener('click', function(){ closeDrawer(); });
+            items.appendChild(a);
+          });
+          gt.addEventListener('click', function(){ gdiv.classList.toggle('open'); });
+          gdiv.appendChild(gt); gdiv.appendChild(items); body.appendChild(gdiv);
+        });
+      }
+    }catch(e){ console.warn('drawer init failed:', e); }
+  })();
+</script>
+</body>
+</html>

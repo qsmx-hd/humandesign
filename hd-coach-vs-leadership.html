@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图教练 vs 人类图领导力 · 一页对照</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --paper:#FBF7F0; --primary:#C4956A; --dark:#2D2118;
+    --border:#E8DCC8; --gold:#B8860B; --muted:#7A6A58;
+    --coach:#6B4E8A; --coach-bg:#F1ECF6;   /* 金紫：教练 */
+    --lead:#C8743C;  --lead-bg:#FBEDE2;     /* 赤陶琥珀：领导 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--dark);
+    font-size:15px; line-height:1.75; padding:0 0 48px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 16px}
+
+  /* 顶栏 */
+  header{
+    background:linear-gradient(135deg,#3A2B1E,#5A4129);
+    color:#F5E9D8; padding:30px 16px 26px; text-align:center;
+    border-bottom:4px solid var(--primary);
+  }
+  header .kicker{font-size:13px; letter-spacing:3px; color:var(--primary); margin-bottom:8px}
+  header h1{font-size:23px; line-height:1.4; font-weight:800; color:#FBF3E6}
+  header p{font-size:14px; color:#E4D4BE; margin-top:10px}
+
+  /* 一句话区分横幅 */
+  .hero{
+    display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center;
+    margin:22px 0 6px;
+  }
+  .hero .pill{padding:14px 12px; border-radius:14px; text-align:center; font-weight:700; font-size:15px}
+  .hero .coach{background:var(--coach-bg); color:var(--coach); border:1.5px solid var(--coach)}
+  .hero .lead{background:var(--lead-bg); color:var(--lead); border:1.5px solid var(--lead)}
+  .hero .vs{font-size:14px; color:var(--muted); font-weight:700}
+
+  section{margin-top:30px}
+  h2{
+    font-size:18px; color:var(--dark); margin-bottom:14px;
+    padding-left:12px; border-left:5px solid var(--primary);
+  }
+  .lead-txt{font-size:14.5px; color:var(--muted); margin-bottom:14px}
+
+  /* 本体区别表 */
+  table{width:100%; border-collapse:collapse; background:var(--paper);
+    border:1px solid var(--border); border-radius:12px; overflow:hidden; font-size:14px}
+  th,td{padding:12px 13px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border)}
+  thead th{background:var(--primary); color:#fff; font-size:13.5px; font-weight:700}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{font-weight:700; color:var(--dark); width:20%; background:#F3ECDF}
+  tbody td b{color:var(--lead)}
+
+  /* 三轴对比卡 */
+  .cmp{background:var(--paper); border:1px solid var(--border); border-radius:14px;
+    padding:16px; margin-bottom:14px}
+  .cmp .dim{font-size:15px; font-weight:800; color:var(--dark); margin-bottom:12px;
+    display:flex; align-items:center; gap:8px}
+  .cmp .dim::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--gold)}
+  .cmp-cols{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .cell{border-radius:10px; padding:12px; font-size:13.5px; line-height:1.7}
+  .cell .tag{display:inline-block; font-size:12px; font-weight:800; padding:2px 9px;
+    border-radius:20px; margin-bottom:7px; color:#fff}
+  .cell.coach{background:var(--coach-bg); border:1px solid #D9C9EC}
+  .cell.coach .tag{background:var(--coach)}
+  .cell.lead{background:var(--lead-bg); border:1px solid #F0CFB8}
+  .cell.lead .tag{background:var(--lead)}
+  .cell b{color:var(--dark)}
+
+  /* 提示框 */
+  .note{background:#FBF3E6; border:1px solid var(--border); border-left:5px solid var(--gold);
+    border-radius:10px; padding:14px 16px; font-size:14px; line-height:1.8; margin-top:6px}
+  .note b{color:var(--lead)}
+  .note .h{font-weight:800; color:var(--dark); display:block; margin-bottom:6px}
+
+  .grid3{display:grid; grid-template-columns:1fr; gap:12px}
+  .card{background:var(--paper); border:1px solid var(--border); border-radius:12px; padding:15px}
+  .card h4{font-size:15px; color:var(--dark); margin-bottom:7px}
+  .card p{font-size:13.5px; color:var(--muted); line-height:1.7}
+
+  /* 互补路径 */
+  .flow{background:var(--paper); border:1px solid var(--border); border-radius:14px; padding:18px 16px}
+  .step{display:flex; gap:12px; align-items:flex-start; position:relative; padding-bottom:18px}
+  .step:last-child{padding-bottom:0}
+  .step .num{flex:0 0 30px; height:30px; border-radius:50%; background:var(--primary);
+    color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center}
+  .step .body{flex:1}
+  .step .body .t{font-weight:800; color:var(--dark); font-size:14.5px}
+  .step .body .d{font-size:13.5px; color:var(--muted); margin-top:2px}
+  .step:not(:last-child)::after{content:""; position:absolute; left:14.5px; top:30px;
+    bottom:0; width:2px; background:var(--border)}
+
+  /* 视觉辨识 */
+  .vis{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px}
+  .vis .v{border-radius:12px; padding:15px; color:#fff}
+  .vis .v.coach{background:linear-gradient(135deg,#5A4170,#6B4E8A)}
+  .vis .v.lead{background:linear-gradient(135deg,#B5611F,#C8743C)}
+  .vis .v h4{font-size:15px; margin-bottom:6px}
+  .vis .v p{font-size:13px; color:#F3E9DC; line-height:1.6}
+
+  footer{margin-top:34px; text-align:center; font-size:12.5px; color:var(--muted);
+    border-top:1px solid var(--border); padding-top:18px; line-height:1.7}
+  footer b{color:var(--dark)}
+
+  @media(max-width:560px){
+    .hero{grid-template-columns:1fr; text-align:center}
+    .hero .vs{order:2; padding:4px 0}
+    .cmp-cols{grid-template-columns:1fr}
+    .vis{grid-template-columns:1fr}
+    header h1{font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">HUMAN DESIGN · 课程矩阵对照</div>
+  <h1>人类图教练 &nbsp;vs&nbsp; 人类图领导力</h1>
+  <p>一页对照 · 两门课的辨识度与互补关系</p>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="pill coach">🟤 向内 · 陪你找到自己</div>
+    <div class="vs">VS</div>
+    <div class="pill lead">🟠 向外 · 带出团队合力</div>
+  </div>
+
+  <!-- 一、本体区别 -->
+  <section>
+    <h2>一、教练技术 vs 领导力：本体就不同</h2>
+    <p class="lead-txt">两者常被混谈，是因为现代领导力包含"教练式领导"。但<b>本体清晰</b>：教练是一种关系姿态（激发客户自己的答案），领导是一种影响功能（动员一群人朝目标前进）。你可以教练式地领导，但不能在领导时完全教练式——有些决定必须你拍板。</p>
+    <table>
+      <thead><tr><th>维度</th><th>教练技术 Coaching</th><th>领导力 Leadership</th></tr></thead>
+      <tbody>
+        <tr><td>本质</td><td>通过对话 + 提问，<b>激发客户自己的觉察与行动</b>；教练是"过程"专家</td><td>通过方向与影响，<b>动员一群人朝共同目标前进</b>；是一种责任</td></tr>
+        <tr><td>核心姿态</td><td><b>非指导</b>：不替客户给答案，客户是自己问题的专家</td><td><b>可指导</b>：该拍板拍板、该给方向给方向、对结果负责</td></tr>
+        <tr><td>作用单位</td><td>主要<b>个体</b>（1:1）</td><td><b>群体 / 组织</b></td></tr>
+        <tr><td>交付物</td><td>客户的清晰、承诺、行为改变</td><td>团队绩效、文化、结果</td></tr>
+        <tr><td>时间性</td><td>常围绕目标 / 转折，阶段性</td><td>持续、系统性</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 二、三轴拆法 -->
+  <section>
+    <h2>二、两门课的辨识度：三轴拆法</h2>
+    <p class="lead-txt">两门课都用到"类型 / 权威 / 剖像"，真正的辨识度来自<b>主语与姿态</b>。沿七个维度拉开：</p>
+
+    <div class="cmp">
+      <div class="dim">主语 / 视角</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>第三人称：我作为教练，服务"他"的客户</div>
+        <div class="cell lead"><span class="tag">领导</span>第一人称：我作为领导者，经营"我"的团队</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">给不给答案</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span><b>不给</b>——提问、陪伴，陪客户自己走出来</div>
+        <div class="cell lead"><span class="tag">领导</span><b>给</b>——做决策、定方向、对结果负责</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">改变单位</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>个体觉察与转化</div>
+        <div class="cell lead"><span class="tag">领导</span>团队 / 组织绩效与合力</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">人类图用法</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>把图当"<b>客户的地图</b>"，教练陪走</div>
+        <div class="cell lead"><span class="tag">领导</span>把图当"<b>自己和团队的操作系统</b>"，用来带人</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">受众身份</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>想助人 / 已是教练、咨询师、解读师、OD 顾问</div>
+        <div class="cell lead"><span class="tag">领导</span>在带人、有团队的管理者 / 创业者 / 团队长</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">出口认证</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>人类图教练（HDCC 四级，可收费接个案）</div>
+        <div class="cell lead"><span class="tag">领导</span>更符合设计的高效领导者（HD-L 四级 + 实践圈）</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="dim">训练形态</div>
+      <div class="cmp-cols">
+        <div class="cell coach"><span class="tag">教练</span>1:1 督导、个案演练、毕业案例分析</div>
+        <div class="cell lead"><span class="tag">领导</span>实践圈 / 团队实验室（Toastmasters 式）、组织设计项目</div>
+      </div>
+    </div>
+
+    <div class="note"><span class="h">辨识度最强的一句话</span>
+      🟤 <b>HD 教练</b> =「向内 · 陪你找到自己」（非指导、1:1、个体转化）<br>
+      🟠 <b>HD 领导力</b> =「向外 · 带出团队合力」（指导、团队、绩效结果）<br>
+      一个 HR 想转型做教练 → 上教练课；一个部门经理想带好团队 → 上领导力课。<b>受众几乎不重叠</b>，这是最硬的辨识度。
+    </div>
+  </section>
+
+  <!-- 三、内容重叠边界 -->
+  <section>
+    <h2>三、必须处理的"内容重叠"——BG5 / 团队模块</h2>
+    <p class="lead-txt">教练课 L4 / BG5 已碰"团队 / 领导力发展"。三条边界即可干净划界，互不打架：</p>
+    <div class="grid3">
+      <div class="card"><h4>① 领导力课只做"应用层"</h4><p>不重教 BG5 / OC16 机制（那是教练课地盘），而假设领导者已自知其设计，聚焦决策矩阵、按类型授权、按类型设计会议、抗倦怠节奏、团队角色排布。</p></div>
+      <div class="card"><h4>② 教练课 BG5 标"顾问视角"</h4><p>教练课的 BG5 模块明确标注为"以教练 / 顾问身份服务组织"——与"领导者第一人称经营"区分开，视角不同，内容不冲突。</p></div>
+      <div class="card"><h4>③ 设计成互补 + 进阶</h4><p>管理者先上 HD-Leadership 带好团队；想转型做教练 / 顾问者，再上 HD-Coaching。两门课互相导流而非互抢。</p></div>
+    </div>
+  </section>
+
+  <!-- 四、互补升学路径 -->
+  <section>
+    <h2>四、互补升学路径（互相导流）</h2>
+    <div class="flow">
+      <div class="step"><div class="num">1</div><div class="body"><div class="t">入口：管理者</div><div class="d">先修 HD-Leadership，带好现有团队、活出自身设计</div></div></div>
+      <div class="step"><div class="num">2</div><div class="body"><div class="t">想进阶助人</div><div class="d">若想"助人 / 对外收费"，续修 HD-Coaching，把带人经验转化为教练能力（ICF 八项能力 + HD-COACH 模型）</div></div></div>
+      <div class="step"><div class="num">3</div><div class="body"><div class="t">毕业出口</div><div class="d">HD-Leadership 出"高效领导者"，HD-Coaching 出"可收费人类图教练"——两条认证链独立、数据互通，形成课程矩阵而非两门孤立课</div></div></div>
+    </div>
+    <div class="note" style="margin-top:14px"><span class="h">价值</span>既守住辨识度，又把同一批用户的<b>生命周期价值</b>从一门课拉长到两门——这是单门课做不到的。</div>
+  </section>
+
+  <!-- 五、视觉辨识 -->
+  <section>
+    <h2>五、品牌视觉辨识建议</h2>
+    <p class="lead-txt">在统一棕金体系内，用副色强化两门课的视觉区隔（具体由你定）：</p>
+    <div class="vis">
+      <div class="v coach"><h4>🟤 HD 教练</h4><p>深棕沉静 + 金紫点缀——传递"向内、陪伴、静水深流"。</p></div>
+      <div class="v lead"><h4>🟠 HD 领导力</h4><p>赤陶 / 琥珀活力——传递"向外、行动、带团队出结果"。</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-weight:700;color:var(--ink)">人类图教练 vs 人类图领导力 · 一页对照</div>
+    <div>© 2026 HD-Leadership</div>
+    <div style="opacity:.75">Powered By Kan Man Tang</div>
+  </footer>
+
+</div>
+</body>
+</html>
