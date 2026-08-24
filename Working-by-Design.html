@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Working-by-Design · 按设计工作</title>
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --surface:#FBF7F0;
+    --surface-2:#FFFDF8;
+    --primary:#C4956A;
+    --primary-dark:#A9743F;
+    --gold:#C9952F;
+    --dark:#2D2118;
+    --muted:#6B5B4A;
+    --border:#E8DCC8;
+    --danger:#B05545;
+    --ok:#5E7B53;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--dark);
+    font-size:15px;
+    line-height:1.75;
+    -webkit-text-size-adjust:100%;
+  }
+  a{color:var(--primary-dark);text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 18px;}
+
+  /* ---------- Top Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:999;
+    background:rgba(245,240,232,.94);
+    backdrop-filter:saturate(140%) blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-weight:800;font-size:16px;color:var(--dark);letter-spacing:.5px;display:flex;align-items:center;gap:8px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,149,47,.18);}
+  .brand small{font-weight:500;font-size:12px;color:var(--muted);margin-left:2px;}
+  .desktop-menu{display:flex;gap:4px;align-items:center;}
+  .desktop-menu a{font-size:13.5px;color:var(--muted);padding:8px 11px;border-radius:9px;white-space:nowrap;}
+  .desktop-menu a:hover{background:var(--surface-2);color:var(--dark);}
+  .hamburger{display:none;width:44px;height:44px;border:none;background:transparent;font-size:22px;color:var(--dark);cursor:pointer;}
+  @media(max-width:768px){
+    .desktop-menu{display:none;}
+    .hamburger{display:block;}
+  }
+
+  /* drawer */
+  .drawer-mask{position:fixed;inset:0;background:rgba(45,33,24,.42);z-index:9998;opacity:0;visibility:hidden;transition:.25s;backdrop-filter:blur(1px);}
+  .drawer-mask.open{opacity:1;visibility:visible;}
+  .drawer{position:fixed;top:0;right:0;height:100dvh;height:100vh;width:82%;max-width:330px;background:var(--surface);z-index:9999;
+    transform:translateX(100%);transition:transform .26s ease;box-shadow:-8px 0 30px rgba(45,33,24,.18);overflow-y:auto;padding:14px 0 26px;}
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 12px;border-bottom:1px solid var(--border);}
+  .drawer-head .t{font-weight:800;color:var(--dark);font-size:15px;}
+  .drawer-close{width:42px;height:42px;border:none;background:transparent;font-size:22px;color:var(--muted);cursor:pointer;}
+  .drawer a{display:block;padding:14px 20px;font-size:15px;color:var(--dark);border-bottom:1px solid var(--border);}
+  .drawer a:active{background:var(--surface-2);}
+  body.drawer-open nav{z-index:0 !important;}
+
+  /* ---------- Hero ---------- */
+  header.hero{text-align:center;padding:54px 18px 40px;background:
+     radial-gradient(120% 90% at 50% -10%, #FBF1E2 0%, var(--bg) 60%);}
+  header.hero .kicker{display:inline-block;font-size:12.5px;letter-spacing:2px;color:var(--primary-dark);border:1px solid var(--border);
+     padding:5px 14px;border-radius:999px;background:var(--surface-2);margin-bottom:16px;}
+  header.hero h1{font-size:30px;line-height:1.3;margin:0 0 6px;color:var(--dark);}
+  header.hero .sub{font-size:14px;color:var(--muted);max-width:72ch;margin:10px auto 0;line-height:1.8;
+     word-wrap:break-word;overflow-wrap:anywhere;}
+  header.hero .lead{font-size:16px;color:var(--dark);max-width:72ch;margin:18px auto 6px;font-weight:700;line-height:1.6;}
+  header.hero .quote{font-size:13.5px;color:var(--muted);max-width:72ch;margin:6px auto 0;font-style:italic;
+     border-top:1px dashed rgba(196,149,106,.4);padding-top:12px;line-height:1.8;word-wrap:break-word;overflow-wrap:anywhere;}
+  .btnrow{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .btn{display:inline-block;padding:13px 22px;border-radius:11px;font-size:14.5px;font-weight:700;cursor:pointer;border:1px solid transparent;}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 6px 18px rgba(196,149,106,.32);}
+  .btn-ghost{background:var(--surface-2);color:var(--dark);border-color:var(--border);}
+
+  /* ---------- Sections ---------- */
+  section{padding:40px 0;border-top:1px solid var(--border);}
+  .sec-head{text-align:center;margin-bottom:26px;}
+  .sec-head .tag{font-size:12px;letter-spacing:2px;color:var(--primary-dark);font-weight:700;}
+  .sec-head h2{font-size:22px;margin:8px 0 6px;color:var(--dark);}
+  .sec-head p{font-size:14px;color:var(--muted);max-width:72ch;margin:0 auto;line-height:1.8;word-wrap:break-word;overflow-wrap:anywhere;}
+  .sec-head p + p{margin-top:8px;}
+  .sec-head p.keep-line{white-space:nowrap;}
+  @media(max-width:560px){.sec-head p.keep-line{white-space:normal;}}
+  header.hero .quote + .quote{border-top:none;padding-top:0;margin-top:2px;}
+
+  .section-title{font-size:17px;font-weight:800;color:var(--dark);margin:0 0 14px;display:flex;align-items:center;gap:9px;}
+  .section-title::before{content:"";width:6px;height:18px;border-radius:3px;background:var(--gold);display:inline-block;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 18px;margin-bottom:14px;
+     box-shadow:0 2px 10px rgba(45,33,24,.04);}
+  .card h3{font-size:15.5px;margin:0 0 8px;color:var(--dark);}
+  .card p{font-size:13.5px;color:var(--muted);margin:6px 0;line-height:1.75;}
+  .card .label{display:inline-block;font-size:12px;color:var(--primary-dark);background:var(--surface-2);
+     border:1px solid var(--border);padding:2px 9px;border-radius:999px;margin:2px 4px 2px 0;}
+
+  /* grid systems */
+  .grid{display:grid;gap:14px;}
+  .grid-2x2{grid-template-columns:repeat(2,1fr);}
+  .grid-3x2{grid-template-columns:repeat(3,1fr);}
+  .grid-auto{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+  @media(max-width:760px){
+    .grid-3x2{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:560px){
+    .grid-2x2{grid-template-columns:1fr;}
+    .grid-3x2{grid-template-columns:1fr;}
+    .grid-auto{grid-template-columns:1fr;}
+  }
+
+  /* effectiveness engine stats */
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 4px;}
+  .stat{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;}
+  .stat b{display:block;font-size:22px;color:var(--primary-dark);}
+  .stat span{font-size:12px;color:var(--muted);}
+  @media(max-width:560px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  /* callout */
+  .callout{background:linear-gradient(180deg,#FBF1E2,#FBF7F0);border:1px solid var(--border);border-left:4px solid var(--gold);
+     border-radius:12px;padding:16px 18px;margin:16px 0;font-size:13.5px;color:var(--dark);line-height:1.8;}
+  .callout b{color:var(--primary-dark);}
+
+  /* 7-step timeline */
+  .steps{position:relative;margin-top:8px;}
+  .step{display:flex;gap:14px;padding:6px 0 18px;}
+  .step .num{flex:0 0 44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;font-weight:800;font-size:17px;
+     display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(196,149,106,.35);}
+  .step .body{flex:1;}
+  .step .body h3{font-size:15.5px;margin:6px 0 4px;}
+  .step .body p{font-size:13px;color:var(--muted);margin:4px 0;line-height:1.7;}
+  .step .body .pit{font-size:12.5px;color:var(--danger);background:rgba(176,85,69,.07);border-radius:8px;padding:8px 10px;margin-top:6px;}
+  .step .body .pit b{color:var(--danger);}
+
+  /* week accordion */
+  details.week{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:11px;overflow:hidden;}
+  details.week summary{cursor:pointer;padding:14px 16px;font-weight:700;font-size:14.5px;color:var(--dark);
+     display:flex;align-items:center;gap:10px;list-style:none;}
+  details.week summary::-webkit-details-marker{display:none;}
+  details.week summary .wk{background:var(--primary);color:#fff;border-radius:8px;font-size:12px;padding:3px 9px;flex:0 0 auto;}
+  details.week summary .ar{margin-left:auto;color:var(--muted);transition:.2s;}
+  details.week[open] summary .ar{transform:rotate(90deg);}
+  details.week .wbody{padding:4px 16px 16px;border-top:1px dashed var(--border);}
+  details.week .wbody .row{margin:10px 0;}
+  details.week .wbody .row .k{font-size:12px;font-weight:800;color:var(--primary-dark);letter-spacing:.5px;margin-bottom:3px;}
+  details.week .wbody .row .v{font-size:13px;color:var(--muted);line-height:1.7;}
+  details.week .wbody ul{margin:4px 0;padding-left:18px;font-size:13px;color:var(--muted);}
+  details.week .wbody ul li{margin:3px 0;}
+
+  /* ladder */
+  .ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .ladder .tier{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px 14px;position:relative;}
+  .ladder .tier .lv{font-size:12px;font-weight:800;color:var(--gold);}
+  .ladder .tier h3{font-size:15px;margin:6px 0 6px;}
+  .ladder .tier p{font-size:12.5px;color:var(--muted);line-height:1.7;margin:0;}
+  .ladder .tier.core{border-color:var(--primary);box-shadow:0 0 0 3px rgba(196,149,106,.16);}
+  .ladder .tier .badge{position:absolute;top:-10px;right:12px;background:var(--primary);color:#fff;font-size:12px;padding:2px 8px;border-radius:999px;}
+  .ladder .tier .tools{display:block;margin-top:4px;color:var(--primary-dark);font-weight:700;}
+  @media(max-width:760px){.ladder{grid-template-columns:1fr;}}
+
+  /* cert table-ish */
+  .cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media(max-width:560px){.cert-grid{grid-template-columns:1fr;}}
+  .cert{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+  .cert .n{font-size:13px;font-weight:800;color:var(--gold);}
+  .cert h3{font-size:15px;margin:4px 0 6px;}
+  .cert p{font-size:13px;color:var(--muted);margin:0;line-height:1.7;}
+
+  /* ethics */
+  .ethics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .ethic{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;border-left:4px solid var(--ok);}
+  @media(max-width:760px){.ethics{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.ethics{grid-template-columns:1fr;}}
+  .ethic h3{font-size:14.5px;margin:0 0 6px;color:var(--dark);}
+  .ethic p{font-size:13px;color:var(--muted);margin:0;line-height:1.7;}
+
+  /* footer */
+  footer{background:var(--surface);color:var(--dark);padding:34px 18px 26px;text-align:center;border-top:1px solid var(--border);}
+  footer .fbrand{font-size:16px;font-weight:800;color:var(--dark);margin-bottom:6px;}
+  footer .powered{margin-top:12px;font-size:12.5px;color:var(--primary-dark);letter-spacing:1px;font-weight:700;}
+
+  .pill{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;
+     padding:4px 12px;font-size:12px;color:var(--muted);margin:3px 4px 3px 0;}
+
+  /* ---------- Workbook ---------- */
+  .wb-weekbar{display:flex;gap:6px;overflow-x:auto;padding:6px 2px 12px;-webkit-overflow-scrolling:touch;}
+  .wb-weekbar button{flex:0 0 auto;min-width:46px;padding:9px 0;border:1px solid var(--border);background:var(--surface-2);border-radius:9px;font-size:13px;color:var(--muted);font-weight:700;cursor:pointer;}
+  .wb-weekbar button.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .wb-form .frow{margin:12px 0;}
+  .wb-form label{display:block;font-size:13px;font-weight:800;color:var(--primary-dark);margin-bottom:5px;}
+  .wb-form input[type=text], .wb-form textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px 12px;font-size:14px;font-family:inherit;background:var(--surface-2);color:var(--dark);}
+  .wb-form textarea{min-height:84px;resize:vertical;line-height:1.6;}
+  .wb-form .range{display:flex;align-items:center;gap:12px;}
+  .wb-form .range input{flex:1;accent-color:var(--primary);}
+  .wb-form .range b{font-size:16px;color:var(--primary-dark);min-width:26px;text-align:center;}
+  .wb-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .wb-print-area{display:none;}
+  @media print{
+    body > *:not(.wb-print-area){display:none !important;}
+    .wb-print-area{display:block !important;position:static;width:100%;padding:24px;color:#1a1a1a;font-size:14px;line-height:1.8;background:#fff;}
+    .wb-print-area h2{font-size:20px;margin:0 0 6px;color:#1a1a1a;text-align:center;}
+    .wb-print-area .pmeta{color:#666;margin-bottom:14px;font-size:12.5px;text-align:center;}
+    .wb-print-area .pv{margin:10px 0;padding-bottom:10px;border-bottom:1px solid #ccc;}
+    .wb-print-area .pv .k{font-weight:800;color:#7a4a1e;font-size:14px;}
+    .wb-print-area .pv .v{white-space:pre-wrap;font-size:13.5px;color:#1a1a1a;}
+  }
+
+  /* ---------- Assessment ---------- */
+  .as-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .as-tabs button{flex:1;min-width:110px;padding:10px 8px;border:1px solid var(--border);background:var(--surface-2);border-radius:10px;font-size:13px;color:var(--muted);font-weight:700;cursor:pointer;}
+  .as-tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .as-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;}
+  .as-panel.active{display:block;}
+  .as-form .frow{margin:12px 0;}
+  .as-form label{display:block;font-size:13px;font-weight:800;color:var(--primary-dark);margin-bottom:5px;}
+  .as-form input[type=text], .as-form input[type=date], .as-form input[type=number], .as-form select, .as-form textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--surface-2);color:var(--dark);}
+  .as-form textarea{min-height:72px;resize:vertical;line-height:1.6;}
+  .as-form .range{display:flex;align-items:center;gap:10px;min-width:0;}
+  .as-form .range input{flex:1;accent-color:var(--primary);min-width:0;width:100%;}
+  .as-form .range b{min-width:28px;text-align:center;color:var(--primary-dark);font-size:16px;}
+  .as-score-row{display:grid;grid-template-columns:1fr 130px;gap:12px;align-items:center;margin:8px 0;}
+  .as-score-row label{margin:0;font-weight:600;color:var(--dark);font-size:13px;}
+  .as-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .as-list{margin-top:16px;}
+  .as-list .item{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;font-size:13px;}
+  .as-list .item .meta{font-size:11.5px;color:var(--muted);margin-bottom:4px;}
+  .as-list .empty{color:var(--muted);font-size:13px;text-align:center;padding:16px;}
+  .as-result{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;}
+  .as-result b{color:var(--primary-dark);}
+  @media(max-width:560px){
+    .as-score-row{grid-template-columns:1fr;gap:6px;}
+    .as-score-row label{margin-bottom:2px;}
+  }
+
+  /* ---------- Channels table ---------- */
+  .ch-search{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;background:var(--surface-2);color:var(--dark);margin-bottom:14px;}
+  .ch-scroll{max-height:560px;overflow-y:auto;border:1px solid var(--border);border-radius:12px;background:var(--surface);}
+  .ch-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .ch-table th,.ch-table td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left;vertical-align:top;}
+  .ch-table th{font-size:12px;color:var(--primary-dark);position:sticky;top:0;background:var(--bg);z-index:1;}
+  .ch-table td .gates{font-weight:800;color:var(--dark);white-space:nowrap;}
+  .ch-table td .en{display:block;font-size:12px;color:var(--muted);margin-top:2px;}
+  .ch-tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);white-space:nowrap;}
+  .ch-tag.int{color:#5e7b53;border-color:#d6e3cf;background:#eef4ea;}
+  .ch-tag.ind{color:#9a5bbf;border-color:#e6d3f2;background:#f7eefc;}
+  .ch-tag.col{color:#2f7d8a;border-color:#cfe7ec;background:#eaf5f7;}
+  .ch-tag.tri{color:#b5702c;border-color:#f0dcbf;background:#fbf2e3;}
+  @media(max-width:560px){.ch-table td .en{display:block;}}
+
+  /* ---------- Pricing ---------- */
+  .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;}
+  .price{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;}
+  .price.core{border-color:var(--primary);box-shadow:0 0 0 3px rgba(196,149,106,.16);}
+  .price .lv{font-size:12px;font-weight:800;color:var(--gold);}
+  .price h3{font-size:16px;margin:5px 0 4px;color:var(--dark);}
+  .price .amt{font-size:21px;font-weight:800;color:var(--primary-dark);margin:8px 0 2px;}
+  .price .amt small{font-size:12px;color:var(--muted);font-weight:500;}
+  .price ul{margin:10px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted);line-height:1.7;}
+  .price ul li{margin:3px 0;}
+  .price .note{margin-top:auto;padding-top:10px;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--border);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="dot"></span>导航</div>
+    <div class="desktop-menu" id="desktopMenu"></div>
+    <button class="hamburger" id="hamburger" aria-label="菜单">☰</button>
+  </div>
+</nav>
+<div class="drawer-mask" id="drawerMask"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><span class="t">课程目录</span><button class="drawer-close" id="drawerClose" aria-label="关闭">✕</button></div>
+  <nav id="drawerMenu"></nav>
+</aside>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <span class="kicker">课程原型 V4 · Working-by-Design</span>
+  <h1>按设计工作</h1>
+  <p class="sub">Working by Design — 一门以「真实改变」为唯一验收标准的人类图训练课程</p>
+  <p class="lead">先读懂设计，再陪跑改变</p>
+  <p class="quote">努力没有错，错的是努力的方向违背了你的出厂设置。</p>
+  <p class="quote">人类图负责「看清你是哪台机器」，训练系统负责「把改变真正发生」。</p>
+  <div class="btnrow">
+    <a class="btn btn-primary" href="#why">为什么有效</a>
+    <a class="btn btn-ghost" href="#course12">看 12 周地图</a>
+  </div>
+</header>
+
+<!-- ===== WHY EFFECTIVE ===== -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">EFFECTIVENESS</div>
+      <h2>为什么这门训练真的有效</h2>
+      <p>人类图的价值不在「读懂」，在「活出」。</p>
+      <p>这门课程把人类图的精准诊断，装进一套被验证过的「行为改变闭环」里。</p>
+      <p>诊断、实验、重复、证据，一个都不缺。</p>
+    </div>
+
+    <div class="callout">
+      <b>核心判断：</b>人类图里唯一能真正改变你如何移动世界的，是「策略与内在权威」（Strategy &amp; Authority）。其余一切——闸门、通道、轮回交叉——都是帮助理解的外在知识。这门课程把 90% 的练习重量，压在「每天按你的设计做决定」这一件地基工程上。
+    </div>
+
+    <div class="grid grid-3x2">
+      <div class="card">
+        <h3>① 精准诊断 · 出厂设置 vs 后天制约</h3>
+        <p>第一次对话即给出你的能量地图：类型、内在权威、定义通道、开放中心。别人要摸索几周才看清的「你是谁」，你的图在第一分钟就说了。</p>
+        <span class="label">类型</span><span class="label">内在权威</span><span class="label">开放中心</span>
+      </div>
+      <div class="card">
+        <h3>② 身体决策 · 内在权威 &gt; 头脑</h3>
+        <p>头脑同意的目标会反悔，身体同意的目标会坚持。课程为你定制专属「决策流程卡」，让重大决策走身体通道，而不是走脑子编的故事。</p>
+        <span class="label">情绪权威</span><span class="label">荐骨回应</span><span class="label">脾脏直觉</span>
+      </div>
+      <div class="card">
+        <h3>③ 设计实验 + 间隔重复</h3>
+        <p>每周一个「小到不可能失败」的设计实验，用重复×时间把洞察长成习惯。实验失败不是失败，是数据——只对「没记录」问责。</p>
+        <span class="label">每周 1 实验</span><span class="label">2 分钟起步</span><span class="label">间隔重复</span>
+      </div>
+      <div class="card">
+        <h3>④ 证据链 · 非我主题频率</h3>
+        <p>不庆祝态度，只庆祝证据。用能量日记与非我主题频率的下降，作为「航向是否正确」的硬指标——挫败/苦涩/愤怒/失望每少一次，就是去制约发生一次。</p>
+        <span class="label">前后测</span><span class="label">日记数据</span><span class="label">改变报告</span>
+      </div>
+      <div class="card">
+        <h3>⑤ 类型化陪跑 · 按设计成事</h3>
+        <p>不同能量类型对应不同的训练路径与节奏——生产者块状专注、反映者需 28 天采样、投射者先被邀请。不套模板，按你的图定制每一周。</p>
+        <span class="label">类型化路径</span><span class="label">节奏定制</span><span class="label">不套模板</span>
+      </div>
+      <div class="card">
+        <h3>⑥ 长程承接 · 7 年去制约社群</h3>
+        <p>训练有效性真正兑现需要时间。90 天闭环是最小可证伪单元，7 年长程社群承接余下的去制约旅程，把一次课程变成一条陪伴飞轮。</p>
+        <span class="label">90 天闭环</span><span class="label">7 年长程</span><span class="label">留存飞轮</span>
+      </div>
+    </div>
+
+    <div class="callout" style="border-left-color:var(--primary);">
+      <b>长期视角（不承诺速成）：</b>人类图的「去制约」有生物学基础——身体细胞约每 7 年完成一次更替。主流训练传统（如 Living Your Design 的实证路径）普遍认为：前 3.5 年是「认出模式」期，3.5–7 年是「整合」期。所以这门课程交付一个 <b>90 天行为改变闭环</b>作为最小可证伪单元，并预留 <b>7 年去制约长程社群</b>承接余下旅程。
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><b>12 周</b><span>90 天陪跑闭环</span></div>
+      <div class="stat"><b>7 步</b><span>教练对话框架</span></div>
+      <div class="stat"><b>90 天</b><span>最小实验周期</span></div>
+      <div class="stat"><b>7 年</b><span>去制约长程</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7-STEP FRAMEWORK ===== -->
+<section id="framework">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">METHODOLOGY</div>
+      <h2>人类图教练对话 · 七步框架</h2>
+      <p>本课程独有的对话式、体验式教练框架。</p>
+      <p class="keep-line">先当镜子（看清设计），再当陪跑（落地改变）。</p>
+      <p class="keep-line">每一步都有明确目的、关键动作与认证考核点。</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div class="body">
+        <h3>建立安全与同盟</h3>
+        <p><b>目的：</b>在解读任何图之前，先建立「这里可以诚实」的场域。安全不是客气，是可预测。</p>
+        <p><b>关键动作：</b>安全声明（图是说明书不是判决书）· 教练契约（角色/频次/退出机制）· 期待管理（区分「算命期待」与「实验期待」）。</p>
+        <div class="pit"><b>误区：</b>跳过安全声明直接解图 → 学员进入防御；允许关键关系人当场点评学员 → 安全场域破产。</div>
+      </div></div>
+      <div class="step"><div class="num">2</div><div class="body">
+        <h3>呈现设计图</h3>
+        <p><b>目的：</b>把出生数据转化为「一图一表」，完成能量层基线。只呈现，不深解。</p>
+        <p><b>关键动作：</b>精校出生数据（年月日时+地点+时区）· 呈现九中心定义状态/类型/Profile/定义通道 · 能量层基线归档（与行为层前测并轨）。</p>
+        <div class="pit"><b>误区：</b>一次性倒完所有知识 → 认知过载；出生时辰未经双人确认 → 全图作废级错误。</div>
+      </div></div>
+      <div class="step"><div class="num">3</div><div class="body">
+        <h3>确认类型与策略</h3>
+        <p><b>目的：</b>锁定能量类型与对应策略，把「抓重点」从通用原则变成按类型定制的操作。</p>
+        <p><b>关键动作：</b>策略+签名/非我主题逐条对照真实经历 · 用上周真实事件做「策略对/错」复盘 · 输出类型策略卡（含 1 个微实验）。</p>
+        <div class="pit"><b>误区：</b>把策略讲成行为规范（生产者不许主动）· 反映者套用短周期节奏（需 28 天采样）。</div>
+      </div></div>
+      <div class="step"><div class="num">4</div><div class="body">
+        <h3>连接内在权威</h3>
+        <p><b>目的：</b>建立「重大决策走身体通道」的流程，并给目标做最后一道身体确认。</p>
+        <p><b>关键动作：</b>交付专属决策流程卡（情绪=48h 澄澈 / 荐骨=出声回应 / 脾脏=0.5 秒 / 自我=听己声）· 目标逐条过身体通道并记录信号。</p>
+        <div class="pit"><b>误区：</b>对情绪型学员当场逼确认 · 把荐骨测试当测谎仪 · 教练替学员解读身体信号（解释权永远在学员）。</div>
+      </div></div>
+      <div class="step"><div class="num">5</div><div class="body">
+        <h3>探索天赋与非我</h3>
+        <p><b>目的：</b>用定义通道定位天赋区（高回报活动的能量坐标），用开放中心定位非我干扰源。</p>
+        <p><b>关键动作：</b>逐条解读定义通道的工作场景翻译 · 高回报活动矩阵（天赋×当前时间）· 开放中心非我模式清单 · 砍/委托 3 项伪高回报活动。</p>
+        <div class="pit"><b>误区：</b>把悬挂闸门当天赋卖 · 天赋清单化后学员全想要（需聚焦 1–2 条主用）· 跳过开放中心只讲好话。</div>
+      </div></div>
+      <div class="step"><div class="num">6</div><div class="body">
+        <h3>设计实验与行动</h3>
+        <p><b>目的：</b>把前 5 步洞察转译为「每周一个设计实验」——小、可记录、可失败，用重复把洞察滚成习惯。</p>
+        <p><b>关键动作：</b>实验四要素（触发场景+替代动作+记录方式+复盘时间）· 每周 1v1 复盘（数据先行）· 同一实验至少连续 3 周才算习得。</p>
+        <div class="pit"><b>误区：</b>实验设计过大（一天三件事）· 只打卡不复盘 · 教练代填记录（记录是学员的觉察练习本身）。</div>
+      </div></div>
+      <div class="step"><div class="num">7</div><div class="body">
+        <h3>整合承诺与跟进</h3>
+        <p><b>目的：</b>以证据链收口：前后测对比、非我主题频率变化、习惯清单；把成果转译为下一程承诺。</p>
+        <p><b>关键动作：</b>学员用数据讲改变故事（3 改变+3 证据）· 关键人终会确认可见变化 · 输出个体改变报告 · 下一程承诺书（含自主循环选项）。</p>
+        <div class="pit"><b>误区：</b>毕业汇报变成感恩会（必须数据先行）· 把卖课当毕业前提 · ROI 只报业务数据（能量层数据是本体系差异点）。</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 12-WEEK COURSE ===== -->
+<section id="course12">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">CORE PRODUCT</div>
+      <h2>Level 1《按设计工作》· 12 周课程地图</h2>
+      <p class="keep-line">90 天教练陪跑：每周 1 次 1v1（60–90 分钟）+ 每日微实践（15–20 分钟）+ 双周工作坊。</p>
+      <p>结构为「诊断→定向→实验→定制→固化」。</p>
+    </div>
+
+    <details class="week" open><summary><span class="wk">W1</span>开学与全面诊断：你的人生说明书<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">建立教练契约；完成人类图全图解读与行为层前测；让学员第一次「被看见」。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">九大能量中心 · 五大类型概览 · 个性/设计（黑/红）意识层次。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">完整人类图（出生数据精校）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>提交出生年月日时 + 出生地（含时区）</li><li>完成前测量表</li><li>记录一周时间流水账（每半小时一行，为 W6 做基线）</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">人类图报告交付 · 前测数据入库 · 目标共识书签署。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W2</span>能量类型与工作策略：别用别人的电池<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">确认能量类型；掌握本类型的策略与签名/非我主题。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">生产者（荐骨回应/满足-挫败）· 显示生产者（回应+告知/满足-挫败+匆忙）· 投射者（等待邀请/成功-苦涩）· 显示者（告知/平静-愤怒）· 反映者（采样/惊喜-失望）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">类型-策略-主题对照表；能量场类型图解。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>能量高低点日记（每天 3 条）</li><li>识别 1 件违背类型策略的事并写下代价</li><li>向同事做 1 分钟「类型策略」分享</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">类型确认书 · 能量日记完成率 ≥80%。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W3</span>内在权威：决策的身体密码<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">确认内在权威；建立「重大决策走身体通道」的流程。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">情绪权威（睡一觉再定/情绪波）· 荐骨权威（当下回应）· 脾脏权威（0.5 秒直觉，过期作废）· 自我权威（听自己说）· 意志力权威（想要+证明）· 无内在权威（环境月亮）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">内在权威决策流程卡（按学员实际权威定制）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>决策流程实测记录 1 次</li><li>列出 3 个「该走权威却走了脑子」的决策</li><li>给关键关系人发一封「我的决策风格说明」</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">权威决策实测完成 · 决策风格说明送达。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W4</span>目标设定：身体说 YES 的目标<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">产出 1 个主目标 + 2 个副目标，全部通过身体确认。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">目标判据（具体/可衡量/可达成/相关/有时限）× 荐骨测试（嗯嗯=YES / 嗯…=NO）× 情绪澄澈确认（48 小时法）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">荐骨测试协议 / 48 小时澄澈法。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>目标计划书 V1（主目标含衡量指标 + 截止日）</li><li>身体确认记录（信号描述）</li><li>与关键关系人完成目标共识签认</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">目标计划书签署 · 身体确认记录归档。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W5</span>高回报活动扫描：天赋通道定位<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">用定义通道清单定位天赋区；输出「高回报活动矩阵」。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">定义通道 = 稳定天赋能量 · 悬挂闸门 = 潜在但需对端配合 · 天赋 ≠ 技能（天赋是能量的形状，技能是填充物）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">学员定义通道逐条解读（每条通道的工作场景翻译）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>高回报活动矩阵（天赋 × 当前时间分配）</li><li>砍掉/委托 3 项「非高回报」活动的具体计划</li><li>通道 × 目标映射表</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">高回报矩阵产出 · 至少 1 项低回报活动完成委托或取消。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W6</span>时间管理与能量节律：按设计排程<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">基于 W1 时间流水账做时间审计；重建按能量节律的日程系统。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">时间审计（时间去哪了）→ 能量节律排程（高峰做高回报/低谷做事务）→ 类型化日程（生产者块状专注 / 投射者能量预算 / 显示者冲刺-休整）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">能量节律日志（由 W2 日记升级为排程依据）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>时间审计报告（分类统计）</li><li>新日程模板 V1</li><li>「黄金 90 分钟」实验记录 5 天</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">时间审计完成 · 黄金 90 分钟执行率 ≥60%。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W7</span>开放中心与非我干扰管理<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">识别开放中心的具体非我模式；建立「这是谁的情绪/压力」过滤协议。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">开放中心 = 吸收 + 放大他人能量之处 · 非我声音示例：开放情绪（怕冲突讨好）/ 开放意志力（过度自证）/ 开放头脑（被别人的问题带跑）/ 开放 G（找错方向感）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">学员开放中心清单 + 每处非我话术翻译。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>开放中心过滤协议卡（放手机壁纸）</li><li>21 天觉察日记启动</li><li>设计 1 个「退出替别人扛情绪」的动作</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">觉察日记启动 · 协议卡上线。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W8</span>中期复盘：实验数据与航向修正<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">复盘前 7 周全部实验数据；用中段反馈校准后 4 周路径。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">行为证据链（时间审计 + 能量日记 + 决策记录）· 非我主题频率下降 = 航向正确的硬指标。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">非我主题频率统计（挫败/苦涩/愤怒/失望出现次数对比）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>中期自评报告（3 个改变 + 3 个卡点）</li><li>关键人中段反馈表</li><li>后 4 周重点重排（目标计划书 V2）</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">中段反馈完成 · V2 目标计划书签署。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W9</span>变量四箭头：环境与动机定制<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">解读[消化][环境][动机][视角]四变量；定制最优工作环境与驱动方式。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">箭头左右 = 焦点型/被动型 · 环境变量（6 种环境影响专注）· 动机变量（恐惧/希望/欲望/需求/内疚/天真）· 视角变量（生存/可能性/权力/想要/概率/个人）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">变量四箭头报告（代码格式 [消化][环境][动机][视角]）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>工作环境改造清单（3 项立即可改）</li><li>动机语言卡（把目标翻译成自己的动机语言）</li><li>换环境办公 2 天对比记录</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">环境改造 ≥2 项落地 · 动机语言卡完成。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W10</span>按设计沟通：协作风格升级<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">基于喉咙中心状态与类型输出沟通协议；完成关键关系沟通升级。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">喉咙定义（有固定表达通道）/ 开放（模仿式表达、易被打断焦虑）· 类型沟通要点（显示者先告知 / 生产者等回应 / 投射者要被邀请发言 / 反映者采样后再说）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">喉咙中心状态 + 沟通闸门解读。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>我的沟通协议卡</li><li>与 1 位关键协作人完成一次「按协议」沟通并记录效果</li><li>向关键关系人索取一次反馈</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">沟通协议实测 1 次 · 关键关系反馈收集。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W11</span>习惯固化：间隔重复与设计实验<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">把前 10 周工具压成「晨-日-周」三层习惯系统；启动毕业设计。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">间隔重复原理（重复 × 时间 = 态度与习惯的改变）· 习惯最小化（2 分钟版）· 实验思维（每周 1 实验，失败 = 数据不是失败）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">去制约习惯卡（类型策略 + 权威决策 + 开放过滤，三层叠加）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>三层习惯卡制作</li><li>毕业设计大纲（改变故事 + 数据证据）</li><li>每日打卡连续 7 天</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">三层卡上线 · 7 天打卡率 ≥85%。</div></div>
+      </div></details>
+
+    <details class="week"><summary><span class="wk">W12</span>毕业整合：后测、证据与下一程<span class="ar">›</span></summary>
+      <div class="wbody">
+        <div class="row"><div class="k">本周目标</div><div class="v">完成行为层后测；输出个体改变报告；制定毕业后 90 天自主计划。</div></div>
+        <div class="row"><div class="k">核心概念</div><div class="v">前后测对比逻辑（行为层变化）· 非我主题频率下降率（能量层变化）· 下一步路径选择（Level 2 天赋觉醒 / 7 年去制约长程社群）。</div></div>
+        <div class="row"><div class="k">工具</div><div class="v">毕业人类图复盘（同一张图，不同的眼睛）。</div></div>
+        <div class="row"><div class="k">学员作业</div><ul><li>毕业设计终稿 + 汇报</li><li>毕业后 90 天自主计划（自选 3 个习惯保持）</li><li>后测完成</li></ul></div>
+        <div class="row"><div class="k">衡量指标</div><div class="v">改变报告交付 · 前后测对比报告 · 毕业证书颁发。</div></div>
+      </div></details>
+
+    <div class="callout">
+      <b>教练周检核表：</b>① 1v1 辅导完成（60–90 分钟，无中断）② 实验布置（每周 1 个，可记录可衡量）③ 关键人共识（第 1/4/8/12 周必须有关系人触点）④ 数据回收（能量日记/决策记录/打卡，周回收率 ≥80%）⑤ 话术合规（不用命定论措辞；一切结论回到学员体验）。
+    </div>
+  </div>
+</section>
+
+<!-- ===== HALF-DAY WORKSHOP ===== -->
+<section id="workshop">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">ENTRY POINT</div>
+      <h2>半日工作坊 · 找到你的能量出厂设置</h2>
+      <p>3.5 小时入门体验，是整门体系的「试用装」。</p>
+      <p>三条规则，一个承诺：离开时你带走一个属于自己的 90 天微型实验。</p>
+    </div>
+
+    <div class="grid grid-2x2">
+      <div class="card"><h3>规则一 · 体验优先</h3><p>今天不考试、不讲大道理。每个概念都会让你在自己身上找到证据。</p></div>
+      <div class="card"><h3>规则二 · 怀疑是数据</h3><p>听到不认同的？太好了。把「这不对」记下来，它就是你的实验素材。</p></div>
+      <div class="card"><h3>规则三 · 你的图你自己解</h3><p>导师只做翻译，不做判决。所有结论的最终解释权在你。</p></div>
+      <div class="card"><h3>一个承诺</h3><p>离开这间教室时，你带走一个属于你的「90 天微型实验」。</p></div>
+    </div>
+
+    <div class="section-title">半日议程（3.5 小时 · 三模块 · 一实验）</div>
+    <div class="card">
+      <p><b>09:00–09:20 开场</b> — 三个扎心问题 + 核心主张（你在用别人的电池，跑你的人生）。</p>
+      <p><b>09:20–10:20 模块一 · 你的能量类型</b> — 别用别人的电池：五大类型、策略、签名 vs 非我主题（仪表盘）。</p>
+      <p><b>10:20–10:35 茶歇</b> — 带走你的类型卡；想一个最近反复纠结的决定带回来。</p>
+      <p><b>10:35–11:20 模块二 · 身体决策</b> — 头脑会骗人，身体不会：六种内在权威速览 + 现场目标身体测试。</p>
+      <p><b>11:20–12:05 模块三 · 天赋定位</b> — 把时间花在通道上：高回报三条判据 + 高回报矩阵草稿。</p>
+      <p><b>12:05–12:30 收口</b> — 设计你的 90 天微型实验（黄金 90 分钟 / 滤网提问 / 权威实测）+ 下一程。</p>
+    </div>
+
+    <div class="section-title">现场带走的三大微型实验</div>
+    <div class="grid grid-auto">
+      <div class="card"><h3>实验 A · 黄金 90 分钟</h3><p>连续 5 天，把每天第一个 90 分钟锁给「能量涨」的事；邮件 10 点后开。</p></div>
+      <div class="card"><h3>实验 B · 滤网提问</h3><p>每次进会议前问：这是我的，还是我吸进来的？每天记 1 次。</p></div>
+      <div class="card"><h3>实验 C · 权威实测</h3><p>本周 1 个真实决定，严格按你的权威流程走（48h 法 / 出声法 / 0.5 秒法）。</p></div>
+    </div>
+    <p class="pill" style="margin-top:12px;">规则：实验失败不是失败，是数据；我们只对「没记录」问责，不对「没做到」问责。</p>
+  </div>
+</section>
+
+<!-- ===== EFFECTIVENESS ENGINE ===== -->
+<section id="engine">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">DELIVERY SYSTEM</div>
+      <h2>训练有效性引擎 · 90 天闭环</h2>
+      <p>把「读懂」变成「做到」的四段交付节奏。</p>
+      <p class="keep-line">每一段都有人类图工具与可衡量产出，确保改变发生在解读之后，而非止于解读。</p>
+    </div>
+    <div class="ladder">
+      <div class="tier"><div class="lv">阶段 1 · 第 1–2 周</div><h3>诊断</h3><p>出厂设置解读 + 行为层前测。<span class="tools">工具：完整人类图 + 变量四箭头。</span></p></div>
+      <div class="tier"><div class="lv">阶段 2 · 第 3–4 周</div><h3>定向</h3><p>天赋定位 + 目标设定。<span class="tools">工具：定义通道 + 内在权威决策卡。</span></p></div>
+      <div class="tier"><div class="lv">阶段 3 · 第 5–10 周</div><h3>实验</h3><p>每周一个设计实验。<span class="tools">工具：荐骨回应 / 能量管理 / 滤网实践。</span></p></div>
+      <div class="tier core"><span class="badge">关键</span><div class="lv">阶段 4 · 第 11–12 周</div><h3>固化</h3><p>习惯复盘 + 后测对比。<span class="tools">工具：非我主题频率变化 + 改变报告。</span></p></div>
+    </div>
+
+    <div class="section-title">设计实验四要素（教练必会）</div>
+    <div class="grid grid-2x2">
+      <div class="card"><h3>① 触发场景</h3><p>明确「在什么情境下启动这个替代动作」，越具体越好。</p></div>
+      <div class="card"><h3>② 替代动作</h3><p>小到 2 分钟就能做；先跑最小版本，加量是之后的事。</p></div>
+      <div class="card"><h3>③ 记录方式</h3><p>用能量日记/打卡记录，数据不流动等于没数据。</p></div>
+      <div class="card"><h3>④ 复盘时间</h3><p>固定每周复盘；同一实验连续 3 周才算习得。</p></div>
+    </div>
+
+    <div class="callout">
+      <b>为什么这套引擎有效（研究佐证）：</b>主流人类图训练传统一致认为——「知识」人人能背，「活出」才是分水岭。有效的陪跑必须是 <b>体验式、以人为本、以实验为单元</b> 的：把图表先放一边，先深深看见一个人，再把他的体验 correlated 回图上。本引擎的「非我主题频率下降」正是这套以人为本逻辑的量化锚点。
+    </div>
+  </div>
+</section>
+
+<!-- ===== ETHICS ===== -->
+<section id="ethics">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">REDLINES</div>
+      <h2>教练伦理红线 · 每次开课前重读</h2>
+      <p>人类图是镜子，不是判决书。专业度体现在边界感，而非神秘感。</p>
+    </div>
+    <div class="ethics">
+      <div class="ethic"><h3>1 · 镜子不是判决书</h3><p>永远把解释权交回学员的体验；图是说明书，不是定性结论。</p></div>
+      <div class="ethic"><h3>2 · 边界即专业</h3><p>不做医疗、法律、投资层面的建议；涉及即转介。</p></div>
+      <div class="ethic"><h3>3 · 禁用定语句式</h3><p>不说「你就是 XX 型所以你不行」，改用「按你的设计，这条路更省力」。</p></div>
+      <div class="ethic"><h3>4 · 保密纪律</h3><p>组织敏感信息遵守保密协议；个体数据未经书面同意不向第三方披露。</p></div>
+      <div class="ethic"><h3>5 · 数据用途</h3><p>时间审计、日记只用于学员成长，不用于绩效评价。</p></div>
+      <div class="ethic"><h3>6 · 期待管理</h3><p>区分「算命期待」与「实验期待」；不做速成、不承诺疗效。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LADDER ===== -->
+<section id="ladder">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">PRODUCT LADDER</div>
+      <h2>课程阶梯 · 从 3.5 小时到 7 年</h2>
+      <p>工作坊是入口，12 周是核心产品。</p>
+      <p class="keep-line">其后按「自我领导 → 关系领导 → 天命战略」层层递进，并以 7 年长程社群承接去制约旅程。</p>
+    </div>
+    <div class="ladder">
+      <div class="tier"><div class="lv">入门</div><h3>半日工作坊</h3><p>3.5 小时 · 能量初体验。适合作为公开课与引流品。</p></div>
+      <div class="tier core"><span class="badge">核心</span><div class="lv">Level 1</div><h3>按设计工作</h3><p>12 周 · 90 天行为改变闭环。含人类图全图 + 前后测 + 改变报告。</p></div>
+      <div class="tier"><div class="lv">Level 2</div><h3>天赋觉醒</h3><p>自我领导 · 用轮回交叉与 Profile 给出使命坐标系；从补短板转向扬长板。</p></div>
+      <div class="tier"><div class="lv">Level 3–4</div><h3>关系 · 天命</h3><p>按设计成事（关系/团队/激励）+ 天命战略（创始人轮回交叉、组织能量配置）。</p></div>
+    </div>
+    <div class="callout">
+      <b>长程产品：</b>人类图独有的「去制约 7 年」概念，天然导出年费制长程社群——这是短期课程制产品没有的留存引擎，也是训练有效性真正兑现的地方。
+    </div>
+  </div>
+</section>
+
+<!-- ===== CERTIFICATION ===== -->
+<section id="cert">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">CERTIFICATION</div>
+      <h2>教练认证体系 · 基于七步框架</h2>
+      <p>培养「既能读懂图、又能陪人活出图」的认证教练。</p>
+      <p>四模块考核，强调实操与伦理，而非背书式记忆。</p>
+    </div>
+    <div class="cert-grid">
+      <div class="cert"><div class="n">模块一 · 理论</div><h3>七步框架与训练原理</h3><p>闭卷笔试（框架逻辑 + 训练原理 + 伦理红线），通过线 ≥85 分。</p></div>
+      <div class="cert"><div class="n">模块二 · 模拟带教</div><h3>建立安全 + 呈现设计图</h3><p>8 分钟高防御开场 + 20 分钟呈现模拟；通过线 = 学员复述关键信息达标。</p></div>
+      <div class="cert"><div class="n">模块三 · 工具实操</div><h3>目标身体确认 + 高回报矩阵</h3><p>带真实/模拟学员完成目标身体确认全流程；通过线 = 双件齐且无红线违规。</p></div>
+      <div class="cert"><div class="n">模块四 · 带教实习</div><h3>完整陪跑 1 名学员 12 周</h3><p>记录回收率 ≥80% + 改变报告合格 + 学员满意度 ≥8/10。</p></div>
+    </div>
+    <div class="callout" style="border-left-color:var(--ok);">
+      <b>认证理念：</b>「先当镜子，再当陪跑」。考核重点不是「你多懂人类图」，而是「你能不能接住一个人的非我、设计出他做得到的实验、并在 7 年里稳稳陪跑」。
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORKBOOK ===== -->
+<section id="workbook">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">COMPANION</div>
+      <h2>学员手册 · 12 周陪跑可填写版</h2>
+      <p>这是你的私人练习本，内容只存在你自己的浏览器里（本地保存，不上传）。</p>
+      <p>每周填一填，毕业时一键导出，就是一份属于你的改变证据链。</p>
+    </div>
+    <div class="callout">
+      <b>怎么用：</b>选周次 → 填四栏（收获 / 设计实验 / 身体确认 / 卡点）→ 自动保存。底部可一键导出全部周次，或清空重来。数据仅存本机，换设备请先导出备份。
+    </div>
+    <div class="wb-weekbar" id="wbWeekbar"></div>
+    <div class="card">
+      <form class="wb-form" id="wbForm" autocomplete="off">
+        <div class="frow">
+          <label>① 本周一句话收获</label>
+          <textarea data-k="gain" placeholder="这周让我眼睛一亮的一个发现…"></textarea>
+        </div>
+        <div class="frow">
+          <label>② 我的设计实验（触发场景 + 替代动作）</label>
+          <textarea data-k="exp" placeholder="例：每天第一个 90 分钟锁给「能量涨」的事；邮件 10 点后开。"></textarea>
+        </div>
+        <div class="frow">
+          <label>③ 身体确认记录（走权威的 1 次决策）</label>
+          <textarea data-k="body" placeholder="决定是什么 / 用了哪种权威 / 身体给了什么信号…"></textarea>
+        </div>
+        <div class="frow">
+          <label>④ 卡点与想求助的点</label>
+          <textarea data-k="stuck" placeholder="哪里卡住了、想找教练聊什么…"></textarea>
+        </div>
+        <div class="frow">
+          <label>⑤ 本周能量打分（1–10）</label>
+          <div class="range"><input type="range" min="1" max="10" value="7" data-k="score" /><b id="wbScore">7</b></div>
+        </div>
+        <div class="wb-actions">
+          <button type="button" class="btn btn-ghost" id="wbClear">清空本周</button>
+          <button type="button" class="btn btn-primary" id="wbExport">导出我的手册</button>
+          <button type="button" class="btn btn-ghost" id="wbPrint">打印 / 导出 PDF</button>
+        </div>
+        <div id="wbPrintArea" class="wb-print-area"></div>
+      </form>
+    </div>
+    <p class="pill" id="wbStatus" style="margin-top:10px;">已自动保存 · 当前周次 W1</p>
+  </div>
+</section>
+
+<!-- ===== ASSESSMENT ===== -->
+<section id="assessment">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">ASSESSMENT</div>
+      <h2>改变证据 · 测评工具</h2>
+      <p>能量打分明显上升、非我主题频率明显下降，这些都需要可记录、可对比的数据。</p>
+      <p class="keep-line">本页测评内容只保存在你的浏览器本地，不上传服务器。</p>
+    </div>
+
+    <div class="as-tabs" id="asTabs">
+      <button class="active" data-tab="energy">能量打分</button>
+      <button data-tab="themes">非我主题</button>
+      <button data-tab="decisions">身体决策</button>
+      <button data-tab="witness">关键人问卷</button>
+    </div>
+
+    <div class="as-panel active" id="as-energy">
+      <div class="as-form">
+        <div class="frow"><label>测评日期</label><input type="date" id="enDate"></div>
+        <div class="as-score-row"><label>早晨能量</label><div class="range"><input type="range" id="enM" min="1" max="10" value="7"><b id="enMv">7</b></div></div>
+        <div class="as-score-row"><label>下午续航</label><div class="range"><input type="range" id="enA" min="1" max="10" value="7"><b id="enAv">7</b></div></div>
+        <div class="as-score-row"><label>决策清晰度</label><div class="range"><input type="range" id="enC" min="1" max="10" value="7"><b id="enCv">7</b></div></div>
+        <div class="as-score-row"><label>身体信号辨识度</label><div class="range"><input type="range" id="enB" min="1" max="10" value="7"><b id="enBv">7</b></div></div>
+        <div class="as-score-row"><label>工作投入感</label><div class="range"><input type="range" id="enE" min="1" max="10" value="7"><b id="enEv">7</b></div></div>
+        <div class="frow"><label>备注（可选）</label><textarea id="enNote" placeholder="例如：昨晚睡眠、当日重大决策、身体感受等"></textarea></div>
+        <div class="as-actions">
+          <button type="button" class="btn btn-primary" id="enSave">保存本次测评</button>
+          <button type="button" class="btn btn-ghost" id="enExport">导出能量打分</button>
+        </div>
+      </div>
+      <div id="enResult" class="as-result" style="display:none;"></div>
+      <div class="as-list" id="enList"></div>
+    </div>
+
+    <div class="as-panel" id="as-themes">
+      <div class="as-form">
+        <div class="frow"><label>日期</label><input type="date" id="thDate"></div>
+        <div class="frow"><label>今天各非我主题出现次数</label>
+          <div class="as-score-row"><label>挫败</label><input type="number" id="thF" min="0" value="0"></div>
+          <div class="as-score-row"><label>苦涩</label><input type="number" id="thB" min="0" value="0"></div>
+          <div class="as-score-row"><label>愤怒</label><input type="number" id="thA" min="0" value="0"></div>
+          <div class="as-score-row"><label>失望</label><input type="number" id="thD" min="0" value="0"></div>
+        </div>
+        <div class="frow"><label>触发场景（可选）</label><textarea id="thTrigger" placeholder="谁在、什么情境、违背了哪种策略或权威"></textarea></div>
+        <div class="as-actions">
+          <button type="button" class="btn btn-primary" id="thSave">保存日记</button>
+          <button type="button" class="btn btn-ghost" id="thExport">导出非我主题日记</button>
+        </div>
+      </div>
+      <div id="thResult" class="as-result" style="display:none;"></div>
+      <div class="as-list" id="thList"></div>
+    </div>
+
+    <div class="as-panel" id="as-decisions">
+      <div class="as-form">
+        <div class="frow"><label>决策名称 / 情境</label><input type="text" id="dcName" placeholder="例如：是否接受新合作项目"></div>
+        <div class="frow"><label>决策方式</label>
+          <select id="dcMethod"><option value="头脑冲动">头脑冲动</option><option value="按权威决策">按权威决策</option></select>
+        </div>
+        <div class="as-score-row"><label>事后后悔度（1-5，越低越好）</label><div class="range"><input type="range" id="dcRegret" min="1" max="5" value="3"><b id="dcRegretV">3</b></div></div>
+        <div class="frow"><label>结果备注（可选）</label><textarea id="dcNote" placeholder="决策后实际发生了什么？"></textarea></div>
+        <div class="as-actions">
+          <button type="button" class="btn btn-primary" id="dcSave">保存记录</button>
+          <button type="button" class="btn btn-ghost" id="dcExport">导出决策记录</button>
+        </div>
+      </div>
+      <div id="dcResult" class="as-result" style="display:none;"></div>
+      <div class="as-list" id="dcList"></div>
+    </div>
+
+    <div class="as-panel" id="as-witness">
+      <div class="as-form">
+        <div class="frow"><label>关系人姓名 / 称谓</label><input type="text" id="wiWho" placeholder="例如：伴侣 / 直属领导"></div>
+        <div class="frow"><label>你观察到的具体变化</label><textarea id="wiChange" placeholder="例如：做决定前会先停下来感受身体了"></textarea></div>
+        <div class="frow"><label>哪些旧模式减少了</label><textarea id="wiReduced" placeholder="例如：抱怨、事后后悔、过度解释"></textarea></div>
+        <div class="frow"><label>哪些新行为增加了</label><textarea id="wiIncreased" placeholder="例如：主动拒绝、睡前写能量日记"></textarea></div>
+        <div class="as-actions">
+          <button type="button" class="btn btn-primary" id="wiSave">保存问卷</button>
+          <button type="button" class="btn btn-ghost" id="wiExport">导出关键人问卷</button>
+        </div>
+      </div>
+      <div class="as-list" id="wiList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHANNELS ===== -->
+<section id="channels">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">REFERENCE</div>
+      <h2>36 通道全对照表</h2>
+      <p>人类图全部 36 条定义通道。</p>
+      <p class="keep-line">通道 = 两端闸门同时被激活，形成稳定、可被他人依赖的能量。</p>
+      <p class="keep-line">在下方搜索闸门号码或通道名，快速定位你的天赋坐标。</p>
+    </div>
+    <input class="ch-search" id="chSearch" placeholder="搜索：如「10-20」「觉醒」「部落」「金钱」…" />
+    <div class="ch-scroll">
+      <table class="ch-table" id="chTable">
+        <thead><tr><th>闸门对</th><th>通道名称</th><th>回路</th><th>主题一句话</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="pill" style="margin-top:12px;">回路图例：<span class="ch-tag int">整合</span> <span class="ch-tag ind">个人 · 知晓回路</span> <span class="ch-tag ind">个人 · 中心回路</span> <span class="ch-tag col">集体</span> <span class="ch-tag tri">部落</span> — 定义通道是你的天赋区，悬挂闸门需对端配合才点亮。</p>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">COMMERCIAL</div>
+      <h2>课程阶梯与定价（参考）</h2>
+      <p>从 3.5 小时体验到 7 年长程，定价遵循「训练有效性 × 陪伴深度」两轴。</p>
+      <p class="keep-line">下列为市场参考区间，最终以正式招生简章为准。</p>
+    </div>
+    <div class="price-grid">
+      <div class="price">
+        <div class="lv">入门 · 引流</div>
+        <h3>半日工作坊</h3>
+        <div class="amt">¥199–399 <small>/人</small></div>
+        <ul>
+          <li>3.5 小时公开课 / 企业内训可议</li>
+          <li>带走 1 个 90 天微型实验</li>
+          <li>含类型卡 + 权威速览</li>
+        </ul>
+        <div class="note">定位：低门槛入口，转化到 Level 1 的核心漏斗。</div>
+      </div>
+      <div class="price core">
+        <div class="lv">核心产品</div>
+        <h3>Level 1 按设计工作</h3>
+        <div class="amt">¥6,800–9,800 <small>/人</small></div>
+        <ul>
+          <li>12 周 90 天陪跑：每周 1v1 + 每日微实践</li>
+          <li>完整人类图 + 变量四箭头</li>
+          <li>行为层前/后测 + 个体改变报告</li>
+          <li>关键人共识触点（第 1/4/8/12 周）</li>
+        </ul>
+        <div class="note">定位：营收主力，以「证据链」为差异化卖点。</div>
+      </div>
+      <div class="price">
+        <div class="lv">Level 2</div>
+        <h3>天赋觉醒</h3>
+        <div class="amt">¥4,800–6,800 <small>/人</small></div>
+        <ul>
+          <li>自我领导：轮回交叉 + Profile 使命坐标系</li>
+          <li>从补短板转向扬长板</li>
+          <li>需先完成 Level 1</li>
+        </ul>
+        <div class="note">定位：复购升级，衔接 Level 3–4。</div>
+      </div>
+      <div class="price">
+        <div class="lv">认证 · 长程</div>
+        <h3>教练认证 + 7 年社群</h3>
+        <div class="amt">¥12,800 起 <small>+ 年费</small></div>
+        <ul>
+          <li>四模块考核（理论/模拟/实操/实习）</li>
+          <li>7 年去制约长程社群年费 ¥1,200–2,400</li>
+          <li>认证后可带教分成</li>
+        </ul>
+        <div class="note">定位：留存引擎 + 供给端，形成飞轮。</div>
+      </div>
+    </div>
+    <div class="callout" style="border-left-color:var(--primary);">
+      <b>卖点话术（不直接讲理论，讲结果）：</b>「我们不做让你更懂人类图的课，我们做让你 90 天后能量打分明显上升、非我主题频率明显下降的陪跑。前测后测你自己看数据。」
+    </div>
+  </div>
+</section>
+
+<!-- ===== COURSE VALUE ===== -->
+<section id="value">
+  <div class="wrap">
+    <div class="section-title">课程价值</div>
+    <div class="callout">
+      <b>按设计工作（Working by Design）</b> — 一门以真实改变为唯一验收标准的人类图训练课程原型。先读懂设计，再陪跑改变。
+      <br><br>课程原型 V4 · 人类图训练有效性引擎 · 七步教练框架 · 90 天行为改变闭环 · 7 年去制约长程。
+      <br><br>本原型为人类图训练课程设计稿，所有训练方法与话术均围绕「体验优先、证据为本、伦理为先」原则设计；图谱解读须由具备资质的人类图分析师完成。
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="fbrand">Working-by-Design（按设计工作）· 课程原型 V4</div>
+  <div class="powered">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var sections = [
+      {id:"why", t:"为什么有效"},
+      {id:"framework", t:"七步框架"},
+      {id:"course12", t:"12周课程"},
+      {id:"workshop", t:"半日工作坊"},
+      {id:"engine", t:"有效性引擎"},
+      {id:"ethics", t:"教练伦理"},
+      {id:"ladder", t:"课程阶梯"},
+      {id:"cert", t:"认证体系"},
+      {id:"workbook", t:"学员手册"},
+      {id:"assessment", t:"测评"},
+      {id:"channels", t:"36通道"},
+      {id:"pricing", t:"课程定价"}
+    ];
+    var desktop = document.getElementById("desktopMenu");
+    var drawerMenu = document.getElementById("drawerMenu");
+    if(desktop){
+      sections.forEach(function(s){
+        var a = document.createElement("a");
+        a.href = "#" + s.id; a.textContent = s.t;
+        desktop.appendChild(a);
+      });
+    }
+    if(drawerMenu){
+      sections.forEach(function(s){
+        var a = document.createElement("a");
+        a.href = "#" + s.id; a.textContent = s.t;
+        a.addEventListener("click", function(){ closeDrawer(); });
+        drawerMenu.appendChild(a);
+      });
+    }
+  }catch(e){ console.warn("menu build failed", e); }
+
+  function openDrawer(){
+    try{
+      document.getElementById("drawer").classList.add("open");
+      document.getElementById("drawerMask").classList.add("open");
+      document.body.classList.add("drawer-open");
+    }catch(e){}
+  }
+  function closeDrawer(){
+    try{
+      document.getElementById("drawer").classList.remove("open");
+      document.getElementById("drawerMask").classList.remove("open");
+      document.body.classList.remove("drawer-open");
+    }catch(e){}
+  }
+  try{
+    var hb = document.getElementById("hamburger");
+    var cls = document.getElementById("drawerClose");
+    var mask = document.getElementById("drawerMask");
+    if(hb) hb.addEventListener("click", openDrawer);
+    if(cls) cls.addEventListener("click", closeDrawer);
+    if(mask) mask.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
+  }catch(e){ console.warn("toggle bind failed", e); }
+
+  /* ===== Workbook (localStorage) ===== */
+  try{
+    var wbWeeks = 12;
+    var wbBar = document.getElementById("wbWeekbar");
+    var wbForm = document.getElementById("wbForm");
+    var wbStatus = document.getElementById("wbStatus");
+    var wbScore = document.getElementById("wbScore");
+    var currentWeek = 1;
+    var fields = ["gain","exp","body","stuck","score"];
+
+    function wbKey(w){ return "hd_workbook_w" + w; }
+    function loadWeek(w){
+      var raw = null;
+      try{ raw = localStorage.getItem(wbKey(w)); }catch(e){}
+      var data = raw ? JSON.parse(raw) : {};
+      fields.forEach(function(k){
+        var el = wbForm.querySelector('[data-k="'+k+'"]');
+        if(!el) return;
+        if(k === "score"){
+          el.value = data[k] || 7;
+          if(wbScore) wbScore.textContent = el.value;
+        } else {
+          el.value = data[k] || "";
+        }
+      });
+      if(wbStatus) wbStatus.textContent = "已自动保存 · 当前周次 W" + w;
+    }
+    function saveWeek(w){
+      var data = {};
+      fields.forEach(function(k){
+        var el = wbForm.querySelector('[data-k="'+k+'"]');
+        if(el){
+          data[k] = el.value;
+          if(k === "score" && wbScore){ wbScore.textContent = el.value; }
+        }
+      });
+      try{ localStorage.setItem(wbKey(w), JSON.stringify(data)); }catch(e){}
+      if(wbStatus) wbStatus.textContent = "已自动保存 · 当前周次 W" + w;
+    }
+    if(wbBar){
+      for(var i=1;i<=wbWeeks;i++){
+        (function(n){
+          var b = document.createElement("button");
+          b.textContent = "W" + n;
+          b.setAttribute("data-w", n);
+          if(n===currentWeek) b.classList.add("active");
+          b.addEventListener("click", function(){
+            currentWeek = n;
+            var ch = wbBar.children;
+            for(var c=0;c<ch.length;c++){ ch[c].classList.remove("active"); }
+            b.classList.add("active");
+            loadWeek(n);
+          });
+          wbBar.appendChild(b);
+        })(i);
+      }
+    }
+    if(wbForm){
+      wbForm.addEventListener("input", function(){ saveWeek(currentWeek); });
+      wbForm.addEventListener("change", function(){ saveWeek(currentWeek); });
+    }
+    var wbClear = document.getElementById("wbClear");
+    if(wbClear) wbClear.addEventListener("click", function(){
+      if(confirm("确定清空 W"+currentWeek+" 的内容？（仅本机）")){
+        try{ localStorage.removeItem(wbKey(currentWeek)); }catch(e){}
+        loadWeek(currentWeek);
+      }
+    });
+    var wbExport = document.getElementById("wbExport");
+    if(wbExport) wbExport.addEventListener("click", function(){
+      var out = "人类图训练 · 我的 12 周手册（看漫堂 · Kan Man Tang）\n================================\n";
+      for(var w=1; w<=wbWeeks; w++){
+        var raw = null;
+        try{ raw = localStorage.getItem(wbKey(w)); }catch(e){}
+        var d = raw ? JSON.parse(raw) : {};
+        out += "\n【W"+w+"】\n";
+        out += "① 收获：" + (d.gain||"（空）") + "\n";
+        out += "② 设计实验：" + (d.exp||"（空）") + "\n";
+        out += "③ 身体确认：" + (d.body||"（空）") + "\n";
+        out += "④ 卡点：" + (d.stuck||"（空）") + "\n";
+        out += "⑤ 能量打分：" + (d.score||"-") + "/10\n";
+      }
+      var blob = new Blob([out], {type:"text/plain;charset=utf-8"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = "我的12周人类图手册.txt";
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+    var wbPrint = document.getElementById("wbPrint");
+    if(wbPrint) wbPrint.addEventListener("click", function(){
+      var w = currentWeek;
+      var data = {};
+      fields.forEach(function(k){
+        var el = wbForm.querySelector('[data-k="'+k+'"]');
+        if(el) data[k] = el.value;
+      });
+      var area = document.getElementById("wbPrintArea");
+      if(!area) return;
+      var rows = [
+        ["① 本周一句话收获", data.gain],
+        ["② 我的设计实验", data.exp],
+        ["③ 身体确认记录", data.body],
+        ["④ 卡点与想求助的点", data.stuck],
+        ["⑤ 本周能量打分", (data.score || "-") + " / 10"]
+      ];
+      var html = '<h2>按设计工作 · 学员手册（W' + w + '）</h2>';
+      html += '<div class="pmeta">仅打印当前选中周次</div>';
+      rows.forEach(function(r){
+        html += '<div class="pv"><div class="k">' + r[0] + '</div><div class="v">' + (r[1] || "（空）") + '</div></div>';
+      });
+      area.innerHTML = html;
+      var originalParent = area.parentNode;
+      var nextSibling = area.nextSibling;
+      document.body.appendChild(area);
+      window.print();
+      if(originalParent){
+        if(nextSibling){ originalParent.insertBefore(area, nextSibling); }
+        else{ originalParent.appendChild(area); }
+      }
+    });
+    loadWeek(currentWeek);
+  }catch(e){ console.warn("workbook failed", e); }
+
+  /* ===== Assessment tabs & tools ===== */
+  (function(){
+    try{
+      var tabs = document.getElementById("asTabs");
+      if(!tabs) return;
+      var btns = tabs.querySelectorAll("button[data-tab]");
+      var panels = document.querySelectorAll(".as-panel");
+      btns.forEach(function(b){
+        b.addEventListener("click", function(){
+          var key = b.getAttribute("data-tab");
+          btns.forEach(function(x){ x.classList.remove("active"); });
+          panels.forEach(function(x){ x.classList.remove("active"); });
+          b.classList.add("active");
+          var p = document.getElementById("as-" + key);
+          if(p) p.classList.add("active");
+        });
+      });
+    }catch(e){ console.warn("assessment tabs failed", e); }
+
+    function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)) || []; }catch(e){ return []; } }
+    function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+    function today(){ var d=new Date(); return d.toISOString().slice(0,10); }
+    function setDate(id){ var el=document.getElementById(id); if(el && !el.value) el.value=today(); }
+    function bindRange(id, outId){ var el=document.getElementById(id), out=document.getElementById(outId); if(!el || !out) return; el.addEventListener("input", function(){ out.textContent=el.value; }); }
+    function exportList(title, rows){
+      var text = title + "\n================================\n\n";
+      rows.forEach(function(r){ text += r + "\n\n"; });
+      var blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a"); a.href=url; a.download = title.replace(/\s+/g,"_") + ".txt";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    /* Energy */
+    try{
+      bindRange("enM","enMv"); bindRange("enA","enAv"); bindRange("enC","enCv");
+      bindRange("enB","enBv"); bindRange("enE","enEv");
+      setDate("enDate");
+      function renderEnergy(){
+        var list = lsGet("hd_assess_energy");
+        var el = document.getElementById("enList");
+        var res = document.getElementById("enResult");
+        if(!el) return;
+        if(!list.length){ el.innerHTML='<p class="empty">暂无测评记录，填一次就开始有趋势图。</p>'; if(res) res.style.display="none"; return; }
+        list.sort(function(a,b){ return b.date.localeCompare(a.date); });
+        var html = "";
+        list.forEach(function(it,i){
+          var avg = ((+it.m + +it.a + +it.c + +it.b + +it.e) / 5).toFixed(1);
+          html += '<div class="item"><div class="meta">' + it.date + ' · 平均分 ' + avg + '/10</div><div>' +
+                  '早晨' + it.m + ' · 下午' + it.a + ' · 决策' + it.c + ' · 身体信号' + it.b + ' · 投入' + it.e +
+                  (it.note ? '<br>备注：' + it.note : '') + '</div></div>';
+        });
+        el.innerHTML = html;
+        if(list.length >= 2 && res){
+          var latest = list[0], first = list[list.length-1];
+          var lavg = ((+latest.m + +latest.a + +latest.c + +latest.b + +latest.e) / 5).toFixed(1);
+          var favg = ((+first.m + +first.a + +first.c + +first.b + +first.e) / 5).toFixed(1);
+          var diff = (lavg - favg).toFixed(1);
+          res.innerHTML = '<b>趋势：</b>从 ' + favg + ' 分 → ' + lavg + ' 分，变化 ' + (diff>=0?'+':'') + diff + ' 分。' + (diff>=0?'能量打分上升，方向值得继续。':'能量打分下降，建议回顾实验设计与休息节律。');
+          res.style.display = "block";
+        }
+      }
+      document.getElementById("enSave").addEventListener("click", function(){
+        var list = lsGet("hd_assess_energy");
+        list.push({ date: document.getElementById("enDate").value || today(),
+          m: document.getElementById("enM").value, a: document.getElementById("enA").value,
+          c: document.getElementById("enC").value, b: document.getElementById("enB").value,
+          e: document.getElementById("enE").value, note: document.getElementById("enNote").value });
+        lsSet("hd_assess_energy", list);
+        renderEnergy();
+        alert("已保存");
+      });
+      document.getElementById("enExport").addEventListener("click", function(){
+        var list = lsGet("hd_assess_energy"); list.sort(function(a,b){ return b.date.localeCompare(a.date); });
+        var rows = list.map(function(it){ var avg=((+it.m + +it.a + +it.c + +it.b + +it.e)/5).toFixed(1); return it.date + " 平均分" + avg + " 早晨" + it.m + " 下午" + it.a + " 决策" + it.c + " 身体信号" + it.b + " 投入" + it.e + (it.note?" 备注："+it.note:""); });
+        exportList("能量打分测评", rows);
+      });
+      renderEnergy();
+    }catch(e){ console.warn("energy assess failed", e); }
+
+    /* Themes */
+    try{
+      setDate("thDate");
+      function renderThemes(){
+        var list = lsGet("hd_assess_themes");
+        var el = document.getElementById("thList");
+        var res = document.getElementById("thResult");
+        if(!el) return;
+        if(!list.length){ el.innerHTML='<p class="empty">暂无日记，记录一周就能看到非我主题频率。</p>'; if(res) res.style.display="none"; return; }
+        list.sort(function(a,b){ return b.date.localeCompare(a.date); });
+        var html="", firstSum=0, latestSum=0;
+        list.forEach(function(it,i){
+          var sum = (+it.f + +it.b + +it.a + +it.d);
+          if(i===0) latestSum=sum;
+          if(i===list.length-1) firstSum=sum;
+          html += '<div class="item"><div class="meta">' + it.date + ' · 今日非我主题合计 ' + sum + ' 次</div><div>' +
+                  '挫败' + it.f + ' · 苦涩' + it.b + ' · 愤怒' + it.a + ' · 失望' + it.d +
+                  (it.trigger ? '<br>触发：' + it.trigger : '') + '</div></div>';
+        });
+        el.innerHTML = html;
+        if(list.length >= 2 && res){
+          var diff = firstSum - latestSum;
+          res.innerHTML = '<b>趋势：</b>非我主题频率从 ' + firstSum + ' 次/日 → ' + latestSum + ' 次/日，' + (diff>0?'下降 ' + diff + ' 次，去制约正在发生。':'当前 ' + (diff<0?'上升 ':'持平 ') + Math.abs(diff) + ' 次。');
+          res.style.display = "block";
+        }
+      }
+      document.getElementById("thSave").addEventListener("click", function(){
+        var list = lsGet("hd_assess_themes");
+        list.push({ date: document.getElementById("thDate").value || today(),
+          f: document.getElementById("thF").value, b: document.getElementById("thB").value,
+          a: document.getElementById("thA").value, d: document.getElementById("thD").value,
+          trigger: document.getElementById("thTrigger").value });
+        lsSet("hd_assess_themes", list);
+        renderThemes();
+        alert("已保存");
+      });
+      document.getElementById("thExport").addEventListener("click", function(){
+        var list = lsGet("hd_assess_themes"); list.sort(function(a,b){ return b.date.localeCompare(a.date); });
+        var rows = list.map(function(it){ var sum=(+it.f + +it.b + +it.a + +it.d); return it.date + " 合计" + sum + " 挫败" + it.f + " 苦涩" + it.b + " 愤怒" + it.a + " 失望" + it.d + (it.trigger?" 触发："+it.trigger:""); });
+        exportList("非我主题频率日记", rows);
+      });
+      renderThemes();
+    }catch(e){ console.warn("themes assess failed", e); }
+
+    /* Decisions */
+    try{
+      bindRange("dcRegret","dcRegretV");
+      function renderDecisions(){
+        var list = lsGet("hd_assess_decisions");
+        var el = document.getElementById("dcList");
+        var res = document.getElementById("dcResult");
+        if(!el) return;
+        if(!list.length){ el.innerHTML='<p class="empty">暂无决策记录，开始记录才能看清「身体决策」是否更少后悔。</p>'; if(res) res.style.display="none"; return; }
+        var mind = list.filter(function(x){ return x.method === "头脑冲动"; });
+        var auth = list.filter(function(x){ return x.method === "按权威决策"; });
+        var mindAvg = mind.length ? (mind.reduce(function(s,x){ return s + +x.regret; },0)/mind.length).toFixed(1) : "-";
+        var authAvg = auth.length ? (auth.reduce(function(s,x){ return s + +x.regret; },0)/auth.length).toFixed(1) : "-";
+        if(res){ res.innerHTML = '<b>命中率：</b>头脑冲动平均后悔度 ' + mindAvg + ' / 5；按权威决策平均后悔度 ' + authAvg + ' / 5。' + (authAvg!=="-" && mindAvg!=="-" && +authAvg < +mindAvg ? '身体决策后悔度更低，策略正在生效。':''); res.style.display="block"; }
+        el.innerHTML = list.map(function(it,i){ return '<div class="item"><div class="meta">#' + (i+1) + ' · ' + it.method + ' · 后悔度 ' + it.regret + '/5</div><div>' + it.name + (it.note?'<br>' + it.note:'') + '</div></div>'; }).reverse().join("");
+      }
+      document.getElementById("dcSave").addEventListener("click", function(){
+        var list = lsGet("hd_assess_decisions");
+        list.push({ name: document.getElementById("dcName").value || "未命名决策",
+          method: document.getElementById("dcMethod").value,
+          regret: document.getElementById("dcRegret").value,
+          note: document.getElementById("dcNote").value });
+        lsSet("hd_assess_decisions", list);
+        renderDecisions();
+        alert("已保存");
+      });
+      document.getElementById("dcExport").addEventListener("click", function(){
+        var list = lsGet("hd_assess_decisions");
+        var rows = list.map(function(it){ return it.method + " · 后悔度" + it.regret + "/5 · " + it.name + (it.note?" 备注："+it.note:""); });
+        exportList("身体决策命中率记录", rows);
+      });
+      renderDecisions();
+    }catch(e){ console.warn("decisions assess failed", e); }
+
+    /* Witness */
+    try{
+      function renderWitness(){
+        var list = lsGet("hd_assess_witness");
+        var el = document.getElementById("wiList");
+        if(!el) return;
+        if(!list.length){ el.innerHTML='<p class="empty">暂无关键人问卷，第 4/8/12 周邀请一位关系人填写。</p>'; return; }
+        el.innerHTML = list.map(function(it,i){ return '<div class="item"><div class="meta">#' + (i+1) + ' · 关系人：' + it.who + '</div><div><b>变化：</b>' + it.change + '<br><b>减少：</b>' + it.reduced + '<br><b>增加：</b>' + it.increased + '</div></div>'; }).reverse().join("");
+      }
+      document.getElementById("wiSave").addEventListener("click", function(){
+        var list = lsGet("hd_assess_witness");
+        list.push({ who: document.getElementById("wiWho").value || "匿名",
+          change: document.getElementById("wiChange").value,
+          reduced: document.getElementById("wiReduced").value,
+          increased: document.getElementById("wiIncreased").value });
+        lsSet("hd_assess_witness", list);
+        renderWitness();
+        alert("已保存");
+      });
+      document.getElementById("wiExport").addEventListener("click", function(){
+        var list = lsGet("hd_assess_witness");
+        var rows = list.map(function(it){ return "关系人：" + it.who + "\n变化：" + it.change + "\n减少：" + it.reduced + "\n增加：" + it.increased; });
+        exportList("关键人可见改变问卷", rows);
+      });
+      renderWitness();
+    }catch(e){ console.warn("witness assess failed", e); }
+  })();
+
+  /* ===== Channels reference table ===== */
+  try{
+    var channels = [
+      ["1-8","灵感","Inspiration","个人 · 知晓回路","以独特风格与范例影响他人，做自己就是贡献"],
+      ["2-14","节拍","The Beat","个人 · 中心回路","识别正确方向，并为之调动资源"],
+      ["3-60","突变","Mutation","个人 · 知晓回路","在限制与压力中催生新秩序，急不得"],
+      ["4-63","逻辑","Logic","集体","用怀疑驱动对模式的验证，为未来做准备"],
+      ["5-15","节律","Rhythm","集体","跟随自然节律与生命流动"],
+      ["6-59","亲密","Intimacy","部落","性吸引与深层联结的能量"],
+      ["7-31","阿尔法","The Alpha","集体","公认的引领力，被认领时自然生效"],
+      ["9-52","专注","Concentration","集体","静止中聚焦，练就 mastery"],
+      ["10-20","觉醒","Awakening","整合","当下活出真实自我，成为他人榜样"],
+      ["10-34","探索","Exploration","整合","按自己内在权威活着的力量"],
+      ["10-57","完美形态","Perfected Form","整合","直觉驱动的本真行为与自爱"],
+      ["11-56","好奇","Curiosity","集体","探寻想法并分享给社群"],
+      ["12-22","开放","Openness","个人 · 知晓回路","情绪开放、选择性表达（社交优雅）"],
+      ["13-33","浪子","The Prodigal","集体","见证与回顾，经验沉淀为智慧"],
+      ["16-48","波长","The Wavelength","集体","深度经练习长成天赋与技能"],
+      ["17-62","接纳","Acceptance","集体","观点加细节，清晰组织与表达"],
+      ["18-58","评判","Judgement","集体","改善不公的喜悦压力（受邀时最健康）"],
+      ["19-49","合成","Synthesis","部落","对资源与供养的敏感与守护"],
+      ["20-34","魅力","Charisma","整合","冲动直接化为行动，回应而非强迫"],
+      ["20-57","脑波","The Brainwave","整合","直觉洞察在当下即时发声"],
+      ["21-45","金钱","Money Line","部落","物质资源的管理与分配"],
+      ["23-43","结构","Structuring","个人 · 知晓回路","顿悟需要对的语言与时机"],
+      ["24-61","觉知","Awareness","个人 · 知晓回路","对未知的思维压力，需静默寻找内在答案"],
+      ["25-51","启动","Initiation","个人 · 中心回路","通过冲击与天真开启新局"],
+      ["26-44","臣服","Surrender","部落","守护资源与金钱的发射站"],
+      ["27-50","守护","Preservation","部落","滋养与守护生命（照顾者设计）"],
+      ["28-38","挣扎","Struggle","个人 · 知晓回路","为意义而战的能量"],
+      ["29-46","发现","Discovery","集体","在他人失败处凭身体获得成功"],
+      ["30-41","识别","Recognition","集体","对感受的聚焦与识别能量"],
+      ["32-54","转化","Transformation","集体","被驱动，把潜力推向实现"],
+      ["34-57","力量","Power","整合","本能加荐骨，身体先行的生存智慧"],
+      ["35-36","瞬变","Transitoriness","集体","尝遍经验，博而不精的丰富"],
+      ["37-40","社群","Community","部落","寻找归属与完整（部分寻求整体）"],
+      ["39-55","情绪","Emoting","个人 · 知晓回路","情绪触动、自由与丰盛"],
+      ["42-53","成熟","Maturation","集体","平衡发展，从萌芽到成熟"],
+      ["47-64","抽象","Abstraction","集体","心智活动与清晰，模式抽象化"]
+    ];
+    var circuitClass = {"整合":"int","个人 · 知晓回路":"ind","个人 · 中心回路":"ind","集体":"col","部落":"tri"};
+    var chBody = document.querySelector("#chTable tbody");
+    function renderChannels(filter){
+      filter = (filter||"").trim().toLowerCase();
+      if(!chBody) return;
+      chBody.innerHTML = "";
+      channels.forEach(function(c){
+        var hay = (c[0]+c[1]+c[2]+c[3]+c[4]).toLowerCase();
+        if(filter && hay.indexOf(filter) === -1) return;
+        var tr = document.createElement("tr");
+        var cc = circuitClass[c[3]] || "";
+        tr.innerHTML = '<td class="gates">'+c[0]+'</td>'+
+          '<td>'+c[1]+'<span class="en">'+c[2]+'</span></td>'+
+          '<td><span class="ch-tag '+cc+'">'+c[3]+'</span></td>'+
+          '<td style="font-size:12.5px;color:var(--muted);line-height:1.6;">'+c[4]+'</td>';
+        chBody.appendChild(tr);
+      });
+      if(!chBody.children.length){
+        var tr2 = document.createElement("tr");
+        tr2.innerHTML = '<td colspan="4" style="text-align:center;color:var(--muted);padding:20px;">没有匹配的通道，换个关键词试试</td>';
+        chBody.appendChild(tr2);
+      }
+    }
+    var chSearch = document.getElementById("chSearch");
+    if(chSearch) chSearch.addEventListener("input", function(){ renderChannels(this.value); });
+    renderChannels("");
+  }catch(e){ console.warn("channels failed", e); }
+})();
+</script>
+</body>
+</html>
