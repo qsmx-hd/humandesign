@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《维摩诘所说经》话剧项目门户 · V2.1</title>
+  <meta name="description" content="《维摩诘所说经》话剧创排项目门户：分幕大纲、人物卡、舞台调度与 12 周项目方案一体化展示。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --card: #FBF6EC;
+      --border: #E8DCC8;
+      --primary: #C4956A;
+      --primary-dark: #A67B4F;
+      --dark: #2D2118;
+      --muted: #6B5742;
+      --highlight: #F0E3CE;
+      --light-text: #FBF6EC;
+      --shadow: 0 4px 14px rgba(45,33,24,0.06);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: "Noto Serif SC", "Songti SC", "SimSun", serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--dark);
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--primary-dark); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* 顶部导航 */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1160px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--dark);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary-dark); border-color: var(--primary); text-decoration: none; }
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--dark);
+      font-size: 22px;
+      line-height: 1;
+      padding: 0;
+      margin: 0 -8px 0 0;
+    }
+    .drawer, .drawer-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100dvh;
+      height: 100vh;
+    }
+    .drawer-backdrop {
+      left: 0;
+      background: rgba(45,33,24,0.35);
+      z-index: 9998;
+    }
+    .drawer {
+      width: min(78vw, 320px);
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      z-index: 9999;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      overflow-y: auto;
+      padding: 64px 20px 24px;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer a {
+      display: block;
+      padding: 14px 8px;
+      font-size: 15px;
+      color: var(--dark);
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer a:hover { color: var(--primary-dark); background: rgba(196,149,106,0.08); text-decoration: none; }
+    body.drawer-open nav { z-index: 0 !important; }
+    .drawer-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      font-size: 24px;
+      color: var(--dark);
+      cursor: pointer;
+    }
+
+    /* 容器 */
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    section {
+      padding: 48px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+
+    /* Hero */
+    .hero {
+      padding: 64px 0 40px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(196,149,106,0.12) 0%, rgba(245,240,232,0) 70%);
+    }
+    .hero .badge {
+      display: inline-block;
+      background: var(--highlight);
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin: 0 0 12px;
+      color: var(--dark);
+    }
+    .hero .lead {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 64ch;
+      margin: 0 auto 16px;
+      line-height: 1.8;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+    .hero .sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 62ch;
+      margin: 0 auto 24px;
+      font-style: italic;
+      border-top: 1px dashed rgba(196,149,106,0.32);
+      padding-top: 10px;
+      line-height: 1.7;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn-primary { background: var(--primary); color: var(--light-text); }
+    .btn-ghost { background: var(--card); color: var(--primary-dark); }
+
+    /* 标题 */
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 22px;
+      border-radius: 3px;
+      background: var(--primary);
+    }
+    .section-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+
+    /* 网格与卡片 */
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .grid-2x2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0 0 10px;
+      color: var(--dark);
+    }
+    .card p, .card li {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.7;
+    }
+    .card ul { margin: 0; padding-left: 18px; }
+    .card li { margin-bottom: 6px; }
+    .card .meta {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--primary-dark);
+      background: var(--highlight);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+    }
+    .card .big {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .card .label { font-size: 13px; color: var(--muted); }
+
+    /* 表格 */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+    table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead tr { background: var(--primary); color: var(--light-text); }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 700; font-size: 13px; white-space: nowrap; }
+    tbody tr:nth-child(even) { background: rgba(232,220,200,0.25); }
+    tbody tr:last-child td { border-bottom: none; }
+    .total-row { background: var(--highlight) !important; color: var(--primary-dark); font-weight: 700; }
+    .highlight-row { background: var(--highlight) !important; color: var(--primary-dark); font-weight: 700; }
+
+    /* 时间轴 */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .milestone {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .milestone .week {
+      font-size: 12px;
+      color: var(--primary-dark);
+      background: var(--highlight);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+    }
+    .milestone h4 { font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+    .milestone p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.6; }
+    .milestone:last-child { border-color: var(--primary); background: var(--highlight); }
+
+    /* 阶段与保障 */
+    .phase-card { border-top: 4px solid var(--primary); }
+    .phase-card .phase-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .phase-card .num {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .phase-card h3 { margin: 0; }
+    .phase-card .kv {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      line-height: 1.65;
+    }
+    .phase-card .kv strong { color: var(--dark); }
+
+    /* 舞台调度 */
+    .schedule-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .schedule-card .cue {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .schedule-card .cue strong { color: var(--dark); }
+
+    /* Footer */
+    footer {
+      background: var(--bg);
+      color: var(--muted);
+      padding: 36px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer .brand-foot {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      color: var(--dark);
+    }
+    footer .foot-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    footer .foot-powered {
+      font-size: 13px;
+      color: var(--primary-dark);
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    /* PDF 原文嵌入 */
+    .pdf-frame {
+      width: 100%;
+      height: 80vh;
+      min-height: 520px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    /* 响应式 */
+    @media (max-width: 920px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .timeline { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .container { padding: 0 16px; }
+      .hero { padding: 48px 0 32px; }
+      .hero h1 { font-size: 24px; }
+      .hero .lead { font-size: 14px; }
+      .section-title { font-size: 20px; }
+      .grid, .grid-2x2, .grid-3, .timeline { grid-template-columns: 1fr; }
+      .card { padding: 16px; }
+      th, td { padding: 10px 12px; font-size: 13px; }
+      table { min-width: 560px; }
+      .drawer, .drawer-backdrop { display: block; }
+      .pdf-frame { height: 70vh; min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+  <nav role="navigation" aria-label="主导航">
+    <div class="nav-inner">
+      <div class="brand">维摩诘话剧项目</div>
+      <div class="nav-links" id="desktopNav">
+        <a href="#overview">项目概览</a>
+        <a href="#acts">分幕大纲</a>
+        <a href="#characters">人物卡</a>
+        <a href="#staging">舞台调度</a>
+        <a href="#timeline">时间轴</a>
+        <a href="#phases">核心阶段</a>
+        <a href="#tables">执行三表</a>
+        <a href="#sutra">原文注音本</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="打开菜单" aria-expanded="false">☰</button>
+    </div>
+  </nav>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="关闭菜单">✕</button>
+    <a href="#overview" class="drawer-link">项目概览</a>
+    <a href="#acts" class="drawer-link">分幕大纲</a>
+    <a href="#characters" class="drawer-link">人物卡</a>
+    <a href="#staging" class="drawer-link">舞台调度</a>
+    <a href="#timeline" class="drawer-link">时间轴</a>
+    <a href="#phases" class="drawer-link">核心阶段</a>
+    <a href="#tables" class="drawer-link">执行三表</a>
+    <a href="#sutra" class="drawer-link">原文注音本</a>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <span class="badge" id="versionBadge">项目门户 V1</span>
+      <h1 id="mainTitle">《维摩诘所说经》话剧创排项目</h1>
+      <p class="lead">从经卷到舞台：用 12 周把「不二法门」搬上舞台</p>
+      <p class="lead">本页面是话剧分幕稿与项目方案的一体化门户，便于团内查阅与外部宣发。</p>
+      <p class="sub">——分幕大纲 · 人物卡 · 舞台调度 · 演员招募 · 彩排 · 宣发 · 登台全流程。</p>
+      <div class="hero-actions">
+        <a href="#acts" class="btn btn-primary">浏览分幕大纲</a>
+        <a href="#tables" class="btn btn-ghost">查看执行三表</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="overview">
+    <div class="container">
+      <h2 class="section-title">项目概览</h2>
+      <p class="section-sub">12 周创排周期，4 大核心模块，约 25 人演职团队，W12 首演。</p>
+      <div class="grid grid-2x2">
+        <div class="card"><div class="big">12 周</div><div class="label">创排总周期</div></div>
+        <div class="card"><div class="big">4 大</div><div class="label">核心阶段模块</div></div>
+        <div class="card"><div class="big">≈25 人</div><div class="label">演职团队规模</div></div>
+        <div class="card"><div class="big">W12</div><div class="label">首演登台节点</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="acts">
+    <div class="container">
+      <h2 class="section-title">分幕大纲</h2>
+      <p class="section-sub">全剧依据《维摩诘所说经》公案情节，分为六幕；每幕时长约 12–18 分钟，含对白、行动与舞台意象。</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <span class="meta">第一幕 · 示疾</span>
+          <h3>维摩诘示疾</h3>
+          <p>毗耶离城长者维摩诘示现疾病，借病说法。佛陀知其用意，欲遣诸声闻、菩萨前往问疾，众人皆因昔日被维摩诘折伏而却步。</p>
+        </div>
+        <div class="card">
+          <span class="meta">第二幕 · 问疾</span>
+          <h3>文殊问疾</h3>
+          <p>文殊师利菩萨承佛旨，率众菩萨、声闻入室问疾。维摩诘以空室、一床说明「空性」之理，展开关于「身」与「病」的机锋。</p>
+        </div>
+        <div class="card">
+          <span class="meta">第三幕 · 不二</span>
+          <h3>入不二法门</h3>
+          <p>诸菩萨依次论说「不二法门」，文殊总结后反问维摩诘。维摩诘默然无言，以沉默彰显「言语道断」的最高境界。</p>
+        </div>
+        <div class="card">
+          <span class="meta">第四幕 · 散花</span>
+          <h3>天女散花</h3>
+          <p>天女散花供养，花落于菩萨身上即落，落于声闻弟子身上则著。舍利弗惊疑，天女借机开示「分别心」与「无分别」之辨。</p>
+        </div>
+        <div class="card">
+          <span class="meta">第五幕 · 请饭</span>
+          <h3>香积请饭</h3>
+          <p>维摩诘以神力取香积佛国之饭，借一钵香饭说法，揭示「法喜禅悦」方为究竟之食，化度众香世界天子。</p>
+        </div>
+        <div class="card">
+          <span class="meta">第六幕 · 嘱累</span>
+          <h3>嘱累流通</h3>
+          <p>佛陀咐嘱弥勒菩萨及众菩萨，于未来世护持、流通此经。众菩萨发愿奉行，全剧收束于「不二」圆音。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="characters">
+    <div class="container">
+      <h2 class="section-title">角色人物卡</h2>
+      <p class="section-sub">五位核心人物构成全剧对手戏；群演塑造菩萨众、弟子群像与毗耶离城大众。</p>
+      <div class="grid grid-3">
+        <div class="card">
+          <span class="meta">男主 · 在家菩萨</span>
+          <h3>维摩诘</h3>
+          <p>毗耶离城大富长者，游戏神通，辩才无碍。以「示疾」为契机，引众入不二法门；台词机锋迭出，是全剧智慧核心。</p>
+        </div>
+        <div class="card">
+          <span class="meta">男主 · 智慧第一</span>
+          <h3>文殊师利菩萨</h3>
+          <p>承佛旨率众问疾，代表般若智慧。与维摩诘一问一答，层层推进；是串联全剧叙事的主线人物。</p>
+        </div>
+        <div class="card">
+          <span class="meta">女主 · 散花天女</span>
+          <h3>天女</h3>
+          <p>散花供养，以花著不著揭示分别心。轻盈灵动，言语柔中带锋，是「不二」思想的生动化身。</p>
+        </div>
+        <div class="card">
+          <span class="meta">声闻代表</span>
+          <h3>舍利弗</h3>
+          <p>佛陀十大弟子之一，智慧第一的小乘代表。因花著身而惊，借与天女问答显发大乘不思议境界。</p>
+        </div>
+        <div class="card">
+          <span class="meta">菩萨众代表</span>
+          <h3>弥勒菩萨 / 众菩萨</h3>
+          <p>未来佛、法会菩萨众代表；参与不二之辩，并于末幕受佛嘱累，承担流通此经之责。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="staging">
+    <div class="container">
+      <h2 class="section-title">舞台调度要点</h2>
+      <p class="section-sub">六幕主要舞台意象与走位提示；实际走位以排练厅落地后的调度图为准。</p>
+      <div class="grid schedule-grid">
+        <div class="card schedule-card">
+          <span class="meta">第一幕</span>
+          <h3>维摩诘示疾</h3>
+          <p>病榻偏左，维摩诘半卧；佛陀金身于高处背光，菩萨众分左右而立。光影由暖转冷，暗示病苦与空性并置。</p>
+          <div class="cue"><strong>调度提示：</strong>佛陀居中高位，文殊从右侧台阶缓步出列；声闻群像退后压低亮度。</div>
+        </div>
+        <div class="card schedule-card">
+          <span class="meta">第二幕</span>
+          <h3>文殊问疾</h3>
+          <p>空室一床，维摩诘与文殊对坐。菩萨、声闻围坐成半圆，构成法会式构图。</p>
+          <div class="cue"><strong>调度提示：</strong>维摩诘与文殊一左一右，距离随辩机推进而拉近；众菩萨环绕移动。</div>
+        </div>
+        <div class="card schedule-card">
+          <span class="meta">第三幕</span>
+          <h3>入不二法门</h3>
+          <p>灯光渐收，仅留维摩诘与文殊两束追光。维摩诘默然，全场定格。</p>
+          <div class="cue"><strong>调度提示：</strong>各菩萨轮次前移发言后归位；文殊最后一问后，维摩诘低头闭目，全场静默 5 秒。</div>
+        </div>
+        <div class="card schedule-card">
+          <span class="meta">第四幕</span>
+          <h3>天女散花</h3>
+          <p>天女由上层平台飘然而下，花瓣装置从天而降；菩萨众泰然，舍利弗后退拍衣。</p>
+          <div class="cue"><strong>调度提示：</strong>花雨从上方均匀落下；天女走位呈 S 形穿越人群，最终在舍利弗身前停驻。</div>
+        </div>
+        <div class="card schedule-card">
+          <span class="meta">第五幕</span>
+          <h3>香积请饭</h3>
+          <p>舞台右侧设香积佛国意象（投影/纱幕），左侧为维摩诘说法座。一钵香饭由「远方」传递至舞台中心。</p>
+          <div class="cue"><strong>调度提示：</strong>运用追光与投影切换空间；众天子从侧台分批进场，围坐受食。</div>
+        </div>
+        <div class="card schedule-card">
+          <span class="meta">第六幕</span>
+          <h3>嘱累流通</h3>
+          <p>佛陀重新登场，弥勒菩萨与众菩萨分列两阶。灯光转暖金色，全场上升感。</p>
+          <div class="cue"><strong>调度提示：</strong>佛说法时众菩萨依次合十；尾声全体缓步向前，定格于「不二」圆光。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="container">
+      <h2 class="section-title">全流程时间轴</h2>
+      <p class="section-sub">W1 → W12 八段节拍，演员招募与宣发并行推进。</p>
+      <div class="timeline">
+        <div class="milestone"><span class="week">W1–W2</span><h4>演员招募启动</h4><p>发布招募令，开放报名与初筛面试。</p></div>
+        <div class="milestone"><span class="week">W3</span><h4>围读定本</h4><p>全员围读，锁定台词与舞台指示。</p></div>
+        <div class="milestone"><span class="week">W4–W6</span><h4>粗排</h4><p>走位、台词、调度图逐幕落地。</p></div>
+        <div class="milestone"><span class="week">W7–W8</span><h4>细排</h4><p>打磨情感、节奏，贴合灯光音乐。</p></div>
+        <div class="milestone"><span class="week">W9</span><h4>舞美合成</h4><p>布景、服装、投影、音效总装配。</p></div>
+        <div class="milestone"><span class="week">W10–W11</span><h4>带妆彩排</h4><p>全要素连排，逐项打磨瑕疵。</p></div>
+        <div class="milestone"><span class="week">W8–W12</span><h4>宣发并行</h4><p>海报、新媒体、开票、媒体跟进。</p></div>
+        <div class="milestone"><span class="week">W12</span><h4>登台首演</h4><p>首演落幕，巡演排期同步启动。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="phases">
+    <div class="container">
+      <h2 class="section-title">四大核心阶段</h2>
+      <p class="section-sub">演员招募、彩排、宣发、登台表演——逐项拆解目标、任务与风险。</p>
+      <div class="grid">
+        <div class="card phase-card">
+          <div class="phase-head"><span class="num">01</span><h3>演员招募</h3></div>
+          <div class="kv"><strong>目标</strong>　甄选主角与群演，组建约 25 人演职团队。</div>
+          <div class="kv"><strong>关键任务</strong>　发布招募令 · 简历初筛 · 面试试戏 · 定角签约。</div>
+          <div class="kv"><strong>负责人</strong>　选角副导演（向总导演汇报）。</div>
+          <div class="kv"><strong>时间节点</strong>　W1–W2。</div>
+          <div class="kv"><strong>交付物</strong>　角色分配表 · 演员签约书 · 排练考勤表。</div>
+          <div class="kv"><strong>风险预警</strong>　主角难寻——提前备 B 角，放宽试戏窗口。</div>
+        </div>
+        <div class="card phase-card">
+          <div class="phase-head"><span class="num">02</span><h3>彩排</h3></div>
+          <div class="kv"><strong>目标</strong>　把剧本立到台上，产出可登台演出版本。</div>
+          <div class="kv"><strong>关键任务</strong>　围读定本 · 粗排走位 · 细排情感 · 舞美合成 · 带妆彩排。</div>
+          <div class="kv"><strong>负责人</strong>　总导演 + 舞台监督（控进度与质量）。</div>
+          <div class="kv"><strong>时间节点</strong>　W3–W11（含宣发并行）。</div>
+          <div class="kv"><strong>交付物</strong>　带妆彩排录像 · 舞台执行本 · 演出运行表。</div>
+          <div class="kv"><strong>风险预警</strong>　进度滞后——设周例会与里程碑红线。</div>
+        </div>
+        <div class="card phase-card">
+          <div class="phase-head"><span class="num">03</span><h3>宣发</h3></div>
+          <div class="kv"><strong>目标</strong>　票房与口碑双收，建立戏剧品牌声量。</div>
+          <div class="kv"><strong>关键任务</strong>　主视觉海报 · 新媒体短视频 · 开票 · 媒体与社团合作。</div>
+          <div class="kv"><strong>负责人</strong>　宣发统筹（对接总导演定基调）。</div>
+          <div class="kv"><strong>时间节点</strong>　W8–W12（与彩排并行）。</div>
+          <div class="kv"><strong>交付物</strong>　宣发日历 · 票务数据 · 媒体剪报。</div>
+          <div class="kv"><strong>风险预警</strong>　曝光不足——提前锁 KOL 与校园/社群渠道。</div>
+        </div>
+        <div class="card phase-card">
+          <div class="phase-head"><span class="num">04</span><h3>登台表演</h3></div>
+          <div class="kv"><strong>目标</strong>　顺利完成首演及后续巡演。</div>
+          <div class="kv"><strong>关键任务</strong>　妆发管理 · 场务执行 · 现场调度 · 演后复盘。</div>
+          <div class="kv"><strong>负责人</strong>　总导演 + 现场制片。</div>
+          <div class="kv"><strong>时间节点</strong>　W12 首演，后续巡演排期。</div>
+          <div class="kv"><strong>交付物</strong>　成功演出 · 观众反馈 · 复盘报告。</div>
+          <div class="kv"><strong>风险预警</strong>　现场突发——备替补、医疗、技术双备份。</div>
+        </div>
+      </div>
+
+      <h2 class="section-title" style="margin-top:48px">保障与风险管控</h2>
+      <p class="section-sub">预算、物资、应急三层兜底，确保登台零事故。</p>
+      <div class="grid grid-3">
+        <div class="card"><h3>预算保障</h3><p>预留 15% 机动金，分项核算服化道、场地、宣发。</p></div>
+        <div class="card"><h3>舞美物资</h3><p>布景、服装、投影提前定制，关键件做双备份。</p></div>
+        <div class="card"><h3>应急预案</h3><p>替补演员、现场医疗、技术双链路、场地 B 方案。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tables">
+    <div class="container">
+      <h2 class="section-title">执行三表</h2>
+      <p class="section-sub">预算明细表 · 人员联络表 · 场地排期表——创排落地的三张核心表单。</p>
+
+      <h3 style="font-size:18px; margin:28px 0 12px; color:var(--dark);">① 预算明细表（分项核算：服化道 / 场地 / 宣发）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>项目</th><th>分项</th><th>预算金额(¥)</th><th>占比</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>服化道</td><td>服装设计与制作</td><td>38,000</td><td>30.6%</td><td>主角6套+群演12套，含面料/刺绣</td></tr>
+            <tr><td>服化道</td><td>道具与装置</td><td>16,000</td><td>12.9%</td><td>病榻/空室/花雨等场景道具</td></tr>
+            <tr><td>服化道</td><td>妆造与发型</td><td>8,000</td><td>6.5%</td><td>演出期跟妆6场</td></tr>
+            <tr><td>场地</td><td>排练厅租赁</td><td>18,000</td><td>14.5%</td><td>12周×每周3次（见排期表）</td></tr>
+            <tr><td>场地</td><td>剧场档期与设备</td><td>22,000</td><td>17.7%</td><td>合成2周+彩排+首演</td></tr>
+            <tr><td>宣发</td><td>海报/物料设计印制</td><td>10,000</td><td>8.1%</td><td>主视觉+节目册+易拉宝</td></tr>
+            <tr><td>宣发</td><td>媒体与票务</td><td>12,000</td><td>9.7%</td><td>公众号/短视频/票务平台</td></tr>
+            <tr class="total-row"><td>合计</td><td>—</td><td>¥124,000</td><td>100%</td><td>含预留机动金 ¥12,400</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:18px; margin:32px 0 12px; color:var(--dark);">② 人员联络表（演职团队名单与职责）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>角色 / 职务</th><th>姓名</th><th>核心职责</th><th>联络方式</th></tr></thead>
+          <tbody>
+            <tr><td>总导演（编导）</td><td>（待定）</td><td>整体艺术把控、排练统筹、终审</td><td>（待录入）</td></tr>
+            <tr><td>执行导演</td><td>（招募中）</td><td>日常排练执行、走位调度</td><td>（待录入）</td></tr>
+            <tr><td>舞美设计</td><td>（招募中）</td><td>舞台/布景/装置设计落地</td><td>（待录入）</td></tr>
+            <tr><td>灯光设计</td><td>（招募中）</td><td>灯光方案与现场控台</td><td>（待录入）</td></tr>
+            <tr><td>服化设计</td><td>（招募中）</td><td>服装/妆造/道具统筹</td><td>（待录入）</td></tr>
+            <tr><td>宣发统筹</td><td>（招募中）</td><td>海报/票务/媒体/社群</td><td>（待录入）</td></tr>
+            <tr><td>演员统筹（casting）</td><td>（招募中）</td><td>演员招募、排期、签到</td><td>（待录入）</td></tr>
+            <tr><td>主演·维摩诘</td><td>（招募中）</td><td>男主，全剧核心对手戏</td><td>（待录入）</td></tr>
+            <tr><td>主演·文殊师利</td><td>（招募中）</td><td>男主，问疾主线</td><td>（待录入）</td></tr>
+            <tr><td>主演·天女</td><td>（招募中）</td><td>女主，散花段落</td><td>（待录入）</td></tr>
+            <tr><td>群演/合唱</td><td>（招募中）</td><td>菩萨众/弟子群像</td><td>（待录入）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:18px; margin:32px 0 12px; color:var(--dark);">③ 场地排期表（排练厅 / 剧场档期）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>周次</th><th>场地</th><th>用途</th><th>时段</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>W1–W2</td><td>排练厅A</td><td>围读+粗排</td><td>周二/四/六 19:00–22:00</td><td>角色定妆</td></tr>
+            <tr><td>W3–W4</td><td>排练厅A</td><td>分幕细排</td><td>周二/四/六 19:00–22:00</td><td>服化道进场</td></tr>
+            <tr><td>W5–W6</td><td>排练厅A</td><td>连排</td><td>每日 14:00–18:00</td><td>走位固化</td></tr>
+            <tr><td>W7–W8</td><td>排练厅B</td><td>带妆排</td><td>每日 14:00–18:00</td><td>灯光cue整合</td></tr>
+            <tr><td>W9–W10</td><td>剧场</td><td>合成（舞美+灯+声）</td><td>全天 10:00–22:00</td><td>技术彩排</td></tr>
+            <tr><td>W11</td><td>剧场</td><td>彩排（带观众）</td><td>19:30–22:00</td><td>2场内部彩排</td></tr>
+            <tr class="highlight-row"><td>W12</td><td>剧场</td><td>首演登台</td><td>19:30 开演</td><td>正式公演</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="sutra" style="border-bottom:none;">
+    <div class="container">
+      <h2 class="section-title">原文注音本</h2>
+      <p class="section-sub">已嵌入《维摩诘所说经》简体注音版（仁慧草堂编制，120 页）。可直接在下方阅读，或在浏览器中全屏查看 / 下载。</p>
+      <iframe class="pdf-frame" src="weimojie-jingwen-zhuyin.pdf" title="《维摩诘所说经》简体注音版" loading="lazy"></iframe>
+      <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--muted);">
+        若嵌入窗口未显示，可 <a href="weimojie-jingwen-zhuyin.pdf" target="_blank" rel="noopener">点击这里在新标签页打开原文 PDF</a>。
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="brand-foot">《维摩诘所说经》话剧创排项目 · V2.1</div>
+      <p class="foot-note">话剧分幕稿内容依据《维摩诘所说经》公案情节整理，项目方案为创排管理参考。</p>
+      <p class="foot-powered">Powered By Kan Man Tang</p>
+    </div>
+  </footer>
+
+  <script>
+    const VERSION = 'V2.1';
+    document.getElementById('versionBadge').textContent = '项目门户 ' + VERSION;
+    // 移动抽屉菜单
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const closeBtn = document.getElementById('drawerClose');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      document.body.classList.add('drawer-open');
+      hamburger.setAttribute('aria-expanded', 'true');
+    }
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      document.body.classList.remove('drawer-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+    hamburger.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+  </script>
+</body>
+</html>
