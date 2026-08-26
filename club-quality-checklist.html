@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>俱乐部质量清单测评 · Club Quality Checklist</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --primary: #772432;
+  --primary-light: #8C2840;
+  --primary-dark: #5C1A26;
+  --gold: #C4952E;
+  --gold-light: #F5E6C8;
+  --bg: #FDFAF5;
+  --bg-card: #FFFFFF;
+  --bg-section: #F9F4EA;
+  --text: #2D2118;
+  --text-secondary: #5C4A3A;
+  --border: #D4C8B0;
+  --border-light: #E8DCC8;
+  --success: #2D7D46;
+  --warning: #C4952E;
+  --danger: #A6192E;
+  --shadow: 0 2px 12px rgba(45, 33, 24, 0.08);
+  --shadow-lg: 0 8px 32px rgba(45, 33, 24, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;
+}
+.header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+.header-subtitle { font-size: 12px; opacity: 0.8; font-weight: 400; margin-top: 1px; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  padding: 9px 20px; border: none; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all var(--transition); display: inline-flex;
+  align-items: center; gap: 6px; letter-spacing: 0.3px; font-family: inherit;
+}
+.btn-primary { background: var(--gold); color: var(--primary-dark); box-shadow: 0 2px 8px rgba(196,149,46,0.3); }
+.btn-primary:hover { background: #D4A640; transform: translateY(-1px); }
+.btn-outline { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn-outline:hover { background: rgba(255,255,255,0.25); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* ========== CONTAINER ========== */
+.container { max-width: 960px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* ========== INTRO CARD ========== */
+.intro-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+}
+.intro-card h1 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
+.intro-card .breadcrumb { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+.intro-card .instruction {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+  padding: 14px 18px; background: var(--bg-section); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--gold);
+}
+.intro-card .instruction p { margin: 6px 0; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text); }
+.form-group input {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 14px; font-family: inherit; color: var(--text); background: #fff;
+  transition: border-color var(--transition);
+}
+.form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(119,36,50,0.08); }
+
+/* ========== PROGRESS BAR (checklist completion) ========== */
+.progress-card {
+  background: var(--bg-card); border-radius: var(--radius); margin-bottom: 22px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light);
+  padding: 18px 24px;
+}
+.progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.progress-label { font-size: 14px; font-weight: 700; color: var(--primary); }
+.progress-count { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.progress-bar { height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; }
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 4px; transition: width 0.35s ease; width: 0%;
+}
+
+/* ========== SECTION CARD ========== */
+.section-card {
+  background: var(--bg-card); border-radius: var(--radius); margin-bottom: 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light); overflow: hidden;
+}
+.section-header {
+  padding: 16px 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.section-num {
+  background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  flex-shrink: 0;
+}
+.section-meta { font-size: 12px; opacity: 0.85; margin-left: 4px; font-weight: 400; }
+.section-toggle { font-size: 18px; transition: transform var(--transition); }
+.section-card.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-card.collapsed .section-body { display: none; }
+.section-body { padding: 8px 24px 18px; }
+
+/* ========== CHECKLIST ITEM ========== */
+.item {
+  padding: 16px 0; border-bottom: 1px solid var(--border-light);
+}
+.item:last-child { border-bottom: none; }
+.item-question {
+  font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.65;
+}
+.item-en {
+  font-size: 12px; font-weight: 400; color: var(--text-secondary); margin-top: 4px;
+  line-height: 1.5; font-style: italic;
+}
+.item-number { color: var(--primary); font-weight: 700; margin-right: 6px; }
+
+.option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 640px) { .option-grid { grid-template-columns: 1fr; } }
+.option-item { position: relative; }
+.option-item input { display: none; }
+.option-item label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 14px; color: var(--text); background: #fff;
+  transition: all var(--transition); user-select: none; line-height: 1.5;
+}
+.option-item label:hover { border-color: var(--primary); background: rgba(119,36,50,0.03); }
+.option-item .option-letter {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+  background: var(--bg-section); color: var(--text-secondary); flex-shrink: 0;
+  transition: all var(--transition);
+}
+/* Yes selected -> success green; No selected -> danger red */
+.option-item input:checked + label.opt-yes {
+  border-color: var(--success); background: rgba(45,125,70,0.07);
+}
+.option-item input:checked + label.opt-yes .option-letter {
+  background: var(--success); color: #fff;
+}
+.option-item input:checked + label.opt-no {
+  border-color: var(--danger); background: rgba(166,25,46,0.06);
+}
+.option-item input:checked + label.opt-no .option-letter {
+  background: var(--danger); color: #fff;
+}
+
+/* ========== SUBMIT ========== */
+.submit-section { text-align: center; padding: 28px 0 8px; }
+.btn-generate {
+  padding: 14px 48px; font-size: 16px; border-radius: 30px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff; border: none; cursor: pointer; font-weight: 700; letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(119,36,50,0.3); transition: all 0.3s; font-family: inherit;
+}
+.btn-generate:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(119,36,50,0.4); }
+.btn-generate:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.submit-hint { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+
+/* ========== REPORT ========== */
+.report-section { display: none; margin-top: 30px; }
+.report-section.visible { display: block; }
+
+.report-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; border-radius: var(--radius) var(--radius) 0 0; padding: 32px; text-align: center;
+}
+.report-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.report-header .report-meta { font-size: 13px; opacity: 0.85; }
+
+.report-body {
+  background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius);
+  padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: none;
+}
+
+/* Result summary card */
+.result-summary-card {
+  text-align: center; padding: 26px 20px; margin-bottom: 26px;
+  border-radius: var(--radius); border: 3px solid var(--primary);
+  background: linear-gradient(135deg, rgba(119,36,50,0.04), rgba(196,149,46,0.08));
+}
+.result-summary-card .result-grade {
+  display: inline-block; padding: 8px 28px; border-radius: 30px;
+  font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 12px;
+}
+.result-summary-card .result-score { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.result-summary-card .result-text { font-size: 14px; color: var(--text-secondary); max-width: 660px; margin: 0 auto; line-height: 1.8; }
+
+/* Category bars */
+.cat-bars { margin-bottom: 30px; }
+.cat-bars h3 { text-align: center; font-size: 15px; color: var(--text); margin-bottom: 18px; }
+.cat-bar-row { margin-bottom: 16px; }
+.cat-bar-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.cat-bar-name { font-size: 14px; font-weight: 700; }
+.cat-bar-name .cat-en { font-size: 12px; color: var(--text-secondary); font-weight: 400; margin-left: 6px; }
+.cat-bar-val { font-size: 13px; color: var(--text-secondary); }
+.cat-bar-val b { color: var(--primary); font-size: 15px; }
+.cat-bar-bg { height: 14px; background: var(--border-light); border-radius: 7px; overflow: hidden; }
+.cat-bar-fill {
+  height: 100%; border-radius: 7px; transition: width 0.9s ease;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+}
+
+/* Improvement suggestions */
+.improve-block {
+  margin-top: 26px; padding-top: 24px; border-top: 2px solid var(--border-light);
+}
+.improve-block > h3 { font-size: 16px; color: var(--text); margin-bottom: 6px; }
+.improve-block > .improve-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.7; }
+.improve-cat { margin-bottom: 18px; }
+.improve-cat-title {
+  display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700;
+  color: var(--primary); margin-bottom: 8px;
+}
+.improve-cat-title .badge {
+  font-size: 11px; font-weight: 700; color: #fff; background: var(--danger);
+  padding: 2px 9px; border-radius: 12px;
+}
+.improve-cat-title .badge.ok { background: var(--success); }
+.improve-list { list-style: none; }
+.improve-list li {
+  font-size: 13px; color: var(--text); line-height: 1.7; padding: 8px 12px;
+  margin-bottom: 6px; background: var(--bg-section); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--danger);
+}
+.improve-list li .li-num { color: var(--danger); font-weight: 700; margin-right: 6px; }
+.improve-ok {
+  font-size: 13px; color: var(--success); padding: 8px 12px;
+  background: rgba(45,125,70,0.07); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--success); font-weight: 600;
+}
+
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 640px) {
+  .header-inner { flex-direction: column; gap: 10px; align-items: flex-start; padding: 10px 16px; }
+  .header-actions { width: 100%; justify-content: center; }
+  .container { padding: 16px 14px 48px; }
+  .intro-card { padding: 20px 18px; }
+  .intro-card h1 { font-size: 18px; }
+  .intro-card .instruction { font-size: 13px; padding: 12px 14px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .progress-card { padding: 14px 16px; }
+  .section-header { padding: 14px 16px; }
+  .section-header h2 { font-size: 15px; }
+  .section-body { padding: 6px 14px 14px; }
+  .item-question { font-size: 13px; }
+  .option-item label { padding: 10px 12px; font-size: 13px; }
+  .btn-generate { padding: 12px 36px; font-size: 15px; width: 90%; max-width: 320px; }
+  .report-header { padding: 24px 18px; }
+  .report-header h2 { font-size: 19px; }
+  .result-summary-card { padding: 22px 16px; }
+  .result-grade { font-size: 15px; padding: 7px 20px; }
+  .result-score { font-size: 14px; }
+  .result-text { font-size: 13px; }
+  .report-body { padding: 22px 18px; }
+  .improve-block > h3 { font-size: 15px; }
+  .footer { padding: 20px 16px; }
+}
+@media (max-width: 380px) {
+  .header-title { font-size: 15px; }
+  .header-subtitle { font-size: 11px; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+  .container { padding: 12px 10px 40px; }
+  .intro-card { padding: 16px 14px; }
+  .section-body { padding: 6px 12px 12px; }
+  .report-body { padding: 18px 14px; }
+  .report-header { padding: 20px 14px; }
+}
+
+/* Print — only the report */
+@media print {
+  body { background: #fff; }
+  .container { max-width: 100%; padding: 0; }
+  .header, .intro-card, .progress-card, .section-card, .submit-section, .footer, .toast,
+  .btn-share, .capture-modal { display: none !important; }
+  .report-section { display: block !important; }
+  .report-section.visible { display: block !important; }
+  .report-body { padding: 0; box-shadow: none; border: none; }
+  .report-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .report-header .report-meta { opacity: 1; }
+  .result-summary-card, .cat-bars, .improve-block {
+    break-inside: avoid; box-shadow: none; border: 1px solid #e0d6c6;
+  }
+}
+
+/* Footer */
+.footer { text-align: center; padding: 28px 24px; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border-light); line-height: 1.9; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--primary-dark); color: #fff; padding: 12px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 999;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { opacity: 1; }
+
+/* Capture Modal */
+.capture-modal {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  align-items: center; justify-content: center;
+  background: rgba(45, 33, 24, 0.62);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+}
+.capture-modal-mask { position: absolute; inset: 0; }
+.capture-modal-box {
+  position: relative; z-index: 1; width: min(92vw, 460px);
+  background: #fff; border-radius: 16px; padding: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35); max-height: 92vh;
+  display: flex; flex-direction: column;
+}
+.capture-modal-head { font-size: 16px; font-weight: 700; color: var(--primary); text-align: center; margin-bottom: 12px; }
+.capture-modal-scroll {
+  overflow-y: auto; max-height: 62vh; border-radius: 10px;
+  border: 1px solid var(--border-light); background: #FDFAF5; padding: 8px;
+}
+.capture-modal-scroll img { width: 100%; height: auto; display: block; border-radius: 6px; }
+.capture-modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+.capture-modal-actions .btn-share { margin: 0; flex: 1; max-width: none; text-align: center; text-decoration: none; }
+.btn-share {
+  display: block; width: 100%; max-width: 320px; margin: 22px auto 4px;
+  padding: 12px 20px; background: var(--gold); color: #fff;
+  border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: background .15s;
+}
+.btn-share:hover { background: #b07f23; }
+.btn-share-ghost { background: #EAE0D0; color: var(--text); }
+.btn-share-ghost:hover { background: #ddd0bb; }
+.capture-hint { font-size: 12px; color: var(--text-secondary); text-align: center; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-logo">CQC</div>
+      <div>
+        <div class="header-title">俱乐部质量清单测评</div>
+        <div class="header-subtitle">Club Quality Checklist · 头马俱乐部自我评估工具</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="Assessment-System.html" class="btn btn-outline btn-sm">← 返回测评系统</a>
+      <button class="btn btn-outline btn-sm" onclick="resetForm()">清空表单</button>
+      <button class="btn btn-outline btn-sm" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <div class="breadcrumb">头马俱乐部自我评估 · Club Quality Checklist · 47 项达标核查</div>
+    <h1>俱乐部质量清单测评</h1>
+    <div class="instruction">
+      <p>我们心里都有一个"理想头马俱乐部"的模样：会议愉悦、学习机会无限、会员友善……还有什么呢？</p>
+      <p>这份清单让你有机会，把俱乐部的优势与不足，对照"理想标准"逐项打勾。完成后，把结果交给俱乐部主席，由主席与干事团队一起讨论改进。</p>
+      <p><strong>说明：</strong>每道题只有两个选项——<strong>是 (Yes)</strong> 或 <strong>否 (No)</strong>。请根据俱乐部的<strong>真实情况</strong>如实勾选；不夸大、不回避，结果才有参考价值。全部勾选完成后，系统会自动生成总分、各类达标率，并汇总出<strong>改进建议</strong>。</p>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>评估人 / 俱乐部</label>
+        <input type="text" id="userName" placeholder="如：张三 / 阳光演讲俱乐部">
+      </div>
+      <div class="form-group">
+        <label>评估日期</label>
+        <input type="date" id="evalDate">
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-card">
+    <div class="progress-top">
+      <span class="progress-label">清单完成进度</span>
+      <span class="progress-count" id="progressCount">已答 0 / 47</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- CHECKLIST (rendered by JS) -->
+  <div id="checklist"></div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-generate" id="genBtn" onclick="generateReport()" disabled>📊 生成评估报告</button>
+    <div class="submit-hint" id="submitHint">请完成全部 47 项勾选后，点击上方按钮生成报告</div>
+  </div>
+
+  <!-- REPORT -->
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <h2>📋 俱乐部质量评估报告</h2>
+      <div class="report-meta" id="reportMeta"></div>
+    </div>
+    <div class="report-body">
+      <!-- Result Summary -->
+      <div class="result-summary-card" id="resultSummaryCard"></div>
+
+      <!-- Category bars -->
+      <div class="cat-bars">
+        <h3>四大维度达标率</h3>
+        <div id="catBars"></div>
+      </div>
+
+      <!-- Improvement suggestions (auto-generated) -->
+      <div class="improve-block">
+        <h3>改进建议（自动汇总）</h3>
+        <div class="improve-sub">以下为你勾选「否 (No)」的项目，按维度归类，供俱乐部干事团队逐项改进。标注 ✅ 的维度表示全部达标。</div>
+        <div id="improveList"></div>
+      </div>
+
+      <!-- SAVE / SHARE -->
+      <button class="btn-share" id="captureBtn" onclick="captureResult()">📸 保存结果卡片</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  基于 Toastmasters International「俱乐部质量清单」(Club Quality Checklist) 材料开发<br>
+  © 2019 Toastmasters International. 版权所有。Rev. 1/2019<br>
+  Powered By Kan Man Tang
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 结果卡片截图预览弹层 -->
+<div class="capture-modal" id="captureModal">
+  <div class="capture-modal-mask" onclick="closeCapture()"></div>
+  <div class="capture-modal-box">
+    <div class="capture-modal-head">📸 结果卡片已生成</div>
+    <div class="capture-modal-scroll"><img id="captureImg" alt="俱乐部质量评估结果卡片"></div>
+    <div class="capture-modal-actions">
+      <a id="captureDownload" class="btn-share" download="俱乐部质量评估结果.png">⬇ 保存图片</a>
+      <button class="btn-share btn-share-ghost" onclick="closeCapture()">关闭</button>
+    </div>
+    <p class="capture-hint">手机端可长按上方图片保存到相册</p>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const CATEGORIES = [
+  {
+    key: 'meetings', name: '俱乐部会议', en: 'Club Meetings', icon: '📅',
+    questions: [
+      { zh: '会议地点是否交通便利、易于到达且对使用者友好（无障碍）？', en: 'Is the meeting location convenient, accessible, and user-friendly (accessible)?' },
+      { zh: '会议流程和议程是否通过邮件或俱乐部网站提前公布？', en: 'Is the meeting agenda available via email or on the club website prior to the meeting?' },
+      { zh: '俱乐部会议是否准时开始并准时结束？', en: 'Does the meeting start and end on time?' },
+      { zh: '会议是否按照议程进行？', en: 'Is the meeting conducted according to the agenda?' },
+      { zh: '是否每位会员都佩戴姓名徽章？', en: 'Do members wear name badges?' },
+      { zh: '是否热情地问候并欢迎所有来宾与会员？', en: 'Are guests and members greeted warmly and welcomed?' },
+      { zh: '是否将每位来宾介绍给其他会员？', en: 'Is each guest introduced to other members?' },
+      { zh: '会议氛围是否友好、愉悦且令人享受？', en: 'Is the atmosphere friendly, enjoyable, and fun?' },
+      { zh: '会议地点是否容易找到，并设有指示标识？', en: 'Is the meeting location easy to find with proper signage?' },
+      { zh: '俱乐部的会议地点和时间是否准确列在官网 toastmasters.org/Find-a-club 上？', en: "Are the club's meeting location and time correctly listed on toastmasters.org/Find-a-club?" },
+      { zh: '事务会议是否简短高效地进行？', en: 'Is business meeting brief and efficiently conducted?' },
+      { zh: '会议内容是否丰富有趣、形式多样？', en: 'Is the meeting content interesting and varied?' },
+      { zh: '是否在会议前充分提前提醒演讲者、点评人及其他参与者各自的职责？', en: 'Are speakers, evaluators, and other participants reminded of their duties well in advance of the meeting?' },
+      { zh: '演讲是否准备充分，并基于 Pathways（路径）中的项目？', en: 'Are speeches prepared and based on Pathways projects?' },
+      { zh: '点评是否积极、有帮助且具建设性？', en: 'Are evaluations positive, helpful, and constructive?' },
+      { zh: '是否每个人都有机会参与会议环节？', en: 'Does everyone have an opportunity to participate during the meeting?' },
+      { zh: '俱乐部干事是否在其领导角色上卓有成效？', en: 'Are club officers effective in their leadership roles?' },
+      { zh: '干事是否汇报俱乐部在"杰出俱乐部计划"中的进展？', en: "Do officers report on the club's progress in the Distinguished Club Program?" },
+      { zh: '是否使用了官网"标志、图片与模板"页面提供的品牌营销物料？', en: 'Are brand marketing materials from the "Logos, Images & Templates" webpage used?' }
+    ]
+  },
+  {
+    key: 'membership', name: '会员', en: 'Membership', icon: '👥',
+    questions: [
+      { zh: '俱乐部是否每年设定会员目标，并努力维持至少 20 名会员？', en: 'Does the club set membership goals each year and strive to maintain at least 20 members?' },
+      { zh: '俱乐部干事与会员是否践行组织的核心价值观：诚信、尊重、服务与卓越？', en: "Do club officers and members practice the organization's core values: integrity, respect, service, excellence?" },
+      { zh: '俱乐部是否定期在社交媒体和社区中宣传其会议？', en: 'Does the club promote its meetings regularly through social media and the community?' },
+      { zh: '是否邀请来宾加入俱乐部？', en: 'Are guests invited to join the club?' },
+      { zh: '新会员加入后是否立即获得头马项目的入门引导？', en: 'Do new members receive an orientation to the Toastmasters program immediately upon joining?' },
+      { zh: '是否立即将会员信息上报至国际总部，以便他们收到欢迎邮件及 Base Camp 入门指引？', en: 'Is membership submitted to World Headquarters immediately so they receive welcome email and Base Camp orientation?' },
+      { zh: '是否为新会员指派导师（Mentor）？', en: 'Are mentors assigned to new members?' },
+      { zh: '新会员是否在加入后很快被安排上台演讲？', en: 'Are new members scheduled to speak soon after joining?' },
+      { zh: '新会员是否在加入后很快被分配到会议角色？', en: 'Are new members assigned meeting roles soon after joining?' },
+      { zh: '新会员是否正式入会，并获颁会员证书、徽章和姓名牌？', en: 'Are new members formally inducted and presented with certificates, badges, and name tags?' },
+      { zh: '是否由专人联系缺席超过一次会议的会员，鼓励其定期参加？', en: 'Is someone assigned to contact members who have missed more than one meeting to encourage regular attendance?' },
+      { zh: '是否每位会员都被分配到某个俱乐部委员会？', en: 'Is every member assigned to a club committee?' },
+      { zh: '俱乐部是否没有扰乱会议或带来负面影响的会员？', en: 'Does the club have no disruptive or negative members?' },
+      { zh: '是否在会议上表彰会员的成就与贡献？', en: 'Are member achievements and contributions recognized at meetings?' },
+      { zh: '俱乐部是否在 Facebook、Twitter 和 LinkedIn 上拥有主页/存在感？', en: 'Does the club have a presence on Facebook, Twitter, and LinkedIn?' },
+      { zh: '俱乐部领导者是否关注头马在 Facebook、Twitter、Instagram 和 LinkedIn 上的账号？', en: 'Do club leaders follow Toastmasters accounts on Facebook, Twitter, Instagram, and LinkedIn?' }
+    ]
+  },
+  {
+    key: 'education', name: '教育活动', en: 'Educational Activities', icon: '🎓',
+    questions: [
+      { zh: '是否鼓励会员访问其他头马俱乐部？', en: 'Are members encouraged to visit other Toastmasters clubs?' },
+      { zh: '俱乐部是否偶尔与其他俱乐部举办联合会议？', en: 'Does the club occasionally hold joint meetings with other clubs?' },
+      { zh: '俱乐部是否鼓励会员参加俱乐部以外的头马活动，例如小区、中区、大区、区域及国际峰会？', en: 'Does the club encourage participation in activities outside the club such as Area, Division, District, Region, and International conventions?' },
+      { zh: '你是否了解各项教育奖项的价值与获取条件？', en: 'Do you understand the value and requirements of educational awards?' }
+    ]
+  },
+  {
+    key: 'general', name: '综合', en: 'General', icon: '⚙️',
+    questions: [
+      { zh: '俱乐部是否有通讯简报或网站？', en: 'Does the club have a newsletter or website?' },
+      { zh: '俱乐部是否利用 Free ToastHost 托管其网站？', en: 'Does the club use Free ToastHost for website hosting?' },
+      { zh: '是否举行正式的干事就职仪式？', en: 'Is there a formal officer installation ceremony?' },
+      { zh: '是否鼓励你参加俱乐部的执行委员会会议？', en: 'Are you encouraged to attend club executive committee meetings?' },
+      { zh: '俱乐部是否讨论并就头马年度业务会议（Annual Business Meeting）上提出的提案进行投票？', en: 'Does the club discuss and vote on proposals at the Annual Business Meeting?' },
+      { zh: '俱乐部财务是否提前开始收取 10 月与 4 月的会费，并充分提醒会员缴费截止日期？', en: 'Are finances handled by collecting dues in October and April with adequate notice of payment deadlines?' },
+      { zh: '干事是否充分理解并切实履行其职责？', en: 'Do officers understand and fulfill their responsibilities?' },
+      { zh: '是否鼓励会员在俱乐部中承担领导角色？', en: 'Are members encouraged to take on leadership roles?' }
+    ]
+  }
+];
+
+// 顺序编号映射：flatIndex -> 全局题号
+const TOTAL = CATEGORIES.reduce((s, c) => s + c.questions.length, 0); // 47
+
+// ============ RENDER CHECKLIST ============
+function buildChecklist() {
+  let html = '';
+  let globalNum = 0;
+  CATEGORIES.forEach((cat, ci) => {
+    html += `<div class="section-card" id="sec_${cat.key}">
+      <div class="section-header" onclick="toggleSection('${cat.key}')">
+        <h2><span class="section-num">${ci + 1}</span>${cat.icon} ${cat.name}
+          <span class="section-meta">${cat.en} · ${cat.questions.length} 项</span></h2>
+        <span class="section-toggle">▾</span>
+      </div>
+      <div class="section-body">`;
+    cat.questions.forEach((q) => {
+      globalNum++;
+      const i = globalNum - 1;
+      html += `<div class="item">
+        <div class="item-question"><span class="item-number">${globalNum}.</span>${q.zh}<div class="item-en">${q.en}</div></div>
+        <div class="option-grid">
+          <div class="option-item">
+            <input type="radio" name="q${i}" value="yes" id="q${i}_yes" onchange="onAnswer()">
+            <label for="q${i}_yes" class="opt-yes">
+              <span class="option-letter">是</span><span>(Yes)</span>
+            </label>
+          </div>
+          <div class="option-item">
+            <input type="radio" name="q${i}" value="no" id="q${i}_no" onchange="onAnswer()">
+            <label for="q${i}_no" class="opt-no">
+              <span class="option-letter">否</span><span>(No)</span>
+            </label>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  document.getElementById('checklist').innerHTML = html;
+}
+
+function toggleSection(key) {
+  document.getElementById('sec_' + key).classList.toggle('collapsed');
+}
+
+function isAnswered(i) {
+  const el = document.querySelector(`input[name="q${i}"]:checked`);
+  return !!el;
+}
+function getAnswer(i) {
+  const el = document.querySelector(`input[name="q${i}"]:checked`);
+  return el ? el.value : null;
+}
+
+function answeredCount() {
+  let n = 0;
+  for (let i = 0; i < TOTAL; i++) if (isAnswered(i)) n++;
+  return n;
+}
+
+// ============ PROGRESS ============
+function updateProgress() {
+  const n = answeredCount();
+  document.getElementById('progressCount').textContent = `已答 ${n} / ${TOTAL}`;
+  document.getElementById('progressFill').style.width = (n / TOTAL * 100) + '%';
+  const btn = document.getElementById('genBtn');
+  const hint = document.getElementById('submitHint');
+  if (n >= TOTAL) {
+    btn.disabled = false;
+    hint.textContent = '全部 47 项已勾选，点击上方按钮生成评估报告';
+  } else {
+    btn.disabled = true;
+    hint.textContent = `还有 ${TOTAL - n} 项未勾选，完成后即可生成报告`;
+  }
+}
+
+function onAnswer() {
+  autoSave();
+  updateProgress();
+}
+
+// ============ INIT ============
+document.getElementById('evalDate').valueAsDate = new Date();
+buildChecklist();
+updateProgress();
+
+// ============ GENERATE REPORT ============
+function generateReport() {
+  if (answeredCount() < TOTAL) {
+    showToast('请先完成全部 47 项勾选');
+    return;
+  }
+  const userName = document.getElementById('userName').value.trim();
+  const evalDate = document.getElementById('evalDate').value;
+
+  // per-category yes counts
+  let globalIdx = 0;
+  const catStats = CATEGORIES.map(cat => {
+    let yes = 0;
+    const noItems = [];
+    cat.questions.forEach(q => {
+      const ans = getAnswer(globalIdx);
+      if (ans === 'yes') yes++;
+      else noItems.push({ num: globalIdx + 1, text: q.zh });
+      globalIdx++;
+    });
+    return { cat, yes, total: cat.questions.length, noItems };
+  });
+
+  const totalYes = catStats.reduce((s, c) => s + c.yes, 0);
+  const pct = Math.round(totalYes / TOTAL * 100);
+
+  // Meta
+  let meta = '';
+  if (userName) meta += `评估人/俱乐部：${userName}  ·  `;
+  meta += `日期：${evalDate || '未指定'}`;
+  document.getElementById('reportMeta').textContent = meta;
+
+  // Grade
+  const grade = gradeOf(pct);
+  document.getElementById('resultSummaryCard').innerHTML = `
+    <div class="result-grade" style="background:${grade.color};">${grade.label}</div>
+    <div class="result-score">总体达标 ${totalYes} / ${TOTAL} 项（${pct}%）</div>
+    <div class="result-text">${grade.text}</div>
+  `;
+
+  // Category bars
+  let barsHTML = '';
+  catStats.forEach(cs => {
+    const cp = Math.round(cs.yes / cs.total * 100);
+    barsHTML += `<div class="cat-bar-row">
+      <div class="cat-bar-head">
+        <span class="cat-bar-name">${cs.cat.icon} ${cs.cat.name}<span class="cat-en">${cs.cat.en}</span></span>
+        <span class="cat-bar-val"><b>${cs.yes}</b> / ${cs.total} 项达标 · ${cp}%</span>
+      </div>
+      <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:0%" data-w="${cp}"></div></div>
+    </div>`;
+  });
+  document.getElementById('catBars').innerHTML = barsHTML;
+
+  // Improvement suggestions
+  let impHTML = '';
+  catStats.forEach(cs => {
+    impHTML += `<div class="improve-cat">
+      <div class="improve-cat-title">${cs.cat.icon} ${cs.cat.name}
+        ${cs.noItems.length === 0
+          ? '<span class="badge ok">全部达标</span>'
+          : `<span class="badge">${cs.noItems.length} 项待改进</span>`}
+      </div>`;
+    if (cs.noItems.length === 0) {
+      impHTML += `<div class="improve-ok">✅ 本类全部达标，继续保持</div>`;
+    } else {
+      impHTML += '<ul class="improve-list">';
+      cs.noItems.forEach(it => {
+        impHTML += `<li><span class="li-num">${it.num}.</span>${it.text}</li>`;
+      });
+      impHTML += '</ul>';
+    }
+    impHTML += '</div>';
+  });
+  document.getElementById('improveList').innerHTML = impHTML;
+
+  // Show report
+  const reportSection = document.getElementById('reportSection');
+  reportSection.classList.add('visible');
+  reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate bars (after visible)
+  requestAnimationFrame(() => {
+    document.querySelectorAll('#catBars .cat-bar-fill').forEach(el => {
+      el.style.width = el.getAttribute('data-w') + '%';
+    });
+  });
+
+  // persist
+  saveRecord({ name: userName || '匿名', evalDate: evalDate || '', totalYes, pct, catStats });
+
+  showToast('✅ 俱乐部质量评估报告已生成！');
+}
+
+function gradeOf(pct) {
+  if (pct >= 90) return {
+    label: '卓越俱乐部', color: '#2D7D46',
+    text: '你的俱乐部在清单各项上几乎全面达标，已具备卓越俱乐部的特质。建议持续巩固优势，并把经验分享给其他俱乐部。'
+  };
+  if (pct >= 75) return {
+    label: '优秀俱乐部', color: '#3B6FB6',
+    text: '你的俱乐部整体表现优秀，绝大多数关键项都已落实。针对少数未达标项重点改进，即可迈向卓越。'
+  };
+  if (pct >= 60) return {
+    label: '良好 · 有提升空间', color: '#C4952E',
+    text: '你的俱乐部基础扎实，但仍有若干方面可以加强。优先处理下方「改进建议」中标注的项，会带来明显提升。'
+  };
+  if (pct >= 40) return {
+    label: '需重点改进', color: '#B5651D',
+    text: '你的俱乐部在多处关键环节存在空白。建议俱乐部干事团队依据下方「改进建议」制定改进计划，并逐项落实。'
+  };
+  return {
+    label: '亟需系统重建', color: '#A6192E',
+    text: '你的俱乐部在多数维度上尚未建立基本规范。建议从会议流程、会员发展与干事职责三大根基入手，系统重建俱乐部运营。'
+  };
+}
+
+// ============ RECORDS ============
+function saveRecord(rec) {
+  try {
+    let list = JSON.parse(localStorage.getItem('cqc_records') || '[]');
+    if (!Array.isArray(list)) list = [];
+    list.push(Object.assign({ id: 'r' + Date.now() + Math.random().toString(36).slice(2,7), timestamp: Date.now() }, rec));
+    localStorage.setItem('cqc_records', JSON.stringify(list));
+  } catch (e) { console.warn('保存记录失败', e); }
+}
+
+// ============ CAPTURE RESULT CARD ============
+function captureResult() {
+  if (typeof html2canvas !== 'function') {
+    showToast('截图组件未加载，请确认网络可访问 CDN 或稍后重试');
+    return;
+  }
+  const btn = document.getElementById('captureBtn');
+  const originalText = btn.textContent;
+  btn.textContent = '⏳ 生成中…';
+  btn.disabled = true;
+
+  const target = document.getElementById('reportSection');
+  const wasVisible = target.classList.contains('visible');
+  target.classList.add('visible');
+
+  html2canvas(target, {
+    scale: 2, backgroundColor: '#FDFAF5', useCORS: true, logging: false
+  }).then(canvas => {
+    if (!wasVisible) target.classList.remove('visible');
+    const dataUrl = canvas.toDataURL('image/png');
+    document.getElementById('captureImg').src = dataUrl;
+    document.getElementById('captureDownload').href = dataUrl;
+    document.getElementById('captureModal').style.display = 'flex';
+    btn.textContent = originalText;
+    btn.disabled = false;
+    showToast('✅ 结果卡片已生成，可保存或长按分享');
+  }).catch(err => {
+    if (!wasVisible) target.classList.remove('visible');
+    btn.textContent = originalText;
+    btn.disabled = false;
+    showToast('截图生成失败：' + (err && err.message ? err.message : err));
+  });
+}
+
+function closeCapture() {
+  document.getElementById('captureModal').style.display = 'none';
+  document.getElementById('captureImg').src = '';
+}
+
+// ============ UTILITIES ============
+function resetForm() {
+  if (confirm('确定要清空所有已勾选的内容吗？此操作不可撤销。')) {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('userName').value = '';
+    document.getElementById('evalDate').valueAsDate = new Date();
+    document.getElementById('reportSection').classList.remove('visible');
+    updateProgress();
+    localStorage.removeItem('cqc_state');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('表单已清空');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// Auto-save to localStorage
+function autoSave() {
+  const state = {};
+  for (let i = 0; i < TOTAL; i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (sel) state['q' + i] = sel.value;
+  }
+  state.userName = document.getElementById('userName').value;
+  state.evalDate = document.getElementById('evalDate').value;
+  try { localStorage.setItem('cqc_state', JSON.stringify(state)); } catch (e) {}
+}
+
+function autoRestore() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cqc_state') || '{}');
+    Object.entries(state).forEach(([key, value]) => {
+      if (key === 'userName') document.getElementById('userName').value = value;
+      else if (key === 'evalDate') { if (value) document.getElementById('evalDate').value = value; }
+      else {
+        const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+        if (radio) radio.checked = true;
+      }
+    });
+    updateProgress();
+  } catch (e) {}
+}
+
+document.addEventListener('change', autoSave);
+window.addEventListener('DOMContentLoaded', autoRestore);
+</script>
+
+</body>
+</html>
