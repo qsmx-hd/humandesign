@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>《维摩诘所说经》话剧项目门户 · V2.2</title>
+  <title>《维摩诘所说经》话剧项目门户 · V2.4</title>
   <meta name="description" content="《维摩诘所说经》话剧创排项目门户：分幕大纲、人物卡、舞台调度与 12 周项目方案一体化展示。" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -467,6 +467,8 @@
         <a href="#phases">核心阶段</a>
         <a href="#tables">执行三表</a>
         <a href="#sutra">原文注音本</a>
+        <a href="#huayumantian">花雨满天</a>
+        <a href="weimojie-6acts-dialogue.html">六幕台词</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="打开菜单" aria-expanded="false">☰</button>
     </div>
@@ -482,6 +484,8 @@
     <a href="#phases" class="drawer-link">核心阶段</a>
     <a href="#tables" class="drawer-link">执行三表</a>
     <a href="#sutra" class="drawer-link">原文注音本</a>
+    <a href="#huayumantian" class="drawer-link">花雨满天</a>
+    <a href="weimojie-6acts-dialogue.html" class="drawer-link">六幕台词</a>
   </div>
 
   <header class="hero">
@@ -774,16 +778,31 @@
     </div>
   </section>
 
+  <section id="huayumantian" style="border-bottom:none;">
+    <div class="container">
+      <h2 class="section-title">《维摩诘的花雨满天》</h2>
+      <p class="section-sub">已嵌入南怀瑾先生讲《维摩诘所说经》的讲录《维摩诘的花雨满天》（全本）。可直接在下方阅读，或在浏览器中全屏查看 / 下载。</p>
+      <iframe class="pdf-frame" data-src="weimojie-de-hua-yu-man-tian.pdf" title="《维摩诘的花雨满天》" loading="lazy"></iframe>
+      <div class="pdf-mobile-fallback">
+        <p>移动端浏览器暂不支持内嵌预览《维摩诘的花雨满天》PDF，点击下方按钮在新标签页阅读或下载：</p>
+        <a class="btn-pdf" href="weimojie-de-hua-yu-man-tian.pdf" target="_blank" rel="noopener">📖 打开 / 下载《维摩诘的花雨满天》（PDF）</a>
+      </div>
+      <p style="text-align:center; margin-top:14px; font-size:13px; color:var(--muted);">
+        桌面端可直接在上方窗口阅读；若嵌入窗口未显示，可 <a href="weimojie-de-hua-yu-man-tian.pdf" target="_blank" rel="noopener">点击这里在新标签页打开《维摩诘的花雨满天》PDF</a>。
+      </p>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <div class="brand-foot">《维摩诘所说经》话剧创排项目 · V2.2</div>
+      <div class="brand-foot">《维摩诘所说经》话剧创排项目 · V2.4</div>
       <p class="foot-note">话剧分幕稿内容依据《维摩诘所说经》公案情节整理，项目方案为创排管理参考。</p>
       <p class="foot-powered">Powered By Kan Man Tang</p>
     </div>
   </footer>
 
   <script>
-    const VERSION = 'V2.2';
+    const VERSION = 'V2.4';
     document.getElementById('versionBadge').textContent = '项目门户 ' + VERSION;
     // 移动抽屉菜单
     const hamburger = document.getElementById('hamburger');
@@ -809,12 +828,13 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
     // 仅桌面端（≥921px）内嵌 PDF，移动端改用按钮打开，避免 iframe 触发 PDF 自动下载
     (function () {
-      var frame = document.querySelector('.pdf-frame');
-      if (!frame) return;
+      var frames = document.querySelectorAll('.pdf-frame');
       var isDesktop = window.matchMedia('(min-width: 921px)').matches;
-      if (isDesktop && frame.dataset.src) {
-        frame.src = frame.dataset.src;
-      }
+      frames.forEach(function (frame) {
+        if (isDesktop && frame.dataset.src) {
+          frame.src = frame.dataset.src;
+        }
+      });
     })();
   </script>
 </body>

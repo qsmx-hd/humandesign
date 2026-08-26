@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《维摩诘的花雨满天》· 六幕话剧扩写台词</title>
+  <meta name="description" content="据南怀瑾《维摩诘的花雨满天》义理扩写之六幕话剧台词：示疾、问疾、入不二法门、天女散花、请饭、嘱累。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F5F0E8;
+      --card: #FFFDF9;
+      --primary: #C4956A;
+      --primary-dark: #A87D53;
+      --dark: #2D2118;
+      --muted: #8A7A6A;
+      --border: #E8DCC8;
+      --gold: #D4A76A;
+      --shadow: 0 4px 18px rgba(45, 33, 24, 0.08);
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+      background: var(--bg);
+      color: var(--dark);
+      line-height: 1.85;
+      font-size: 15px;
+    }
+    a { color: var(--primary-dark); }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+    /* nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--dark);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--primary-dark); border-color: var(--primary); text-decoration: none; }
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--dark);
+      font-size: 22px;
+      line-height: 1;
+      padding: 0;
+    }
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(45,33,24,0.35);
+      z-index: 9998;
+    }
+    .drawer-backdrop.open { display: block; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(280px, 82vw);
+      height: 100dvh;
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      z-index: 9999;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      padding: 64px 22px 28px;
+      overflow-y: auto;
+      box-shadow: -6px 0 28px rgba(45,33,24,0.18);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--dark);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .drawer-link {
+      display: block;
+      color: var(--dark);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+    }
+
+    header.hero {
+      text-align: center;
+      padding: 58px 0 36px;
+      background: linear-gradient(180deg, #F5F0E8 0%, #EBE4D9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 99px;
+      background: rgba(196,149,106,0.14);
+      color: var(--primary-dark);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 0 10px;
+      line-height: 1.35;
+    }
+    .lead {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 8px auto 6px;
+      line-height: 1.72;
+      white-space: nowrap;
+    }
+    .sub {
+      font-size: 14px;
+      color: var(--primary-dark);
+      margin: 8px auto 0;
+      font-style: italic;
+      line-height: 1.7;
+      white-space: nowrap;
+    }
+
+    section { padding: 38px 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 0 8px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .act-number {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .scene-meta {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin: 16px 0 22px;
+      box-shadow: var(--shadow);
+    }
+    .scene-meta p { margin: 6px 0; font-size: 14px; color: var(--muted); }
+    .scene-meta strong { color: var(--dark); }
+    .core-line {
+      margin: 12px 0 0;
+      padding: 12px 16px;
+      border-left: 3px solid var(--primary);
+      background: rgba(196,149,106,0.08);
+      color: var(--dark);
+      font-size: 14px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .stage-direction {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 14px;
+      margin: 18px 0 10px;
+      padding-left: 14px;
+      border-left: 2px solid var(--border);
+    }
+    .dialogue { margin: 18px 0; }
+    .line { display: flex; gap: 14px; margin: 14px 0; align-items: baseline; }
+    .speaker {
+      flex: 0 0 92px;
+      text-align: right;
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 14px;
+    }
+    .text { flex: 1; font-size: 15px; }
+    .line.vimalakirti .speaker { color: #8A5A3A; }
+    .line.manjushri .speaker { color: #5D4A3A; }
+    .line.goddess .speaker { color: #9C6B8A; }
+    .line.sariputra .speaker { color: #5A6B5A; }
+    .line.buddha .speaker { color: #B8860B; }
+
+    .note {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin: 26px 0 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0 42px;
+      border-top: 1px solid var(--border);
+      background: #EBE4D9;
+    }
+    .brand-foot { font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .foot-note { font-size: 13px; color: var(--muted); margin: 4px 0; }
+    .foot-powered { font-size: 12px; color: var(--primary); margin-top: 10px; }
+
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      h1 { font-size: 23px; }
+      .lead, .sub {
+        font-size: 14px;
+        white-space: normal;
+      }
+      .speaker { flex: 0 0 74px; font-size: 13px; }
+      .text { font-size: 14px; }
+      .line { gap: 10px; }
+      .section-title { font-size: 20px; }
+      section { padding: 28px 0; }
+      .scene-meta { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <nav role="navigation" aria-label="幕次导航">
+    <div class="nav-inner">
+      <div class="brand">六幕扩写台词</div>
+      <div class="nav-links" id="desktopNav">
+        <a href="#act1">第一幕</a>
+        <a href="#act2">第二幕</a>
+        <a href="#act3">第三幕</a>
+        <a href="#act4">第四幕</a>
+        <a href="#act5">第五幕</a>
+        <a href="#act6">第六幕</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="打开菜单" aria-expanded="false">☰</button>
+    </div>
+  </nav>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="关闭菜单">✕</button>
+    <a href="#act1" class="drawer-link">第一幕　示疾</a>
+    <a href="#act2" class="drawer-link">第二幕　问疾</a>
+    <a href="#act3" class="drawer-link">第三幕　入不二法门</a>
+    <a href="#act4" class="drawer-link">第四幕　天女散花</a>
+    <a href="#act5" class="drawer-link">第五幕　请饭</a>
+    <a href="#act6" class="drawer-link">第六幕　嘱累</a>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <span class="badge">据南怀瑾《维摩诘的花雨满天》义理扩写</span>
+      <h1>《维摩诘所说经》六幕话剧扩写台词</h1>
+      <p class="lead">从「示疾」到「嘱累」，把不二法门的机锋，变成舞台上可听、可看、可呼吸的对话。</p>
+      <p class="sub">台词根基于公版《维摩诘所说经》情节；花雨满天之义理化为原创戏剧语言，不照搬原书。</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="act1">
+      <h2 class="section-title"><span class="act-number">第一幕</span>示疾</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>毗耶离城 · 维摩诘丈室（室中唯有一床，空无一物）</p>
+        <p><strong>人物：</strong>维摩诘、佛陀、舍利弗、目犍连、迦叶、须菩提、富楼那、迦旃延、阿那律、优波离、罗睺罗、阿难</p>
+        <div class="core-line">「众生有病，是故我病；若一切众生得不病者，则我无是疾也。」</div>
+      </div>
+
+      <div class="stage-direction">灯光初起：一室空明，唯有一榻。维摩诘侧卧，面容平静，却似承受着所有人的疼痛。远处传来市井之声。</div>
+
+      <div class="dialogue">
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（轻声，似自语）你们都在外面问：维摩诘为何病了？可你们谁又真正无病？我这一病，不是业力，不是风寒，是众生心头那一点不肯放下的执着。众生有病，所以我病。</div></div>
+        <div class="stage-direction">切光。灵鹫山，佛陀升座，十大弟子分列两侧。</div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">维摩诘居士在毗耶离城示疾，当有弟子往问其疾，以慰其意。舍利弗，汝智慧第一，可愿往？</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（迟疑）世尊，弟子……不敢。昔日在毗耶离城，维摩诘问我：「舍利子，昼夜十二时，你的心念安顿好了没有？」弟子当时无言以对。</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">目犍连，汝神通第一，可愿往？</div></div>
+        <div class="line"><div class="speaker">目犍连</div><div class="text">世尊，弟子亦不敢。他曾问我：「目犍连，你为诸居士说法，是在说佛法，还是在说自己的分别心？」弟子至今想起，仍觉背后有汗。</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">大迦叶，汝头陀第一，可愿往？</div></div>
+        <div class="line"><div class="speaker">大迦叶</div><div class="text">世尊，我修头陀行，他反问我：「大迦叶，你以贫陋为德，是否还在贫富两端分别？」弟子当时便知道，自己那点骄傲，被他看穿了。</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">须菩提，汝解空第一，可愿往？</div></div>
+        <div class="line"><div class="speaker">须菩提</div><div class="text">世尊，我不敢。我问他如何是空，他反问：「须菩提，你乞食时，若见贫贱者而生慈悲，见富贵者而生恭敬，这还是空吗？」弟子方知，自己的空，还在善恶贫富里打转。</div></div>
+        <div class="stage-direction">佛陀依次点名，众弟子一一推辞。气氛渐紧。</div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">富楼那、迦旃延、阿那律、优波离、罗睺罗、阿难——汝等亦不敢乎？</div></div>
+        <div class="line"><div class="speaker">众弟子</div><div class="text">（齐声）不敢。维摩诘居士之辩，非言辞可敌；其室虽空，其机锋深不可测。</div></div>
+        <div class="stage-direction">静场。佛陀微笑。</div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">文殊师利，汝可往问疾。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">（上前，合十）世尊，弟子愿往。正因为他难问，所以才须有人问；正因为他无病，所以才须有人问「病从何来」。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（低声）文殊师利去，这一问，怕是要把整座毗耶离城都问空了。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">（回首）舍利弗，城本空，病亦空。我们去问疾，不是去战胜他，是去照见自己。</div></div>
+      </div>
+    </section>
+
+    <section id="act2">
+      <h2 class="section-title"><span class="act-number">第二幕</span>问疾</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>丈室之中 · 唯空床一榻</p>
+        <p><strong>人物：</strong>文殊师利、维摩诘</p>
+        <div class="core-line">文殊问：「从有疾而来，抑无疾而来？」维摩诘答：「不生不灭，不常不断，不来不去。」</div>
+      </div>
+
+      <div class="stage-direction">文殊步入丈室。室内空无一物，一榻、一病者。二人对视良久。</div>
+
+      <div class="dialogue">
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">文殊师利，你来了。你是带着病来，还是带着无病来？</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">居士，我从不二之门来，无所谓病与不病。</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">好一个不二来去。那你且说，我今此病，从何而来？</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">从有疾而来，抑无疾而来？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">此病者，不生不灭，不常不断，不来不去。若谓从有疾来，则有病之实；若谓从无疾来，则无病可问。文殊师利，你这一问，已经落在两边。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">（微笑）居士说的是。然则，菩萨应云何慰喻有疾菩萨？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">应说：身如幻相，病亦如幻。幻师所化，岂有真痛？菩萨不当于幻身中，更起幻病之执。然而——若见众生之病，而生真实大悲，此即菩萨之病。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">大悲亦病乎？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">大悲非病，著大悲之相则为病。我此病，非业报、非风寒，是入生死而不舍生死，处烦恼而不厌烦恼。众生未度，故我示疾。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">如此说来，丈室虽空，却容得下三千大千世界之苦？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">文殊师利，你不见这室中四壁皆空？正因其空，故无所不容。一榻之上，即是道场；一病之中，即是解脱。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">那解脱，又在何处？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（缓缓坐起）就在你问我「何处」的这一刻。你若向外求，它便是毗耶离城；你若向内看，它便是你问话的心。城与心，不二。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">（合十）居士此语，令我想到：所谓空室，原来不是空无一物，而是无有分别之物。</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">文殊师利，你果然不负「大智」之名。只是——言语道断，你说得越多，离它越远。</div></div>
+      </div>
+    </section>
+
+    <section id="act3">
+      <h2 class="section-title"><span class="act-number">第三幕</span>入不二法门</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>丈室法会 · 座无虚席</p>
+        <p><strong>人物：</strong>文殊师利、维摩诘、三十一位菩萨（代表：弥勒、持世、光严童子、无尽意、宝积等）</p>
+        <div class="core-line">文殊：「于一切法无言无说，无示无识，离诸问答，是为入不二法门。」维摩诘——默然无言。</div>
+      </div>
+
+      <div class="stage-direction">丈室忽然广大，三十一菩萨依次而坐。文殊与维摩诘对坐中央。众菩萨各各发言。</div>
+
+      <div class="dialogue">
+        <div class="line"><div class="speaker">弥勒菩萨</div><div class="text">我所谓不二：一切众生心，即是菩萨心；一切众生性，即是如来性。不断生死，不住涅槃，是为不二。</div></div>
+        <div class="line"><div class="speaker">持世菩萨</div><div class="text">我所谓不二：善恶、苦乐、得失，皆是幻象。见善不喜，见恶不嗔，苦乐一如，是为不二。</div></div>
+        <div class="line"><div class="speaker">光严童子</div><div class="text">我所谓不二：凡夫所见之五欲，与菩萨所修之万行，同出一源。不染不离，是为不二。</div></div>
+        <div class="line"><div class="speaker">无尽意菩萨</div><div class="text">我所谓不二：布施与悭贪不二，持戒与毁禁不二。何以故？一切法无自性故。无自性者，无分别，是为不二。</div></div>
+        <div class="line"><div class="speaker">宝积菩萨</div><div class="text">我所谓不二：佛法与世间法不二。离世无菩提，离欲无解脱。于烦恼中证菩提，于生死中证涅槃，是为不二。</div></div>
+        <div class="stage-direction">众菩萨一一陈说不二之法，各尽其妙。最后，文殊师利起身。</div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">我所谓不二：于一切法无言无说，无示无识，离诸问答，是为入不二法门。</div></div>
+        <div class="stage-direction">文殊言毕，回向维摩诘。</div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">我等各各说已。仁者当说，何等是菩萨入不二法门？</div></div>
+        <div class="stage-direction">全场寂然。维摩诘默然，垂目，不发一语。良久。</div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（低声问旁侧菩萨）他怎么不答？</div></div>
+        <div class="line"><div class="speaker">旁侧菩萨</div><div class="text">（低声）他答了。只是这答案，不在声音里。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">（向维摩诘深深一礼）善哉，善哉。乃至无有文字语言，是真入不二法门。</div></div>
+        <div class="stage-direction">维摩诘微微抬眼，目光如秋月映水。众人似有所悟，有人垂泪，有人微笑。</div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（轻声）文殊师利，你们都说了不二。可不二之名，亦是不二之相。若执「不二」为法，不二亦成二。我今默然，非有所示，非无所示。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">默然之中，雷音已震。</div></div>
+      </div>
+    </section>
+
+    <section id="act4">
+      <h2 class="section-title"><span class="act-number">第四幕</span>天女散花</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>法会上空 · 花雨缤纷</p>
+        <p><strong>人物：</strong>天女、舍利弗</p>
+        <div class="core-line">花著身者，是「分别想」未断；舍利弗欲拂去花而不得。</div>
+      </div>
+
+      <div class="stage-direction">法会正进行，忽有天花自空而降，缤纷如雨。花瓣落在大菩萨身上，自然滑落；落在声闻弟子身上，却粘着不去。</div>
+
+      <div class="dialogue">
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">（翩然而下，笑）诸位尊者，这花好不好看？</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（皱眉，拂身上花）天女，你为何散花？花著比丘身，成何体统！</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">尊者莫急。这花落在菩萨身上便落，落在你身上便粘。你可知为何？</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">定是我戒律未纯，所以你以花戏弄于我。</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">非也。花本无择人之心，是你有分别之心。你心中尚有「花是花，我是我；净是净，染是染」之分，所以花就停在你身上，替你标出那根还未断的线。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（用力拂，花愈粘）胡说！我修戒定慧，断贪嗔痴，怎会有分别？</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">你越是说「我没有分别」，分别就粘得越紧。尊者，你若不著男女之相，何惧花粘袈裟？你若不著净染之相，何劳拂去天花？</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">你……你一个女子，也来教训我？</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">（笑得更甚）尊者，你又说「女子」了。我于八万四千劫中，往来男女之相，无有定相。你呢？你于八万四千劫中，可曾有一念不分别男女、净染、僧俗？</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（语塞）我……</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">尊者，我不是来羞辱你，我是来散花的。花之所以粘，不是因为它脏，是因为你把它当了真。你把它当了真，一朵花就变成了八万四千烦恼。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（渐渐停下拂花的手）那……如何才能让它不粘？</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">不必让它不粘。粘与不粘，本来不二。你只管看花自开自落，看粘自粘自去。心不迎拒，花便成道。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（呆立片刻，忽然合掌，低首）天女，我舍利弗今日方知，我的戒行，还穿在身上；你的解脱，早已落在心里。</div></div>
+        <div class="line goddess"><div class="speaker">天女</div><div class="text">（轻挥衣袖，花雨渐止）尊者，花雨要停了。但你心里的分别雨，停与不停，我却帮不了你。</div></div>
+      </div>
+    </section>
+
+    <section id="act5">
+      <h2 class="section-title"><span class="act-number">第五幕</span>请饭（香积佛品）</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>丈室 → 众香国（维摩诘以神力化现）</p>
+        <p><strong>人物：</strong>维摩诘、化菩萨、香积如来（声）、舍利弗、大众</p>
+        <div class="core-line">维摩诘断取妙喜世界如陶家轮，化菩萨往众香国乞香饭。</div>
+      </div>
+
+      <div class="stage-direction">丈室忽然广大无量，中央现出一道金色光轮，光中依稀可见众香国世界。维摩诘结印，一化菩萨自光中现身。</div>
+
+      <div class="dialogue">
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">大众且看这方丈之室。你以为它小，只因你心中有大小；你以为它窄，只因你心中有宽窄。我今断取妙喜世界，如陶师转轮——你可见那轮中转动的，不是世界，是你自己的分别心？</div></div>
+        <div class="line"><div class="speaker">化菩萨</div><div class="text">（合掌）居士有何咐嘱？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">汝往众香国，向香积如来乞取香饭，以飨此会。但记取：乞饭不是乞食，是乞那一味法味；施饭不是施米，是施那一念平等。</div></div>
+        <div class="line"><div class="speaker">化菩萨</div><div class="text">领法旨。</div></div>
+        <div class="stage-direction">化菩萨乘光而去。须臾，手捧香饭而回，饭香普熏，一室皆成金色。</div>
+        <div class="line"><div class="speaker">香积如来</div><div class="text">（声如远钟，自光中传来）维摩诘，汝以一钵饭，欲度几许人？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（仰头向光）如来，一钵饭能饱凡夫腹，一乘法能饱众生心。我今所度，不在人数，在那一念回心。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（惊异）居士，这小小方丈，如何能容下众香国？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">舍利弗，你的眼所见的是方丈，你的心若打开，方丈即是法界。须弥山可纳于芥子，大海可收于毛孔——这不是神通，是本来如此。</div></div>
+        <div class="line manjushri"><div class="speaker">文殊师利</div><div class="text">居士此会，是否意谓：解脱不必离世间，成佛不必舍家业？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">文殊师利，你这话问到根上了。世人以为出家才近道，在家便远佛；以为清净是修行，烦恼是业障。殊不知，坐在蒲团上的人，心中未必无垢；在市中卖酒的人，心头未必无月。不离世间，即出世间；不断烦恼，即证菩提。</div></div>
+        <div class="line"><div class="speaker">化菩萨</div><div class="text">饭已至，请大众受用。</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">吃吧。吃得香，是法味；吃得淡，也是法味。你若执香为法味，淡便成了过失；你若知香淡不二，每一口都是众香国。</div></div>
+        <div class="stage-direction">大众捧饭，或食或思。室内饭香渐淡，人心却渐明。</div>
+      </div>
+    </section>
+
+    <section id="act6">
+      <h2 class="section-title"><span class="act-number">第六幕</span>嘱累</h2>
+      <div class="scene-meta">
+        <p><strong>场景：</strong>法会终了 · 灵山不远</p>
+        <p><strong>人物：</strong>佛陀、弥勒、大众、维摩诘</p>
+        <div class="core-line">「不断烦恼而入涅槃，是为不二；不舍道法而现凡夫。」</div>
+      </div>
+
+      <div class="stage-direction">丈室恢复平常，一榻一人。维摩诘起身，似病已愈。佛陀与弥勒率大众而至。</div>
+
+      <div class="dialogue">
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">法会将终，我今以此《维摩诘所说经》咐嘱于汝。弥勒，汝当受持读诵，广为人说。未来世中，若有善男子、善女人受持此经，即是受持诸佛如来之法身。</div></div>
+        <div class="line"><div class="speaker">弥勒</div><div class="text">（合掌顶礼）世尊，弟子必当流通，使不二之义不灭于世。只是——此经甚深，末世众生根钝，如何能入？</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">弥勒，不二之义，不在文字之多寡，在当人一念回光。你不必令众生都懂「不二」二字，只需令他们于日用平常中，少一分分别，多一分慈悲。</div></div>
+        <div class="line"><div class="speaker">弥勒</div><div class="text">世尊，何谓「不断烦恼而入涅槃，不舍道法而现凡夫」？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（上前）弥勒，你问得好。烦恼与涅槃，不是两岸，是一条河的上下流。你在烦恼中，若能不随烦恼转，当下即是涅槃；你在凡夫中，若能不离道法念，凡夫即是菩萨。</div></div>
+        <div class="line"><div class="speaker">弥勒</div><div class="text">居士，这样说来，众生的烦恼，竟不必断？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">不是不断，是不执断。你若执一个「断」字，便是头上安头；你若执一个「不断」字，便是放纵流浪。真正的修行，是见烦恼本空，见生死如幻，在幻中做事，在梦中醒着。</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">善哉。维摩诘，你以居士身，示疾、说法、默然、散花、请饭，无不是道场。</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">世尊，我这丈室之门，今日尚未合上。</div></div>
+        <div class="line"><div class="speaker">弥勒</div><div class="text">门未合？</div></div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">门若合上，你们便以为法会在丈室；门若不关，你们方知——法会从未开始，也从未结束。毗耶离城是丈室，灵山也是丈室；你我问答处是丈室，你们转身回家后，依旧是丈室。</div></div>
+        <div class="line sariputra"><div class="speaker">舍利弗</div><div class="text">（喃喃）门未合……</div></div>
+        <div class="line buddha"><div class="speaker">佛陀</div><div class="text">（微笑）大众，且听此一偈：是身如幻，从颠倒起；是身如梦，为虚妄见；是身如影，从业缘现；是身如响，属诸因缘。汝等当如是受持。</div></div>
+        <div class="stage-direction">灯光渐暗，唯余维摩诘丈室之门，微光从门缝透出。众菩萨、声闻、天女、居士，静默不语。花雨已停，香饭已尽，而门，始终未合。</div>
+        <div class="line vimalakirti"><div class="speaker">维摩诘</div><div class="text">（最后一句，轻声，却清晰可闻）去吧。门，从来没有关过。</div></div>
+      </div>
+
+      <div class="note">
+        <strong>说明：</strong>本台词为据南怀瑾先生《维摩诘的花雨满天》义理进行的原创戏剧扩写。核心情节与偈颂取自公版《维摩诘所说经》；南师对「不二」「分别心」「烦恼即菩提」等义理的理解，已化入人物对白，未整段引用原书文字。
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="brand-foot">《维摩诘所说经》六幕话剧扩写台词 · V2.1</div>
+      <p class="foot-note">据《维摩诘的花雨满天》义理扩写 · 公版经文情节 + 原创戏剧语言</p>
+      <p class="foot-powered">Powered By Kan Man Tang</p>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const closeBtn = document.getElementById('drawerClose');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    hamburger.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+  </script>
+</body>
+</html>
