@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>开发「魔方矩阵 Cube Matrix」课程 — 可行性研究报告</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --info:#4A6B87;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+header .meta span{white-space:nowrap}
+
+/* ---------- section ---------- */
+section{margin:34px 0 0}
+.sec-no{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px;
+}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:22px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+/* ---------- card / grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+.panel.tight{padding:13px 15px}
+
+/* ---------- verdict ---------- */
+.verdict{background:linear-gradient(135deg,#3A2A1C,#4E3823);color:#F3E4CE;border-radius:13px;padding:20px 19px;margin:16px 0}
+.verdict h3{color:#F6D9A8;margin:0 0 11px;font-size:16px}
+.verdict p{color:#E6D8C3;font-size:13.5px;line-height:1.78}
+.verdict .tag{
+  display:inline-block;font-size:12px;font-weight:700;padding:3px 11px;border-radius:16px;
+  background:var(--main);color:#2D2118;margin-right:7px;letter-spacing:.5px;
+}
+.verdict .tag.b{background:#8FBF9F}
+.verdict .tag.c{background:#D9A05B}
+
+/* ---------- table ---------- */
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th.num{text-align:right}
+
+/* ---------- chips ---------- */
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.chip.mid{background:#FBEBCF;color:#8A5A12;border-color:#EBD3A0}
+.chip.lo{background:#F8DED9;color:#8A3228;border-color:#E9BEB5}
+.chip.na{background:#EFEAE2;color:#6B5844;border-color:#DED5C6}
+
+/* ---------- notes ---------- */
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+.q{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.68}
+
+/* ---------- funnel ---------- */
+.funnel{margin:14px 0}
+.fbar{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.flabel{flex:0 0 118px;font-size:12.5px;color:var(--ink);font-weight:600;line-height:1.5}
+.ftrack{flex:1;background:#EFE6D6;border-radius:6px;overflow:hidden;height:26px;position:relative}
+.ffill{height:100%;background:linear-gradient(90deg,#C4956A,#A8752E);border-radius:6px;
+  display:flex;align-items:center;padding-left:9px;color:#fff;font-size:12px;font-weight:700}
+.fnote{flex:0 0 auto;font-size:12px;color:var(--muted);min-width:96px;text-align:right}
+
+/* ---------- footer ---------- */
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+/* ---------- toc ---------- */
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">FEASIBILITY STUDY</p>
+  <h1 id="h1">开发「魔方矩阵 Cube Matrix」课程<br>可行性研究报告</h1>
+  <p class="lead">基于「伍空人类图」《人类图魔方矩阵》第二期训练营招生文案的信息溯源、市场测算与立项评估</p>
+  <p class="sub">——一份以支持「做 / 不做 / 怎么做」决策为唯一目的的内部研究报告，不预设结论，不迎合立项。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>密级：内部决策参考</span>
+  </div>
+</header>
+
+<!-- ============ 一页纸结论 ============ -->
+<section>
+  <span class="sec-no">EXECUTIVE SUMMARY</span>
+  <h2>一页纸结论</h2>
+
+  <div class="verdict">
+    <h3><span class="tag">核心判断</span>内容本体真实，名称与包装存疑；不宜作为独立课程线立项</h3>
+    <p><strong>1. 它不是凭空编造的。</strong>「魔方矩阵」所指向的知识内容——Rave Cosmology（Rave 宇宙学）、Variables 四变量、PHS 初级健康系统、行星序列与交点——全部是 Ra Uru Hu 体系中真实存在的高阶知识层级，有明确的原始教材与官方课程可查。</p>
+    <p><strong>2. 但「Cube Matrix / 魔方矩阵」这个名字是本土化再包装。</strong>在 Jovian Archive 与 IHDS 的官方课程目录中，<strong>不存在名为 Cube Matrix 的课程</strong>。这意味着：命名权是空的（机会），但也意味着学员无法用英文资料交叉验证（风险）。</p>
+    <p><strong>3. 招生文案存在可验证的硬伤</strong>（详见第 2 章），说明课程方的知识严谨度与内容工程能力需要实地验证，不能仅凭文案决策。</p>
+    <p style="margin-top:14px"><span class="tag b">推荐动作</span><strong>先花一期学费做「学员式尽调」，再决定是否自研——而不是现在就立项开发。</strong></p>
+    <p><span class="tag c">战略落点</span>真正的机会不在「再开一门灵性高阶课」，而在于把其中<strong>Variables 四变量</strong>这块可直接翻译成组织语言的内容，做成 B 端组织诊断工具，嵌入你已有的领导力 / OC16 体系。</p>
+  </div>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">① 知识真实性</p>
+      <p class="d">内容构件<span class="chip hi">高置信</span>可溯源至 Ra 原始体系；名称<span class="chip lo">无国际对应</span>，属自创包装术语。</p>
+    </div>
+    <div class="card">
+      <p class="t">② 市场容量</p>
+      <p class="d">全国年度天花板估算 <b>¥50 万 – ¥400 万</b>，且被少数机构分食；C 端独立开课<span class="chip lo">财务不成立</span>。</p>
+    </div>
+    <div class="card">
+      <p class="t">③ 战略匹配</p>
+      <p class="d">与小程序、领导力课程<span class="chip hi">强协同</span>；与「灵性觉醒」定位<span class="chip mid">弱协同</span>。取哪一段决定成败。</p>
+    </div>
+    <div class="card">
+      <p class="t">④ 投入回收</p>
+      <p class="d">自研投入估算 <b>¥8 万 – ¥22 万</b>；独立开课回本 1–3 年；作为模块嵌入则<span class="chip hi">边际成本近零</span>。</p>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="th">报告目录</div>
+    <ol>
+      <li><a href="#s1">研究缘起与对象界定</a></li>
+      <li><a href="#s2">知识谱系溯源：它到底是什么</a></li>
+      <li><a href="#s3">市场需求与容量测算</a></li>
+      <li><a href="#s4">竞争格局与价格对标</a></li>
+      <li><a href="#s5">与现有业务的战略匹配</a></li>
+      <li><a href="#s6">产品方案设计（三方案）</a></li>
+      <li><a href="#s7">投入测算与财务可行性</a></li>
+      <li><a href="#s8">风险识别与对策</a></li>
+      <li><a href="#s9">决策建议与实施路径</a></li>
+      <li><a href="#a1">附录 A：12 个待核实问题</a></li>
+      <li><a href="#a2">附录 B：术语对照速查</a></li>
+      <li><a href="#a3">附录 C：数据来源与口径</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <span class="sec-no">SECTION 01</span>
+  <h2>研究缘起与对象界定</h2>
+
+  <p>本报告的信息起点是一篇微信公众号招生文案：<strong>「伍空人类图魔方」2025 年 3 月 21 日发布的《人类图魔方矩阵》第二期训练营招生文</strong>，平台创始人与主讲为「观星老师」。</p>
+
+  <div class="panel">
+    <h3>文案中可确证的客观事实（原文摘录）</h3>
+    <ul>
+      <li><strong>课程定位：</strong>「魔方课程属于人类图知识体系的高阶课，而且是专业实操课程」——原文明确自我定位为<strong>高阶</strong>，且声明「如果本身已有基础，那这个课程特别适合你」。</li>
+      <li><strong>教学历史：</strong>2024 年 8 月首次在伍空平台教授，首班学员 <strong>20+ 人</strong>；本次为第二期。</li>
+      <li><strong>交付形式：</strong>10 人小班制，每周一课一练习，周期约 <strong>3 个月</strong>；报名超 10 人分班。</li>
+      <li><strong>增值项：</strong>每位学员 1 次 1V1 解读（45–60 分钟，标称价值 1,000 元）；社群答疑；前 10 名赠送《个人专业版财富地图》。</li>
+      <li><strong>内容模块（原文）：</strong>理解你设计中的星体 / 人格魔方垂直线 / 人格魔方向 / 世俗序列和火星序列 / 设计形式垂直 / 设计横向反应与形式分化 / 月球主节点与链接节点 / 人类图魔方行星矩阵全盘练习。</li>
+      <li><strong>二期新增：</strong>孕期建设、土星诊断、魔方共振，穿插四箭头与九大能量中心。</li>
+      <li><strong>前置要求：</strong>会顺带讲到能量类型、通道和策略，「但不会再像基础的一二三阶那么详细解释」。</li>
+      <li><strong>供给稀缺性：</strong>原文自述「仅有极少数老师教授该课程（这是我们通过个人了解信息得出的结论，不够全面，如有误解，请联系我们纠正）」——这是全篇<strong>最诚实的一句</strong>，值得计入正面评价。</li>
+    </ul>
+  </div>
+
+  <div class="note warn">
+    <span class="h">关键缺口：课程价格未公开</span>
+    全文未出现学费金额，仅有「立即报名」引导。这是本报告最大的数据缺口，直接导致第 7 章财务测算只能给出区间。该问题已列入<strong>附录 A 第 1 问</strong>，必须在实际接触时优先获取。
+  </div>
+
+  <h3>本次研究要回答的三个问题</h3>
+  <div class="grid">
+    <div class="card"><p class="t">Q1 · 真伪</p><p class="d">「魔方矩阵」是真实的高阶知识体系，还是营销包装出来的概念？</p></div>
+    <div class="card"><p class="t">Q2 · 值不值</p><p class="d">它的目标人群有多大？付得起多少钱？值不值得投入研发？</p></div>
+    <div class="card"><p class="t">Q3 · 怎么做</p><p class="d">如果做，自研、联名还是引进？落在 C 端还是 B 端？</p></div>
+  </div>
+
+  <p class="q">口径说明：本报告将「开发魔方矩阵课程」理解为「以该知识内容为基底，面向中文市场交付一门可商业化的课程产品」，而非简单复述文案内容。</p>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <span class="sec-no">SECTION 02</span>
+  <h2>知识谱系溯源：它到底是什么</h2>
+
+  <p>这是整份报告<strong>最关键的一章</strong>。如果搞不清它在人类图知识树里的真实位置，后面所有市场与财务测算都是空中楼阁。</p>
+
+  <h3>2.1 人类图官方知识体系的分层</h3>
+  <p>Ra Uru Hu（1948–2011）于 1987 年接收该体系，其后 25 年持续展开。按其官方教育机构 IHDS（International Human Design School）与版权方 Jovian Archive 的架构，知识呈明显分层：</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>层级</th><th>内容</th><th>官方课程 / 形态</th><th>门槛</th></tr></thead>
+      <tbody>
+        <tr><td><b>L0 通识</b></td><td>类型 / 策略 / 内在权威 / 去制约</td><td>Living Your Design（$350）</td><td>无</td></tr>
+        <tr><td><b>L1 机械</b></td><td>九大中心 / 回路 / 通道 / 闸门</td><td>Rave ABC（$450）· Rave Cartography</td><td>L0</td></tr>
+        <tr><td><b>L2 专业</b></td><td>64 闸门 + <b>384 爻</b> / Keynoting / 综合解读</td><td>Professional Analyst Level I（3 学期，≥200 学时）</td><td>L1</td></tr>
+        <tr><td><b>L3 进阶</b></td><td>连接分析 / 生命周期（太阳回归、土星回归、天王星对冲、凯龙回归）/ 轮回交叉</td><td>Analyst Level II–IV</td><td>L2</td></tr>
+        <tr><td><b>L4 变量与健康</b></td><td><b>Variables 四变量（四箭头）</b> / PHS 初级健康系统 / 摄食方式 / 环境</td><td>The 16 Variable Workshops（Ibiza 2009，17 讲）· PHS 专业训练</td><td>L1+</td></tr>
+        <tr><td><b>L5 宇宙学</b></td><td><b>Rave Cosmology</b>：Bhan Tugh、神秘之道、死亡与中阴、2027 突变、梵天长夜、Profile 与目的</td><td>Rave Cosmology I–VII（7 门，85+ 小时）</td><td>部分课程对公众开放</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="h">溯源结论①：内容落在 L4–L5 之间</span>
+    从文案列出的模块（星体、人格/设计垂直线、行星序列、主节点与链接节点、形式分化、PHS、四箭头）判断，「魔方矩阵」对应的正是 <strong>L4 变量层 + L5 宇宙学层的交叉地带</strong>——这在人类图体系里确实是「高阶中的高阶」，文案的自我定位<strong>属实，没有虚标</strong>。
+  </div>
+
+  <h3>2.2 术语溯源对照表（核心证据）</h3>
+  <p>逐条核验文案用语在 Ra 原始体系中的对应物。置信度说明：<span class="chip hi">高</span>= 有官方资料直接印证；<span class="chip mid">中</span>= 可推断但未被公开资料直接确证；<span class="chip lo">低</span>= 无法溯源或表述有误。</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:130px">文案用语</th><th>可能的体系对应</th><th style="min-width:76px">置信度</th></tr></thead>
+      <tbody>
+        <tr><td><b>魔方矩阵 Cube Matrix</b></td><td>对应 L4–L5 交叉内容的<strong>本土化再包装名</strong>。Jovian Archive 全站课程目录、IHDS 课程目录中<strong>检索不到 "Cube Matrix"</strong>。Ra 体系有「384 爻立方体」与「Rave Mandala 曼陀罗」的几何意象，但无此固定术语。</td><td><span class="chip lo">名称无对应</span></td></tr>
+        <tr><td><b>PHS</b></td><td>Primary Health System（初级健康系统），Ra 正式体系，讲摄食方式（Determination）、环境与认知。官方有独立专业训练路径。</td><td><span class="chip hi">高</span></td></tr>
+        <tr><td><b>四箭头</b></td><td>Variables 四变量：消化 Digestion / 环境 Environment / 觉知 Perspective / 动机 Motivation。Jovian Archive 有 <em>The 16 Variable Workshops | Ibiza 2009</em>（17 讲）专门课程。</td><td><span class="chip hi">高</span></td></tr>
+        <tr><td><b>四部转化</b></td><td>Ra 的 Four Transformations（四转化），属 Rave Psychology 核心框架。</td><td><span class="chip mid">中</span></td></tr>
+        <tr><td><b>月球主节点与链接节点</b></td><td>南北交点（North/South Node）+ 近日点 Perihelion / 远日点 Aphelion —— 均为人类图「设计水晶」计算中的真实要素。</td><td><span class="chip hi">高</span></td></tr>
+        <tr><td><b>土星诊断</b></td><td>对应 Analyst Level II 的生命周期分析：土星回归 Saturn Return / 天王星对冲 Uranus Opposition / 凯龙回归 Kiron Return。官方确有教学。</td><td><span class="chip hi">高</span></td></tr>
+        <tr><td><b>火星对角线意识</b></td><td>Rave Cosmology 中确有 "the Program"（程序）与行星轴线、以及「乘客 Passenger 意识」的讲授；Ra 亦讲过 Sun / Neptune / Mars 在程序中的角色。但「<strong>火星对角线</strong>」作为固定术语，未能在公开英文资料中确证其精确定义。</td><td><span class="chip mid">中偏低</span></td></tr>
+        <tr><td><b>世俗序列 / 火星序列</b></td><td><span class="chip lo">存疑</span>Ra 体系有 Sun/Earth 序列、火星相关教学；但「序列 Sequence」作为产品线术语主要来自 <strong>Gene Keys（理查德·拉德）</strong>，其三序列为 Activation / Venus / Pearl（激活 / 金星 / 珍珠），<strong>并无「火星序列」或「世俗序列」</strong>。此处高度疑似<strong>两个体系混用</strong>。</td><td><span class="chip lo">低</span></td></tr>
+        <tr><td><b>123456 代码链（6color、6tone、6爻）</b></td><td><span class="chip lo">表述有误</span>人类图的正确细分层级为 <strong>Line 爻（6）→ Color 色调（6）→ Tone 音调（6）→ Base 基底（5）</strong>。把「6color、6tone、6爻」并列为一条「123456 链」，是对四级结构的<strong>层级混淆</strong>。</td><td><span class="chip lo">表述有误</span></td></tr>
+        <tr><td><b>64 基因密码子与 13 条行星通道</b></td><td><span class="chip lo">表述有误</span>人类图为 <strong>64 个闸门</strong>（对应 64 卦）、<strong>36 条通道</strong>、<strong>13 个天体</strong>（日月水金火木土天海冥 + 南北交点计法不同）。「13 条行星通道」<strong>既不是 13 也不是通道</strong>，属明显术语错乱。</td><td><span class="chip lo">表述有误</span></td></tr>
+        <tr><td><b>九大能量中心 / 定义与空白</b></td><td>完全正确，属 L1 基础内容。</td><td><span class="chip hi">高</span></td></tr>
+        <tr><td><b>乘客觉醒 / 无我之境</b></td><td>「乘客 Passenger」是 Ra 体系的核心隐喻（意识为乘客，身体为车辆），表述方向<strong>符合原义</strong>。</td><td><span class="chip hi">高</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.3 文案硬伤清单（可验证的客观问题）</h3>
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">硬伤 1 · 术语错乱</p>
+      <p class="d">「64 个基因密码子与<b>13 条行星通道</b>」。正确表述应为 64 闸门 / 36 通道 / 13 天体。这是基础概念错误，出现在课程定义句里。</p>
+    </div>
+    <div class="card">
+      <p class="t">硬伤 2 · 层级混淆</p>
+      <p class="d">「123456 代码链（6color、6tone、6爻）」把 Line / Color / Tone 三级并置，掩盖了 Line→Color→Tone→Base 的真实结构。</p>
+    </div>
+    <div class="card">
+      <p class="t">硬伤 3 · 体系混用</p>
+      <p class="d">「世俗序列 / 火星序列」疑与 Gene Keys 三序列体系混用；「去二元性」引《道德经》属本土化诠释，非 Ra 原义。</p>
+    </div>
+    <div class="card">
+      <p class="t">硬伤 4 · 内部矛盾</p>
+      <p class="d">正文称「<b>10 人</b>小班制，超 10 人分班」，文末却写「抢占 <b>5 人</b>小班席位」；「前 10 名赠送」在全班仅 10 人时亦无意义。</p>
+    </div>
+  </div>
+
+  <div class="note risk">
+    <span class="h">这些硬伤意味着什么</span>
+    硬伤 1、2 属于<strong>基础概念层面的错误</strong>，不是修辞问题。一门自称「专业实操高阶课」的产品，其对外文案出现「13 条行星通道」这类错误，有两种可能：<br>
+    <strong>A.</strong> 文案由非专业运营人员或 AI 扩写，课程内容本身是扎实的（<u>概率更高</u>，因为模块列表本身相当专业）；<br>
+    <strong>B.</strong> 讲授者对体系的理解本身就存在缝隙。<br>
+    两种可能指向同一个动作：<strong>必须实地听课验证，不能凭文案下判断。</strong>
+  </div>
+
+  <div class="note ok">
+    <span class="h">同时也要公允地记上一笔</span>
+    文案模块列表（人格/设计垂直线、主节点与链接节点、形式分化）的专业度<strong>明显高于普通营销文</strong>，且主动声明「仅有极少数老师教授该课程……我们了解不够全面」并邀请纠正——这种自辩在招生文案中<strong>相当罕见</strong>，是诚实的信号。综合判断：<strong>内容大概率是真的，包装是草率的。</strong>
+  </div>
+
+  <h3>2.4 命名权：这是机会也是陷阱</h3>
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">机会面</p>
+      <p class="d">「魔方矩阵 / Cube Matrix」目前是<strong>空白命名</strong>。谁先把它系统化、产品化、品牌化，谁就有机会占位，建立品类心智。</p>
+    </div>
+    <div class="card">
+      <p class="t">陷阱面</p>
+      <p class="d">学员一旦去搜英文资料，会发现<strong>查无此词</strong>。此时「正统性」会瞬间崩塌——尤其在人类图这种<strong>极度看重传承谱系</strong>的领域。</p>
+    </div>
+  </div>
+  <div class="note">
+    <span class="h">命名策略建议：双轨命名</span>
+    若自行开发，建议<strong>主名用国际通用名建立可信度，副名用中文意象做记忆点</strong>。例如：「人类图变量深度课 · 行星矩阵」或「四变量与 PHS · 意识层解码」。这样学员可以交叉验证（Variables / PHS / Rave Cosmology 都能搜到英文资料），信任成本大幅下降，同时保留中文辨识度。<br>
+    <strong>这一点是本报告最具操作价值的建议之一。</strong>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <span class="sec-no">SECTION 03</span>
+  <h2>市场需求与容量测算</h2>
+
+  <p>人类图在国内属小众赛道，无权威第三方市场规模数据。以下采用<strong>漏斗法</strong>估算，所有数字均为<strong>基于可观察代理指标（中文内容供给量、机构数量、课程开班频次）的推算区间</strong>，非精确统计，供决策量级参考。</p>
+
+  <h3>3.1 目标人群漏斗</h3>
+  <div class="funnel">
+    <div class="fbar"><div class="flabel">接触过人类图</div><div class="ftrack"><div class="ffill" style="width:100%">100%</div></div><div class="fnote">50–200 万人</div></div>
+    <div class="fbar"><div class="flabel">付费学过基础</div><div class="ftrack"><div class="ffill" style="width:52%">≈2%</div></div><div class="fnote">1–5 万人</div></div>
+    <div class="fbar"><div class="flabel">体系化学习</div><div class="ftrack"><div class="ffill" style="width:34%">≈15%</div></div><div class="fnote">3,000–8,000 人</div></div>
+    <div class="fbar"><div class="flabel">可消化本层级</div><div class="ftrack"><div class="ffill" style="width:22%">≈20%</div></div><div class="fnote">500–2,000 人</div></div>
+    <div class="fbar"><div class="flabel">年内有付费意愿</div><div class="ftrack"><div class="ffill" style="width:14%">≈20%</div></div><div class="fnote">100–400 人/年</div></div>
+  </div>
+  <p class="q">口径：「可消化本层级」指已掌握类型 / 权威 / Profile / 通道 / 轮回交叉，具备理解变量与宇宙学层的前置知识。这是文案自己强调的门槛。</p>
+
+  <div class="note warn">
+    <span class="h">这是全报告最需要正视的数字</span>
+    全国范围内，一年能付费学习这一层级的学员，估算<strong>仅 100–400 人</strong>。按客单价 ¥5,000–10,000 计，<strong>全国年度市场天花板约 ¥50 万 – ¥400 万</strong>，且已被亚洲人类图学院、各中文体系机构及少数独立讲师分食。<br>
+    <strong>单一机构在 C 端能拿到的份额，乐观估计也只有几万到几十万量级。</strong>
+  </div>
+
+  <h3>3.2 需求侧的三类人群</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>人群</th><th>核心诉求</th><th>支付能力</th><th>规模</th><th>获取难度</th></tr></thead>
+      <tbody>
+        <tr><td><b>人类图咨询师</b></td><td>突破「类型–权威」解读瓶颈，升级高净值个案</td><td>中（¥3,000–15,000）</td><td>最小</td><td>中（社群密集，易触达）</td></tr>
+        <tr><td><b>身心疗愈从业者</b></td><td>把矩阵诊断融入芳疗 / 瑜伽 / 冥想，打造技术壁垒</td><td>中（¥3,000–10,000）</td><td>较小</td><td>中</td></tr>
+        <tr><td><b>意识探索者</b></td><td>个人成长、认知升级、破解「努力却匮乏」</td><td>低–中（¥1,000–6,000）</td><td>最大</td><td><span class="chip mid">高</span>（需大量内容种草）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>结构性矛盾：</strong>需求最大的第三类（意识探索者）<strong>支付能力最低且获取成本最高</strong>；支付能力最强、最容易触达的第一类（咨询师）<strong>池子最小</strong>。这个矛盾决定了：这门课<strong>天然不适合做规模化引流品</strong>。</p>
+
+  <h3>3.3 需求侧的正面信号</h3>
+  <div class="grid">
+    <div class="card"><p class="t">信号 1 · 稀缺即溢价</p><p class="d">文案自述「仅有极少数老师教授」。供给稀缺是<strong>定价权</strong>的来源，也是这门课能定在高价位的根本原因。</p></div>
+    <div class="card"><p class="t">信号 2 · 复购与复训真实</p><p class="d">亚洲人类图学院六阶<strong>复训价 NT$36,000</strong>（新生的 50%），说明高阶课复训需求真实存在，可做长尾收入。</p></div>
+    <div class="card"><p class="t">信号 3 · 人类图整体升温</p><p class="d">中文世界人类图内容供给近年明显增长，<strong>L0–L1 人群持续扩大</strong>，为高阶课程做长期蓄水。</p></div>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <span class="sec-no">SECTION 04</span>
+  <h2>竞争格局与价格对标</h2>
+
+  <h3>4.1 国际官方体系价格（美元，汇率按 1 USD ≈ 7.2 CNY）</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>项目</th><th>机构</th><th class="num">原价</th><th class="num">≈人民币</th><th>周期</th></tr></thead>
+      <tbody>
+        <tr><td>Living Your Design</td><td>IHDS</td><td class="num">$350</td><td class="num">¥2,520</td><td>短训</td></tr>
+        <tr><td>Rave ABC</td><td>IHDS</td><td class="num">$450</td><td class="num">¥3,240</td><td>短训</td></tr>
+        <tr><td>LYD Guide 认证</td><td>IHDS</td><td class="num">$1,800</td><td class="num">¥12,960</td><td>1 年</td></tr>
+        <tr><td>Analyst Level I</td><td>IHDS</td><td class="num">$3,450</td><td class="num">¥24,840</td><td>1 年 / ≥200 学时</td></tr>
+        <tr><td>Analyst L2 / L3 / L4</td><td>IHDS</td><td class="num">$1,600 / $800 / $850</td><td class="num">¥23,400</td><td>合计</td></tr>
+        <tr><td>Lifeline Analyst 全程</td><td>IHDS</td><td class="num">$5,999</td><td class="num">¥43,193</td><td>全生命周期</td></tr>
+        <tr><td><b>Rave Cosmology 单课</b></td><td>Jovian Archive</td><td class="num">$297</td><td class="num">¥2,138</td><td>13–14 小时</td></tr>
+        <tr><td>Rave Cosmology 全套（7 门）</td><td>第三方平台</td><td class="num">$5,997</td><td class="num">¥43,193</td><td>终身</td></tr>
+        <tr><td>Professional Leader 全程包</td><td>IHDS 体系</td><td class="num">$15,997</td><td class="num">¥115,178</td><td>3.5 年</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="q">观察：<b>Rave Cosmology 单课仅 $297（约 ¥2,100）</b>——Ra 原始讲授的音频 + 电子书，价格<strong>远低于</strong>中文市场的面授课。这是中文高阶课定价的<strong>锚点压力</strong>：学员一旦知道原版只要两千块，万元定价就需要极强的「带教 / 社群 / 本土化」溢价理由。</p>
+
+  <h3>4.2 中文市场可比价格</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>项目</th><th>机构</th><th class="num">价格</th><th class="num">≈人民币</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>六阶（轮回交叉）</td><td>亚洲人类图学院</td><td class="num">NT$72,000</td><td class="num">¥16,270</td><td>官方授权中文教材，乔宜思授课</td></tr>
+        <tr><td>六阶复训</td><td>亚洲人类图学院</td><td class="num">NT$36,000</td><td class="num">¥8,135</td><td>不含教材</td></tr>
+        <tr><td><b>魔方矩阵第二期</b></td><td><b>伍空人类图</b></td><td class="num" style="color:#A8443A"><b>未公开</b></td><td class="num">—</td><td>10 人小班 · 3 个月 · 含 1V1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.3 竞争强度判断</h3>
+  <div class="grid grid-2x2">
+    <div class="card"><p class="t">直接竞争：<span class="chip hi">极弱</span></p><p class="d">能教这一层级的中文讲师<strong>屈指可数</strong>。这是进入的最大理由。</p></div>
+    <div class="card"><p class="t">间接竞争：<span class="chip mid">中</span></p><p class="d">Gene Keys（金轮 / 三序列）、占星进阶、各类灵性成长课在<strong>争夺同一批钱包</strong>。</p></div>
+    <div class="card"><p class="t">替代品：<span class="chip lo">强</span></p><p class="d">原版 Rave Cosmology 音频课 <b>¥2,100</b> 即可获得，且是 Ra 亲授。<strong>这是最强替代品。</strong></p></div>
+    <div class="card"><p class="t">进入壁垒：<span class="chip mid">中</span></p><p class="d">知识本身不设壁垒（Ra 未注册版权），真正的壁垒是<strong>讲授能力 + 案例积累 + 社群信任</strong>。</p></div>
+  </div>
+
+  <div class="note risk">
+    <span class="h">最具杀伤力的竞争：原版直购</span>
+    Ra 本人讲授的 7 门 Rave Cosmology 课，单门 <strong>$297、85+ 小时音频 + 200–260 页电子书</strong>。一位具备英文阅读能力的深度学习者，花约 <strong>¥15,000</strong> 就能买齐全套原版。<br>
+    这意味着中文高阶课的定价逻辑<strong>不能建立在「知识独家性」上</strong>，只能建立在三件事上：<strong>① 中文语境的转译与本土化 ② 带教与反馈 ③ 社群与实战练习</strong>。任何宣称「独家知识」的定位都经不起推敲。
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <span class="sec-no">SECTION 05</span>
+  <h2>与现有业务的战略匹配</h2>
+
+  <p>评估任何新产品，最终要落回一个问题：<strong>它对已有业务是加成还是分散？</strong></p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>现有资产</th><th>与魔方矩阵的协同点</th><th>协同强度</th></tr></thead>
+      <tbody>
+        <tr><td><b>人类图小程序</b>（微信云开发）</td><td>可作为变量 / 行星矩阵的<strong>计算器与可视化载体</strong>；把抽象矩阵做成交互式图表，是极强的差异化（目前市面上几乎没有）</td><td><span class="chip hi">强</span></td></tr>
+        <tr><td><b>人类图 × 领导力课程</b></td><td>Variables 四变量可<strong>直接翻译成组织语言</strong>（见下方拆解），是领导力课程天然的「加深模块」</td><td><span class="chip hi">强</span></td></tr>
+        <tr><td><b>OC16 组织分析系统</b></td><td>四变量中的「环境 / 动机 / 觉知」可与组织诊断维度对接，形成<strong>个人设计 → 团队配置</strong>的闭环</td><td><span class="chip hi">强</span></td></tr>
+        <tr><td><b>财运 / 财富主题内容</b></td><td>文案主打「物质矩阵与财富觉醒」，与既有财运产品线<strong>主题高度重合</strong></td><td><span class="chip mid">中</span></td></tr>
+        <tr><td><b>C 端灵性成长学员</b></td><td>受众画像与「意识探索者」重叠，但<strong>支付能力较弱</strong>，转化效率存疑</td><td><span class="chip mid">中</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">本报告最重要的战略发现：Variables 四变量是 B 端的翻译器</span>
+    在「魔方矩阵」包罗万象的内容里，只有<strong>Variables 四变量</strong>这一块能无损翻译成商业与组织语言，而这恰好是<strong>你已有的主场</strong>：
+    <div class="tw" style="margin:11px 0 6px">
+      <table>
+        <thead><tr><th>四变量</th><th>人类图原义</th><th>组织 / 管理语言转译</th></tr></thead>
+        <tbody>
+          <tr><td><b>环境 Environment</b></td><td>身体在何种空间中决策最清明（市场 / 厨房 / 山谷 / 海岸 / 山洞等六类）</td><td><b>办公空间设计、远程与在场配置、团队物理协作模式</b></td></tr>
+          <tr><td><b>动机 Motivation</b></td><td>驱动力的六种质地（恐惧 / 希望 / 欲望 / 需求 / 内疚 / 纯真）</td><td><b>激励设计、非物质激励匹配、管理者的驱动识别</b></td></tr>
+          <tr><td><b>觉知 Perspective</b></td><td>观察者的两种取向（见证 / 聚焦）</td><td><b>沟通风格、信息接收偏好、教练式提问方式</b></td></tr>
+          <tr><td><b>消化 Digestion</b></td><td>摄食方式与认知节奏（连续 / 交替，六种感官）</td><td><b>工作节奏设计、精力管理、会议与专注时段安排</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    这四个维度<strong>HR 与 OD 听得懂，企业愿意付费</strong>，且客单价（B 端工作坊 ¥2 万–5 万 / 场）远高于 C 端高阶课。<br>
+    <strong>结论：魔方矩阵对你真正的价值，不是「多一门灵性高阶课」，而是「给领导力与组织诊断产品线补上一层别人没有的深度」。</strong>
+  </div>
+
+  <div class="note warn">
+    <span class="h">需要警惕的不匹配</span>
+    文案的整体调性——「意识跃迁」「无我之境」「摆脱剧本框架」「来自 RA 老师的神圣礼物」——是<strong>灵性 / 玄学叙事</strong>。而你的领导力与组织产品线是<strong>应用 / 商业叙事</strong>。<br>
+    两种叙事混在同一品牌下会有<strong>稀释风险</strong>：B 端客户（尤其企业采购方）对「觉醒」「无我」这类词汇敏感。建议<strong>在品牌层面做切割</strong>——同一套知识内核，C 端用灵性语言，B 端用组织语言，两套话术不混用。
+  </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <span class="sec-no">SECTION 06</span>
+  <h2>产品方案设计（三方案对比）</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:88px">方案</th><th>定位</th><th>内容取舍</th><th>交付形式</th><th class="num">建议定价</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>A · 独立高阶课</b><br><span class="chip lo">不建议单独立项</span></td>
+          <td>对标伍空，做「魔方矩阵」同类课程</td>
+          <td>全盘复刻：星体、垂直线、序列、节点、形式分化</td>
+          <td>10 人小班 · 12 周 · 含 1V1</td>
+          <td class="num">¥5,800–9,800</td>
+        </tr>
+        <tr>
+          <td><b>B · 模块嵌入</b><br><span class="chip hi">推荐主路径</span></td>
+          <td>作为领导力 / 组织诊断体系的「意识层加深模块」</td>
+          <td>只取 <b>Variables 四变量 + PHS</b>，剔除宇宙学与灵性叙事</td>
+          <td>B 端工作坊 2 天 或 C 端高阶选修</td>
+          <td class="num">B 端 ¥2 万–5 万 / 场<br>C 端 ¥1,980–3,800</td>
+        </tr>
+        <tr>
+          <td><b>C · 联名 / 引进</b><br><span class="chip mid">备选</span></td>
+          <td>与伍空或其他讲师合作，你出流量与本地化</td>
+          <td>对方出内容，你出产品化、渠道与学员运营</td>
+          <td>联合品牌 · 收入分成</td>
+          <td class="num">分成 30%–50%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>方案 A 的详细设计（若仍要做）</h3>
+  <div class="panel tight">
+    <p style="margin:0 0 8px"><strong>命名建议：</strong>避免使用「魔方矩阵 / Cube Matrix」作为主名，改用双轨命名 —— 主名「<strong>人类图变量与行星矩阵深度课</strong>」，副名「意识层解码 · 高阶实操」。</p>
+    <p style="margin:0"><strong>模块建议（12 周）：</strong>① 变量基础与四箭头复盘 → ② 六色调与六音调（Line→Color→Tone→Base 四级结构讲透）→ ③ 环境与摄食方式（PHS）→ ④ 觉知与动机 → ⑤ 人格/设计垂直线 → ⑥ 星体与行星序列 → ⑦ 主节点与近日点/远日点 → ⑧ 土星诊断与生命周期 → ⑨ 形式分化与四转化 → ⑩ 全盘综合练习 → ⑪ 案例督导 → ⑫ 结业解读考核。</p>
+  </div>
+  <p class="q">与伍空原版的差异点（这是必须回答的「为什么选你不选他」）：<strong>① 术语可交叉验证（用国际通用名）② 配套小程序可视化工具 ③ 结构化教材而非纯口授 ④ 结业标准明确</strong>。</p>
+
+  <h3>方案 B 的产品形态（推荐）</h3>
+  <div class="grid grid-2x2">
+    <div class="card"><p class="t">B1 · 组织变量诊断工作坊</p><p class="d">2 天，10–20 人。用四变量做团队物理空间、激励、沟通、节奏四维诊断，输出团队配置建议。</p></div>
+    <div class="card"><p class="t">B2 · 高管 1V1 深度解读</p><p class="d">基于变量的个人决策环境设计，单次 90 分钟，含书面报告。高毛利，可规模化。</p></div>
+    <div class="card"><p class="t">B3 · 小程序变量计算器</p><p class="d">把 Line→Color→Tone→Base 与四箭头做成可视化工具，作为<strong>流量入口与壁垒</strong>。</p></div>
+    <div class="card"><p class="t">B4 · 领导力课高阶选修</p><p class="d">在既有课程后加 1 天「变量层」，提升客单价与复购，<strong>边际成本近零</strong>。</p></div>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <span class="sec-no">SECTION 07</span>
+  <h2>投入测算与财务可行性</h2>
+
+  <h3>7.1 研发投入测算（方案 A 自研路径）</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>投入项</th><th class="num">低方案</th><th class="num">高方案</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>Ra 原始资料采购</td><td class="num">¥3,000</td><td class="num">¥15,000</td><td>Rave Cosmology 单课 $297 起；全套约 ¥15,000</td></tr>
+        <tr><td>中文资料 / 参考教材</td><td class="num">¥2,000</td><td class="num">¥8,000</td><td>Rave I'Ching、Line Companion 等</td></tr>
+        <tr><td>外部课程学习（若需）</td><td class="num">¥0</td><td class="num">¥30,000</td><td>自学为 0；报 IHDS 中文体系课则显著上升</td></tr>
+        <tr><td>内容研发工时</td><td class="num">¥60,000</td><td class="num">¥120,000</td><td>300 小时 × ¥200–400/小时机会成本</td></tr>
+        <tr><td>课件 / 视觉 / 工具配套</td><td class="num">¥5,000</td><td class="num">¥20,000</td><td>含小程序模块开发</td></tr>
+        <tr><td>试讲与两轮迭代</td><td class="num">¥10,000</td><td class="num">¥30,000</td><td>小班试讲、教材修订</td></tr>
+        <tr style="background:#FBF5EA"><td><b>合计</b></td><td class="num"><b>¥80,000</b></td><td class="num"><b>¥223,000</b></td><td>未计持续授课时间成本</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>7.2 收入模型与盈亏平衡（方案 A · C 端独立开课）</h3>
+  <p>假设：单价 <strong>¥6,800</strong>，10 人小班，一年 <strong>2 期</strong>，单期可变成本（场地/助教/1V1 人力）约 ¥8,000。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>场景</th><th class="num">满班率</th><th class="num">年学员</th><th class="num">年收入</th><th class="num">扣变动成本后</th><th class="num">回本周期</th></tr></thead>
+      <tbody>
+        <tr><td>保守</td><td class="num">50%</td><td class="num">10 人</td><td class="num">¥68,000</td><td class="num">¥52,000</td><td class="num">1.5 – 4.3 年</td></tr>
+        <tr><td>中性</td><td class="num">70%</td><td class="num">14 人</td><td class="num">¥95,200</td><td class="num">¥79,200</td><td class="num">1.0 – 2.8 年</td></tr>
+        <tr><td>乐观</td><td class="num">95%</td><td class="num">19 人</td><td class="num">¥129,200</td><td class="num">¥113,200</td><td class="num">0.7 – 2.0 年</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note risk">
+    <span class="h">财务结论：作为独立产品线，不成立</span>
+    即使在乐观场景下，年净收入也只有 <strong>¥11 万</strong>左右，而研发投入 ¥8 万–¥22 万，<strong>回本需 0.7–4.3 年</strong>，且完全<strong>未计入你本人的授课与备课时间成本</strong>。<br>
+    更严峻的是：第 3 章测算显示<strong>全国年度可付费人群仅 100–400 人</strong>。你要从中争取 10–19 人，意味着要拿下全国 <strong>5%–15% 的份额</strong>——对一个新进入者来说，<strong>这是非常激进的假设</strong>。<br>
+    <strong>若把授课时间按 ¥500/小时计入，方案 A 大概率是亏损的。</strong>
+  </div>
+
+  <h3>7.3 方案 B 的经济性（模块嵌入路径）</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>产品</th><th class="num">单价</th><th class="num">年场次/人次</th><th class="num">年收入估算</th><th class="num">边际成本</th></tr></thead>
+      <tbody>
+        <tr><td>B1 组织工作坊（2 天）</td><td class="num">¥25,000</td><td class="num">6 场</td><td class="num">¥150,000</td><td class="num">低</td></tr>
+        <tr><td>B2 高管 1V1</td><td class="num">¥4,800</td><td class="num">30 人次</td><td class="num">¥144,000</td><td class="num">极低</td></tr>
+        <tr><td>B4 领导力课高阶选修</td><td class="num">¥2,800</td><td class="num">40 人次</td><td class="num">¥112,000</td><td class="num">近零</td></tr>
+        <tr style="background:#EFF6F1"><td><b>合计（中性场景）</b></td><td class="num">—</td><td class="num">—</td><td class="num"><b>¥406,000</b></td><td class="num"><b>—</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>关键差异：</strong>方案 B 复用已有的客户池、渠道与品牌信任，<strong>不需要重新获客</strong>，因此边际成本极低；且 B 端客单价是 C 端的 <strong>3–7 倍</strong>。更重要的是——<strong>方案 B 的研发只需吃透 Variables 四变量这一块，工作量约为方案 A 的三分之一。</strong></p>
+
+  <div class="note ok">
+    <span class="h">财务结论：方案 B 成立，且显著优于方案 A</span>
+    同样的知识内核，落在 B 端与既有渠道上，收入潜力约为方案 A 的 <strong>3–4 倍</strong>，研发投入约为 <strong>1/3</strong>，且<strong>不依赖争夺那 100–400 人的极窄池子</strong>。
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <span class="sec-no">SECTION 08</span>
+  <h2>风险识别与对策</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:104px">风险</th><th style="min-width:56px">等级</th><th>描述</th><th>对策</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>师资与知识依赖</b></td><td><span class="chip lo">高</span></td>
+          <td>该层级知识需长期学习积累（官方路径 3.5 年）。若依赖外聘讲师，一旦合作终止，产品线即刻停摆。</td>
+          <td>核心内容必须自有化；外聘只做客座。同步沉淀教材与课件，避免「人走课亡」。</td>
+        </tr>
+        <tr>
+          <td><b>市场容量不足</b></td><td><span class="chip lo">高</span></td>
+          <td>全国年付费人群估算仅 100–400 人，且被分食。招生不及预期是最可能发生的事。</td>
+          <td>不设独立招生指标；转为模块嵌入与 1V1，把固定成本变成变动成本。</td>
+        </tr>
+        <tr>
+          <td><b>内容严谨性</b></td><td><span class="chip lo">高</span></td>
+          <td>知识层级越深，错误越难被学员发现，但也<strong>一旦被发现，信任崩塌越彻底</strong>。文案硬伤已是警示。</td>
+          <td>建立术语对照表（附录 B）并逐条溯源到 Ra 原始资料；教材标注出处与原始课程编号。</td>
+        </tr>
+        <tr>
+          <td><b>命名无国际背书</b></td><td><span class="chip mid">中</span></td>
+          <td>学员搜不到 "Cube Matrix" 英文资料，可能质疑正统性。</td>
+          <td>采用双轨命名：主名用 Variables / PHS / Rave Cosmology 等国际通用名，中文意象名作副名。</td>
+        </tr>
+        <tr>
+          <td><b>原版替代品压制</b></td><td><span class="chip mid">中</span></td>
+          <td>Ra 亲授 Rave Cosmology 全套约 ¥15,000，且可终身反复听。</td>
+          <td>定价逻辑建立在「中文转译 + 带教反馈 + 社群实战」，而非知识独占。可考虑把原版资料作为<strong>配套赠品</strong>反而增强说服力。</td>
+        </tr>
+        <tr>
+          <td><b>版权与授权</b></td><td><span class="chip mid">中</span></td>
+          <td>Ra 生前<strong>未对人类图系统做正式注册或权利保护</strong>，概念术语在相当程度上可被自由使用；但 Jovian Archive 掌握原始书籍与录音的版权，IHDS 控制「认证」话语权。</td>
+          <td>① 使用知识开课：法律风险低；② <strong>切勿宣称「官方授权 / IHDS 认证」</strong>（无授权即属虚假宣传）；③ 引用原文需注明出处；④ 若要认证，须走 IHDS 正式路径。</td>
+        </tr>
+        <tr>
+          <td><b>合规与监管</b></td><td><span class="chip mid">中</span></td>
+          <td>涉及「意识觉醒」「财富丰盛」「病理诊断」等表述，在国内平台有<strong>被判定为封建迷信或夸大宣传</strong>的先例风险；「病理诊断」尤其敏感。</td>
+          <td>文案剥离诊断性与疗效性表述；B 端统一用组织发展语言；避免「疗愈」「治疗」等医疗暗示词汇。</td>
+        </tr>
+        <tr>
+          <td><b>品牌叙事稀释</b></td><td><span class="chip mid">中</span></td>
+          <td>灵性叙事与商业/组织叙事混用，可能让 B 端客户产生专业性质疑。</td>
+          <td>品牌层面切割：同一内核，C 端与 B 端两套话术，互不串用。</td>
+        </tr>
+        <tr>
+          <td><b>AI 生成内容污染</b></td><td><span class="chip mid">中</span></td>
+          <td>该层级中文资料稀缺，若用 AI 辅助生成教材，<strong>极易产生看似通顺的编造术语</strong>——文案中的硬伤很可能就是这种污染的产物。</td>
+          <td>教材编写以 Ra 原始资料为唯一事实源；AI 仅用于排版与表达优化，不用于生成实质内容。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="s9">
+  <span class="sec-no">SECTION 09</span>
+  <h2>决策建议与实施路径</h2>
+
+  <div class="verdict">
+    <h3><span class="tag b">推荐决策</span>不做独立立项；走「学员式尽调 → 模块嵌入」两步走</h3>
+    <p><strong>第一步（立刻，成本最低）：</strong>报名伍空第二期，以学员身份完成尽调。这是<strong>性价比最高的信息获取方式</strong>——一期学费（估计数千元）+ 3 个月，换来的是：① 内容真伪与深度的一手验证 ② 讲授者真实水平的直接观察 ③ 同行学员画像与付费意愿的实地调研 ④ 一个完整的产品流程样板。<strong>这比任何二手调研都值。</strong></p>
+    <p><strong>第二步（尽调后决策）：</strong>若内容扎实 → 走<strong>方案 B 模块嵌入</strong>，只取 Variables 四变量 + PHS，做成 B 端组织诊断工具与领导力课高阶选修；若内容注水 → 直接转从 Ra 原始资料自研，反而省掉一层中间环节。</p>
+    <p><strong>不建议：</strong>① 现在就投入 ¥8 万–22 万自研全盘课程；② 使用「魔方矩阵 / Cube Matrix」作为主品牌名；③ 面向 C 端做独立招生。</p>
+  </div>
+
+  <h3>实施时间表</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:78px">时间</th><th>动作</th><th>交付物</th><th style="min-width:82px">投入</th></tr></thead>
+      <tbody>
+        <tr><td><b>2026 Q4</b></td><td>报名伍空二期，以学员身份全程参与；同步建立术语对照表并逐条溯源</td><td>《课程尽调报告》含：内容真伪判定、讲师能力评估、学员画像、可复用模块清单</td><td>学费 + 3 个月</td></tr>
+        <tr><td><b>2027 Q1</b></td><td>把 Variables 四变量结构化、可视化，嵌入小程序</td><td>变量计算器模块（Line→Color→Tone→Base + 四箭头）</td><td>¥5,000–20,000</td></tr>
+        <tr><td><b>2027 Q2</b></td><td>在既有领导力 / 组织诊断产品中加「变量层」，做 8–12 人小规模验证</td><td>1 天选修模块 + 2 场内部试讲</td><td>工时为主</td></tr>
+        <tr><td><b>2027 Q3</b></td><td>依据转化与复购数据，决定是否升级为独立 B 端工作坊</td><td>产品化决策 + 定价定稿</td><td>依数据定</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">为什么「先当学员」是这里的最优解</span>
+    三个理由：<strong>① 信息不对称最大</strong>——你第一次听说这门课，一切判断都建立在文案上，而文案已证实有硬伤；<strong>② 试错成本最低</strong>——一期学费相对 ¥8 万+ 的研发预算是零头，却能避免方向性错误；<strong>③ 有额外收益</strong>——即使最终不开发这门课，你本人获得的高阶知识也会直接提升解读深度，且含一次 1V1 解读。<br>
+    <strong>这是一笔无论结果如何都不亏的支出。</strong>
+  </div>
+</section>
+
+<!-- ============ 附录 A ============ -->
+<section id="a1">
+  <span class="sec-no">APPENDIX A</span>
+  <h2>附录 A：接触课程方时必须核实的 12 个问题</h2>
+  <p>建议在实际沟通或报名前后逐一获取答案。<strong>前 4 问是决定性的</strong>——如果答不上来，课程的知识根基值得怀疑。</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:26px">#</th><th>问题</th><th style="min-width:90px">为什么问</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>课程全价是多少？是否有早鸟价、复训价？</b></td><td>全文未公开，是财务测算的最大缺口</td></tr>
+        <tr><td>2</td><td><b>「魔方矩阵」对应的 Ra 原始课程 / 讲座具体是哪一门？能否给出英文原名？</b></td><td>决定是否可交叉验证</td></tr>
+        <tr><td>3</td><td><b>「火星对角线」的英文原名是什么？出自 Ra 哪一年哪一场讲座？</b></td><td>核心概念的可溯源性是正统性基础</td></tr>
+        <tr><td>4</td><td><b>「世俗序列」「火星序列」出自何处？是否与 Gene Keys 的三序列（Activation / Venus / Pearl）混用？</b></td><td>检测体系混用程度</td></tr>
+        <tr><td>5</td><td><b>「123456 代码链」具体指什么？与 Line→Color→Tone→Base 四级结构如何对应？</b></td><td>检测层级理解是否准确</td></tr>
+        <tr><td>6</td><td><b>讲师的 IHDS 认证层级是什么？</b>（LYD Guide / Professional Analyst 第几级 / Rave Cosmologist？）</td><td>师资可信度的硬指标</td></tr>
+        <tr><td>7</td><td>讲师是否完成过 PHS 专业训练？是否有任何机构授权？</td><td>PHS 是模块中的实质内容，需要专业训练背景</td></tr>
+        <tr><td>8</td><td><b>文中「13 条行星通道」应为「13 个天体」或「36 条通道」，是笔误还是另有定义？</b></td><td>直接验证严谨度，观察对方如何回应质疑</td></tr>
+        <tr><td>9</td><td>是否有教材？可否预览目录与样章？</td><td>有无沉淀物决定内容工程能力</td></tr>
+        <tr><td>10</td><td><b>10 人小班还是 5 人小班？</b>（正文与文末矛盾）</td><td>影响交付质量与切身体验</td></tr>
+        <tr><td>11</td><td>是否有复训机制？价格与条件？</td><td>判断长期价值与长尾收入模型</td></tr>
+        <tr><td>12</td><td><b>学员结业后是否具备独立做矩阵解读的能力？有无结业标准或考核？</b></td><td>「专业实操课」的定位是否名副其实</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="h">观察技巧</span>
+    重点不在于对方答什么，而在<strong>于对方如何回应质疑</strong>。第 4、5、8 问带有温和的质疑性质——能坦诚回答「这是文案笔误，课堂上会讲清楚」的讲师，与顾左右而言他的讲师，可信度相差极大。
+  </div>
+</section>
+
+<!-- ============ 附录 B ============ -->
+<section id="a2">
+  <span class="sec-no">APPENDIX B</span>
+  <h2>附录 B：术语对照速查表</h2>
+  <p>供后续内容开发时统一用语使用。<strong>建议以此为基准，避免出现同类硬伤。</strong></p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">中文</th><th style="min-width:130px">英文</th><th>正确表述</th></tr></thead>
+      <tbody>
+        <tr><td>九大能量中心</td><td>Nine Centers</td><td>无误</td></tr>
+        <tr><td>64 闸门 / 36 通道</td><td>64 Gates / 36 Channels</td><td><b>不可写作「13 条行星通道」</b></td></tr>
+        <tr><td>13 天体</td><td>13 Celestial Bodies</td><td>日月水金火木土天海冥等，注意与通道区分</td></tr>
+        <tr><td>384 爻</td><td>384 Lines</td><td>64 闸门 × 6 爻</td></tr>
+        <tr><td>爻 / 色调 / 音调 / 基底</td><td>Line / Color / Tone / Base</td><td>四级细分结构，<b>6 / 6 / 6 / 5</b>，不可并列混称</td></tr>
+        <tr><td>四箭头、四变量</td><td>Variables</td><td>消化 / 环境 / 觉知 / 动机</td></tr>
+        <tr><td>初级健康系统</td><td>PHS (Primary Health System)</td><td>摄食方式 Determination、环境等</td></tr>
+        <tr><td>四转化</td><td>Four Transformations</td><td>Rave Psychology 核心框架</td></tr>
+        <tr><td>主节点 / 链接节点</td><td>Nodes / Perihelion / Aphelion</td><td>南北交点 + 近日点 / 远日点</td></tr>
+        <tr><td>土星回归 / 天王星对冲 / 凯龙回归</td><td>Saturn Return / Uranus Opposition / Kiron Return</td><td>生命周期分析，见 Analyst Level II</td></tr>
+        <tr><td>Rave 宇宙学</td><td>Rave Cosmology</td><td>Ra 七门课体系，共 85+ 小时</td></tr>
+        <tr><td>轮回交叉</td><td>Incarnation Cross</td><td>L3 层级内容</td></tr>
+        <tr><td>生产者</td><td>Generator</td><td><b>统一用「生产者」，不用「生成者」</b></td></tr>
+        <tr><td>显示生产者</td><td>Manifesting Generator (MG)</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 附录 C ============ -->
+<section id="a3">
+  <span class="sec-no">APPENDIX C</span>
+  <h2>附录 C：数据来源、口径与置信度声明</h2>
+
+  <h3>一手来源</h3>
+  <ul>
+    <li>「伍空人类图魔方」公众号《人类图魔方矩阵》第二期训练营招生文（2025-03-21 发布），全文抓取。</li>
+  </ul>
+
+  <h3>二手来源</h3>
+  <ul>
+    <li><strong>IHDS（International Human Design School）</strong>：专业分析师培养路径、课程价格、3.5 年周期、Level I–IV 内容说明。</li>
+    <li><strong>Jovian Archive</strong>：全站课程目录检索、Rave Cosmology Series I–VII（7 门，85+ 小时，单课 $297）、The 16 Variable Workshops（Ibiza 2009）。</li>
+    <li><strong>Gene Keys 官方站</strong>：三序列（Activation / Venus / Pearl）确认，用于比对「火星序列 / 世俗序列」的溯源性。</li>
+    <li><strong>亚洲人类图学院</strong>：中文市场高阶课价格对标（六阶 NT$72,000，复训 NT$36,000）。</li>
+    <li>Ra Uru Hu 生平与体系起源的多个独立来源交叉验证。</li>
+  </ul>
+
+  <h3>估算与假设（须谨慎对待）</h3>
+  <ul>
+    <li><strong>市场规模</strong>：无第三方权威数据，采用漏斗法基于可观察代理指标推算，<strong>仅代表量级判断</strong>（年付费 100–400 人），误差可能较大。</li>
+    <li><strong>研发投入</strong>：工时按 300 小时、机会成本 ¥200–400/小时估算，实际取决于自学能力与资料获取成本。</li>
+    <li><strong>收入模型</strong>：单价 ¥6,800、年 2 期、满班率 50%–95% 均为假设值，<strong>伍空实际定价未知</strong>是主要不确定源。</li>
+    <li><strong>汇率</strong>：1 USD ≈ 7.2 CNY，1 TWD ≈ 0.226 CNY（换算时点参考值）。</li>
+  </ul>
+
+  <h3>置信度总览</h3>
+  <div class="grid grid-2x2">
+    <div class="card"><p class="t">知识层级定位</p><p class="d"><span class="chip hi">高置信</span>有官方课程目录直接印证</p></div>
+    <div class="card"><p class="t">术语溯源对照</p><p class="d"><span class="chip hi">高置信</span>逐条比对官方资料得出</p></div>
+    <div class="card"><p class="t">价格与竞争格局</p><p class="d"><span class="chip hi">高置信</span>官方公开价格，可直接引用</p></div>
+    <div class="card"><p class="t">市场规模与财务</p><p class="d"><span class="chip mid">中等置信</span>基于假设推算，仅供量级参考</p></div>
+  </div>
+
+  <div class="note warn">
+    <span class="h">本报告的局限</span>
+    全部分析基于<strong>一篇招生文案 + 公开网络资料</strong>，<strong>未实际接触课程方、未听课、未采访学员</strong>。因此对「课程实际质量」的判断是<strong>推断而非结论</strong>——这也正是本报告建议「先当一期学员再决策」的原因。<br>
+    报告中对文案硬伤的指认是<strong>客观的、可验证的</strong>（术语错误、内部矛盾），但对课程方动机的判断<strong>保持中立</strong>：更倾向于「内容为真、包装草率」，而非「内容造假」。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 开发「魔方矩阵 Cube Matrix」课程可行性研究报告</div>
+  <div>内部决策参考 · 基于公开信息分析，不构成投资或商业承诺 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

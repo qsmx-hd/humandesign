@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>四变量深度讲义 · 24 项逐条可讲版</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:24px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+.panel.tight{padding:13px 15px}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.chip.mid{background:#FBEBCF;color:#8A5A12;border-color:#EBD3A0}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+/* 条目块 */
+.item{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:15px 16px;margin:14px 0}
+.item .ih{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.item .iname{font-size:15px;font-weight:700;color:var(--deep);line-height:1.5}
+.item .ien{font-size:12.5px;color:var(--muted);font-style:italic}
+.item .oneline{font-size:13.5px;color:var(--gold);font-weight:700;margin:0 0 11px;line-height:1.6}
+.item .lbl{display:block;font-size:12px;font-weight:700;color:var(--muted);
+  letter-spacing:.8px;margin:11px 0 4px}
+.item .lbl::before{content:"";display:inline-block;width:3px;height:11px;
+  background:var(--main);margin-right:7px;vertical-align:-1px}
+.item p,.item ul{margin:0 0 8px}
+.item ul{margin-top:0}
+.item li{margin-bottom:5px}
+
+/* 讲师提示 vs 可念话术 */
+.tip{background:#F3F0FA;border:1px solid #DDD3F0;border-left:3px solid var(--tip);
+  border-radius:0 8px 8px 0;padding:10px 13px;margin:10px 0;font-size:13px;line-height:1.75;color:#3A2F5E}
+.tip::before{content:"讲师提示";display:inline-block;font-size:12px;font-weight:700;color:var(--tip);
+  border:1px solid var(--tip);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.say{background:#FBF5EA;border:1px solid var(--border);border-left:3px solid var(--main);
+  border-radius:0 8px 8px 0;padding:10px 13px;margin:10px 0;font-size:13px;line-height:1.78;color:var(--ink)}
+.say::before{content:"可念话术";display:inline-block;font-size:12px;font-weight:700;color:var(--gold);
+  border:1px solid var(--gold);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+/* 章节导航条 */
+.nav{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:13px 16px;margin:16px 0}
+.nav .nh{font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:8px}
+.nav .nr{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;line-height:1.7}
+.nav .nr span{color:var(--muted)}
+.nav .nr b{color:var(--ink);font-weight:700}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">LECTURE NOTES · STEP 1</p>
+  <h1 id="h1">四变量深度讲义<br>24 项逐条可讲版</h1>
+  <p class="lead">环境 · 摄食 · 动机 · 视角，每项含核心定义、工作场景、常见误判、落地动作与可念话术</p>
+  <p class="sub">——配套 B2《高管变量深度解读》产品开发手册，解决「讲不满 90 分钟」与「讲错」两个问题。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>内部讲义 · 不可直接对外发放</span>
+  </div>
+</header>
+
+<!-- 使用说明 -->
+<section>
+  <span class="sec-no">HOW TO USE</span>
+  <h2>这份讲义怎么用</h2>
+
+  <div class="note">
+    <span class="h">先分清两种内容</span>
+    本讲义每条目下有两块特殊内容，<strong>用途完全不同，不要混用</strong>：
+    <ul style="margin:8px 0 0">
+      <li><span class="chip" style="background:#F3F0FA;color:#4A3B7A;border-color:#DDD3F0">讲师提示</span> —— <strong>给你看的</strong>。讲法、节奏、易错点、客户可能的反应。<strong>不要念给客户听。</strong></li>
+      <li><span class="chip" style="background:#FBF5EA;color:#A8752E;border-color:#E8DCC8">可念话术</span> —— <strong>给客户听的</strong>。可以直接念，但建议改成你自己的语气。</li>
+    </ul>
+  </div>
+
+  <div class="nav">
+    <div class="nh">四条讲解铁律</div>
+    <div class="nr">
+      <span>① <b>身体变量给动作，心智变量给看见</b></span>
+      <span>② <b>先讲底色（左右箭头），再讲六项</b></span>
+      <span>③ <b>每讲完一项必问「这个像不像您」</b></span>
+      <span>④ <b>客户说不像，立刻追问哪部分不像，绝不辩护</b></span>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:88px">变量</th><th class="c">归属</th><th>讲法</th><th class="c">建议时长</th><th class="c">优先级</th></tr></thead>
+      <tbody>
+        <tr><td><b>环境</b> Environment</td><td class="c"><span class="chip design">Design</span></td><td>给动作：换工位、调空间</td><td class="c">15–18′</td><td class="c"><span class="chip hi">最高</span></td></tr>
+        <tr><td><b>摄食</b> Determination</td><td class="c"><span class="chip design">Design</span></td><td>给动作：改日程、改节奏</td><td class="c">15–18′</td><td class="c"><span class="chip hi">最高</span></td></tr>
+        <tr><td><b>动机</b> Motivation</td><td class="c"><span class="chip pers">Personality</span></td><td>给看见：您是被什么点燃的</td><td class="c">15–20′</td><td class="c"><span class="chip hi">高</span></td></tr>
+        <tr><td><b>视角</b> Perspective</td><td class="c"><span class="chip pers">Personality</span></td><td>给看见：您天然看见什么</td><td class="c">10–12′</td><td class="c"><span class="chip mid">中</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#ch1">环境六类（最详细）</a></li>
+      <li><a href="#ch2">摄食六项</a></li>
+      <li><a href="#ch3">动机六项</a></li>
+      <li><a href="#ch4">视角六项</a></li>
+      <li><a href="#ch5">通用讲解技法</a></li>
+      <li><a href="#ch6">翻车点与救场话术</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 第一章 环境 -->
+<section id="ch1">
+  <span class="sec-no">CHAPTER 01</span>
+  <h2>环境 Environment <span class="chip design">Design · 身体 · 可实验</span></h2>
+
+  <div class="nav">
+    <div class="nh">讲师导航</div>
+    <div class="nr">
+      <span><b>时长</b> 15–18 分钟</span>
+      <span><b>位置</b> 放在全场最前</span>
+      <span><b>目标</b> 20 分钟内让客户「被看见」</span>
+      <span><b>易错</b> 讲成风水或装修建议</span>
+    </div>
+  </div>
+
+  <p>环境的原义是「身体在什么样的物理空间里运作最省力」。在 B 端，它是<strong>成本最低、见效最快、最容易验证</strong>的一个变量——换个工位、调个会议地点，客户第二天就能感受到差别。</p>
+
+  <div class="note warn">
+    <span class="h">关键提醒：环境不是风水，也不是审美</span>
+    客户最容易在这里跑偏，把它理解成"办公室摆什么绿植"。<strong>环境的本质是神经系统的安顿感</strong>——身体在哪种空间里能"呼出一口气"。<br>
+    讲的时候要反复回到身体感受：<strong>不是"你喜不喜欢这个空间"，是"你的身体在这个空间里能不能放松下来"。</strong>
+  </div>
+
+  <h3>左右箭头在环境上的差异</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:80px">方向</th><th>环境上的表现</th><th>举例</th></tr></thead>
+      <tbody>
+        <tr><td><b>← 左</b><br>主动 / 精准</td><td>需要<strong>特定的、被界定的</strong>那一个点位。空间要"选对"，同一个大类里只有某些具体位置有效。</td><td>Caves 左 = 书房这种可控光线的小角落；Markets 左 = 展会、市集这种有明确目标的点</td></tr>
+        <tr><td><b>→ 右</b><br>接收 / 沉浸</td><td>需要<strong>更广阔、可沉浸</strong>的场域。不执着于具体点位，要的是整体氛围的包裹。</td><td>Caves 右 = 地下室、有顶棚的市集这类更宽的庇护所；Markets 右 = 城市街道、机场这种流动的扩展</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Caves -->
+  <div class="item">
+    <div class="ih"><span class="iname">1. 洞穴 Caves</span><span class="ien">保护 · 边界 · 可控</span></div>
+    <p class="oneline">您的身体在感到「受保护、能控制谁进来」时，才会真正放松。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>封闭、收敛、可选择进出的空间。不等于与世隔绝，而是<strong>能控制访问权限</strong>——谁可以进来、什么时候进来、待多久。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>独立办公室 / 静音舱 / 可上锁的思考空间</strong>，比开放工位的生产力高一个量级。</li>
+      <li>会议中偏好<strong>能看见入口的位置</strong>——背对门会持续消耗警戒能量。</li>
+      <li>远程办公的价值极高，但前提是家里有一个"不被打扰的物理结界"。</li>
+      <li>被安排在开放式工位、或临时被拉进没有边界的协作区，是隐性的持续能耗。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「内向 / 不合群」。实际上很多洞穴型的人是出色的演讲者——他们只是需要<strong>回到可控空间去恢复</strong>。</li>
+      <li>被误读为「排挤人」。他们挑的是空间，不是人。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>会议时<strong>提前 5 分钟到场，选靠墙或能看见门的位置</strong>。</li>
+      <li>在日程里设两段 15 分钟的「关门时间」，期间不接任何会。</li>
+      <li>如果工位在开放区，配一副降噪耳机——这是最低成本的人造洞穴。</li>
+    </ul>
+
+    <div class="tip">洞穴型客户在听到"您不是内向，您是需要在可控空间里恢复"时，常有明显的释然反应。这句话值得专门说。</div>
+
+    <div class="say">您的环境是「洞穴」。这不表示您孤僻——它说的是，您的身体只有在<strong>能控制谁可以进来</strong>的时候才真正放松。我猜您开会的时候，如果背对着门坐，整场都会有点飘。这不是心理作用，是您的神经系统在替您看着身后那扇门。</div>
+  </div>
+
+  <!-- Markets -->
+  <div class="item">
+    <div class="ih"><span class="iname">2. 市场 Markets</span><span class="ien">流动 · 交换 · 选项</span></div>
+    <p class="oneline">您的身体在「有东西在流动、有交换在发生」的地方才会活过来。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>交换、流动、选择、选项密度高的地方。可以是真实的市集，也可以是协作办公区、活跃街区、信息与人交汇的节点。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>需要处在信息与人的交汇点</strong>：前线、客户现场、展会、开放式协作区。</li>
+      <li>被关在安静的独立办公室里反而会枯竭——那是洞穴型的补给站，不是他们的。</li>
+      <li>适合的角色：<strong>商务拓展、市场、渠道、投资、任何需要"在场上"的岗位</strong>。</li>
+      <li>长期远程且无人接触，对他们是慢性消耗。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「爱热闹 / 不专注」。他们不是要吵，是要<strong>流动感和选项</strong>。</li>
+      <li>被误读为「坐不住」。久坐不动的静态环境确实会让他们迟钝，这不是注意力缺陷。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>把至少两场内部会议<strong>改成走动式</strong>，或挪到楼下的咖啡区。</li>
+      <li>每周安排一次<strong>去前线</strong>——见客户、逛门店、去展会，哪怕只有半天。</li>
+      <li>需要深度思考时，选<strong>有背景活动的场所</strong>（咖啡馆），而不是绝对安静的房间。</li>
+    </ul>
+
+    <div class="tip">市场型客户最常问"那我是不是不适合做深度工作"。答案是：他们适合在有流动感的环境里做深度工作，不是在没有。这个区分很重要。</div>
+
+    <div class="say">您的环境是「市场」。意思是您的身体需要<strong>流动和交换</strong>才能活起来。很多人一听就说"那我肯定做不了深度思考"——不是的。您不是做不了，您是<strong>不能在静止的环境里做</strong>。您回想一下，您最有灵感的时刻，是不是常常在旅途中、在咖啡馆、或者在刚见完客户回来的路上？</div>
+  </div>
+
+  <!-- Kitchens -->
+  <div class="item">
+    <div class="ih"><span class="iname">3. 厨房 Kitchens</span><span class="ien">转化 · 过程 · 混合</span></div>
+    <p class="oneline">您的身体在「有东西正在被做出来」的地方最舒服——您需要在过程里，而不是在旁边看。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>转化正在发生的地方：食材变成菜、点子变成产品、混乱变成秩序。<strong>关键词是"进行中"</strong>，不是"已完成"。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>适合在"事正在发生"的位置</strong>：项目作战室、产品从 0 到 1 的现场、创业早期团队。</li>
+      <li>典型优势是<strong>整合与催化</strong>——把不同要素搅在一起，产出新东西。</li>
+      <li>被丢进<strong>成熟、稳定、没有变化</strong>的业务里会迅速失去能量。</li>
+      <li>团队里他们是"把事情搅动起来"的人，不是"守成"的人。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「爱管闲事」。他们介入不是要控制，是<strong>需要在过程里</strong>。</li>
+      <li>被误读为「不稳定」。他们不是喜新厌旧，是需要有东西在转化。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>主动参与一个<strong>正在进行</strong>的项目，哪怕只是列席——旁观会让他们枯萎。</li>
+      <li>把一部分会议改成<strong>共创工作坊</strong>的形式，而不是听汇报。</li>
+      <li>如果当前岗位纯维护，给自己找一个<strong>小的改造项目</strong>作为能量补给。</li>
+    </ul>
+
+    <div class="tip">厨房型与洞穴型常常在同一个组织里互相误解——厨房型觉得洞穴型"躲起来"，洞穴型觉得厨房型"太吵"。如果客户是管理者，这个洞察能直接用于他的团队配置。</div>
+
+    <div class="say">您的环境是「厨房」。关键词不是厨房这个房间，是<strong>转化</strong>——您的身体需要有东西正在被做出来。我猜您最难受的时期，不是最忙的时候，而是那种<strong>一切都在按部就班运转、没什么在变</strong>的时候。您不是怕闲，您是需要有东西在酝酿。</div>
+  </div>
+
+  <!-- Mountains -->
+  <div class="item">
+    <div class="ih"><span class="iname">4. 山脉 Mountains</span><span class="ien">高度 · 距离 · 视野</span></div>
+    <p class="oneline">您的身体需要「高度和距离」——离得远一点，才看得清。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>高处、开阔、有视野的地方。重点不是海拔，是<strong>与日常噪音保持健康的距离</strong>，从而获得更超然的观察位。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>需要能俯瞰的位置</strong>：高层办公室、能看到远处的地方，甚至是"信息上的高度"。</li>
+      <li>天然适合<strong>战略、长期规划、periodic review</strong>——需要拉开距离看的活。</li>
+      <li>长期陷在低矮封闭、没有窗、没有视野的环境里，会持续压抑却说不出原因。</li>
+      <li>不适合被塞进<strong>高频救火的一线</strong>——那会让他们失去唯一的优势：距离感。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「高高在上 / 不接地气」。他们的距离感是<strong>认知工具</strong>，不是态度问题。</li>
+      <li>被误读为「反应慢」。他们需要退一步才能看清，这是节奏不是迟钝。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>把战略性思考的时段，挪到<strong>有视野的物理位置</strong>——高层、窗边、户外。</li>
+      <li>每周留一段<strong>刻意抽离</strong>的时间，从执行层退出来看全局。</li>
+      <li>重要决策前，先<strong>离开现场</strong>走一走，再回来定。</li>
+    </ul>
+
+    <div class="say">您的环境是「山脉」。这不表示您要住在山上——它说的是您需要<strong>距离</strong>。您在一个没有窗、没有视野的房间里做战略，就像爬山的时候把脸贴在岩壁上。我猜您过去做的几个最好的判断，都是在您<strong>退开一步之后</strong>才做出的。</div>
+  </div>
+
+  <!-- Valleys -->
+  <div class="item">
+    <div class="ih"><span class="iname">5. 山谷 Valleys</span><span class="ien">流动 · 声音 · 连接</span></div>
+    <p class="oneline">您的身体需要「声音和流动」——完全静止会让您的系统停摆。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>被环抱但有声响、有流通的地方。信息的走廊、连接的通道。<strong>关键词是"流动"而非"静止"</strong>。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>适合边走边谈</strong>：散步会议比会议室效率更高。</li>
+      <li>需要<strong>背景声</strong>——播客、音乐、咖啡馆的环境音，都是补给而非干扰。</li>
+      <li>适合处在<strong>信息流通的节点</strong>：知道正在发生什么，本身就是能量来源。</li>
+      <li>长时间静坐 + 绝对安静的环境，是他们的效率杀手。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「注意力不集中 / 需要背景音才能干活是不专业」。实际上背景音对他们是<strong>调节器</strong>。</li>
+      <li>被误读为「爱八卦」。他们需要的是<strong>信息流通感</strong>，不是八卦本身。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>把一对一沟通改成<strong>散步式</strong>，尤其是需要坦诚的对话。</li>
+      <li>深度工作时开<strong>背景音</strong>（环境音或轻音乐），不必强迫自己绝对安静。</li>
+      <li>在密集社交之间<strong>穿插一个小差事</strong>走动一下，作为系统重置。</li>
+    </ul>
+
+    <div class="say">您的环境是「山谷」。关键词是<strong>流动</strong>——您的身体需要声音和流通，完全的静止反而会让系统停摆。很多人被教导"深度工作需要绝对安静"，对您的体质来说那可能正好相反。您试试戴着耳机、或者边走边想，看思路会不会更顺。</div>
+  </div>
+
+  <!-- Shores -->
+  <div class="item">
+    <div class="ih"><span class="iname">6. 海岸 Shores</span><span class="ien">边缘 · 过渡 · 交界</span></div>
+    <p class="oneline">您的身体在「边界上」最自在——您需要随时能进，也随时能出。</p>
+
+    <span class="lbl">空间特质</span>
+    <p>两个世界交汇的过渡地带：陆与水、城市与自然、内与外。<strong>关键词是"边缘"而非"中心"</strong>。</p>
+
+    <span class="lbl">B 端转译</span>
+    <ul>
+      <li><strong>天生适合跨界与转型角色</strong>：新业务、组织变革、跨部门、边界岗位。</li>
+      <li>需要<strong>保留一个出口</strong>——物理上靠近门或窗，情绪上保有退出的余地。</li>
+      <li>被固定在<strong>中心、深处、无法抽身</strong>的位置会窒息。</li>
+      <li>适合做<strong>连接两个系统的人</strong>，不适合被焊死在一个系统里。</li>
+    </ul>
+
+    <span class="lbl">常见误判</span>
+    <ul>
+      <li>被误读为「不够投入 / 若即若离」。他们的最佳状态就是<strong>在边缘</strong>，不是不投入。</li>
+      <li>被误读为「善变」。他们需要周期性换环境，长期固定一处会僵化。</li>
+    </ul>
+
+    <span class="lbl">本周可做的动作</span>
+    <ul>
+      <li>会议时<strong>坐在靠出口或靠窗的位置</strong>，给自己留物理上的"出"。</li>
+      <li>允许自己<strong>早到或晚到</strong>、中途出去透口气，不必全程在场。</li>
+      <li>在日程里安排<strong>周期性换环境</strong>——哪怕只是换个楼层办公一天。</li>
+    </ul>
+
+    <div class="tip">海岸型客户常有一种隐秘的愧疚感——觉得自己"不够投入"。明确告诉他们"您的最佳状态就是在边缘"，是一个很有力量的许可。</div>
+
+    <div class="say">您的环境是「海岸」。意思是您的身体在<strong>边界上</strong>最自在——两个东西交界的地方。您可能一直觉得自己有点"若即若离"，不太能全情扎进去。但那不是问题，那是您的设计。您天生适合做<strong>连接两个系统的人</strong>，而连接者必须站在边缘，不能站进任何一边的中心。</div>
+  </div>
+</section>
+
+<!-- 第二章 摄食 -->
+<section id="ch2">
+  <span class="sec-no">CHAPTER 02</span>
+  <h2>摄食 Determination <span class="chip design">Design · 身体 · 可实验</span></h2>
+
+  <div class="nav">
+    <div class="nh">讲师导航</div>
+    <div class="nr">
+      <span><b>时长</b> 15–18 分钟</span>
+      <span><b>位置</b> 紧接环境之后</span>
+      <span><b>目标</b> 触发最强的「原来如此」</span>
+      <span><b>易错</b> 滑向饮食建议（合规红线）</span>
+    </div>
+  </div>
+
+  <div class="note risk">
+    <span class="h">合规红线：只谈节奏，不谈饮食</span>
+    摄食方式的原义关乎身体如何摄入营养，但在 B 端交付中，<strong>一律转译为"信息摄入方式与工作节奏"</strong>。<br>
+    绝不提供具体饮食建议、营养方案或任何涉及健康的表述。一旦说"您应该怎么吃"，就从咨询服务滑进了未经许可的健康建议领域，在国内属于高风险行为。
+  </div>
+
+  <p><strong>箭头方向：</strong><span class="chip">← 左 · Consecutive 连续</span> 一次一事的连续型，结构化、固定时段；<span class="chip">→ 右 · Alternating 交替</span> 混合穿插的交替型，灵活、随身体感觉。</p>
+
+  <div class="item">
+    <div class="ih"><span class="iname">1. 食欲 Appetite</span><span class="ien">单线程深潜</span></div>
+    <p class="oneline">您的大脑在「一次只处理一种输入」时最清明。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li>一次只啃一件事，<strong>中途切换的代价极高</strong>——不是慢，是重启成本大。</li>
+      <li>日程需要<strong>整块留白</strong>，碎片会议是效率的直接杀手。</li>
+      <li>典型困境：一天开了六个 45 分钟的会，晚上发现自己什么都没推进。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>每周至少留<strong>一个完整的上午</strong>，不放任何会议。</li>
+      <li>把同主题的会<strong>合并成半天</strong>，而不是散布在全周。</li>
+    </ul>
+    <div class="say">您是「连续型」。这不是自不自律的问题——是您的大脑在<strong>一次只处理一种输入</strong>时最清明。您现在的日程是每 45 分钟换一个议题，等于让一个连续型的系统每 45 分钟重启一次。我们不用改您，只要把周三上午空出来。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">2. 品味 Taste</span><span class="ien">对品质敏感</span></div>
+    <p class="oneline">您对「内容的品质」敏感，粗制的信息塞不进去。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li>需要<strong>参与选题与标准制定</strong>，被硬塞低质内容会直接罢工。</li>
+      <li>对报告、方案的精细度要求高，这不是挑剔，是摄取机制。</li>
+      <li>适合做<strong>把关人、评审、标准制定者</strong>的角色。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>把一部分"接收"改成"筛选"——让您参与定标准，效率会明显提升。</li>
+      <li>对于必须接收的低质信息，<strong>先让人提炼</strong>再给您。</li>
+    </ul>
+    <div class="tip">品味型的高管常被下属认为"难伺候"。点破"这不是挑剔，是您的摄取机制"，能同时缓解双方。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">3. 渴 Thirst</span><span class="ien">高频少量</span></div>
+    <p class="oneline">您需要的是「小口、多次、持续」的输入，长会会让您脱水。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li>适合<strong>短会、快速同步、持续小剂量输入</strong>。</li>
+      <li>三小时的长会对他们是<strong>生理性的消耗</strong>，不是耐心问题。</li>
+      <li>天然适合<strong>站会机制、即时通讯、短平快的沟通节奏</strong>。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>把冗长的周会拆成<strong>两次 15 分钟</strong>。</li>
+      <li>重要信息<strong>分批给</strong>，不要一次性倾倒。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">4. 触觉 Touch</span><span class="ien">需要摸得到</span></div>
+    <p class="oneline">您要「摸得到」才算真的知道——看报告不如看现场。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li>决策前需要<strong>接触实物或一线</strong>，纯数据推演会让他们不踏实。</li>
+      <li>典型优势：<strong>现场感、对细节质地的判断力</strong>。</li>
+      <li>被隔绝在会议室里做决策，会持续感到"悬空"。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>重大决策前安排一次<strong>现场走访</strong>，哪怕只有两小时。</li>
+      <li>要求汇报时<strong>带实物或带案例</strong>，而不是只有 PPT。</li>
+    </ul>
+    <div class="say">您是「触觉型」。意思是您要<strong>摸得到</strong>才踏实。看十页数据，不如去现场待两小时。我猜您有些决策反复改主意，不是犹豫，是您一直没碰到实物——一旦摸到了，您定得比谁都快。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">5. 声音 Sound</span><span class="ien">声学敏感</span></div>
+    <p class="oneline">您对声学环境极度敏感——要么绝对安静，要么特定的背景音。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li><strong>开放式办公的噪音是隐形能耗</strong>，他们常常累却说不出为什么。</li>
+      <li>需要<strong>控制声学环境</strong>的权利：降噪耳机、独立空间、或自选背景音。</li>
+      <li>会议场所的<strong>回音、空调声、邻座通话</strong>都会实质影响他们的思考质量。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>配备降噪耳机，并<strong>明确告知团队</strong>这不是不礼貌。</li>
+      <li>重要思考安排在<strong>声学可控</strong>的时段与地点。</li>
+    </ul>
+    <div class="tip">声音型与山谷型容易混淆：山谷型需要背景声（补给），声音型需要可控的声学环境（可能要绝对安静）。区分点在"您是要声音，还是要对声音的控制权"。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">6. 光 Light</span><span class="ien">与昼夜同步</span></div>
+    <p class="oneline">您的效率跟着光走——核心决策要放在有日光的时候。</p>
+    <span class="lbl">工作场景</span>
+    <ul>
+      <li>典型的<strong>昼夜节律型工作者</strong>，夜间效率断崖式下跌。</li>
+      <li>把重要决策排在<strong>晚上或凌晨</strong>，等于在状态最差时做最重要的判断。</li>
+      <li>长期夜间工作对他们的消耗，远超对自己是"夜猫子"的认知。</li>
+    </ul>
+    <span class="lbl">落地动作</span>
+    <ul>
+      <li>把<strong>最重要的决策会</strong>挪到上午或午后有光的时段。</li>
+      <li>晚间只安排<strong>事务性、不需要判断</strong>的工作。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 第三章 动机 -->
+<section id="ch3">
+  <span class="sec-no">CHAPTER 03</span>
+  <h2>动机 Motivation <span class="chip pers">Personality · 心智 · 观察</span></h2>
+
+  <div class="nav">
+    <div class="nh">讲师导航</div>
+    <div class="nr">
+      <span><b>时长</b> 15–20 分钟</span>
+      <span><b>位置</b> 中段，最慢热</span>
+      <span><b>目标</b> 让客户自己讲出关键洞察</span>
+      <span><b>易错</b> 讲成「你应该改变驱动」</span>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <span class="h">讲法要害：这是看见，不是改造</span>
+    动机属 Personality/心智，<strong>只能观察，不能改变</strong>。绝不能说"您应该从内疚驱动改成希望驱动"——那是不可能的，也是有害的。<br>
+    正确的做法：<strong>指出对齐态与错位态的区别</strong>，让客户看见自己当前处在哪个状态，以及什么样的任务能把他推回对齐态。<br>
+    <strong>讲动机时，客户说话的时间应该比你多。</strong>这一段的目标是让他自己说出"对，我就是被这个点燃的"。
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">1. 恐惧 Fear</span><span class="ien">探究未知</span></div>
+    <p class="oneline">您是被「这里有我没搞懂的东西」点燃的——您是探究者，不是胆小者。</p>
+    <ul>
+      <li><strong>对齐态：</strong>智慧的探究者，把未知变成可理解。会主动去查清、去验证、去搞明白底层逻辑。</li>
+      <li><strong>错位态：</strong>焦虑、瘫痪、反复推演却不行动。</li>
+      <li><strong>激励设计：</strong>给<strong>待查清的难题</strong>，而不是确定的 KPI。别用"别想太多"打发他们——那等于抽走他们的燃料。</li>
+    </ul>
+    <div class="tip">「恐惧」这个名字最容易引起抵触。开场必须先正名：这不是害怕，是驱动去理解未知。跳过这步，客户会当场关闭。</div>
+    <div class="say">您的动机是「恐惧」。先说清楚——这不是害怕。它说的是<strong>您被"这里有我没搞懂的东西"点燃</strong>。您是一个探究者。我猜您最投入的时候，是面对一个还没人搞明白的问题。反过来，如果一件事所有人都说"没问题、照做就行"，您反而提不起劲。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">2. 希望 Hope</span><span class="ien">信任展开</span></div>
+    <p class="oneline">您相信事情会自然展开——您的力量在于耐心，而不是强力推动。</p>
+    <ul>
+      <li><strong>对齐态：</strong>对时机的深层信任，能等、能允许、能在别人焦虑时保持不动。</li>
+      <li><strong>错位态：</strong>盲目等待、把力量交出去、错过窗口。</li>
+      <li><strong>激励设计：</strong>给<strong>时间窗口</strong>而非 deadline 压迫。适合长期布局、孵化型岗位。</li>
+    </ul>
+    <div class="tip">希望型在「狼性文化」里常被误判为缺乏进取心。指出"您的力量是不在该动的时候不动"，对他们是很大的解绑。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">3. 欲望 Desire</span><span class="ien">改变物质世界</span></div>
+    <p class="oneline">您有股内在的推力，要去改变、移动、组织物质世界。</p>
+    <ul>
+      <li><strong>对齐态：</strong>天生的领导者，能把想法变成现实，推动事物成形。</li>
+      <li><strong>错位态：</strong>控制欲、为动而动、为了迎合外部期待而推动。</li>
+      <li><strong>激励设计：</strong>给<strong>可改变的战场</strong>。让他们带队打仗，别让他们守成。</li>
+    </ul>
+    <div class="say">您的动机是「欲望」。这是六项里最有推力的一项——您天生想把东西<strong>变成另一个样子</strong>。您最适合的是从零开始、或者要去改变点什么的局面。如果把您放在一个只需要维持现状的位置上，您会开始制造不必要的变化，那不是您的问题，是位置放错了。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">4. 需求 Need</span><span class="ien">识别真正所需</span></div>
+    <p class="oneline">您是被「有人需要我」点燃的——服务导向，识别生存与支持真正所需。</p>
+    <ul>
+      <li><strong>对齐态：</strong>精准识别真正需要什么，可靠、有支撑力。</li>
+      <li><strong>错位态：</strong>过度承担、被需求绑架、边界失守。</li>
+      <li><strong>激励设计：</strong>用<strong>"谁依赖你"</strong>来激活，而不是"你想成为什么"。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">5. 内疚 Guilt</span><span class="ien">修复破损</span></div>
+    <p class="oneline">您是被「这里有东西坏了，我得修好它」点燃的。</p>
+    <ul>
+      <li><strong>对齐态：</strong>驱动去修复、纠正、为破损处提供实用方案。组织里最可靠的"救火队长"。</li>
+      <li><strong>错位态：</strong>永远在救火、被问题牵着走、无法说不、最终 burnout。</li>
+      <li><strong>激励设计：</strong>给<strong>待修复的系统</strong>——但<strong>必须配边界机制</strong>，否则会耗尽。</li>
+    </ul>
+    <div class="say">您的动机是「内疚」。这不是说您有负罪感——它说的是<strong>您被"这里有东西坏了"点燃</strong>。我猜您过去两年接手的，大部分是别人留下来的烂摊子。问题不在于您不会说不，而在于您的能量天然会被破损处吸引，比别人先看见它。我们不是要改这个，是要给它装一个开关。</div>
+  </div>
+
+  <div class="item">
+    <div class="ih"><span class="iname">6. 纯真 Innocence</span><span class="ien">无议程进入</span></div>
+    <p class="oneline">您带着无议程的开放进入事物——您的力量是不预设立场。</p>
+    <ul>
+      <li><strong>对齐态：</strong>纯粹、开放、不带预设，能看见别人被成见遮住的东西。</li>
+      <li><strong>错位态：</strong>显得天真、被利用、缺乏方向感。</li>
+      <li><strong>激励设计：</strong>给<strong>空白画布</strong>。适合从 0 到 1，不适合存量博弈。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 第四章 视角 -->
+<section id="ch4">
+  <span class="sec-no">CHAPTER 04</span>
+  <h2>视角 Perspective <span class="chip pers">Personality · 心智 · 观察</span></h2>
+
+  <div class="nav">
+    <div class="nh">讲师导航</div>
+    <div class="nr">
+      <span><b>时长</b> 10–12 分钟</span>
+      <span><b>位置</b> 收口段，解释「为什么卡住」</span>
+      <span><b>目标</b> 用配对结构点破当前困境</span>
+      <span><b>易错</b> 两套命名混用</span>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <span class="h">命名纪律：先定一套，全场一致</span>
+    这一项存在两套命名传统：一套是下表的<strong>六视角</strong>（Survival / Possibility / Power / Wanting / Probability / Personal），另一套以<strong>六感</strong>命名（Smell / Taste / Outer Vision / Inner Vision / Feeling / Touch），后者常被称为 Cognition。<br>
+    <strong>选定一套、全场一致、报告中标注来源。</strong>两套混用是这行最常见的硬伤，懂行的客户一眼能看出。
+  </div>
+
+  <p>视角讲的是「你天然会看见什么」。它的<strong>三对配对结构</strong>是本产品最有教练价值的部分——每一对里，一个是你的真实视角，另一个是你会滑进去的错位视角。</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:92px">真实视角</th><th>天然看见</th><th style="min-width:92px">错位视角</th><th>滑进去时的表现</th></tr></thead>
+      <tbody>
+        <tr><td><b>Survival</b><br>生存</td><td>什么安全、什么不安全</td><td>Wanting 欲望</td><td>被"我想要"牵走，忽略风险底线</td></tr>
+        <tr><td><b>Possibility</b><br>可能性</td><td>什么是可能的</td><td>Probability 概率</td><td>反复算"现实吗"，把可能性掐死在摇篮</td></tr>
+        <tr><td><b>Power</b><br>力量</td><td>影响力与冲击点在哪</td><td>Personal 个人</td><td>把结构性力量问题，误当成个人恩怨</td></tr>
+        <tr><td><b>Wanting</b><br>欲望</td><td>被渴望的是什么</td><td>Survival 生存</td><td>退回防御，不敢要</td></tr>
+        <tr><td><b>Probability</b><br>概率</td><td>可能发生什么</td><td>Possibility 可能性</td><td>沉溺想象，失去现实检验</td></tr>
+        <tr><td><b>Personal</b><br>个人</td><td>有个人意义的是什么</td><td>Power 力量</td><td>把个人议题放大成权力斗争</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>箭头方向：</strong><span class="chip">← 左</span> 聚焦视角——放大、分析细节、目标导向；<span class="chip">→ 右</span> 外围视角——看见全局、同时接收多路信息、通过观察学习。</p>
+
+  <div class="tip"><strong>怎么讲配对：</strong>不要只说"您的视角是可能性"。要说"<strong>您天然看见可能性，但压力大的时候会滑进概率——开始反复算现实不现实，然后把自己说服放弃了</strong>。"后一半才是客户会拍大腿的部分。</div>
+
+  <div class="say">您的视角是「可能性」——您天生看见的是<strong>什么可以成立</strong>。但每一视角都有一个对应的错位位，可能性滑过去就是「概率」：开始反复计算现实不现实，最后自己把自己劝退了。我猜您过去放弃的几个想法，不是因为真的不可行，是因为您在概率里待太久了。</div>
+</section>
+
+<!-- 第五章 技法 -->
+<section id="ch5">
+  <span class="sec-no">CHAPTER 05</span>
+  <h2>通用讲解技法</h2>
+
+  <h3>5.1 顺序不能乱</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:60px">顺序</th><th style="min-width:80px">内容</th><th>为什么</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>环境</b></td><td>成本最低、见效最快。<strong>20 分钟内必须建立可信度</strong>，否则后面全废</td></tr>
+        <tr><td>2</td><td><b>摄食</b></td><td>紧接环境，触发"原来如此"。客户开始主动举例</td></tr>
+        <tr><td>3</td><td><b>动机</b></td><td>最慢热，需要留白。此时信任已建立，客户愿意说</td></tr>
+        <tr><td>4</td><td><b>视角</b></td><td>收口，解释"为什么现在卡住"</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note risk">
+    <span class="h">最常见的顺序错误</span>
+    按图表顺序从"摄食"开始讲（因为它排在最上）。摄食对工作场景的转译相对抽象，<strong>开场讲它会让客户在前 15 分钟里找不到抓手</strong>。<br>
+    <strong>永远从环境开始</strong>——它是唯一一个客户当天就能验证的变量。
+  </div>
+
+  <h3>5.2 每项的讲解节奏</h3>
+  <ol>
+    <li><strong>先给一句话核心</strong>（10 秒）—— 让客户立刻知道这项在说什么。</li>
+    <li><strong>再讲工作场景表现</strong>（60 秒）—— 用具体的、客户身上会发生的例子。</li>
+    <li><strong>然后问「像不像您」</strong>（停顿）—— <strong>这一步不能省</strong>，自我确认的说服力远大于你的陈述。</li>
+    <li><strong>给落地动作</strong>（30 秒）—— 具体到时间和地点，不要泛泛而谈。</li>
+  </ol>
+
+  <h3>5.3 通用收口问句</h3>
+  <div class="say">这个说法，您觉得像不像您？</div>
+  <p>如果客户说<strong>「不太像」</strong>——不要辩护，立刻追问：</p>
+  <div class="say">哪一部分不像？</div>
+  <div class="tip">客户说"不像"通常只有三个原因：① 出生时间有误差 ② 你举的例子不贴合他的行业 ③ 他理解成了字面意思（比如把"洞穴"理解成要住山洞）。<strong>追问比辩护有用一百倍</strong>，而且能当场暴露时间精度问题。</div>
+
+  <h3>5.4 时间分配的弹性</h3>
+  <p>90 分钟的标准分配是 <strong>8 / 17 / 17 / 18 / 12 / 13 / 5</strong>（开场 / 环境 / 摄食 / 动机 / 视角 / 综合 / 收尾）。但实操中<strong>最容易被挤占的是动机</strong>——因为它最需要客户说话，而客户一说话就容易超时。</p>
+  <div class="note">
+    <span class="h">救场原则</span>
+    如果超时，<strong>砍视角，不砍动机</strong>。视角是锦上添花，动机才是客户会记住的部分。<br>
+    视角段压缩到 5 分钟讲完配对结构即可，不必逐项展开。
+  </div>
+</section>
+
+<!-- 第六章 翻车点 -->
+<section id="ch6">
+  <span class="sec-no">CHAPTER 06</span>
+  <h2>翻车点与救场话术</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:120px">翻车场景</th><th>救场话术</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>「这不就是算命吗」</b></td>
+          <td>不是。算命告诉你<strong>会发生什么</strong>，我只说<strong>您这套系统怎么运作</strong>。而且今天说的每一条您都能验证——我给的建议您这周就能试，两周就知道对不对。</td>
+        </tr>
+        <tr>
+          <td><b>「我觉得不太像我」</b></td>
+          <td>哪一部分不像？（等他回答）……这很重要，我们记下来。出生时间的精度会直接影响这一层，回头我再核一次。</td>
+        </tr>
+        <tr>
+          <td><b>「那我是不是应该改」</b></td>
+          <td>（若是心智变量）不。动机和视角<strong>只能看见，改不了</strong>——硬改只会更累。我们能做的是识别它什么时候在对齐态、什么时候滑进了错位态。<br>（若是身体变量）对，这个可以试。但只试一条，不要一次改一堆。</td>
+        </tr>
+        <tr>
+          <td><b>「我时间记不清了」</b></td>
+          <td>那我们先把能确定的部分讲完，涉及不确定项我会明确标注。回去如果查到出生证明，我再给您补一份修订。<strong>绝不硬解。</strong></td>
+        </tr>
+        <tr>
+          <td><b>「这对我的团队有用吗」</b></td>
+          <td>有用，但那是另一件事——今天我们先把您自己的四个变量跑通。如果您想看团队层面的配置，我们可以单独安排一场。（<strong>这是 B1 / B3 的需求信号，务必记下来</strong>）</td>
+        </tr>
+        <tr>
+          <td><b>客户开始讲自己的事，停不下来</b></td>
+          <td>不要打断。动机段客户自发讲述是<strong>好事</strong>，说明他被击中了。用 5.4 的救场原则，从视角段把时间找回来。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">最后一句提醒</span>
+    这份讲义能保证你<strong>讲得对、讲得满、不翻车</strong>。但它替代不了两件事：<strong>一是真实的案例积累，二是你自己的语气</strong>。<br>
+    建议前 5 场严格照着讲，第 6 场开始，把客户反应最好的那几句<strong>改成你自己的话</strong>——那些话会变成你真正的资产，也是别人拿不走的东西。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 四变量深度讲义 · 24 项逐条可讲版</div>
+  <div>配套 B2《高管变量深度解读》产品开发手册 · 内部讲义，不可直接对外发放 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>冷启动邀约话术包 · 5 场免费会话</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:24px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+.panel.tight{padding:13px 15px}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+td.c{text-align:center;white-space:nowrap}
+th.c{text-align:center}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.chip.mid{background:#FBEBCF;color:#8A5A12;border-color:#EBD3A0}
+.chip.lo{background:#F8DED9;color:#8A3228;border-color:#E9BEB5}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+/* 可复制消息块 */
+.msg{background:#FFFDF9;border:1px solid var(--border);border-radius:11px;margin:14px 0;overflow:hidden}
+.msg .mh{background:#F0E4D2;padding:8px 14px;font-size:12.5px;font-weight:700;color:var(--deep);
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.msg .mh span{font-weight:400;color:var(--muted);font-size:12px}
+.msg .mb{padding:14px 16px;font-size:13.5px;line-height:1.85;color:var(--ink);white-space:pre-wrap}
+.msg .mb em{color:var(--gold);font-style:normal;font-weight:700}
+
+.tip{background:#F3F0FA;border:1px solid #DDD3F0;border-left:3px solid var(--tip);
+  border-radius:0 8px 8px 0;padding:10px 13px;margin:10px 0;font-size:13px;line-height:1.75;color:#3A2F5E}
+.tip::before{content:"要点";display:inline-block;font-size:12px;font-weight:700;color:var(--tip);
+  border:1px solid var(--tip);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.frow{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px dashed var(--border)}
+.frow:last-child{border-bottom:none}
+.fno{flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#2D2118;
+  font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fbody{flex:1}
+.fbody .ft{font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:3px;line-height:1.55}
+.fbody .fd{font-size:13px;line-height:1.72;color:var(--muted)}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">OUTREACH KIT · STEP 3</p>
+  <h1 id="h1">冷启动邀约话术包<br>5 场免费会话</h1>
+  <p class="lead">四个渠道的邀约文案 · 人选标准 · 反馈收集表 · 跟进节奏 · 拒绝应对</p>
+  <p class="sub">——目标不是赚钱，是在低风险环境里把话术打磨到能收费的标准。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>内部使用 · 文案可按需改写</span>
+  </div>
+</header>
+
+<!-- 00 核心原则 -->
+<section>
+  <span class="sec-no">PRINCIPLE</span>
+  <h2>先想清楚：这 5 场要换回什么</h2>
+
+  <div class="note">
+    <span class="h">这 5 场免费不是做慈善，是采购信息</span>
+    你要换回三样东西：<br>
+    <strong>① 话术校准</strong>——哪一句话让客户眼睛亮了，哪一句让他困惑<br>
+    <strong>② 时长验证</strong>——90 分钟够不够，哪一段会超时<br>
+    <strong>③ 定价依据</strong>——客户听完觉得值多少，这是最真实的定价调研<br>
+    <strong>如果只拿到"挺好的，谢谢"，这 5 场就白做了。</strong>
+  </div>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">姿态：内测，不是求人</p>
+      <p class="d">说「我在打磨一个新产品，需要真实反馈」——<b>真实、不掉价、且给了对方一个体面的参与理由</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">限量：5 场，不是无限</p>
+      <p class="d">明确说只做 5 场。<b>稀缺感让对方更认真，也让你有理由筛选人</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">交换：要反馈，不含糊</p>
+      <p class="d">事前就说明需要 20 分钟反馈。<b>事前说清楚，事后才拿得到</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">称呼：决策环境设计</p>
+      <p class="d">对外少说「人类图解读」。<b>前者锚定高管教练，后者触发玄学折扣预期</b>。</p>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#s1">找谁：人选标准</a></li>
+      <li><a href="#s2">微信私信版（主力）</a></li>
+      <li><a href="#s3">朋友圈版</a></li>
+      <li><a href="#s4">老客户群发版</a></li>
+      <li><a href="#s5">社群版</a></li>
+      <li><a href="#s6">反馈收集表</a></li>
+      <li><a href="#s7">拒绝应对</a></li>
+      <li><a href="#s8">5 场之后</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 01 找谁 -->
+<section id="s1">
+  <span class="sec-no">SECTION 01</span>
+  <h2>找谁：人选标准比人数重要</h2>
+
+  <div class="note warn">
+    <span class="h">最容易犯的错：找最容易答应的人</span>
+    至亲好友会一直说好话；完全陌生的人反馈太浅；同行会忍不住评判技术细节。<strong>这三类都拿不到有效反馈。</strong>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:90px">维度</th><th>要找的</th><th>要避开的</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>关系</b></td>
+          <td><strong>「认识但不太熟」的人</strong>——彼此尊重但不需要维护面子，最愿意说真话</td>
+          <td>至亲好友（会说好话）</td>
+        </tr>
+        <tr>
+          <td><b>身份</b></td>
+          <td><strong>有真实决策压力的人</strong>：创始人、业务负责人、正在转型期的中层</td>
+          <td>纯好奇者、时间过于宽裕的人</td>
+        </tr>
+        <tr>
+          <td><b>特质</b></td>
+          <td><strong>愿意直说、表达能力强</strong>。他要能讲清楚"哪里不对"</td>
+          <td>客气型、习惯性附和的人</td>
+        </tr>
+        <tr>
+          <td><b>基础</b></td>
+          <td>最好<strong>有一点自我探索基础</strong>（做过教练、上过课、知道自己的类型）</td>
+          <td>完全没接触过、需要从头普及的人（会挤占会话时间）</td>
+        </tr>
+        <tr>
+          <td><b>专业</b></td>
+          <td><strong>非人类图从业者</strong>。要的是客户视角，不是同行评审</td>
+          <td>人类图同行（除非你明确要技术反馈）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">理想的 5 人组合</span>
+    <strong>2 位</strong>高压决策者（创始人 / CEO）—— 验证最硬的场景<br>
+    <strong>2 位</strong>正在转型期的中层 —— 验证"为什么卡住"的解释力<br>
+    <strong>1 位</strong>有教练或咨询背景的人 —— 他会给你最专业的话术反馈<br>
+    这个组合能覆盖 B2 目标客群的主要切面。
+  </div>
+</section>
+
+<!-- 02 私信 -->
+<section id="s2">
+  <span class="sec-no">SECTION 02</span>
+  <h2>微信私信版（主力渠道）</h2>
+
+  <div class="tip">私信的三个要素：① 为什么找<strong>他</strong>（要有具体原因，不能有群发感）② 要他做什么 ③ 他得到什么。缺第一点，回复率会掉一半。</div>
+
+  <div class="msg">
+    <div class="mh">版本 A · 强关系（认识但不算熟）<span>适合：见过面、有过交流的人</span></div>
+    <div class="mb">XX 你好，
+
+最近我在打磨一个新产品，叫「决策环境设计」，想找 5 位朋友做内测，第一个想到你。
+
+找你的原因很具体：<em>你在带团队这件事上一直有自己的判断，我想看看这套东西放在真实的决策场景里，到底站不站得住</em>。
+
+简单说，它看的不是性格，是四个很具体的变量：你在什么样的空间里最清明、什么节奏下最持久、什么驱动能点燃你、你天然会先看见什么。都来自出生数据，也都可以验证。
+
+形式是 90 分钟的一对一，线上就行。之后我会给你一份 6 页的书面报告。
+
+内测期免费，但有个交换条件：<em>结束之后我需要占用你 20 分钟，听你说哪些地方准、哪些地方不像、哪些话听了没感觉</em>。这部分对我比什么都重要。
+
+如果你觉得有意思，回我一个时间，我把具体安排发你。如果暂时不方便也完全没关系，不用有压力。</div>
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 B · 弱关系（久未联系 / 点头之交）<span>适合：加了微信但很少互动</span></div>
+    <div class="mb">XX 你好，冒昧打扰。
+
+我在做一个新东西的内测，想找几位愿意说真话的朋友，想到了你。
+
+是一个 90 分钟的一对一，叫「决策环境设计」——<em>用四个变量说清一个人的决策环境</em>：什么空间让你清醒、什么节奏让你持久、什么能点燃你、你天然先看见什么。不是性格测试，也不做任何预测。
+
+内测只做 5 场，免费。条件是结束后给我 20 分钟的真实反馈——<em>尤其是"哪里说错了"这种，我最需要</em>。
+
+如果你有兴趣，我发详细一点的介绍给你。没兴趣直接忽略这条就好，不用回复。</div>
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 C · 极简版（朋友圈私聊 / 时间紧）<span>适合：快速试探</span></div>
+    <div class="mb">XX，我在做一个 90 分钟的一对一内测，叫「决策环境设计」——用四个变量说清一个人的决策环境（空间、节奏、驱动、视角）。
+
+只做 5 场，免费，条件是结束后给我 20 分钟真实反馈，越批评越好。
+
+有没有兴趣？有的话我发介绍给你。</div>
+  </div>
+
+  <div class="note">
+    <span class="h">发送节奏</span>
+    不要一次群发 5 个。<strong>先发 2 个，看回复情况和反馈质量，调整话术后再发下一批。</strong><br>
+    如果前 2 个都没回，说明文案有问题——通常是「为什么找他」那一段太泛，改具体了再发。
+  </div>
+</section>
+
+<!-- 03 朋友圈 -->
+<section id="s3">
+  <span class="sec-no">SECTION 03</span>
+  <h2>朋友圈版</h2>
+
+  <div class="tip">朋友圈的钩子要够短。不要解释原理，只抛一个问题让人对号入座——<strong>评论区和私信来的，才是精准的</strong>。</div>
+
+  <div class="msg">
+    <div class="mh">版本 A · 提问式（转化最好）<span>适合：广撒网，等私信</span></div>
+    <div class="mb">你有没有过这种感觉——
+
+同样的工作量，在有的地方做特别顺，换个地方就怎么都进不了状态。
+
+大多数人会归结为「状态不好」。但观察久了会发现，有些人就是需要在有人的地方才转得动，有些人必须关起门来才能想清楚。
+
+这不是习惯问题，是可以被说清楚的。
+
+我最近在做一个 90 分钟的一对一，叫「决策环境设计」，看四个东西：你在什么空间最清明、什么节奏最持久、什么能点燃你、你天然先看见什么。
+
+内测 5 场，免费，条件是结束后给我 20 分钟真实反馈——越批评越好。
+
+有兴趣的私信我。</div>
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 B · 个人视角式（更真实）<span>适合：偏熟人圈</span></div>
+    <div class="mb">最近在打磨一个新的服务，想找 5 个人试。
+
+起因是我发现，很多人花大力气改自己的性格，但真正卡住的往往是更表面的东西——比如工位放错了、会议排错了、被放在了一个跟自己驱动方式相反的位置上。
+
+这个 90 分钟的一对一，就是专门看这四件事。
+
+内测免费，但我要的回报是真实反馈，尤其欢迎「这段说得不对」这种。
+
+想试试的私信我，我把完整介绍发你。</div>
+  </div>
+</section>
+
+<!-- 04 老客户群发 -->
+<section id="s4">
+  <span class="sec-no">SECTION 04</span>
+  <h2>老客户群发版</h2>
+
+  <div class="tip">老客户的优势是<strong>已有信任</strong>，不用从零建立。话术可以更直接，重点讲"这是我新增的一个层次"，而不是"我做了个新东西"。</div>
+
+  <div class="msg">
+    <div class="mh">版本 A · 给已有解读客户<span>适合：做过基础解读、知道自己的类型</span></div>
+    <div class="mb">XX 你好，
+
+你之前做过基础解读，知道自己的类型和内在权威。最近我在原有基础上加了一个更深的层次，想找几位老客户先试。
+
+叫「决策环境设计」，看的是四个变量：环境、节奏、驱动、视角。
+
+这么说吧——<em>类型告诉你"怎么决策"，这四个变量告诉你"在什么条件下，你的决策质量最高"</em>。是微调层，但因为可以直接调（换个工位、改个会议节奏），见效反而更快。
+
+90 分钟一对一 + 6 页报告。内测期免费，只做 5 场。
+
+条件是结束后给我 20 分钟反馈——哪些准、哪些不像，直接说。
+
+要不要试一场？</div>
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 B · 给课程学员<span>适合：上过你的课、有基础</span></div>
+    <div class="mb">XX，
+
+课程内容之外，我最近在做一个 90 分钟的一对一，想找 5 位学员内测。
+
+它解决的是课程里讲不到的一层：<em>同样的策略，为什么你在某些环境下用得出来、换个环境就失灵</em>。
+
+具体看四个变量——你在什么空间最清明、什么节奏最持久、什么能点燃你、你天然先看见什么。
+
+内测免费，条件是给我 20 分钟真实反馈。
+
+有兴趣的话回我，我把介绍发你。</div>
+  </div>
+</section>
+
+<!-- 05 社群 -->
+<section id="s5">
+  <span class="sec-no">SECTION 05</span>
+  <h2>社群版</h2>
+
+  <div class="note warn">
+    <span class="h">社群邀约的两个纪律</span>
+    <strong>① 先问群主。</strong>未经允许在别人的群里发招募，是社交资产的自杀行为。<br>
+    <strong>② 给群的价值 > 你要的价值。</strong>最好先抛一个免费的观察角度，再提内测——直接发招募容易被当成广告。
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 A · 先给后取（推荐）<span>适合：专业群 / 创业者群</span></div>
+    <div class="mb">分享一个我这阵子观察到的现象，可能对你有用：
+
+很多人觉得自己"状态不好"，但其实不是状态问题，是环境问题。
+
+我见过两类人——一类必须在有人的地方才转得动，关起门来就枯竭；另一类完全相反，开放工位对他们就是慢性消耗。
+
+这两类人互相觉得对方"不正常"，其实只是设计不同。
+
+判断方法很简单：<em>回想你做出的最好的那几个决策，当时你人在哪里</em>。答案通常很一致。
+
+——顺便说一句，我最近在做一个 90 分钟的一对一，专门看这个（空间、节奏、驱动、视角四个变量）。内测 5 场，免费，条件是给我 20 分钟真实反馈。有兴趣的私我。</div>
+  </div>
+
+  <div class="msg">
+    <div class="mh">版本 B · 直接版<span>适合：自己的群 / 已获群主同意</span></div>
+    <div class="mb">招募 5 位内测。
+
+我在做一个 90 分钟的一对一，叫「决策环境设计」——用四个变量说清一个人的决策环境：什么空间让你清醒、什么节奏让你持久、什么能点燃你、你天然先看见什么。
+
+不做性格分析，不做预测，只看四个可以被验证的变量。
+
+内测免费。我要的回报是 20 分钟真实反馈，越批评越好。
+
+想试的扣 1 或者私我。</div>
+  </div>
+</section>
+
+<!-- 06 反馈表 -->
+<section id="s6">
+  <span class="sec-no">SECTION 06</span>
+  <h2>反馈收集表</h2>
+
+  <div class="note">
+    <span class="h">提问的关键：不要问「好不好」</span>
+    「你觉得怎么样」这类问题只能得到「挺好的」。<strong>要问具体的、有画面的问题</strong>，让对方不得不给出细节。
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">会后 20 分钟 · 必问的 6 个问题</h3>
+    <div class="frow">
+      <div class="fno">1</div>
+      <div class="fbody">
+        <div class="ft">刚才说的四个变量里，哪一个你觉得最准？</div>
+        <div class="fd">（这是最重要的一问。客户主动挑出来的那一项，就是你的主打卖点。）</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">2</div>
+      <div class="fbody">
+        <div class="ft">哪一个你听完觉得「不太像我」？</div>
+        <div class="fd">（不要辩护。追问是哪一部分，记录下来。可能是时间误差，也可能是你的例子不贴他的行业。）</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">3</div>
+      <div class="fbody">
+        <div class="ft">有没有哪一句话，你听完觉得「被说中了」？</div>
+        <div class="fd">（让客户复述原话。<strong>那些原话就是你的金句，要一字不改地记下来。</strong>）</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">4</div>
+      <div class="fbody">
+        <div class="ft">有没有哪一段，你觉得我在讲术语、你没听懂？</div>
+        <div class="fd">（定位话术的黑洞。客户听不懂的地方，往往是你自己觉得讲得很清楚的地方。）</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">5</div>
+      <div class="fbody">
+        <div class="ft">90 分钟，你感觉哪一段拖了、哪一段还想多听？</div>
+        <div class="fd">（直接得到时长分配的调整依据。）</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">6</div>
+      <div class="fbody">
+        <div class="ft">如果这个是收费的，你心里觉得它值多少？</div>
+        <div class="fd">（<strong>不要给选项，让他说数字。</strong>这是最真实的定价调研，比任何市场分析都准。）</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>会中实时记录（自己填）</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:100px">记录项</th><th>记什么</th></tr></thead>
+      <tbody>
+        <tr><td><b>亮眼时刻</b></td><td>客户在哪一句有明显反应（身体前倾、停顿、"对"、笑）——<strong>记下你说的前一句话</strong></td></tr>
+        <tr><td><b>困惑时刻</b></td><td>客户在哪一句皱眉、反问、或转移话题</td></tr>
+        <tr><td><b>自发讲述</b></td><td>客户主动举了什么例子——<strong>这些例子可以直接变成下次的话术素材</strong></td></tr>
+        <tr><td><b>超时段落</b></td><td>哪一段花了超预期的时间</td></tr>
+        <tr><td><b>B 端信号</b></td><td>客户是否问了「那我团队呢」「能用在公司里吗」——<strong>这是 B1/B3 的需求信号，务必记</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">5 场之后你会得到什么</span>
+    一张表：<strong>被说中最多的一句话、最准的变量、最容易困惑的段落、客户心里的价格区间</strong>。<br>
+    这张表比任何市场报告都值钱——因为它是<strong>你的客户、你的行业、你的表达方式</strong>下产生的真实数据。
+  </div>
+</section>
+
+<!-- 07 拒绝 -->
+<section id="s7">
+  <span class="sec-no">SECTION 07</span>
+  <h2>拒绝应对</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:130px">对方说</th><th>怎么回</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>「最近太忙了」</b></td>
+          <td>完全理解，这个确实要留出完整的 90 分钟。我这边 5 场内测会做到 X 月底，如果后面有时间随时找我。<br><strong>（不给压力，但给了时间边界，保留稀缺感）</strong></td>
+        </tr>
+        <tr>
+          <td><b>「这是算命吗」</b></td>
+          <td>不是。它不预测任何事，只看四个可以被验证的变量——我给的建议您这周就能试，两周就知道对不对。<br><strong>（关键在"可验证"三个字，不要解释体系）</strong></td>
+        </tr>
+        <tr>
+          <td><b>「我对这些不太信」</b></td>
+          <td>其实我建议您带着怀疑来——<strong>内测我最需要的就是不信的人</strong>，您会比我那些信任我的客户更能挑出毛病。<br><strong>（把怀疑变成参与的资格，这招对理性型客户特别有效）</strong></td>
+        </tr>
+        <tr>
+          <td><b>「我时间记不清了」</b></td>
+          <td>那我们先把能确定的部分做完，涉及不确定项我会明确标注。回头如果查到出生证明，我再给您补一份修订。<br><strong>（诚实，且展示专业度。不要说"大概就行"）</strong></td>
+        </tr>
+        <tr>
+          <td><b>已读不回</b></td>
+          <td><strong>不要追。</strong>一次就够。内测名额有限，不追反而是姿态。如果一周后没回，可以发一条朋友圈让对方看到进展。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 08 之后 -->
+<section id="s8">
+  <span class="sec-no">SECTION 08</span>
+  <h2>5 场之后：怎么过渡到收费</h2>
+
+  <div class="flow">
+    <div class="frow">
+      <div class="fno">1</div>
+      <div class="fbody">
+        <div class="ft">整理反馈，改话术</div>
+        <div class="fd">把 5 场记录汇总成一张表：金句、黑洞、时长、价格区间。<strong>用这些改一遍讲义里的话术</strong>，尤其是客户没听懂的部分。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">2</div>
+      <div class="fbody">
+        <div class="ft">第 6 场开始收费，起步 ¥2,800</div>
+        <div class="fd">不要一步跳到 ¥4,800。<strong>先有付费验证，再提价</strong>——哪怕只有 ¥2,800，付了钱的客户反馈也比免费的真实得多。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">3</div>
+      <div class="fbody">
+        <div class="ft">做满 10 场，调到 ¥4,800</div>
+        <div class="fd">此时你手上已有 10 个案例、10 份报告、一套打磨过的表达。<strong>这个价格配得上这个积累</strong>，也配得上对外宣传。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">4</div>
+      <div class="fbody">
+        <div class="ft">同步启动 B1 / B3</div>
+        <div class="fd">如果 5 场里有 <strong>2 场以上</strong>客户问到「团队能不能用」，这就是明确信号——B1 工作坊与 B3 工具可以开始准备了。<br><strong>需求是被验证出来的，不是被规划出来的。</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note ok">
+    <span class="h">最后一个提醒</span>
+    前 5 场最难的不是讲，是<strong>忍住不要推销</strong>。<br>
+    很多人在免费场次里急于展示价值、铺垫转化，结果客户感觉被销售，反馈也就不真实了。<br>
+    <strong>这 5 场只做一件事：把话说对。</strong>转化是话说对之后的自然结果。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 冷启动邀约话术包 · 5 场免费会话</div>
+  <div>配套 B2 产品开发手册、四变量深度讲义、B3 技术方案 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

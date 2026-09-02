@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>M5 团队变量地图画布</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+  --quiet:#4A3B7A; --center:#A8752E; --edge:#4A7C59;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 72px}
+header{background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:30px 20px 22px;text-align:center;border-bottom:3px solid var(--main)}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 8px;font-weight:600}
+header h1{font-size:21px;line-height:1.45;margin:0 12px;color:#FBEFDC;font-weight:700}
+header .sub{font-size:13px;color:#EADFCD;max-width:58ch;margin:9px auto 0;line-height:1.7;font-style:italic}
+header .meta{margin-top:12px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center}
+section{margin:30px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--gold);
+  background:#F0E4D2;border:1px solid var(--border);border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;margin:0 0 12px;color:var(--deep);font-weight:700;border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:14.5px;margin:18px 0 8px;color:var(--deep);font-weight:700}
+h4{font-size:13px;margin:12px 0 5px;color:var(--gold);font-weight:700}
+p{margin:0 0 11px}
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;padding:11px 14px;margin:12px 0;font-size:13px;line-height:1.7}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.tip{border-left-color:var(--tip);background:#F1ECF8}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:4px;font-size:13.5px}
+.panel{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:15px;margin:14px 0}
+.form-row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:10px}
+.form-row input,.form-row select{font-size:13px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--ink);min-width:0}
+.form-row input.name{flex:1;min-width:120px}
+.form-row select{min-width:96px}
+.btn{font-size:13px;font-weight:700;padding:7px 14px;border-radius:8px;border:1px solid var(--main);
+  background:var(--main);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--gold)}
+.btn:hover{opacity:.9}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12.5px}
+td{padding:8px 10px;border-bottom:1px solid #F0E7D8;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;font-weight:700;border:1px solid transparent}
+.tag.q{background:#EDE7F6;color:var(--quiet);border-color:#CFC3E8}
+.tag.c{background:#F3E3CC;color:var(--center);border-color:#E2C79A}
+.tag.e{background:#E0F0E6;color:var(--edge);border-color:#B6DCC2}
+.tag.del{background:#FBEAE7;color:var(--risk);border-color:#E9C2BC;cursor:pointer;margin-left:4px}
+.stat{margin:14px 0}
+.stat h4{margin-bottom:6px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12.5px}
+.bar .lab{width:62px;flex:none;color:var(--muted)}
+.bar .track{flex:1;height:14px;background:#F0E7D8;border-radius:7px;overflow:hidden}
+.bar .fill{height:100%;background:var(--main);border-radius:7px}
+.bar .num{width:26px;flex:none;text-align:right;color:var(--deep);font-weight:700}
+canvas,.mapwrap{width:100%}
+.mapwrap svg{width:100%;height:auto;display:block}
+.insight{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin:12px 0}
+.card{border:1px solid var(--border);border-radius:10px;padding:12px 13px;background:var(--panel);font-size:13px;line-height:1.7}
+.card b{color:var(--deep)}
+.card.q{border-left:3px solid var(--quiet)}
+.card.c{border-left:3px solid var(--center)}
+.card.e{border-left:3px solid var(--edge)}
+.card.risk{border-left:3px solid var(--risk);background:#FBEFED}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+a{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.form-row input.name{min-width:100%}.bar .lab{width:54px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">M5 · WORKSHOP CANVAS</p>
+  <h1>团队变量地图画布<br>Team Variable Map</h1>
+  <p class="sub">把四位高管的 Variables 四变量拼成「团队怎么决策」的全图——看谁在中心、谁在边缘、谁需要安静</p>
+  <div class="meta">
+    <span id="mVer"></span>
+    <span id="mDate"></span>
+    <span>配套《高管变量深度解读》M5 整合模块</span>
+  </div>
+</header>
+
+<section>
+  <span class="sec-no">HOW TO USE</span>
+  <h2>怎么用这张画布</h2>
+  <div class="note tip">
+    <span class="h">匿名优先</span>
+    首次绘制建议用代号（A 总 / B 总）而非真名，降低防御；在「看分布」阶段人人平等。环境决定物理空间、摄食决定信息节奏、动机决定激励话术、视角决定沟通与决策盲区——四层叠加，就是团队的「决策操作系统」。
+  </div>
+  <ol>
+    <li>在下方录入每位成员的四变量（环境 / 摄食节奏 / 动机 / 视角）。</li>
+    <li>画布自动把成员按「环境六类」集群到对应区域，并标出安静区 / 中心区 / 边缘区。</li>
+    <li>下方统计与洞察卡给出：谁需要安静、团队主驱动、决策盲区（缺哪类视角）。</li>
+    <li>导出结论用于 M5「团队变量分布图」交付，或带入 M6 做 B 端诊断。</li>
+  </ol>
+  <div class="form-row">
+    <button class="btn ghost" id="demoBtn">载入示例团队</button>
+    <button class="btn ghost" id="clearBtn">清空</button>
+  </div>
+</section>
+
+<section>
+  <span class="sec-no">INPUT</span>
+  <h2>① 成员录入</h2>
+  <div class="panel">
+    <div class="form-row">
+      <input class="name" id="mName" placeholder="姓名 / 代号">
+      <select id="mEnv">
+        <option value="洞穴">环境·洞穴</option>
+        <option value="市场">环境·市场</option>
+        <option value="厨房">环境·厨房</option>
+        <option value="山脉">环境·山脉</option>
+        <option value="山谷">环境·山谷</option>
+        <option value="海岸">环境·海岸</option>
+      </select>
+      <select id="mDet">
+        <option value="连续">摄食·连续型</option>
+        <option value="交替">摄食·交替型</option>
+      </select>
+      <select id="mMot">
+        <option value="恐惧">动机·恐惧</option>
+        <option value="希望">动机·希望</option>
+        <option value="欲望">动机·欲望</option>
+        <option value="需求">动机·需求</option>
+        <option value="内疚">动机·内疚</option>
+        <option value="纯真">动机·纯真</option>
+      </select>
+      <select id="mPer">
+        <option value="生存">视角·生存</option>
+        <option value="可能性">视角·可能性</option>
+        <option value="力量">视角·力量</option>
+        <option value="渴望">视角·渴望</option>
+        <option value="概率">视角·概率</option>
+        <option value="个人">视角·个人</option>
+      </select>
+      <button class="btn" id="addBtn">添加成员</button>
+    </div>
+    <table id="memTbl">
+      <thead><tr><th>成员</th><th>环境</th><th>摄食</th><th>动机</th><th>视角</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <span class="sec-no">CANVAS</span>
+  <h2>② 环境六区画布</h2>
+  <div class="note">
+    <span class="h">读图说明</span>
+    <span class="tag q">洞穴 / 山脉</span> 需安静、可控空间（封闭+高处视野）；
+    <span class="tag c">市场 / 厨房</span> 在信息与人流中心（转化发生地）；
+    <span class="tag e">山谷 / 海岸</span> 在边缘与过渡带（环抱 / 过渡）。成员按自身环境落入对应区。
+  </div>
+  <div class="panel mapwrap" id="mapWrap"></div>
+</section>
+
+<section>
+  <span class="sec-no">STATS</span>
+  <h2>③ 四变量分布统计</h2>
+  <div class="stat" id="statEnv"><h4>环境分布</h4></div>
+  <div class="stat" id="statDet"><h4>摄食节奏分布</h4></div>
+  <div class="stat" id="statMot"><h4>动机分布</h4></div>
+  <div class="stat" id="statPer"><h4>视角分布</h4></div>
+</section>
+
+<section>
+  <span class="sec-no">INSIGHT</span>
+  <h2>④ 自动洞察</h2>
+  <div class="insight" id="insightBox"></div>
+  <div class="note warn">
+    <span class="h">合规提醒</span>
+    动机 / 视角是心智变量，本画布只做「看见与分布」，不评判优劣、不给「应该改」。环境 / 摄食是身体变量，可据分布直接调整物理空间与信息节奏。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 团队变量地图画布 · 《高管变量深度解读》M5 专属物料</div>
+  <div>配套：cube-course-exec-variable.html（课程蓝图）· <span id="fDate"></span></div>
+  <div style="margin-top:6px;font-size:12px;color:var(--muted)">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+
+<script>
+var VERSION="V1";
+var BUILT="2026-09-03";
+function setText(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+setText("mVer","版本 "+VERSION);setText("mDate","编制 "+BUILT);setText("fVer",VERSION);setText("fDate",BUILT);
+
+var ZONES=[
+  {key:"洞穴",type:"quiet",desc:"封闭可控"},
+  {key:"市场",type:"center",desc:"人流信息流"},
+  {key:"厨房",type:"center",desc:"转化中心"},
+  {key:"山脉",type:"quiet",desc:"高处视野"},
+  {key:"山谷",type:"edge",desc:"环抱有声响"},
+  {key:"海岸",type:"edge",desc:"过渡边缘"}
+];
+var MOT_NOTE={恐惧:"被误读型·先否认再定义",希望:"被误读型·先否认再定义",欲望:"行动驱动·给战场别围栏",
+  需求:"被误读型·先否认再定义",内疚:"被误读型·先否认再定义",纯真:"意义驱动·先接住意义"};
+var members=[];
+var seq=0;
+
+function addMember(name,env,det,mot,per){
+  members.push({id:++seq,name:name||("成员"+(members.length+1)),env:env,det:det,mot:mot,per:per});
+  render();
+}
+function delMember(id){members=members.filter(m=>m.id!==id);render();}
+
+function render(){
+  // table
+  var tb=document.querySelector("#memTbl tbody");tb.innerHTML="";
+  members.forEach(function(m){
+    var tr=document.createElement("tr");
+    var zt=ZONES.find(z=>z.key===m.env).type;
+    var zcls=zt==="quiet"?"q":zt==="center"?"c":"e";
+    tr.innerHTML="<td><b>"+esc(m.name)+"</b></td>"+
+      "<td><span class='tag "+zcls+"'>"+m.env+"</span></td>"+
+      "<td>"+m.det+"</td><td>"+m.mot+"</td><td>"+m.per+"</td>"+
+      "<td><span class='tag del' data-id='"+m.id+"'>✕</span></td>";
+    tb.appendChild(tr);
+  });
+  document.querySelectorAll(".tag.del").forEach(function(el){
+    el.onclick=function(){delMember(parseInt(el.getAttribute("data-id")));};
+  });
+  renderMap();renderStats();renderInsight();
+}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+function renderMap(){
+  var W=680,H=440,cx=340,cy=220,R=150,zr=72;
+  var svg="<svg viewBox='0 0 "+W+" "+H+"' role='img' aria-label='团队环境变量地图'>";
+  // center hub
+  svg+="<circle cx='"+cx+"' cy='"+cy+"' r='34' fill='#F0E4D2' stroke='"+cssVar('--main')+"' stroke-width='1.5'/>";
+  svg+="<text x='"+cx+"' y='"+(cy-2)+"' text-anchor='middle' font-size='12' fill='"+cssVar('--deep')+"' font-weight='700'>团队</text>";
+  svg+="<text x='"+cx+"' y='"+(cy+13)+"' text-anchor='middle' font-size='10' fill='"+cssVar('--muted')+"'>核心</text>";
+  ZONES.forEach(function(z,i){
+    var ang=(-90+i*60)*Math.PI/180;
+    var x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+    var col=ztColor(z.type);
+    svg+="<line x1='"+cx+"' y1='"+cy+"' x2='"+x+"' y2='"+y+"' stroke='"+col+"' stroke-width='1' stroke-dasharray='3 4' opacity='0.5'/>";
+    svg+="<circle cx='"+x+"' cy='"+y+"' r='"+zr+"' fill='"+col+"' fill-opacity='0.10' stroke='"+col+"' stroke-width='1.5'/>";
+    svg+="<text x='"+x+"' y='"+(y-zr+16)+"' text-anchor='middle' font-size='13' font-weight='700' fill='"+col+"'>"+z.key+"</text>";
+    svg+="<text x='"+x+"' y='"+(y-zr+30)+"' text-anchor='middle' font-size='9.5' fill='"+cssVar('--muted')+"'>"+z.desc+"</text>";
+    // members in zone
+    var inZone=members.filter(m=>m.env===z.key);
+    inZone.forEach(function(m,k){
+      var cols=3, gx=22, gy=22;
+      var cc=(k%cols), cr=Math.floor(k/cols);
+      var dx=x+(cc-(cols-1)/2)*gx, dy=y+8+cr*gy;
+      svg+="<circle cx='"+dx+"' cy='"+dy+"' r='9' fill='"+col+"'/>";
+      svg+="<text x='"+dx+"' y='"+(dy+3.5)+"' text-anchor='middle' font-size='9' fill='#fff' font-weight='700'>"+esc((m.name||"·").slice(0,1))+"</text>";
+    });
+    if(inZone.length===0){
+      svg+="<text x='"+x+"' y='"+(y+4)+"' text-anchor='middle' font-size='10' fill='"+cssVar('--muted')+"' opacity='0.6'>空</text>";
+    }
+  });
+  svg+="</svg>";
+  document.getElementById("mapWrap").innerHTML=svg;
+}
+function ztColor(t){return t==="quiet"?cssVar('--quiet'):t==="center"?cssVar('--center'):cssVar('--edge');}
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+
+function count(arr,key){var m={};arr.forEach(function(x){var v=x[key];m[v]=(m[v]||0)+1;});return m;}
+function barBlock(elId,labels,data){
+  var box=document.getElementById(elId);
+  var title=box.querySelector("h4").outerHTML;
+  var max=Math.max(1,Math.max.apply(null,data.map(function(d){return d.v;})));
+  var html=title;
+  data.forEach(function(d){
+    var pct=Math.round(d.v/max*100);
+    var bg=d.cls?("background:"+cssVar(d.cls)+";"):"";
+    html+="<div class='bar'><span class='lab'>"+d.k+"</span><span class='track'><span class='fill' style='"+bg+"width:"+pct+"%'></span></span><span class='num'>"+d.v+"</span></div>";
+  });
+  box.innerHTML=html;
+}
+function renderStats(){
+  var envC=count(members,"env");
+  var envData=ZONES.map(function(z){var t=z.type;return {k:z.key,v:envC[z.key]||0,cls:t==="quiet"?"--quiet":t==="center"?"--center":"--edge"};});
+  barBlock("statEnv",null,envData);
+  var detC=count(members,"det");
+  barBlock("statDet",null,[{k:"连续型",v:detC["连续"]||0,cls:"--main"},{k:"交替型",v:detC["交替"]||0,cls:"--main"}]);
+  var mots=["恐惧","希望","欲望","需求","内疚","纯真"];
+  barBlock("statMot",null,mots.map(function(k){return {k:k,v:count(members,"mot")[k]||0,cls:"--tip"};}));
+  var pers=["生存","可能性","力量","渴望","概率","个人"];
+  barBlock("statPer",null,pers.map(function(k){return {k:k,v:count(members,"per")[k]||0,cls:"--tip"};}));
+}
+
+function renderInsight(){
+  var box=document.getElementById("insightBox");box.innerHTML="";
+  if(members.length===0){box.innerHTML="<div class='card'>录入成员后，这里会自动生成团队洞察。</div>";return;}
+  var cards=[];
+  // environment
+  var envC=count(members,"env");
+  var quiet=(envC["洞穴"]||0)+(envC["山脉"]||0);
+  var center=(envC["市场"]||0)+(envC["厨房"]||0);
+  var edge=(envC["山谷"]||0)+(envC["海岸"]||0);
+  cards.push({cls:"q",h:"安静需求",b:quiet+" 人属洞穴 / 山脉，需要封闭或高处视野的安静区。会议排位把 TA 们放靠窗 / 靠角落，别塞进开放工区核心。"});
+  cards.push({cls:"c",h:"中心活跃",b:center+" 人属市场 / 厨房，在信息与人流中心最能转化。把协同、共创类工作交给 TA 们，但注意别让 TA 们替安静型挡掉专注时间。"});
+  cards.push({cls:"e",h:"边缘过渡",b:edge+" 人属山谷 / 海岸，在过渡带最稳（环抱 / 边缘）。TA 们适合做接口、缓冲、跨团队联络角色。"});
+  // motivation
+  var motC=count(members,"mot");
+  var topMot=Object.keys(motC).sort(function(a,b){return motC[b]-motC[a];})[0];
+  var misread=["恐惧","希望","需求","内疚"].filter(function(k){return motC[k];});
+  cards.push({cls:"c",h:"团队主驱动",b:"动机以「"+topMot+"」为主（"+MOT_NOTE[topMot]+"）。激励话术优先贴合这一驱动，而非统一用 KPI。"});
+  if(misread.length){
+    cards.push({cls:"risk",h:"被误读型动机",b:misread.join("、")+" 属「先否认再定义」型——激励前先替 TA 们挡掉误解（如「恐惧不是怯懦，是雷达」），再给点燃句。"});
+  }
+  // perspective gap
+  var perC=count(members,"per");
+  var allPer=["生存","可能性","力量","渴望","概率","个人"];
+  var missing=allPer.filter(function(k){return !perC[k];});
+  var topPer=Object.keys(perC).sort(function(a,b){return perC[b]-perC[a];})[0];
+  cards.push({cls:"c",h:"沟通主视角",b:"决策视角以「"+topPer+"」为主。沟通与汇报默认对齐此视角，能减少反复拉扯。"});
+  if(missing.length){
+    cards.push({cls:"risk",h:"决策盲区",b:"团队缺 "+missing.join("、")+" 视角——这是天然盲区。重大决策前刻意引入该视角的人，或设一道「反向校验」流程。"});
+  } else {
+    cards.push({cls:"ok",h:"视角完整",b:"六种视角齐全，团队认知频谱较完整；仍需注意某人滑向自身错位项时的校准。"});
+  }
+  // determination rhythm
+  var detC=count(members,"det");
+  var dCon=detC["连续"]||0,dAlt=detC["交替"]||0;
+  cards.push({cls:"q",h:"信息节奏",b:"连续型 "+dCon+" 人 / 交替型 "+dAlt+" 人。连续型留整块时间、别碎片化；交替型拆小股、变节奏。周会节奏按此分流。"});
+  cards.forEach(function(c){
+    var d=document.createElement("div");d.className="card "+(c.cls==="ok"?"ok":c.cls==="risk"?"risk":c.cls);
+    d.innerHTML="<b>"+c.h+"</b><br>"+c.b;box.appendChild(d);
+  });
+}
+
+document.getElementById("addBtn").onclick=function(){
+  addMember(document.getElementById("mName").value.trim(),
+    document.getElementById("mEnv").value,document.getElementById("mDet").value,
+    document.getElementById("mMot").value,document.getElementById("mPer").value);
+  document.getElementById("mName").value="";
+};
+document.getElementById("clearBtn").onclick=function(){members=[];seq=0;render();};
+document.getElementById("demoBtn").onclick=function(){
+  members=[];seq=0;
+  [["A总","山脉","交替","欲望","力量"],["B总","洞穴","连续","希望","概率"],
+   ["C总","市场","交替","需求","生存"],["D总","厨房","连续","纯真","个人"],
+   ["E总","海岸","交替","恐惧","可能性"],["F总","山谷","连续","内疚","渴望"]].forEach(function(r){addMember(r[0],r[1],r[2],r[3],r[4]);});
+};
+render();
+</script>
+</body>
+</html>

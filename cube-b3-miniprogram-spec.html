@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>B3 变量计算器 · 小程序技术方案</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --code:#3A2F5E;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:24px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+.panel.tight{padding:13px 15px}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+td.c{text-align:center;white-space:nowrap}
+th.c{text-align:center}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th.num{text-align:right}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.chip.mid{background:#FBEBCF;color:#8A5A12;border-color:#EBD3A0}
+.chip.lo{background:#F8DED9;color:#8A3228;border-color:#E9BEB5}
+.chip.p1{background:#F0E4D2;color:#6B5844;border-color:#E8DCC8}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+pre{background:#2A2118;color:#E8DCC8;border-radius:10px;padding:13px 15px;
+  overflow-x:auto;font-size:12.5px;line-height:1.7;margin:12px 0;
+  font-family:"SF Mono",Consolas,"Courier New",monospace;-webkit-overflow-scrolling:touch}
+pre b{color:#F0C88A;font-weight:700}
+pre i{color:#9FB8A0;font-style:normal}
+
+.flow{margin:14px 0}
+.frow{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px dashed var(--border)}
+.frow:last-child{border-bottom:none}
+.fno{flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#2D2118;
+  font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fbody{flex:1}
+.fbody .ft{font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:3px;line-height:1.55}
+.fbody .fd{font-size:13px;line-height:1.72;color:var(--muted)}
+
+.gantt{margin:14px 0}
+.grow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.glabel{flex:0 0 108px;font-size:12.5px;color:var(--ink);font-weight:600;line-height:1.5}
+.gtrack{flex:1;background:#EFE6D6;border-radius:6px;height:24px;overflow:hidden;position:relative}
+.gfill{height:100%;background:linear-gradient(90deg,#C4956A,#A8752E);border-radius:6px;
+  display:flex;align-items:center;padding-left:9px;color:#fff;font-size:12px;font-weight:700}
+.gnote{flex:0 0 92px;font-size:12px;color:var(--muted);text-align:right}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">TECH SPEC · STEP 2</p>
+  <h1 id="h1">B3 变量计算器<br>小程序技术方案</h1>
+  <p class="lead">在现有人类图小程序内新增「四变量」模块的完整技术设计：计算链路、数据模型、页面结构与开发排期</p>
+  <p class="sub">——把 B2 的单次服务，变成可复用、可传播、可沉淀数据的工具资产。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>技术栈：微信小程序 + 云开发</span>
+  </div>
+</header>
+
+<!-- 00 定位 -->
+<section>
+  <span class="sec-no">OVERVIEW</span>
+  <h2>它解决什么问题</h2>
+
+  <div class="note">
+    <span class="h">一句话定位</span>
+    B3 不是"又一个测试小程序"，而是<strong>B2 服务的三个杠杆</strong>：<br>
+    <strong>① 获客杠杆</strong>——免费算变量 → 付费约解读<br>
+    <strong>② 交付杠杆</strong>——会前让客户先自测，会话直接从洞察开始，不用从普及开始<br>
+    <strong>③ 壁垒杠杆</strong>——市面上中文的变量计算工具极少，做到位就是差异化
+  </div>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">为什么现在做</p>
+      <p class="d">B2 做到一定量级，客户一定会问「<b>那我团队呢</b>」。这句话就是 B3 的需求信号，也是通往 B 端大单的桥。</p>
+    </div>
+    <div class="card">
+      <p class="t">为什么不做独立小程序</p>
+      <p class="d">你已有云开发小程序。<b>加模块，不新建</b>——复用登录、用户池与支付链路，成本最低。</p>
+    </div>
+    <div class="card">
+      <p class="t">最小可行范围</p>
+      <p class="d">只做<b>四变量计算 + 详解 + 分享</b>。不做全盘解读、不做合盘、不做流年——那些是已有能力或后续迭代。</p>
+    </div>
+    <div class="card">
+      <p class="t">一句话价值</p>
+      <p class="d">让客户在见你之前就<b>先被自己的变量击中一次</b>，会话转化率与满意度都会明显不同。</p>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#s1">计算链路（核心）</a></li>
+      <li><a href="#s2">数据模型</a></li>
+      <li><a href="#s3">云函数设计</a></li>
+      <li><a href="#s4">页面结构与流程</a></li>
+      <li><a href="#s5">内容层设计</a></li>
+      <li><a href="#s6">开发排期与工作量</a></li>
+      <li><a href="#s7">风险与对策</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 01 计算链路 -->
+<section id="s1">
+  <span class="sec-no">SECTION 01</span>
+  <h2>计算链路：这是全方案的技术核心</h2>
+
+  <p>变量的精度要求远高于类型与通道——<strong>要算到 Color 与 Tone 层</strong>。理解这条链路，才能判断开发难度与风险。</p>
+
+  <h3>1.1 从黄道到 Tone 的四层细分</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:80px">层级</th><th class="num">每份跨度</th><th class="num">总数</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>闸门 Gate</b></td><td class="num">5.625°</td><td class="num">64</td><td>360° ÷ 64，对应易经 64 卦</td></tr>
+        <tr><td><b>爻 Line</b></td><td class="num">0.9375°</td><td class="num">384</td><td>每闸门 6 爻，即 384 爻</td></tr>
+        <tr><td><b>色调 Color</b></td><td class="num">0.15625°</td><td class="num">2,304</td><td>每爻 6 分 → <b>决定六项分类</b></td></tr>
+        <tr><td><b>音调 Tone</b></td><td class="num">0.026°</td><td class="num">13,824</td><td>每 Color 再 6 分 → <b>决定箭头方向与细项</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note warn">
+    <span class="h">精度要求的实际含义</span>
+    Tone 层跨度仅 <strong>0.026°</strong>（约 1.6 角分）。这意味着行星位置的计算误差必须<strong>远小于此</strong>，否则 Tone 会判错。<br>
+    好消息：现代星历（如 Swiss Ephemeris）的精度在 <strong>0.001 角秒量级</strong>，比需求高出四个数量级，完全够用。<br>
+    <strong>真正的风险不在算法，而在于：① 用了精度不足的近似公式 ② 时区与夏令时处理错误。</strong>
+  </div>
+
+  <h3>1.2 完整计算步骤</h3>
+  <div class="flow">
+    <div class="frow">
+      <div class="fno">1</div>
+      <div class="fbody">
+        <div class="ft">出生数据归一化</div>
+        <div class="fd">出生年月日 + <strong>精确到分钟的时间</strong> + 出生地 → 转 UTC 时刻 + 经纬度。<strong>时区与历史夏令时是本步最大的坑</strong>，必须用可靠的时区数据库。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">2</div>
+      <div class="fbody">
+        <div class="ft">求 Design 时刻</div>
+        <div class="fd">找出太阳黄道位置比出生时刻<strong>提前 88°</strong> 的那个时刻（约在出生前 88 天）。需迭代求解——太阳移动速度不均匀，不能简单按 88 天推算。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">3</div>
+      <div class="fbody">
+        <div class="ft">计算两组的行星位置</div>
+        <div class="fd">分别计算 <strong>Personality 时刻（出生时）</strong>与 <strong>Design 时刻</strong>的太阳与月亮南北交点位置。<strong>变量只用到 Sun 与 Node，不涉及其余行星</strong>——这是好消息，计算量可控。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">4</div>
+      <div class="fbody">
+        <div class="ft">映射到闸门 / 爻 / Color / Tone</div>
+        <div class="fd">黄道经度 → 闸门序号 → 爻序号 → Color 序号 → Tone 序号。<strong>注意人类图的闸门排列不是从 0° 顺时针等分的</strong>，需要用官方的曼陀罗映射表，不能自行推算。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">5</div>
+      <div class="fbody">
+        <div class="ft">取出四个变量</div>
+        <div class="fd">按映射关系读出四个变量的值与箭头方向。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>1.3 四个变量的取值来源</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">变量</th><th style="min-width:130px">取值来源</th><th class="c">归属</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>摄食 Determination</b></td><td>Design Sun 的 Color</td><td class="c"><span class="chip p1">Design</span></td><td>决定六摄食方式</td></tr>
+        <tr><td><b>环境 Environment</b></td><td>Design North Node 的 Color</td><td class="c"><span class="chip p1">Design</span></td><td>决定六类环境</td></tr>
+        <tr><td><b>动机 Motivation</b></td><td>Personality Sun 的 Tone</td><td class="c"><span class="chip mid">Personality</span></td><td>决定六动机</td></tr>
+        <tr><td><b>视角 Perspective</b></td><td>Personality North Node 的 Tone</td><td class="c"><span class="chip mid">Personality</span></td><td>决定六视角</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note risk">
+    <span class="h">必须正视：映射关系存在实现差异</span>
+    关于「哪个变量对应哪颗星的哪一属性」，<strong>不同资料与不同软件之间存在细微差异</strong>（例如有的把动机归于 Sun 的 Color，有的归于 Tone；上下位置的图面布局各家也不一致）。<br>
+    <strong>这不是可以拍脑袋定的事——判错一个，客户当场就能听出来。</strong><br>
+    <strong>对策（必做）：</strong>开发阶段用 <strong>3–5 个已知变量的真实案例</strong>做交叉验证，比对权威软件（如 Jovian Archive 官方工具、或行业主流出图软件）的输出，<strong>四项全部对上才算通过</strong>。不要相信任何单一来源，包括本方案。
+  </div>
+
+  <h3>1.4 时间精度的量化说明</h3>
+  <p>客户常问「我的出生时间只记得大概，行不行」。这里给出可量化的回答：</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">影响对象</th><th class="num">每天移动</th><th class="num">改变 Color 需</th><th class="num">改变 Tone 需</th></tr></thead>
+      <tbody>
+        <tr><td><b>太阳</b>（约 1°/天）</td><td class="num">1°</td><td class="num">≈ 3.7 小时</td><td class="num">≈ 37 分钟</td></tr>
+        <tr><td><b>月亮交点</b>（约 0.05°/天逆行）</td><td class="num">0.05°</td><td class="num">≈ 3 天</td><td class="num">≈ 12 小时</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="h">实务结论</span>
+    变量主要由 <strong>Sun 与 Node</strong> 决定，两者移动都慢，因此变量<strong>对时间的敏感度低于通道和闸门</strong>——通常要 30 分钟以上的误差才会改变 Tone 层。<br>
+    <strong>但仍然坚持要求精确到分钟</strong>：一是行业标准做法，二是留出安全余量，三是避免客户事后质疑。<br>
+    可以在输入页加一句：<strong>「时间越准，结果越准；只记得大概也能算，但环境一项可能有偏差。」</strong>——诚实，且降低预期。
+  </div>
+</section>
+
+<!-- 02 数据模型 -->
+<section id="s2">
+  <span class="sec-no">SECTION 02</span>
+  <h2>数据模型</h2>
+
+  <p>在现有云开发数据库中<strong>新增 3 个集合</strong>，全部挂在 <code>_openid</code> 下，权限设为「仅创建者可读写」。</p>
+
+  <h3>2.1 <code>var_profiles</code> — 出生档案</h3>
+  <pre>{
+  <b>_id</b>: "auto",
+  <b>_openid</b>: "用户标识",
+  <b>name</b>: "姓名/备注",
+  <b>birthDate</b>: "1985-04-12",        <i>// 公历</i>
+  <b>birthTime</b>: "14:32",              <i>// 24小时制，精确到分</i>
+  <b>timeAccuracy</b>: "exact",           <i>// exact | approximate，影响提示话术</i>
+  <b>birthPlace</b>: {
+    <b>name</b>: "上海市",
+    <b>lng</b>: 121.47, <b>lat</b>: 31.23,
+    <b>timezone</b>: "Asia/Shanghai"
+  },
+  <b>createdAt</b>: "ISO日期",
+  <b>updatedAt</b>: "ISO日期"
+}</pre>
+
+  <h3>2.2 <code>var_results</code> — 计算结果（含缓存）</h3>
+  <pre>{
+  <b>_id</b>: "auto",
+  <b>_openid</b>: "用户标识",
+  <b>profileId</b>: "关联 var_profiles._id",
+  <b>engineVersion</b>: "v1.0.0",         <i>// 算法版本，便于日后重算</i>
+  <b>determination</b>: { <b>arrow</b>:"L", <b>color</b>:1, <b>key</b>:"appetite",      <b>name</b>:"食欲" },
+  <b>environment</b>:   { <b>arrow</b>:"R", <b>color</b>:4, <b>key</b>:"mountains",    <b>name</b>:"山脉" },
+  <b>motivation</b>:     { <b>arrow</b>:"L", <b>tone</b>:2,  <b>key</b>:"hope",         <b>name</b>:"希望" },
+  <b>perspective</b>:    { <b>arrow</b>:"R", <b>tone</b>:4,  <b>key</b>:"wanting",      <b>name</b>:"欲望" },
+  <b>raw</b>: {                            <i>// 保留原始中间值，供核查</i>
+    <b>designTime</b>: "ISO日期",
+    <b>designSunLon</b>: 123.456, <b>designNodeLon</b>: 78.901,
+    <b>personSunLon</b>: 22.333,  <b>personNodeLon</b>: 199.888
+  },
+  <b>createdAt</b>: "ISO日期"
+}</pre>
+
+  <div class="note">
+    <span class="h">为什么必须存 raw 中间值</span>
+    一旦客户质疑结果，或者日后发现算法有偏差，<strong>没有原始数据就无法追溯</strong>。存下四个黄道经度，任何时候都能重算与比对。<br>
+    这是<strong>成本极低、价值极高</strong>的设计——多存 4 个数字，换来对结果的可审计性。
+  </div>
+
+  <h3>2.3 <code>var_teams</code> — 团队档案（二期）</h3>
+  <pre>{
+  <b>_id</b>: "auto",
+  <b>_openid</b>: "创建者标识",
+  <b>teamName</b>: "高管团队",
+  <b>members</b>: [
+    { <b>profileId</b>: "...", <b>name</b>: "张三", <b>role</b>: "CEO" },
+    { <b>profileId</b>: "...", <b>name</b>: "李四", <b>role</b>: "COO" }
+  ],
+  <b>createdAt</b>: "ISO日期"
+}</pre>
+
+  <div class="note ok">
+    <span class="h">团队表是 B 端大单的入口</span>
+    当一位高管做完 B2 之后问「那我的班子呢」，<code>var_teams</code> 就是承接这个需求的载体。<br>
+    它能直接产出<strong>团队配置视图</strong>：谁需要安静空间、谁需要流动、谁被什么驱动——这些是 HR 与 OD 能直接用的东西，也是从 ¥4,800 单次服务跃升到 ¥25,000 工作坊的桥。<br>
+    <strong>一期先把表结构留出来，二期再开发功能。</strong>
+  </div>
+</section>
+
+<!-- 03 云函数 -->
+<section id="s3">
+  <span class="sec-no">SECTION 03</span>
+  <h2>云函数设计</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:130px">云函数</th><th>职责</th><th class="c">优先级</th></tr></thead>
+      <tbody>
+        <tr><td><code>varCalc</code></td><td>核心。接收出生数据 → 返回四个变量。<strong>纯计算，不写库</strong>，便于单独测试</td><td class="c"><span class="chip lo">P0</span></td></tr>
+        <tr><td><code>varSave</code></td><td>调用 varCalc 并写入 var_results，带缓存（同参数直接返回历史结果）</td><td class="c"><span class="chip lo">P0</span></td></tr>
+        <tr><td><code>varContent</code></td><td>按 key 返回对应变量的详解文案（从数据库读，便于运营修改）</td><td class="c"><span class="chip mid">P1</span></td></tr>
+        <tr><td><code>varShare</code></td><td>生成分享卡片（小程序码 + 变量摘要图）</td><td class="c"><span class="chip mid">P1</span></td></tr>
+        <tr><td><code>varTeam</code></td><td>团队聚合分析，输出配置建议（二期）</td><td class="c"><span class="chip p1">P2</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.1 依赖选型</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">需求</th><th>推荐</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>星历计算</b></td><td>Swiss Ephemeris 的 JS 移植，或 astronomy-engine</td><td>精度需达 0.001° 以内。<strong>不要用简化的太阳位置近似公式</strong></td></tr>
+        <tr><td><b>时区处理</b></td><td>带历史时区与夏令时的库（如 Luxon + 完整 tzdata）</td><td><strong>中国 1986–1991 年实行过夏令时</strong>，处理错误会整体偏差一小时</td></tr>
+        <tr><td><b>地理编码</b></td><td>复用现有小程序的城市库，或接地图服务</td><td>只需经纬度，不需要逆地理</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note risk">
+    <span class="h">两个最容易出错的坑</span>
+    <strong>① 中国夏令时（1986–1991）</strong>：这几年出生的人，如果不做夏令时校正，结果会整体偏差约一小时，足以改变 Tone。<strong>必须用带历史规则的时间库，不能用固定 UTC+8。</strong><br>
+    <strong>② 云函数体积限制</strong>：完整星历表数据较大，可能超出单个云函数的部署限制。对策是<strong>只引入太阳与月亮交点的计算模块</strong>（变量只用到这两者），或把星历数据放在云存储按需加载。<br>
+    <strong>建议在正式开发前，先做一个「只算太阳位置」的技术验证（spike），确认精度与体积都过关再全面开发。</strong>
+  </div>
+
+  <h3>3.2 计算函数伪代码</h3>
+  <pre><i>// varCalc 主流程</i>
+<b>function</b> calcVariables(birthUTC, lng, lat) {
+
+  <i>// 1. 求 Design 时刻：太阳比出生时提前 88°</i>
+  <b>const</b> sunBirth = sunLongitude(birthUTC);
+  <b>const</b> target   = normalize(sunBirth - 88);
+  <b>const</b> designUTC = solveByIteration(
+     t => sunLongitude(t) === target,
+     birthUTC - 95days, birthUTC - 80days
+  );
+
+  <i>// 2. 四个关键黄道经度</i>
+  <b>const</b> designSun  = sunLongitude(designUTC);
+  <b>const</b> designNode = northNodeLongitude(designUTC);
+  <b>const</b> personSun  = sunLongitude(birthUTC);
+  <b>const</b> personNode = northNodeLongitude(birthUTC);
+
+  <i>// 3. 映射到 Color / Tone</i>
+  <b>return</b> {
+    determination: decode(designSun,  'color'),   <i>// → 六摄食</i>
+    environment:   decode(designNode, 'color'),   <i>// → 六环境</i>
+    motivation:    decode(personSun,  'tone'),    <i>// → 六动机</i>
+    perspective:   decode(personNode, 'tone'),    <i>// → 六视角</i>
+    raw: { designUTC, designSun, designNode, personSun, personNode }
+  };
+}
+
+<i>// decode: 黄道经度 → 闸门/爻/Color/Tone 四级</i>
+<i>// 必须使用官方曼陀罗映射表，不可自行等分推算</i></pre>
+</section>
+
+<!-- 04 页面 -->
+<section id="s4">
+  <span class="sec-no">SECTION 04</span>
+  <h2>页面结构与流程</h2>
+
+  <div class="flow">
+    <div class="frow">
+      <div class="fno">1</div>
+      <div class="fbody">
+        <div class="ft">入口页</div>
+        <div class="fd">在现有小程序首页加一个「四变量 · 决策环境」入口。文案：<strong>「你最清明的状态，藏在四个变量里」</strong>。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">2</div>
+      <div class="fbody">
+        <div class="ft">输入页</div>
+        <div class="fd">姓名 + 出生日期 + <strong>时间（精确到分，带"记不清"选项）</strong> + 出生地。<strong>时间字段要有明确提示</strong>，说明精度影响。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">3</div>
+      <div class="fbody">
+        <div class="ft">计算页</div>
+        <div class="fd">加载态展示行星定位动画（约 1–2 秒）。<strong>这段时间不要留白</strong>，展示"正在定位您的行星坐标"等文案，制造专业感。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">4</div>
+      <div class="fbody">
+        <div class="ft">结果总览页 <span class="chip lo">核心页</span></div>
+        <div class="fd">四张卡片，每张显示：变量名称 + 你的类型 + <strong>一句话核心</strong>。<strong>一句话必须击中</strong>，这是决定用户会不会继续看的关键。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">5</div>
+      <div class="fbody">
+        <div class="ft">单项详解页</div>
+        <div class="fd">点击卡片进入：核心定义 + 工作场景 + 常见误判 + <strong>本周可做的一个动作</strong>。<strong>只给一条动作，不要列十条</strong>。</div>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fno">6</div>
+      <div class="fbody">
+        <div class="ft">分享页</div>
+        <div class="fd">生成含四变量摘要的分享卡片 + 小程序码。<strong>分享是获客主力，必须做</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="h">结果页的设计要害：一句话核心</span>
+    用户扫一眼结果页的时间只有几秒。<strong>一句话核心决定他会不会往下点。</strong><br>
+    反例（不要这样）：「您的环境是山脉，代表您适合高处和视野开阔的地方。」——平淡，像说明书。<br>
+    正例（要这样）：「您需要距离——离得远一点，才看得清。」——有钩子，用户会想知道为什么。<br>
+    <strong>24 项的一句话核心，是文案投入产出比最高的地方，值得单独打磨。</strong>
+  </div>
+
+  <h3>与 B2 服务的联动设计</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">环节</th><th>设计</th></tr></thead>
+      <tbody>
+        <tr><td><b>会前</b></td><td>发送带参数的链接或小程序码，客户自测后<strong>数据自动归档到你的查看端</strong>，你提前看到结果，会话直接从洞察开始</td></tr>
+        <tr><td><b>会中</b></td><td>直接用小程序上的结果页讲解，<strong>客户看得见自己的数据</strong>，说服力高于纯口述</td></tr>
+        <tr><td><b>会后</b></td><td>报告里附上小程序码，客户可随时回看自己的四项</td></tr>
+        <tr><td><b>转化</b></td><td>详解页底部设「约一场 90 分钟深度解读」入口，<strong>免费工具 → 付费服务的漏斗</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 05 内容层 -->
+<section id="s5">
+  <span class="sec-no">SECTION 05</span>
+  <h2>内容层设计</h2>
+
+  <div class="note">
+    <span class="h">内容与代码分离</span>
+    <strong>24 项的详解文案全部存数据库，不写在代码里。</strong><br>
+    理由：文案会反复修改（尤其一句话核心），存库可以随时调整、不用重新发版；也方便日后做多版本（C 端灵性版 / B 端组织版两套话术）。
+  </div>
+
+  <h3>内容字段设计</h3>
+  <pre>{
+  <b>key</b>: "environment.mountains",
+  <b>kicker</b>: "高度 · 距离 · 视野",
+  <b>name</b>: "山脉",
+  <b>oneline</b>: "您的身体需要高度和距离——离得远一点，才看得清。",
+  <b>scene</b>: "工作场景表现...",
+  <b>misread</b>: "常见误判...",
+  <b>action</b>: "本周可做的一个动作...",
+  <b>variants</b>: {
+    <b>b2b</b>: { <b>scene</b>: "...", <b>action</b>: "..." },   <i>// 组织语言版</i>
+    <b>b2c</b>: { <b>scene</b>: "...", <b>action</b>: "..." }    <i>// 灵性语言版</i>
+  }
+}</pre>
+
+  <div class="note warn">
+    <span class="h">两套话术的必要性</span>
+    你同时在做 C 端学员与 B 端客户，<strong>同一套内容对两类人的表达必须分开</strong>。<br>
+    B 端客户（尤其企业采购方）看到「觉醒」「无我」「能量场」这类词会本能警惕；C 端学员则觉得组织语言太干。<br>
+    <strong>字段里预留 variants，一期可以只填 B 端版，二期再补 C 端版。</strong>
+  </div>
+
+  <h3>内容量估算</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:100px">内容</th><th class="num">条数</th><th class="num">每条字数</th><th class="num">合计</th></tr></thead>
+      <tbody>
+        <tr><td>一句话核心</td><td class="num">24</td><td class="num">30</td><td class="num">720</td></tr>
+        <tr><td>工作场景</td><td class="num">24</td><td class="num">150</td><td class="num">3,600</td></tr>
+        <tr><td>常见误判</td><td class="num">24</td><td class="num">80</td><td class="num">1,920</td></tr>
+        <tr><td>本周动作</td><td class="num">24</td><td class="num">100</td><td class="num">2,400</td></tr>
+        <tr style="background:#FBF5EA"><td><b>合计（单版本）</b></td><td class="num">—</td><td class="num">—</td><td class="num"><b>≈ 8,600 字</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="q">讲义《四变量深度讲义》已覆盖主要素材，内容层的工作主要是<b>压缩与改写</b>——把讲义的长文压成适合手机阅读的短段落。</p>
+</section>
+
+<!-- 06 排期 -->
+<section id="s6">
+  <span class="sec-no">SECTION 06</span>
+  <h2>开发排期与工作量</h2>
+
+  <div class="gantt">
+    <div class="grow"><div class="glabel">技术验证</div><div class="gtrack"><div class="gfill" style="width:14%">Sprint 0</div></div><div class="gnote">3–5 天</div></div>
+    <div class="grow"><div class="glabel">计算引擎</div><div class="gtrack"><div class="gfill" style="width:42%;margin-left:14%">Sprint 1</div></div><div class="gnote">2–3 周</div></div>
+    <div class="grow"><div class="glabel">前端页面</div><div class="gtrack"><div class="gfill" style="width:36%;margin-left:56%">Sprint 2</div></div><div class="gnote">2 周</div></div>
+    <div class="grow"><div class="glabel">内容与联调</div><div class="gtrack"><div class="gfill" style="width:8%;margin-left:92%">S3</div></div><div class="gnote">3–5 天</div></div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">阶段</th><th>任务</th><th class="num">工期</th><th>交付物</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Sprint 0</b><br>技术验证</td>
+          <td>验证星历库在云函数中的精度、体积与时区处理；用已知案例比对</td>
+          <td class="num">3–5 天</td>
+          <td>《技术可行性验证报告》</td>
+        </tr>
+        <tr>
+          <td><b>Sprint 1</b><br>计算引擎</td>
+          <td>varCalc / varSave 云函数；四变量映射；交叉验证</td>
+          <td class="num">2–3 周</td>
+          <td>可用的计算 API + 测试用例</td>
+        </tr>
+        <tr>
+          <td><b>Sprint 2</b><br>前端页面</td>
+          <td>输入页 / 计算页 / 结果页 / 详解页 / 分享页</td>
+          <td class="num">2 周</td>
+          <td>可交互的完整流程</td>
+        </tr>
+        <tr>
+          <td><b>Sprint 3</b><br>内容与联调</td>
+          <td>24 项文案入库；与 B2 流程打通；测试上线</td>
+          <td class="num">3–5 天</td>
+          <td>正式上线</td>
+        </tr>
+        <tr style="background:#FBF5EA">
+          <td colspan="2"><b>合计</b></td>
+          <td class="num"><b>6–8 周</b></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note ok">
+    <span class="h">务必先做 Sprint 0</span>
+    整个方案最大的不确定性在<strong>计算引擎</strong>，而不是页面。如果星历库在云函数里跑不通、或精度不达标，后面全白做。<br>
+    <strong>花 3–5 天先验证，能避免 6 周的方向性返工。</strong>这也是本方案最重要的执行建议。
+  </div>
+
+  <h3>成本估算（若外包开发）</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">项目</th><th class="num">低</th><th class="num">高</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>前端开发</td><td class="num">¥8,000</td><td class="num">¥15,000</td><td>5 个页面，含分享卡片</td></tr>
+        <tr><td>计算引擎</td><td class="num">¥10,000</td><td class="num">¥25,000</td><td>难度最高，视星历方案而定</td></tr>
+        <tr><td>UI 设计</td><td class="num">¥3,000</td><td class="num">¥8,000</td><td>沿用现有风格可压低</td></tr>
+        <tr><td>内容撰写</td><td class="num">¥0</td><td class="num">¥5,000</td><td>基于讲义自行压缩则为零</td></tr>
+        <tr style="background:#FBF5EA"><td><b>合计</b></td><td class="num"><b>¥21,000</b></td><td class="num"><b>¥53,000</b></td><td>不含服务器（云开发按量，初期极低）</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 07 风险 -->
+<section id="s7">
+  <span class="sec-no">SECTION 07</span>
+  <h2>风险与对策</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">风险</th><th class="c">等级</th><th>对策</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>计算映射判错</b></td><td class="c"><span class="chip lo">高</span></td>
+          <td><strong>用 3–5 个已知案例交叉验证权威软件，四项全对才算通过。</strong>不相信任何单一来源，包括本方案给出的映射表</td>
+        </tr>
+        <tr>
+          <td><b>时区与夏令时错误</b></td><td class="c"><span class="chip lo">高</span></td>
+          <td>使用带历史时区规则的库；<strong>专门测试 1986–1991 年中国夏令时出生案例</strong></td>
+        </tr>
+        <tr>
+          <td><b>星历库体积超限</b></td><td class="c"><span class="chip mid">中</span></td>
+          <td>只引入太阳与月亮交点模块；或把数据放云存储按需加载。<strong>Sprint 0 必须验证</strong></td>
+        </tr>
+        <tr>
+          <td><b>内容合规</b></td><td class="c"><span class="chip mid">中</span></td>
+          <td>文案禁用「诊断 / 治疗 / 预测 / 注定」；摄食项只谈工作节奏，<strong>绝不出现饮食建议</strong></td>
+        </tr>
+        <tr>
+          <td><b>命名两套混用</b></td><td class="c"><span class="chip mid">中</span></td>
+          <td>视角项<strong>选定一套命名（六视角 或 六感）</strong>，全站一致，并在页面标注采用来源</td>
+        </tr>
+        <tr>
+          <td><b>免费工具冲击付费</b></td><td class="c"><span class="chip mid">中</span></td>
+          <td>工具只给「是什么」，不给「对你意味着什么」。<strong>详解页要给场景，但落地动作留到付费会话</strong></td>
+        </tr>
+        <tr>
+          <td><b>数据归属与隐私</b></td><td class="c"><span class="chip mid">中</span></td>
+          <td>出生数据属敏感个人信息。<strong>需明示收集目的、提供删除入口</strong>；团队功能须获成员授权</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="h">最后一个判断</span>
+    B3 的价值不在「算得准」——市面上能算变量的工具有，只是中文的少。<br>
+    <strong>它的真正价值在于：把你的解读方法论产品化了。</strong>客户用工具看到结果，然后用你的话术体系理解结果——这两者绑在一起，才是别人抄不走的东西。<br>
+    所以<strong>内容层（24 项文案）比计算层更值得投入</strong>。计算可以外包，文案必须你自己写。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · B3 变量计算器 · 小程序技术方案</div>
+  <div>配套 B2《高管变量深度解读》产品开发手册与四变量深度讲义 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

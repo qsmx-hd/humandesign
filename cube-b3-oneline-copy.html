@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>24 项一句话核心 · 文案打磨版</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:24px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+/* 文案条目 */
+.cp{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:15px 16px;margin:14px 0}
+.cp .ch{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:9px;
+  padding-bottom:9px;border-bottom:1px dashed var(--border)}
+.cp .cn{font-size:15px;font-weight:700;color:var(--deep)}
+.cp .ce{font-size:12.5px;color:var(--muted);font-style:italic}
+
+.cp .bad{background:#FBEFED;border-left:3px solid #C9A9A3;border-radius:0 8px 8px 0;
+  padding:9px 12px;margin-bottom:8px;font-size:13px;line-height:1.7;color:#7A5249}
+.cp .bad::before{content:"反例";display:inline-block;font-size:12px;font-weight:700;color:var(--risk);
+  border:1px solid var(--risk);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.cp .good{background:#EFF6F1;border-left:3px solid var(--ok);border-radius:0 8px 8px 0;
+  padding:11px 13px;margin-bottom:7px;font-size:14.5px;line-height:1.8;color:#22402C;font-weight:700}
+.cp .good::before{content:"主推";display:inline-block;font-size:12px;font-weight:700;color:var(--ok);
+  border:1px solid var(--ok);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.cp .alt{background:#FBF5EA;border-left:3px solid var(--main);border-radius:0 8px 8px 0;
+  padding:11px 13px;margin-bottom:8px;font-size:14px;line-height:1.8;color:var(--ink)}
+.cp .alt::before{content:"备选";display:inline-block;font-size:12px;font-weight:700;color:var(--gold);
+  border:1px solid var(--gold);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.cp .why{font-size:12.5px;line-height:1.7;color:var(--muted);margin:0}
+.cp .why b{color:var(--ink)}
+
+.tip{background:#F3F0FA;border:1px solid #DDD3F0;border-left:3px solid var(--tip);
+  border-radius:0 8px 8px 0;padding:10px 13px;margin:10px 0;font-size:13px;line-height:1.75;color:#3A2F5E}
+.tip::before{content:"写法";display:inline-block;font-size:12px;font-weight:700;color:var(--tip);
+  border:1px solid var(--tip);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">COPY · ONELINER</p>
+  <h1 id="h1">24 项一句话核心<br>文案打磨版</h1>
+  <p class="lead">每项含反例对照、主推版、备选版与写法拆解 · 供 B3 结果页与 B2 会话开场直接使用</p>
+  <p class="sub">——结果页上用户只扫几秒。这 30 个字决定他会不会点进去，也决定他会不会约你。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>24 项 · 48 句</span>
+  </div>
+</header>
+
+<!-- 00 为什么 -->
+<section>
+  <span class="sec-no">WHY IT MATTERS</span>
+  <h2>为什么这 30 个字是生死线</h2>
+
+  <div class="note">
+    <span class="h">用户扫一眼结果页的时间，只有几秒</span>
+    在这几秒里，他只做一件事：<strong>判断这东西跟自己有没有关系</strong>。<br>
+    有关系 → 点进去 → 看详解 → 约你。<br>
+    没关系 → 退出 → 再也不来。<br>
+    <strong>整条漏斗的第一道闸门，就是这 30 个字。</strong>
+  </div>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">说明书式（失败）</p>
+      <p class="d">「您的环境是山脉，代表您适合高处和视野开阔的地方。」<br><b>→ 平淡、正确、没人会记住</b></p>
+    </div>
+    <div class="card">
+      <p class="t">钩子式（成功）</p>
+      <p class="d">「您需要距离——离得远一点，才看得清。」<br><b>→ 有疑问，用户想知道为什么</b></p>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <span class="h">最常见的失败模式：写成了说明书</span>
+    把「是什么」讲清楚，是最容易也最没用的写法。<strong>正确不等于有效。</strong><br>
+    用户不需要知道"山脉代表高处"——他需要的是<strong>"这说的就是我"</strong>的那一瞬间。
+  </div>
+
+  <h3>四条写法原则</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:88px">原则</th><th>说明</th><th style="min-width:130px">对照</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>① 先否认，再定义</b></td>
+          <td>很多项的名字自带误解（恐惧、内疚、洞穴）。<strong>先替客户挡掉那个误解，他才听得进去后面的话。</strong></td>
+          <td>「您不是孤僻，您只是需要能关上门。」</td>
+        </tr>
+        <tr>
+          <td><b>② 给出体感，不给定义</b></td>
+          <td>不要解释概念，描述一个客户身上真实发生的感受。</td>
+          <td>不说"需要刺激"，说"安静的房间会让您慢慢枯竭"</td>
+        </tr>
+        <tr>
+          <td><b>③ 留一个缺口</b></td>
+          <td>好文案要让人想追问"为什么"。<strong>答得太完整，就没有下一步了。</strong></td>
+          <td>「离得远一点，才看得清」→ 为什么？点进去看</td>
+        </tr>
+        <tr>
+          <td><b>④ 用破折号制造停顿</b></td>
+          <td>破折号前的部分陈述，后面的部分击中。<strong>节奏感本身就是说服力。</strong></td>
+          <td>「您不是害怕——您是被'没搞懂'点燃的」</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip">这四条里，<strong>①「先否认再定义」是最高频也最有效的</strong>。六项动机里有四项（恐惧、内疚、欲望、需求）名字都自带误解，不先挡掉，客户当场就关闭了。</div>
+
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#ch1">环境六类</a></li>
+      <li><a href="#ch2">摄食六项</a></li>
+      <li><a href="#ch3">动机六项</a></li>
+      <li><a href="#ch4">视角六项</a></li>
+      <li><a href="#ch5">怎么用与怎么测</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 环境 -->
+<section id="ch1">
+  <span class="sec-no">CHAPTER 01</span>
+  <h2>环境六类 <span class="chip design">Design</span></h2>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">1. 洞穴 Caves</span><span class="ce">需要挡掉的误解：孤僻、不合群</span></div>
+    <div class="bad">您的环境是洞穴，代表您适合封闭、安静、可控的空间。</div>
+    <div class="good">您不是孤僻，您只是需要一个能关上门的地方。</div>
+    <div class="alt">您的身体，只在能控制谁可以进来的时候才真正放松。</div>
+    <p class="why"><b>为什么：</b>「洞穴」这个词自带负面联想，必须先否认。主推版用"能关上门"这个具体动作替代"封闭"，<b>从概念变成画面</b>；备选版点出真正的机制——不是要安静，是要<b>控制权</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">2. 市场 Markets</span><span class="ce">需要挡掉的误解：爱热闹、坐不住</span></div>
+    <div class="bad">您的环境是市场，代表您适合人流密集、信息流通的场所。</div>
+    <div class="good">您需要身边有东西在流动——安静的房间会让您慢慢枯竭。</div>
+    <div class="alt">您不是坐不住，您是需要流动感才能转起来。</div>
+    <p class="why"><b>为什么：</b>「枯竭」是个有体感的词，比"不适合"强得多。备选版直接回应客户最常听到的评价——<b>替他反驳别人对他的误解，是最快的建立信任的方式</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">3. 厨房 Kitchens</span><span class="ce">需要挡掉的误解：爱管闲事</span></div>
+    <div class="bad">您的环境是厨房，代表您适合人群聚集、交流互动的地方。</div>
+    <div class="good">您需要待在「事情正在发生」的地方——旁观，比忙碌更累。</div>
+    <div class="alt">您不是闲不下来，您是需要有东西在酝酿。</div>
+    <p class="why"><b>为什么：</b>反直觉的句子最有钩子。「旁观比忙碌更累」完全违背常识，<b>会让人停下来想一秒</b>——这一秒就是他点进去的时刻。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">4. 山脉 Mountains</span><span class="ce">需要挡掉的误解：高高在上、不接地气</span></div>
+    <div class="bad">您的环境是山脉，代表您适合高处、视野开阔的地方。</div>
+    <div class="good">您需要距离——离得远一点，才看得清。</div>
+    <div class="alt">您的优势是距离感，把它拿走，您就只剩焦虑。</div>
+    <p class="why"><b>为什么：</b>主推版最短，但破折号制造了因果悬念。备选版更狠，<b>说出了客户没意识到的代价</b>——适合用在详解页，而不是结果页。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">5. 山谷 Valleys</span><span class="ce">需要挡掉的误解：注意力不集中</span></div>
+    <div class="bad">您的环境是山谷，代表您适合有声响、被环抱的低地。</div>
+    <div class="good">您需要流动和声音——绝对的安静，反而让您停摆。</div>
+    <div class="alt">对您来说，背景音不是干扰，是补给。</div>
+    <p class="why"><b>为什么：</b>直接挑战"深度工作需要安静"这个流行信条。<b>凡是替客户推翻一条他一直信奉的规则，都会产生强共鸣。</b></p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">6. 海岸 Shores</span><span class="ce">需要挡掉的误解：若即若离、不够投入</span></div>
+    <div class="bad">您的环境是海岸，代表您适合水边、过渡性的地带。</div>
+    <div class="good">您最自在的位置是边缘——不进中心，也不离开。</div>
+    <div class="alt">您不是投入不了，您是天生适合连接两个系统。</div>
+    <p class="why"><b>为什么：</b>「不进中心，也不离开」精准描述了那种难以言说的状态。海岸型客户常有隐秘的愧疚感，<b>这句话给的是许可</b>，不是信息。</p>
+  </div>
+</section>
+
+<!-- 摄食 -->
+<section id="ch2">
+  <span class="sec-no">CHAPTER 02</span>
+  <h2>摄食六项 <span class="chip design">Design</span></h2>
+
+  <div class="note warn">
+    <span class="h">这一组的文案例外</span>
+    摄食六项的名字（食欲、品味、渴、触觉、声音、光）在中文里<strong>极易被理解成饮食相关</strong>。<br>
+    <strong>全部文案一律落在"信息摄入与工作节奏"上，绝不出现任何与吃有关的暗示。</strong>这既是合规要求，也是避免客户误解。
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">1. 食欲 Appetite</span><span class="ce">单线程深潜</span></div>
+    <div class="bad">您是连续型，代表您一次最好只处理一件事。</div>
+    <div class="good">您的大脑一次只处理一件事——切换的代价，比您以为的高得多。</div>
+    <div class="alt">不是您慢，是您每换一次题，都要重启一次。</div>
+    <p class="why"><b>为什么：</b>"重启"是个所有人都懂的体验，<b>把一个抽象机制翻译成一次身体记忆</b>。备选版先否认"慢"这个自我评价，更解气。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">2. 品味 Taste</span><span class="ce">对品质敏感</span></div>
+    <div class="bad">您是品味型，代表您对内容的品质要求较高。</div>
+    <div class="good">您对内容的品质敏感——粗制的东西，您根本塞不进去。</div>
+    <div class="alt">您不是挑剔，您是摄取机制比别人更挑。</div>
+    <p class="why"><b>为什么：</b>替客户正名。这一型的人长期被说"难伺候"，<b>一句话把评价变成机制，是最有力量的</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">3. 渴 Thirst</span><span class="ce">高频少量</span></div>
+    <div class="bad">您是渴型，代表您需要持续、少量的信息补充。</div>
+    <div class="good">您需要小口、多次——三小时的长会，对您是生理性消耗。</div>
+    <div class="alt">不是您没耐心，是您的系统需要持续补给。</div>
+    <p class="why"><b>为什么：</b>"生理性"这个词很关键——<b>把问题从意志力层面挪到身体层面</b>，客户就不会再自责。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">4. 触觉 Touch</span><span class="ce">需要摸得到</span></div>
+    <div class="bad">您是触觉型，代表您需要通过接触来理解事物。</div>
+    <div class="good">您要摸得到才算真的知道——十页数据，不如现场两小时。</div>
+    <div class="alt">您反复改主意，往往不是犹豫，是还没碰到实物。</div>
+    <p class="why"><b>为什么：</b>备选版直接命中一个具体痛点。<b>越是具体的场景，越像在说他本人</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">5. 声音 Sound</span><span class="ce">声学敏感</span></div>
+    <div class="bad">您是声音型，代表您对声音环境比较敏感。</div>
+    <div class="good">您对声音的「控制权」，比您以为的更影响思考质量。</div>
+    <div class="alt">您常常觉得累却说不出为什么——答案可能就在声音里。</div>
+    <p class="why"><b>为什么：</b>这一型最容易被误判，因为"敏感"听起来像矫情。<b>把焦点从"敏感"转到"控制权"</b>，就把弱点变成了需求。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">6. 光 Light</span><span class="ce">与昼夜同步</span></div>
+    <div class="bad">您是光型，代表您的效率受日照影响。</div>
+    <div class="good">您的效率跟着光走——把重要决策排在夜里，是自我消耗。</div>
+    <div class="alt">您不是夜猫子，您只是把重要的事排错了时段。</div>
+    <p class="why"><b>为什么：</b>很多人以"我是夜型人"自居，<b>备选版挑战了这个自我认知</b>，会引发强烈好奇。</p>
+  </div>
+</section>
+
+<!-- 动机 -->
+<section id="ch3">
+  <span class="sec-no">CHAPTER 03</span>
+  <h2>动机六项 <span class="chip pers">Personality</span></h2>
+
+  <div class="note risk">
+    <span class="h">这一组必须先否认，再定义——无一例外</span>
+    六项里有四项（恐惧、内疚、欲望、需求）在中文里都带负面色彩。<strong>不先挡掉误解，客户当场就关闭。</strong><br>
+    这也是四条写法原则里「先否认，再定义」最主要的应用场景。
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">1. 恐惧 Fear</span><span class="ce">挡掉：胆小、焦虑</span></div>
+    <div class="bad">您的动机是恐惧，代表您容易被不确定性驱动。</div>
+    <div class="good">您不是害怕——您是被「这里还有我没搞懂的」点燃的。</div>
+    <div class="alt">您是一个探究者，不是胆小的人。</div>
+    <p class="why"><b>为什么：</b>「恐惧」是最需要先否认的一项。破折号前的否定必须干脆，<b>不留任何余地</b>——"您不是害怕"，句号。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">2. 希望 Hope</span><span class="ce">挡掉：被动、不上进</span></div>
+    <div class="bad">您的动机是希望，代表您对未来抱有期待。</div>
+    <div class="good">您的力量是耐心——在该等的时候等得住，不是不作为。</div>
+    <div class="alt">在狼性文化里，您最容易被误判为没有进取心。</div>
+    <p class="why"><b>为什么：</b>希望型在职场长期被低估。<b>替他说出"我被误解了"，共鸣极强。</b></p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">3. 欲望 Desire</span><span class="ce">挡掉：功利、控制欲</span></div>
+    <div class="bad">您的动机是欲望，代表您有很强的成功驱动力。</div>
+    <div class="good">您天生要去改变点什么——守成的位置，会逼您制造不必要的变化。</div>
+    <div class="alt">把您放在维持现状的岗位上，是浪费，也是隐患。</div>
+    <p class="why"><b>为什么：</b>后半句说出客户自己可能都没意识到的行为模式——<b>在稳定岗位上"搞事情"，不是他的问题，是位置错了</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">4. 需求 Need</span><span class="ce">挡掉：讨好型人格</span></div>
+    <div class="bad">您的动机是需求，代表您有服务他人的倾向。</div>
+    <div class="good">您是被「有人需要我」点燃的——被需要不是负担，是您的燃料。</div>
+    <div class="alt">用"谁依赖您"来激励您，比"您想成为什么"有效十倍。</div>
+    <p class="why"><b>为什么：</b>把"被需要"从负担重构成燃料。<b>同样的事实，换个说法就是从消耗变成补给。</b></p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">5. 内疚 Guilt</span><span class="ce">挡掉：负罪感、自责</span></div>
+    <div class="bad">您的动机是内疚，代表您容易有负罪感。</div>
+    <div class="good">您被「这里有东西坏了」点燃——所以您总比别人先看见破损处。</div>
+    <div class="alt">问题不在于您不会说不，而在于您的能量天然会被破损处吸引。</div>
+    <p class="why"><b>为什么：</b>把"内疚"这个情绪词，翻译成"看见破损"这个能力词。<b>从缺陷变成天赋，只差一个说法。</b></p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">6. 纯真 Innocence</span><span class="ce">挡掉：幼稚、好骗</span></div>
+    <div class="bad">您的动机是纯真，代表您天性单纯。</div>
+    <div class="good">您的优势是不带预设——您能看见别人被成见挡住的东西。</div>
+    <div class="alt">您不是天真，您是还没被训练成只看得见该看的。</div>
+    <p class="why"><b>为什么：</b>备选版带一点锋芒，<b>适合 C 端，B 端慎用</b>（"被训练成"有评判感）。</p>
+  </div>
+</section>
+
+<!-- 视角 -->
+<section id="ch4">
+  <span class="sec-no">CHAPTER 04</span>
+  <h2>视角六项 <span class="chip pers">Personality</span></h2>
+
+  <div class="tip"><strong>这一组的写法要害：必须带上错位项。</strong>只说「您看见可能性」是平的；说「您看见可能性，但压力大会滑去反复算现实不现实」才有钩子——<strong>后半句是客户会拍大腿的部分</strong>。</div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">1. 生存 Survival</span><span class="ce">错位：Wanting 欲望</span></div>
+    <div class="bad">您的视角是生存，代表您关注安全与风险。</div>
+    <div class="good">您第一眼看见的，永远是「这安全吗」——压力大的时候，反而会被"我想要"牵走。</div>
+    <div class="alt">您的谨慎是资产，但让步于欲望时，风险就是这么进来的。</div>
+    <p class="why"><b>为什么：</b>后半句揭示了一个反直觉的漏洞——<b>越谨慎的人，破防的方式越出乎意料</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">2. 可能性 Possibility</span><span class="ce">错位：Probability 概率</span></div>
+    <div class="bad">您的视角是可能性，代表您富有想象力。</div>
+    <div class="good">您天生看见「什么可以成立」——压力大的时候，会滑去反复算现实不现实。</div>
+    <div class="alt">您放弃过的想法，多半不是不可行，是在概率里待太久了。</div>
+    <p class="why"><b>为什么：</b>备选版几乎是一记直球。<b>这句话会让很多人想起具体的某件事</b>，是全场最强的共鸣点之一。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">3. 力量 Power</span><span class="ce">错位：Personal 个人</span></div>
+    <div class="bad">您的视角是力量，代表您关注权力与影响力。</div>
+    <div class="good">您第一眼看见的，是影响力在哪里——压力大的时候，会把结构问题误当成个人恩怨。</div>
+    <div class="alt">您看得懂格局，但要小心把格局问题变成人事问题。</div>
+    <p class="why"><b>为什么：</b>指出一个管理者最容易犯的错。<b>具体到"结构 vs 人事"这个层面，就有咨询价值了。</b></p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">4. 欲望 Wanting</span><span class="ce">错位：Survival 生存</span></div>
+    <div class="bad">您的视角是欲望，代表您关注他人的需求。</div>
+    <div class="good">您第一眼看见的，是别人真正想要什么——压力大的时候，会退回防御，不敢要。</div>
+    <div class="alt">您很会读人，但轮到自己时，常常连"我想要"都说不出口。</div>
+    <p class="why"><b>为什么：</b>"很会读人，但轮到自己就说不出口"——<b>这个反差本身就是洞察</b>。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">5. 概率 Probability</span><span class="ce">错位：Possibility 可能性</span></div>
+    <div class="bad">您的视角是概率，代表您善于预测趋势。</div>
+    <div class="good">您天生看见「接下来会发生什么」——压力大的时候，会滑进不切实际的想象。</div>
+    <div class="alt">您的判断力来自现实检验，失去它，您就只剩想象。</div>
+    <p class="why"><b>为什么：</b>指出优势的<strong>前提条件</strong>——"您的判断力来自现实检验"，这句话让赞美变得可信。</p>
+  </div>
+
+  <div class="cp">
+    <div class="ch"><span class="cn">6. 个人 Personal</span><span class="ce">错位：Power 力量</span></div>
+    <div class="bad">您的视角是个人，代表您关注个人意义。</div>
+    <div class="good">您第一眼看见的，是「这对我意味着什么」——压力大的时候，会把个人议题放大成权力斗争。</div>
+    <div class="alt">您在乎意义，这没错；但当它变成"谁压过谁"，您就偏了。</div>
+    <p class="why"><b>为什么：</b>"在乎意义"被肯定，但立刻指出滑坡路径。<b>先接住，再点破——这是教练式表达的标准结构。</b></p>
+  </div>
+</section>
+
+<!-- 用法 -->
+<section id="ch5">
+  <span class="sec-no">CHAPTER 05</span>
+  <h2>怎么用与怎么测</h2>
+
+  <h3>5.1 三个投放位置</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">位置</th><th>用哪个版本</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td><b>B3 结果页</b></td><td>主推版</td><td>四张卡片各一句，<strong>字号要够大</strong>，一屏内看完</td></tr>
+        <tr><td><b>B3 详解页</b></td><td>顶部用主推，正文展开</td><td>详解页开头再出现一次同一句，形成呼应</td></tr>
+        <tr><td><b>B2 会话开场</b></td><td>备选版优先</td><td>备选版更口语，<strong>念出来比读出来好听</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="h">为什么备选版更适合口述</span>
+    主推版偏书面，适合眼睛看（结果页）；备选版更口语，有停顿和语气，适合嘴巴说（会话开场）。<br>
+    <strong>这不是重复劳动，是两个投放渠道的不同要求。</strong>
+  </div>
+
+  <h3>5.2 怎么知道哪句更好</h3>
+  <div class="flow">
+    <div class="frow" style="display:flex;gap:11px;padding:10px 0;border-bottom:1px dashed var(--border)">
+      <div style="flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#2D2118;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">1</div>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:3px">冷启动 5 场，每场记一句</div>
+        <div style="font-size:13px;line-height:1.72;color:var(--muted)">记录客户听到哪一句时有反应。<strong>不用问，看他</strong>——停顿、身体前倾、重复你的话、突然开始举例子，这些都是信号。</div>
+      </div>
+    </div>
+    <div class="frow" style="display:flex;gap:11px;padding:10px 0;border-bottom:1px dashed var(--border)">
+      <div style="flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#2D2118;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">2</div>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:3px">5 场后统计</div>
+        <div style="font-size:13px;line-height:1.72;color:var(--muted)">哪几句被击中次数最多，就是<strong>真正有效的一句核心</strong>。客户的反应比你的判断准。</div>
+      </div>
+    </div>
+    <div class="frow" style="display:flex;gap:11px;padding:10px 0">
+      <div style="flex:0 0 26px;height:26px;border-radius:50%;background:var(--main);color:#2D2118;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">3</div>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:3px">结果页做 A/B</div>
+        <div style="font-size:13px;line-height:1.72;color:var(--muted)">小程序上线后，同一项准备两句，<strong>按用户分流显示，看点开率</strong>。这是唯一能拿到客观数据的方式。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note ok">
+    <span class="h">最后一句提醒</span>
+    这 48 句是我写的，但<strong>最好的版本一定是你自己讲出来的那句</strong>。<br>
+    冷启动 5 场里，客户复述你说的话时，<strong>往往会用他自己的措辞</strong>——那些措辞比你写的更好，因为它们是真实反应，不是文案。<br>
+    <strong>把那些原话记下来，替换掉这里的句子。</strong>
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 24 项一句话核心 · 文案打磨版</div>
+  <div>配套 B2 产品开发手册、四变量深度讲义、B3 技术方案、冷启动邀约话术包 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

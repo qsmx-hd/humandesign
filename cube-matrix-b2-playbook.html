@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>B2 高管变量深度解读 · 产品开发手册</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+header .meta span{white-space:nowrap}
+
+section{margin:34px 0 0}
+.sec-no{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px;
+}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:22px 0 9px;color:var(--deep);font-weight:700}
+h4{font-size:13.5px;margin:16px 0 7px;color:var(--gold);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 15px}
+.card .t{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 7px;line-height:1.5}
+.card .d{font-size:13px;line-height:1.72;color:var(--muted);margin:0}
+.card .d b{color:var(--ink)}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}
+.panel.tight{padding:13px 15px}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:540px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th.num{text-align:right}
+td.c{text-align:center;white-space:nowrap}
+th.c{text-align:center}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.chip.mid{background:#FBEBCF;color:#8A5A12;border-color:#EBD3A0}
+.chip.lo{background:#F8DED9;color:#8A3228;border-color:#E9BEB5}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+ul,ol{margin:8px 0 12px;padding-left:22px}
+li{margin-bottom:7px;line-height:1.74}
+li::marker{color:var(--main)}
+
+/* script timeline */
+.tl{margin:14px 0}
+.tlrow{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.tlrow:last-child{border-bottom:none}
+.tltime{flex:0 0 78px;font-size:13px;font-weight:700;color:var(--gold);
+  font-variant-numeric:tabular-nums;line-height:1.6}
+.tlbody{flex:1}
+.tlbody .tlt{font-size:13.5px;font-weight:700;color:var(--deep);margin-bottom:4px;line-height:1.55}
+.tlbody .tld{font-size:13px;line-height:1.72;color:var(--muted)}
+@media(max-width:520px){
+  .tlrow{flex-direction:column;gap:4px}
+  .tltime{flex:none}
+}
+
+/* script line */
+.say{background:#FBF5EA;border:1px solid var(--border);border-left:3px solid var(--main);
+  border-radius:0 8px 8px 0;padding:10px 13px;margin:8px 0;font-size:13px;line-height:1.78;color:var(--ink)}
+.say::before{content:"话术";display:inline-block;font-size:12px;font-weight:700;color:var(--gold);
+  border:1px solid var(--gold);border-radius:9px;padding:0 7px;margin-right:8px;vertical-align:1px}
+
+.q{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.68}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">PRODUCT PLAYBOOK · B2</p>
+  <h1 id="h1">高管变量深度解读<br>产品开发手册</h1>
+  <p class="lead">基于人类图 Variables 四变量的高管 1V1 决策环境设计服务 · 可直接落地的完整作业手册</p>
+  <p class="sub">——方案 B 模块嵌入路径的核心产品，最低启动成本、最高毛利、最快验证市场的一条线。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>配套：魔方矩阵可研报告 V1</span>
+  </div>
+</header>
+
+<!-- 00 产品卡 -->
+<section>
+  <span class="sec-no">PRODUCT CARD</span>
+  <h2>产品卡</h2>
+
+  <div class="panel">
+    <table style="min-width:0">
+      <tbody>
+        <tr><th style="width:88px">产品名称</th><td><strong>高管变量深度解读</strong>（Executive Variable Decoding）· 副标题建议「决策环境设计」</td></tr>
+        <tr><th>一句话定位</th><td>用四个可验证的先天变量，说清一位高管<strong>在什么样的空间、什么样的节奏、被什么样的驱动点燃</strong>，并给出可执行的调整清单。</td></tr>
+        <tr><th>技术内核</th><td>人类图 Variables 四变量（Determination 摄食 · Environment 环境 · Motivation 动机 · Perspective 视角）</td></tr>
+        <tr><th>目标客户</th><td>创始人、CEO、事业部负责人、高压决策者；已有自我探索基础者优先</td></tr>
+        <tr><th>交付形式</th><td>90 分钟 1V1 + 书面报告 + 30 天跟进</td></tr>
+        <tr><th>建议定价</th><td>标准 <strong>¥4,800</strong> ／ 深度 ¥8,800 ／ 年度顾问 ¥38,000</td></tr>
+        <tr><th>为什么先做它</th><td><span class="chip hi">零库存</span><span class="chip hi">极低边际成本</span><span class="chip hi">可直接复用既有客户池</span><span class="chip hi">反哺 B1 工作坊内容</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">① 启动最快</p>
+      <p class="d">不需要招生、不需要场地、不需要课件。约到一个客户就能开一场，<b>今天定方案明天就能接单</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">② 毛利极高</p>
+      <p class="d">主要成本是准备时间（约 60–90 分钟）与会话 90 分钟。<b>扣除准备成本后单场毛利约 85%</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">③ 内容反哺</p>
+      <p class="d">每做一场就积累一个真实案例与一套表达。<b>做到 15 场，B1 工作坊的素材自然成型</b>。</p>
+    </div>
+    <div class="card">
+      <p class="t">④ 风险最低</p>
+      <p class="d">不投入研发、不压货、不招人。市场不买账就停，<b>沉没成本接近于零</b>。</p>
+    </div>
+  </div>
+
+  <div class="note ok">
+    <span class="h">它在整盘棋里的位置</span>
+    B2 是<strong>现金流与案例池</strong>，不是终点。它验证的是一件事：<strong>四变量这套语言，高管听得懂吗、愿意为此付钱吗</strong>。<br>
+    验证通过后，B1（组织工作坊）才有内容可讲，B3（小程序工具）才有需求依据，B4（领导力课选修）才有加价理由。<strong>先做 B2，是让后面三步都有地基。</strong>
+  </div>
+</section>
+
+<!-- 01 准入门槛 -->
+<section>
+  <span class="sec-no">SECTION 01</span>
+  <h2>准入门槛：这一条决定产品寿命</h2>
+
+  <p>Ra Uru Hu 对 Variables 的教学有一贯的强调：<strong>变量是「微调」（fine-tuning），不是入门</strong>。原话大意是「先把你的类型活对七年，然后如果你想，变量会告诉你如何优化你的载具」。传统上也认为变量适合在土星回归（约 29 岁）之后探索。</p>
+
+  <div class="note warn">
+    <span class="h">这意味着产品必须设门槛——而这恰恰是卖点</span>
+    很多自我探索产品的问题在于「谁都能来」，结果是客户基础不同、体验参差、口碑两极。<br>
+    B2 应该<strong>明确要求客户先知道自己的类型、策略与内在权威</strong>。这不是门槛，是<strong>筛选器</strong>：它把「随便看看的人」挡在外面，让来的人带着自我观察的基础进场，解读的深度和满意度会完全不同。<br>
+    <strong>对高净值客户而言，有门槛反而是品质信号。</strong>
+  </div>
+
+  <h3>准入规则设计</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">条件</th><th>具体要求</th><th>不满足怎么办</th></tr></thead>
+      <tbody>
+        <tr><td><b>硬条件 1</b></td><td>已知自己的<strong>能量类型与内在权威</strong></td><td>先做一场基础解读（¥1,280），或观看 30 分钟前置视频</td></tr>
+        <tr><td><b>硬条件 2</b></td><td><strong>出生时间精确到分钟</strong>（变量对时间极敏感，误差 15 分钟可能改变结果）</td><td>请客户查出生证明 / 医院记录；无法确认则明确告知变量结果仅供参考</td></tr>
+        <tr><td><b>软条件 1</b></td><td>有过至少 3 个月的自我观察实践</td><td>不强求，但在会话中放慢节奏</td></tr>
+        <tr><td><b>软条件 2</b></td><td>当前有真实的决策困境或转型议题</td><td>无议题者转化为「年度顾问」而非单次解读</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="say">我不建议把它当成第一次接触人类图的入口。变量是一套微调系统——它假设你已经知道自己的决策机制是什么。如果您还不清楚自己的类型和内在权威，我们可以先花 30 分钟把它补上，这样后面的内容才能真正用起来。</div>
+
+  <div class="note risk">
+    <span class="h">时间精度是这产品的技术生命线</span>
+    变量由行星的 <strong>Color / Tone</strong> 决定，精度要求远高于类型与通道。<strong>出生时间差 15 分钟，环境或摄食方式就可能判错</strong>，客户会当场发现"这个不像我"。<br>
+    <strong>执行纪律：收单时必须拿到精确到分钟的出生时间；拿不到就如实说明不确定性，绝不硬解。</strong>
+  </div>
+</section>
+
+<!-- 02 技术核心 -->
+<section>
+  <span class="sec-no">SECTION 02</span>
+  <h2>技术核心：四变量速查</h2>
+
+  <h3>2.1 先搞清一件事：左右归属不同，用法不同</h3>
+  <p>四个箭头分列图表顶端，<strong>左边两个属 Design（身体，红色），右边两个属 Personality（心智，黑色）</strong>。这个区分不是术语游戏——它直接决定你怎么跟客户说话：</p>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t"><span class="chip design">Design · 身体</span> 左两箭</p>
+      <p class="d"><b>摄食 · 环境</b><br>这两个是身体的事，<b>靠实验，不靠想</b>。话术是「您去试两周，看身体怎么回应」，而不是「您觉得对不对」。</p>
+    </div>
+    <div class="card">
+      <p class="t"><span class="chip pers">Personality · 心智</span> 右两箭</p>
+      <p class="d"><b>动机 · 视角</b><br>这两个是心智的事，<b>靠观察，不靠改</b>。话术是「您留意一下是不是这样」，而不是「您应该调整成那样」。</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="h">这是 B2 产品最容易翻车的地方</span>
+    如果把四个变量都当成「建议客户去改变的东西」，就变成了另一种成功学。<br>
+    <strong>正确的姿态是：身体那两个给实验，心智那两个给觉察。</strong>前者客户可以动手调整（换办公室、改会议节奏），后者只能看见（原来我是被「内疚」驱动的，难怪我总在救火）。<br>
+    <strong>这个「可改 vs 只需看见」的区分，是本产品专业度的分水岭。</strong>
+  </div>
+
+  <h3>2.2 左右箭头的通用含义</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:104px">箭头</th><th>通用质地</th><th>工作场景表现</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>← 左</b><br><span class="chip">Strategic 战略性</span></td>
+          <td>主动、聚焦、结构化、一致。喜欢方向与节奏，善于放大细节，靠重复与常规建立能力，通过具体性获得确定感。</td>
+          <td>偏好固定工位与固定流程；习惯深度聚焦单任务；日程表越清晰越安心；学习靠系统钻研。</td>
+        </tr>
+        <tr>
+          <td><b>→ 右</b><br><span class="chip">Receptive 接收性</span></td>
+          <td>接收、观察、外围、灵活。广泛感知，善于同时接收多路信息，通过经验与时机学习，靠流动而非固定规则。</td>
+          <td>偏好可移动、可切换的工位；善于多线程捕捉信息；日程过满会窒息；学习靠浸泡与经验。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="q">用法提示：左右箭头是「底色」，六项 Color 是「具体内容」。先讲底色（客户最容易秒懂），再落到具体项。</p>
+
+  <h3>2.3 环境 Environment <span class="chip design">Design · 可实验</span></h3>
+  <p>六类环境，是本产品<strong>最能立刻见效、客户最有体感</strong>的部分——因为改环境的成本极低，效果却立竿见影。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:88px">环境</th><th>空间特质</th><th>组织语言转译</th></tr></thead>
+      <tbody>
+        <tr><td><b>Caves</b><br>洞穴</td><td>封闭、安全、可控的小空间；能关门、能隔绝</td><td><b>独立办公室 / 静音舱 / 可上锁的思考空间</b>。开放工位是灾难；远程时要有一个"不被打扰的物理结界"</td></tr>
+        <tr><td><b>Markets</b><br>市场</td><td>交换与交易的场所；人流、信息流、刺激</td><td><b>需要处在信息与人交汇的节点</b>。前线、展会、客户现场、开放式办公区。把他们关在安静房间里反而枯竭</td></tr>
+        <tr><td><b>Kitchens</b><br>厨房</td><td>公共的、滋养的、正在"发生转化"的中心</td><td><b>枢纽位置</b>：团队协作区、项目作战室、跨部门的交汇点。适合做整合者与连接器，不适合孤立决策</td></tr>
+        <tr><td><b>Mountains</b><br>山脉</td><td>高处、视野开阔、俯瞰</td><td><b>需要高度与视野</b>：高层办公室、能看到全局的位置。适合做战略与长期规划，在低矮封闭处会压抑</td></tr>
+        <tr><td><b>Valleys</b><br>山谷</td><td>被环抱、有声响、有回音的掩护地带</td><td><b>需要被保护但不封闭</b>：有背景声的半开放空间、团队中的中位。适合在"有人气但不被打扰"处深度工作</td></tr>
+        <tr><td><b>Shores</b><br>海岸</td><td>过渡地带、边缘、交界处</td><td><b>适合做跨界与转型角色</b>：新业务、组织变革、边界岗位。需要周期性换环境，长期固定一处会僵化</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="say">您的环境是「山脉」。这不意味着您一定要搬去山里——它说的是您需要<strong>高度和视野</strong>。我见过很多山脉型的高管，坐在没有窗的会议室里做三年战略，一直觉得哪里不对。您回想一下，您做重大决策的时候，是不是通常在一个能看到远处的地方？</div>
+
+  <h3>2.4 摄食 Determination <span class="chip design">Design · 可实验</span></h3>
+  <p>原义关乎身体如何摄入营养；在 B 端，转译为<strong>工作节奏与信息摄入方式</strong>。这是最容易做出「哇塞感」的部分。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:88px">摄食方式</th><th>原义</th><th>工作节奏转译</th></tr></thead>
+      <tbody>
+        <tr><td><b>Appetite</b><br>食欲</td><td>连续进食，一次一种食物</td><td><b>单线程深潜</b>。一次只啃一件事，中途切换代价极高。日程要整块留白，忌碎片会议</td></tr>
+        <tr><td><b>Taste</b><br>品味</td><td>挑剔、需要合口味</td><td><b>对"内容品质"敏感</b>。需要参与选题与标准制定，塞给它粗制信息会直接罢工</td></tr>
+        <tr><td><b>Thirst</b><br>渴</td><td>需要随时补充、小口多次</td><td><b>高频少量</b>。适合短会、快速同步、持续小剂量输入；长会会脱水</td></tr>
+        <tr><td><b>Touch</b><br>触觉</td><td>通过质地与温度感知</td><td><b>需要"摸得到"</b>。看报告不如看现场，听汇报不如亲手试。决策前要接触实物或一线</td></tr>
+        <tr><td><b>Sound</b><br>声音</td><td>进食需要安静或有特定环境音</td><td><b>对声学环境极度敏感</b>。要么绝对安静，要么特定背景音。开放式办公的噪音是隐形能耗</td></tr>
+        <tr><td><b>Light</b><br>光</td><td>进食时机与日光同步</td><td><b> circadian 型工作者</b>。要在日光时段处理核心决策，夜间效率断崖。别把重要会排在晚上</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>箭头方向：</strong><span class="chip">← 左 Consecutive 连续</span> 一次一件事、结构化、固定时段进食 → 工作上是<strong>整块时间 + 固定节律</strong>；<span class="chip">→ 右 Alternating 交替</span> 混合、灵活、随身体感觉 → 工作上是<strong>穿插切换 + 弹性节奏</strong>。</p>
+  <div class="say">您是「连续型」。这不是自律不自律的问题——它说的是您的大脑在<strong>一次只处理一种输入</strong>时最清明。您现在的日程是每 45 分钟换一个会，等于让一个连续型的系统每 45 分钟重启一次。我们不需要改您，只需要把周三上午空出来。</div>
+
+  <h3>2.5 动机 Motivation <span class="chip pers">Personality · 观察</span></h3>
+  <p>六项动机。<strong>每个动机都有对齐态与错位态</strong>——这个「对齐 vs 错位」的结构，是本产品最有教练价值的部分，它能直接解释高管的疲惫感从哪来。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:80px">动机</th><th>对齐态（能量来源）</th><th>错位态（疲惫来源）</th><th>激励设计转译</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fear</b><br>恐惧</td><td>驱动去理解未知，是<strong>智慧的探究者</strong>；把不确定变成可理解</td><td>焦虑、瘫痪、反复推演不行动</td><td>给他<b>待查清的难题</b>而非确定的KPI；别用"别想太多"打发</td></tr>
+        <tr><td><b>Hope</b><br>希望</td><td>相信事情会展开，<strong>耐心、允许</strong>，有时表现为不行动</td><td>盲目等待、把力量交出去、错过时机</td><td>给<b>时间窗口</b>而非deadline压迫；适合长期布局型岗位</td></tr>
+        <tr><td><b>Desire</b><br>欲望</td><td>内在推动去改变、组织物质世界，<strong>天生的领导者</strong></td><td>控制欲、迎合压力、为动而动</td><td>给<b>可改变的战场</b>；让他带队打仗，别让他守成</td></tr>
+        <tr><td><b>Need</b><br>需求</td><td><strong>服务导向</strong>，识别生存与支持真正所需</td><td>过度承担、被需求绑架、边界失守</td><td>给<b>明确的被需要者</b>；用"谁依赖你"来激活，而非"你想成为什么"</td></tr>
+        <tr><td><b>Guilt</b><br>内疚</td><td>驱动去<strong>修复、纠正</strong>、为破损处提供方案</td><td>永远在救火、被问题牵着走、无法说不</td><td>给<b>待修复的系统</b>；但必须配边界机制，否则会 burnout</td></tr>
+        <tr><td><b>Innocence</b><br>纯真</td><td><strong>无议程、纯粹、开放</strong>，不带预设地进入</td><td>显得天真、被利用、缺乏方向感</td><td>给<b>空白画布</b>；适合从0到1，不适合存量博弈</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="say">您的动机是「内疚」。请注意，这不是说您有负罪感——它说的是<strong>您是被"这里有东西坏了，我得修好它"点燃的</strong>。我猜您过去两年接手的，大部分是别人留下来的烂摊子。问题不在于您不会说不，而在于您的能量天然会被破损处吸引。我们要做的不是改这个，是给它装一个开关。</div>
+
+  <h3>2.6 视角 Perspective <span class="chip pers">Personality · 观察</span></h3>
+  <p>关于「你天然会看见什么」。主流教学给六项，且<strong>每项都有一个对应的错位视角</strong>——这个配对结构是绝佳的教练抓手。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">真实视角</th><th>会看见什么</th><th style="min-width:96px">错位视角</th><th>错位时的表现</th></tr></thead>
+      <tbody>
+        <tr><td><b>Survival</b><br>生存</td><td>看见什么安全、什么不安全</td><td>Wanting 欲望</td><td>被"我想要"牵走，忽略风险底线</td></tr>
+        <tr><td><b>Possibility</b><br>可能性</td><td>看见什么是可能的</td><td>Probability 概率</td><td>反复算"现实吗"，把可能性掐死在摇篮</td></tr>
+        <tr><td><b>Power</b><br>力量</td><td>看见影响力与冲击点在哪</td><td>Personal 个人</td><td>把结构性力量问题，误当成个人恩怨</td></tr>
+        <tr><td><b>Wanting</b><br>欲望</td><td>看见被渴望的是什么</td><td>Survival 生存</td><td>退回防御，不敢要</td></tr>
+        <tr><td><b>Probability</b><br>概率</td><td>看见可能发生什么</td><td>Possibility 可能性</td><td>沉溺于想象，失去现实检验</td></tr>
+        <tr><td><b>Personal</b><br>个人</td><td>看见有个人意义的是什么</td><td>Power 力量</td><td>把个人议题，放大成权力斗争</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>箭头方向：</strong><span class="chip">← 左</span> 聚焦视角——放大、分析细节、目标导向，战术感自然；<span class="chip">→ 右</span> 外围视角——看见全局、同时接收多路信息、通过观察学习。</p>
+
+  <div class="note warn">
+    <span class="h">术语使用提醒</span>
+    「视角」这一项在不同教学传统中有两套命名：一套是上表的六项（Survival / Possibility / Power / Wanting / Probability / Personal），另一套以「六感」命名（Smell 嗅觉 / Taste 味觉 / Outer Vision 外视觉 / Inner Vision 内视觉 / Feeling 感觉 / Touch 触觉），后者常被称为 Cognition。<br>
+    <strong>交付纪律：选定一套、全场一致，并在报告中标注采用来源。</strong>两套混用是这行的常见硬伤，懂行的客户一眼能看出来。
+  </div>
+</section>
+
+<!-- 03 会话 SOP -->
+<section>
+  <span class="sec-no">SECTION 03</span>
+  <h2>90 分钟会话标准作业流程</h2>
+
+  <h3>3.1 会前准备（60–90 分钟，不计费）</h3>
+  <div class="panel tight">
+    <ol style="margin:0">
+      <li><strong>收资料：</strong>出生年月日 + <strong>精确到分钟的时间</strong> + 出生地。时间不确定要提前沟通。</li>
+      <li><strong>出图与核对：</strong>生成四变量数据，逐项确认箭头方向与 Color。</li>
+      <li><strong>填《客户预读表》：</strong>三项内容 —— ① 当前最耗神的一件事 ② 一天中精力最好的时段 ③ 过去一年做过的最好的一个决策，当时是什么状态。</li>
+      <li><strong>准备落地清单：</strong>针对其环境 + 摄食，预先写好 3 条<strong>本周就能做</strong>的调整建议（不要泛泛而谈）。</li>
+    </ol>
+  </div>
+
+  <h3>3.2 会话时间轴</h3>
+  <div class="tl">
+    <div class="tlrow">
+      <div class="tltime">00–08′</div>
+      <div class="tlbody">
+        <div class="tlt">开场 · 校准期待</div>
+        <div class="tld">讲清三件事：这不是算命；这不是让你改变性格；这只讲四个可验证的变量。<strong>先破防，再开始。</strong></div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">08–25′</div>
+      <div class="tlbody">
+        <div class="tlt">环境 · 最易见效，放在最前</div>
+        <div class="tld">讲环境类型 → 对照其真实办公场景 → 给本周可做的空间调整。<strong>这一段要做出体感，让客户在 20 分钟内就"被看见"。</strong></div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">25–42′</div>
+      <div class="tlbody">
+        <div class="tlt">摄食与节奏</div>
+        <div class="tld">讲摄食方式 + 连续/交替 → 对照其日程结构 → 给会议与专注时段的重排建议。<strong>这里通常触发最强的"原来如此"。</strong></div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">42–60′</div>
+      <div class="tlbody">
+        <div class="tlt">动机 · 最深也最慢</div>
+        <div class="tld">讲六动机 + 对齐态/错位态 → 对照其职业史。<strong>这一段必须慢，要给客户说话的空间，常见的是客户自己讲出关键洞察。</strong></div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">60–72′</div>
+      <div class="tlbody">
+        <div class="tlt">视角</div>
+        <div class="tld">讲真实视角与错位视角的配对 → 对照其当前的决策困境。<strong>这一段是"解释为什么现在卡住"的收口。</strong></div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">72–85′</div>
+      <div class="tlbody">
+        <div class="tlt">综合 · 出三条落地动作</div>
+        <div class="tld">把四个变量收成<strong>三条本周可执行的具体动作</strong>。不要十条，三条。每条要具体到"周三上午把工位换到窗边"这种粒度。</div>
+      </div>
+    </div>
+    <div class="tlrow">
+      <div class="tltime">85–90′</div>
+      <div class="tlbody">
+        <div class="tlt">收尾 · 交付与跟进约定</div>
+        <div class="tld">说明报告交付时间（48 小时内）与 30 天后的 15 分钟回访。<strong>回访是复购与转介绍的入口，不要省。</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>3.3 开场破防话术（关键 8 分钟）</h3>
+  <div class="say">在开始之前，我想先说清楚三件事，这样您的 90 分钟不会浪费。<br><br>第一，这不是算命。我不会告诉您会发生什么，我只说您这套系统是怎么运作的。<br><br>第二，我不打算让您改变性格。四个变量里，有两个是身体的，可以试；有两个是心智的，只能看见。硬改心智那两个，只会更累。<br><br>第三，今天我们只看四件事：您在什么空间里最清明、什么节奏下最持久、什么驱动能点燃您、您天然会看见什么。这四件事都可以验证——您回去试两周就知道对不对。<br><br>如果您的出生时间不是精确到分钟的，我们先花两分钟确认一下，因为变量对时间非常敏感。</div>
+
+  <div class="note">
+    <span class="h">为什么把环境放在最前面</span>
+    环境是<strong>成本最低、见效最快、最容易验证</strong>的变量——换个工位、调个会议时间，客户第二天就能感受到差别。<br>
+    把它放在开场后第一段，能在 20 分钟内建立可信度。<strong>反过来，如果开场先讲动机（最抽象、最慢热），客户很容易在半小时后失去耐心。</strong>
+  </div>
+</section>
+
+<!-- 04 提问话术库 -->
+<section>
+  <span class="sec-no">SECTION 04</span>
+  <h2>提问话术库</h2>
+  <p>每个变量准备 3 个问题。<strong>问题的目的不是收集信息，是让客户自己说出"对，就是这样"</strong>——自我确认的说服力远大于你的陈述。</p>
+
+  <h4>环境</h4>
+  <ul>
+    <li>过去一年，您做出的最好的一个决策——当时您人在哪里？</li>
+    <li>您在什么样的空间里会觉得"脑子特别清楚"？那个空间有什么特征？</li>
+    <li>有没有某个会议室或某个位置，您一坐进去就觉得不对劲？</li>
+  </ul>
+
+  <h4>摄食与节奏</h4>
+  <ul>
+    <li>您一天里精力最好的时段是哪一段？那段通常没人打扰吗？</li>
+    <li>连续开三个会之后，您的状态是什么样的？需要多久恢复？</li>
+    <li>您更喜欢一整块时间啃一件事，还是穿插着处理几件？哪种之后您更累？</li>
+  </ul>
+
+  <h4>动机</h4>
+  <ul>
+    <li>回想您最有干劲的一段时期——当时是什么在推动您？</li>
+    <li>什么样的事情会让您"一看就想上手"？</li>
+    <li>反过来，什么样的事会让您提不起劲，哪怕它很重要？</li>
+  </ul>
+
+  <h4>视角</h4>
+  <ul>
+    <li>进入一个新项目，您第一眼注意到的通常是什么？</li>
+    <li>别人常说您看问题太细，还是太散？</li>
+    <li>您最近一次判断失误，回头看是漏掉了什么？</li>
+  </ul>
+
+  <div class="note ok">
+    <span class="h">一个通用的收口问句</span>
+    每个变量讲完后问同一句：<strong>「这个说法，您觉得像不像您？」</strong><br>
+    给客户否认的空间。如果客户说"不太像"，不要辩护——立刻追问：<strong>「哪一部分不像？</strong>」这往往能暴露出生时间误差或理解偏差，反而比硬撑专业形象更有价值。
+  </div>
+</section>
+
+<!-- 05 报告模板 -->
+<section>
+  <span class="sec-no">SECTION 05</span>
+  <h2>书面报告模板（48 小时内交付）</h2>
+
+  <div class="panel">
+    <p style="margin:0 0 10px"><strong>篇幅纪律：不超过 6 页。</strong>高管不看长报告。宁可少而准，不要全而泛。</p>
+    <ol style="margin:0">
+      <li><strong>第 1 页 · 你的四个变量</strong> —— 四个变量名称 + 箭头方向 + 一句话定义。配一张简洁的变量图示。</li>
+      <li><strong>第 2 页 · 环境</strong> —— 环境类型、空间特质、当前办公场景对照、本周可做的 2 个空间调整。</li>
+      <li><strong>第 3 页 · 节奏</strong> —— 摄食方式、连续或交替、当前日程结构对照、会议与专注时段的重排建议。</li>
+      <li><strong>第 4 页 · 动机</strong> —— 动机类型、对齐态表现、错位态表现、什么样的任务能点燃你。</li>
+      <li><strong>第 5 页 · 视角</strong> —— 真实视角、错位视角、当前决策困境的解释。</li>
+      <li><strong>第 6 页 · 三条落地动作</strong> —— 本周可执行，具体到时间与地点。末尾附 30 天回访约定。</li>
+    </ol>
+  </div>
+
+  <div class="note warn">
+    <span class="h">报告的语言纪律</span>
+    同一份报告里，<strong>身体那两个变量（环境、摄食）用祈使句</strong>：把周三上午空出来、把工位换到窗边。<br>
+    <strong>心智那两个变量（动机、视角）用陈述句</strong>：您会被破损处吸引、您天然先看风险。<br>
+    <strong>绝不对心智变量给出"你应该改"的建议</strong>——那会把产品降格为成功学。
+  </div>
+</section>
+
+<!-- 06 定价 -->
+<section>
+  <span class="sec-no">SECTION 06</span>
+  <h2>定价与成交</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:96px">版本</th><th>内容</th><th class="num">定价</th><th>适合谁</th></tr></thead>
+      <tbody>
+        <tr><td><b>标准版</b></td><td>90 分钟 1V1 + 6 页报告 + 30 天回访</td><td class="num"><b>¥4,800</b></td><td>首次接触，验证市场反应</td></tr>
+        <tr><td><b>深度版</b></td><td>2 × 90 分钟 + 报告 + 30 天回访 + 期间不限次微信问答</td><td class="num"><b>¥8,800</b></td><td>已有基础、正处转型期的客户</td></tr>
+        <tr><td><b>年度顾问</b></td><td>4 次/年 + 随时问答 + 团队变量配置建议 1 次</td><td class="num"><b>¥38,000</b></td><td>创始人、长期陪跑</td></tr>
+        <tr><td><b>前置基础解读</b></td><td>60 分钟，讲清类型与内在权威（准入门槛不满足时）</td><td class="num"><b>¥1,280</b></td><td>漏斗入口，也是转化器</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="h">定价逻辑：锚定在什么上</span>
+    不要锚定在"人类图解读多少钱"上，要锚定在<strong>高管教练与组织咨询</strong>上。<br>
+    市场上一场高管教练单次要 ¥3,000–10,000，一次组织诊断 ¥2 万起。B2 提供的是<strong>个人决策环境设计</strong>，属于同一货架。<br>
+    <strong>话术上永远说"决策环境设计"，少说"人类图解读"</strong>——后者会触发客户的玄学折扣预期。
+  </div>
+
+  <h3>成交话术</h3>
+  <div class="say">这场会话不做任何预测。我们只看四件事：您在什么空间里最清明、什么节奏下最持久、什么驱动能点燃您、您天然会看见什么。<br><br>这四件事都来自您的出生数据，而且都可以验证——我给的三条调整建议，您本周就能试，两周就知道对不对。<br><br>90 分钟，加上一份 6 页的报告，30 天后我们再用 15 分钟复盘一次。</div>
+
+  <div class="note risk">
+    <span class="h">合规红线（必须遵守）</span>
+    <ul style="margin:6px 0 0">
+      <li><strong>禁用词汇：</strong>诊断、治疗、疗愈、病理、预测、命中注定。B 端一律用组织发展语言。</li>
+      <li><strong>不做承诺：</strong>不承诺业绩提升、关系改善等结果。产品的交付是"看见与建议"，不是"保证效果"。</li>
+      <li><strong>不越界：</strong>摄食方式只谈节奏与工作方式，<strong>不提供饮食或医疗建议</strong>（这是 PHS 原义，但在国内属于高风险表述）。</li>
+      <li><strong>不宣称认证：</strong>未获授权前，绝不出现"官方授权""IHDS 认证"字样。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 07 联动 -->
+<section>
+  <span class="sec-no">SECTION 07</span>
+  <h2>与 B1 / B3 / B4 的联动</h2>
+
+  <div class="grid grid-2x2">
+    <div class="card">
+      <p class="t">B2 → B1 组织工作坊</p>
+      <p class="d">做满 10–15 场 B2 后，案例与表达自然成型。此时开 2 天工作坊（¥25,000），<b>内容不用另起炉灶</b>，四变量的组织转译表直接可用。</p>
+    </div>
+    <div class="card">
+      <p class="t">B2 → B3 小程序工具</p>
+      <p class="d">B2 中客户反复问"那我团队呢"，就是 B3 的需求信号。小程序变量计算器上线后，<b>B2 从单次服务变成「工具 + 解读」组合</b>，客单价可上浮。</p>
+    </div>
+    <div class="card">
+      <p class="t">B2 → B4 领导力选修</p>
+      <p class="d">把 B2 的四变量压缩成 1 天选修模块（¥2,800/人），嵌入既有领导力课。<b>边际成本近零，纯增量收入。</b></p>
+    </div>
+    <div class="card">
+      <p class="t">B2 → 团队配置咨询</p>
+      <p class="d">当一位高管做完 B2 后问"那我的班子呢"，这就自然长成<b>高毛利的团队变量配置咨询</b>——这是通往 B 端大单的桥。</p>
+    </div>
+  </div>
+
+  <div class="note ok">
+    <span class="h">冷启动的三个动作</span>
+    <ol style="margin:6px 0 0">
+      <li><strong>先做 5 场免费</strong>：找 5 位已有客户或熟人，条件是给详细反馈。目的是打磨话术，不是赚钱。</li>
+      <li><strong>录下每场的关键反应</strong>：客户在哪一句说"对，就是这样"，哪一句露出困惑。这些是话术的金矿。</li>
+      <li><strong>第 6 场开始收费</strong>，从 ¥2,800 起步，做满 10 场后调到 ¥4,800。价格随案例数走，不要一步到位。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 08 待办 -->
+<section>
+  <span class="sec-no">SECTION 08</span>
+  <h2>启动前必须补齐的三件事</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:110px">事项</th><th>为什么必须</th><th>建议动作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>① 术语定版</b></td>
+          <td>「视角」存在两套命名（六视角 / 六感 Cognition），混用是硬伤。另外，「生产者」不可写作「生成者」。</td>
+          <td>选定一套命名并写入术语表，全场一致；报告页脚标注采用来源。</td>
+        </tr>
+        <tr>
+          <td><b>② 变量计算校验</b></td>
+          <td>变量对出生时间极敏感，算错一次客户立刻失去信任。需要有可靠的计算来源。</td>
+          <td>确认现有小程序的变量计算逻辑，或选定一个可交叉验证的工具；用 3–5 个已知案例做比对测试。</td>
+        </tr>
+        <tr>
+          <td><b>③ 原版资料补齐</b></td>
+          <td>本手册是框架，六项的具体展开（尤其摄食与环境）需要 Ra 原版细节支撑，否则第 3–5 场就会词穷。</td>
+          <td>采购 Jovian Archive 的 Variables 相关资料（约 ¥2,000 起），把六项逐个补齐成自己的话术。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note warn">
+    <span class="h">本手册的边界</span>
+    这是一份<strong>产品与流程设计</strong>，不是知识教材。四变量的框架、六项名称、箭头含义已核准到可直接使用的程度；但<strong>每一项的深度展开（尤其摄食六项与环境六项的具体表现）需要以 Ra 原版资料为准补齐</strong>。<br>
+    手册能保证的是：结构对、流程对、话术方向对、坑避开。<strong>不能保证的是：你不看原版就能讲满 90 分钟。</strong>
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 高管变量深度解读（B2）产品开发手册</div>
+  <div>配套《开发「魔方矩阵 Cube Matrix」课程可行性研究报告 V1》· 内部使用 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-02";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

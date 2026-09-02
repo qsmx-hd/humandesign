@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>高管变量深度解读 · 课程蓝图</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 72px}
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .sub{font-size:14px;color:#EADFCD;max-width:60ch;margin:10px auto 0;line-height:1.75;font-style:italic}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:22px 0 9px;color:var(--deep);font-weight:700}
+h4{font-size:13.5px;margin:14px 0 6px;color:var(--gold);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+ul,ol{margin:0 0 12px;padding-left:22px}
+li{margin:0 0 6px}
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.body{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.mind{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note.tip{border-left-color:var(--tip);background:#F1ECF8}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+code{background:#F0E4D2;color:var(--deep);padding:1px 6px;border-radius:5px;font-size:12.5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mod{border:1px solid var(--border);border-radius:12px;background:var(--panel);
+  padding:16px;margin:16px 0}
+.mod .mh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:6px}
+.mod .mt{font-size:16px;font-weight:700;color:var(--deep)}
+.mod .md{font-size:12.5px;color:var(--muted);font-style:italic}
+.mod .tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.card{border:1px solid var(--border);border-radius:10px;padding:12px 13px;background:var(--panel);font-size:13px;line-height:1.7}
+.card b{color:var(--deep)}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+a{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--main)}
+a:hover{color:var(--deep);border-bottom-style:solid}
+a code{background:#F0E4D2;color:var(--deep);border-bottom:none}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+.toc a:hover{color:var(--gold)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">COURSE BLUEPRINT</p>
+  <h1>高管变量深度解读<br>Executive Variable Decoding</h1>
+  <p class="sub">副标题 · 决策环境设计 ——<br>把人类图 Variables 四变量，翻译成高管当天就能用的「决策环境设计」语言</p>
+  <div class="meta">
+    <span id="mVer"></span>
+    <span id="mDate"></span>
+    <span>6 模块 · 2 天旗舰工作坊 + 21 天陪跑</span>
+  </div>
+</header>
+
+<!-- 定位 -->
+<section id="positioning">
+  <span class="sec-no">POSITIONING</span>
+  <h2>课程定位</h2>
+  <div class="grid2">
+    <div class="card"><b>一句话</b><br>把人类图 Variables 四变量，翻译成高管当天就能用的「决策环境设计」语言——身体给动作、心智给看见，不谈命理、不谈改命、不给健康建议。</div>
+    <div class="card"><b>受众</b><br>企业决策者（C-level / 中高层）、HR / OD 负责人、教练与组织顾问。无需人类图基础。</div>
+    <div class="card"><b>差异点</b><br>不靠「神秘感」卖课，靠「可验证、可落地」取胜。用国际通用名 Variables 双轨命名，便于学员交叉验证。</div>
+    <div class="card"><b>与时下同类课的关系</b><br>内容构件同源（Variables / PHS 落在 IHDS L4 层），但本課不自称「魔方矩阵 / Cube Matrix」主品牌，也不宣称官方授权。</div>
+  </div>
+  <div class="note tip">
+    <span class="h">「决策环境设计」为什么是副标题</span>
+    环境（Environment）是四变量里唯一客户当天就能验证、成本最低、见效最快的一项——它直接对应「办公空间 / 远程配置 / 会议与物理协作模式」。把整门课框定为「设计你的决策环境」，是以最可执行的杠杆（物理空间）为锚，再带出信息节奏、激励结构、认知视角三个配套杠杆。四个变量 = 决策环境设计的四个杠杆。
+  </div>
+</section>
+
+<!-- 课程地图 -->
+<section>
+  <span class="sec-no">ROADMAP</span>
+  <h2>课程地图</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:90px">模块</th><th style="min-width:160px">主题</th><th style="min-width:70px">时长</th><th>核心产出</th></tr></thead>
+      <tbody>
+        <tr><td>M0</td><td>开篇 · 从类型到变量</td><td>1h</td><td>课程地图卡 · 变量心智模型</td></tr>
+        <tr><td><b>M1</b> ★</td><td>环境 · 决策环境设计</td><td>2.5h</td><td>个人环境画像 + 一处 7 日实验</td></tr>
+        <tr><td>M2</td><td>摄食 · 信息节奏与高管精力</td><td>2h</td><td>周节奏模板</td></tr>
+        <tr><td>M3</td><td>动机 · 驱动与非物质激励</td><td>2.5h</td><td>团队激励卡</td></tr>
+        <tr><td>M4</td><td>视角 · 决策视角与认知校准</td><td>2.5h</td><td>个人决策检查清单</td></tr>
+        <tr><td>M5</td><td>整合 · 个人解码 + 团队变量地图</td><td>1.5h</td><td>变量解码报告（小程序导出）</td></tr>
+        <tr><td>M6</td><td>B 端落地 · 从洞察到组织诊断</td><td>1h</td><td>B 端诊断框架一页纸</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="h">形态建议</span>
+    线下 / 线上混合 · 小班 ≤ 12 人，建议 <strong>5–8 人深度班</strong>（来自冷启动话术包的理想组合：2 位高压决策者 + 2 位转型期中层 + 1 位教练 / 咨询背景）。旗舰 2 天工作坊后可接 <strong>21 天落地陪跑</strong>（每周一次小组复盘 + 小程序打卡）。
+  </div>
+</section>
+
+<!-- 逐模块 -->
+<section id="modules">
+  <span class="sec-no">MODULES</span>
+  <h2>逐模块详解</h2>
+
+  <div class="mod">
+    <div class="mh"><span class="mt">M0 开篇 · 从类型到变量</span><span class="md">1h</span></div>
+    <div class="tags"><span class="chip design">Design + Personality</span></div>
+    <p><b>目标：</b>让高管理解「为什么类型不够，变量才是微调层」，并建立左右箭头的基本语言。</p>
+    <p><b>核心知识点：</b>人类图分层（L0 通识 → L4 变量 / PHS → L5 宇宙学）；变量是 fine-tuning，须在活出类型 / 策略 / 权威之后；<strong>左箭头 = Design / 身体 = 靠实验（祈使句）</strong>，<strong>右箭头 = Personality / 心智 = 靠观察（陈述句）</strong>。</p>
+    <p><b>配套素材：</b><a href="cube-matrix-feasibility.html"><code>cube-matrix-feasibility.html</code></a> 分层章节 · <a href="cube-b2-lecture-notes.html"><code>cube-b2-lecture-notes.html</code></a> 变量总论</p>
+    <p><b>教学活动：</b>破冰——「你最常被误读成什么？」（预演「先否认再定义」）；左右箭头自测。</p>
+    <p><b>交付：</b>课程地图卡。</p>
+  </div>
+
+  <div class="mod" id="m1">
+    <div class="mh"><span class="mt">M1 环境 · 决策环境设计</span><span class="md">2.5h · 副标题主场</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p><b>目标：</b>高管能为自己与团队重设物理 / 远程 / 会议三类决策环境。</p>
+    <p><b>核心知识点：</b>环境的本质是神经系统安顿感，<strong>不是风水、不是审美</strong>；六类环境——洞穴 / 市场 / 厨房 / 山脉 / 山谷 / 海岸；左箭头，给动作。</p>
+    <p><b>配套素材（已产出，直接作教材）：</b><a href="cube-b3-detail-pages.html"><code>cube-b3-detail-pages.html</code></a> 环境六类 6 张详解页（讲义密度）· <a href="cube-b3-oneline-copy.html"><code>cube-b3-oneline-copy.html</code></a> 环境 6 句核心</p>
+    <p><b>教学活动：</b>① 现场环境自评（你是哪类？）② 给自己的工位 / 会议做<strong>一处</strong>改动 ③ 团队环境审计（谁的结界被破坏了）。</p>
+    <p><b>交付：</b>个人环境画像 + 一处 7 日实验。</p>
+  </div>
+
+  <div class="mod" id="m2">
+    <div class="mh"><span class="mt">M2 摄食 · 信息节奏与高管精力</span><span class="md">2h</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p><b>目标：</b>把「精力管理」从鸡汤变成机制——信息怎么进来、何时进来。</p>
+    <p><b>核心知识点：</b>Determination 一律转译为<strong>「信息摄入方式与工作节奏」</strong>；连续 / 交替两类；六项——食欲 / 品味 / 渴 / 触觉 / 声音 / 光。</p>
+    <div class="note risk">
+      <span class="h">合规纪律（本模块不可破）</span>
+      摄食六项<strong>全程不出现任何与饮食、餐饮相关的字</strong>——全部落点在节奏。已在 24 项详解页正文 grep 验证零违禁词（固定术语「食欲」为项目名称，非正文）。
+    </div>
+    <p><b>配套素材：</b><a href="cube-b3-detail-pages.html"><code>cube-b3-detail-pages.html</code></a> 摄食 6 张 · <a href="cube-b2-lecture-notes.html"><code>cube-b2-lecture-notes.html</code></a> 摄食章</p>
+    <p><b>教学活动：</b>节奏审计——标出一周里「被塞爆」的时段；设计个人信息摄入窗口（连续型留整块、交替型拆小股）。</p>
+    <p><b>交付：</b>周节奏模板。</p>
+  </div>
+
+  <div class="mod" id="m3">
+    <div class="mh"><span class="mt">M3 动机 · 驱动与非物质激励</span><span class="md">2.5h</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p><b>目标：</b>识别自己的驱动，并学会激励团队（不靠钱）。</p>
+    <p><b>核心知识点：</b>动机是心智变量，<strong>只能观察、不能改变</strong>；六项——恐惧 / 希望 / 欲望 / 需求 / 内疚 / 纯真，每项均有对齐态与错位态；四项带负面色彩的名字须「先否认再定义」。</p>
+    <p><b>配套素材：</b><a href="cube-b3-detail-pages.html"><code>cube-b3-detail-pages.html</code></a> 动机 6 张 · <a href="cube-b2-outreach-kit.html">冷启动话术包</a>动机相关段落</p>
+    <p><b>教学活动：</b>① 写一句「我的点燃句」② 给一位团队成员写一句「激励而非 KPI」的话。</p>
+    <p><b>交付：</b>团队激励卡。</p>
+  </div>
+
+  <div class="mod" id="m4">
+    <div class="mh"><span class="mt">M4 视角 · 决策视角与认知校准</span><span class="md">2.5h</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p><b>目标：</b>识别自己的真实视角与错位滑落，决策前做校准。</p>
+    <p><b>核心知识点：</b>六视角（Survival / Possibility / Power / Wanting / Probability / Personal）；<strong>必须带「错位项」</strong>——只说真实视角是平的，后半句才是客户拍大腿的部分；左聚焦 / 右外围。</p>
+    <p><b>配套素材：</b><a href="cube-b3-detail-pages.html"><code>cube-b3-detail-pages.html</code></a> 视角 6 张 · <a href="cube-b2-lecture-notes.html"><code>cube-b2-lecture-notes.html</code></a> 视角章</p>
+    <p><b>教学活动：</b>决策复盘——上次「滑向错位」是哪次？写一句归位检查点（如「做决定前先问：这安全吗？」）。</p>
+    <p><b>交付：</b>个人决策检查清单。</p>
+  </div>
+
+  <div class="mod" id="m5">
+    <div class="mh"><span class="mt">M5 整合 · 个人解码 + 团队变量地图</span><span class="md">1.5h</span></div>
+    <div class="tags"><span class="chip hi">整合</span></div>
+    <p><b>目标：</b>把四个变量拼成「我是怎么决策的」全图，并看到团队分布。</p>
+    <p><b>配套素材：</b><a href="cube-b3-miniprogram-spec.html">小程序 B3 变量计算器</a>（四变量同时呈现于结果页）· <a href="cube-course-team-map.html">团队变量地图画布</a></p>
+    <p><b>教学活动：</b>两两互读详解页 + 团队变量分布图（匿名绘制，看谁在边缘 / 谁在中心 / 谁需要安静）。</p>
+    <p><b>交付：</b>个人变量解码报告（小程序一键导出）。</p>
+  </div>
+
+  <div class="mod" id="m6">
+    <div class="mh"><span class="mt">M6 B 端落地 · 从洞察到组织诊断</span><span class="md">1h</span></div>
+    <div class="tags"><span class="chip hi">B 端</span></div>
+    <p><b>目标：</b>让 HR / OD 看到变量如何变成组织诊断工具——这是课程真正的商业落点。</p>
+    <p><b>核心知识点：</b>四变量 → 组织语言映射（环境→空间与远程配置、动机→激励设计、视角→沟通风格、摄食→工作节奏）；<strong>定价纪律</strong>：锚定高管教练 / 组织咨询 ¥3,000–10,000 / 次（来自可研对标）；不做 C 端独立开课。</p>
+    <p><b>配套素材：</b><a href="cube-matrix-feasibility.html"><code>cube-matrix-feasibility.html</code></a> B 端结论 · <a href="cube-b3-miniprogram-spec.html"><code>cube-b3-miniprogram-spec.html</code></a> · <a href="cube-matrix-b2-playbook.html"><code>cube-matrix-b2-playbook.html</code></a> · <a href="cube-course-bdiag-onepager.html">B 端诊断一页纸</a></p>
+    <p><b>教学活动：</b>用一家真实公司做变量诊断沙盘（环境审计 → 节奏诊断 → 激励匹配 → 视角校准）。</p>
+    <p><b>交付：</b><a href="cube-course-bdiag-onepager.html">B 端诊断框架一页纸</a>。</p>
+  </div>
+</section>
+
+<!-- 教学纪律 -->
+<section id="discipline">
+  <span class="sec-no">DISCIPLINE</span>
+  <h2>教学纪律（贯穿全课）</h2>
+  <div class="grid2">
+    <div class="card"><b>先否认，再定义</b><br>动机四项（恐惧 / 内疚 / 欲望 / 需求）名字自带误解，必须先替客户挡掉误解，他才听得进后面。破折号前要干脆，不留余地。</div>
+    <div class="card"><b>身体给动作 · 心智给看见</b><br>环境 / 摄食用祈使句（「把周三上午空出来」）；动机 / 视角用陈述句（「您会被破损处吸引」），<strong>绝不对方心智变量提「你应该改」</strong>。</div>
+    <div class="card"><b>不谈饮食 / 命理 / 健康</b><br>摄食只谈节奏；不给医疗、心理、营养建议。</div>
+    <div class="card"><b>变量是微调，设准入门槛</b><br>明确告知这是「体验级」而非「专业解读」；Ra 明言变量须在活出类型之后探索，本课程作为入门展示级精度。</div>
+  </div>
+</section>
+
+<!-- 合规红线 -->
+<section>
+  <span class="sec-no">COMPLIANCE</span>
+  <h2>合规红线（不可破）</h2>
+  <div class="note risk">
+    <span class="h">四条硬纪律</span>
+    ① <strong>摄食六项零饮食字</strong>（已 grep 验证）。② <strong>不宣称 IHDS 官方授权 / 认证</strong>——可开课、术语可自由使用，但 Jovian Archive 握原始版权、IHDS 握认证话语权。③ <strong>不使用「魔方矩阵 / Cube Matrix」作主品牌</strong>——本課用 Variables 国际通用名双轨命名，便于学员交叉验证。④ <strong>入门展示级精度</strong>，不越界做医疗 / 心理诊断。
+  </div>
+</section>
+
+<!-- 工具矩阵 -->
+<section>
+  <span class="sec-no">ASSETS</span>
+  <h2>工具与交付物矩阵（已有素材）</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:200px">素材</th><th>在课程中的角色</th></tr></thead>
+      <tbody>
+        <tr><td><a href="cube-b3-detail-pages.html"><code>cube-b3-detail-pages.html</code></a>（24 详解页 · 8,606 字）</td><td>教材 backbone，M1–M4 逐模块展开底稿</td></tr>
+        <tr><td><a href="cube-b3-oneline-copy.html"><code>cube-b3-oneline-copy.html</code></a>（24 一句话核心）</td><td>海报 / 卡片 / 破冰金句</td></tr>
+        <tr><td><a href="cube-b2-lecture-notes.html"><code>cube-b2-lecture-notes.html</code></a>（四变量深度讲义）</td><td>讲师备课底稿、M0/M2/M4 理论支点</td></tr>
+        <tr><td><a href="cube-b3-miniprogram-spec.html"><code>cube-b3-miniprogram-spec.html</code></a>（小程序技术方案）</td><td>B3 变量计算器——核心教具，M5 导出报告</td></tr>
+        <tr><td><a href="cube-b2-outreach-kit.html"><code>cube-b2-outreach-kit.html</code></a>（冷启动话术包）</td><td>招生 / 邀约 / 小班组建</td></tr>
+        <tr><td><a href="cube-matrix-feasibility.html"><code>cube-matrix-feasibility.html</code></a>（可研）</td><td>M0 分层定位、M6 B 端定价依据</td></tr>
+        <tr><td><a href="cube-matrix-b2-playbook.html"><code>cube-matrix-b2-playbook.html</code></a>（B2 玩法）</td><td>M6 组织诊断沙盘脚本</td></tr>
+        <tr><td><a href="cube-course-lecturer-script.html"><code>cube-course-lecturer-script.html</code></a>（24 张讲师逐页讲稿）</td><td>M1–M4 讲师备课逐页讲稿，含计时 / 互动 / 板书 / 合规红线</td></tr>
+        <tr><td><a href="cube-course-workshop-kits.html"><code>cube-course-workshop-kits.html</code></a>（工作坊物料四表）</td><td>M1–M4 课堂可填写表单：环境自评 / 节奏审计 / 团队激励卡 / 决策检查清单</td></tr>
+        <tr><td><a href="cube-course-team-map.html"><code>cube-course-team-map.html</code></a>（团队变量地图画布）</td><td>M5 专属物料：成员录入 + 环境六区 SVG 画布 + 四变量分布 + 自动洞察</td></tr>
+        <tr><td><a href="cube-course-bdiag-onepager.html"><code>cube-course-bdiag-onepager.html</code></a>（B 端诊断一页纸）</td><td>M6 专属物料：四诊断块（环境/节奏/激励/视角）+ 优先级 + 90 天目标，可填写打印</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note ok">
+    <span class="h">工作坊物料清单（需另制）</span>
+    环境自评表 · 节奏审计表 · 团队激励卡模板 · 个人决策检查清单 · B 端诊断一页纸。以上可由对应模块的「交付」项直接派生。
+  </div>
+</section>
+
+<!-- 运营定价 -->
+<section id="ops-pricing">
+  <span class="sec-no">OPS & PRICING</span>
+  <h2>运营与定价参考</h2>
+  <div class="grid2">
+    <div class="card"><b>班型</b><br>小班 ≤ 12，建议 5–8 人深度班。</div>
+    <div class="card"><b>阶梯</b><br>免费体验场 → ¥2,800（6 场后）→ ¥4,800（满 10 场）；B 端企业版另计。</div>
+    <div class="card"><b>B 端单价</b><br>高管教练 / 组织咨询 ¥3,000–10,000 / 次（可研对标）。</div>
+    <div class="card"><b>转化信号</b><br>若学员中 ≥ 2 人问「团队能用吗」→ 启动 B1 / B3 企业版。</div>
+  </div>
+  <div class="note warn">
+    <span class="h">战略提醒（来自可研）</span>
+    全国年付费人群仅约 100–400 人，C 端独立开课财务不成立；<strong>最强落点是 B 端模块嵌入</strong>，收入潜力约为独立开课的 3–4 倍、研发投入约 1/3。本課 M6 即为此预留接口。
+  </div>
+</section>
+
+<!-- 附录 -->
+<section id="appendix">
+  <span class="sec-no">APPENDIX</span>
+  <h2>附录 · 术语对照与衔接索引</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:140px">中文</th><th style="min-width:200px">英文 / 国际名</th><th>课程中的叫法</th></tr></thead>
+      <tbody>
+        <tr><td>四变量</td><td>Variables</td><td>决策环境设计的四个杠杆</td></tr>
+        <tr><td>环境</td><td>Environment</td><td>物理决策环境（副标题主场）</td></tr>
+        <tr><td>摄食</td><td>Determination</td><td>信息摄入方式与工作节奏</td></tr>
+        <tr><td>动机</td><td>Motivation</td><td>驱动与非物质激励</td></tr>
+        <tr><td>视角</td><td>Perspective（六视角）</td><td>决策视角与认知校准</td></tr>
+        <tr><td>PHS</td><td>Primary Health System</td><td>仅在合规语境引用，不作健康建议</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="h">与其他文件的衔接</span>
+    本蓝图是「总装层」，向下挂接上述素材；向上可对接小程序 B3 与冷启动招生。原规划的 ① 24 张讲师逐页讲稿、② 工作坊物料四表、③ 团队变量地图画布（M5）、④ B 端诊断一页纸（M6）均已完成，见上方工具矩阵，可直接点开使用。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 高管变量深度解读 · 课程蓝图（副标题：决策环境设计）</div>
+  <div>整合自 2026-09-02 系列成果（可研 / 讲义 / 24 详解页 / 话术包 / 小程序方案）· <span id="fDate"></span></div>
+  <div style="margin-top:6px;font-size:12px;color:var(--muted)">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V5";
+var BUILT = "2026-09-03";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

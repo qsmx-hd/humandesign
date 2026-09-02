@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>小程序详解页文案 · 24 项详写版（讲义密度）</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 72px}
+
+header{
+  background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;
+  border-bottom:3px solid var(--main);
+}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:23px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .lead{font-size:14px;color:#EADFCD;max-width:64ch;margin:10px auto 4px;line-height:1.75;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .sub{font-size:13px;color:#D4C6B3;max-width:62ch;margin:8px auto 0;font-style:italic;
+  border-top:1px dashed rgba(243,217,190,.32);padding-top:10px;line-height:1.72;
+  word-wrap:break-word;overflow-wrap:anywhere}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;
+  color:var(--gold);background:#F0E4D2;border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;
+  border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:24px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:13px;margin:14px 0}
+.grid.grid-2x2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.grid.grid-2x2{grid-template-columns:1fr}}
+
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;
+  border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.body{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.mind{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.hi{background:#DFF0E4;color:#2F5D3F;border-color:#B6DCC2}
+
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;
+  padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note.ok{border-left-color:var(--ok);background:#EFF6F1}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+.tw{overflow-x:auto;margin:13px 0;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--border);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;
+  padding:10px 11px;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #F0E7D8;vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+code{background:#F0E4D2;color:var(--deep);padding:1px 6px;border-radius:5px;font-size:12.5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+/* 详解页卡片 = 一个小程序详情页的内容 */
+.dp{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:16px 16px;margin:15px 0;display:flex;flex-direction:column}
+.dp .dh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.dp .dn{font-size:15.5px;font-weight:700;color:var(--deep);line-height:1.45}
+.dp .de{font-size:12.5px;color:var(--muted);font-style:italic}
+.dp .tags{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 10px}
+.dp .tags .chip{font-size:12px;padding:1px 8px}
+.dp .hook{background:#EFF6F1;border-left:3px solid var(--ok);border-radius:0 8px 8px 0;
+  padding:10px 12px;margin:0 0 9px;font-size:14.5px;line-height:1.78;color:#22402C;font-weight:700}
+.dp .hook::before{content:"钩子";display:inline-block;font-size:12px;font-weight:700;color:var(--ok);
+  border:1px solid var(--ok);border-radius:8px;padding:0 6px;margin-right:7px;vertical-align:1px}
+.dp .ess{background:#FBF5EA;border:1px solid var(--border);border-radius:0 8px 8px 0;
+  padding:8px 12px;margin:0 0 10px;font-size:13px;line-height:1.7;color:var(--muted);font-style:italic}
+.dp .ess::before{content:"本质";display:inline-block;font-size:12px;font-weight:700;color:var(--gold);
+  border:1px solid var(--gold);border-radius:8px;padding:0 6px;margin-right:7px;vertical-align:1px}
+.dp .body{font-size:13.5px;line-height:1.8;color:var(--ink);margin:0 0 10px}
+.dp .body b{color:var(--deep)}
+.dp .body b.leadlbl{color:var(--gold);font-weight:700}
+.dp .try{background:#FBF5EA;border:1px dashed var(--border);border-radius:0 9px 9px 0;
+  padding:9px 12px;font-size:13px;line-height:1.72;color:var(--muted)}
+.dp .try::before{content:"本周一试";display:inline-block;font-size:12px;font-weight:700;color:var(--gold);
+  border:1px solid var(--gold);border-radius:8px;padding:0 6px;margin-right:7px;vertical-align:1px}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">COPY · DETAIL PAGES</p>
+  <h1 id="h1">小程序详解页文案<br>24 项详写版（讲义密度）</h1>
+  <p class="lead">每项为 B3 结果页点进去后的「详解页」内容：钩子 + 本质一句 + 三段展开（职场表现 / 常见误判 / 落地动作）+ 本周一试</p>
+  <p class="sub">——扩写自《一句话核心》与《四变量讲义》，压到讲义密度，写给开发直接绑定，也写给客户直接读。</p>
+  <div class="meta">
+    <span id="mDate"></span>
+    <span id="mVer"></span>
+    <span>24 项 · 4 变量组</span>
+  </div>
+</header>
+
+<!-- 用法 -->
+<section>
+  <span class="sec-no">HOW TO USE</span>
+  <h2>这份文案怎么用</h2>
+  <div class="note">
+    <span class="h">这是「内容源」，不是「页面成品」</span>
+    本文件 24 张卡片，每张对应小程序里<strong>一个变量项的详解页</strong>。开发时把卡片拆成字段，绑定到结果页点击后的详情路由。<br>
+    字段结构见文末 <a href="#appendix">附录 · 字段映射表</a>。客户在小程序里点开看到的就是 <code>hook</code> + <code>ess</code> + <code>body</code>（三段）+ <code>try</code>。
+  </div>
+  <div class="grid grid-2x2">
+    <div class="note" style="margin:0">
+      <span class="h">钩子 hook · 本质 ess</span>
+      钩子复用《一句话核心》的<strong>主推版</strong>；本质是一句更抽象的「再确认」，让客户在详情页顶部二次被看见。
+    </div>
+    <div class="note" style="margin:0">
+      <span class="h">正文 body（三段）</span>
+      职场表现 / 常见误判 / 落地动作，压自讲义。<strong>不谈饮食、不谈改命、不给健康建议。</strong>
+    </div>
+  </div>
+  <div class="note warn">
+    <span class="h">三条不可破的纪律</span>
+    ① <strong>摄食六项绝不出现与吃有关的字</strong>——全部落在「信息摄入与工作节奏」。② <strong>动机 / 视角是心智变量，只给看见不给改造</strong>——任何「您应该改成…」都是红线。③ 身体变量（环境 / 摄食）给动作，心智变量（动机 / 视角）给看见，两者话术语气分家。
+  </div>
+
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#ch1">环境六类（详解页）</a></li>
+      <li><a href="#ch2">摄食六项（详解页）</a></li>
+      <li><a href="#ch3">动机六项（详解页）</a></li>
+      <li><a href="#ch4">视角六项（详解页）</a></li>
+      <li><a href="#appendix">附录 · 字段映射表</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 环境 -->
+<section id="ch1">
+  <span class="sec-no">CHAPTER 01</span>
+  <h2>环境 Environment <span class="chip design">Design · 身体</span></h2>
+  <div class="note">环境的本质是<strong>神经系统的安顿感</strong>——身体在哪种空间里能「呼出一口气」。成本最低、见效最快，是结果页里最该让客户立刻验证的一项。它<strong>不是风水，也不是装修审美</strong>，反复回到身体感受即可。</div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">1. 洞穴 Caves</span><span class="de">保护 · 边界 · 可控</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您不是孤僻，您只是需要一个能关上门的地方。</p>
+    <p class="ess">您的神经系统需要「可控的边界」才能安顿下来。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体只有在能控制「谁可以进来、什么时候进来」时才真正放松——这不是要躲人，是要能掌控出入口。独立办公室、静音舱、可上锁的思考空间，比开放工位的生产力高一个量级；会议里您偏好能看见入口的位置，背对门会持续消耗警戒能量；远程办公价值极高，但前提是家里有一个不被打扰的物理结界。把工位选择当成生产力工具，而不是个人偏好——这一条改动成本几乎为零，回报却最实在。环境是四个变量里唯一客户当天就能验证的一项，所以它最该排在最前面讲。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>内向、不合群、排挤人。事实恰恰相反——很多洞穴型是出色的演讲者，他们只是需要回到可控空间去恢复；他们挑的是空间，不是人。把「需要独处」当成性格缺陷，会让他们长期背着不必要的自责。当他们说「我需要安静一会」，那不是社交拒绝，是系统在请求重启。把性格标签翻译成生理设定，那层自责会立刻松动。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>会议提前 5 分钟到场，选靠墙或能看见门的位置；在日程里设两段 15 分钟的「关门时间」，期间不接任何会；如果工位在开放区，配一副降噪耳机——这是最低成本的人造洞穴。先从降噪耳机开始，一周后您会清楚知道哪些会议值得露面、哪些可以远程。改一条就够，不必一次重构整个工作方式。</p>
+    <p class="try">配一副降噪耳机，这是最低成本的人造洞穴。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">2. 市场 Markets</span><span class="de">流动 · 交换 · 选项</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您需要身边有东西在流动——安静的房间会让您慢慢枯竭。</p>
+    <p class="ess">您的能量来自流动与交换，静止的环境会让您枯竭。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体在信息与人交汇的地方才活过来，要的是流动感和选项，不是吵闹。商务拓展、客户现场、协作区是您的补给站；被关在安静的独立办公室反而会枯竭。深度思考也适合有背景活动的场所（咖啡馆），而不是绝对安静的房间。长期远程且无人接触，对您是慢性消耗。您的能量曲线随环境起伏，不是靠意志力硬撑出来的。把「去现场」当成工作环节，而不是额外负担，他们的产出会明显不同。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>爱热闹、坐不住、不专注。他们不是要吵，是要流动感和选项；久坐不动的静态环境确实会让他们迟钝，这不是注意力缺陷。问「您最有灵感的时刻在哪儿」往往能戳破这个误解——答案常是旅途中、咖啡馆、或见完客户回来的路上。「坐不住」的标签，常常掩盖了真正的信号：他们需要场，不是需要安静。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把至少两场内部会议改成走动式，或挪到楼下的咖啡区；每周安排一次去前线——见客户、逛门店、去展会，哪怕只有半天；需要深度思考时，选有背景活动的场所，而不是逼自己待在空房间。流动感回来了，思路会跟着回来。哪怕只是把茶水间当成临时补给站，也比困在独立办公室强。先挪一场会，比立flag说「我要多出去」管用得多。</p>
+    <p class="try">把两场内部会改成走动式，或挪到楼下咖啡区。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">3. 厨房 Kitchens</span><span class="de">转化 · 过程 · 混合</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您需要待在「事情正在发生」的地方——旁观，比忙碌更累。</p>
+    <p class="ess">您需要在「转化正在发生」的过程里，而不是在旁边看。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体需要「转化正在发生」——点子变产品、混乱变秩序。您适合项目作战室、从 0 到 1 的现场、创业早期团队；典型优势是整合与催化，把不同要素搅在一起产出新东西。被丢进成熟、稳定、没有变化的业务里会迅速失去能量。团队里您是「把事情搅动起来」的人，不是守成的人。他们不是不能做稳定业务，是在没有转化的业务里会慢慢熄火。给他们一个能搅动的场，比给他们一个头衔更能留住人。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>爱管闲事、不稳定。他们介入不是要控制，是需要在过程里；不是喜新厌旧，是需要有东西在转化。您最难受的时期往往不是最忙的时候，而是「一切按部就班、没什么在变」的时候。「爱管闲事」的评价，常常来自把他们的参与欲误读成了控制欲。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>主动参与一个正在进行的项目，哪怕只是列席——旁观会让他们枯萎；把一部分会议改成共创工作坊的形式，而不是听汇报；如果当前岗位纯维护，给自己找一个小的改造项目作为能量补给。让「转化」重新发生，比任何激励都管用。让他们保有至少一个「正在进行」的项目，比任何团建都更能留住人。列席即可，不必非得牵头——他们要的是在场，不是掌权。</p>
+    <p class="try">主动列席一个进行中的项目，旁观会让您枯萎。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">4. 山脉 Mountains</span><span class="de">高度 · 距离 · 视野</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您需要距离——离得远一点，才看得清。</p>
+    <p class="ess">您的认知需要距离，贴得太近反而看不清。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体需要高度和距离，重点不是海拔，是与日常噪音隔开的健康距离。您天生适合战略、长期规划、周期性复盘这类要拉开距离看的活；没有窗、没有视野的房间会让您持续压抑却说不出原因。您做的几个最好的判断，往往是在退开一步之后才浮现的。您看的不是风景，是局势——视野是认知的延伸。把山脉型焊在一线，等于拆掉他的瞭望台。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>高高在上、不接地气、反应慢。他们的距离感是认知工具，不是态度问题；退一步才看清是节奏，不是迟钝。把「需要抽离」误判成「不投入」，是管理者常犯的错。逼一个山脉型去一线天天救火，等于废掉他的千里镜。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把战略性思考的时段挪到有视野的物理位置——高层、窗边、户外；每周留一段刻意抽离的时间，从执行层退出来看全局；重要决策前，先离开现场走一圈，再回来定。距离不是逃避，是您看清局势的方式。高层办公室不是特权，是他们的工作设备。高层位不是特权，是装备——这句话值得当面说给带他的人听。</p>
+    <p class="try">把战略思考挪到窗边或户外，决策前先离开现场走一圈。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">5. 山谷 Valleys</span><span class="de">流动 · 声音 · 连接</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您需要流动和声音——绝对的安静，反而让您停摆。</p>
+    <p class="ess">您的系统靠声音与流通维持运转，绝对静止会停摆。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体需要声音和流通，完全静止会让系统停摆。背景音（播客、音乐、咖啡馆环境音）对您是补给，不是干扰；边走边谈比会议室效率高；处在信息流通的节点（知道正在发生什么）本身就是能量来源。长期静坐加绝对安静的环境，是您的效率杀手。您的专注靠流动维持，不是靠屏蔽维持。静止对他不是专注，是停摆。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>注意力不集中、需要背景音才干活是不专业。实际上背景音对您是调节器；您需要的是信息流通感，不是八卦本身。「深度工作必须绝对安静」这条流行信条，对您的体质可能正好相反。「不专业」的评判，来自用安静型的标准衡量流动型的人。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把一对一沟通改成散步式，尤其是需要坦诚的对话；深度工作时开背景音（环境音或轻音乐），不必强迫自己绝对安静；在密集社交之间穿插一个小差事走动一下，作为系统重置。凡是替您推翻一条一直信奉的规则，都会产生强共鸣。通勤路上听播客，往往比坐在工位上硬想更高效。背景音一开，那层莫名的焦躁常会降半档。</p>
+    <p class="try">把一对一沟通改成散步式，深度工作时开背景音。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">6. 海岸 Shores</span><span class="de">边缘 · 过渡 · 交界</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <p class="hook">您最自在的位置是边缘——不进中心，也不离开。</p>
+    <p class="ess">您的最佳位置在边缘——能进能出，不扎进任何一边的中心。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您的身体在两个世界交汇的过渡地带最自在，需要随时能进、随时能出。您天生适合跨界、转型、连接两个系统的角色；被焊死在中心或深处会窒息。您常有的「若即若离」不是不投入，是您的设计——连接者必须站在边缘。他们站在边缘，才能同时看见两边，这是连接者的工位。别逼他选边站，他站中间才有用。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>不够投入、若即若离、善变。他们的最佳状态就是在边缘，不是不投入；需要周期性换环境，长期固定一处会僵化。海岸型常有一种隐秘的愧疚感——觉得自己「不够投入」，这句话给的是许可，不是信息。「若即若离」是他们的设计语言，不是态度问题。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>会议坐靠出口或靠窗的位置，给自己留物理上的「出」；允许自己早到或晚到、中途出去透口气，不必全程在场；在日程里安排周期性换环境，哪怕只是换个楼层办公一天。保留出口，您才待得住。周期性换环境不是善变，是系统需要刷新。允许他中途离场，他反而待得更久。</p>
+    <p class="try">会议坐靠出口的位置，允许自己中途出去透口气。</p>
+  </div>
+</section>
+
+<!-- 摄食 -->
+<section id="ch2">
+  <span class="sec-no">CHAPTER 02</span>
+  <h2>摄食 Determination <span class="chip design">Design · 身体</span></h2>
+  <div class="note risk">
+    <span class="h">合规红线：只谈节奏，不谈饮食</span>
+    摄食（Determination）的原义关乎身体的摄入机制，但在小程序里<strong>一律转译为「信息摄入方式与工作节奏」</strong>。下面六段<strong>不出现任何与饮食、餐饮相关的字</strong>——这是合规要求，也是避免客户误解。<br>
+    <span style="display:inline-block;margin-top:5px">箭头方向：<span class="chip">← 左 · 连续型</span> 一次一事、结构化固定时段；<span class="chip">→ 右 · 交替型</span> 混合穿插、灵活随身体感觉。</span>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">1. 食欲 Appetite</span><span class="de">单线程深潜</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <p class="hook">您的大脑一次只处理一件事——切换的代价，比您以为的高得多。</p>
+    <p class="ess">您的大脑一次只跑一条线程，切换要整体重启。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您是连续型，一次只啃一件事，中途切换要整体重启，不是慢。日程需要整块留白，碎片会议是效率的直接杀手。典型困境：一天开了六个 45 分钟的会，晚上发现自己什么都没推进——不是您不努力，是系统被频繁重启了。您的效率来自深度，不是来自忙碌的密度。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>效率低、不自律。把节奏错配当成性格缺陷，会让连续型的人长期自我攻击。真正的卡点不在能力，在于日程把您的「单线程」硬掰成了「多线程」。把重启成本当成懒惰，是对连续型最大的误解。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>每周至少留一个完整的上午，不放任何会议；把同主题的会议合并成半天，而不是散布在全周。我们不用改您，只要把整块时间还给您。先试周三上午空出来，看一周感受。整块时间不是奢侈品，是他们系统运转的必需品。连续型最怕被夸成「能多线程」——那句夸奖常是把他日程塞爆的起点；把专注翻译成「需要保护」，管理者反而用得起他。</p>
+    <p class="try">每周留一个完整上午，不放任何会议。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">2. 品味 Taste</span><span class="de">对品质敏感</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <p class="hook">您对内容的品质敏感——粗制的东西，您根本装不进去。</p>
+    <p class="ess">您对信息品质的敏感是机制，不是挑剔。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您对信息品质敏感，被硬塞低质内容会直接罢工；不是挑剔，是您的摄取机制。您适合做把关人、评审、标准制定者。对报告、方案的精细度要求高，这不是难伺候，是您的系统对输入质量有阈值。门槛高不是毛病，是您的过滤器在替团队把关。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>难搞、挑刺的下属。点破「这不是挑剔，是您的摄取机制」，能同时缓解双方——您不必为要求高而愧疚，团队也知道这是规律不是针对人。把筛选权交给您，反而省下反复返工的精力。与其让他们「别挑了」，不如把筛选权正式交给他。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把一部分「接收」改成「筛选」——让您参与定标准，效率会明显提升；对于必须接收的低质信息，先让人提炼再给您。您不是要掌控一切，是要让进来的东西配得上您的注意力。让他们定标准，返工率会明显下降。把「挑刺」翻译成「系统把关」，团队少一层防御、多一层信任；他筛掉的东西，常常正是别人会返工的地方。</p>
+    <p class="try">对低质信息，要求对方先提炼再给。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">3. 渴 Thirst</span><span class="de">高频少量</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <p class="hook">您需要小份、多次——三小时的长会，对您是生理性消耗。</p>
+    <p class="ess">您要的是持续小剂量补给，不是一次性倾倒。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您是高频少量型，需要持续小剂量输入。三小时的长会对您是生理性消耗，不是没耐心；短会、快速同步、站会机制才是您的节奏。重要信息分批给，别一次性倒过来。您常常累却说不出为什么，根子常在对节奏错配——您的系统不是不能专注，是要以小剂量、高频次的方式输入。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>没耐心、坐不住。把「需要持续补给」误判成「注意力短」，会让您被迫在长会里硬撑，结果更累。真正的卡点不在性格，在于没人把信息拆成您能消化的小股。他们的专注靠小股持续输入维持，不是靠一次塞满。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把冗长的周会拆成两次 15 分钟；重要信息分批给，而不是攒一大包一次性丢过来。把节奏从「一次性塞满」改成「细水长流」，您一整天的状态会不一样。先改周会这一处，您会立刻感到下午没那么空。高频少量是神经节奏，不是难伺候；逼他一次性接收，等于让浅呼吸的人憋气。把信息拆碎，他反而能跑完全程。</p>
+    <p class="try">把冗长周会拆成两次 15 分钟。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">4. 触觉 Touch</span><span class="de">需要摸得到</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <p class="hook">您要摸得到才算真的知道——十页数据，不如现场两小时。</p>
+    <p class="ess">您靠接触实物确认，纯数据推演会让您悬空。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您决策前需要接触实物或一线，纯数据推演会让您不踏实。您的优势是现场感和对细节质地的判断力；被隔绝在会议室里做决策会持续感到「悬空」。重大决策前安排一次现场走访，常常能让犹豫瞬间消失。他们需要的是亲眼确认，不是 micromanage。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>不信任团队、要 micromanage。其实是需要触觉确认，不是不信任人。您反复改主意，往往不是犹豫，是您一直没碰到实物——一旦摸到了，您定得比谁都快。「不信任团队」的误读，伤的是他们做决定的速度。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>重大决策前安排一次两小时现场走访，哪怕只是去一线待一会儿；要求汇报时带实物或带案例，而不是只有 PPT。给您「摸得到」的权限，比任何催促都更能让您拍板。一次现场走访，常常顶过十页报告。触觉型最怕被说「不信任团队」，其实他只是要碰实物；给「可接触」的权限，决策变快，团队也少一层被 micromanage 的错觉。</p>
+    <p class="try">重大决策前，安排一次两小时现场走访。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">5. 声音 Sound</span><span class="de">声学敏感</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <p class="hook">您对声音的「控制权」，比您以为的更影响思考质量。</p>
+    <p class="ess">您要的是对声音的「控制权」，不是单纯安静。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您对声学环境极度敏感——开放式办公的噪音是隐形能耗，常累却说不出为什么。您需要的是对声音的控制权：降噪耳机、独立空间、或自选背景音。会议场所的回音、邻座通话都会实质影响您的思考质量。这不是矫情，是生理需求。噪音对您不是打扰，是持续漏电。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>难搞、矫情。注意与山谷型区分：山谷型需要声音（补给），声音型需要可控的声学环境（可能要绝对安静）。区分点在「您是要声音，还是要对声音的控制权」。把焦点从「敏感」转到「控制权」，弱点就变成需求。把对声音的需要说成「矫情」，等于否认他们的生理设定。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>配一副降噪耳机，并明确告诉团队这不是不礼貌，是您的工作方式；重要思考安排在声学可控的时段与地点。把控制权拿回来，您会发现自己没那么容易「莫名其妙地累」。降噪耳机不是装备，是他们的工作边界。声学控制是生理设定，不是矫情；把「敏感」翻译成「需要控制权」，弱点就变成可满足的需求。一副耳机，常顶过十次谈心。</p>
+    <p class="try">配降噪耳机，并明确告诉团队这不是不礼貌。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">6. 光 Light</span><span class="de">与昼夜同步</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <p class="hook">您的效率跟着光走——把重要决策排在夜里，是自我消耗。</p>
+    <p class="ess">您的状态跟着昼夜走，逆着它工作就是消耗。</p>
+    <p class="body"><b class="leadlbl">在职场里：</b>您是昼夜节律型工作者，夜间效率断崖式下跌。把重要决策排在晚上或凌晨，等于在状态最差时做最关键的判断；长期夜间工作对您的消耗，远超对自己是「夜猫子」的认知。上午和午后有光的时段，才是您真正的黄金窗口。您的黄金时段在白天，不在深夜。</p>
+    <p class="body"><b class="leadlbl">常被误读成：</b>懒、作息差、硬撑着熬夜。以「我是夜型人」自居，把重要事排错时段还以为是习惯，是最隐蔽的浪费。您的节律不是喜好，是生理曲线。「夜猫子」的自嘲，常是节律被工作安排长期压错的结果。</p>
+    <p class="body"><b class="leadlbl">可以试着：</b>把最重要的决策会挪到上午或午后有光的时段；晚间只安排事务性、不需要判断的工作。不用逼自己改变整个人生，只要把「最关键的判断」挪到 daylight 里，回报就很明显。把关键判断挪到 daylight，是零成本的效率升级。夜型人标签常是错配的结果，不是天性；把关键判断挪回 daylight，他会从「莫名其妙累」变成「原来上午这么能打」。零成本却常被忽略。</p>
+    <p class="try">晚间只安排事务性、不需要判断的工作。</p>
+  </div>
+</section>
+
+<!-- 动机 -->
+<section id="ch3">
+  <span class="sec-no">CHAPTER 03</span>
+  <h2>动机 Motivation <span class="chip pers">Personality · 心智</span></h2>
+  <div class="note warn">
+    <span class="h">讲法要害：这是看见，不是改造</span>
+    动机属心智，<strong>只能观察，不能改变</strong>。六段里四项（恐惧、内疚、欲望、需求）名字带负面色彩，<strong>钩子句一律先否认再定义</strong>。正文只讲对齐态与错位态，绝不说「您应该改」。<br>
+    <span style="display:inline-block;margin-top:5px">这一段客户说话的时间该比您多——目标是让他自己说出「对，我就是被这个点燃的」。</span>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">1. 恐惧 Fear</span><span class="de">探究未知</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您不是害怕——您是被「这里还有我没搞懂的」点燃的。</p>
+    <p class="ess">您是被未知点燃的探究者，不是胆小的人。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>智慧的探究者，把未知变可理解。会主动去查清、去验证、去搞明白底层逻辑；最投入的，是还没人搞明白的问题。如果一件事所有人都说「没问题、照做就行」，您反而提不起劲。他们不是怕，是想知道——这是两个不同的引擎。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>反复推演却不行动、焦虑、瘫痪。「恐惧」这个名字最容易引起抵触，必须先正名——这不是害怕，是驱动去理解未知。跳过这步，客户会当场关闭。把探究欲当成焦虑治，会同时杀掉他们的动力。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>激励您靠「待查清的难题」，而不是确定的 KPI。别用「别想太多」打发——那等于抽走您的燃料。把燃料从「确定的任务」换成「没人搞懂的问题」，您自己会动起来。给他们难题，不要给答案；答案会灭掉他们的火。管理者最该戒的一句是「别想太多」，那等于抽走探究者的燃料。</p>
+    <p class="try">给自己排一个没人搞明白的难题，而不是一个死任务。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">2. 希望 Hope</span><span class="de">信任展开</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您的力量是耐心——在该等的时候等得住，不是不作为。</p>
+    <p class="ess">您的力量是信任时机，在该等时等得住。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>对时机的深层信任，能等、能允许、能在别人焦虑时保持不动。这是力量不是软弱，天生适合长期布局、孵化型岗位——您种下的东西，您愿意等它长。他们的耐心是战略资产，不是拖延。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>盲目等待、把力量交出去、错过窗口。在狼性文化里，您最易被误判为没进取心——其实您不是不动，是懂得有些事急不得。在唯快是图的文化里，他们最容易被低估。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>给时间窗口，而非 deadline 压迫。把一项长期工作，从「逼自己快点」改成「定个窗口等它成熟」。您要的不是推力，是允许——允许比催促更能让您交付。允许他们等，比催促他们动更有产出。希望型不是慢，是会等；把 deadline 换成窗口期，他交付的更耐放。逼一个会等的人抢跑，是在浪费他的战略资产。</p>
+    <p class="try">把一项长期工作，从「逼自己快点」改成「定个窗口等它成熟」。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">3. 欲望 Desire</span><span class="de">改变物质世界</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您天生要去改变点什么——守成的位置，会逼您制造不必要的变化。</p>
+    <p class="ess">您有把想法变成现实的推力，是天生的行动者。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>天生的领导者，能把想法变成现实、推动事物成形。您最适合从零开始、或要去改变点什么的局面。把您放在可改变的战场上，您带队打仗比谁都顺。他们是建造者，不是维持者。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>控制欲、为动而动、为迎合外部期待而推动。如果把您放在只需维持现状的位置上，您会开始制造变化——那不是您的问题，是位置放错了。在守成岗上的「折腾」，是系统错配的求救信号。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>给可改变的战场，让您带队打仗，别让您守成。放错位置时的「搞事情」，是系统在抗议，不是性格缺陷。把推力导向真实的战场，它就成了领导力。给他们战场，别给他们围栏。把「折腾」翻译成「位置错配」，你就救回一个本可带队的人；守成岗上的躁动，是系统在喊被浪费。</p>
+    <p class="try">给自己找一个「从零开始」或「要改变点什么」的小项目。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">4. 需求 Need</span><span class="de">识别真正所需</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您是被「有人需要我」点燃的——被需要不是负担，是您的燃料。</p>
+    <p class="ess">您被「被需要」点燃，那是您的燃料。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>精准识别真正所需，可靠、有支撑力。用「谁依赖您」来激活您，比「您想成为什么」有效十倍。您不是讨好型人格，是被需要这件事本身点燃。他们是被需要点燃，不是被成就点燃。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>过度承担、被需求绑架、边界失守。被需要不是负担，但当它变成「谁都要管」，您会耗尽。问题不在动力，在边界。没有边界的「被需要」，会慢慢变成被掏空。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>列出「谁真的依赖我」，把精力优先投给这几个人；但必须配边界机制，否则会被需求拖垮。同样的燃料，加上开关，就是可持续的支撑力。燃料要有开关，否则迟早烧完。被需要点燃的人，最怕被当成随手可取的电池；列完「谁真依赖我」必须配边界，开关才真正转得动。</p>
+    <p class="try">列出「谁真的依赖我」，把精力优先投给这几个人。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">5. 内疚 Guilt</span><span class="de">修复破损</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您被「这里有东西坏了」点燃——所以您总比别人先看见破损处。</p>
+    <p class="ess">您被破损处吸引，是组织的救火队长。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>驱动去修复、纠正、为破损处提供实用方案。组织里最可靠的救火队长，别人看见麻烦绕开，您看见麻烦就上手。这是能力，不是缺陷。他们看见破损，就像看见待修的灯——本能就去拧。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>永远在救火、被问题牵着走、无法说不、最终 burnout。问题不在您不会拒绝，而在于您的能量天然流向破损，比别人先看见它——开关不在嘴上，在机制上。把救火当成天性，忘了救火也需要轮班。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>给待修复的系统，但必须配边界——否则会耗尽。我们不是要改这个，是给它装一个开关：每天只接一件别人留下的烂摊子，其余的让它先坏着。开关不是冷漠，是让救火可持续。救火队长需要轮班——给破损系统配个开关，比劝他「学会拒绝」管用；他不是不会 no，是能量天然流向破损。</p>
+    <p class="try">给「救火」设一个开关：每天只接一件别人留下的烂摊子。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">6. 纯真 Innocence</span><span class="de">无议程进入</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您的优势是不带预设——您能看见别人被成见挡住的东西。</p>
+    <p class="ess">您不带预设地进入事物，所以看得见盲区。</p>
+    <p class="body"><b class="leadlbl">对齐时：</b>纯粹、开放、不带预设，能看见别人被成见遮住的盲区。您「没被训练成只看得见该看的」，恰恰是洞察力来源，不是幼稚。他们的盲区红利，来自没被训练成只看该看的。</p>
+    <p class="body"><b class="leadlbl">错位时：</b>显得天真、被利用、缺乏方向感。空白画布上人人都能画，但您要让画布真的空白，而不是被别人的议程先占满。在存量博弈里，这份开放反而容易被当成好欺负。</p>
+    <p class="body"><b class="leadlbl">怎么用：</b>适合从 0 到 1 的空白画布，不适合存量博弈。把一个已有结论的问题，放下预设重新看一遍——您会看到别人因为太熟而看不见的东西。让他们先入局、不被议程占满，洞察就来了。让画布真的空白——存量博弈里他的开放易被当软柿子，但放到 0→1 的场，那份无预设正是洞察红利；别用「太天真」堵他的眼。</p>
+    <p class="try">把一个已有结论的问题，放下预设重新看一遍。</p>
+  </div>
+</section>
+
+<!-- 视角 -->
+<section id="ch4">
+  <span class="sec-no">CHAPTER 04</span>
+  <h2>视角 Perspective <span class="chip pers">Personality · 心智</span></h2>
+  <div class="note warn">
+    <span class="h">命名纪律：本文件统一采用「六视角」命名</span>
+    视角存在两套传统：下表「六视角」（Survival / Possibility / Power / Wanting / Probability / Personal）与「六感 / Cognition」命名。本报告<strong>选定六视角一套、全场一致</strong>。正文必须带上「错位项」——只说真实视角是平的，后半句才是客户拍大腿的部分。<br>
+    <span style="display:inline-block;margin-top:5px">箭头方向：<span class="chip">← 左</span> 聚焦视角（放大细节、目标导向）；<span class="chip">→ 右</span> 外围视角（看全局、多路接收）。</span>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">1. 生存 Survival</span><span class="de">错位 → 欲望 Wanting</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您第一眼看见的，永远是「这安全吗」——压力大的时候，反而会被「我想要」牵走。</p>
+    <p class="ess">您的第一反应是确认安全，这是资产。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>风险与安全。您天然先看底线在哪，这是价值——团队里需要有人先问「这会不会出事」。您的谨慎不是怯，是雷达。他们先扫风险，是团队的刹车。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>当压力上来，您会让步于欲望，忽略风险底线，风险就这么进来。破防方式出乎意料——越谨慎的人，越容易被「我想要」带偏。这不是您不谨慎，是谨慎被渴望临时盖住了。谨慎被渴望临时覆盖，是破防的真实路径。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>做重大决定前，先问一句「这安全吗」，不让渴望盖过它。把「安全」这个检查点明确写进决策流程，您的雷达就归位了。把「安全吗」写进决策清单，雷达就归位。谨慎者最该被提醒的不是勇敢，是先确认刹车还在——这句话常让带他的人松一口气。</p>
+    <p class="try">做重大决定前，先问一句「这安全吗」，不被渴望盖过。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">2. 可能性 Possibility</span><span class="de">错位 → 概率 Probability</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您天生看见「什么可以成立」——压力大的时候，会滑去反复算现实不现实。</p>
+    <p class="ess">您天然看见「什么可以成立」。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>什么是可能的。您看到一个想法时，先看见它能成立的那一面——这是稀缺的天赋，团队需要有人先说「试试看」。他们先看见能成立，团队才敢试。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>压力一大，您滑进「概率」，开始反复算现实吗，把自己劝退。您放弃过的想法，多半不是不可行，是在概率里待太久了。这一句几乎是一记直球，很多人会想起具体的某件事。在概率里待太久，是可能性被自己掐死的过程。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>想到一个点子，先记下来「它哪里成立」，别急着算它为什么不行——那是您掐死想法的老习惯。先让可能性活过 24 小时，再谈检验。让想法先活过一天，再谈检验。掐死可能性的从不是别人，是他自己按下的「现实检验」快捷键；少算一次不行，多留一个成立的可能。</p>
+    <p class="try">想到一个点子，先记下来「它哪里成立」，别急着算它为什么不行。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">3. 力量 Power</span><span class="de">错位 → 个人 Personal</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您第一眼看见的，是影响力在哪里——压力大的时候，会把结构问题误当成个人恩怨。</p>
+    <p class="ess">您第一眼看见的是影响力与格局。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>格局与影响力。您天生看见冲击点在哪、谁在推动局势——这是管理者的底层视野，团队里需要有人抬头看结构。他们抬头看结构，团队才有人看全局。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>压力一来，您把结构性问题当成个人恩怨，开始内耗。具体到「结构 vs 人事」这个层面，就是您的教练价值——分清了，您就从人事漩涡里出来。把结构问题读成个人恩怨，是最贵的内耗。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>遇到卡点，先分清「这是结构问题还是某人针对我」。一句话问出口，很多原本以为的「他针对我」，会现出原本的结构形状。一句话分清楚，漩涡就散了。把结构问题读成个人恩怨是最贵的内耗——提醒他抬头看格局，比陪他复盘每句「他对我怎样」都值钱。</p>
+    <p class="try">遇到卡点，先分清「这是结构问题还是某人针对我」。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">4. 欲望 Wanting</span><span class="de">错位 → 生存 Survival</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您第一眼看见的，是别人真正想要什么——压力大的时候，会退回防御，不敢要。</p>
+    <p class="ess">您第一眼读的是别人的渴望。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>读人、识别他人渴望。您很会看见别人真正要什么，谈判、销售、带人时这是隐蔽的优势——您先懂对方，再出手。他们先读懂对方，再出手，这是隐蔽优势。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>压力上来，您退回防御，轮到自己连「我想要」都说不出口。很会读人，但对自己失语——这个反差本身就是洞察。很会读人、却对自己失语，是他们最常见的亏。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>今天明确说一次「我想要什么」，不只是「你需要什么」。把对他人的雷达，也调一档回自己身上，您才不会总在成全别人之后才发现忘了自己。把雷达调一档回自己，才不总忘了自己。很会读人的人，最常亏在对自己失语；今天说一次「我想要」，比读懂十个客户都更能救他。</p>
+    <p class="try">今天明确说一次「我想要什么」，不只是「你需要什么」。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">5. 概率 Probability</span><span class="de">错位 → 可能性 Possibility</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您天生看见「接下来会发生什么」——压力大的时候，会滑进不切实际的想象。</p>
+    <p class="ess">您天然看见趋势，前提是守住现实检验。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>预测趋势、基于现实检验做判断。您是难得的趋势眼——别人还在看当下，您已经算出下一步大概率往哪走。他们是趋势眼，别人还在看当下。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>失去现实检验，沉溺想象。优势的前提是「现实检验」四个字——守住它您是宝，失去它只剩想象。指出前提，赞美才可信。失去现实检验，趋势眼就变成幻想者。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>做一个判断时，找一条可验证的事实锚点，别只靠推演。给想象拴一根事实的绳，它就不会把您带跑。给想象拴一根事实的绳。趋势眼可贵，失了现实检验就只剩幻想；一句「有什么可验证的」，能把他从云里拽回地面。</p>
+    <p class="try">做一个判断时，找一条可验证的事实锚点，别只靠推演。</p>
+  </div>
+
+  <div class="dp">
+    <div class="dh"><span class="dn">6. 个人 Personal</span><span class="de">错位 → 力量 Power</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <p class="hook">您第一眼看见的，是「这对我意味着什么」——压力大的时候，会把个人议题放大成权力斗争。</p>
+    <p class="ess">您在乎意义，这是您判断的底层坐标。</p>
+    <p class="body"><b class="leadlbl">真实视角：</b>个人意义。您做的每个决定，底层都挂着「这对我意味着什么」——这没错，是您判断是否值得投入的标尺。意义是他们的标尺，不是矫情。</p>
+    <p class="body"><b class="leadlbl">滑向错位：</b>压力一大，您把个人议题放大成「谁压过谁」，就偏了。在乎意义本身要被肯定，但滑坡路径要被点破——先接住，再指出。把意义放大成输赢，是滑坡的开始。</p>
+    <p class="body"><b class="leadlbl">怎么识别：</b>碰到冲突，先问「我在乎的到底是什么」，别急着争输赢。把意义感接住，权力斗争的戏码就散了。先接住意义，戏码就散了。在乎「这对我意味着什么」不是矫情，是判断的底层坐标；别用输赢掩盖意义，否则他永远在别处燃烧。</p>
+    <p class="try">碰到冲突，先问「我在乎的到底是什么」，别急着争输赢。</p>
+  </div>
+</section>
+
+<!-- 附录 -->
+<section id="appendix">
+  <span class="sec-no">APPENDIX</span>
+  <h2>附录 · 字段映射表（给开发）</h2>
+  <p>小程序结果页每个变量项点击后，跳转同一详情路由，按 <code>itemKey</code> 取以下字段渲染。正文 <code>body</code> 即上方 24 张卡片的三段 <code>&lt;p class="body"&gt;</code> 原文——开发可整体渲染，或按段落拆成 <code>body1 / body2 / body3</code>。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th style="min-width:120px">字段</th><th>含义</th><th style="min-width:150px">取值 / 示例</th></tr></thead>
+      <tbody>
+        <tr><td><code>varKey</code></td><td>变量组键</td><td>env / det / mot / per</td></tr>
+        <tr><td><code>itemKey</code></td><td>单项键（唯一）</td><td>env_caves / det_appetite / mot_fear / per_survival …</td></tr>
+        <tr><td><code>cn</code></td><td>中文名</td><td>洞穴</td></tr>
+        <tr><td><code>en</code></td><td>英文名</td><td>Caves</td></tr>
+        <tr><td><code>side</code></td><td>归属</td><td>design / personality</td></tr>
+        <tr><td><code>kind</code></td><td>身体 / 心智</td><td>body / mind（决定话术语气）</td></tr>
+        <tr><td><code>arrowNote</code></td><td>左右箭头提示</td><td>摄食六项含「连续 / 交替」；视角六项含「聚焦 / 外围」</td></tr>
+        <tr><td><code>hook</code></td><td>钩子句（主推）</td><td>您不是孤僻，您只是需要一个能关上门的地方。</td></tr>
+        <tr><td><code>ess</code></td><td>本质一句</td><td>您的神经系统需要「可控的边界」才能安顿下来。</td></tr>
+        <tr><td><code>body</code></td><td>详解正文（三段）</td><td>上方卡片三段 <code>&lt;p class="body"&gt;</code> 原文</td></tr>
+        <tr><td><code>try</code></td><td>本周一试</td><td>上方卡片「本周一试」原文</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note ok">
+    <span class="h">开发落地三提醒</span>
+    ① 摄食六项的 <code>body</code> 已不含饮食相关字，上线前再 grep 一次「吃 / 食 / 餐 / 营养 / 喂 / 尝」确证。② 动机 / 视角的 <code>kind=mind</code>，详情页底部统一加一行小字：「这是您天生的看见方式，无需改变，只需识别它在对齐还是错位」。③ <code>hook</code> 同时用于结果页卡片与详情页顶部，务必两处一致；<code>ess</code> 仅出现在详情页。
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 小程序详解页文案 · 24 项详写版（讲义密度）</div>
+  <div>扩写自《24 项一句话核心》与《四变量深度讲义》· 配套 B3 变量计算器技术方案 · <span id="fDate"></span></div>
+</footer>
+
+</div>
+
+<script>
+var VERSION = "V2";
+var BUILT = "2026-09-03";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

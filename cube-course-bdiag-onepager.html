@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>M6 B端诊断一页纸模板</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:13.5px;line-height:1.7;letter-spacing:.2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 64px}
+header{background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 22px;padding:26px 20px 20px;text-align:center;border-bottom:3px solid var(--main)}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 8px;font-weight:600}
+header h1{font-size:20px;line-height:1.4;margin:0 12px;color:#FBEFDC;font-weight:700}
+header .sub{font-size:12.5px;color:#EADFCD;max-width:56ch;margin:8px auto 0;font-style:italic}
+header .meta{margin-top:12px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center}
+.meta-line{display:flex;flex-wrap:wrap;gap:10px 18px;margin:14px 0;font-size:13px}
+.meta-line label{color:var(--muted);font-weight:700}
+.meta-line input{flex:1;min-width:120px;padding:6px 9px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--ink);font-size:13px}
+h2{font-size:17px;margin:24px 0 12px;color:var(--deep);font-weight:700;border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:14px;margin:0 0 4px;color:var(--deep);font-weight:700}
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;padding:10px 13px;margin:12px 0;font-size:12.5px;line-height:1.7}
+.note.tip{border-left-color:var(--tip);background:#F1ECF8}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:13px 0}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+.diag{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:13px 14px}
+.diag .dh{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:7px}
+.diag .dh .no{font-size:12px;font-weight:700;color:#fff;background:var(--gold);border-radius:7px;padding:1px 8px}
+.diag .dh .map{font-size:12px;color:var(--muted)}
+.field{margin:8px 0}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:3px}
+.field textarea,.field input{width:100%;border:1px solid var(--border);border-radius:7px;background:#fffdf9;color:var(--ink);
+  font-size:12.5px;padding:6px 8px;font-family:inherit;line-height:1.6;resize:vertical}
+.field textarea{min-height:44px}
+.prio{border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:13px 14px;margin:13px 0}
+.prio table{width:100%;border-collapse:collapse;font-size:12.5px}
+.prio th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;padding:7px 9px;font-size:12px}
+.prio td{padding:7px 9px;border-bottom:1px solid #F0E7D8;vertical-align:top}
+.prio tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:10px}
+.pill.p0{background:#FBEFED;color:var(--risk)}
+.pill.p1{background:#FDF4E6;color:var(--warn)}
+.pill.p2{background:#EFF6F1;color:var(--ok)}
+.goal{margin:13px 0}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+@media print{
+  body{background:#fff;font-size:12px}
+  header{background:#3A2A1C !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0 8px}
+  .note{background:#FBF5EA !important}
+  .diag,.prio{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">M6 · B-END DIAGNOSIS</p>
+  <h1>B 端变量诊断一页纸<br>Organization Variable Diagnosis</h1>
+  <p class="sub">把 Variables 四变量翻译成组织诊断语言——环境 / 节奏 / 激励 / 视角，四个杠杆一次看清</p>
+  <div class="meta">
+    <span id="mVer"></span>
+    <span id="mDate"></span>
+    <span>配套《高管变量深度解读》M6 落地模块</span>
+  </div>
+</header>
+
+<div class="meta-line">
+  <span><label>客户 / 团队</label><input placeholder="如：XX 科技·产品团队"></span>
+  <span><label>诊断日期</label><input placeholder="YYYY-MM-DD"></span>
+  <span><label>顾问 / 交付人</label><input placeholder="姓名"></span>
+  <span><label>团队规模</label><input placeholder="人数 / 层级"></span>
+</div>
+
+<div class="note tip">
+  <b>四变量 → 组织语言映射</b>：环境→空间与远程配置 · 摄食→工作节奏与信息摄入 · 动机→激励设计（只观察不给改造）· 视角→沟通风格与决策校准。每块按「现状 → 风险信号 → 建议干预 → 责任人/周期」填写。
+</div>
+
+<h2>四诊断块</h2>
+<div class="grid2">
+
+  <div class="diag">
+    <div class="dh"><span class="no">01</span><h3>环境审计</h3><span class="map">→ 空间 / 远程 / 会议</span></div>
+    <div class="field"><label>现状</label><textarea placeholder="当前物理空间、远程配置、会议模式怎样？谁在开放区、谁在角落？"></textarea></div>
+    <div class="field"><label>风险信号</label><textarea placeholder="谁的环境被长期破坏？协作卡点、专注被切碎的迹象？"></textarea></div>
+    <div class="field"><label>建议干预</label><textarea placeholder="重排工位 / 会议坐席、设安静区、远程与在场配比调整…"></textarea></div>
+    <div class="field"><label>责任人 / 周期</label><input placeholder="谁跟进 · 几周内验证"></div>
+  </div>
+
+  <div class="diag">
+    <div class="dh"><span class="no">02</span><h3>节奏诊断</h3><span class="map">→ 信息摄入 / 精力</span></div>
+    <div class="field"><label>现状</label><textarea placeholder="信息怎么进来？连续型 / 交替型各占多少？是否被碎片化塞爆？"></textarea></div>
+    <div class="field"><label>风险信号</label><textarea placeholder="整块时间被切碎、交替型被要求「稳定输出」、关键决策压在疲态时段…"></textarea></div>
+    <div class="field"><label>建议干预</label><textarea placeholder="为连续型留整块、交替型拆小股；把关键判断挪到精力窗口…"></textarea></div>
+    <div class="field"><label>责任人 / 周期</label><input placeholder="谁跟进 · 几周内验证"></div>
+  </div>
+
+  <div class="diag">
+    <div class="dh"><span class="no">03</span><h3>激励匹配</h3><span class="map">→ 非物质激励</span></div>
+    <div class="field"><label>现状</label><textarea placeholder="团队主驱动是哪种动机？现在用什么方式激励（是否只靠 KPI/钱）？"></textarea></div>
+    <div class="field"><label>风险信号</label><textarea placeholder="「被误读型」动机（恐惧/希望/需求/内疚）被当成缺点；点燃句缺失…"></textarea></div>
+    <div class="field"><label>建议干预</label><textarea placeholder="先否认再定义；给每位关键人写一句点燃句 / 激励而非 KPI 的话…"></textarea></div>
+    <div class="field"><label>责任人 / 周期</label><input placeholder="谁跟进 · 几周内验证"></div>
+  </div>
+
+  <div class="diag">
+    <div class="dh"><span class="no">04</span><h3>视角校准</h3><span class="map">→ 沟通 / 决策</span></div>
+    <div class="field"><label>现状</label><textarea placeholder="团队主视角？沟通默认对齐哪种？谁常滑向自身错位项？"></textarea></div>
+    <div class="field"><label>风险信号</label><textarea placeholder="缺某类视角→决策盲区；汇报错位导致反复拉扯…"></textarea></div>
+    <div class="field"><label>建议干预</label><textarea placeholder="重大决定前引入缺失视角 / 设反向校验；决策前做归位检查点…"></textarea></div>
+    <div class="field"><label>责任人 / 周期</label><input placeholder="谁跟进 · 几周内验证"></div>
+  </div>
+
+</div>
+
+<h2>优先级与落地</h2>
+<div class="prio">
+  <table>
+    <thead><tr><th style="width:54px">优先级</th><th>干预项</th><th style="width:120px">预期效果</th><th style="width:96px">时间盒</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill p0">P0</span></td><td><textarea style="min-height:34px" placeholder="最该先做的一件"></textarea></td><td><textarea style="min-height:34px" placeholder=""></textarea></td><td><textarea style="min-height:34px" placeholder="如 2 周"></textarea></td></tr>
+      <tr><td><span class="pill p1">P1</span></td><td><textarea style="min-height:34px" placeholder=""></textarea></td><td><textarea style="min-height:34px" placeholder=""></textarea></td><td><textarea style="min-height:34px" placeholder=""></textarea></td></tr>
+      <tr><td><span class="pill p2">P2</span></td><td><textarea style="min-height:34px" placeholder=""></textarea></td><td><textarea style="min-height:34px" placeholder=""></textarea></td><td><textarea style="min-height:34px" placeholder=""></textarea></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="goal">
+  <div class="field"><label>90 天目标（一页纸结论）</label><textarea placeholder="90 天后，这个团队在环境 / 节奏 / 激励 / 视角上应达成的可观察变化…"></textarea></div>
+</div>
+
+<div class="note">
+  <b>定价备注</b>：本诊断锚定高管教练 / 组织咨询区间 ¥3,000–10,000 / 次（来自可研对标）；不做 C 端独立开课。B 端模块嵌入是课程最强落点。
+</div>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · B 端变量诊断一页纸 · 《高管变量深度解读》M6 专属物料</div>
+  <div>配套：cube-course-exec-variable.html（课程蓝图）· 团队地图 cube-course-team-map.html · <span id="fDate"></span></div>
+  <div style="margin-top:6px;font-size:12px;color:var(--muted)">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+
+<script>
+var VERSION="V1";
+var BUILT="2026-09-03";
+function setText(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+setText("mVer","版本 "+VERSION);setText("mDate","编制 "+BUILT);setText("fVer",VERSION);setText("fDate",BUILT);
+</script>
+</body>
+</html>

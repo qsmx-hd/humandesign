@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>高管变量深度解读 · 讲师逐页讲稿（24 张）</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.75;letter-spacing:.2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 72px}
+header{background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;border-bottom:3px solid var(--main)}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:22px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .sub{font-size:13px;color:#EADFCD;max-width:62ch;margin:10px auto 0;line-height:1.75;font-style:italic}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+section{margin:34px 0 0}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--gold);
+  background:#F0E4D2;border:1px solid var(--border);border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 12px;color:var(--deep);font-weight:700;border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:22px 0 9px;color:var(--deep);font-weight:700}
+p{margin:0 0 11px}
+strong{color:var(--deep);font-weight:700}
+.chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:12px;font-weight:700;border:1px solid transparent;white-space:nowrap;line-height:1.7}
+.chip.body{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.mind{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.chip.design{background:#EDE7F6;color:#4A3B7A;border-color:#CFC3E8}
+.chip.pers{background:#E3F0F7;color:#24506B;border-color:#BBD9EA}
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;padding:12px 14px;margin:13px 0;font-size:13px;line-height:1.75;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note.risk{border-left-color:var(--risk);background:#FBEFED}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:5px;font-size:13.5px}
+
+/* 单页讲稿卡 */
+.lp{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:0;margin:16px 0;overflow:hidden}
+.lp .ph{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;padding:13px 15px 0;background:linear-gradient(0deg,#FBF5EA,#FFFDF9)}
+.lp .lpno{font-size:12px;font-weight:700;color:#fff;background:var(--gold);border-radius:20px;padding:2px 10px;letter-spacing:1px}
+.lp .lpn{font-size:15.5px;font-weight:700;color:var(--deep);line-height:1.4}
+.lp .lpe{font-size:12.5px;color:var(--muted);font-style:italic}
+.lp .tags{display:flex;gap:6px;flex-wrap:wrap;padding:6px 15px 10px}
+.lp .lpn + .lpe{margin-left:2px}
+.screen{border-top:1px dashed var(--border);margin:0;padding:12px 15px;background:#FFFDF9}
+.screen .sh{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.screen .sh::before{content:"";width:14px;height:14px;border-radius:4px;background:var(--gold);display:inline-block}
+.screen .seg{margin:0 0 9px}
+.screen .seg b{color:var(--deep);font-weight:700}
+.screen .seg.hook{background:#EFF6F1;border-left:3px solid var(--ok);border-radius:0 8px 8px 0;padding:9px 11px;color:#22402C;font-weight:700;font-size:14px}
+.screen .seg.ess{background:#FBF5EA;border:1px solid var(--border);border-radius:0 8px 8px 0;padding:7px 11px;color:var(--muted);font-style:italic;font-size:13px}
+.screen .seg.try{background:#FBF5EA;border:1px dashed var(--border);border-radius:0 9px 9px 0;padding:8px 11px;font-size:13px;color:var(--muted)}
+.screen .lbl{display:inline-block;font-size:12px;font-weight:700;color:var(--gold);border:1px solid var(--gold);border-radius:7px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.coach{border-top:2px solid var(--tip);background:#F6F3FB;padding:13px 15px 14px}
+.coach .ch{font-size:12.5px;font-weight:700;color:var(--tip);letter-spacing:1px;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.coach .ch::before{content:"讲";width:18px;height:18px;border-radius:50%;background:var(--tip);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.coach .row{display:flex;gap:9px;margin:0 0 8px;font-size:13px;line-height:1.7}
+.coach .row .k{flex:0 0 78px;font-weight:700;color:var(--deep);font-size:12.5px}
+.coach .row .v{flex:1;color:var(--ink)}
+.coach .red{margin:8px 0 0;font-size:12.5px;color:#fff;background:var(--risk);border-radius:8px;padding:7px 10px;line-height:1.6}
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">LECTURER SCRIPT</p>
+  <h1>讲师逐页讲稿<br>24 张详解页 · 逐页拆解</h1>
+  <p class="sub">副标题 · 决策环境设计 —— 配套《高管变量深度解读》课程，对应小程序 B3 的 24 张变量详解页，逐页给出屏幕原文 + 讲师备注</p>
+  <div class="meta">
+    <span id="mVer"></span>
+    <span id="mDate"></span>
+    <span>M1 环境 / M2 摄食 / M3 动机 / M4 视角</span>
+  </div>
+</header>
+
+<!-- 使用说明 -->
+<section>
+  <span class="sec-no">HOW TO USE</span>
+  <h2>这份讲稿怎么用</h2>
+  <div class="note">
+    <span class="h">屏上原文 + 讲师备注，两区分离</span>
+    每张讲稿卡的<strong>上半区「屏幕显示」</strong>是学员在小程序里看到的原文（钩子 / 本质 / 三段 / 本周一试），逐字照读或投影即可；<strong>下半区「讲师备注」</strong>是写给您的：计时、开场、互动、板书、常见追问、合规红线。<br>
+    24 张按 4 个变量组排列，对应课程 M1–M4。建议每页 8–10 分钟，整组 45–55 分钟。
+  </div>
+  <div class="grid-note" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0">
+    <div class="note" style="margin:0"><span class="h">身体变量（环境 / 摄食）</span>给动作、给实验。话术语气用祈使句（「把周三上午空出来」）。客户当天就能验证，多让他们现场改一处。</div>
+    <div class="note" style="margin:0"><span class="h">心智变量（动机 / 视角）</span>只给看见、不给改造。话术语气用陈述句（「您会被破损处吸引」）。<strong>绝不说「您应该改」</strong>。客户说话时间应多于您。</div>
+  </div>
+  <div class="toc">
+    <div class="th">目录</div>
+    <ol>
+      <li><a href="#m1">M1 环境 Environment（6 页）</a></li>
+      <li><a href="#m2">M2 摄食 Determination（6 页）</a></li>
+      <li><a href="#m3">M3 动机 Motivation（6 页）</a></li>
+      <li><a href="#m4">M4 视角 Perspective（6 页）</a></li>
+      <li><a href="#tip">讲师总提醒</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ M1 环境 ============ -->
+<section id="m1">
+  <span class="sec-no">MODULE M1</span>
+  <h2>环境 Environment · 决策环境设计（身体变量）</h2>
+  <div class="note">环境的本质是<strong>神经系统的安顿感</strong>——身体在哪种空间里能「呼出一口气」。成本最低、见效最快，是结果页里最该让客户立刻验证的一项。<strong>不是风水，也不是装修审美</strong>，反复回到身体感受即可。开场可让全员闭眼 10 秒想「此刻我最想躲进去的地方」，引出六类。</div>
+
+  <!-- 1 洞穴 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">01</span><span class="lpn">洞穴 Caves</span><span class="lpe">保护 · 边界 · 可控</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您不是孤僻，您只是需要一个能关上门的地方。</p>
+      <p class="seg ess">您的神经系统需要「可控的边界」才能安顿下来。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体只有在能控制「谁可以进来、什么时候进来」时才真正放松——这不是要躲人，是要能掌控出入口。独立办公室、静音舱、可上锁的思考空间，比开放工位的生产力高一个量级；会议里您偏好能看见入口的位置，背对门会持续消耗警戒能量；远程办公价值极高，但前提是家里有一个不被打扰的物理结界。把工位选择当成生产力工具，而不是个人偏好——这一条改动成本几乎为零，回报却最实在。环境是四个变量里唯一客户当天就能验证的一项，所以它最该排在最前面讲。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>内向、不合群、排挤人。事实恰恰相反——很多洞穴型是出色的演讲者，他们只是需要回到可控空间去恢复；他们挑的是空间，不是人。把「需要独处」当成性格缺陷，会让他们长期背着不必要的自责。当他们说「我需要安静一会」，那不是社交拒绝，是系统在请求重启。把性格标签翻译成生理设定，那层自责会立刻松动。</p>
+      <p class="seg"><span class="lbl">可以试着</span>会议提前 5 分钟到场，选靠墙或能看见门的位置；在日程里设两段 15 分钟的「关门时间」，期间不接任何会；如果工位在开放区，配一副降噪耳机——这是最低成本的人造洞穴。先从降噪耳机开始，一周后您会清楚知道哪些会议值得露面、哪些可以远程。改一条就够，不必一次重构整个工作方式。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>配一副降噪耳机，这是最低成本的人造洞穴。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。开场 1 分钟，三段各 2 分钟，留 1 分钟让现场改一处。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接一句：「注意，这句话不是性格，是神经系统的设定」。立刻点破「孤僻」标签的误导。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「此刻你工位能看见门吗？背对门坐的人举个手。」让洞穴型当场被看见，自责松动。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①可控边界=安顿 ②背对门=持续漏电 ③降噪耳机=最低成本人造洞穴。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「开放工位效率更高吧？」→应答：对浅协作是，但对需要深度的人是被偷走的电量；这不是偏好，是生理。</span></div>
+      <div class="red">🚫 红线：给动作（选位置/设关门时间），不评价性格。绝不把「需要独处」说成缺陷。</div>
+    </div>
+  </div>
+
+  <!-- 2 市场 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">02</span><span class="lpn">市场 Markets</span><span class="lpe">流动 · 交换 · 选项</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您需要身边有东西在流动——安静的房间会让您慢慢枯竭。</p>
+      <p class="seg ess">您的能量来自流动与交换，静止的环境会让您枯竭。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体在信息与人交汇的地方才活过来，要的是流动感和选项，不是吵闹。商务拓展、客户现场、协作区是您的补给站；被关在安静的独立办公室反而会枯竭。深度思考也适合有背景活动的场所（咖啡馆），而不是绝对安静的房间。长期远程且无人接触，对您是慢性消耗。您的能量曲线随环境起伏，不是靠意志力硬撑出来的。把「去现场」当成工作环节，而不是额外负担，他们的产出会明显不同。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>爱热闹、坐不住、不专注。他们不是要吵，是要流动感和选项；久坐不动的静态环境确实会让他们迟钝，这不是注意力缺陷。问「您最有灵感的时刻在哪儿」往往能戳破这个误解——答案常是旅途中、咖啡馆、或见完客户回来的路上。「坐不住」的标签，常常掩盖了真正的信号：他们需要场，不是需要安静。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把至少两场内部会议改成走动式，或挪到楼下的咖啡区；每周安排一次去前线——见客户、逛门店、去展会，哪怕只有半天；需要深度思考时，选有背景活动的场所，而不是逼自己待在空房间。流动感回来了，思路会跟着回来。哪怕只是把茶水间当成临时补给站，也比困在独立办公室强。先挪一场会，比立 flag 说「我要多出去」管用得多。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把两场内部会改成走动式，或挪到楼下咖啡区。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。与洞穴型形成对照：一个要关上门，一个要走出去。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，问全场：「谁在安静房间待半天会发慌？」点出市场型——他们要的是流动，不是噪音。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最有灵感的一次，是在哪？」多数答「路上 / 客户现场 / 咖啡馆」——当场证伪「坐不住=不专注」。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①能量=流动+交换 ②静止=枯竭 ③去现场是工作环节不是负担。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「远程办公不适合我吧？」→应答：长期无人接触是慢性消耗；保留每周一次前线接触即可补回。</span></div>
+      <div class="red">🚫 红线：给动作（挪会议/去前线）。不要把「需要流动」说成浮躁或纪律差。</div>
+    </div>
+  </div>
+
+  <!-- 3 厨房 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">03</span><span class="lpn">厨房 Kitchens</span><span class="lpe">转化 · 过程 · 混合</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您需要待在「事情正在发生」的地方——旁观，比忙碌更累。</p>
+      <p class="seg ess">您需要在「转化正在发生」的过程里，而不是在旁边看。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体需要「转化正在发生」——点子变产品、混乱变秩序。您适合项目作战室、从 0 到 1 的现场、创业早期团队；典型优势是整合与催化，把不同要素搅在一起产出新东西。被丢进成熟、稳定、没有变化的业务里会迅速失去能量。团队里您是「把事情搅动起来」的人，不是守成的人。他们不是不能做稳定业务，是在没有转化的业务里会慢慢熄火。给他们一个能搅动的场，比给他们一个头衔更能留住人。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>爱管闲事、不稳定。他们介入不是要控制，是需要在过程里；不是喜新厌旧，是需要有东西在转化。您最难受的时期往往不是最忙的时候，而是「一切按部就班、没什么在变」的时候。「爱管闲事」的评价，常常来自把他们的参与欲误读成了控制欲。</p>
+      <p class="seg"><span class="lbl">可以试着</span>主动参与一个正在进行的项目，哪怕只是列席——旁观会让他们枯萎；把一部分会议改成共创工作坊的形式，而不是听汇报；如果当前岗位纯维护，给自己找一个小的改造项目作为能量补给。让「转化」重新发生，比任何激励都管用。让他们保有至少一个「正在进行」的项目，比任何团建都更能留住人。列席即可，不必非得牵头——他们要的是在场，不是掌权。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>主动列席一个进行中的项目，旁观会让您枯萎。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。含「守成岗上的躁动是求救信号」的延展讨论。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，点题：厨房型要的是「转化正在发生」，不是要忙。旁观比忙碌更累，因为能量没处落。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你上一次觉得『这事有劲』是什么时候？」答案几乎都是某个从 0 到 1 的现场。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①需要转化现场 ②介入≠控制 ③列席即可，要的是在场不是掌权。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是爱管闲事吗？」→应答：你是要参与过程，不是要控制权；把参与欲误读成控制欲，是团队对你的误判。</span></div>
+      <div class="red">🚫 红线：给动作（列席/共创工作坊）。对管理者：把「守成岗躁动」翻译成位置错配，不是性格。</div>
+    </div>
+  </div>
+
+  <!-- 4 山脉 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">04</span><span class="lpn">山脉 Mountains</span><span class="lpe">高度 · 距离 · 视野</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您需要距离——离得远一点，才看得清。</p>
+      <p class="seg ess">您的认知需要距离，贴得太近反而看不清。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体需要高度和距离，重点不是海拔，是与日常噪音隔开的健康距离。您天生适合战略、长期规划、周期性复盘这类要拉开距离看的活；没有窗、没有视野的房间会让您持续压抑却说不出原因。您做的几个最好的判断，往往是在退开一步之后才浮现的。您看的不是风景，是局势——视野是认知的延伸。把山脉型焊在一线，等于拆掉他的瞭望台。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>高高在上、不接地气、反应慢。他们的距离感是认知工具，不是态度问题；退一步才看清是节奏，不是迟钝。把「需要抽离」误判成「不投入」，是管理者常犯的错。逼一个山脉型去一线天天救火，等于废掉他的千里镜。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把战略性思考的时段挪到有视野的物理位置——高层、窗边、户外；每周留一段刻意抽离的时间，从执行层退出来看全局；重要决策前，先离开现场走一圈，再回来定。距离不是逃避，是您看清局势的方式。高层办公室不是特权，是他们的工作设备。高层位不是特权，是装备——这句话值得当面说给带他的人听。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把战略思考挪到窗边或户外，决策前先离开现场走一圈。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。重点讲「距离感是认知工具」，破「不接地气」误解。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「视野不是风景，是认知的延伸」。直接对带团队的管理者说话。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最好的判断，是在桌上还是离开桌子后蹦出来的？」多数答后者——证成距离的价值。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①距离=认知工具 ②无窗房=持续压抑 ③高层位=工作设备不是特权。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太飘了？」→应答：你不是飘，是需要抽离看全局；焊在一线才真是浪费。</span></div>
+      <div class="red">🚫 红线：给动作（挪位置/抽离时段）。把「需要距离」讲成装备需求，不是态度问题。</div>
+    </div>
+  </div>
+
+  <!-- 5 山谷 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">05</span><span class="lpn">山谷 Valleys</span><span class="lpe">流动 · 声音 · 连接</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您需要流动和声音——绝对的安静，反而让您停摆。</p>
+      <p class="seg ess">您的系统靠声音与流通维持运转，绝对静止会停摆。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体需要声音和流通，完全静止会让系统停摆。背景音（播客、音乐、咖啡馆环境音）对您是补给，不是干扰；边走边谈比会议室效率高；处在信息流通的节点（知道正在发生什么）本身就是能量来源。长期静坐加绝对安静的环境，是您的效率杀手。您的专注靠流动维持，不是靠屏蔽维持。静止对他不是专注，是停摆。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>注意力不集中、需要背景音才干活是不专业。实际上背景音对您是调节器；您需要的是信息流通感，不是八卦本身。「深度工作必须绝对安静」这条流行信条，对您的体质可能正好相反。「不专业」的评判，来自用安静型的标准衡量流动型的人。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把一对一沟通改成散步式，尤其是需要坦诚的对话；深度工作时开背景音（环境音或轻音乐），不必强迫自己绝对安静；在密集社交之间穿插一个小差事走动一下，作为系统重置。凡是替您推翻一条一直信奉的规则，都会产生强共鸣。通勤路上听播客，往往比坐在工位上硬想更高效。背景音一开，那层莫名的焦躁常会降半档。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把一对一沟通改成散步式，深度工作时开背景音。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。与声音型（M2-5）对照讲：山谷要声音（补给），声音型要控制权。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，点破「深度工作必须绝对安静」对山谷型可能是反的。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你边听东西边干活更高效吗？」山谷型会猛点头——替他推翻旧信条，强共鸣。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①声音=补给不是干扰 ②专注靠流动不靠屏蔽 ③散步谈=坦诚对话。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是不专注？」→应答：你专注靠流动维持，逼你绝对安静反而停摆；这是体质不是态度。</span></div>
+      <div class="red">🚫 红线：给动作（散步谈/背景音）。不评判「需要声音」为不专业。</div>
+    </div>
+  </div>
+
+  <!-- 6 海岸 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">06</span><span class="lpn">海岸 Shores</span><span class="lpe">边缘 · 过渡 · 交界</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">可实验</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您最自在的位置是边缘——不进中心，也不离开。</p>
+      <p class="seg ess">您的最佳位置在边缘——能进能出，不扎进任何一边的中心。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您的身体在两个世界交汇的过渡地带最自在，需要随时能进、随时能出。您天生适合跨界、转型、连接两个系统的角色；被焊死在中心或深处会窒息。您常有的「若即若离」不是不投入，是您的设计——连接者必须站在边缘。他们站在边缘，才能同时看见两边，这是连接者的工位。别逼他选边站，他站中间才有用。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>不够投入、若即若离、善变。他们的最佳状态就是在边缘，不是不投入；需要周期性换环境，长期固定一处会僵化。海岸型常有一种隐秘的愧疚感——觉得自己「不够投入」，这句话给的是许可，不是信息。「若即若离」是他们的设计语言，不是态度问题。</p>
+      <p class="seg"><span class="lbl">可以试着</span>会议坐靠出口或靠窗的位置，给自己留物理上的「出」；允许自己早到或晚到、中途出去透口气，不必全程在场；在日程里安排周期性换环境，哪怕只是换个楼层办公一天。保留出口，您才待得住。周期性换环境不是善变，是系统需要刷新。允许他中途离场，他反而待得更久。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>会议坐靠出口的位置，允许自己中途出去透口气。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。收尾本组，强调「边缘是连接者的工位」，给隐藏愧疚者许可。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「这句话给的是许可，不是信息——若即若离是你的设计语言」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你有没有因为『不够投入』偷偷愧疚过？」海岸型会松一口气。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①边缘=能进能出 ②连接者必须站边缘 ③周期换环境=系统刷新。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我善变吗？」→应答：你要的是出口和刷新，不是善变；保留出口你反而待得更久。</span></div>
+      <div class="red">🚫 红线：给动作（留出口/周期换环境）。把「若即若离」译成设计语言，不评态度。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M2 摄食 ============ -->
+<section id="m2">
+  <span class="sec-no">MODULE M2</span>
+  <h2>摄食 Determination · 信息节奏与高管精力（身体变量）</h2>
+  <div class="note risk">
+    <span class="h">开场即立合规红线：只谈节奏，不谈饮食</span>
+    摄食原义关乎身体摄入机制，但在本课<strong>一律转译为「信息摄入方式与工作节奏」</strong>。六页<strong>不出现任何饮食、餐饮相关字</strong>。箭头：← 左连续型（一次一事、整块时段）/ → 右交替型（混合穿插、灵活随感）。<br>
+    若学员问「那我该怎么吃」，标准应答：「我们不谈饮食，只谈信息怎么进来、何时进来——这是精力管理的机制，不是营养建议。」
+  </div>
+
+  <!-- 7 食欲 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">07</span><span class="lpn">食欲 Appetite</span><span class="lpe">单线程深潜（连续型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您的大脑一次只处理一件事——切换的代价，比您以为的高得多。</p>
+      <p class="seg ess">您的大脑一次只跑一条线程，切换要整体重启。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您是连续型，一次只啃一件事，中途切换要整体重启，不是慢。日程需要整块留白，碎片会议是效率的直接杀手。典型困境：一天开了六个 45 分钟的会，晚上发现自己什么都没推进——不是您不努力，是系统被频繁重启了。您的效率来自深度，不是来自忙碌的密度。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>效率低、不自律。把节奏错配当成性格缺陷，会让连续型的人长期自我攻击。真正的卡点不在能力，在于日程把您的「单线程」硬掰成了「多线程」。把重启成本当成懒惰，是对连续型最大的误解。</p>
+      <p class="seg"><span class="lbl">可以试着</span>每周至少留一个完整的上午，不放任何会议；把同主题的会议合并成半天，而不是散布在全周。我们不用改您，只要把整块时间还给您。先试周三上午空出来，看一周感受。整块时间不是奢侈品，是他们系统运转的必需品。连续型最怕被夸成「能多线程」——那句夸奖常是把他日程塞爆的起点；把专注翻译成「需要保护」，管理者反而用得起他。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>每周留一个完整上午，不放任何会议。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。本页是连续型的代表，讲清「切换=重启」机制。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「这不是慢，是系统切换要整体重启」。立刻区分能力与节奏。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「昨天你推进了什么？还是开了六个会啥也没落下？」戳中连续型日常的restart陷阱。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①单线程 ②切换=重启 ③整块时间=系统必需品。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是效率低？」→应答：你效率来自深度，碎片会议才是杀手；把整块时间还给你即可。</span></div>
+      <div class="red">🚫 红线：零饮食字。给动作（留整块）。绝不说「您应该改」，只还时间。</div>
+    </div>
+  </div>
+
+  <!-- 8 品味 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">08</span><span class="lpn">品味 Taste</span><span class="lpe">对品质敏感（连续型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您对内容的品质敏感——粗制的东西，您根本装不进去。</p>
+      <p class="seg ess">您对信息品质的敏感是机制，不是挑剔。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您对信息品质敏感，被硬塞低质内容会直接罢工；不是挑剔，是您的摄取机制。您适合做把关人、评审、标准制定者。对报告、方案的精细度要求高，这不是难伺候，是您的系统对输入质量有阈值。门槛高不是毛病，是您的过滤器在替团队把关。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>难搞、挑刺的下属。点破「这不是挑剔，是您的摄取机制」，能同时缓解双方——您不必为要求高而愧疚，团队也知道这是规律不是针对人。把筛选权交给您，反而省下反复返工的精力。与其让他们「别挑了」，不如把筛选权正式交给他。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把一部分「接收」改成「筛选」——让您参与定标准，效率会明显提升；对于必须接收的低质信息，先让人提炼再给您。您不是要掌控一切，是要让进来的东西配得上您的注意力。让他们定标准，返工率会明显下降。把「挑刺」翻译成「系统把关」，团队少一层防御、多一层信任；他筛掉的东西，常常正是别人会返工的地方。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>对低质信息，要求对方先提炼再给。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。对团队：把「挑刺」翻译成「系统把关」是管理红利。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「敏感是机制，不是挑剔——你的过滤器在替团队把关」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你返工最多的一次，是因为别人给的东西太糙吗？」品味型会深有共鸣。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①品质阈值=机制 ②把关人角色 ③定标准=降返工。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太难搞？」→应答：你是在替团队过滤，把筛选权正式交给你反而省事。</span></div>
+      <div class="red">🚫 红线：零饮食字（「品味」此处指信息品质，非味觉）。给动作（定标准）。</div>
+    </div>
+  </div>
+
+  <!-- 9 渴 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">09</span><span class="lpn">渴 Thirst</span><span class="lpe">高频少量（交替型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您需要小份、多次——三小时的长会，对您是生理性消耗。</p>
+      <p class="seg ess">您要的是持续小剂量补给，不是一次性倾倒。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您是高频少量型，需要持续小剂量输入。三小时的长会对您是生理性消耗，不是没耐心；短会、快速同步、站会机制才是您的节奏。重要信息分批给，别一次性倒过来。您常常累却说不出为什么，根子常在对节奏错配——您的系统不是不能专注，是要以小剂量、高频次的方式输入。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>没耐心、坐不住。把「需要持续补给」误判成「注意力短」，会让您被迫在长会里硬撑，结果更累。真正的卡点不在性格，在于没人把信息拆成您能消化的小股。他们的专注靠小股持续输入维持，不是靠一次塞满。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把冗长的周会拆成两次 15 分钟；重要信息分批给，而不是攒一大包一次性丢过来。把节奏从「一次性塞满」改成「细水长流」，您一整天的状态会不一样。先改周会这一处，您会立刻感到下午没那么空。高频少量是神经节奏，不是难伺候；逼他一次性接收，等于让浅呼吸的人憋气。把信息拆碎，他反而能跑完全程。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把冗长周会拆成两次 15 分钟。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。明确「小份多次」是神经节奏，不是难伺候。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「三小时长会不是你没耐心，是生理性消耗——你的系统要小剂量高频次」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「长会开完你啥感觉？」渴型答「被掏空」——点破一次性倾倒的错配。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①高频少量=节奏 ②长会=生理消耗 ③拆碎信息=跑完全程。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我坐不住怎么办？」→应答：不是坐不住，是信息没拆小股；把周会拆两次 15 分即可。</span></div>
+      <div class="red">🚫 红线：零饮食字（用「小份多次/细水长流」喻节奏，不喻餐饮）。给动作（拆会议）。</div>
+    </div>
+  </div>
+
+  <!-- 10 触觉 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">10</span><span class="lpn">触觉 Touch</span><span class="lpe">需要摸得到（交替型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您要摸得到才算真的知道——十页数据，不如现场两小时。</p>
+      <p class="seg ess">您靠接触实物确认，纯数据推演会让您悬空。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您决策前需要接触实物或一线，纯数据推演会让您不踏实。您的优势是现场感和对细节质地的判断力；被隔绝在会议室里做决策会持续感到「悬空」。重大决策前安排一次现场走访，常常能让犹豫瞬间消失。他们需要的是亲眼确认，不是 micromanage。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>不信任团队、要 micromanage。其实是需要触觉确认，不是不信任人。您反复改主意，往往不是犹豫，是您一直没碰到实物——一旦摸到了，您定得比谁都快。「不信任团队」的误读，伤的是他们做决定的速度。</p>
+      <p class="seg"><span class="lbl">可以试着</span>重大决策前安排一次两小时现场走访，哪怕只是去一线待一会儿；要求汇报时带实物或带案例，而不是只有 PPT。给您「摸得到」的权限，比任何催促都更能让您拍板。一次现场走访，常常顶过十页报告。触觉型最怕被说「不信任团队」，其实他只是要碰实物；给「可接触」的权限，决策变快，团队也少一层被 micromanage 的错觉。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>重大决策前，安排一次两小时现场走访。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。对管理者重点：给「可接触」权限，决策反而快。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你要的是摸得到，不是不信任人——给可接触权限，决策更快」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最坚定的决定，是在看汇报前还是看实物后？」触觉型答后者。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①摸得到=确认 ②悬空=纯推演 ③现场走访顶十页报告。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我反复改主意是不是优柔？」→应答：你只是没碰到实物；摸到了你定得比谁都快。</span></div>
+      <div class="red">🚫 红线：零饮食字。给动作（现场走访）。不评「不信任团队」。</div>
+    </div>
+  </div>
+
+  <!-- 11 声音 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">11</span><span class="lpn">声音 Sound</span><span class="lpe">声学敏感（交替型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">交替型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您对声音的「控制权」，比您以为的更影响思考质量。</p>
+      <p class="seg ess">您要的是对声音的「控制权」，不是单纯安静。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您对声学环境极度敏感——开放式办公的噪音是隐形能耗，常累却说不出为什么。您需要的是对声音的控制权：降噪耳机、独立空间、或自选背景音。会议场所的回音、邻座通话都会实质影响您的思考质量。这不是矫情，是生理需求。噪音对您不是打扰，是持续漏电。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>难搞、矫情。注意与山谷型区分：山谷型需要声音（补给），声音型需要可控的声学环境（可能要绝对安静）。区分点在「您是要声音，还是要对声音的控制权」。把焦点从「敏感」转到「控制权」，弱点就变成需求。把对声音的需要说成「矫情」，等于否认他们的生理设定。</p>
+      <p class="seg"><span class="lbl">可以试着</span>配一副降噪耳机，并明确告诉团队这不是不礼貌，是您的工作方式；重要思考安排在声学可控的时段与地点。把控制权拿回来，您会发现自己没那么容易「莫名其妙地累」。降噪耳机不是装备，是他们的工作边界。声学控制是生理设定，不是矫情；把「敏感」翻译成「需要控制权」，弱点就变成可满足的需求。一副耳机，常顶过十次谈心。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>配降噪耳机，并明确告诉团队这不是不礼貌。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。关键区分：山谷要声音（补给）vs 声音型要控制权。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你要的是控制权，不是安静——这是生理设定，不是矫情」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「开放式办公你累吗？」声音型答「莫名其妙地累」——点出隐形能耗。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①声学敏感=生理 ②要控制权非要安静 ③耳机=工作边界。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太矫情？」→应答：噪音对你是持续漏电；把敏感翻译成需要控制权，弱点变需求。</span></div>
+      <div class="red">🚫 红线：零饮食字。给动作（耳机/声学可控）。不与山谷型混淆。</div>
+    </div>
+  </div>
+
+  <!-- 12 光 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">12</span><span class="lpn">光 Light</span><span class="lpe">与昼夜同步（连续型）</span></div>
+    <div class="tags"><span class="chip body">身体变量</span><span class="chip">连续型</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您的效率跟着光走——把重要决策排在夜里，是自我消耗。</p>
+      <p class="seg ess">您的状态跟着昼夜走，逆着它工作就是消耗。</p>
+      <p class="seg"><span class="lbl">在职场里</span>您是昼夜节律型工作者，夜间效率断崖式下跌。把重要决策排在晚上或凌晨，等于在状态最差时做最关键的判断；长期夜间工作对您的消耗，远超对自己是「夜猫子」的认知。上午和午后有光的时段，才是您真正的黄金窗口。您的黄金时段在白天，不在深夜。</p>
+      <p class="seg"><span class="lbl">常被误读成</span>懒、作息差、硬撑着熬夜。以「我是夜型人」自居，把重要事排错时段还以为是习惯，是最隐蔽的浪费。您的节律不是喜好，是生理曲线。「夜猫子」的自嘲，常是节律被工作安排长期压错的结果。</p>
+      <p class="seg"><span class="lbl">可以试着</span>把最重要的决策会挪到上午或午后有光的时段；晚间只安排事务性、不需要判断的工作。不用逼自己改变整个人生，只要把「最关键的判断」挪到 daylight 里，回报就很明显。把关键判断挪到 daylight，是零成本的效率升级。夜型人标签常是错配的结果，不是天性；把关键判断挪回 daylight，他会从「莫名其妙累」变成「原来上午这么能打」。零成本却常被忽略。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>晚间只安排事务性、不需要判断的工作。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">8 分钟。收尾摄食组，强调「夜型人标签常是错配结果」。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「夜猫子常是节律被排错时段的结果，不是天性」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最重要的会排在几点？」光型若在夜里开，直接点出零成本升级机会。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①黄金窗在白天 ②夜排决策=最差时做关键判 ③挪回 daylight=零成本升级。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我真是夜型人」→应答：先把关键判断挪回上午试一周，多数会发现标签是错配。</span></div>
+      <div class="red">🚫 红线：零饮食字。给动作（挪时段）。不谈作息优劣，只谈节律。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M3 动机 ============ -->
+<section id="m3">
+  <span class="sec-no">MODULE M3</span>
+  <h2>动机 Motivation · 驱动与非物质激励（心智变量）</h2>
+  <div class="note warn">
+    <span class="h">讲法要害：这是看见，不是改造</span>
+    动机属心智，<strong>只能观察，不能改变</strong>。六页里四项（恐惧、内疚、欲望、需求）名字带负面色彩，<strong>钩子句一律先否认再定义</strong>。正文只讲对齐态与错位态，绝不说「您应该改」。<br>
+    这一段学员说话的时间该比您多——目标是让他自己说出「对，我就是被这个点燃的」。
+  </div>
+
+  <!-- 13 恐惧 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">13</span><span class="lpn">恐惧 Fear</span><span class="lpe">探究未知</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您不是害怕——您是被「这里还有我没搞懂的」点燃的。</p>
+      <p class="seg ess">您是被未知点燃的探究者，不是胆小的人。</p>
+      <p class="seg"><span class="lbl">对齐时</span>智慧的探究者，把未知变可理解。会主动去查清、去验证、去搞明白底层逻辑；最投入的，是还没人搞明白的问题。如果一件事所有人都说「没问题、照做就行」，您反而提不起劲。他们不是怕，是想知道——这是两个不同的引擎。</p>
+      <p class="seg"><span class="lbl">错位时</span>反复推演却不行动、焦虑、瘫痪。「恐惧」这个名字最容易引起抵触，必须先正名——这不是害怕，是驱动去理解未知。跳过这步，客户会当场关闭。把探究欲当成焦虑治，会同时杀掉他们的动力。</p>
+      <p class="seg"><span class="lbl">怎么用</span>激励您靠「待查清的难题」，而不是确定的 KPI。别用「别想太多」打发——那等于抽走您的燃料。把燃料从「确定的任务」换成「没人搞懂的问题」，您自己会动起来。给他们难题，不要给答案；答案会灭掉他们的火。管理者最该戒的一句是「别想太多」，那等于抽走探究者的燃料。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>给自己排一个没人搞明白的难题，而不是一个死任务。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">10 分钟。心智组首页，先把「先否认再定义」的节奏立住。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，破折号前干脆：「你不是害怕」。停顿，再给定义。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最有劲的一次，是搞清楚了什么？」让恐惧型自己说出「探究者」身份。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①先否认：不是害怕 ②定义：被未知点燃 ③给难题不给答案。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是想太多？」→应答：你是在探究，别用「别想太多」抽走燃料；给个没人搞懂的问题。</span></div>
+      <div class="red">🚫 红线：心智变量只观察。绝不说「您应该改掉害怕」。管理者戒「别想太多」。</div>
+    </div>
+  </div>
+
+  <!-- 14 希望 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">14</span><span class="lpn">希望 Hope</span><span class="lpe">信任展开</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您的力量是耐心——在该等的时候等得住，不是不作为。</p>
+      <p class="seg ess">您的力量是信任时机，在该等时等得住。</p>
+      <p class="seg"><span class="lbl">对齐时</span>对时机的深层信任，能等、能允许、能在别人焦虑时保持不动。这是力量不是软弱，天生适合长期布局、孵化型岗位——您种下的东西，您愿意等它长。他们的耐心是战略资产，不是拖延。</p>
+      <p class="seg"><span class="lbl">错位时</span>盲目等待、把力量交出去、错过窗口。在狼性文化里，您最易被误判为没进取心——其实您不是不动，是懂得有些事急不得。在唯快是图的文化里，他们最容易被低估。</p>
+      <p class="seg"><span class="lbl">怎么用</span>给时间窗口，而非 deadline 压迫。把一项长期工作，从「逼自己快点」改成「定个窗口等它成熟」。您要的不是推力，是允许——允许比催促更能让您交付。允许他们等，比催促他们动更有产出。希望型不是慢，是会等；把 deadline 换成窗口期，他交付的更耐放。逼一个会等的人抢跑，是在浪费他的战略资产。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把一项长期工作，从「逼自己快点」改成「定个窗口等它成熟」。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。对狼性文化里的希望型，给「允许」比催促更产出。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「耐心是力量不是软弱——它是最被低估的战略资产」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你被催过『快点』吗？当时交的货耐放吗？」希望型会答「被催的都短命」。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①耐心=力量 ②窗口期≠deadline ③允许>催促。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太慢？」→应答：你不是慢，是会等；把 deadline 换成窗口期，交付更耐放。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该更积极」。把「等」译成战略资产。</div>
+    </div>
+  </div>
+
+  <!-- 15 欲望 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">15</span><span class="lpn">欲望 Desire</span><span class="lpe">改变物质世界</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您天生要去改变点什么——守成的位置，会逼您制造不必要的变化。</p>
+      <p class="seg ess">您有把想法变成现实的推力，是天生的行动者。</p>
+      <p class="seg"><span class="lbl">对齐时</span>天生的领导者，能把想法变成现实、推动事物成形。您最适合从零开始、或要去改变点什么的局面。把您放在可改变的战场上，您带队打仗比谁都顺。他们是建造者，不是维持者。</p>
+      <p class="seg"><span class="lbl">错位时</span>控制欲、为动而动、为迎合外部期待而推动。如果把您放在只需维持现状的位置上，您会开始制造变化——那不是您的问题，是位置放错了。在守成岗上的「折腾」，是系统错配的求救信号。</p>
+      <p class="seg"><span class="lbl">怎么用</span>给可改变的战场，让您带队打仗，别让您守成。放错位置时的「搞事情」，是系统在抗议，不是性格缺陷。把推力导向真实的战场，它就成了领导力。给他们战场，别给他们围栏。把「折腾」翻译成「位置错配」，你就救回一个本可带队的人；守成岗上的躁动，是系统在喊被浪费。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>给自己找一个「从零开始」或「要改变点什么」的小项目。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。重点：守成岗上的躁动=位置错配，不是性格。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你的推力是领导力——放错位置才变成折腾」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你上一次主动搞事情，是因为无聊还是因为它该变？」多数答后者。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①推力=领导力 ②守成岗躁动=错配 ③给战场别给围栏。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太爱折腾？」→应答：你要的是可改变的战场；把推力导向真战场就是领导力。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该沉稳点」。把「折腾」译成位置错配。</div>
+    </div>
+  </div>
+
+  <!-- 16 需求 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">16</span><span class="lpn">需求 Need</span><span class="lpe">识别真正所需</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您是被「有人需要我」点燃的——被需要不是负担，是您的燃料。</p>
+      <p class="seg ess">您被「被需要」点燃，那是您的燃料。</p>
+      <p class="seg"><span class="lbl">对齐时</span>精准识别真正所需，可靠、有支撑力。用「谁依赖您」来激活您，比「您想成为什么」有效十倍。您不是讨好型人格，是被需要这件事本身点燃。他们是被需要点燃，不是被成就点燃。</p>
+      <p class="seg"><span class="lbl">错位时</span>过度承担、被需求绑架、边界失守。被需要不是负担，但当它变成「谁都要管」，您会耗尽。问题不在动力，在边界。没有边界的「被需要」，会慢慢变成被掏空。</p>
+      <p class="seg"><span class="lbl">怎么用</span>列出「谁真的依赖我」，把精力优先投给这几个人；但必须配边界机制，否则会被需求拖垮。同样的燃料，加上开关，就是可持续的支撑力。燃料要有开关，否则迟早烧完。被需要点燃的人，最怕被当成随手可取的电池；列完「谁真依赖我」必须配边界，开关才真正转得动。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>列出「谁真的依赖我」，把精力优先投给这几个人。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。强调「燃料要有开关」——给边界才可持续。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「被需要是燃料，不是负担——但燃料得有开关」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最近一次耗尽，是因为被谁需要？」需求型会意识到边界缺失。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①被需要=燃料 ②无边界=被掏空 ③列依赖者+配开关。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是讨好型？」→应答：你是被需要点燃，不是讨好；但必须配边界，否则成电池。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该少管闲事」。给边界机制，不改造动机。</div>
+    </div>
+  </div>
+
+  <!-- 17 内疚 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">17</span><span class="lpn">内疚 Guilt</span><span class="lpe">修复破损</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您被「这里有东西坏了」点燃——所以您总比别人先看见破损处。</p>
+      <p class="seg ess">您被破损处吸引，是组织的救火队长。</p>
+      <p class="seg"><span class="lbl">对齐时</span>驱动去修复、纠正、为破损处提供实用方案。组织里最可靠的救火队长，别人看见麻烦绕开，您看见麻烦就上手。这是能力，不是缺陷。他们看见破损，就像看见待修的灯——本能就去拧。</p>
+      <p class="seg"><span class="lbl">错位时</span>永远在救火、被问题牵着走、无法说不、最终 burnout。问题不在您不会拒绝，而在于您的能量天然流向破损，比别人先看见它——开关不在嘴上，在机制上。把救火当成天性，忘了救火也需要轮班。</p>
+      <p class="seg"><span class="lbl">怎么用</span>给待修复的系统，但必须配边界——否则会耗尽。我们不是要改这个，是给它装一个开关：每天只接一件别人留下的烂摊子，其余的让它先坏着。开关不是冷漠，是让救火可持续。救火队长需要轮班——给破损系统配个开关，比劝他「学会拒绝」管用；他不是不会 no，是能量天然流向破损。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>给「救火」设一个开关：每天只接一件别人留下的烂摊子。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。与需求型呼应：给「救火」装开关=可持续。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你是救火队长，不是不会拒绝——开关在机制不在嘴」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你看见破损是不是手就痒？」内疚型猛点头——点出能量天然流向破损。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①见破损=本能 ②burnout=无轮班 ③每天只接一件=开关。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是不会拒绝？」→应答：你不是不会 no，是能量流向破损；装个开关比练拒绝管用。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该学会拒绝」。给机制开关，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 18 纯真 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">18</span><span class="lpn">纯真 Innocence</span><span class="lpe">无议程进入</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您的优势是不带预设——您能看见别人被成见挡住的东西。</p>
+      <p class="seg ess">您不带预设地进入事物，所以看得见盲区。</p>
+      <p class="seg"><span class="lbl">对齐时</span>纯粹、开放、不带预设，能看见别人被成见遮住的盲区。您「没被训练成只看得见该看的」，恰恰是洞察力来源，不是幼稚。他们的盲区红利，来自没被训练成只看该看的。</p>
+      <p class="seg"><span class="lbl">错位时</span>显得天真、被利用、缺乏方向感。空白画布上人人都能画，但您要让画布真的空白，而不是被别人的议程先占满。在存量博弈里，这份开放反而容易被当成好欺负。</p>
+      <p class="seg"><span class="lbl">怎么用</span>适合从 0 到 1 的空白画布，不适合存量博弈。把一个已有结论的问题，放下预设重新看一遍——您会看到别人因为太熟而看不见的东西。让他们先入局、不被议程占满，洞察就来了。让画布真的空白——存量博弈里他的开放易被当软柿子，但放到 0→1 的场，那份无预设正是洞察红利；别用「太天真」堵他的眼。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>把一个已有结论的问题，放下预设重新看一遍。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。收尾动机组：纯真=盲区红利，不是幼稚。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你的无预设是洞察红利，不是幼稚——放进 0→1 的场才发光」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最近一次看到别人看不见的，是在新项目还是旧地盘？」纯真型答新场。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①无预设=洞察 ②盲区红利 ③放 0→1 场别放存量博弈。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太天真？」→应答：你看得见的正是别人因太熟而盲的；别用「太天真」堵你的眼。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该现实点」。把无预设译成洞察红利。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ M4 视角 ============ -->
+<section id="m4">
+  <span class="sec-no">MODULE M4</span>
+  <h2>视角 Perspective · 决策视角与认知校准（心智变量）</h2>
+  <div class="note warn">
+    <span class="h">命名纪律：本文件统一采用「六视角」命名</span>
+    视角有两套传统：六视角（Survival / Possibility / Power / Wanting / Probability / Personal）与六感 / Cognition。本课<strong>选定六视角一套、全场一致</strong>。正文<strong>必须带上「错位项」</strong>——只说真实视角是平的，后半句才是客户拍大腿的部分。<br>
+    箭头：← 左聚焦视角（放大细节、目标导向）/ → 右外围视角（看全局、多路接收）。
+  </div>
+
+  <!-- 19 生存 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">19</span><span class="lpn">生存 Survival</span><span class="lpe">错位 → 欲望 Wanting</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您第一眼看见的，永远是「这安全吗」——压力大的时候，反而会被「我想要」牵走。</p>
+      <p class="seg ess">您的第一反应是确认安全，这是资产。</p>
+      <p class="seg"><span class="lbl">真实视角</span>风险与安全。您天然先看底线在哪，这是价值——团队里需要有人先问「这会不会出事」。您的谨慎不是怯，是雷达。他们先扫风险，是团队的刹车。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>当压力上来，您会让步于欲望，忽略风险底线，风险就这么进来。破防方式出乎意料——越谨慎的人，越容易被「我想要」带偏。这不是您不谨慎，是谨慎被渴望临时盖住了。谨慎被渴望临时覆盖，是破防的真实路径。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>做重大决定前，先问一句「这安全吗」，不让渴望盖过它。把「安全」这个检查点明确写进决策流程，您的雷达就归位了。把「安全吗」写进决策清单，雷达就归位。谨慎者最该被提醒的不是勇敢，是先确认刹车还在——这句话常让带他的人松一口气。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>做重大决定前，先问一句「这安全吗」，不被渴望盖过。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">10 分钟。视角组首页，讲清「真实视角+错位项」结构。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你的谨慎是雷达，是团队的刹车——但破防方式很反直觉」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最近一次冲动决策，是不是因为太想要？」生存型会认出「谨慎被渴望盖住」。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=扫风险 ②错位=被想要带偏 ③检查点「安全吗」。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太怂？」→应答：你不是怂，是先确认刹车还在；提醒你勇敢之前，先确认刹车。</span></div>
+      <div class="red">🚫 红线：只观察。绝不催「你要勇敢点」。把错位讲成机制，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 20 可能性 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">20</span><span class="lpn">可能性 Possibility</span><span class="lpe">错位 → 概率 Probability</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您天生看见「什么可以成立」——压力大的时候，会滑去反复算现实不现实。</p>
+      <p class="seg ess">您天然看见「什么可以成立」。</p>
+      <p class="seg"><span class="lbl">真实视角</span>什么是可能的。您看到一个想法时，先看见它能成立的那一面——这是稀缺的天赋，团队需要有人先说「试试看」。他们先看见能成立，团队才敢试。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>压力一大，您滑进「概率」，开始反复算现实吗，把自己劝退。您放弃过的想法，多半不是不可行，是在概率里待太久了。这一句几乎是一记直球，很多人会想起具体的某件事。在概率里待太久，是可能性被自己掐死的过程。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>想到一个点子，先记下来「它哪里成立」，别急着算它为什么不行——那是您掐死想法的老习惯。先让可能性活过 24 小时，再谈检验。让想法先活过一天，再谈检验。掐死可能性的从不是别人，是他自己按下的「现实检验」快捷键；少算一次不行，多留一个成立的可能。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>想到一个点子，先记下来「它哪里成立」，别急着算它为什么不行。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。「在概率里待太久=自己掐死可能性」是一记直球。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你放弃的念头，多半不是不行，是在概率里待太久」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你想过但没做的，后来被谁做成了？」可能性型会想起具体案例——强共鸣。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=看见能成立 ②错位=滑进概率 ③先记成立再检验。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是不切实际？」→应答：你只是急着算不行；让想法活过 24 小时再检验。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该现实点」。把错位讲成自掐，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 21 力量 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">21</span><span class="lpn">力量 Power</span><span class="lpe">错位 → 个人 Personal</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您第一眼看见的，是影响力在哪里——压力大的时候，会把结构问题误当成个人恩怨。</p>
+      <p class="seg ess">您第一眼看见的是影响力与格局。</p>
+      <p class="seg"><span class="lbl">真实视角</span>格局与影响力。您天生看见冲击点在哪、谁在推动局势——这是管理者的底层视野，团队里需要有人抬头看结构。他们抬头看结构，团队才有人看全局。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>压力一来，您把结构性问题当成个人恩怨，开始内耗。具体到「结构 vs 人事」这个层面，就是您的教练价值——分清了，您就从人事漩涡里出来。把结构问题读成个人恩怨，是最贵的内耗。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>遇到卡点，先分清「这是结构问题还是某人针对我」。一句话问出口，很多原本以为的「他针对我」，会现出原本的结构形状。一句话分清楚，漩涡就散了。把结构问题读成个人恩怨是最贵的内耗——提醒他抬头看格局，比陪他复盘每句「他对我怎样」都值钱。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>遇到卡点，先分清「这是结构问题还是某人针对我」。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。管理者视角红利：抬头看结构，脱离人事漩涡。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你先看见格局，但压力一来会读成个人恩怨——这是最贵的内耗」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你最近一次内耗，是结构还是某人？」力量型多数答「以为是某人，其实是结构」。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=看格局 ②错位=读成恩怨 ③一句话分清漩涡散。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太敏感？」→应答：你是在看结构；把结构读成恩怨才内耗，分清楚就出来。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该大度」。把错位讲成结构误读，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 22 欲望(视角) -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">22</span><span class="lpn">欲望 Wanting</span><span class="lpe">错位 → 生存 Survival</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您第一眼看见的，是别人真正想要什么——压力大的时候，会退回防御，不敢要。</p>
+      <p class="seg ess">您第一眼读的是别人的渴望。</p>
+      <p class="seg"><span class="lbl">真实视角</span>读人、识别他人渴望。您很会看见别人真正要什么，谈判、销售、带人时这是隐蔽的优势——您先懂对方，再出手。他们先读懂对方，再出手，这是隐蔽优势。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>压力上来，您退回防御，轮到自己连「我想要」都说不出口。很会读人，但对自己失语——这个反差本身就是洞察。很会读人、却对自己失语，是他们最常见的亏。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>今天明确说一次「我想要什么」，不只是「你需要什么」。把对他人的雷达，也调一档回自己身上，您才不会总在成全别人之后才发现忘了自己。把雷达调一档回自己，才不总忘了自己。很会读人的人，最常亏在对自己失语；今天说一次「我想要」，比读懂十个客户都更能救他。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>今天明确说一次「我想要什么」，不只是「你需要什么」。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。与动机组「欲望」区分：此处是视角（读别人渴望），非驱动。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你先懂别人，但压力一来对自己失语——把雷达调回自己一档」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你今天为别人做了几件，为自己几件？」视角型会意识到失衡。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=读他人渴望 ②错位=对自己失语 ③说一次我要。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太讨好？」→应答：你是在读人，优势；但要把雷达也调回自己，否则总忘了自己。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该多为自己」。把错位讲成雷达偏移，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 23 概率 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">23</span><span class="lpn">概率 Probability</span><span class="lpe">错位 → 可能性 Possibility</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您天生看见「接下来会发生什么」——压力大的时候，会滑进不切实际的想象。</p>
+      <p class="seg ess">您天然看见趋势，前提是守住现实检验。</p>
+      <p class="seg"><span class="lbl">真实视角</span>预测趋势、基于现实检验做判断。您是难得的趋势眼——别人还在看当下，您已经算出下一步大概率往哪走。他们是趋势眼，别人还在看当下。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>失去现实检验，沉溺想象。优势的前提是「现实检验」四个字——守住它您是宝，失去它只剩想象。指出前提，赞美才可信。失去现实检验，趋势眼就变成幻想者。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>做一个判断时，找一条可验证的事实锚点，别只靠推演。给想象拴一根事实的绳，它就不会把您带跑。给想象拴一根事实的绳。趋势眼可贵，失了现实检验就只剩幻想；一句「有什么可验证的」，能把他从云里拽回地面。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>做一个判断时，找一条可验证的事实锚点，别只靠推演。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。与可能性型互补：概率型要守现实检验。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「你是趋势眼，但前提是现实检验——丢了它你就飘」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你上次判断翻车，是因为没锚事实还是真看错？」概率型答前者居多。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=趋势眼 ②错位=失现实检验 ③找事实锚点。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是想太多？」→应答：你想的是趋势；给想象拴根事实的绳，就不飘。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该落地」。把错位讲成失锚，不改造。</div>
+    </div>
+  </div>
+
+  <!-- 24 个人 -->
+  <div class="lp">
+    <div class="ph"><span class="lpno">24</span><span class="lpn">个人 Personal</span><span class="lpe">错位 → 力量 Power</span></div>
+    <div class="tags"><span class="chip mind">心智变量</span><span class="chip">只观察</span></div>
+    <div class="screen">
+      <div class="sh">屏幕显示（学员看到）</div>
+      <p class="seg hook">您第一眼看见的，是「这对我意味着什么」——压力大的时候，会把个人议题放大成权力斗争。</p>
+      <p class="seg ess">您在乎意义，这是您判断的底层坐标。</p>
+      <p class="seg"><span class="lbl">真实视角</span>个人意义。您做的每个决定，底层都挂着「这对我意味着什么」——这没错，是您判断是否值得投入的标尺。意义是他们的标尺，不是矫情。</p>
+      <p class="seg"><span class="lbl">滑向错位</span>压力一大，您把个人议题放大成「谁压过谁」，就偏了。在乎意义本身要被肯定，但滑坡路径要被点破——先接住，再指出。把意义放大成输赢，是滑坡的开始。</p>
+      <p class="seg"><span class="lbl">怎么识别</span>碰到冲突，先问「我在乎的到底是什么」，别急着争输赢。把意义感接住，权力斗争的戏码就散了。先接住意义，戏码就散了。在乎「这对我意味着什么」不是矫情，是判断的底层坐标；别用输赢掩盖意义，否则他永远在别处燃烧。</p>
+      <p class="seg try"><span class="lbl">本周一试</span>碰到冲突，先问「我在乎的到底是什么」，别急着争输赢。</p>
+    </div>
+    <div class="coach">
+      <div class="ch">讲师备注</div>
+      <div class="row"><span class="k">⏱ 时长</span><span class="v">9 分钟。收尾视角组也是全课收口：先接住意义，戏码就散。</span></div>
+      <div class="row"><span class="k">🎤 开场</span><span class="v">读 hook，接：「意义是你的标尺，不是矫情——但别把它放大成输赢」。</span></div>
+      <div class="row"><span class="k">💬 互动</span><span class="v">「你上一次争执，是在争输赢还是争意义？」个人型答后者——点破滑坡。</span></div>
+      <div class="row"><span class="k">📌 板书</span><span class="v">①真实=意义标尺 ②错位=放大成输赢 ③先问我在乎什么。</span></div>
+      <div class="row"><span class="k">❓ 追问</span><span class="v">「我是不是太自我？」→应答：你在意意义是判断坐标；先接住它，戏码就散。</span></div>
+      <div class="red">🚫 红线：只观察。绝不说「您应该大度」。把错位讲成意义放大，不改造。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 讲师总提醒 -->
+<section id="tip">
+  <span class="sec-no">REMINDER</span>
+  <h2>讲师总提醒</h2>
+  <div class="note ok"><span class="h">三句贯穿全课的话</span>
+    ① 身体变量（环境 / 摄食）给动作、给实验，用祈使句；心智变量（动机 / 视角）只给看见、不给改造，用陈述句。<br>
+    ② 摄食六项全程零饮食字，只谈「信息摄入方式与工作节奏」；若被问饮食，标准应答：「我们不谈饮食，只谈节奏」。<br>
+    ③ 动机 / 视角是天生看见方式，详情页与讲稿都须带「这是您天生的看见方式，无需改变，只需识别它在对齐还是错位」。<br>
+    全课结尾回到副标题：<strong>四个变量 = 决策环境设计的四个杠杆</strong>——物理环境 / 信息节奏 / 激励结构 / 认知视角。
+  </div>
+  <div class="note"><span class="h">时间盒参考</span>M1 环境 50 分钟 · M2 摄食 50 分钟 · M3 动机 55 分钟 · M4 视角 55 分钟；含开场 10 分钟与整合 20 分钟，整课约 4.5 小时（对应课程地图 M1–M4 模块）。</div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 讲师逐页讲稿 · 24 张详解页拆解</div>
+  <div>配套《高管变量深度解读》课程与小程序 B3 变量计算器 · <span id="fDate"></span></div>
+  <div style="margin-top:6px;font-size:12px;color:var(--muted)">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-03";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>

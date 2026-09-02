@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>高管变量深度解读 · 工作坊物料四表</title>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:#FFFDF9; --main:#C4956A; --deep:#2D2118;
+  --border:#E8DCC8; --muted:#6B5844; --ink:#3A2C20; --gold:#A8752E;
+  --ok:#4A7C59; --warn:#B4701E; --risk:#A8443A; --tip:#4A3B7A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  font-size:14px;line-height:1.7;letter-spacing:.2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 72px}
+header{background:linear-gradient(160deg,#3A2A1C 0%,#4A3624 55%,#5A4130 100%);
+  color:#F3E4CE;margin:0 -16px 26px;padding:34px 20px 26px;text-align:center;border-bottom:3px solid var(--main)}
+header .kicker{font-size:12px;letter-spacing:3px;color:var(--main);margin:0 0 10px;font-weight:600}
+header h1{font-size:22px;line-height:1.45;margin:0 14px;color:#FBEFDC;font-weight:700}
+header .sub{font-size:13px;color:#EADFCD;max-width:64ch;margin:10px auto 0;line-height:1.75;font-style:italic}
+header .meta{margin-top:14px;font-size:12px;color:#C0AF99;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+section{margin:34px 0 0;page-break-inside:avoid}
+.sec-no{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--gold);
+  background:#F0E4D2;border:1px solid var(--border);border-radius:20px;padding:3px 12px;margin-bottom:9px}
+h2{font-size:18px;line-height:1.5;margin:0 0 10px;color:var(--deep);font-weight:700;border-left:4px solid var(--main);padding-left:11px}
+h3{font-size:15px;margin:18px 0 8px;color:var(--deep);font-weight:700}
+.note{border-left:4px solid var(--main);background:#FBF5EA;border-radius:0 9px 9px 0;padding:11px 14px;margin:12px 0;font-size:13px;line-height:1.7;color:var(--ink)}
+.note.warn{border-left-color:var(--warn);background:#FDF4E6}
+.note .h{font-weight:700;color:var(--deep);display:block;margin-bottom:4px;font-size:13.5px}
+.card{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:15px 16px;margin:14px 0;page-break-inside:avoid}
+.card .ct{font-size:14px;font-weight:700;color:var(--deep);margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.card .ct .no{background:var(--gold);color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 22px}
+.card .cd{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+/* 表单 */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+th{background:#F0E4D2;color:var(--deep);font-weight:700;text-align:left;padding:9px 10px;border:1px solid var(--border);font-size:12.5px}
+td{padding:8px 10px;border:1px solid var(--border);vertical-align:top;line-height:1.6}
+tr:nth-child(even) td{background:#FCF8F0}
+input[type=text],textarea,select{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 9px;font-size:13px;
+  font-family:inherit;color:var(--ink);background:#FFFDF9;line-height:1.6}
+textarea{min-height:56px;resize:vertical}
+select{padding:6px 8px}
+.rgroup{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.rgroup label{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;white-space:nowrap}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.kit{background:#FBF5EA;border:1px dashed var(--border);border-radius:9px;padding:12px;margin:10px 0}
+.kit .kh{font-size:13px;font-weight:700;color:var(--gold);margin:0 0 8px}
+.check li{margin:0 0 7px}
+.toc{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:16px 0}
+.toc .th{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:9px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:22px}
+.toc li{margin-bottom:5px;font-size:13px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--main)}
+@media(max-width:600px){.toc ol{columns:1}}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8}
+footer .v{color:var(--gold);font-weight:700}
+@media print{
+  body{background:#fff;font-size:12px}
+  header{background:#3A2A1C !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card,.kit,table,th,td,input,textarea,select{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">WORKSHOP KITS</p>
+  <h1>工作坊物料四表<br>高管变量深度解读 · 决策环境设计</h1>
+  <p class="sub">配套课程的 four 份可填写物料：环境自评表 / 节奏审计表 / 团队激励卡 / 个人决策检查清单。直接打印或发电子版填写。</p>
+  <div class="meta">
+    <span id="mVer"></span>
+    <span id="mDate"></span>
+    <span>工作坊陪跑物料</span>
+  </div>
+</header>
+
+<div class="toc">
+  <div class="th">目录</div>
+  <ol>
+    <li><a href="#k1">表一 · 环境自评表</a></li>
+    <li><a href="#k2">表二 · 节奏审计表</a></li>
+    <li><a href="#k3">表三 · 团队激励卡</a></li>
+    <li><a href="#k4">表四 · 个人决策检查清单</a></li>
+  </ol>
+</div>
+
+<!-- ===== 表一 环境自评表 ===== -->
+<section id="k1">
+  <span class="sec-no">KIT 01</span>
+  <h2>环境自评表 · 我的决策环境</h2>
+  <div class="note"><span class="h">怎么填</span>读左边六类描述，在「我有多像」勾选；描述里提到的是身体在哪种空间最安顿，不是性格好坏。最后写出你的主场环境与本周一处改动。</div>
+  <div class="card">
+    <div class="ct"><span class="no">1</span>环境六类自评</div>
+    <div class="cd">身体变量 · 可实验 · 勾选最接近的一项</div>
+    <table>
+      <thead><tr><th style="min-width:120px">环境类型</th><th>身体在哪种空间最安顿</th><th style="min-width:170px">我有多像</th><th>备注 / 我的证据</th></tr></thead>
+      <tbody>
+        <tr><td><b>洞穴</b><br>Caves</td><td>能关上门、控制谁进来的可控边界</td><td><div class="rgroup"><label><input type="radio" name="e1">很像</label><label><input type="radio" name="e1">有点</label><label><input type="radio" name="e1">不像</label></div></td><td><input type="text" placeholder="例：背对门坐会一直紧绷"></td></tr>
+        <tr><td><b>市场</b><br>Markets</td><td>有人/信息流动交换的地方，静止会枯竭</td><td><div class="rgroup"><label><input type="radio" name="e2">很像</label><label><input type="radio" name="e2">有点</label><label><input type="radio" name="e2">不像</label></div></td><td><input type="text" placeholder="例：安静房间待半天会发慌"></td></tr>
+        <tr><td><b>厨房</b><br>Kitchens</td><td>转化正在发生的过程里，旁观会枯萎</td><td><div class="rgroup"><label><input type="radio" name="e3">很像</label><label><input type="radio" name="e3">有点</label><label><input type="radio" name="e3">不像</label></div></td><td><input type="text" placeholder="例：守成岗上会制造变化"></td></tr>
+        <tr><td><b>山脉</b><br>Mountains</td><td>要有距离/视野，贴太近看不清</td><td><div class="rgroup"><label><input type="radio" name="e4">很像</label><label><input type="radio" name="e4">有点</label><label><input type="radio" name="e4">不像</label></div></td><td><input type="text" placeholder="例：无窗房持续压抑"></td></tr>
+        <tr><td><b>山谷</b><br>Valleys</td><td>需要声音与流通，绝对安静会停摆</td><td><div class="rgroup"><label><input type="radio" name="e5">很像</label><label><input type="radio" name="e5">有点</label><label><input type="radio" name="e5">不像</label></div></td><td><input type="text" placeholder="例：边听边干更高效"></td></tr>
+        <tr><td><b>海岸</b><br>Shores</td><td>边缘过渡地带，能进能出最自在</td><td><div class="rgroup"><label><input type="radio" name="e6">很像</label><label><input type="radio" name="e6">有点</label><label><input type="radio" name="e6">不像</label></div></td><td><input type="text" placeholder="例：若即若离是设计不是态度"></td></tr>
+      </tbody>
+    </table>
+    <div class="grid2">
+      <div><b>我的主场环境（最像哪类）：</b><br><input type="text" placeholder="洞穴 / 市场 / 厨房 / 山脉 / 山谷 / 海岸"></div>
+      <div><b>本周一处改动（只改一条）：</b><br><input type="text" placeholder="例：会议选靠墙位 + 15分钟关门时间"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 表二 节奏审计表 ===== -->
+<section id="k2">
+  <span class="sec-no">KIT 02</span>
+  <h2>节奏审计表 · 我的信息摄入节奏</h2>
+  <div class="note warn"><span class="h">合规提醒</span>本表只记录「信息怎么进来、何时进来」的节奏，<strong>不涉及任何饮食 / 餐饮</strong>。摄食六项一律按连续型 / 交替型理解你的精力曲线。</div>
+  <div class="card">
+    <div class="ct"><span class="no">2</span>一周能量与节奏标记</div>
+    <div class="cd">每天三个时段各勾「高 / 中 / 低」能量；在「被塞爆处」写具体事件</div>
+    <table>
+      <thead><tr><th style="min-width:64px">日期</th><th>上午</th><th>下午</th><th>晚上</th><th style="min-width:150px">被塞爆 / 碎片会议处</th></tr></thead>
+      <tbody>
+        <tr><td>周一</td><td class="rgroup"><label><input type="radio" name="d1a">高</label><label><input type="radio" name="d1a">中</label><label><input type="radio" name="d1a">低</label></td><td class="rgroup"><label><input type="radio" name="d1b">高</label><label><input type="radio" name="d1b">中</label><label><input type="radio" name="d1b">低</label></td><td class="rgroup"><label><input type="radio" name="d1c">高</label><label><input type="radio" name="d1c">中</label><label><input type="radio" name="d1c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周二</td><td class="rgroup"><label><input type="radio" name="d2a">高</label><label><input type="radio" name="d2a">中</label><label><input type="radio" name="d2a">低</label></td><td class="rgroup"><label><input type="radio" name="d2b">高</label><label><input type="radio" name="d2b">中</label><label><input type="radio" name="d2b">低</label></td><td class="rgroup"><label><input type="radio" name="d2c">高</label><label><input type="radio" name="d2c">中</label><label><input type="radio" name="d2c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周三</td><td class="rgroup"><label><input type="radio" name="d3a">高</label><label><input type="radio" name="d3a">中</label><label><input type="radio" name="d3a">低</label></td><td class="rgroup"><label><input type="radio" name="d3b">高</label><label><input type="radio" name="d3b">中</label><label><input type="radio" name="d3b">低</label></td><td class="rgroup"><label><input type="radio" name="d3c">高</label><label><input type="radio" name="d3c">中</label><label><input type="radio" name="d3c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周四</td><td class="rgroup"><label><input type="radio" name="d4a">高</label><label><input type="radio" name="d4a">中</label><label><input type="radio" name="d4a">低</label></td><td class="rgroup"><label><input type="radio" name="d4b">高</label><label><input type="radio" name="d4b">中</label><label><input type="radio" name="d4b">低</label></td><td class="rgroup"><label><input type="radio" name="d4c">高</label><label><input type="radio" name="d4c">中</label><label><input type="radio" name="d4c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周五</td><td class="rgroup"><label><input type="radio" name="d5a">高</label><label><input type="radio" name="d5a">中</label><label><input type="radio" name="d5a">低</label></td><td class="rgroup"><label><input type="radio" name="d5b">高</label><label><input type="radio" name="d5b">中</label><label><input type="radio" name="d5b">低</label></td><td class="rgroup"><label><input type="radio" name="d5c">高</label><label><input type="radio" name="d5c">中</label><label><input type="radio" name="d5c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周六</td><td class="rgroup"><label><input type="radio" name="d6a">高</label><label><input type="radio" name="d6a">中</label><label><input type="radio" name="d6a">低</label></td><td class="rgroup"><label><input type="radio" name="d6b">高</label><label><input type="radio" name="d6b">中</label><label><input type="radio" name="d6b">低</label></td><td class="rgroup"><label><input type="radio" name="d6c">高</label><label><input type="radio" name="d6c">中</label><label><input type="radio" name="d6c">低</label></td><td><input type="text"></td></tr>
+        <tr><td>周日</td><td class="rgroup"><label><input type="radio" name="d7a">高</label><label><input type="radio" name="d7a">中</label><label><input type="radio" name="d7a">低</label></td><td class="rgroup"><label><input type="radio" name="d7b">高</label><label><input type="radio" name="d7b">中</label><label><input type="radio" name="d7b">低</label></td><td class="rgroup"><label><input type="radio" name="d7c">高</label><label><input type="radio" name="d7c">中</label><label><input type="radio" name="d7c">低</label></td><td><input type="text"></td></tr>
+      </tbody>
+    </table>
+    <p><b>审计结论：</b></p>
+    <div class="grid2">
+      <div>整块高能量时段（保护起来）：<br><textarea placeholder="例：周二/周四 上午"></textarea></div>
+      <div>最常被塞爆的碎片（下次拆/挪）：<br><textarea placeholder="例：每天 3 个 45 分钟会"></textarea></div>
+    </div>
+    <p><b>我的节奏型：</b>
+      <span class="rgroup">
+        <label><input type="radio" name="rhythm">连续型（一次一事、要整块）</label>
+        <label><input type="radio" name="rhythm">交替型（小份多次、灵活随感）</label>
+      </span>
+    </p>
+  </div>
+</section>
+
+<!-- ===== 表三 团队激励卡 ===== -->
+<section id="k3">
+  <span class="sec-no">KIT 03</span>
+  <h2>团队激励卡 · 非物质激励模板</h2>
+  <div class="note"><span class="h">怎么填</span>动机是心智变量，<strong>只能观察不能改变</strong>。先识别对方动机类型（先否认再定义），再写一句「激励而非 KPI」的话。复制此卡给每位要激励的成员。</div>
+  <div class="card">
+    <div class="ct"><span class="no">3</span>成员激励卡（模板 ×3）</div>
+    <div class="cd">动机六类：恐惧(探究未知) / 希望(信任展开) / 欲望(改变现实) / 需求(被需要) / 内疚(修复破损) / 纯真(无预设)</div>
+
+    <div class="kit">
+      <div class="kh">成员 A</div>
+      <div class="grid2">
+        <div>姓名 / 角色：<br><input type="text" placeholder="例：王× · 产品负责人"></div>
+        <div>动机类型：<br>
+          <select><option>— 选择 —</option><option>恐惧 Fear（被未知点燃）</option><option>希望 Hope（信任时机）</option><option>欲望 Desire（要去改变）</option><option>需求 Need（被需要点燃）</option><option>内疚 Guilt（修复破损）</option><option>纯真 Innocence（无预设）</option></select>
+        </div>
+      </div>
+      <div>他的点燃句（什么让他自己动起来）：<br><textarea placeholder="例：一个没人搞懂的难题"></textarea></div>
+      <div>我的激励话术（非 KPI，给看见不给改造）：<br><textarea placeholder="例：这个从 0 到 1 的坑，我想交给你探"></textarea></div>
+    </div>
+
+    <div class="kit">
+      <div class="kh">成员 B</div>
+      <div class="grid2">
+        <div>姓名 / 角色：<br><input type="text" placeholder="例：李× · 运营"></div>
+        <div>动机类型：<br>
+          <select><option>— 选择 —</option><option>恐惧 Fear（被未知点燃）</option><option>希望 Hope（信任时机）</option><option>欲望 Desire（要去改变）</option><option>需求 Need（被需要点燃）</option><option>内疚 Guilt（修复破损）</option><option>纯真 Innocence（无预设）</option></select>
+        </div>
+      </div>
+      <div>他的点燃句（什么让他自己动起来）：<br><textarea placeholder="例：一个待修复的破损系统"></textarea></div>
+      <div>我的激励话术（非 KPI，给看见不给改造）：<br><textarea placeholder="例：这摊子只有你能看见该怎么拧"></textarea></div>
+    </div>
+
+    <div class="kit">
+      <div class="kh">成员 C</div>
+      <div class="grid2">
+        <div>姓名 / 角色：<br><input type="text" placeholder="例：张× · 战略"></div>
+        <div>动机类型：<br>
+          <select><option>— 选择 —</option><option>恐惧 Fear（被未知点燃）</option><option>希望 Hope（信任时机）</option><option>欲望 Desire（要去改变）</option><option>需求 Need（被需要点燃）</option><option>内疚 Guilt（修复破损）</option><option>纯真 Innocence（无预设）</option></select>
+        </div>
+      </div>
+      <div>他的点燃句（什么让他自己动起来）：<br><textarea placeholder="例：一个能成立的可能性"></textarea></div>
+      <div>我的激励话术（非 KPI，给看见不给改造）：<br><textarea placeholder="例：这事哪里成立，你先看见了什么"></textarea></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 表四 个人决策检查清单 ===== -->
+<section id="k4">
+  <span class="sec-no">KIT 04</span>
+  <h2>个人决策检查清单 · 认知校准</h2>
+  <div class="note warn"><span class="h">怎么填</span>视角是心智变量，<strong>只识别对齐还是错位，不改造</strong>。先确认你的真实视角，再在每次重大决策前走一遍检查点。六视角：生存 / 可能性 / 力量 / 欲望 / 概率 / 个人。</div>
+  <div class="card">
+    <div class="ct"><span class="no">4</span>我的视角与决策前检查点</div>
+    <div class="cd">真实视角 = 你天生先看见的；错位项 = 压力下会滑向的那一侧</div>
+    <div class="grid2">
+      <div>我的真实视角：<br>
+        <select><option>— 选择 —</option><option>生存 Survival（先看安全）</option><option>可能性 Possibility（先看能成立）</option><option>力量 Power（先看格局影响）</option><option>欲望 Wanting（先读他人渴望）</option><option>概率 Probability（先算趋势）</option><option>个人 Personal（先问对我意味着什么）</option></select>
+      </div>
+      <div>压力下易滑向（错位项）：<br>
+        <select><option>— 选择 —</option><option>欲望 Wanting（被想要带偏）</option><option>概率 Probability（反复算现实）</option><option>个人 Personal（读成恩怨）</option><option>生存 Survival（退回防御不敢要）</option><option>可能性 Possibility（失现实检验）</option><option>力量 Power（放大成输赢）</option></select>
+      </div>
+    </div>
+    <p><b>重大决策前，逐项勾选：</b></p>
+    <ul class="check">
+      <li><label><input type="checkbox"> 我确认了风险底线（「这安全吗」不被渴望盖过）——生存型</label></li>
+      <li><label><input type="checkbox"> 我先记下了「它哪里成立」，没急着算不行——可能性型</label></li>
+      <li><label><input type="checkbox"> 我分清了「这是结构问题还是某人针对我」——力量型</label></li>
+      <li><label><input type="checkbox"> 我今天说了一次「我想要什么」，不只「你需要什么」——欲望(视角)型</label></li>
+      <li><label><input type="checkbox"> 我给判断找了一条可验证的事实锚点——概率型</label></li>
+      <li><label><input type="checkbox"> 我先问了「我在乎的到底是什么」，没急着争输赢——个人型</label></li>
+    </ul>
+    <p><b>本次决策笔记：</b></p>
+    <textarea placeholder="写下你识别到的视角 + 是否滑向错位 + 一句归位动作"></textarea>
+    <div class="note" style="margin-bottom:0"><span class="h">收口语</span>这是你天生的看见方式，无需改变，只需识别它在对齐还是错位。四个变量 = 决策环境设计的四个杠杆：物理环境 / 信息节奏 / 激励结构 / 认知视角。</div>
+  </div>
+</section>
+
+<footer>
+  <div><span class="v" id="fVer"></span> · 工作坊物料四表</div>
+  <div>配套《高管变量深度解读》课程与讲师逐页讲稿 · <span id="fDate"></span></div>
+  <div style="margin-top:6px;font-size:12px;color:var(--muted)">Powered By Kan Man Tang</div>
+</footer>
+
+</div>
+<script>
+var VERSION = "V1";
+var BUILT = "2026-09-03";
+function setText(id, val){var el=document.getElementById(id); if(el){el.textContent=val;}}
+setText("mVer", "版本 " + VERSION);
+setText("mDate", "编制日期 " + BUILT);
+setText("fVer", VERSION);
+setText("fDate", BUILT);
+</script>
+</body>
+</html>
