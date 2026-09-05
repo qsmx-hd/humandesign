@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基因天命·体证之旅 · 课程页面 · 黄金之路 × 体证之路 一体化设计</title>
+<meta name="description" content="黄金之路 × 体证之路 一体化递进课程。3 阶 / 6 模块 / 18 课时 / 10 周 / 6 份标志性产出。基于 genekeys-profile V4.1 沉思笔记。">
+<style>
+/* =========================================================
+   基因天命 · 体证之旅 — 课程页面
+   视觉系统：暖白 + 深墨 + 琥珀金 + 莫兰迪（绿/红/蓝）
+   字体：思源宋体（标题）+ 思源黑体（正文）+ 衬线数字
+   风格参照：hd-four-arts-course.html 的「新中式人文课程」
+   ========================================================= */
+
+:root{
+  --bg-warm:#FAF8F4;        /* 暖白主背景 */
+  --bg-paper:#FFFFFF;       /* 卡片白 */
+  --ink-deep:#0F0F0F;       /* 深墨 */
+  --ink-soft:#2D2118;       /* 暖墨 */
+  --gold:#C9A961;           /* 琥珀金主强调 */
+  --gold-deep:#A8884B;      /* 深金 */
+  --gold-pale:#F1E7CC;      /* 浅金底 */
+  --line-soft:#E8DFCF;      /* 细线 */
+  --text-mid:#5A4A3A;       /* 暖灰正文 */
+  --text-soft:#8A7A68;      /* 副文 */
+  --c-green:#6B8E5A;        /* 看见 · 莫兰迪绿（启动序列） */
+  --c-red:#C04B45;          /* 体证 · 砖红（金星序列） */
+  --c-blue:#6B7FB8;         /* 合一 · 雾蓝（珍珠序列） */
+  --c-purple:#8E70AD;       /* 跨序列 · 紫罗兰 */
+  --shadow-1: 0 2px 8px rgba(45,33,24,.06);
+  --shadow-2: 0 8px 24px rgba(45,33,24,.10);
+  --shadow-3: 0 20px 50px rgba(45,33,24,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.7;color:var(--text-mid);
+  background:var(--bg-warm);
+  -webkit-font-smoothing:antialiased;
+}
+.serif{font-family:"Noto Serif SC","Songti SC","SimSun",serif;}
+.gold{color:var(--gold);}
+
+/* ──────── 顶部导航 ──────── */
+header.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(250,248,244,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-inner{
+  max-width:1240px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 32px;
+}
+.nav-brand{font-family:"Noto Serif SC",serif;font-size:17px;font-weight:600;color:var(--ink-soft);}
+.nav-brand small{display:block;font-size:11px;font-weight:400;color:var(--text-soft);letter-spacing:2px;margin-top:2px;}
+.nav-links{display:flex;gap:28px;flex-wrap:wrap;}
+.nav-links a{color:var(--ink-soft);text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:1px;
+  border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .2s,color .2s;}
+.nav-links a:hover{color:var(--gold-deep);border-bottom-color:var(--gold);}
+
+/* ──────── Hero 区 ──────── */
+.hero{
+  background:linear-gradient(135deg,#F8F1E0 0%,#F1E7CC 100%);
+  color:var(--ink-soft);padding:96px 32px 80px;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--line-soft);
+}
+.hero::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);
+}
+.hero-inner{max-width:1240px;margin:0 auto;position:relative;z-index:2;}
+.hero-tag{
+  display:inline-block;padding:6px 14px;
+  border:1px solid var(--gold);border-radius:20px;
+  color:var(--gold);font-size:11px;letter-spacing:3px;
+  font-family:"Noto Sans SC",sans-serif;text-transform:uppercase;
+}
+.hero h1{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(40px,5vw,64px);font-weight:700;line-height:1.15;
+  margin:24px 0 16px;color:var(--ink-soft);
+}
+.hero h1 .small{display:block;font-size:0.55em;font-weight:400;color:var(--gold-deep);margin-top:8px;}
+.hero h1 .accent{color:var(--gold-deep);font-style:italic;}
+.hero-sub{
+  font-size:18px;color:var(--text-mid);max-width:760px;line-height:1.65;margin-bottom:32px;
+  font-weight:300;
+}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px;}
+.btn{padding:14px 28px;border-radius:30px;font-size:14px;font-weight:600;
+  text-decoration:none;cursor:pointer;letter-spacing:1px;transition:all .2s;}
+.btn-gold{background:var(--gold);color:var(--ink-deep);border:1px solid var(--gold);}
+.btn-gold:hover{background:var(--gold-deep);border-color:var(--gold-deep);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold);}
+.btn-outline:hover{background:var(--gold);color:var(--ink-deep);}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  padding-top:36px;border-top:1px solid rgba(201,169,97,.25);
+}
+.hero-stat{text-align:center;border-right:1px solid rgba(201,169,97,.15);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat .num{
+  font-family:"Noto Serif SC",serif;
+  font-size:52px;font-weight:700;color:var(--gold);
+  line-height:1;margin-bottom:8px;letter-spacing:-1px;
+}
+.hero-stat .num small{font-size:24px;color:var(--gold-deep);margin-left:2px;}
+.hero-stat .lab{font-size:13px;color:var(--text-soft);letter-spacing:2px;}
+
+/* ──────── 通用 section ──────── */
+section{padding:96px 32px;max-width:1240px;margin:0 auto;}
+.section-tag{
+  display:inline-block;padding:5px 14px;
+  color:var(--gold-deep);font-size:11px;letter-spacing:4px;
+  font-family:"Noto Sans SC",sans-serif;text-transform:uppercase;
+  border-bottom:1px solid var(--gold);margin-bottom:18px;
+}
+h2.section-title{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(30px,3.5vw,42px);font-weight:700;color:var(--ink-soft);
+  margin-bottom:14px;line-height:1.25;
+}
+h2.section-title .accent{color:var(--gold);font-style:italic;}
+.section-sub{font-size:16px;color:var(--text-soft);max-width:760px;margin-bottom:48px;line-height:1.7;}
+
+/* ──────── Series Overview（4 列等宽卡） ──────── */
+.overview-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  margin-bottom:64px;
+}
+.overview-card{
+  background:var(--bg-paper);border-radius:14px;padding:32px 24px;
+  box-shadow:var(--shadow-1);transition:all .3s;cursor:pointer;
+  border-top:3px solid var(--gold);position:relative;overflow:hidden;
+}
+.overview-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-2);}
+.overview-card .ch-char{
+  font-family:"Noto Serif SC",serif;
+  font-size:54px;font-weight:700;color:var(--gold);
+  line-height:1;margin-bottom:12px;letter-spacing:2px;
+}
+.overview-card.c-green{border-top-color:var(--c-green);}
+.overview-card.c-green .ch-char{color:var(--c-green);}
+.overview-card.c-red{border-top-color:var(--c-red);}
+.overview-card.c-red .ch-char{color:var(--c-red);}
+.overview-card.c-blue{border-top-color:var(--c-blue);}
+.overview-card.c-blue .ch-char{color:var(--c-blue);}
+.overview-card .en{
+  font-size:11px;letter-spacing:3px;color:var(--text-soft);
+  margin-bottom:14px;text-transform:uppercase;
+}
+.overview-card h3{
+  font-family:"Noto Serif SC",serif;font-size:21px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:10px;
+}
+.overview-card p{font-size:13.5px;color:var(--text-mid);line-height:1.65;margin-bottom:18px;}
+.overview-card .tags{display:flex;flex-wrap:wrap;gap:6px;}
+.overview-card .tag{
+  font-size:11px;padding:3px 9px;border-radius:10px;
+  background:var(--gold-pale);color:var(--ink-soft);
+}
+.overview-card.c-green .tag{background:rgba(107,142,90,.12);color:var(--c-green);}
+.overview-card.c-red .tag{background:rgba(192,75,69,.10);color:var(--c-red);}
+.overview-card.c-blue .tag{background:rgba(107,127,184,.12);color:var(--c-blue);}
+
+/* ──────── 金字塔可视化 ──────── */
+.pyramid{
+  background:linear-gradient(180deg,var(--bg-paper) 0%,#F1E7CC 100%);
+  border-radius:18px;padding:48px 32px;
+  box-shadow:var(--shadow-2);
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.pyr-layer{
+  width:100%;text-align:center;padding:24px 20px;
+  border-radius:14px;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif SC",serif;font-size:18px;font-weight:600;
+  letter-spacing:1px;margin-bottom:-8px;position:relative;
+  box-shadow:0 4px 12px rgba(45,33,24,.10);
+}
+.pyr-layer .stage-num{
+  font-family:"Noto Serif SC",serif;font-size:42px;font-weight:700;
+  margin-right:18px;line-height:1;
+  font-feature-settings:"lnum";
+}
+.pyr-layer .stage-text{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.pyr-layer .stage-text small{display:block;font-size:11px;font-weight:400;letter-spacing:2px;opacity:.85;}
+.pyr-layer.l7{background:linear-gradient(135deg,#A8884B,#C9A961);width:55%;color:var(--ink-soft);}
+.pyr-layer.l7 .stage-num{color:var(--ink-soft);}
+.pyr-layer.l6{background:linear-gradient(135deg,#8B3A35,#C04B45);width:72%;color:#F1E7CC;}
+.pyr-layer.l6 .stage-num{color:#F1E7CC;}
+.pyr-layer.l5{background:linear-gradient(135deg,#4F6B43,#6B8E5A);width:88%;}
+.pyr-layer.l5 .stage-num{color:#F1E7CC;}
+.pyr-base{
+  margin-top:24px;text-align:center;font-size:13px;color:var(--text-soft);
+  letter-spacing:2px;padding:14px;
+  border-top:1px dashed var(--line-soft);
+}
+
+/* ──────── 单阶 Hero（章节切换 · 浅色莫兰迪） ──────── */
+.stage-hero{
+  background:linear-gradient(135deg,#F0EFE5 0%,#E8E2D0 100%);
+  color:var(--ink-soft);padding:80px 32px 56px;
+  margin:0 -32px 0;border-radius:0;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--line-soft);
+}
+.stage-hero::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);
+}
+.stage-hero .hero-inner{max-width:1240px;margin:0 auto;position:relative;z-index:2;}
+.stage-hero h2{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(32px,4vw,48px);font-weight:700;
+  line-height:1.2;margin-bottom:18px;color:var(--ink-soft);
+}
+.stage-hero h2 .num{
+  font-size:1.4em;color:var(--gold-deep);font-style:italic;
+  font-family:"Noto Serif SC",serif;font-weight:700;margin-right:8px;
+}
+.stage-hero h2 .accent{color:var(--gold);}
+.stage-hero .en-line{
+  font-size:13px;letter-spacing:3px;color:var(--gold);
+  font-family:"Noto Sans SC",sans-serif;text-transform:uppercase;margin-bottom:14px;
+}
+.stage-hero .desc{
+  font-size:16px;color:var(--text-mid);max-width:820px;line-height:1.7;
+  margin-bottom:0;
+}
+
+/* ──────── 模块卡（栅格） ──────── */
+.module-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  margin-top:32px;
+}
+.module-card{
+  background:var(--bg-paper);border-radius:14px;
+  padding:28px 24px;box-shadow:var(--shadow-1);
+  border-left:4px solid var(--gold);
+  transition:all .25s;display:flex;flex-direction:column;
+}
+.module-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);}
+.module-card .m-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.module-card .m-id{
+  font-family:"Noto Serif SC",serif;font-size:13px;
+  color:var(--gold-deep);letter-spacing:2px;font-weight:600;
+}
+.module-card .m-hours{
+  font-size:11px;padding:3px 10px;border-radius:10px;
+  background:var(--gold-pale);color:var(--gold-deep);
+}
+.module-card h4{
+  font-family:"Noto Serif SC",serif;font-size:20px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:6px;line-height:1.35;
+}
+.module-card .m-en{font-size:12px;letter-spacing:2px;color:var(--text-soft);margin-bottom:14px;text-transform:uppercase;}
+.module-card .m-desc{font-size:14px;color:var(--text-mid);line-height:1.7;margin-bottom:18px;}
+.module-card .m-meta{
+  margin-top:auto;border-top:1px dashed var(--line-soft);padding-top:14px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:13px;
+}
+.module-card .m-meta div{color:var(--text-soft);}
+.module-card .m-meta strong{color:var(--ink-soft);font-weight:600;display:block;}
+
+/* ──────── 跨学科卡（卡片顶部汉字图标） ──────── */
+.ch-icon-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+  margin-top:32px;
+}
+.ch-icon-card{
+  background:var(--bg-paper);border-radius:14px;
+  padding:28px 24px;box-shadow:var(--shadow-1);
+  text-align:center;transition:all .25s;
+  border:1px solid var(--line-soft);
+}
+.ch-icon-card:hover{box-shadow:var(--shadow-2);transform:translateY(-2px);}
+.ch-icon-card .icon-char{
+  font-family:"Noto Serif SC",serif;
+  font-size:62px;font-weight:700;line-height:1;margin-bottom:14px;
+  display:inline-block;width:90px;height:90px;line-height:90px;
+  border-radius:50%;background:var(--gold-pale);color:var(--gold-deep);
+}
+.ch-icon-card .c-purple .icon-char{background:rgba(142,112,173,.14);color:var(--c-purple);}
+.ch-icon-card h4{font-family:"Noto Serif SC",serif;font-size:18px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+.ch-icon-card .en{font-size:11px;letter-spacing:2px;color:var(--text-soft);text-transform:uppercase;margin-bottom:12px;}
+.ch-icon-card p{font-size:13.5px;color:var(--text-mid);line-height:1.65;}
+
+/* ──────── 表格 ──────── */
+.curriculum-table{
+  width:100%;border-collapse:collapse;margin-top:32px;
+  background:var(--bg-paper);border-radius:14px;overflow:hidden;
+  box-shadow:var(--shadow-1);font-size:14px;
+}
+.curriculum-table thead{background:var(--gold-pale);color:var(--ink-soft);border-bottom:2px solid var(--gold);}
+.curriculum-table th{
+  padding:16px 14px;font-weight:600;text-align:left;
+  font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;font-family:"Noto Sans SC",sans-serif;
+}
+.curriculum-table tbody tr{border-bottom:1px solid var(--line-soft);transition:background .15s;}
+.curriculum-table tbody tr:nth-child(even){background:rgba(241,231,204,.20);}
+.curriculum-table tbody tr:hover{background:var(--gold-pale);}
+.curriculum-table td{padding:14px;vertical-align:top;color:var(--text-mid);}
+.curriculum-table td:first-child{
+  font-weight:600;color:var(--ink-soft);
+  font-family:"Noto Serif SC",serif;font-size:14px;
+  white-space:nowrap;
+}
+.curriculum-table .week-tag{
+  display:inline-block;padding:3px 10px;border-radius:10px;
+  background:var(--gold-pale);color:var(--gold-deep);
+  font-size:12px;font-weight:600;
+}
+
+/* ──────── 产出卡（6 份标志性产出） ──────── */
+.outcome-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  margin-top:32px;
+}
+.outcome-card{
+  background:var(--bg-paper);border-radius:14px;padding:24px;
+  box-shadow:var(--shadow-1);border-top:3px solid var(--gold);
+  position:relative;overflow:hidden;
+}
+.outcome-card .o-num{
+  font-family:"Noto Serif SC",serif;font-size:54px;font-weight:700;
+  color:var(--gold-pale);position:absolute;top:-10px;right:18px;
+  line-height:1;letter-spacing:-2px;
+}
+.outcome-card h4{
+  font-family:"Noto Serif SC",serif;font-size:18px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:8px;position:relative;
+}
+.outcome-card .o-en{font-size:11px;letter-spacing:2px;color:var(--text-soft);text-transform:uppercase;margin-bottom:12px;}
+.outcome-card p{font-size:13.5px;color:var(--text-mid);line-height:1.65;margin-bottom:12px;}
+.outcome-card .o-deliver{
+  font-size:12px;color:var(--gold-deep);font-weight:600;
+  padding-top:10px;border-top:1px dashed var(--line-soft);
+}
+
+/* ──────── 配套物料 ──────── */
+.material-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  margin-top:32px;
+}
+.material-card{
+  background:var(--bg-paper);border-radius:14px;padding:32px 24px;
+  box-shadow:var(--shadow-1);text-align:center;transition:all .25s;
+}
+.material-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);}
+.material-card .m-icon{
+  width:84px;height:84px;border-radius:50%;margin:0 auto 16px;
+  background:linear-gradient(135deg,var(--gold-pale),#E8D4A8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;color:var(--gold-deep);
+}
+.material-card h4{
+  font-family:"Noto Serif SC",serif;font-size:17px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:6px;
+}
+.material-card .en{font-size:11px;letter-spacing:2px;color:var(--text-soft);text-transform:uppercase;margin-bottom:10px;}
+.material-card p{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.material-card ul{text-align:left;font-size:13px;color:var(--text-mid);list-style:none;padding:0;margin-top:10px;}
+.material-card ul li{padding:4px 0 4px 18px;position:relative;}
+.material-card ul li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700;}
+
+/* ──────── 商业化三档 ──────── */
+.price-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  margin-top:32px;
+}
+.price-card{
+  background:var(--bg-paper);border-radius:14px;padding:36px 28px;
+  box-shadow:var(--shadow-1);position:relative;
+  border:1px solid var(--line-soft);
+}
+.price-card.featured{
+  border:2px solid var(--gold);transform:scale(1.04);
+  box-shadow:var(--shadow-3);
+}
+.price-card.featured::before{
+  content:"最受欢迎";position:absolute;top:-12px;left:50%;
+  transform:translateX(-50%);background:var(--gold);color:var(--ink-deep);
+  padding:4px 14px;border-radius:10px;font-size:11px;letter-spacing:2px;font-weight:600;
+}
+.price-card .p-name{
+  font-family:"Noto Serif SC",serif;font-size:22px;font-weight:600;
+  color:var(--ink-soft);margin-bottom:4px;
+}
+.price-card .p-en{font-size:11px;letter-spacing:3px;color:var(--text-soft);text-transform:uppercase;margin-bottom:18px;}
+.price-card .p-price{
+  font-family:"Noto Serif SC",serif;font-size:42px;font-weight:700;
+  color:var(--gold-deep);line-height:1;margin-bottom:6px;
+}
+.price-card .p-price small{font-size:14px;color:var(--text-soft);font-weight:400;}
+.price-card .p-sub{font-size:13px;color:var(--text-soft);margin-bottom:20px;}
+.price-card ul{list-style:none;padding:0;margin-bottom:24px;}
+.price-card ul li{
+  padding:8px 0 8px 22px;position:relative;font-size:13.5px;color:var(--text-mid);
+  border-bottom:1px dashed var(--line-soft);
+}
+.price-card ul li::before{
+  content:"◆";position:absolute;left:0;color:var(--gold);
+}
+.price-card ul li strong{color:var(--ink-soft);font-weight:600;}
+
+/* ──────── 页脚 ──────── */
+footer{
+  background:var(--bg-paper);color:var(--text-mid);padding:64px 32px 32px;
+  margin-top:64px;border-top:1px solid var(--line-soft);
+}
+.foot-inner{max-width:1240px;margin:0 auto;}
+.foot-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;
+  padding-bottom:32px;border-bottom:1px solid var(--line-soft);
+}
+.foot-brand h3{
+  font-family:"Noto Serif SC",serif;font-size:22px;color:var(--ink-soft);
+  margin-bottom:8px;font-weight:600;
+}
+.foot-brand .tagline{
+  font-size:11px;letter-spacing:3px;color:var(--gold-deep);
+  font-family:"Noto Sans SC",sans-serif;text-transform:uppercase;margin-bottom:14px;
+}
+.foot-brand p{font-size:13px;color:var(--text-soft);line-height:1.7;max-width:380px;}
+.foot-col h4{
+  font-size:13px;letter-spacing:2px;color:var(--ink-soft);
+  font-weight:600;margin-bottom:14px;text-transform:uppercase;
+}
+.foot-col ul{list-style:none;padding:0;}
+.foot-col ul li{padding:5px 0;font-size:13px;color:var(--text-soft);}
+.foot-col ul li a{color:var(--text-soft);text-decoration:none;transition:color .2s;}
+.foot-col ul li a:hover{color:var(--gold-deep);}
+.foot-bottom{
+  padding-top:24px;display:flex;justify-content:space-between;
+  font-size:12px;color:var(--text-soft);
+}
+.foot-bottom .powered{color:var(--gold);font-weight:500;}
+
+/* ──────── 口诀框（金色边框） ──────── */
+.motto{
+  background:var(--gold-pale);
+  border:1px solid var(--gold);border-radius:10px;
+  padding:18px 22px;margin:24px 0;font-size:14px;
+  color:var(--ink-soft);font-weight:500;text-align:center;
+  position:relative;
+}
+.motto::before{
+  content:"口诀";position:absolute;top:-10px;left:50%;
+  transform:translateX(-50%);background:var(--gold);color:var(--ink-deep);
+  padding:2px 10px;border-radius:8px;font-size:11px;letter-spacing:2px;
+}
+
+/* ──────── 引用 / 段落装饰 ──────── */
+.quote-block{
+  border-left:3px solid var(--gold);
+  padding:8px 0 8px 20px;margin:24px 0;
+  font-style:italic;color:var(--ink-soft);font-size:16px;
+  font-family:"Noto Serif SC",serif;
+}
+
+/* ──────── 响应式 ──────── */
+@media (max-width:980px){
+  section{padding:64px 22px;}
+  .hero{padding:72px 22px 56px;}
+  .stage-hero{padding:64px 22px 40px;}
+  .nav-inner{padding:14px 22px;}
+  .nav-links{display:none;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);gap:24px;}
+  .hero-stat:nth-child(2){border-right:none;}
+  .overview-grid,.module-grid,.ch-icon-grid,
+  .outcome-grid,.material-grid,.price-grid{grid-template-columns:1fr 1fr;}
+  .foot-grid{grid-template-columns:1fr;gap:32px;}
+  .foot-bottom{flex-direction:column;gap:8px;}
+  .pyr-layer{font-size:15px;padding:18px 14px;}
+  .pyr-layer .stage-num{font-size:32px;margin-right:12px;}
+  .curriculum-table{font-size:13px;}
+  .curriculum-table th,.curriculum-table td{padding:10px 8px;}
+}
+@media (max-width:560px){
+  .overview-grid,.module-grid,.ch-icon-grid,
+  .outcome-grid,.material-grid,.price-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:34px;}
+  .hero-stat .num{font-size:38px;}
+  .stage-hero h2{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ───── 顶部导航 ───── -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">基因天命·体证之旅<small>GENE KEYS · PATH OF CONTEMPLATION</small></div>
+    <nav class="nav-links">
+      <a href="#overview">课程总览</a>
+      <a href="#philosophy">三阶哲学</a>
+      <a href="#stage5">看见·第5阶</a>
+      <a href="#stage6">体证·第6阶</a>
+      <a href="#stage7">合一·第7阶</a>
+      <a href="#schedule">10周课表</a>
+      <a href="#outcomes">标志性产出</a>
+      <a href="#materials">配套物料</a>
+      <a href="#pricing">课程档位</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ───── Hero ───── -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">COURSE · 一体化课程设计稿 V1.0</span>
+    <h1>
+      <span class="small">从看见图谱</span>
+      <span class="accent">走向活出悉地</span>
+    </h1>
+    <p class="hero-sub">
+      黄金之路 × 体证之路 一体化递进课程。<br>
+      把"我知道了"的认知地图，锻造成"我活出来了"的悉地频率。3 阶递进 · 6 模块 · 18 课时 · 10 周 · 6 份标志性产出。
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#overview">查看课程总览</a>
+      <a class="btn btn-outline" href="#materials">下载配套工具</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">3<small>阶</small></div><div class="lab">看见·体证·合一</div></div>
+      <div class="hero-stat"><div class="num">6<small>模块</small></div><div class="lab">启动至七星封印</div></div>
+      <div class="hero-stat"><div class="num">18<small>课时</small></div><div class="lab">36 小时沉浸</div></div>
+      <div class="hero-stat"><div class="num">10<small>周</small></div><div class="lab">递进式共修</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 课程总览 ───── -->
+<section id="overview">
+  <span class="section-tag">SERIES OVERVIEW · 课程总览</span>
+  <h2 class="section-title">三阶递进，<span class="accent">一次走完基因天命最长的路</span></h2>
+  <p class="section-sub">
+    这不是一门"按七个序列讲一遍"的课——那是工具已经完成的事。这是一份**让图谱在你生命中真的活过来**的递进旅程。从「知道」到「活出来」，从「看见阴影」到「稳定悉地」。
+  </p>
+
+  <div class="overview-grid">
+    <div class="overview-card c-green">
+      <div class="ch-char">看</div>
+      <div class="en">STAGE 5 · SEEING</div>
+      <h3>看见·黄金之路</h3>
+      <p>用 11 球体全息图谱，建立"我是谁"的完整叙事。启动序列（与天赋）→ 金星序列（与关系）→ 珍珠序列（与世界）。</p>
+      <div class="tags">
+        <span class="tag">启动 4 键</span>
+        <span class="tag">金星 6 键</span>
+        <span class="tag">珍珠 4 键</span>
+      </div>
+    </div>
+
+    <div class="overview-card c-red">
+      <div class="ch-char">证</div>
+      <div class="en">STAGE 6 · EMBODIMENT</div>
+      <h3>体证·沉思之术</h3>
+      <p>把"我知道了"锻造成"我活出来了"。每个基因键配 3 次沉思（阴影→天赋→悉地），间隔 ≥3 天，跨序列交叉基因重点关照。</p>
+      <div class="tags">
+        <span class="tag">梦帷 Dream Arc</span>
+        <span class="tag">星纪 Star Pearl</span>
+        <span class="tag">沉思 Contemplation</span>
+      </div>
+    </div>
+
+    <div class="overview-card c-blue">
+      <div class="ch-char">合</div>
+      <div class="en">STAGE 7 · UNITY</div>
+      <h3>合一·七星封印</h3>
+      <p>把悉地频率从"时刻偶尔"内化为"日常常在"。7 个身体门打开稳定封印通道，公开演讲是不退转的硬约束。</p>
+      <div class="tags">
+        <span class="tag">七封印</span>
+        <span class="tag">身心灵</span>
+        <span class="tag">公开演讲</span>
+      </div>
+    </div>
+
+    <div class="overview-card">
+      <div class="ch-char">道</div>
+      <div class="en">METHOD · CONTEMPLATION</div>
+      <h3>沉思之术·贯穿</h3>
+      <p>它不是单独模块，是<strong style="color:var(--gold-deep)">贯穿全程的方法论</strong>。每节课配 30 分钟沉思实践，工具沉淀自动连接每一次生命事件。</p>
+      <div class="tags">
+        <span class="tag">3 次/键</span>
+        <span class="tag">≥3 天间隔</span>
+        <span class="tag">生命事件对账</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 三阶哲学 ───── -->
+<section id="philosophy">
+  <span class="section-tag">PHILOSOPHY · 三阶哲学</span>
+  <h2 class="section-title">为什么是「3 阶」，<span class="accent">而不是 7 个序列？</h2>
+  <p class="section-sub">
+    七序列是<strong>认知地图</strong>，三阶是<strong>意识频次</strong>。学员在第 5 阶读完七个序列时，已经能讲出自己的完整生命叙事；在第 6 阶走完三个弧线时，能在日常事件中辨认出频率滑移；在第 7 阶走完七星封印时，悉地状态变得<em>稳定可重复</em>。
+  </p>
+
+  <div class="pyramid">
+    <div class="pyr-layer l7">
+      <span class="stage-num">7</span>
+      <div class="stage-text">合一·七星封印<small>UNION · 悉地稳定可重复</small></div>
+    </div>
+    <div class="pyr-layer l6">
+      <span class="stage-num">6</span>
+      <div class="stage-text">体证·进阶三弧<small>EMBODIMENT · 从刻意到无意识</small></div>
+    </div>
+    <div class="pyr-layer l5">
+      <span class="stage-num">5</span>
+      <div class="stage-text">看见·黄金之路<small>SEEING · 完整自我叙事</small></div>
+    </div>
+    <div class="pyr-base">【学员入门处 · 11 球体首次解读】</div>
+  </div>
+
+  <div class="motto">递进的本质不是「讲更多」，而是「静观更深」</div>
+
+  <div class="quote-block">
+    "工具是工具——单点触发、缺乏结构、缺乏共修、缺乏递进逻辑。<br>
+    所以我们需要一门课程，把这两条路真正连成一条路。"
+  </div>
+</section>
+
+<!-- ───── 第 5 阶·看见 ───── -->
+<div class="stage-hero">
+  <div class="hero-inner">
+    <div class="en-line">STAGE 5 · SEEING</div>
+    <h2><span class="num">5</span><span class="accent">看见 · 黄金之路</span><br>三个序列整合为一份完整的「我是谁」叙事</h2>
+    <p class="desc">
+      第 5 阶回答三个问题：「我和天赋是什么关系？」「我和他人是什么关系？」「我和世界是什么关系？」三个序列，三种关系，三段叙事。M1 启动序列（4 课时）让你认出"我的天赋频次"；M2 金星序列（4 课时）让你辨识"我吸引谁、我与他关系的盲点"；M3 珍珠序列（3 课时）让你定位"我和世界的接口"。每个基因键配 1 次课堂沉思 + 1 篇 2000-3000 字整合文。
+    </p>
+  </div>
+</div>
+
+<section>
+  <div class="module-grid">
+    <div class="module-card">
+      <div class="m-head"><span class="m-id">M1 · 启动序列</span><span class="m-hours">4 课时</span></div>
+      <h4>你与天赋的关系</h4>
+      <div class="m-en">ACTIVATION SEQUENCE · GENIUS</div>
+      <p class="m-desc">走完 47.6 → 22.6 → 12.2 → 11.2 四个钥匙。从「生命工作」（人格太阳）的阴影走到「使命」（设计地球）的悉地，回答"我为什么来到这个世界"。</p>
+      <div class="m-meta">
+        <div><strong>核心方法</strong>序列行走 + 跨序列交叉</div>
+        <div><strong>主键</strong>47.6 · 22.6 · 12.2 · 11.2</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="m-head"><span class="m-id">M2 · 金星序列</span><span class="m-hours">4 课时</span></div>
+      <h4>你与他人（关系）的关系</h4>
+      <div class="m-en">VENUS SEQUENCE · RELATING</div>
+      <p class="m-desc">走完 11.2 → 49.3 → 46.1 → 64.5 → 16.1 → 53.2 六个钥匙。回答"我吸引谁"、"我与他关系的盲点"、"我的核心伤口是什么"。</p>
+      <div class="m-meta">
+        <div><strong>核心方法</strong>关系复盘 + 核心伤口凝视</div>
+        <div><strong>主键</strong>11.2 · 49.3 · 46.1 · 64.5 · 16.1 · 53.2</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="m-head"><span class="m-id">M3 · 珍珠序列</span><span class="m-hours">3 课时</span></div>
+      <h4>你与世界（丰盛）的关系</h4>
+      <div class="m-en">PEARL SEQUENCE · ABUNDANCE</div>
+      <p class="m-desc">走完 53.2 → 42.3 → 3.3 → 47.6 四个钥匙。回答"我的天职是什么"、"我和更大群体的接口"、"我服务的对象是谁"。</p>
+      <div class="m-meta">
+        <div><strong>核心方法</strong>服务之心 + 跨群体对账</div>
+        <div><strong>主键</strong>53.2 · 42.3 · 3.3 · 47.6</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ch-icon-grid">
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-green);background:rgba(107,142,90,.14);">序</div>
+      <h4>序列行走</h4>
+      <div class="en">SEQUENCE WALKING</div>
+      <p>不再是"按顺序读图谱"，而是"在事件中按顺序觉察"。每个钥匙配 3 次沉思（阴影→天赋→悉地），间隔 ≥3 天，工具自动归档。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-purple);background:rgba(142,112,173,.14);">叉</div>
+      <h4>跨序列交叉</h4>
+      <div class="en">CROSS-SEQUENCE KEYS</div>
+      <p>重点关照 47.6 / 11.2 / 53.2 / 3.3 四个"双重身份"基因键——它们在多个序列里担任不同角色，是体证的钥匙。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char">整</div>
+      <h4>完整叙事</h4>
+      <div class="en">INTEGRATED NARRATIVE</div>
+      <p>第 5 阶毕业标志：能用 5 分钟讲清"我是谁 + 我和世界的关系 + 我的最大盲点"——三个序列的整合叙事。</p>
+    </div>
+  </div>
+
+  <div class="motto">看见 ≠ 知道。看见 = 我能在日常对话中讲清楚图谱里的每一根线</div>
+</section>
+
+<!-- ───── 第 6 阶·体证 ───── -->
+<div class="stage-hero" style="background:linear-gradient(135deg,#F4E8E0 0%,#E8D0C5 100%);">
+  <div class="hero-inner">
+    <div class="en-line">STAGE 6 · EMBODIMENT</div>
+    <h2><span class="num">6</span><span class="accent">体证 · 进阶三弧</span><br>从刻意练习到无意识呈现</h2>
+    <p class="desc">
+      第 6 阶回答一个问题：「我怎么把知道的活出来？」三个弧线，三种「内化」方式。梦帷·Dream Arc 让你认出"未显化的胚胎天赋"；星纪·Star Pearl 让你认出"精神层面的高阶悉地"；沉思之术·Contemplation 作为方法论贯穿全程。每节课配 30 分钟实修 + 1 篇整合文 + 1 次公开分享会。
+    </p>
+  </div>
+</div>
+
+<section>
+  <div class="module-grid">
+    <div class="module-card" style="border-left-color:var(--c-red);">
+      <div class="m-head"><span class="m-id">M4 · 进阶三弧</span><span class="m-hours" style="background:rgba(192,75,69,.10);color:var(--c-red);">4 课时</span></div>
+      <h4>梦帷 · 星纪 · 沉思之术</h4>
+      <div class="m-en">DREAM ARC · STAR PEARL · CONTEMPLATION</div>
+      <p class="m-desc">M4 全部课时用于实修。梦帷唤醒"还在胚胎里的天赋"，星纪让悉地带上"精神层级"，沉思之术作为方法论把每个钥匙从阴影真正滑移至悉地。</p>
+      <div class="m-meta">
+        <div><strong>核心方法</strong>实修为主、理论为辅</div>
+        <div><strong>主键</strong>梦帷 + 星纪 + 全键 3 次/键</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ch-icon-grid">
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-red);background:rgba(192,75,69,.10);">梦</div>
+      <h4>梦帷 · Dream Arc</h4>
+      <div class="en">DREAMING SEQUENCE</div>
+      <p>识别"还在胚胎里、尚未出生"的天赋。常常是突然浮现的灵感、让你热泪盈眶的瞬间、未被兑现的童年理想。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:#C9A961;background:rgba(201,169,97,.16);">星</div>
+      <h4>星纪 · Star Pearl</h4>
+      <div class="en">STAR PEARL ARC</div>
+      <p>把悉地频率带向"精神层级"的稳定通道。识别"我能贡献的不可替代之物"——服务之心的成熟形态。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-purple);background:rgba(142,112,173,.14);">沉</div>
+      <h4>沉思之术 · Contemplation</h4>
+      <div class="en">METHOD · CONTEMPLATION</div>
+      <p>3 步循环法：①凝视阴影 7 天 ②允许天赋浮现 ③让悉地稳定。每个钥匙配 3 次沉思，间隔 ≥3 天。工具自动保存。</p>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "认知升级了，体证原地不动"——这是基因天命课程的通病。<br>
+    M4 的 4 课时全部用于实修，不允许有 1 分钟的纯理论。
+  </div>
+</section>
+
+<!-- ───── 第 7 阶·合一 ───── -->
+<div class="stage-hero" style="background:linear-gradient(135deg,#E8E8F0 0%,#D8DDE8 100%);">
+  <div class="hero-inner">
+    <div class="en-line">STAGE 7 · UNITY</div>
+    <h2><span class="num">7</span><span class="accent">合一 · 七星封印</span><br>悉地状态稳定可重复</h2>
+    <p class="desc">
+      第 7 阶回答一个问题：「我怎么稳定在悉地状态？」七星封印 = 七个身体门的开启。M5 把第 5-7 阶的体证收口为公开演讲——这是「不退转」的硬约束。能在公开场合即兴分享体证，意味着悉地状态已经能稳定可重复地输出。
+    </p>
+  </div>
+</div>
+
+<section>
+  <div class="module-grid">
+    <div class="module-card" style="border-left-color:var(--c-blue);">
+      <div class="m-head"><span class="m-id">M5 · 七星封印</span><span class="m-hours" style="background:rgba(107,127,184,.12);color:var(--c-blue);">2 课时</span></div>
+      <h4>身心灵稳定通道</h4>
+      <div class="m-en">SEVEN SACRED SEALS</div>
+      <p class="m-desc">七个身体门打开封印通道：身（5 个脉轮中心）+ 心（情绪节律）+ 灵（高频接收）。最后一课是公开演讲——每位学员做 15 分钟体证分享。</p>
+      <div class="m-meta">
+        <div><strong>核心方法</strong>身体实践 + 公开演讲</div>
+        <div><strong>主键</strong>七星封印 + 全键体证整合</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ch-icon-grid">
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-blue);background:rgba(107,127,184,.12);">印</div>
+      <h4>七星封印 · 身</h4>
+      <div class="en">SEVEN SEALS · BODY</div>
+      <p>5 个脉轮中心 + 7 个身体门。身体先于意识——当身体通道稳定，悉地才不会被情绪冲散。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-blue);background:rgba(107,127,184,.12);">演</div>
+      <h4>七星封印 · 心</h4>
+      <div class="en">SEVEN SEALS · SPEECH</div>
+      <p>公开演讲是不退转的硬约束。能即兴讲 15 分钟，意味着悉地状态可重复输出——不再是「时刻偶尔」。</p>
+    </div>
+    <div class="ch-icon-card">
+      <div class="icon-char" style="color:var(--c-blue);background:rgba(107,127,184,.12);">灵</div>
+      <h4>七星封印 · 灵</h4>
+      <div class="en">SEVEN SEALS · SPIRIT</div>
+      <p>把高频接收变成日常基础能力。第 7 阶毕业 = 学员可以在没有工具、没有讲解的情况下，认出自己正处于哪个频次。</p>
+    </div>
+  </div>
+
+  <div class="motto">合一 ≠ 永远不会回阴影。合一 = 滑移后能立刻认出并回到悉地</div>
+</section>
+
+<!-- ───── 10 周课表 ───── -->
+<section id="schedule">
+  <span class="section-tag">CURRICULUM · 10 周课表</span>
+  <h2 class="section-title">10 周课表，<span class="accent">36 小时沉浸</span></h2>
+  <p class="section-sub">
+    每个模块配 1 篇 2000-3000 字整合文 + 1 次课堂沉思 + 1 次生命事件对账。共 6 份标志性产出 + 1 场公开演讲 + 1 份 10 周体证报告。
+  </p>
+
+  <table class="curriculum-table">
+    <thead>
+      <tr>
+        <th>周次</th>
+        <th>模块</th>
+        <th>主题</th>
+        <th>课时</th>
+        <th>方法</th>
+        <th>标志性产出</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="week-tag">W1</span></td>
+        <td>M0 · 序章</td>
+        <td>看见你的图谱</td>
+        <td>1</td>
+        <td>11 球体首次解读 + 工具演示</td>
+        <td>首次阴影记录（V4.1 工具）</td>
+      </tr>
+      <tr>
+        <td><span class="week-tag">W2-3</span></td>
+        <td>M1 · 启动</td>
+        <td>你与天赋的关系</td>
+        <td>4</td>
+        <td>47.6→22.6→12.2→11.2 序列行走 + 跨序列交叉</td>
+        <td>《我的启动序列体证》2000 字</td>
+      </tr>
+      <tr>
+        <td><span class="week-tag">W4-5</span></td>
+        <td>M2 · 金星</td>
+        <td>你与关系的关系</td>
+        <td>4</td>
+        <td>11.2→49.3→46.1→64.5→16.1→53.2 关系复盘</td>
+        <td>《我的金星序列体证》2000 字</td>
+      </tr>
+      <tr>
+        <td><span class="week-tag">W6-7</span></td>
+        <td>M3 · 珍珠</td>
+        <td>你与世界的关系</td>
+        <td>3</td>
+        <td>53.2→42.3→3.3→47.6 服务之心 + 跨群体对账</td>
+        <td>《我的珍珠序列体证》2000 字</td>
+      </tr>
+      <tr>
+        <td><span class="week-tag">W8-9</span></td>
+        <td>M4 · 体证</td>
+        <td>梦帷 + 星纪 + 沉思之术</td>
+        <td>4</td>
+        <td>实修为主，全键 3 次沉思（≥3 天间隔）</td>
+        <td>《我的进阶三弧体证》2000 字</td>
+      </tr>
+      <tr>
+        <td><span class="week-tag">W10</span></td>
+        <td>M5 · 合一</td>
+        <td>七星封印 + 公开演讲</td>
+        <td>2</td>
+        <td>身体实践 + 公开演讲硬约束</td>
+        <td>15 分钟公开演讲 + 七星封印体证</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ───── 标志性产出 ───── -->
+<section id="outcomes">
+  <span class="section-tag">DELIVERABLES · 6 份标志性产出</span>
+  <h2 class="section-title">每篇 2000-3000 字，<span class="accent">6 份标志性产出</span></h2>
+  <p class="section-sub">
+    写作是体证的外显——能把体证写清楚，意味着它已经稳定。每份产出必须引用 ≥3 条来自 V4.1 工具的沉思笔记，确保是基于真实生命事件，而非理论推导。
+  </p>
+
+  <div class="outcome-grid">
+    <div class="outcome-card">
+      <div class="o-num">1</div>
+      <h4>启动序列体证</h4>
+      <div class="o-en">ACTIVATION · GENIUS</div>
+      <p>从 47.6 阴影走到 11.2 悉地的完整过程。包含至少 3 个真实生命事件，每个事件标注日期、情绪、当时回应、事后觉察。</p>
+      <div class="o-deliver">交付：W3 末提交，2000-3000 字</div>
+    </div>
+
+    <div class="outcome-card">
+      <div class="o-num">2</div>
+      <h4>金星序列体证</h4>
+      <div class="o-en">VENUS · RELATING</div>
+      <p>从 11.2 使命走到 53.2 核心的完整过程。重点关照 49.3 / 46.1 / 64.5 / 16.1 四个关系钥匙——为什么这段关系吸引我、关系里的盲点在哪。</p>
+      <div class="o-deliver">交付：W5 末提交，2000-3000 字</div>
+    </div>
+
+    <div class="outcome-card">
+      <div class="o-num">3</div>
+      <h4>珍珠序列体证</h4>
+      <div class="o-en">PEARL · ABUNDANCE</div>
+      <p>从 53.2 天职走到 47.6 收口的完整过程。包含服务之心浮起的具体时刻——我如何辨认"以服务之心行动"的真实发生。</p>
+      <div class="o-deliver">交付：W7 末提交，2000-3000 字</div>
+    </div>
+
+    <div class="outcome-card">
+      <div class="o-num">4</div>
+      <h4>进阶三弧体证</h4>
+      <div class="o-en">DREAM ARC · STAR PEARL</div>
+      <p>记录梦帷唤醒的"胚胎天赋"和星纪浮现的"高阶悉地"。这是 M4 全部 4 课时实修的精华。</p>
+      <div class="o-deliver">交付：W9 末提交，2000-3000 字</div>
+    </div>
+
+    <div class="outcome-card">
+      <div class="o-num">5</div>
+      <h4>七星封印体证</h4>
+      <div class="o-en">SEVEN SEALS</div>
+      <p>七个身体门的开启过程。包含身体层面的具体感受——脉轮中心打通的那一刻、呼吸节律的变化。</p>
+      <div class="o-deliver">交付：W10 课程中完成</div>
+    </div>
+
+    <div class="outcome-card">
+      <div class="o-num">6</div>
+      <h4>10 周体证报告</h4>
+      <div class="o-en">10-WEEK REPORT</div>
+      <p>整合 6 篇产出 + 工具沉思笔记 + 公开演讲内容。完整呈现 10 周生命轨迹——从拿到图谱到合一的完整过程。</p>
+      <div class="o-deliver">交付：W10 末提交，5000-8000 字</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 配套物料 ───── -->
+<section id="materials">
+  <span class="section-tag">MATERIALS · 配套物料</span>
+  <h2 class="section-title">三件核心物料，<span class="accent">贯穿 10 周全程</span></h2>
+  <p class="section-sub">
+    课程不是孤立的——它是 genekeys-profile.html 工具 + 沉思笔记本 + 七星封印手册 三件物料的组合使用课。每一份物料都对应课程中的某个角色。
+  </p>
+
+  <div class="material-grid">
+    <div class="material-card">
+      <div class="m-icon">🧬</div>
+      <h4>全息基因图工具</h4>
+      <div class="en">GENE KEYS · V4.1</div>
+      <ul>
+        <li>11 球体图谱自动生成</li>
+        <li>序列行走路径可视化</li>
+        <li>球体详解 + 沉思笔记（localStorage）</li>
+        <li>支持打印 / 导出 PDF</li>
+      </ul>
+    </div>
+
+    <div class="material-card">
+      <div class="m-icon">📓</div>
+      <h4>沉思笔记本</h4>
+      <div class="en">CONTEMPLATION JOURNAL</div>
+      <ul>
+        <li>每键配 3 次沉思模板</li>
+        <li>阴影 → 天赋 → 悉地 三栏</li>
+        <li>每页留白 + 触发事件栏</li>
+        <li>纸质 + 数字双版</li>
+      </ul>
+    </div>
+
+    <div class="material-card">
+      <div class="m-icon">⭐</div>
+      <h4>七星封印手册</h4>
+      <div class="en">SEVEN SEALS BOOKLET</div>
+      <ul>
+        <li>7 个身体门详解</li>
+        <li>脉轮中心 + 呼吸节律</li>
+        <li>封印开启可视化流程</li>
+        <li>M5 公开演讲底稿</li>
+      </ul>
+    </div>
+
+    <div class="material-card">
+      <div class="m-icon">📊</div>
+      <h4>评估与对账</h4>
+      <div class="en">ASSESSMENT & REVIEW</div>
+      <ul>
+        <li>6 份产出批改 rubric</li>
+        <li>10 周生命事件对账表</li>
+        <li>三阶评估问卷</li>
+        <li>公开演讲评分表</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 课程档位 ───── -->
+<section id="pricing">
+  <span class="section-tag">PRICING · 课程档位</span>
+  <h2 class="section-title">三档可选，<span class="accent">适配不同深度的陪伴</span></h2>
+  <p class="section-sub">
+    自学版适合时间灵活、希望按自己节奏深入的人；共修版适合希望有群体动能、有节奏约束的人；陪伴版适合希望有 1 对 1 深度反馈的人。
+  </p>
+
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="p-name">自学版</div>
+      <div class="p-en">SELF-PACED · 10 WEEKS</div>
+      <div class="p-price"><small>¥</small>1,980</div>
+      <div class="p-sub">录播课程 + 工具 + 群答疑</div>
+      <ul>
+        <li><strong>18 课时录播</strong>（36 小时）</li>
+        <li><strong>6 份整合文</strong>批改模板</li>
+        <li><strong>V4.1 工具</strong>永久使用</li>
+        <li><strong>学员群</strong>全程答疑</li>
+        <li><strong>纸质沉思笔记本</strong>包邮到家</li>
+      </ul>
+      <a class="btn btn-outline" href="#" style="display:block;text-align:center;">立即报名</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="p-name">共修版</div>
+      <div class="p-en">COHORT · LIVE SESSIONS</div>
+      <div class="p-price"><small>¥</small>4,980</div>
+      <div class="p-sub">自学版 + 8 次共修会直播</div>
+      <ul>
+        <li><strong>自学版全部内容</strong></li>
+        <li><strong>8 次共修会</strong>直播（每周 1 次，2 小时）</li>
+        <li><strong>学员群体动能</strong>支持</li>
+        <li><strong>每次共修</strong>配 1 次深度个案</li>
+        <li><strong>M5 公开演讲</strong>共修学员优先参与</li>
+        <li><strong>结业证书</strong></li>
+      </ul>
+      <a class="btn btn-gold" href="#" style="display:block;text-align:center;">立即报名</a>
+    </div>
+
+    <div class="price-card">
+      <div class="p-name">陪伴版</div>
+      <div class="p-en">1-ON-1 · MENTORSHIP</div>
+      <div class="p-price"><small>¥</small>9,800</div>
+      <div class="p-sub">共修版 + 2 次 1 对 1 + 微信答疑</div>
+      <ul>
+        <li><strong>共修版全部内容</strong></li>
+        <li><strong>2 次 1 对 1</strong>深度对话（90 分钟/次）</li>
+        <li><strong>微信群全程答疑</strong>（1 对 1 微信私信）</li>
+        <li><strong>6 份产出</strong>逐份反馈</li>
+        <li><strong>M5 演讲底稿</strong>1 对 1 打磨</li>
+        <li><strong>结业后 3 个月</strong>免费答疑</li>
+      </ul>
+      <a class="btn btn-outline" href="#" style="display:block;text-align:center;">立即报名</a>
+    </div>
+  </div>
+
+  <div class="quote-block" style="margin-top:48px;text-align:center;border-left:none;border-top:1px dashed var(--line-soft);border-bottom:1px dashed var(--line-soft);padding:24px 0;">
+    "这门课不是教你更多——这门课是让你<strong style="color:var(--gold-deep);">把已经知道的活出来</strong>。"
+    <br><br>
+    <span style="font-size:13px;color:var(--text-soft);font-style:normal;">—— 邓勤敏（Kan Man Tang）· 勤思妙享</span>
+  </div>
+</section>
+
+<!-- ───── 页脚 ───── -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h3>基因天命·体证之旅</h3>
+        <div class="tagline">GENE KEYS · PATH OF CONTEMPLATION</div>
+        <p>黄金之路 × 体证之路 一体化课程。把图谱锻造成生命，把认知锻造成悉地。3 阶递进 · 6 模块 · 18 课时 · 10 周 · 6 份标志性产出。</p>
+      </div>
+      <div class="foot-col">
+        <h4>课程结构</h4>
+        <ul>
+          <li><a href="#stage5">第 5 阶 · 看见</a></li>
+          <li><a href="#stage6">第 6 阶 · 体证</a></li>
+          <li><a href="#stage7">第 7 阶 · 合一</a></li>
+          <li><a href="#schedule">10 周课表</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>报名咨询</h4>
+        <ul>
+          <li>自学版 ¥1,980</li>
+          <li>共修版 ¥4,980</li>
+          <li>陪伴版 ¥9,800</li>
+          <li>咨询：Kan Man Tang</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 勤思妙享 · 基因天命·体证之旅课程设计稿 V1.0</span>
+      <span class="powered">Powered By Kan Man Tang</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
