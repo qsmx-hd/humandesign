@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>64 闸门 · 易经卦象语义距离分级表 V7</title>
+<style>
+:root{
+  --bg:#F5F0E8; --card:#FBF8F2; --text:#2D2118; --muted:#7A6A58;
+  --accent:#C4956A; --line:#E3D7C4; --deep:#4A3728;
+  --gA:#5F7A4E; --gB:#C4956A; --gC:#B5713F; --gD:#9E4A3C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text); font-size:15px; line-height:1.75;
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",sans-serif;
+  padding:0 0 60px;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+header{padding:34px 0 22px;border-bottom:2px solid var(--accent);margin-bottom:24px;
+  text-align:center}
+h1{font-size:24px;font-weight:600;letter-spacing:.5px;line-height:1.4;
+  display:inline-block;vertical-align:middle}
+.sub{color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
+.badge{display:inline-block;background:var(--accent);color:#fff;font-size:12px;
+  padding:3px 10px;border-radius:10px;vertical-align:middle;margin-left:8px;font-weight:500}
+h2{font-size:17px;font-weight:600;margin:30px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.card p{font-size:14px;color:var(--deep);margin-bottom:6px}
+.card p:last-child{margin-bottom:0}
+.gradeDef{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.gd{border-radius:8px;padding:12px 14px;color:#fff;font-size:13px;line-height:1.6}
+.gd b{display:block;font-size:15px;margin-bottom:4px;font-weight:600}
+.gdA{background:var(--gA)} .gdB{background:var(--gB)} .gdC{background:var(--gC)} .gdD{background:var(--gD)}
+.stat{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.stat button{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);
+  border-radius:8px;padding:12px;cursor:pointer;font-size:14px;color:var(--text);
+  font-family:inherit;text-align:left;transition:.15s}
+.stat button:hover{border-color:var(--accent)}
+.stat button.on{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,149,106,.28)}
+.stat .num{font-size:20px;font-weight:600;display:block}
+.stat .lb{font-size:12px;color:var(--muted)}
+.ctrl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
+.ctrl select,.ctrl input{width:100%;min-height:44px;padding:10px 12px;font-size:14px;
+  font-family:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text)}
+.hint{font-size:13px;color:var(--muted);margin-bottom:14px}
+
+/* ——— 双轴散点 ——— */
+.scatter-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:14px;margin-bottom:18px;overflow-x:auto;position:relative}
+.scatter-wrap svg{display:block;margin:0 auto;max-width:560px;width:100%;height:auto}
+.scatter-tip{position:absolute;background:var(--deep);color:#fff;padding:10px 12px;border-radius:6px;
+  font-size:12px;pointer-events:none;display:none;z-index:10;line-height:1.55;
+  box-shadow:0 6px 16px rgba(0,0,0,.22);max-width:340px}
+.scatter-tip b{color:#FAC775;font-size:13px}
+.scatter-tip .tip-row{margin-top:4px;color:#E8DCC6}
+.scatter-tip .tip-bridge{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
+  color:#F3E7D2;line-height:1.6}
+.scatter-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:8px;
+  font-size:12px;color:var(--deep);justify-content:center}
+.scatter-legend .lg{display:flex;align-items:center;gap:5px}
+.scatter-legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.scatter-legend .lg-forbid{width:18px;height:11px;display:inline-block;border:1px dashed #9E4A3C;
+  border-radius:2px;background:repeating-linear-gradient(45deg,
+    rgba(158,74,60,.34) 0 3px, transparent 3px 6px)}
+
+/* ——— 4×4 象限热力图 ——— */
+.heatmap{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:16px;margin-bottom:18px}
+.heatmap-title{font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center}
+.heatmap-grid{
+  display:grid;
+  grid-template-columns:64px repeat(4,1fr);
+  grid-template-rows:30px repeat(4,minmax(56px,1fr));
+  gap:5px;max-width:560px;margin:0 auto;
+}
+.hm-corner{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);
+  text-align:center;line-height:1.3;padding:0 4px}
+.hm-axis{display:flex;align-items:center;justify-content:center;font-size:12px;
+  font-weight:600;letter-spacing:.3px;color:var(--deep)}
+.hm-row-label{border-right:1px solid var(--line);background:rgba(255,255,255,.4)}
+.hm-cell{
+  border-radius:7px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;cursor:pointer;transition:.15s;font-size:13px;color:#fff;
+  border:1px solid transparent;position:relative;font-family:inherit;width:100%}
+.hm-cell:hover{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,149,106,.3)}
+.hm-cell.on{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,149,106,.45)}
+.hm-cell .hm-n{font-size:20px;font-weight:700;line-height:1}
+.hm-cell .hm-l{font-size:10px;opacity:.85;margin-top:3px;letter-spacing:.3px}
+.hm-cell.empty{border:1px dashed var(--line);background:transparent;color:var(--muted);cursor:default}
+.hm-cell.empty:hover{border-color:var(--line);box-shadow:none}
+/* 空格两类：结构不可能（斜线阴影）· 经验性空（虚线） */
+.hm-cell.imp{
+  border:1px solid rgba(158,74,60,.35);cursor:default;color:#9E4A3C;
+  background:repeating-linear-gradient(45deg,
+    rgba(158,74,60,.10) 0 5px, rgba(158,74,60,.03) 5px 10px);
+}
+.hm-cell.imp:hover{border-color:rgba(158,74,60,.6);box-shadow:none}
+.hm-cell.imp .hm-n{font-size:15px;opacity:.75}
+.hm-cell.none{border:1px dashed rgba(122,106,88,.45);background:transparent;color:var(--muted);cursor:default}
+.hm-cell.none:hover{border-color:rgba(122,106,88,.7);box-shadow:none}
+.hm-cell.none .hm-n{font-size:15px;opacity:.6}
+.hm-cell .hm-tag{font-size:9px;letter-spacing:.2px;margin-top:2px;opacity:.9;line-height:1.2;text-align:center}
+/* 选中联动高亮 */
+.hm-cell.sel{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(196,149,106,.4);
+  position:relative;z-index:2}
+.hm-tip{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* ——— V6：15 谦专页 ——— */
+.gp-card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:20px 22px;margin-bottom:16px;border-left:5px solid var(--gD)}
+.gp-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:14px;
+  padding-bottom:14px;border-bottom:1px solid var(--line)}
+.gp-hex{flex:0 0 auto;padding:8px 10px 4px;background:#F3ECE0;border-radius:8px;
+  border:1px solid var(--line);text-align:center}
+.gp-hz{font-size:19px;font-weight:600;margin-bottom:3px;line-height:1.4}
+.gp-ra{font-size:14px;color:var(--deep);margin-bottom:6px}
+.gp-meta{font-size:12px;color:var(--muted);line-height:1.7}
+.gp-sec{margin-top:15px}
+.gp-sec h3{font-size:14px;font-weight:600;color:var(--accent);margin-bottom:7px}
+.gp-sec p{font-size:14px;color:var(--deep);line-height:1.85;margin-bottom:7px}
+.gp-quote{background:#F3ECE0;border-left:3px solid var(--accent);padding:10px 14px;
+  border-radius:0 8px 8px 0;font-size:14px;color:var(--deep);line-height:1.8;margin:8px 0}
+.gp-quote .src{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.gp-wrong{background:#FBF0EE;border-left:3px solid #9E4A3C;padding:10px 14px;
+  border-radius:0 8px 8px 0;font-size:13px;color:#7A3226;line-height:1.8;margin:8px 0}
+.gp-right{background:#F1F5EC;border-left:3px solid var(--gA);padding:10px 14px;
+  border-radius:0 8px 8px 0;font-size:13px;color:#3F5233;line-height:1.8;margin:8px 0}
+.gp-jump{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;
+  font-size:13px;cursor:pointer;font-family:inherit;font-weight:500;margin-top:14px;transition:.15s}
+.gp-jump:hover{background:#B0835A}
+
+/* ——— 表格 ——— */
+table{width:100%;border-collapse:collapse;background:var(--card);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+th{background:#EFE6D7;text-align:left;padding:11px 10px;font-weight:600;font-size:13px;
+  color:var(--deep);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F3ECE0}
+/* V5：点击行选中联动（散点 + 热力图格子） */
+tr{cursor:pointer}
+tr.sel td{background:#F7E6CC}
+tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.sel:hover td{background:#F5DFC0}
+.sel-badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;
+  padding:1px 6px;border-radius:4px;margin-left:6px;font-weight:500;vertical-align:middle}
+.gpill{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;
+  border-radius:5px;color:#fff;font-size:12px;font-weight:600;padding:0 6px}
+.pA{background:var(--gA)} .pB{background:var(--gB)} .pC{background:var(--gC)} .pD{background:var(--gD)}
+.num-cell{font-weight:600;font-size:15px;color:var(--accent);white-space:nowrap}
+.alt-no{display:block;font-size:11px;color:var(--muted);font-weight:400;line-height:1.4}
+.tri{display:block;font-size:11px;color:#8A7355;line-height:1.5}
+/* V6：排序切换 */
+.sortbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.sortbar-lb{font-size:13px;color:var(--muted)}
+.sbtn{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 14px;
+  cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;transition:.15s}
+.sbtn:hover{border-color:var(--accent)}
+.sbtn.on{border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,149,106,.28);color:var(--accent);font-weight:600}
+.sortbar-note{flex-basis:100%;font-size:12px;color:var(--muted);line-height:1.6}
+.hz{font-weight:600}
+.en{color:var(--muted);font-size:12px;display:block;line-height:1.5}
+.ra{font-weight:500}
+.razh{color:var(--muted);font-size:12px;display:block}
+.tag{display:inline-block;background:#EFE6D7;color:var(--deep);font-size:12px;
+  padding:1px 7px;border-radius:4px;white-space:nowrap}
+.bridge{color:var(--deep);font-size:13px;line-height:1.7}
+.gx{display:inline-flex;gap:3px;align-items:center}
+.gx .glb{font-size:10px;color:var(--muted);letter-spacing:.5px}
+.hex{display:inline-block;vertical-align:middle;width:34px}
+.hex svg{display:block}
+
+/* ——— V7：伏羲序圆图（曼陀罗轮盘） ——— */
+.wheel-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:16px;margin-bottom:14px}
+.wheel-stage{position:relative;max-width:760px;margin:0 auto}
+.wheel-stage svg{display:block;width:100%;height:auto}
+.wheel-cell{cursor:pointer;transition:.12s}
+.wheel-cell:hover{opacity:1 !important}
+.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:34%;text-align:center;pointer-events:none;line-height:1.6}
+.wheel-center .wc-n{font-size:26px;font-weight:700;color:var(--accent);line-height:1.2}
+.wheel-center .wc-hz{font-size:15px;font-weight:600;color:var(--deep)}
+.wheel-center .wc-ra{font-size:12px;color:var(--deep);margin-top:2px}
+.wheel-center .wc-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.wheel-center .wc-idle{font-size:12px;color:var(--muted)}
+.wheel-tip{position:absolute;background:var(--deep);color:#fff;padding:8px 11px;border-radius:6px;
+  font-size:12px;pointer-events:none;display:none;z-index:20;line-height:1.6;
+  box-shadow:0 6px 16px rgba(0,0,0,.22);max-width:280px}
+.wheel-tip b{color:#FAC775}
+.wheel-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px;
+  font-size:12px;color:var(--deep);justify-content:center}
+.wheel-legend .lg{display:flex;align-items:center;gap:5px}
+.wheel-legend .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.mstrip{background:#F3ECE0;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+  margin-top:12px;font-size:11px;color:var(--deep);line-height:1.9;word-break:break-all;
+  font-family:"SF Mono",Consolas,monospace}
+.mstrip .ms-t{font-size:12px;color:var(--muted);font-family:inherit;margin-bottom:4px}
+.mstrip span.mn{display:inline-block;padding:0 3px;border-radius:3px;color:var(--muted)}
+.mstrip span.mn.hi{background:var(--accent);color:#fff;font-weight:700}
+.mstrip span.mn.wr{background:rgba(158,74,60,.16);color:#9E4A3C;font-weight:600;border-radius:3px}
+
+/* ——— V7：「最容易翻车的 6 卦」导航 ——— */
+.gpnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.gpnav a{display:inline-block;background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:6px 14px;font-size:13px;color:var(--deep);text-decoration:none;
+  transition:.15s;white-space:nowrap}
+.gpnav a:hover{border-color:var(--accent);color:var(--accent)}
+.gp-card.g15{border-left-color:var(--gD)}
+.gp-card.bc{border-left-color:var(--gC)}
+.gp-no{font-size:11px;color:#fff;background:var(--accent);border-radius:4px;
+  padding:1px 7px;margin-right:8px;vertical-align:middle;font-weight:500}
+
+/* ——— V7：导出 ——— */
+.expbar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+.ebtn{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 16px;
+  cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;transition:.15s;
+  display:inline-flex;align-items:center;gap:6px}
+.ebtn:hover{border-color:var(--accent);color:var(--accent)}
+.ebtn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ebtn.primary:hover{background:#B0835A;color:#fff}
+.exp-note{font-size:12px;color:var(--muted);line-height:1.7}
+.exp-msg{font-size:12px;color:var(--gA);font-weight:600;margin-left:6px}
+
+footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--muted);text-align:center;line-height:1.9}
+footer .pwr{display:block;margin-top:8px;color:var(--accent);font-weight:500;letter-spacing:.5px}
+
+@media (max-width:820px){
+  .gradeDef{grid-template-columns:repeat(2,1fr)}
+  .ctrl{grid-template-columns:1fr}
+  table,thead,tbody,tr,td{display:block;width:100%}
+  thead{display:none}
+  tr{border:1px solid var(--line);border-radius:10px;margin-bottom:12px;padding:12px;background:var(--card)}
+  td{border:none;padding:4px 0}
+  tr:hover td{background:transparent}
+  td.num-cell{font-size:17px}
+  td[data-l]:before{content:attr(data-l) "：";color:var(--muted);font-size:12px;margin-right:4px}
+  .hex{display:none}
+  .col-hex-head{display:none}
+  .heatmap-grid{grid-template-columns:46px repeat(4,1fr);grid-template-rows:26px repeat(4,minmax(48px,1fr))}
+  .wheel-center{width:42%}
+  .wheel-center .wc-n{font-size:19px}
+  .wheel-center .wc-hz{font-size:13px}
+  .wheel-center .wc-ra{font-size:11px}
+  .wheel-center .wc-meta{font-size:9.5px;line-height:1.5}
+  .wheel-center .wc-idle{font-size:10.5px}
+  .expbar{gap:6px}
+  .ebtn{padding:8px 11px;font-size:12px}
+}
+@media print{
+  body{background:#fff}
+  .ctrl,.stat,.hint,.scatter-tip,.heatmap{display:none}
+  tr:hover td{background:transparent}
+  .hex{display:inline-block}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>64 闸门 · 易经卦象语义距离分级表<span class="badge" id="vBadge"></span></h1>
+  <div class="sub">判准：<b>卦名 → Ra 主题名</b> 的语义距离（非卦辞注解层）。编号沿用文王卦序，轮盘排列为伏羲（二进制）序。底本：Wilhelm-Baynes 英译。</div>
+</header>
+
+<h2>分级判准</h2>
+<div class="gradeDef">
+  <div class="gd gdA"><b>A · 直译</b>卦名核心动作 ＝ 主题名核心动作，无需解释即可看出同源。</div>
+  <div class="gd gdB"><b>B · 延伸</b>核心意象相连，但 Ra 加了一层或换了一个侧面，一句话可说清。</div>
+  <div class="gd gdC"><b>C · 重构</b>取象层次被换（社会／伦理 → 个体心理／生物），桥存在但需转。</div>
+  <div class="gd gdD"><b>D · 断裂</b>卦名与主题名之间几乎无语义桥，主题名主要由中心／回路功能决定。</div>
+</div>
+
+<div class="card">
+  <p><b>核心结论：</b>「有的近、有的远」的斑驳分布，本身就是「Ra 不是在翻译《周易》」的证据。翻译会产生均匀偏移，不会同时出现局部逐字对应与局部彻底重构。</p>
+  <p><b>双维度判准：</b>① 卦名层（X 轴）= 卦名 → 主题名；② 注解层（Y 轴）= 传统儒家化解读（卦辞＋彖传＋象传） → 主题名。两者可不同（如 10 号履：卦名层直译 B，注解层 C）。</p>
+  <p><b>距离公式：</b>语义距离 ≈ 卦辞的<span class="kw">社会化程度</span> − 所在中心的<span class="kw">生物性程度</span>。荐骨／根／脾（生命维持）近；G／喉／头（身份与社会化）远。</p>
+  <p><b>内容生产纪律：</b>① 禁止用卦辞注解直接讲闸门（尤其 4／7／10／11／13／15／17／54）；② 双轨命名——卦名作锚、主题名作功能、通俗名标注来源；③ 「爱自己」是 10 号的流行译法，非 Ra 原名，回挂 Treading／履 才拿得到「位」这条线索。</p>
+</div>
+
+<h2>双轴散点：卦名层 × 注解层</h2>
+<div class="card">
+  <p style="font-size:13px">X 轴：卦名层距离（A=0 → D=3）。Y 轴：注解层距离（A=0 → D=3）。点的颜色＝所在中心。点越靠近左下，三层（卦名／注解／主题）越一致；越靠近右上，越说明 Ra 离传统解读远。<b>hover</b> 显示编号 + 卦名 + 完整桥接说明；<b>点击</b> 按该层筛选并选中该闸门（联动表格行 + 热力图格子）。<br><span style="color:var(--muted)">注：同一格内的闸门已做<b>确定性抖动</b>散开——否则 64 个闸门只落在 7 个非空格里，会完全重叠成 7 个点堆、无法单独选中。抖动幅度 ±0.28 格，点仍在各自格内。</span><br><span style="color:#9E4A3C"><b>斜线阴影区 ＝ |Δ| ≥ 2 禁区</b>：卦名层与注解层相距 2 级以上的格子。因为注解是卦名的展开训释、两者共享语义内核，闸门<b>结构上不可能</b>落入这些格子（论证见下方「9 个空格的结构性解释」）。<b>实测 64 条全部落在斜线区之外，无一例外。</b></span></p>
+</div>
+<div class="scatter-wrap" id="scatterWrap">
+  <div class="scatter-tip" id="tip"></div>
+  <svg viewBox="0 0 560 480" id="scatter">
+    <text x="280" y="20" text-anchor="middle" font-size="14" font-weight="500" fill="#2D2118" font-family="inherit">卦名层 × 注解层 距离散点（64 闸门）</text>
+    <line x1="60" y1="420" x2="520" y2="420" stroke="#888780" stroke-width="1"/>
+    <line x1="60" y1="50"  x2="60"  y2="420" stroke="#888780" stroke-width="1"/>
+    <g id="grid"></g>
+    <g id="forbid"></g>
+    <g id="dots"></g>
+    <g id="axlabels"></g>
+  </svg>
+  <div class="scatter-legend" id="legend"></div>
+</div>
+
+<h2>伏羲序圆图 · 曼陀罗轮盘</h2>
+<div class="wheel-wrap">
+  <div class="sortbar" style="justify-content:center">
+    <span class="sortbar-lb">排布方式</span>
+    <button id="wSeq" class="sbtn" onclick="setWheel('seq')">连续环（顺时针 1→64）</button>
+    <button id="wFold" class="sbtn" onclick="setWheel('fold')">八宫折返（伏羲圆图）</button>
+    <span class="sortbar-note" id="wheelNote"></span>
+  </div>
+
+  <div class="wheel-stage">
+    <svg viewBox="0 0 760 760" id="wheel">
+      <g id="wTrigram"></g>
+      <g id="wTick"></g>
+      <g id="wCells"></g>
+      <g id="wMark"></g>
+    </svg>
+    <div class="wheel-center" id="wheelCenter"></div>
+    <div class="wheel-tip" id="wheelTip"></div>
+  </div>
+
+  <div class="wheel-legend" id="wheelLegend"></div>
+
+  <div class="mstrip">
+    <div class="ms-t" id="msTitle">曼陀罗轮盘序（＝伏羲序 1→64 对应的闸门编号）</div>
+    <div id="msBody"></div>
+  </div>
+
+  <div class="hint" style="margin-top:10px">
+    <b>怎么读：</b>外圈 64 格＝64 个闸门，格内大字是<b>闸门编号（文王序）</b>，小字是中文卦名；顺时针依次读下去，得到的编号序列 <b>1 → 43 → 14 → 34 → 9 → 5 → 26 → 11 → …</b> 正是曼陀罗轮盘的顺序。右侧序列条里<b>红底</b>的是「最容易翻车的 6 卦」，<b>金底</b>的是当前选中。
+  </div>
+</div>
+
+<h2>4×4 象限热力图</h2>
+<div class="heatmap">
+  <div class="heatmap-title">行＝卦名层　列＝注解层　颜色深浅＝密度　点击格子可联动筛选</div>
+  <div class="heatmap-grid" id="heatmap"></div>
+  <div class="hm-tip">点击格子 = 设置「卦名层 = 行 + 注解层 = 列」双层筛选；再次点击同一格 = 清除筛选。空格分两类：<b style="color:#9E4A3C">斜线阴影＝结构不可能</b>　·　<b>虚线＝经验性空</b>（详见下方解释）。</div>
+</div>
+
+<h2>9 个空格的结构性解释</h2>
+<div class="card">
+  <p><b>先说结论：9 个空格不是同一种空。</b>按 <b>|卦名层 − 注解层|</b>（记作 |Δ|）分成两类——<span style="color:#9E4A3C;font-weight:600">6 个是结构上不可能出现</span>，<span style="font-weight:600">3 个只是这 64 条里恰好没有</span>。</p>
+  <p style="margin-top:10px"><b>为什么会有硬约束？</b>卦名层和注解层测的其实<b>不是两次独立的翻译</b>，而是「同一个主题名」对<b>同一语义内核</b>的两次距离测量——而注解（卦辞＋彖传＋象传）本身就是卦名的展开与训释，两者共享内核。所以两次判定不会相距 2 级以上：</p>
+  <p style="margin-top:8px">· 若卦名层判 <b>A</b>（Ra 逐字直译卦名），对同一内核的注解也必然被"直译"过去，注解层最多落到 B，<b>不可能跳到 C／D</b>——否则等于说同一个主题名同时对同源语义既"逐字直译"又"彻底重构"，自相矛盾。<br>
+  · 反之若卦名层已判 <b>C／D</b>（Ra 根本没沿卦名的语义走），他也不可能"回头逐字直译"注解，注解层最多回到 B，<b>不会落到 A</b>。</p>
+  <p style="margin-top:10px">这就形成了 <b>|Δ| ≤ 1</b> 的硬约束。实测 64 条<b>全部落在 |Δ| ≤ 1 内，无一条例外</b>——对角线 51 条（|Δ|=0）、偏离一格 13 条（|Δ|=1），|Δ| ≥ 2 一个都没有。这不是样本量不够，是结构上不可能。</p>
+</div>
+
+<div class="card" style="border-left:4px solid #9E4A3C">
+  <p><b style="color:#9E4A3C">▍结构不可能（6 个）　|Δ| ≥ 2</b></p>
+  <p style="margin-top:6px"><b>AC（A×C）· AD（A×D）· CA（C×A）· DA（D×A）· BD（B×D）· DB（D×B）</b></p>
+  <p style="margin-top:6px">前四个是「一端直译、另一端重构／断裂」的反向拉扯，后两个是「B 与 D 相距两格」。全部违反 |Δ| ≤ 1 约束。<b>即使换一批闸门、放宽判准，也不会出现。</b></p>
+</div>
+
+<div class="card" style="border-left:4px solid #7A6A58">
+  <p><b>▍经验性空（3 个）　|Δ| ≤ 1，理论上可达但实测为 0</b></p>
+  <p style="margin-top:6px"><b>CB（卦名层 C 重构 · 注解层 B 延伸）</b>——需要"卦名古奥难解、而儒家注解恰好说中 Ra 的落点"。理论上可能，但 Ra 的取象几乎都回到卦象结构本身而非后世训释，所以实测为 0。</p>
+  <p style="margin-top:6px"><b>CD（卦名层 C · 注解层 D 断裂）</b>——注解比卦名<b>更远</b>一格。只有"卦名还有桥、注解完全无关"才会出现，而注解是卦名的展开，逻辑上别扭但无硬矛盾。</p>
+  <p style="margin-top:6px"><b>DD（卦名层 D 断裂 · 注解层 D 断裂）★ 最值得注意</b>——全表唯一的 D 是 <b>15 谦</b>（Modesty → Extremes），而它的注解层落在 <b>C</b> 而非 D：谦卦大象「<b>裒多益寡，称物平施</b>」恰好提供了一条桥（在人性的所有极端之间持守平衡）。<b>唯一一个"卦名读不出桥"的闸门，恰恰在注解层找回了一条桥。</b>DD 为空不是巧合，它体现了双轴判准的<b>补偿机制</b>——注解层会自动把卦名层的极端断裂往回拉一格。<b>这正是双轴比单轴稳的原因。</b></p>
+</div>
+
+<h2>最容易翻车的 6 卦</h2>
+<div class="card" style="border-left:4px solid var(--gD)">
+  <p><b>▍为什么是这 6 卦</b>　它们不是"离易经最远的 6 卦"，而是<b>卦名层与注解层不一致</b>的 6 卦——卦名看着还贴，注解一查就跑偏。中文内容生产里 90% 的误读都出在这里：<b>拿卦辞注解当引子讲闸门</b>。</p>
+  <p style="margin-top:6px">① <b>15 谦</b>（D→C）是全表唯一的卦名层断裂；②–⑥ 是 <b>B→C 层次切换</b>：卦名保住意象，注解把意象<b>社会化</b>（礼制／宗法／德教／养贤），Ra 又把它<b>个体化</b>（存在几何／情绪／意志力／内在觉知）。<b>注解在这 5 卦里不是桥，是干扰项。</b></p>
+  <p style="margin-top:6px;color:#9E4A3C"><b>共同规律：这 6 卦分布在 G 中心（2）、情绪（2）、意志力（1）、头部（1），无一是荐骨／根／脾——正好印证「语义距离 ≈ 卦辞社会化程度 − 中心生物性程度」。</b></p>
+</div>
+
+<div class="gpnav">
+  <a href="#gx15">① 15 谦 · D→C</a>
+  <a href="#gx10">② 10 履 · B→C</a>
+  <a href="#gx22">③ 22 贲 · B→C</a>
+  <a href="#gx26">④ 26 大畜 · B→C</a>
+  <a href="#gx37">⑤ 37 家人 · B→C</a>
+  <a href="#gx61">⑥ 61 中孚 · B→C</a>
+</div>
+
+<div class="gp-card g15" id="gx15">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">①</span>谦 ䷎　Modesty　→　Extremes</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>Extremes</b>（极端 · 人性之爱）</div>
+      <div class="gp-meta">G 中心 · 集体回路 · 文王序 15 · 伏羲序 56 · 地山谦（上坤 ☷ 下艮 ☶）
+        · 卦名层 <span class="gpill pD">D</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">谦，亨，君子有终。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">地中有山，谦；君子以<b>裒多益寡，称物平施</b>。<span class="src">— 大象传（「裒」音 póu，减损、取出之意）</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、为什么卦名层判 D（断裂）</h3>
+    <p>卦名 <b>Modesty</b>＝谦逊、有度、知止、收敛；主题名 <b>Extremes</b>＝极端。二者表面完全相反——一个讲减损收敛，一个讲极端张扬。从卦名直接跳到主题名，<b>找不到任何桥</b>，故判 D，是全表唯一一例。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、为什么注解层判 C（重构）——「裒多益寡」这条桥</h3>
+    <p>关键在大象传那八个字。<b>裒</b>＝减损多余的，<b>益</b>＝增补不足的，<b>称物平施</b>＝衡量万物使其各得其平。</p>
+    <p>注意这句话的<b>前提</b>：万物<b>本就处在"多"与"寡"的两极</b>。有过剩才需要「裒」，有不足才需要「益」。也就是说，谦卦处理的局面不是"平平无奇"，而是<b>一个充满极端落差的场域</b>。</p>
+    <p>Ra 的 <b>Extremes</b> 恰恰指向这个前提——<b>人性的所有极端体验</b>。谦的任务不是"避免极端"（那是中庸的道德读法），而是<b>容纳并穿越所有极端、不执着于任何一端</b>。</p>
+    <p>所以桥就在这里：<b>「裒多益寡」＝ 在极端之间持守平衡</b>。这是层次切换（儒家的分配正义／中庸 → 个体存在的极端体验谱系），故判 <b>C</b> 而非 D。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、「地中有山」的二重读法</h3>
+    <p>山（艮）本应高耸，却藏在地（坤）之下。</p>
+    <p>· <b>传统读法</b>：有实力而不彰显，高而能下 → 导出"谦虚"这种德行。<br>
+    · <b>Ra 的读法更激进</b>：重点不是"不高"，而是<b>"能同时是高和低"</b>——走遍极端。这正是 Extremes：<b>能容纳人性全谱，从最高贵到最卑贱，无一排斥</b>。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>五、D → C 跃迁的意义：双轴的补偿机制</h3>
+    <p><b>单轴看</b>：15 谦是全表唯一的 D，是个"孤儿"——看起来 Ra 在这里彻底脱离了易经。<br>
+    <b>双轴看</b>：注解层把它拉回 C。</p>
+    <p>这揭示了双轴判准的真正价值：<b>注解层有补偿机制，会自动把卦名层的极端断裂往回拉一格。</b>反过来说，若一条闸门<b>两层都是 D</b>（即 DD 格），那才是真正彻底断裂——而 <b>DD 格实测为空，0 条</b>。</p>
+    <p style="color:#9E4A3C"><b>结论：D 级不是终点，而是信号。</b>它标记的是"卦名这条路走不通了"，而不是"这条闸门与易经无关"。双轴比单轴稳，就是这个道理。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>六、内容生产纪律（讲课时最容易翻车的一卦）</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 15 是谦虚的美德，教你低调、别太张扬。」<br>
+    <b>✗ 也不要讲成：</b>「Extremes ＝ 情绪极端 / 爱走极端。」（这是望文生义的误读）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 15 是<b>人性之爱（Love of Humanity）</b>——能容纳人类经验的全部极端：高贵与卑贱、神圣与世俗、丰盛与匮乏，<b>不排斥任何一端</b>。<br>
+    <b>✓ 「谦」在这里不是道德上的谦虚，而是结构上的"能低下去"</b>——地中有山，高者自处于下。<br>
+    <b>✓ 参照 G 中心四个"爱"的闸门</b>：15 人性之爱（向下兼容的包容力）· 25 宇宙之爱（无条件）· 46 身体之爱（经由身体）· 10 自我之爱（经由行为）。15 的独特性在于<b>它爱的是"人之所以为人"的全部光谱</b>，包括那些不堪的部分。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(15)">在表格 / 散点 / 热力图 / 轮盘中高亮 15 谦</button>
+</div>
+
+<div class="gp-card bc" id="gx10">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex10"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">②</span>履 ䷉　Treading　→　Behavior of the Self</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>Behavior of the Self</b>（自我行为 · 自我之爱）</div>
+      <div class="gp-meta">G 中心 · 整合回路 · 文王序 10 · 伏羲序 9 · 天泽履（上乾 ☰ 下兑 ☱）
+        · 卦名层 <span class="gpill pB">B</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">履虎尾，不咥人，亨。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">上天下泽，履；君子以<b>辨上下，定民志</b>。<span class="src">— 大象传</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、卦名层为什么是 B</h3>
+    <p><b>Treading</b> ＝ 行走、步履、<b>如何行走</b>；<b>Behavior of the Self</b> ＝ 自我的行为方式。同一个动作从"脚怎么走"移到"整个人怎么举止"，<b>核心动词没变</b>，只是载体从身体换成了整体人格。故判 B 而非 A。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、注解层为什么掉到 C——「礼」不是 Ra 要的东西</h3>
+    <p>履卦的核心从来不是"礼"这个<b>道德结论</b>，而是「辨上下、定民志」里的那个 <b>「位」</b>：各安其位，在这个位上该怎么走。</p>
+    <p><b>儒家把「位」落成了礼</b>（等级秩序与社会规范）；<b>Ra 把「位」落成了存在几何</b>——磁单极把你固定在正确的时空坐标上。你在"你该在的位置"上，行为自然正确。</p>
+    <p>所以"爱自己"这个流行译法的真正含义不是自恋或自我宠爱，而是 <b>居其位而行其事</b>。这就是层次切换：社会位阶 → 存在坐标。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、六爻逐条呼应（履卦是全表最工整的一例）</h3>
+    <p>履卦是六十四卦里少见的、六爻几乎全在讲"处于某个位阶时该如何行进"的卦，和 Gate 10 六线并排看：</p>
+    <div class="gp-quote" style="line-height:2">
+      初九「<b>素履</b>，往无咎」 → Line 1 <b>Modesty</b>（谦逊／变色龙）<br>
+      九二「履道坦坦，<b>幽人</b>贞吉」 → Line 2 <b>The Hermit</b>（隐士）<br>
+      六三「眇能视，跛能履…<b>咥人</b>，凶」 → Line 3 <b>The Martyr</b>（殉道者）<br>
+      九四「履虎尾，<b>愬愬</b>，终吉」 → Line 4 <b>The Opportunist</b>（待时而动）<br>
+      九五「<b>夬履</b>，贞厉」 → Line 5 <b>The Heretic</b>（异端）<br>
+      上九「<b>视履考祥</b>，其旋元吉」 → Line 6 <b>The Role Model</b>（榜样）
+      <span class="src">"幽人"对 Hermit，"夬"（决裂）对 Heretic，"视履考祥"（回望所行之路）对 Role Model——Ra 用的是 Wilhelm-Baynes 译本，这不太可能是巧合。</span>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>五、内容生产纪律</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 10 是礼貌、守规矩、社交礼仪。」（把履读成礼）<br>
+    <b>✗ 也不要讲成：</b>「爱自己 ＝ 多宠爱自己、多满足自己。」（降格为成功学式自恋）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 10 关乎<b>你如何在自己的位置上行动</b>。行为正确不靠自我约束，而靠<b>位置的正确</b>——磁单极已经把你放在该在的地方，你只需按自己的内在权威行动。<br>
+    <b>✓ 这是"自我之爱"：不是"我很棒"，而是"我在此处，我照此行"。</b><br>
+    <b>✓ 整合回路注记：</b>10 属整合回路（10／20／34／57），是<b>自我赋能</b>的回路——不服务他人、不为集体，它的行为本身就是目的。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(10)">在表格 / 散点 / 热力图 / 轮盘中高亮 10 履</button>
+</div>
+
+<div class="gp-card bc" id="gx22">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex22"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">③</span>贲 ䷕　Grace　→　Openness</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>Openness</b>（开放 · 优雅）</div>
+      <div class="gp-meta">情绪中心 · 个体回路 · 文王序 22 · 伏羲序 23 · 山火贲（上艮 ☶ 下离 ☲）
+        · 卦名层 <span class="gpill pB">B</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">贲，亨，小利有攸往。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">观乎天文以察时变，观乎<b>人文以化成天下</b>。<span class="src">— 彖传</span></div>
+    <div class="gp-quote">山下有火，贲；君子以<b>明庶政，无敢折狱</b>。<span class="src">— 大象传</span></div>
+    <div class="gp-quote">上九：<b>白贲</b>，无咎。<span class="src">— 爻辞（饰极返素）</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、卦名层为什么是 B</h3>
+    <p><b>Grace</b> ＝ 文饰、装饰、使可观。<b>Openness</b> ＝ 开放、可被靠近。桥在于：<b>「文饰」的本质是把内在呈现于外</b>——装饰是为了让人看得见、愿意靠近。Ra 取的正是"使关系可亲、使美可见"这一侧，故判 B。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、注解层为什么掉到 C——「化成天下」把贲读成了礼乐制度</h3>
+    <p>彖传的「人文以化成天下」、大象的「明庶政」，把贲落成了<b>礼乐教化与文饰制度</b>；上九「白贲」更进一步：<b>文饰终究是次要的，饰极返素才是归宿</b>。</p>
+    <p>Ra 的落点完全不同：22 在<b>情绪中心</b>，属<b>个体回路</b>（12-22 通道）。这里的 Grace 不是"修饰自己"，而是<b>在情绪波中保持开放、让人愿意靠近的能力</b>——一种<b>突变式的、不可控的</b>亲和力。</p>
+    <p>注解说"文饰不重要"，Ra 说"开放即本质"。两者不是距离远近的问题，是<b>估价方向相反</b>。故判 C。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、内容生产纪律</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 22 是打扮、礼仪、外在修饰。」<br>
+    <b>✗ 也不要讲成：</b>「贲是表面功夫，所以要返璞归真。」（直接搬运「白贲」注解）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 22 是<b>情绪层面的开放与优雅</b>——在亲密关系与社交中让人感到被接纳的能力。<br>
+    <b>✓ 个体回路注记：</b>12-22 是个体人的表达通道，Grace 是<b>突变式的</b>，来去不由人，不是讨好、不是经营形象。<br>
+    <b>✓ 情绪中心注记：</b>22 没有情绪波的"真相"，只有<b>流动中的开放程度</b>——所以它不是"情绪稳定"，而是"愿意被看见"。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(22)">在表格 / 散点 / 热力图 / 轮盘中高亮 22 贲</button>
+</div>
+
+<div class="gp-card bc" id="gx26">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex26"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">④</span>大畜 ䷙　Taming Power of the Great　→　The Egoist</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>The Egoist</b>（自我主义者 · 驯服力）</div>
+      <div class="gp-meta">意志力中心 · 部落回路 · 文王序 26 · 伏羲序 7 · 山天大畜（上艮 ☶ 下乾 ☰）
+        · 卦名层 <span class="gpill pB">B</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">大畜，利贞，<b>不家食吉</b>，利涉大川。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">大畜，刚健笃实辉光，日新其德……<b>能止健，大正也</b>。<span class="src">— 彖传</span></div>
+    <div class="gp-quote">天在山中，大畜；君子以<b>多识前言往行，以畜其德</b>。<span class="src">— 大象传</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、卦名层为什么是 B</h3>
+    <p><b>卦名被 Ra 完整保留</b>（Taming Power of the Great），这在全表不多见。Ra 只是在落到<b>意志力中心</b>之后，加了一层「自我」——驯服力变成了<b>小我（ego）的驱动力</b>。卦名到主题名只有一层位移，故判 B。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、注解层为什么掉到 C——「养贤」不是「部落交易」</h3>
+    <p>彖传的「能止健」、大象的「多识前言往行以畜其德」、卦辞的「不家食吉」（不食于家而食于朝），把大畜落成了 <b>国家养贤与士人德性积累</b>——这是<b>士大夫的修身伦理</b>。</p>
+    <p>Ra 的落点是 <b>44-26 通道</b>：部落回路的<b>交易与记忆</b>。大畜之力在这里 = <b>记住谁欠谁、用记忆与许诺影响他人、为部落争取资源</b>。「驯服」被彻底物质化、个体化了。</p>
+    <p>一个是"养德以事君"，一个是"用记忆做交易"。共有的只有"蓄积"这个空壳，故判 C。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、内容生产纪律</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 26 是积累德行、修身养性、储备知识。」<br>
+    <b>✗ 也不要讲成：</b>「自我主义者 ＝ 自私自利的人。」（「Egoist」在这里是中性词）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 26 是<b>意志力中心的驯服力</b>——通过记忆与承诺影响他人，是部落的资源谈判能力。<br>
+    <b>✓ 「Egoist」的准确含义：</b>由<b>小我（ego）</b>驱动的意志力，不是道德评价。意志力中心的能量是<b>需要休息的脉冲式</b>，不是持续输出。<br>
+    <b>✓ 44-26 通道：</b>本能的交易嗅觉（44，脾脏）+ 说服与记忆（26，意志力）= 部落回路最典型的<b>物质交换通道</b>。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(26)">在表格 / 散点 / 热力图 / 轮盘中高亮 26 大畜</button>
+</div>
+
+<div class="gp-card bc" id="gx37">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex37"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">⑤</span>家人 ䷤　The Family　→　Friendship</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>Friendship</b>（友谊 · 部落纽带）</div>
+      <div class="gp-meta">情绪中心 · 部落回路 · 文王序 37 · 伏羲序 21 · 风火家人（上巽 ☴ 下离 ☲）
+        · 卦名层 <span class="gpill pB">B</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">家人，<b>利女贞</b>。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">家人，<b>女正位乎内，男正位乎外</b>，正家而天下定矣。<span class="src">— 彖传</span></div>
+    <div class="gp-quote">风自火出，家人；君子以<b>言有物而行有恒</b>。<span class="src">— 大象传</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、卦名层为什么是 B</h3>
+    <p><b>The Family</b> → <b>Friendship</b>。桥在「亲族／亲密纽带」：Ra 把<b>血缘</b>扩成了<b>部落纽带</b>。家的<b>结构</b>——分工、资源、归属——被完整保留，只是成员从亲属换成了部落。有桥，故判 B。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、注解层为什么掉到 C——「正家而天下定」是宗法政治，不是部落协议</h3>
+    <p>彖传的「女正位乎内，男正位乎外，<b>正家而天下定矣</b>」，把家当成了<b>治国模型</b>；卦辞「利女贞」则是宗法家庭的伦理规范。这是标准的<b>家国同构</b>政治哲学。</p>
+    <p>Ra 的落点：37 在<b>情绪中心</b>、属<b>部落回路</b>（37-40 通道，社群协议/bargain）。家庭性（family）在这里变成 <b>非血缘的部落情谊与交换协议</b>——「家人」的<b>结构</b>被保留，家的<b>伦理</b>被剥离。</p>
+    <p>一个是"治家有方则天下定"，一个是"部落内部的资源与情感协议"。同一个"家"字，两个完全不同的理论框架，故判 C。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、内容生产纪律</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 37 是家庭责任、亲情、治家有方。」<br>
+    <b>✗ 也不要讲成：</b>「37 是贤妻良母 / 男主外女主内。」（直接搬运彖传，且与现代语境冲突）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 37 是<b>部落回路的友谊与协议</b>——亲密关系中<b>分工与交换</b>的本质，以及情绪中心对"归属"的感受。<br>
+    <b>✓ 37-40 通道（社群协议）：</b>40 独处复原（意志力）↔ 37 部落情谊（情绪）= <b>「付出—撤回—再协商」</b>的部落交易循环。<br>
+    <b>✓ 与 15 谦对照：</b>15 是<b>无条件的</b>人性之爱（向下兼容的包容），37 是<b>有协议的</b>部落之爱（含分工、含讨价还价）。两者都在情绪／G 侧，性质完全不同。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(37)">在表格 / 散点 / 热力图 / 轮盘中高亮 37 家人</button>
+</div>
+
+<div class="gp-card bc" id="gx61">
+  <div class="gp-head">
+    <div class="gp-hex" id="gpHex61"></div>
+    <div class="gp-title">
+      <div class="gp-hz"><span class="gp-no">⑥</span>中孚 ䷼　Inner Truth　→　Mystery</div>
+      <div class="gp-ra">Rave I'Ching 主题名：<b>Mystery</b>（奥秘 · 灵感）</div>
+      <div class="gp-meta">头部中心 · 个体回路 · 文王序 61 · 伏羲序 13 · 风泽中孚（上巽 ☴ 下兑 ☱）
+        · 卦名层 <span class="gpill pB">B</span> → 注解层 <span class="gpill pC">C</span></div>
+    </div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>一、原文</h3>
+    <div class="gp-quote">中孚，<b>豚鱼吉</b>，利涉大川，利贞。<span class="src">— 卦辞</span></div>
+    <div class="gp-quote">中孚，柔在内而刚得中……<b>信及豚鱼也</b>。<span class="src">— 彖传</span></div>
+    <div class="gp-quote">泽上有风，中孚；君子以<b>议狱缓死</b>。<span class="src">— 大象传</span></div>
+  </div>
+
+  <div class="gp-sec">
+    <h3>二、卦名层为什么是 B</h3>
+    <p><b>Inner Truth</b>（心中诚信／内在真实）→ <b>Mystery</b>。桥在<b>「内在」</b>二字：真实在<b>内</b>，不可外求、不可言说。从"内在的真实"推到"内在的不可知"，只需一转，故判 B。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>三、注解层为什么掉到 C——方向几乎相反</h3>
+    <p>彖传「<b>信及豚鱼</b>」＝诚信能感化最微贱之物；大象「<b>议狱缓死</b>」＝以诚信行宽恤之政。注解层的中孚是<b>向外的</b>：德教感化、司法宽仁。</p>
+    <p>Ra 的落点：61 在<b>头部中心</b>、属<b>个体回路</b>（61-24 觉知通道）。中孚在这里不是"我诚实"，而是 <b>「真理本身不可言说」</b>——头部中心提供的<b>不是答案，是思考的压力</b>。</p>
+    <p><b>Mystery ＝ 对不可知的内在觉知。</b>注解是"以诚感化万物"（向外、可达、道德），Ra 是"承受不可知的压力"（向内、不可达、认知）。<b>施力方向几乎反向</b>，故判 C。</p>
+  </div>
+
+  <div class="gp-sec">
+    <h3>四、内容生产纪律</h3>
+    <div class="gp-wrong"><b>✗ 不要这样讲：</b>「Gate 61 是真诚、守信、以诚感人。」<br>
+    <b>✗ 也不要讲成：</b>「61 是神秘学 / 玄学天赋。」（望文生义）</div>
+    <div class="gp-right"><b>✓ 正确讲法：</b>Gate 61 是<b>对不可知之物的灵感压力</b>——头脑持续承受"想知道"的压力，但头部中心<b>不提供答案</b>，只提供问题。<br>
+    <b>✓ 61-24 通道（觉知）：</b>61 的奥秘压力 → 24 反复合理化 → 突变式的洞见。这是<b>个体回路</b>的认知通道，突变不可预测。<br>
+    <b>✓ 与 63/64 对照：</b>头部中心三闸门 61（奥秘/灵感）· 63（完成后的怀疑）· 64（未完成的困惑），<b>三者都是压力而非答案</b>——这是头部中心的整体性质。</div>
+  </div>
+
+  <button class="gp-jump" onclick="pickRow(61)">在表格 / 散点 / 热力图 / 轮盘中高亮 61 中孚</button>
+</div>
+
+<div class="card" style="border-left:4px solid var(--gA)">
+  <p><b>▍六卦通吃的一条内容纪律</b></p>
+  <p style="margin-top:6px">这 6 卦的<b>注解层都比卦名层更远</b>。原因高度一致：<b>《周易》的注解层（卦辞＋彖传＋象传）是周代礼制与儒家义理的产物，它的默认主语是"君子"，默认语境是"治国"</b>；而 Ra 的体系主语是<b>个体形体</b>，语境是<b>存在几何</b>。</p>
+  <p style="margin-top:6px">所以讲这 6 卦时——<b>不要用卦辞注解作引子。</b>正确顺序是：① 先说<b>卦象结构</b>（上下卦、爻位、阴阳动力学）→ ② 再说 Ra 的主题名 → ③ 最后才提一句传统注解，并明确指出<b>它落在哪一层、为什么偏了</b>。这样既尊重经典，也不会把学员带沟里。</p>
+</div>
+
+<h2>分布概览（点击筛选）</h2>
+<div class="stat" id="stat"></div>
+<div class="hint" id="hmHint"></div>
+
+<h2>检索</h2>
+<div class="sortbar">
+  <span class="sortbar-lb">排序：</span>
+  <button id="sWen" class="sbtn" onclick="setSort('wen')">文王序（义理序）</button>
+  <button id="sFu" class="sbtn" onclick="setSort('fu')">伏羲序（二进制序）</button>
+  <span class="sortbar-note" id="sortNote"></span>
+</div>
+<div class="ctrl">
+  <select id="fCenter"><option value="">全部中心</option></select>
+  <select id="fCircuit"><option value="">全部回路</option></select>
+  <input id="q" type="search" placeholder="搜索编号 / 卦名 / 主题名 / 桥接说明">
+</div>
+<div class="hint" id="count"></div>
+
+<table id="tbl">
+  <thead><tr>
+    <th style="width:64px" id="thNo">序号</th>
+    <th style="width:46px" class="col-hex-head">卦画</th>
+    <th style="width:160px" id="thHz">卦</th>
+    <th style="width:170px">Rave I'Ching 主题名</th>
+    <th style="width:78px">中心</th>
+    <th style="width:64px">回路</th>
+    <th style="width:80px">卦名层</th>
+    <th style="width:80px">注解层</th>
+    <th>桥接说明（为什么近／为什么远）</th>
+  </tr></thead>
+  <tbody id="tb"></tbody>
+</table>
+
+<h2>导出数据</h2>
+<div class="expbar">
+  <button class="ebtn primary" onclick="doExport('csv','all')">⬇ 下载 CSV（全部 64 条）</button>
+  <button class="ebtn" onclick="doExport('json','all')">⬇ 下载 JSON（全部 64 条）</button>
+  <button class="ebtn" onclick="doExport('csv','filtered')">⬇ CSV（当前筛选结果）</button>
+  <button class="ebtn" onclick="doExport('json','filtered')">⬇ JSON（当前筛选结果）</button>
+  <button class="ebtn" onclick="copyJSON()">⧉ 复制 JSON 到剪贴板</button>
+  <span class="exp-msg" id="expMsg"></span>
+</div>
+<div class="exp-note">
+  字段：<code>n 闸门编号(文王序)</code> · <code>hz 中文卦名</code> · <code>en Wilhelm 卦名</code> · <code>ra Rave 主题名(EN)</code> · <code>razh Rave 主题名(中)</code> · <code>c 中心</code> · <code>cir 回路</code> · <code>g 卦名层</code> · <code>g2 注解层</code> · <code>lines 六爻(底→顶)</code> · <code>fx 伏羲序</code> · <code>trigUp/trigLo 上下卦</code> · <code>b 桥接说明(已去 HTML 标签)</code>。<br>
+  CSV 带 UTF-8 BOM，Excel 直接打开不乱码；JSON 为数组，可直接喂给其他工具。<b>伏羲序由六爻实时计算</b>（先天八卦序号 = 8 − 三爻二进制值；卦序号 = (内卦序号−1)×8 + 外卦序号），不是硬编码字段。
+</div>
+
+<footer>
+  <div id="fVer"></div>
+  <div>数据底本：Wilhelm-Baynes 译本 · Jovian Archive 官方闸门命名 · 中心／回路归组依 IHDS 标准</div>
+  <div>分级为主观研判，每条均已列出桥接依据，可逐行复核</div>
+  <span class="pwr">Powered by Kan Man Tang</span>
+</footer>
+</div>
+
+<script>
+/* ============================================================
+   CHANGELOG
+   ------------------------------------------------------------
+   V1  2026-09-08  首版发布
+       - 建立 64 闸门 × 易经卦象「语义距离」四级判准（A 直译 / B 延伸 / C 重构 / D 断裂）
+       - 64 条：编号(文王序) / 中文卦名 / Wilhelm 卦名 / Rave I'Ching 主题名 / 中心 / 回路 / 分级 / 桥接说明
+       - 分布：A 26 / B 25 / C 12 / D 1
+       - 按等级·中心·回路筛选 + 全文检索
+       - 移动端卡片化、打印友好
+
+   V2  2026-09-08  完善版
+       - header 居中排列，footer「Powered by Kan Man Tang」独立一行
+       - 新增第二维度「注解层距离」g2
+       - 新增「双轴散点图」SVG：卦名层 × 注解层，hover 显示编号 + 卦名 + 主题名
+       - 新增「六爻卦画」SVG（line1=底, line6=顶；阳 ━━━ · 阴 ━ ━）
+       - 双等级 pill 并列显示
+       - 但发布前自检发现 Bug：卦画渲染 linecap="round" 导致阴爻两条断线圆头对接，肉眼看不出阴爻差异（V2 归档保留作为 bug 标本）
+
+   V3  2026-09-08  修订版
+       - 【修】卦画渲染：linecap 改 butt，gap 4px，stroke-width 1.5，阴／阳爻视觉上明确区分
+       - 【改】顺序调整：「双轴散点」提到「分布概览」之前（先看分布形态、再看统计）
+       - 【改】footer 删除日期信息（保留版本号）
+       - 【新】功能 (a) 散点 hover 显示完整桥接说明（之前仅显示编号+主题）
+       - 【新】功能 (b) 散点点击过滤：点击点＝按该层（g）筛选，state 与下方 pill 联动
+       - 【新】功能 (c) 4×4 象限热力图：行=卦名层·列=注解层，颜色深浅映射密度，点击格子 = 双重筛选
+       - state 扩展：新增 g2 字段（注解层筛选）
+       - count 提示同步显示「已按卦名层 XX / 注解层 YY 筛选」
+       - 但发布前自检发现第二处 bug：爻位方向画反——循环 i:0→top 而非 i:0→bottom
+       - V3 归档保留作为双重 bug 标本（linecap+爻位）
+
+   V4  2026-09-08  定版
+       - 【修】卦画爻位方向：循环改为 yEnd - i*yStep，让 i=0 (line1=底) 画在 SVG 底部
+       - 数据约定「底到顶」（lines.charAt(0) = line1 底爻）终于与渲染方向一致
+       - 全表 64 卦爻位方向正确（之前被 V1/V2 linecap bug 掩盖——全阳卦看不出来）
+       - 双重 bug 标本：V3/v2/v1 归档保留，待后续若发现新问题再做 v5
+
+   V5  2026-09-08  交互增强版
+       - 【新】(a) 卦 ↔ 闸门 点击联动：点表格行 → 选中该闸门，散点该点双环高亮 + 热力图
+                 所在格子高亮；反向点散点也选中并高亮对应表格行（state.sel）
+       - 【修】散点抖动 jitter：64 闸门只落 7 个非空格、原本完全重叠成 7 个点堆，
+                 加确定性黄金比例哈希抖动（±0.28 格）后每个闸门可独立辨识与选中
+       - 【改】(b) 热力图透明度梯度：分段 + 对数映射，强化低计数区视觉
+                 c=0 空格（分两类）· c=1 → 0.34 · c>=2 对数 0.42~0.94
+                 （旧线性映射下 c=1 与 c=2 仅差 0.026，肉眼分不出）
+       - 【新】(c) 9 个空格结构性解释：按 |卦名层 − 注解层| 分「结构不可能」6 个
+                 （AC/AD/BD/CA/DA/DB，|Δ|>=2，违反 |Δ|<=1 硬约束）与「经验性空」3 个
+                 （CB/CD/DD，|Δ|<=1 理论可达但实测 0）
+                 * 硬约束论证：卦名层与注解层测的是同一主题名对同一语义内核的两次距离，
+                   注解是卦名的展开，故 |Δ|<=1；实测 64 条无一例外
+                 * DD 为空最有价值：唯一 D 级 15 谦的注解层落 C（裒多益寡提供桥），
+                   证明双轴判准有「补偿机制」，比单轴更稳
+       - 空格视觉：斜线阴影＝结构不可能（红）· 虚线＝经验性空（灰）
+
+   V6  2026-09-08  可视化 + 专页版
+       - 【新】(a) 散点图禁区带：|Δ| ≥ 2 的 6 个格子打 45° 斜线阴影（SVG pattern），
+                 与热力图「结构不可能」6 格一一对应；图例加斜线说明；
+                 坐标轴说明标注「实测 64 条全部落在斜线区之外」
+       - 【新】(b) 15 谦专页详解（全表唯一 D 级）：
+                 原文（卦辞 + 大象传「裒多益寡，称物平施」）→ 卦名层为何 D →
+                 注解层为何 C（裒多益寡的前提是万物本处多寡两极 = Extremes）→
+                 「地中有山」二重读法（传统=高而能下 / Ra=能同时是高和低）→
+                 D→C 跃迁的意义（双轴补偿机制，DD 格实测 0 条）→
+                 内容生产纪律（不可讲成谦虚美德；正确=人性之爱，容纳极端全谱）
+       - 【新】(c) 伏羲（先天／二进制）序 vs 文王序切换：
+                 算法：先天八卦序号 = 8 − 三爻二进制值（乾111=1 … 坤000=8）
+                       卦序号 = (内卦序号 − 1) × 8 + 外卦序号
+                 校验：屯(100010) 内震4 外坎6 → 30，与伏羲六十四卦圆图序第 30 位一致
+                 坤 → 64、乾 → 1、谦 → 56 均已核对
+                 * 关键提示：闸门编号沿用文王序，人类图轮盘排布用伏羲序，两者不可混
+                 * 表格序号列显示当前序 + 另一序对照，卦名列下显示「X上·Y下」内外卦
+
+   V7  2026-09-08  轮盘 + 六卦专题 + 导出版
+       - 【新】(a) 伏羲序圆图（曼陀罗轮盘）SVG：
+                 * 两种排布：【连续环】伏羲序 1→64 顺时针（＝曼陀罗读法，乾居正上方）
+                             【八宫折返】按内卦分八宫（先天方位），宫内按外卦先天方位序
+                               → 第 4 卦后回折，即伏羲圆图特有的 S 形折返
+                 * 先天八卦圆图方位：乾0 兑1 离2 震3 坤4 艮5 坎6 巽7（对宫相差 4）
+                   WHEEL_ROT = 19.6875° 令伏羲第 1 卦（乾为天）落在正上方
+                 * 格内大字＝闸门编号（文王序），小字＝中文卦名，填充色＝所属中心
+                 * 点格选中 → 中心面板显示伏羲序/文王序/中心/回路/双等级，并与表格·散点·热力图联动
+                 * 下方「曼陀罗轮盘序」序列条：伏羲序 1..64 对应的闸门编号，可点击
+                 * 校验锚点：Sequence = 1,43,14,34,9,5,26,11,10,58,38,54,61,60,41,19,13,49,30,55,
+                            37,63,22,36,25,17,21,51,42,3,27,24,44,28,50,32,57,48,18,46,6,47,64,40,
+                            59,29,4,7,33,31,56,62,53,39,52,15,12,45,35,16,20,8,23,2
+       - 【新】(b) 「最容易翻车的 6 卦」专题：
+                 * ① 15 谦（D→C，全表唯一卦名层断裂，V6 已有，本次并入）
+                 * ② 10 履 ③ 22 贲 ④ 26 大畜 ⑤ 37 家人 ⑥ 61 中孚（全部 B→C）
+                 * 每卦 5 段：原文（卦辞＋彖/大象）→ 卦名层为何 B → 注解层为何掉到 C
+                             → 内容生产纪律（✗ 不可 / ✓ 正确）→ 跳转按钮
+                 * 共同规律：注解层都比卦名层更远，因为《周易》注解默认主语是「君子」、
+                   语境是「治国」，而 Ra 的主语是个体形体、语境是存在几何
+                 * 6 卦分布在 G(2)/情绪(2)/意志力(1)/头部(1)，无一是荐骨·根·脾
+       - 【新】(c) 导出 CSV / JSON：
+                 * 四种：CSV 全部 / JSON 全部 / CSV 当前筛选 / JSON 当前筛选 + 复制 JSON 到剪贴板
+                 * 14 字段，CSV 带 UTF-8 BOM（Excel 不乱码），桥接说明已去 HTML 标签
+                 * 伏羲序由六爻实时计算（非硬编码），导出给其他工具可直接用
+   ============================================================ */
+var VERSION = 'V7';
+
+var GATES = [
+{n:1,hz:'乾',en:'The Creative',ra:'Self Expression',razh:'自我表达',c:'G 中心',cir:'个体',g:'A',g2:'A',lines:'111111',b:'乾＝纯粹创造力、健行不息 → 个体的创造性自我表达。Ra 只把「宇宙之健」收窄为「个人的表达」。<b>卦名层几乎无位移。</b>'},
+{n:2,hz:'坤',en:'The Receptive',ra:'Direction of the Self',razh:'自我的方向',c:'G 中心',cir:'个体',g:'B',g2:'A',lines:'000000',b:'坤＝承载与接纳 → 接收性带来的方向感与高层认知。卦名「Receptive」被完整保留，Ra 加了一层「方向」。<b>桥在「受」。</b>'},
+{n:3,hz:'屯',en:'Difficulty at the Beginning',ra:'Ordering',razh:'秩序化（突变）',c:'荐骨',cir:'个体',g:'B',g2:'B',lines:'100010',b:'屯＝初生之难、混沌萌动 → 在混乱中试出秩序。Ra 把「难」译成「突变机制」，卦名里的 Difficulty 被转成了动作。<b>桥在「萌动→排序」。</b>'},
+{n:4,hz:'蒙',en:'Youthful Folly',ra:'Formulization',razh:'公式化',c:'逻辑',cir:'集体',g:'C',g2:'C',lines:'010001',b:'蒙＝蒙昧待启 → 用公式与答案驱散蒙昧。<b>层次切换</b>：外在的「启蒙」被换成内在的「心智运算」。卦名与主题名之间需经「启蒙＝给公式」一转。'},
+{n:5,hz:'需',en:'Waiting',ra:'Fixed Rhythms',razh:'固定节奏',c:'荐骨',cir:'集体',g:'A',g2:'A',lines:'111010',b:'需＝等待时机、饮食宴乐 → 固定的节奏与自然时机。卦名 Waiting 与主题名同源，<b>几乎直译</b>。'},
+{n:6,hz:'讼',en:'Conflict',ra:'Friction',razh:'摩擦',c:'情绪',cir:'部落',g:'A',g2:'A',lines:'010111',b:'讼＝争讼冲突 → 情绪上的摩擦与边界。<b>同一动作换了载体</b>（社会争讼 → 情绪摩擦），核心动词未变。'},
+{n:7,hz:'师',en:'The Army',ra:'Role of the Self in Interaction',razh:'自我在互动中的角色',c:'G 中心',cir:'集体',g:'C',g2:'C',lines:'010000',b:'师＝军旅、统帅 → 领导力与角色。<b>层次切换</b>：军事组织 → 个体在群体中的角色定位。卦的取象是制度，主题名是身份功能。'},
+{n:8,hz:'比',en:'Holding Together',ra:'Contribution',razh:'贡献',c:'喉咙',cir:'个体',g:'B',g2:'B',lines:'000010',b:'比＝亲附、辅佐、结盟 → 以身作则的贡献。Ra 把「依附于众」改写为「个体化的给予」，<b>桥在「联合」</b>，但施力方向反了。'},
+{n:9,hz:'小畜',en:'Taming Power of the Small',ra:'Focus',razh:'专注',c:'荐骨',cir:'集体',g:'B',g2:'B',lines:'111011',b:'小畜＝以小蓄大、渐进积累 → 聚焦细节的能量。<b>桥在「蓄」＝聚集</b>，Ra 把「积蓄」转成了「专注」这一心理动作。'},
+{n:10,hz:'履',en:'Treading',ra:'Behavior of the Self',razh:'自我行为',c:'G 中心',cir:'整合',g:'B',g2:'C',lines:'110111',b:'<b>卦名层直译</b>（步履／行进方式 → 行为方式）；<b>注解层切换</b>：礼／辨上下（社会位阶）→ 位（磁单极的存在几何）→ 自我行为。且履卦六爻「素履／幽人／夬履／视履考祥」与 Gate 10 六线（Modesty／Hermit／Heretic／Role Model）<b>逐爻呼应</b>。'},
+{n:11,hz:'泰',en:'Peace',ra:'Ideas',razh:'想法（概念化）',c:'逻辑',cir:'集体',g:'C',g2:'C',lines:'111000',b:'泰＝通泰、天下太平 → 心智的通达与想法的丰饶。<b>层次切换</b>：政治太平 → 认知丰产。Ra 保留 keynote「Peace」，但落到了心智层。'},
+{n:12,hz:'否',en:'Standstill',ra:'Caution',razh:'谨慎',c:'喉咙',cir:'个体',g:'B',g2:'B',lines:'000111',b:'否＝闭塞不通 → 表达的谨慎与等待时机。<b>Ra 保留了「停滞」的内核</b>，只是把结果换成了「谨慎」这一应对姿态。'},
+{n:13,hz:'同人',en:'Fellowship',ra:'The Listener',razh:'倾听者',c:'G 中心',cir:'集体',g:'C',g2:'C',lines:'101111',b:'同人＝与人和同、盟会 → 倾听与收藏他人经历。<b>层次切换</b>：集体盟会 → 个体认知功能。桥是「同盟需先听」，但主题名已完全换到认知侧。'},
+{n:14,hz:'大有',en:'Possession in Great Measure',ra:'Power Skills',razh:'力量技能',c:'荐骨',cir:'个体',g:'A',g2:'A',lines:'111101',b:'大有＝盛大丰有 → 拥有资源 → 驾驭资源的力量技能。<b>几乎直译</b>，Ra 只加了「如何用」这一层。'},
+{n:15,hz:'谦',en:'Modesty',ra:'Extremes',razh:'极端（人性之爱）',c:'G 中心',cir:'集体',g:'D',g2:'C',lines:'001000',b:'<b>全表最反直觉的一个。</b>谦＝地中有山、有度知止；主题名却是「Extremes 极端」。桥极隐晦：谦卦大象「裒多益寡，称物平施」＝在人性的所有极端之间持守平衡。<b>需专讲，不可望文生义。</b>'},
+{n:16,hz:'豫',en:'Enthusiasm',ra:'Skills',razh:'技能（精通）',c:'喉咙',cir:'集体',g:'B',g2:'A',lines:'000100',b:'豫＝悦乐奋发、豫备 → 通往精通的热忱。Ra 取「奋发」侧而非「逸乐」侧，<b>桥在「豫」的双义</b>（悦／备）。注解层直译更顺。'},
+{n:17,hz:'随',en:'Following',ra:'Opinions',razh:'意见（模式识别）',c:'逻辑',cir:'集体',g:'C',g2:'C',lines:'100110',b:'随＝随从、随时 → 逻辑观点与模式识别。<b>层次切换</b>：社会性跟随 → 认知功能。桥弱，主题名主要由 Ajna 中心功能决定。'},
+{n:18,hz:'蛊',en:'Work on What Has Been Spoiled',ra:'Correction',razh:'纠正',c:'脾脏',cir:'集体',g:'A',g2:'A',lines:'011001',b:'蛊＝整治败坏之事 → 纠正与改进。<b>几乎逐字直译</b>，是全表对应最紧密的之一。'},
+{n:19,hz:'临',en:'Approach',ra:'Wanting',razh:'想要（需求敏感）',c:'根部',cir:'部落',g:'A',g2:'A',lines:'110000',b:'临＝临近、逼近、监察 → 靠近资源、对需求的敏感。<b>几乎直译</b>，官方 keynote 本身就是 Approach／Wanting。'},
+{n:20,hz:'观',en:'Contemplation',ra:'The Now',razh:'当下',c:'喉咙',cir:'整合',g:'B',g2:'B',lines:'000011',b:'观＝观照、仰观 → 在当下的临在觉知。Ra 把「观」的对象从外在（观天下）转为此刻，<b>桥在「观」这个动作</b>。'},
+{n:21,hz:'噬嗑',en:'Biting Through',ra:'The Hunter / Huntress',razh:'猎手（控制）',c:'意志力',cir:'部落',g:'B',g2:'B',lines:'100101',b:'噬嗑＝咬合、断狱、咬穿障碍 → 咬住资源的意志力与控制。<b>桥在「咬穿」</b>，Ra 落到意志力中心后变成「掌控」。'},
+{n:22,hz:'贲',en:'Grace',ra:'Openness',razh:'开放（优雅）',c:'情绪',cir:'个体',g:'B',g2:'C',lines:'101001',b:'贲＝文饰、装饰 → 情绪上的优雅与开放。Ra 取「文饰使关系可亲」这一侧，<b>桥在「饰→接纳」</b>。注解层（止贲尚质）距离更远。'},
+{n:23,hz:'剥',en:'Splitting Apart',ra:'Assimilation',razh:'同化（个体洞见的表达）',c:'喉咙',cir:'个体',g:'C',g2:'C',lines:'000001',b:'剥＝剥落、侵蚀 → 拆解复杂洞见以便同化后再表达。<b>层次切换</b>：政治性的剥落 → 认知加工。桥是「剥＝拆解以便吸收」，需一转。'},
+{n:24,hz:'复',en:'Return',ra:'Rationalization',razh:'合理化（回归沉思）',c:'逻辑',cir:'个体',g:'B',g2:'B',lines:'100000',b:'复＝复归、反复 → 反复思量直到想通（aha 之前的心智回旋）。<b>桥就在「反复」这个动作本身</b>，非常顺。'},
+{n:25,hz:'无妄',en:'Innocence',ra:'Spirit of the Self',razh:'自我之灵（普遍之爱）',c:'G 中心',cir:'个体',g:'A',g2:'B',lines:'100111',b:'无妄＝不妄为、天真无伪 → 无条件的普遍之爱。<b>几乎直译</b>，卦名 Innocence 与主题名同根。注解层讲「诚」，Ra 落到「爱」。'},
+{n:26,hz:'大畜',en:'Taming Power of the Great',ra:'The Egoist',razh:'自我主义者（驯服力）',c:'意志力',cir:'部落',g:'B',g2:'C',lines:'111001',b:'大畜＝大的蓄养与驯服 → 记忆的驯服力与说服。卦名被完整保留，Ra 落到意志力中心后加了「自我」这一层。注解层讲止健养贤，差距更大。'},
+{n:27,hz:'颐',en:'Nourishment',ra:'Caring',razh:'关怀（滋养）',c:'荐骨',cir:'部落',g:'A',g2:'A',lines:'100001',b:'颐＝颐养、滋养 → 关怀与维生。<b>同一动词</b>，几乎直译。'},
+{n:28,hz:'大过',en:'Preponderance of the Great',ra:'The Game Player',razh:'游戏玩家（冒险）',c:'脾脏',cir:'个体',g:'C',g2:'C',lines:'011110',b:'大过＝过甚、栋梁桡（重压将折） → 孤注一掷、为意义而赌。<b>层次切换</b>：结构性的危机 → 存在性的博弈。桥是「过载→冒险」，需两转。'},
+{n:29,hz:'坎',en:'The Abysmal',ra:'Saying Yes',razh:'说「是」（承诺）',c:'荐骨',cir:'集体',g:'B',g2:'B',lines:'010010',b:'坎＝重险、深渊 → 投身深渊的承诺与坚持。Ra 取的是卦辞「有孚维心亨」——身处险境仍坚持，<b>桥在「陷而能通」</b>。'},
+{n:30,hz:'离',en:'The Clinging Fire',ra:'Feelings',razh:'感受（渴望之火）',c:'情绪',cir:'集体',g:'B',g2:'B',lines:'101101',b:'离＝附丽、火 → 执着的渴求与情绪之火。<b>桥在「附丽」＝黏着的欲望</b>，非常贴切，只是从自然象落到了情绪层。'},
+{n:31,hz:'咸',en:'Influence',ra:'Leading',razh:'领导（影响）',c:'喉咙',cir:'集体',g:'B',g2:'B',lines:'001110',b:'咸＝感应、相感 → 通过言语施加影响与民主领导。<b>同一个「感」字</b>，卦名 Influence 与主题名几乎同义。'},
+{n:32,hz:'恒',en:'Duration',ra:'Continuity',razh:'连续性',c:'脾脏',cir:'集体',g:'A',g2:'A',lines:'011100',b:'恒＝持久、恒常 → 对延续价值的本能识别。<b>几乎直译</b>。'},
+{n:33,hz:'遁',en:'Retreat',ra:'Privacy',razh:'隐私（退隐）',c:'喉咙',cir:'集体',g:'A',g2:'A',lines:'001111',b:'遁＝退隐、遁世 → 退隐以保存记忆与故事。<b>几乎直译</b>。'},
+{n:34,hz:'大壮',en:'The Power of the Great',ra:'Power',razh:'力量',c:'荐骨',cir:'整合',g:'A',g2:'A',lines:'111100',b:'大壮＝雷在天上、阳刚盛壮 → 纯粹的荐骨力量。<b>卦象层、中心层、主题名三层完全一致</b>，是全表距离最近的代表。'},
+{n:35,hz:'晋',en:'Progress',ra:'Change',razh:'变化（进展）',c:'喉咙',cir:'集体',g:'A',g2:'A',lines:'000101',b:'晋＝进、晋升 → 通过体验变化而前进。<b>几乎直译</b>。'},
+{n:36,hz:'明夷',en:'Darkening of the Light',ra:'Crisis',razh:'危机',c:'情绪',cir:'集体',g:'A',g2:'A',lines:'101000',b:'明夷＝光明受伤、晦其明 → 危机中的情绪探索。<b>几乎直译</b>。'},
+{n:37,hz:'家人',en:'The Family',ra:'Friendship',razh:'友谊（部落纽带）',c:'情绪',cir:'部落',g:'B',g2:'C',lines:'101011',b:'家人＝家族伦理 → 部落情谊与协议。Ra 把「血缘」扩为「部落纽带」，<b>桥在「亲族」</b>，但换成了非血缘的「友谊」。注解层（治家严君）距离更远。'},
+{n:38,hz:'睽',en:'Opposition',ra:'The Fighter',razh:'战士',c:'根部',cir:'个体',g:'B',g2:'B',lines:'110101',b:'睽＝乖离、对立 → 为个体意义而战的坚持。<b>同一个「对立」</b>，Ra 加了「为意义而战」的主体姿态。'},
+{n:39,hz:'蹇',en:'Obstruction',ra:'The Provocateur',razh:'挑衅者',c:'根部',cir:'个体',g:'C',g2:'C',lines:'001010',b:'蹇＝蹇难、阻碍 → 挑衅以测试情感精神。<b>层次切换</b>：客观的困境 → 主动的试探。桥是「阻碍催生挑衅」，施力方向反转。'},
+{n:40,hz:'解',en:'Deliverance',ra:'Aloneness',razh:'独处（解脱）',c:'意志力',cir:'部落',g:'C',g2:'C',lines:'010100',b:'解＝解除、缓解 → 为复原而必需的独处。<b>层次切换</b>：困境的解除 → 意志力的独处。卦名被保留，主题名已换到「独自复原」侧。'},
+{n:41,hz:'损',en:'Decrease',ra:'Contraction',razh:'收缩',c:'根部',cir:'集体',g:'A',g2:'A',lines:'110001',b:'损＝减损 → 收缩以启动新体验（对应起始密码子）。<b>几乎直译</b>。'},
+{n:42,hz:'益',en:'Increase',ra:'Growth',razh:'成长',c:'荐骨',cir:'集体',g:'A',g2:'A',lines:'100011',b:'益＝增益 → 完成体验周期的成长。<b>几乎直译</b>。'},
+{n:43,hz:'夬',en:'Breakthrough',ra:'Insight',razh:'洞见（突破）',c:'逻辑',cir:'个体',g:'A',g2:'A',lines:'111110',b:'夬＝决断、决裂 → 个体心智的突破与洞见。<b>几乎直译</b>，卦名 Breakthrough 与主题名同根。'},
+{n:44,hz:'姤',en:'Coming to Meet',ra:'Alertness',razh:'警觉',c:'脾脏',cir:'部落',g:'C',g2:'C',lines:'011111',b:'姤＝不期而遇 → 对模式与机会的本能警觉。<b>层次切换</b>：相遇事件 → 脾脏的警觉功能。卦名无「警觉」义，主题名主要由中心决定。'},
+{n:45,hz:'萃',en:'Gathering Together',ra:'The Gatherer',razh:'聚集者（统治者）',c:'喉咙',cir:'部落',g:'A',g2:'A',lines:'000110',b:'萃＝聚集、会聚 → 聚集资源与部落领导。<b>几乎直译</b>。'},
+{n:46,hz:'升',en:'Pushing Upward',ra:'Determination of the Self',razh:'自我决心（身体之爱）',c:'G 中心',cir:'集体',g:'B',g2:'A',lines:'011000',b:'升＝上升、积小以高大 → 通过身体与机缘实现的自我提升。<b>几乎直译</b>，Ra 加了「身体之爱／机缘」这一层。'},
+{n:47,hz:'困',en:'Oppression',ra:'Realizing',razh:'领悟（抽象化）',c:'逻辑',cir:'集体',g:'B',g2:'B',lines:'010110',b:'困＝困穷受压 → 压力逼出顿悟（aha moment）。<b>桥在「受压→释放」</b>，Ra 取的是受压之后的结果。'},
+{n:48,hz:'井',en:'The Well',ra:'Depth',razh:'深度',c:'脾脏',cir:'集体',g:'A',g2:'A',lines:'011010',b:'井＝井深不竭、养而不穷 → 知识的深度与对不足的恐惧。<b>几乎直译</b>。'},
+{n:49,hz:'革',en:'Revolution',ra:'Principles',razh:'原则（革命）',c:'情绪',cir:'部落',g:'B',g2:'B',lines:'101110',b:'革＝变革、去故 → 革命所依据的情感原则。<b>卦名保留</b>，Ra 加了「革命背后的原则」这一层。'},
+{n:50,hz:'鼎',en:'The Cauldron',ra:'Values',razh:'价值（律法）',c:'脾脏',cir:'部落',g:'B',g2:'A',lines:'011101',b:'鼎＝重器、正位凝命 → 部落价值与律法的承载。<b>桥在「承载」</b>（鼎所承载的即是价值）。'},
+{n:51,hz:'震',en:'The Arousing / Shock',ra:'Shock',razh:'震惊（发起）',c:'意志力',cir:'个体',g:'A',g2:'A',lines:'100100',b:'震＝雷、震动 → 震惊、启蒙与竞争的勇气。<b>几乎直译</b>。'},
+{n:52,hz:'艮',en:'Keeping Still',ra:'Stillness',razh:'静止',c:'根部',cir:'集体',g:'A',g2:'A',lines:'001001',b:'艮＝止、山 → 静止与专注的克制。<b>几乎直译</b>。'},
+{n:53,hz:'渐',en:'Development',ra:'Beginnings',razh:'开始',c:'根部',cir:'集体',g:'B',g2:'A',lines:'001011',b:'渐＝渐进（鸿渐于陆） → 新周期逐步展开的开始。Ra 取的是「渐进的起点」，<b>桥在「渐」</b>，但落点从过程移到了起点。'},
+{n:54,hz:'归妹',en:'The Marrying Maiden',ra:'Ambition',razh:'野心（驱动力）',c:'根部',cir:'集体',g:'C',g2:'C',lines:'110100',b:'归妹＝少女出嫁、位不当 → 以卑求升的驱动力与野心。<b>层次切换</b>：婚姻位分 → 物质与灵性的攀升。桥是「位不当→求升」，需一转。'},
+{n:55,hz:'丰',en:'Abundance',ra:'Spirit',razh:'灵性（情绪丰盛）',c:'情绪',cir:'个体',g:'A',g2:'A',lines:'101100',b:'丰＝丰盛、丰大 → 情绪的丰盛与灵性。<b>几乎直译</b>，Ra 的 keynote 本身仍含 Abundance。'},
+{n:56,hz:'旅',en:'The Wanderer',ra:'Stimulation',razh:'刺激（说故事）',c:'喉咙',cir:'集体',g:'B',g2:'B',lines:'001101',b:'旅＝旅人、客旅 → 用异乡见闻与故事带来新鲜刺激。<b>桥在「异乡见闻」</b>。'},
+{n:57,hz:'巽',en:'The Gentle',ra:'Intuitive Clarity',razh:'直觉清明',c:'脾脏',cir:'整合',g:'A',g2:'B',lines:'011011',b:'巽＝风、入、顺 → 穿透性的直觉觉知（penetration）。<b>桥就在「入」字</b>，是全表最贴切的转译之一。注解层讲「申命行事」，略远。'},
+{n:58,hz:'兑',en:'The Joyous',ra:'Joy of Life',razh:'生命之喜（活力）',c:'根部',cir:'集体',g:'A',g2:'A',lines:'110110',b:'兑＝泽、悦 → 改善生命的活力与喜悦。<b>几乎直译</b>。'},
+{n:59,hz:'涣',en:'Dispersion',ra:'Sexuality',razh:'性（亲密）',c:'荐骨',cir:'部落',g:'C',g2:'C',lines:'010011',b:'涣＝涣散、冰消瓦解 → 溶解障碍、达成亲密与繁殖。<b>层次切换</b>：离散 → 基因策略。桥是「消融界限」，需一转。'},
+{n:60,hz:'节',en:'Limitation',ra:'Acceptance',razh:'接受（限制）',c:'根部',cir:'个体',g:'A',g2:'A',lines:'110010',b:'节＝节制、限制 → 接受限制作为突变的来源。<b>Ra 保留「Limitation」，只加了「接受」这一姿态</b>。'},
+{n:61,hz:'中孚',en:'Inner Truth',ra:'Mystery',razh:'奥秘（灵感）',c:'头部',cir:'个体',g:'B',g2:'C',lines:'110011',b:'中孚＝心中诚信、感通 → 认知内在真理的灵感压力。Ra 把「诚信」转为「不可言说的奥秘／觉知」，<b>桥在「内在」</b>。注解层讲「感化万物」，反向。'},
+{n:62,hz:'小过',en:'Preponderance of the Small',ra:'Detail',razh:'细节',c:'喉咙',cir:'集体',g:'A',g2:'A',lines:'001100',b:'小过＝小事上的过度审慎 → 细节与事实的精确表达。<b>几乎直译</b>。'},
+{n:63,hz:'既济',en:'After Completion',ra:'Doubt',razh:'怀疑',c:'头部',cir:'集体',g:'B',g2:'B',lines:'101010',b:'既济＝事已完成 → 完成之后的再检验与逻辑怀疑。<b>桥在「成之后的下一步」</b>：完成即需被验证，故生疑。需一转。'},
+{n:64,hz:'未济',en:'Before Completion',ra:'Confusion',razh:'困惑',c:'头部',cir:'集体',g:'A',g2:'A',lines:'010101',b:'未济＝尚未完成 → 混乱未明的心智压力。<b>几乎直译</b>，且卦序终点的「未完」意象被完整保留。'}
+];
+
+var GM = {A:'A · 直译',B:'B · 延伸',C:'C · 重构',D:'D · 断裂'};
+var GM_SHORT = {A:'卦名层 A 直译',B:'卦名层 B 延伸',C:'卦名层 C 重构',D:'卦名层 D 断裂'};
+var GM2_SHORT = {A:'注解层 A 直译',B:'注解层 B 延伸',C:'注解层 C 重构',D:'注解层 D 断裂'};
+var GM_HEX = {A:'\u201c\u201d', B:'\u201c\u201d', C:'\u201c\u201d', D:'\u201c\u201d'}; // placeholder, 不使用
+var state = {g:'', g2:'', c:'', cir:'', q:'', hmRow:'', hmCol:'', sel:'', sort:'wen', wheel:'seq'};
+var CENTER_COLORS = {
+  'G 中心':'#534AB7','荐骨':'#D85A30','逻辑':'#378ADD','情绪':'#ED93B1',
+  '喉咙':'#1D9E75','脾脏':'#BA7517','根部':'#0F6E56','意志力':'#993C1D','头部':'#5F5E5A'
+};
+var GRADE_COLORS = {A:'#5F7A4E',B:'#C4956A',C:'#B5713F',D:'#9E4A3C'};
+var HEX_ORDER = ['A','B','C','D'];
+var HM_COUNT = {};
+(function(){
+  GATES.forEach(function(x){ HM_COUNT[x.g+x.g2] = (HM_COUNT[x.g+x.g2]||0)+1; });
+})();
+var HM_MAX = Math.max.apply(null, Object.keys(HM_COUNT).map(function(k){return HM_COUNT[k]}));
+/* V5 改：分段 + 对数映射，强化低计数区（N=0/1/2）的视觉梯度
+   - c=0  → 空格（结构不可能 / 经验性空 两类分别渲染）
+   - c=1  → 0.34（与空格拉开明显距离，一眼看得出"有 1 个"）
+   - c>=2 → 对数 0.42 ~ 0.94（避免 24 与 15 挤在一起、2 与 1 又看不出差别） */
+function hmCellAlpha(c){
+  if(c === 0) return 0;
+  if(c === 1) return 0.34;
+  var t = Math.log(c) / Math.log(HM_MAX);   // c=2 → 0.215；c=HM_MAX → 1
+  return 0.42 + 0.52 * t;
+}
+/* 空格分类：|卦名层 − 注解层| >= 2 → 结构不可能；否则 → 经验性空 */
+function hmEmptyType(row, col){
+  return Math.abs(gVal(row) - gVal(col)) >= 2 ? 'imp' : 'none';
+}
+var EMPTY_NOTE = {
+  imp:'结构不可能',
+  none:'经验性空'
+};
+
+function uniq(k){var s={},a=[];GATES.forEach(function(x){if(!s[x[k]]){s[x[k]]=1;a.push(x[k])}});return a.sort()}
+
+function initFilters(){
+  var fc=document.getElementById('fCenter'), fr=document.getElementById('fCircuit');
+  uniq('c').forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;fc.appendChild(o)});
+  uniq('cir').forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;fr.appendChild(o)});
+}
+
+function gVal(g){return g==='A'?0:g==='B'?1:g==='C'?2:3}
+
+/* V5：确定性抖动偏移（黄金比例哈希），返回 ±0.28 格内的稳定偏移
+   同一闸门每次渲染位置一致，不会像随机数那样跳来跳去 */
+function jitterOffset(n, axis){
+  var k = (axis === 'x') ? (n * 0.6180339887) : (n * 0.3819660113);
+  var f = k - Math.floor(k);          // 小数部分 0..1
+  return (f - 0.5) * 0.56;            // ±0.28 格
+}
+
+/* V6：伏羲（先天／二进制）六十四卦序
+   算法：先天八卦序号 = 8 − 三爻二进制值（111乾=1 … 000坤=8）
+        卦序号 = (下卦/内卦序号 − 1) × 8 + 上卦/外卦序号
+   lines 为「底到顶」6 位：前 3 位 = 初/二/三爻（内卦），后 3 位 = 四/五/上爻（外卦） */
+var TRI_NAME = {7:'乾',6:'兑',5:'离',4:'震',3:'巽',2:'坎',1:'艮',0:'坤'};
+function trigramOrder(bin3){ return 8 - parseInt(bin3, 2); }   // 1..8
+function fuXiParts(lines){
+  var lower = lines.substring(0,3), upper = lines.substring(3,6);
+  var lo = trigramOrder(lower), up = trigramOrder(upper);
+  return {lo:lo, up:up, loName:TRI_NAME[parseInt(lower,2)], upName:TRI_NAME[parseInt(upper,2)]};
+}
+function fuXiOrder(lines){
+  var p = fuXiParts(lines);
+  return (p.lo - 1) * 8 + p.up;   // 1..64
+}
+
+/* 六爻卦画 SVG：line1=底（底部），line6=顶（顶部）
+   V3 修：linecap 默认 butt + gap=4 + stroke-width=1.5，阴／阳爻视觉上区分
+   V4 修：循环方向 i:0→5 映射 y:bottom→top，让 i=0 (data 第 0 位) 画在 SVG 底部
+        修复了 V1→V3 一脉相承的"爻位颠倒"bug（i=0 之前画在了 SVG 顶部） */
+function renderHex(lines){
+  var w=34, h=44, sw=30, gap=4;
+  var x0 = (w-sw)/2;
+  var yStart = 2, yEnd = h-2, yStep = (yEnd-yStart)/5;
+  var half = (sw - gap) / 2;
+  var s = '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">';
+  for(var i=0;i<6;i++){
+    // i=0 (line1=底) → 画在底部 y=yEnd；i=5 (line6=顶) → 画在顶部 y=yStart
+    var y = yEnd - yStep*i;
+    var ch = lines.charAt(i);
+    if(ch==='1'){
+      s += '<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+sw)+'" y2="'+y+'" stroke="#2D2118" stroke-width="1.5"/>';
+    } else {
+      s += '<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+half)+'" y2="'+y+'" stroke="#2D2118" stroke-width="1.5"/>';
+      s += '<line x1="'+(x0+half+gap)+'" y1="'+y+'" x2="'+(x0+sw)+'" y2="'+y+'" stroke="#2D2118" stroke-width="1.5"/>';
+    }
+  }
+  s += '</svg>';
+  return s;
+}
+
+/* 分布概览 pill：点 A / B / C / D / 全部 */
+function renderStat(){
+  var st=document.getElementById('stat'), html='';
+  HEX_ORDER.forEach(function(g){
+    var n=GATES.filter(function(x){return x.g===g}).length;
+    html+='<button data-g="'+g+'" class="'+(state.g===g?'on':'')+'" onclick="pickG(\''+g+'\')">'
+      +'<span class="num" style="color:var(--g'+g+')">'+n+'</span><span class="lb">'+GM[g]+'</span></button>';
+  });
+  html+='<button data-g="" class="'+(state.g===''?'on':'')+'" onclick="pickG(\'\')">'
+    +'<span class="num">'+GATES.length+'</span><span class="lb">全部闸门</span></button>';
+  st.innerHTML=html;
+}
+
+function pickG(g){ state.g = (state.g===g ? '' : g); render(); }
+
+/* 4×4 象限热力图 */
+function renderHeatmap(){
+  var el=document.getElementById('heatmap'), html='';
+  // 当前选中闸门（用于格子高亮联动）
+  var selGate = null;
+  if(state.sel){
+    GATES.forEach(function(x){ if(String(x.n)===String(state.sel)) selGate = x; });
+  }
+  // 左上角说明
+  html += '<div class="hm-corner">卦名层　↓<br>注解层　→</div>';
+  HEX_ORDER.forEach(function(col){
+    html += '<div class="hm-axis">'+col+'　注解层</div>';
+  });
+  HEX_ORDER.forEach(function(row){
+    html += '<div class="hm-axis hm-row-label">卦名层 '+row+'</div>';
+    HEX_ORDER.forEach(function(col){
+      var c = HM_COUNT[row+col] || 0;
+      var alpha = hmCellAlpha(c);
+      var baseColor = GRADE_COLORS[row];
+      var isOn = (state.hmRow===row && state.hmCol===col);
+      var isSel = selGate && selGate.g===row && selGate.g2===col;
+      var selCls = isSel ? ' sel' : '';
+      if(c===0){
+        // V5：空格分两类——结构不可能（斜线阴影）· 经验性空（虚线）
+        var et = hmEmptyType(row, col);
+        html += '<div class="hm-cell '+et+selCls+'" data-row="'+row+'" data-col="'+col+'" '
+          +'title="'+row+' × '+col+'：'+EMPTY_NOTE[et]+'">'
+          + '<span class="hm-n">—</span>'
+          + '<span class="hm-tag">'+EMPTY_NOTE[et]+'</span></div>';
+      } else {
+        var onStyle = isOn ? 'border-color:var(--accent);box-shadow:0 0 0 2px rgba(196,149,106,.45);' : '';
+        html += '<button class="hm-cell'+selCls+'" data-row="'+row+'" data-col="'+col+'" '
+          +'style="background:'+baseColor+';opacity:'+alpha.toFixed(2)+';'+onStyle+'" '
+          +'onclick="pickHM(\''+row+'\',\''+col+'\')">'
+          +'<span class="hm-n">'+c+'</span>'
+          +'<span class="hm-l">闸门</span></button>';
+      }
+    });
+  });
+  el.innerHTML = html;
+}
+
+function pickHM(row, col){
+  if(state.hmRow===row && state.hmCol===col){
+    state.hmRow=''; state.hmCol=''; state.g=''; state.g2='';
+  } else {
+    state.hmRow=row; state.hmCol=col; state.g=row; state.g2=col;
+  }
+  render();
+}
+
+/* V5：点击表格行 → 选中该闸门，联动高亮散点 + 热力图格子 */
+function pickRow(n){
+  state.sel = (String(state.sel)===String(n)) ? '' : n;
+  render();
+}
+
+function filtered(){
+  var q=state.q.trim().toLowerCase();
+  var list = GATES.filter(function(x){
+    if(state.g && x.g!==state.g) return false;
+    if(state.g2 && x.g2!==state.g2) return false;
+    if(state.c && x.c!==state.c) return false;
+    if(state.cir && x.cir!==state.cir) return false;
+    if(q){
+      var hay=(x.n+' '+x.hz+' '+x.en+' '+x.ra+' '+x.razh+' '+x.c+' '+x.cir+' '+x.b).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  });
+  // V6：伏羲（二进制）序排序
+  if(state.sort === 'fu'){
+    list = list.slice().sort(function(a,b){ return fuXiOrder(a.lines) - fuXiOrder(b.lines); });
+  }
+  return list;
+}
+
+function setSort(m){
+  state.sort = m;
+  render();
+}
+
+function render(){
+  renderStat();
+  renderScatter();
+  renderWheel();
+  renderMandalaStrip();
+  renderHeatmap();
+  var list=filtered(), tb=document.getElementById('tb'), h='';
+  list.forEach(function(x){
+    var isSel = (String(state.sel)===String(x.n));
+    var fx = fuXiOrder(x.lines), fp = fuXiParts(x.lines);
+    var mainNo = (state.sort==='fu') ? fx : x.n;
+    var altNo  = (state.sort==='fu') ? ('文王 '+x.n) : ('伏羲 '+fx);
+    h+='<tr class="'+(isSel?'sel':'')+'" onclick="pickRow('+x.n+')">'
+      +'<td class="num-cell" data-l="序号">'+mainNo+(isSel?'<span class="sel-badge">已选</span>':'')
+      +'<span class="alt-no">'+altNo+'</span></td>'
+      +'<td class="col-hex-head" data-l="卦画">'+renderHex(x.lines)+'</td>'
+      +'<td data-l="卦"><span class="hz">'+x.hz+'</span><span class="en">'+x.en+'</span>'
+      +'<span class="tri">'+fp.upName+'上 · '+fp.loName+'下</span></td>'
+      +'<td data-l="主题名"><span class="ra">'+x.ra+'</span><span class="razh">'+x.razh+'</span></td>'
+      +'<td data-l="中心"><span class="tag">'+x.c+'</span></td>'
+      +'<td data-l="回路"><span class="tag">'+x.cir+'</span></td>'
+      +'<td data-l="卦名层"><span class="gpill p'+x.g+'">'+x.g+'</span></td>'
+      +'<td data-l="注解层"><span class="gpill p'+x.g2+'">'+x.g2+'</span></td>'
+      +'<td class="bridge" data-l="桥接">'+x.b+'</td>'
+      +'</tr>';
+  });
+  tb.innerHTML = h || '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">没有匹配的闸门，换个条件试试</td></tr>';
+  var selGate = null;
+  if(state.sel){ GATES.forEach(function(x){ if(String(x.n)===String(state.sel)) selGate = x; }); }
+  document.getElementById('count').textContent='当前显示 '+list.length+' / '+GATES.length+' 个闸门'
+    + (state.g?('　｜　已按 '+GM_SHORT[state.g]+' 筛选'):'')
+    + (state.g2?('　｜　已按 '+GM2_SHORT[state.g2]+' 筛选'):'')
+    + (state.hmRow && state.hmCol?('　｜　（来自热力图：卦名层 '+state.hmRow+' × 注解层 '+state.hmCol+'）'):'')
+    + (selGate?('　｜　已选中 #'+selGate.n+' '+selGate.hz+'（散点 + 热力图格子已高亮）'):'');
+  document.getElementById('hmHint').innerHTML = selGate
+    ? ('点击表格任意一行可联动高亮；当前选中 <b>#'+selGate.n+' '+selGate.hz+'</b>（'+selGate.razh+'）。再次点击同一行取消。')
+    : '点击表格任意一行 → 联动高亮散点中该闸门的位置 + 热力图中它所在的格子。';
+
+  // V6：排序切换 UI 状态
+  document.getElementById('sWen').className = 'sbtn' + (state.sort==='wen' ? ' on' : '');
+  document.getElementById('sFu').className  = 'sbtn' + (state.sort==='fu'  ? ' on' : '');
+  document.getElementById('thNo').textContent = state.sort==='fu' ? '伏羲序' : '文王序';
+  document.getElementById('thHz').textContent = state.sort==='fu' ? '卦（文王序见下）' : '卦（伏羲序见下）';
+  document.getElementById('sortNote').innerHTML = state.sort==='fu'
+    ? '当前按<b>伏羲（先天／二进制）序</b>排列。算法：先天八卦序号 = 8 − 三爻二进制值（乾111=1 … 坤000=8）；卦序号 = (内卦序号−1)×8 + 外卦序号。<b>人类图轮盘正是用这一序排布的</b>——闸门编号沿用文王序，轮盘排布用伏羲序，两者不可混。'
+    : '当前按<b>文王（后天／义理）序</b>排列，即通行本《周易》卦序：按卦义演进（乾坤→屯蒙→需讼→…→既济未济），是<b>叙事／义理序</b>，与二进制无关。人类图闸门编号沿用此序。';
+}
+
+/* 双轴散点图 */
+function renderScatter(){
+  var svg = document.getElementById('scatter');
+  if(!svg) return;
+  var x0=70, y0=50, x1=520, y1=420, w=x1-x0, h=y1-y0;
+  var grid=document.getElementById('grid'), forbid=document.getElementById('forbid'),
+      dots=document.getElementById('dots'),
+      labels=document.getElementById('axlabels'), legend=document.getElementById('legend');
+  var gh='';
+  for(var i=1;i<4;i++){
+    var gx=x0 + w*i/4, gy=y0 + h*i/4;
+    gh += '<line x1="'+gx+'" y1="'+y0+'" x2="'+gx+'" y2="'+y1+'" stroke="#E3D7C4" stroke-width="0.5" stroke-dasharray="2,3"/>';
+    gh += '<line x1="'+x0+'" y1="'+gy+'" x2="'+x1+'" y2="'+gy+'" stroke="#E3D7C4" stroke-width="0.5" stroke-dasharray="2,3"/>';
+  }
+  grid.innerHTML = gh;
+
+  /* V6：|Δ| ≥ 2 禁区带 —— 斜线阴影。
+     |Δ| = |卦名层 − 注解层|；相距 2 级以上的格子结构上不可能落入（详见「9 个空格的结构性解释」） */
+  var fh = '<defs><pattern id="forbidPat" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
+         + '<line x1="0" y1="0" x2="0" y2="7" stroke="#9E4A3C" stroke-width="1.6" opacity="0.34"/></pattern></defs>';
+  for(var r=0;r<4;r++){
+    for(var c=0;c<4;c++){
+      if(Math.abs(r - c) >= 2){
+        var rx = x0 + w*r/4, ry = y1 - h*(c+1)/4;
+        fh += '<rect x="'+rx.toFixed(1)+'" y="'+ry.toFixed(1)+'" width="'+(w/4).toFixed(1)+'" height="'+(h/4).toFixed(1)+'" '
+           + 'fill="url(#forbidPat)" stroke="#9E4A3C" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.9"/>';
+      }
+    }
+  }
+  forbid.innerHTML = fh;
+
+  var dh='';
+  var centers = {};
+  GATES.forEach(function(x){
+    /* V5：确定性抖动（jitter）。64 个闸门只落在 7 个非空格子里，
+       不加抖动时会完全重叠成 7 个点堆，无法单独选中。
+       用黄金比例哈希产生 ±0.28 格的确定性偏移 —— 点仍在格内，但彼此可辨。*/
+    var jx = jitterOffset(x.n, 'x'), jy = jitterOffset(x.n, 'y');
+    var px = x0 + w * (gVal(x.g) + 0.5 + jx)/4;
+    var py = y1 - h * (gVal(x.g2) + 0.5 + jy)/4;
+    var col = CENTER_COLORS[x.c] || '#888';
+    var r = x.g === x.g2 ? 5 : 4.5;
+    var isSel = (String(state.sel)===String(x.n));
+    var dim = (state.g && x.g!==state.g) ? 0.2 : (isSel ? 1 : 0.85);
+    // 完整桥接说明写入 data-* 以便 tooltip 取用
+    var safeB = (x.b||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    dh += '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+r+'" fill="'+col+'" stroke="#2D2118" stroke-width="0.6" opacity="'+dim+'" '
+      + 'data-n="'+x.n+'" data-hz="'+x.hz+'" data-ra="'+x.razh+'" data-c="'+x.c+'" data-g="'+x.g+'" data-g2="'+x.g2+'" data-b="'+safeB+'" '
+      + 'class="dot" style="cursor:pointer"/>';
+    // 选中闸门：双环高亮
+    if(isSel){
+      dh += '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+(r+3.5)+'" fill="none" stroke="#C4956A" stroke-width="2.5" opacity="0.95" pointer-events="none"/>';
+      dh += '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+(r+7)+'" fill="none" stroke="#C4956A" stroke-width="1" opacity="0.45" pointer-events="none"/>';
+    }
+    centers[x.c] = col;
+  });
+  dots.innerHTML = dh;
+
+  var lh='';
+  HEX_ORDER.forEach(function(g,i){
+    var cx = x0 + w*(i+0.5)/4;
+    lh += '<text x="'+cx+'" y="'+y1+18+'" text-anchor="middle" font-size="12" fill="#4A3728" font-family="inherit" font-weight="500">'+g+'</text>';
+    var cy = y1 - h*(i+0.5)/4;
+    lh += '<text x="'+x0-10+'" y="'+cy+'" text-anchor="end" font-size="12" fill="#4A3728" font-family="inherit" font-weight="500" dominant-baseline="central">'+g+'</text>';
+  });
+  lh += '<text x="'+(x0+w/2)+'" y="'+(y1+38)+'" text-anchor="middle" font-size="12" fill="#7A6A58" font-family="inherit">卦名层（X）</text>';
+  lh += '<text transform="translate('+(x0-32)+','+(y0+h/2)+') rotate(-90)" text-anchor="middle" font-size="12" fill="#7A6A58" font-family="inherit">注解层（Y）</text>';
+  labels.innerHTML = lh;
+
+  var leg='';
+  Object.keys(centers).forEach(function(k){
+    leg += '<span class="lg"><span class="dot" style="background:'+centers[k]+'"></span>'+k+'</span>';
+  });
+  leg += '<span class="lg"><span class="lg-forbid"></span>斜线＝|Δ|≥2 禁区（结构不可能，实测 0 条落入）</span>';
+  legend.innerHTML = leg;
+
+  // tooltip：标题 + 双等级 + 中心 + 完整桥接说明（原始 HTML，让粗体生效）
+  var tip=document.getElementById('tip');
+  svg.querySelectorAll('.dot').forEach(function(c){
+    c.onmouseenter = function(e){
+      var d=this.dataset;
+      tip.innerHTML =
+        '<b>#'+d.n+' '+d.hz+'</b>　'+d.ra+
+        '<div class="tip-row">中心：'+d.c+'　卦名层 '+d.g+' · 注解层 '+d.g2+'</div>'
+        +'<div class="tip-bridge">'+d.b+'</div>';
+      tip.style.display='block';
+    };
+    c.onmousemove = function(e){
+      var r=document.getElementById('scatterWrap').getBoundingClientRect();
+      var tw = tip.offsetWidth, th = tip.offsetHeight;
+      var left = e.clientX - r.left + 14;
+      var top  = e.clientY - r.top  + 14;
+      // 防止 tooltip 跑出图框
+      if(left + tw > r.width - 8) left = e.clientX - r.left - tw - 14;
+      if(top + th > r.height - 8) top = e.clientY - r.top - th - 14;
+      tip.style.left = Math.max(4,left) + 'px';
+      tip.style.top  = Math.max(4,top)  + 'px';
+    };
+    c.onmouseleave = function(){tip.style.display='none'};
+    // 点击：V5 新增选中该闸门（联动表格行 + 热力图格子）；保留 V4 的层级筛选 toggle
+    c.onclick = function(){
+      var d=this.dataset;
+      state.sel = d.n;
+      state.g = (state.g===d.g) ? '' : d.g;
+      render();
+    };
+  });
+}
+
+/* ============================================================
+   V7：伏羲序圆图（曼陀罗轮盘）
+   ------------------------------------------------------------
+   先天八卦圆图方位（0..7，自正上方起【逆时针】）：
+       乾 0 · 兑 1 · 离 2 · 震 3 · 坤 4 · 艮 5 · 坎 6 · 巽 7
+   对宫相差 4（乾↔坤、兑↔艮、离↔坎、震↔巽），即「天地定位、山泽通气…」之序。
+   折返式：宫（内卦）按先天方位定宫位；宫内 8 卦按外卦先天方位序折返排列
+            —— 这就是伏羲圆图特有的 S 形折返（第 4 卦后回折）。
+   ============================================================ */
+var TRI_POS = {1:0,2:1,3:2,4:3,5:7,6:6,7:5,8:4};
+var TRI_SYM = {1:'☰',2:'☱',3:'☲',4:'☳',5:'☴',6:'☵',7:'☶',8:'☷'};
+var WHEEL_ROT = 19.6875;   // 令伏羲第 1 卦（乾为天）落在正上方
+var WHEEL = {cx:380, cy:380, rIn:198, rOut:318, rT0:324, rT1:330, rT2:341, rLbl:356};
+var SPECIAL6 = [15,10,22,26,37,61];   // 最容易翻车的 6 卦
+
+/* 顺时针角度（度），0 = 正上方 */
+function wheelCW(g){
+  var p = fuXiParts(g.lines), fx = fuXiOrder(g.lines);
+  if(state.wheel === 'seq') return (fx - 1) * (360/64);
+  return -(TRI_POS[p.lo]*45 + (TRI_POS[p.up] - 3.5) * (45/8) + WHEEL_ROT);
+}
+function polar(r, cw){
+  var t = cw * Math.PI / 180;
+  return [WHEEL.cx + r*Math.sin(t), WHEEL.cy - r*Math.cos(t)];
+}
+function segPath(rIn, rOut, a0, a1){
+  var p0=polar(rOut,a0), p1=polar(rOut,a1), p2=polar(rIn,a1), p3=polar(rIn,a0);
+  var la = (a1-a0) > 180 ? 1 : 0;
+  return 'M'+p0[0].toFixed(2)+','+p0[1].toFixed(2)
+       + 'A'+rOut+','+rOut+' 0 '+la+' 1 '+p1[0].toFixed(2)+','+p1[1].toFixed(2)
+       + 'L'+p2[0].toFixed(2)+','+p2[1].toFixed(2)
+       + 'A'+rIn+','+rIn+' 0 '+la+' 0 '+p3[0].toFixed(2)+','+p3[1].toFixed(2)+' Z';
+}
+function setWheel(m){ state.wheel = m; render(); }
+
+function renderWheel(){
+  var svg = document.getElementById('wheel');
+  if(!svg) return;
+  var gCells=document.getElementById('wCells'), gTick=document.getElementById('wTick'),
+      gTrig=document.getElementById('wTrigram'), gMark=document.getElementById('wMark'),
+      tip=document.getElementById('wheelTip'), center=document.getElementById('wheelCenter'),
+      legend=document.getElementById('wheelLegend');
+  var half = (360/64)/2 - 0.18;
+  var byFx = {}; GATES.forEach(function(x){ byFx[fuXiOrder(x.lines)] = x; });
+
+  /* 外圈：连续环 = 64 刻度 + 每 8 一个序号；折返式 = 8 宫（内卦） */
+  var th='';
+  if(state.wheel === 'seq'){
+    for(var k=0;k<64;k++){
+      var a=k*(360/64), isEight=(k%8===0);
+      var q0=polar(WHEEL.rT0,a), q1=polar(isEight?WHEEL.rT2:WHEEL.rT1,a);
+      th += '<line x1="'+q0[0].toFixed(1)+'" y1="'+q0[1].toFixed(1)+'" x2="'+q1[0].toFixed(1)+'" y2="'+q1[1].toFixed(1)+'" '
+          + 'stroke="'+(isEight?'#C4956A':'#DCCDB6')+'" stroke-width="'+(isEight?1.6:0.8)+'"/>';
+    }
+    for(var m=0;m<8;m++){
+      var la=m*8*(360/64), lp=polar(WHEEL.rLbl, la);
+      th += '<text x="'+lp[0].toFixed(1)+'" y="'+lp[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
+          + 'font-size="11" fill="#8A7355" font-family="inherit">伏'+(m*8+1)+'</text>';
+    }
+  } else {
+    for(var t=1;t<=8;t++){
+      var c = -(TRI_POS[t]*45 + WHEEL_ROT);
+      th += '<path d="'+segPath(WHEEL.rT0, WHEEL.rT2, c-22.5, c+22.5)+'" '
+          + 'fill="#EFE6D7" stroke="#DCCDB6" stroke-width="0.8"/>';
+      var tp = polar((WHEEL.rT0+WHEEL.rT2)/2, c);
+      th += '<text x="'+tp[0].toFixed(1)+'" y="'+(tp[1]-5).toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
+          + 'font-size="15" fill="#4A3728" font-family="inherit">'+TRI_SYM[t]+'</text>';
+      th += '<text x="'+tp[0].toFixed(1)+'" y="'+(tp[1]+10).toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
+          + 'font-size="11" fill="#7A6A58" font-family="inherit">'+TRI_NAME[8-t]+'宫</text>';
+    }
+  }
+  gTick.innerHTML = th;
+  gTrig.innerHTML = '';
+
+  /* 主环：64 格 */
+  var ch='', mh='';
+  GATES.forEach(function(x){
+    var cw = wheelCW(x), fx = fuXiOrder(x.lines);
+    var col = CENTER_COLORS[x.c] || '#888';
+    var isSel = (String(state.sel) === String(x.n));
+    var dim = ((state.g && x.g!==state.g) || (state.g2 && x.g2!==state.g2)
+            || (state.c && x.c!==state.c) || (state.cir && x.cir!==state.cir)) ? 0.18 : 0.86;
+    if(isSel) dim = 1;
+    ch += '<path class="wheel-cell" d="'+segPath(WHEEL.rIn, WHEEL.rOut, cw-half, cw+half)+'" '
+        + 'fill="'+col+'" opacity="'+dim+'" stroke="#F5F0E8" stroke-width="1" '
+        + (isSel ? 'stroke="#8A5A22" stroke-width="2.6" ' : '')
+        + 'data-n="'+x.n+'" data-hz="'+x.hz+'" data-ra="'+x.razh+'" data-c="'+x.c+'" data-cir="'+x.cir+'" '
+        + 'data-g="'+x.g+'" data-g2="'+x.g2+'" data-fx="'+fx+'"/>';
+    // 六卦标记：外缘红弧
+    if(SPECIAL6.indexOf(x.n) >= 0){
+      mh += '<path d="'+segPath(WHEEL.rOut+2, WHEEL.rOut+7, cw-2.2, cw+2.2)+'" fill="#9E4A3C" opacity="0.9"/>';
+    }
+    // 文字：闸门号（文王序） + 卦名
+    var pn = polar(280, cw), ph = polar(232, cw);
+    ch += '<text x="'+pn[0].toFixed(1)+'" y="'+pn[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
+        + 'font-size="17" font-weight="700" fill="#fff" opacity="'+(dim<0.3?0.35:1)+'" pointer-events="none" '
+        + 'font-family="inherit">'+x.n+'</text>';
+    ch += '<text x="'+ph[0].toFixed(1)+'" y="'+ph[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
+        + 'font-size="11" fill="#fff" opacity="'+(dim<0.3?0.35:0.92)+'" pointer-events="none" '
+        + 'font-family="inherit">'+x.hz+'</text>';
+  });
+  gMark.innerHTML = mh;
+  gCells.innerHTML = ch;
+
+  /* 中心面板 */
+  var selGate = null;
+  if(state.sel){ GATES.forEach(function(x){ if(String(x.n)===String(state.sel)) selGate = x; }); }
+  if(selGate){
+    var hxChar = String.fromCharCode(0x4DC0 + selGate.n - 1);   // U+4DC0 起为六十四卦符号
+    center.innerHTML = '<div class="wc-n">#'+selGate.n+'</div>'
+      + '<div class="wc-hz">'+hxChar+' '+selGate.hz+'</div>'
+      + '<div class="wc-ra">'+selGate.razh+'</div>'
+      + '<div class="wc-meta">'+selGate.c+' · '+selGate.cir+'回路<br>'
+      + '伏羲序 '+fuXiOrder(selGate.lines)+' ／ 文王序 '+selGate.n+'<br>'
+      + '卦名层 '+selGate.g+' → 注解层 '+selGate.g2+'</div>';
+  } else {
+    center.innerHTML = '<div class="wc-idle">点击任一格<br>查看闸门详情<br><br>'
+      + '<span style="font-size:11px">外圈 64 格的顺时针顺序<br>＝ 曼陀罗轮盘序</span></div>';
+  }
+
+  /* 图例 */
+  var lg='', used={};
+  GATES.forEach(function(x){ used[x.c] = CENTER_COLORS[x.c] || '#888'; });
+  Object.keys(used).forEach(function(k){
+    lg += '<span class="lg"><span class="sw" style="background:'+used[k]+'"></span>'+k+'</span>';
+  });
+  lg += '<span class="lg"><span class="sw" style="background:#9E4A3C"></span>外缘红弧＝最容易翻车的 6 卦</span>';
+  legend.innerHTML = lg;
+
+  /* 交互 */
+  var stage = svg.parentNode;
+  svg.querySelectorAll('.wheel-cell').forEach(function(el){
+    var d = el.dataset;
+    el.onmousemove = function(e){
+      var r = stage.getBoundingClientRect();
+      tip.innerHTML = '<b>#'+d.n+' '+d.hz+'</b>　'+d.ra
+        + '<div style="color:#E8DCC6;margin-top:3px">伏羲序 '+d.fx+' · '+d.c+' · '+d.cir+'回路　卦名层 '+d.g+' → 注解层 '+d.g2+'</div>';
+      tip.style.display='block';
+      var tw=tip.offsetWidth, thh=tip.offsetHeight;
+      var left=e.clientX-r.left+14, top=e.clientY-r.top+14;
+      if(left+tw > r.width-8) left = e.clientX-r.left-tw-14;
+      if(top+thh > r.height-8) top = e.clientY-r.top-thh-14;
+      tip.style.left = Math.max(4,left)+'px'; tip.style.top = Math.max(4,top)+'px';
+    };
+    el.onmouseleave = function(){ tip.style.display='none'; };
+    el.onclick = function(){
+      state.sel = (String(state.sel)===String(d.n)) ? '' : d.n;
+      render();
+    };
+  });
+
+  /* 模式说明 */
+  document.getElementById('wSeq').className  = 'sbtn' + (state.wheel==='seq'  ? ' on' : '');
+  document.getElementById('wFold').className = 'sbtn' + (state.wheel==='fold' ? ' on' : '');
+  document.getElementById('wheelNote').innerHTML = (state.wheel==='seq')
+    ? '伏羲序 1→64 <b>顺时针</b>依次排满一圈，乾（伏羲 1／闸门 1）在正上方。<b>这就是人类图曼陀罗轮盘的读法</b>——轮盘上的相邻闸门，在文王序里往往相隔很远（如 1→43→14→34），因为两套序的依据完全不同。'
+    : '传统<b>伏羲六十四卦圆图</b>画法：按<b>内卦（下卦）</b>分八宫，宫位依先天八卦方位（乾上·坤下）；宫内 8 卦按<b>外卦（上卦）</b>的先天方位序排列，因此每宫到第 4 卦后<b>回折</b>——这就是圆图特有的 S 形折返（如乾宫自上方起：乾→夬→大有→大壮→<b>折</b>→泰→大畜→需→小畜）。已令伏羲第 1 卦（乾为天）居正上方；坤（第 64）因此落在正下方偏逆 22.5° 的坤宫中段。';
+}
+
+/* 曼陀罗轮盘序 = 伏羲序 1..64 对应的闸门编号 */
+function renderMandalaStrip(){
+  var el = document.getElementById('msBody');
+  if(!el) return;
+  var byFx = {}; GATES.forEach(function(x){ byFx[fuXiOrder(x.lines)] = x; });
+  var h='';
+  for(var i=1;i<=64;i++){
+    var g = byFx[i]; if(!g) continue;
+    var cls = 'mn' + (String(state.sel)===String(g.n) ? ' hi' : (SPECIAL6.indexOf(g.n)>=0 ? ' wr' : ''));
+    h += '<span class="'+cls+'" data-fx="'+i+'" title="伏羲序 '+i+' · '+g.hz+' · '+g.razh+'" '
+       + 'style="cursor:pointer" onclick="pickRow('+g.n+')">'+g.n+'</span>';
+  }
+  el.innerHTML = h;
+  document.getElementById('msTitle').innerHTML =
+    '曼陀罗轮盘序（伏羲序 1→64 对应的闸门编号，共 '+document.querySelectorAll('#msBody .mn').length+' 个）　'
+    + '<span style="color:#9E4A3C">红底＝最容易翻车的 6 卦</span>　<span style="color:var(--accent)">金底＝当前选中</span>　点击可高亮';
+}
+
+/* ============================================================
+   V7：导出 CSV / JSON
+   ============================================================ */
+function stripTags(s){ return String(s==null?'':s).replace(/<[^>]*>/g,''); }
+function exportRows(scope){
+  var list = (scope==='filtered') ? filtered() : GATES.slice();
+  return list.map(function(x){
+    return {
+      n:x.n, hz:x.hz, en:x.en, ra:x.ra, razh:x.razh,
+      c:x.c, cir:x.cir, g:x.g, g2:x.g2,
+      lines:x.lines, fx:fuXiOrder(x.lines),
+      trigUp:TRI_NAME[parseInt(x.lines.substring(3,6),2)],
+      trigLo:TRI_NAME[parseInt(x.lines.substring(0,3),2)],
+      b:stripTags(x.b)
+    };
+  });
+}
+function csvEscape(v){
+  v = String(v==null?'':v);
+  return /[",\n\r]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v;
+}
+function downloadBlob(blob, filename){
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); if(a.remove) a.remove(); }, 500);
+}
+function expMsg(t){
+  var m = document.getElementById('expMsg');
+  if(m){ m.textContent = t; setTimeout(function(){ m.textContent=''; }, 2800); }
+}
+function doExport(kind, scope){
+  var rows = exportRows(scope);
+  if(!rows.length){ expMsg('当前筛选结果为空'); return; }
+  var tag = 'hd-gate-iching-'+VERSION.toLowerCase()+'-'+(scope==='all' ? 'all64' : 'filtered'+rows.length);
+  if(kind === 'csv'){
+    var head = ['闸门','中文卦名','Wilhelm卦名','Rave主题名(EN)','Rave主题名(中)','中心','回路',
+                '卦名层','注解层','六爻(底→顶)','伏羲序','上卦','下卦','桥接说明'];
+    var keys = ['n','hz','en','ra','razh','c','cir','g','g2','lines','fx','trigUp','trigLo','b'];
+    var out = [head.join(',')];
+    rows.forEach(function(r){ out.push(keys.map(function(k){ return csvEscape(r[k]); }).join(',')); });
+    downloadBlob(new Blob(['\uFEFF'+out.join('\r\n')], {type:'text/csv;charset=utf-8'}), tag+'.csv');
+  } else {
+    downloadBlob(new Blob([JSON.stringify(rows,null,2)], {type:'application/json;charset=utf-8'}), tag+'.json');
+  }
+  expMsg('已导出 '+rows.length+' 条（'+(kind==='csv'?'CSV':'JSON')+'）');
+}
+function copyJSON(){
+  var txt = JSON.stringify(exportRows('all'), null, 2);
+  var done = function(){ expMsg('已复制 '+GATES.length+' 条 JSON 到剪贴板'); };
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }
+    catch(e){ expMsg('复制失败，请改用下载 JSON'); }
+    if(ta.remove) ta.remove();
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done, fallback);
+  } else fallback();
+}
+
+document.getElementById('fCenter').onchange=function(){state.c=this.value;render()};
+document.getElementById('fCircuit').onchange=function(){state.cir=this.value;render()};
+document.getElementById('q').oninput=function(){state.q=this.value;render()};
+
+document.getElementById('vBadge').textContent=VERSION;
+document.getElementById('fVer').textContent='64 闸门语义距离分级表 · '+VERSION;
+
+// V7：六卦专页的卦画（15 谦 + 5 个 B→C 层次切换）
+(function(){
+  var LABEL = {15:'地山谦', 10:'天泽履', 22:'山火贲', 26:'山天大畜', 37:'风火家人', 61:'风泽中孚'};
+  var idOf  = {15:'gpHex', 10:'gpHex10', 22:'gpHex22', 26:'gpHex26', 37:'gpHex37', 61:'gpHex61'};
+  [15,10,22,26,37,61].forEach(function(n){
+    var g = null;
+    GATES.forEach(function(x){ if(x.n === n) g = x; });
+    var el = document.getElementById(idOf[n]);
+    if(g && el){
+      el.innerHTML = renderHex(g.lines)
+        + '<div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.5px">'+LABEL[n]+'</div>';
+    }
+  });
+})();
+
+initFilters();
+render();
+</script>
+</body>
+</html>
