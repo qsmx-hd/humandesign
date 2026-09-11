@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="uy2GYMnz5sgxdK7lcaNxMG">
+<head data-page-node-id="xSHDGIKSdzA9qxCzHrQDBE">
+<meta charset="UTF-8" data-page-node-id="Iw9eeATYiB1AlSVfnvksH9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ICkm2klTd58skEJ6WamCCN">
+<title>《蹲下来》智慧父母沙龙 · 活动策划方案 V1</title>
+<style>
+  :root{
+    --ink:#2D2118;        /* 深棕 - 主文字 */
+    --ink-soft:#5A4A3A;   /* 次要文字 */
+    --ink-faint:#8A7767;  /* 辅助文字 */
+    --paper:#F5F0E8;      /* 米白底 */
+    --card:#FFFFFF;
+    --gold:#C4956A;       /* 金棕 - 强调 */
+    --gold-soft:#F0E2D0;
+    --line:#E2D7C6;
+    --warm:#C1664F;       /* 暖红 - 情绪点 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.8;
+    font-size:15px;
+    padding:0 0 60px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- 封面 ---------- */
+  .cover{
+    background:var(--ink);
+    color:var(--paper);
+    padding:64px 0 56px;
+    margin-bottom:44px;
+    border-bottom:6px solid var(--gold);
+  }
+  .cover .badge{
+    display:inline-block;font-size:12px;letter-spacing:3px;
+    border:1px solid var(--gold);color:var(--gold);
+    padding:5px 14px;border-radius:2px;margin-bottom:26px;
+  }
+  .cover h1{
+    font-size:52px;line-height:1.15;letter-spacing:4px;
+    font-weight:700;margin-bottom:18px;
+  }
+  .cover .sub{font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:30px;}
+  .cover .claim{
+    font-size:16px;color:#D9CFBE;max-width:640px;
+    border-left:3px solid var(--gold);padding-left:18px;line-height:1.9;
+  }
+  .cover .meta{
+    margin-top:34px;padding-top:22px;border-top:1px solid #4A3B2E;
+    display:flex;flex-wrap:wrap;gap:28px;font-size:13px;color:#A9977F;
+  }
+  .cover .meta b{color:var(--gold);font-weight:600;}
+
+  /* ---------- 通用块 ---------- */
+  section{margin-bottom:46px;}
+  h2{
+    font-size:22px;font-weight:700;color:var(--ink);
+    padding-left:14px;border-left:5px solid var(--gold);
+    margin-bottom:6px;letter-spacing:1px;
+  }
+  .h2sub{font-size:13px;color:var(--ink-faint);padding-left:19px;margin-bottom:22px;}
+  h3{font-size:16px;font-weight:700;color:var(--ink);margin:24px 0 10px;}
+  p{margin-bottom:12px;}
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:6px;padding:24px 26px;margin-bottom:18px;
+  }
+  .card.gold{background:var(--gold-soft);border-color:var(--gold);}
+  ul,ol{padding-left:22px;margin-bottom:12px;}
+  li{margin-bottom:8px;}
+
+  /* ---------- 表格 ---------- */
+  table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:14px;background:var(--card);}
+  th{
+    background:var(--ink);color:var(--paper);text-align:left;
+    padding:11px 13px;font-weight:600;font-size:13px;letter-spacing:1px;
+  }
+  td{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#FCFAF6;}
+  td.time{color:var(--gold);font-weight:700;white-space:nowrap;}
+  td.who{white-space:nowrap;color:var(--ink-soft);font-size:13px;}
+
+  /* ---------- 标签 ---------- */
+  .tag{
+    display:inline-block;background:var(--gold-soft);color:#8A5F33;
+    font-size:12px;padding:2px 9px;border-radius:3px;margin-right:6px;
+    border:1px solid #E0C9AC;
+  }
+  .tag.hot{background:#F6E3DD;color:#9B4128;border-color:#E7BFAF;}
+  .tag.cool{background:#E4EAEC;color:#3C5A63;border-color:#C2D3D8;}
+
+  /* ---------- 金句 ---------- */
+  .quote{
+    background:var(--ink);color:var(--paper);
+    padding:22px 26px;border-radius:6px;margin:16px 0;
+    font-size:16px;line-height:1.9;border-left:5px solid var(--gold);
+  }
+  .quote .src{display:block;margin-top:10px;font-size:12px;color:#A9977F;}
+
+  /* ---------- 双栏 ---------- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .two .card{margin-bottom:0;}
+  .card h4{font-size:15px;margin-bottom:10px;color:var(--ink);}
+  .card h4 span{font-size:12px;color:var(--ink-faint);font-weight:400;margin-left:6px;}
+
+  /* ---------- 时间轴 ---------- */
+  .timeline{border-left:2px solid var(--gold);padding-left:24px;margin-left:8px;}
+  .tl-item{position:relative;margin-bottom:22px;}
+  .tl-item::before{
+    content:"";position:absolute;left:-31px;top:7px;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--gold);border:2px solid var(--paper);
+  }
+  .tl-day{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px;}
+  .tl-title{font-size:15px;font-weight:700;margin:2px 0 4px;}
+  .tl-desc{font-size:13.5px;color:var(--ink-soft);}
+
+  /* ---------- 清单 ---------- */
+  .check{list-style:none;padding-left:0;}
+  .check li{padding-left:26px;position:relative;margin-bottom:9px;}
+  .check li::before{
+    content:"";position:absolute;left:0;top:8px;
+    width:12px;height:12px;border:1.5px solid var(--gold);border-radius:2px;
+  }
+
+  .note{
+    font-size:13px;color:var(--ink-faint);
+    background:#EFEAE1;border-radius:4px;padding:12px 16px;margin-top:12px;
+  }
+  footer{
+    text-align:center;color:var(--ink-faint);font-size:12px;
+    margin-top:50px;padding-top:22px;border-top:1px solid var(--line);
+  }
+
+  @media (max-width:720px){
+    .cover h1{font-size:34px;}
+    .two{grid-template-columns:1fr;}
+    .wrap{padding:0 16px;}
+    table{font-size:13px;}
+  }
+  @media print{
+    body{background:#fff;}
+    .cover{background:var(--ink) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    section{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body data-page-node-id="PNthYAUeS2YDsGVQDrB3rw">
+
+<div class="cover" data-page-node-id="4fl1O86mIxbkvwPW6DRlcz">
+  <div class="wrap" data-page-node-id="UM9Ar2XajdcrAyIaUvFvSD">
+    <div class="badge" data-page-node-id="D2FbMOt8xAsg4GC5QCvjSP">灵 感 孵 化 器</div>
+    <h1 data-page-node-id="toaYTRhgJRcIG8uh4Z7LAk">蹲下来</h1>
+    <div class="sub" data-page-node-id="8XnJ9o5x8umycQHIz2XEa8">看见孩子，也看见自己 ·《智慧父母》沙龙</div>
+    <div class="claim" data-page-node-id="35tlyeEKsfciXMqfomuhvh">
+      蹲下来，不是放低姿态，而是把视线调到孩子的高度——<br data-page-node-id="hHjwh0I0zKlokBBOUqkinw">
+      而那个高度，恰好也是当年那个孩子的高度。
+    </div>
+    <div class="meta" data-page-node-id="7uT5qXc7ttBaQOQ5T6L2hX">
+      <span data-page-node-id="CVaXrNuBTZcDxWDsTJRFHv"><b data-page-node-id="EGAF0WB1HA6dninyjzxx7X">发起人</b> NIKI</span>
+      <span data-page-node-id="qwZoleSUFVPo7wIeij0E04"><b data-page-node-id="mmm0dBYfwnwx2o8TuWT9X2">共创成员</b> 勤敏 · Nana · 彩琼 · 如今</span>
+      <span data-page-node-id="0yx1jOL8VhyIVcWvQzGqBz"><b data-page-node-id="UePfjYMlak4FEvEGvFYCNs">形式</b> 线上 / 线下 待定</span>
+      <span data-page-node-id="JIZA1SN4KNA2IL4ML9li6g"><b data-page-node-id="EcAdtF3EQ0WIb5Mto8BH7Y">版本</b> V1</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" data-page-node-id="bsDmeAFSmPucXamHoKlfWv">
+
+<!-- ============ 0. 一页速览 ============ -->
+<section data-page-node-id="2sAPBe8gbWr0Nz8iwoP8aN">
+  <h2 data-page-node-id="jMeVYmH1a80ILa3nX0ev0C">一页速览</h2>
+  <div class="h2sub" data-page-node-id="iy9DAMINA5BYeM2LFiby2t">给所有成员看的 30 秒版本</div>
+  <div class="card gold" data-page-node-id="DpB4W2ATL5GxPEDnXLpirG">
+    <table data-page-node-id="n3C7Oms5giua79DMBOkM4O">
+      <tbody data-page-node-id="rJ5BXGr6FvGXxKjtj8fKGx">
+        <tr data-page-node-id="RgtvARjbd22BlBsl34oIrZ"><th style="width:110px;" data-page-node-id="zz1oGEqcFBGkZSqLBRVWGL">主题</th><td data-page-node-id="XAU72m8hMkGqi4oZxUOFzT"><b data-page-node-id="7chyDZbIXmFDwAuH62TvKD">《蹲下来》——看见孩子，也看见自己</b></td></tr>
+        <tr data-page-node-id="0Fb7bxYXZqJYzZzFLAHFLd"><th data-page-node-id="gKraY8ViMMKHnqnTIHHfow">一句话</th><td data-page-node-id="DAR8QpAtucdWj2JC9hrVn6">一次 2 小时的体验式沙龙，让父母在身体蹲下的那一刻，重新看见孩子，也重新看见童年里的自己。</td></tr>
+        <tr data-page-node-id="WYQvROMsOiPlwnD37ujtQK"><th data-page-node-id="JvjqAaIYn0ekZHiVNL5wlY">面向</th><td data-page-node-id="XaB4VuG69L0WALalnESjHd">0–12 岁孩子的父母（可开放少量教育工作者席位）</td></tr>
+        <tr data-page-node-id="ihaCPThzDnIoE6QHF2oOwM"><th data-page-node-id="EXwePbjbNhTIxbMTEU0AX6">规模</th><td data-page-node-id="4yaayChbFoFql1f1GIE8FR">线下 15–25 人（推荐）／ 线上 20–40 人</td></tr>
+        <tr data-page-node-id="gJTHWji2Iak1X7GP56B7ET"><th data-page-node-id="EYNaOTPx9UYh62OWxuREY5">时长</th><td data-page-node-id="d2rkVnzw6zeOcgk7vuPIP5">线下 120 分钟 ／ 线上 90 分钟</td></tr>
+        <tr data-page-node-id="2ajgDo1Q4AV955lKjDHRzi"><th data-page-node-id="CkAzdlThc5TzGHHNj3C4L4">调性</th><td data-page-node-id="C27tVnUSRwWurC9HclP2X6">温暖、克制、非说教。<b data-page-node-id="liZWJ27MI0lfz8nC816LtG">体验优先于知识，感受优先于道理。</b></td></tr>
+        <tr data-page-node-id="MZWk8NYGtiIgE6Ho5LwbAt"><th data-page-node-id="usU3p9iQ26n3mb6gLEZj1H">唯一动作</th><td data-page-node-id="IIsJZlbh1ffB82Kfgm2HWK">带走一个可立刻执行的微行动：<b data-page-node-id="hpt4AWwpoIO1ByDUMG8QiO">「蹲下来 30 秒」</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 1. 主题内核 ============ -->
+<section data-page-node-id="S9mFigLmUkUkrBvvl2RRfG">
+  <h2 data-page-node-id="CMNpkrwc0Uevnn5rIsVH90">一、主题内核：我们到底要说什么</h2>
+  <div class="h2sub" data-page-node-id="P6xgeVRcbm7B5JQoqpqcd2">先统一理解，再分工执行</div>
+
+  <h3 data-page-node-id="dkNO95wZIIzH9xMtCBCiyQ">1.1 「蹲下来」的三层含义</h3>
+  <div class="card" data-page-node-id="wxCD27UReehctagUUg5nsI">
+    <table data-page-node-id="UgXkfyjgt4Rh3pF2EOBOY5">
+      <thead data-page-node-id="NFwAO6AwIfV84WFqPoXQXP"><tr data-page-node-id="nFVe8e6QjMG4TwhcRU3mw8"><th style="width:120px;" data-page-node-id="Q31wAMTRzvYX5azYia8lJW">层次</th><th style="width:180px;" data-page-node-id="wIbjNYPr9PL6JnQYqrnc0A">含义</th><th data-page-node-id="pOHBGVf4lqCKklWnAfLB2X">沙龙里怎么让参与者感受到</th></tr></thead>
+      <tbody data-page-node-id="qH1ljdSPvV6Tmvq0Prs4X8">
+        <tr data-page-node-id="uv72YCzkPBCsG67CO3vu0F">
+          <td data-page-node-id="nAQ23uyOqOoomwso0Kp0bs"><b data-page-node-id="HSPDOwWbFm2DEUb1Up1oCD">物理层</b><br data-page-node-id="yT6mlcnW6z4cD5yGi6btZo"><span class="tag" data-page-node-id="irC8hdH9F8dXxeoTRdFNIh">身体</span></td>
+          <td data-page-node-id="q1NLN46moTWyyGTVB208D7">降低视线高度，与孩子平视</td>
+          <td data-page-node-id="czKublMDwQs0bZ9U9mECZB">开场实测「身高差」，发一张身高差卡片；全场设置 1 米视角影像墙</td>
+        </tr>
+        <tr data-page-node-id="5wLUl9fw6c6TFWbBUSDDWp">
+          <td data-page-node-id="G0Tdm9Eoemw5Tc02sE4jbh"><b data-page-node-id="3zs8lJClMAkwA1JlwZVC7n">心理层</b><br data-page-node-id="r5Ft7xeberdTEMEecMOHyJ"><span class="tag" data-page-node-id="eseovHQd7RbGdzAElkCZ6X">位置</span></td>
+          <td data-page-node-id="uvHBsVqZQtztPKM5yEIbY9">从「我在管你」切换到「我在理解你」</td>
+          <td data-page-node-id="bwcdiILtwYByBvQjMTpKcD">两人一组「视线交换」练习：同一句话，站着说 vs 蹲下说，体感完全不同</td>
+        </tr>
+        <tr data-page-node-id="mftWGTFpRiiDJy9pcREKQ4">
+          <td data-page-node-id="C9FBc1vfefMr0KUPN9KG0z"><b data-page-node-id="04SpmRSAoGKperCvPR7NTl">关系层</b><br data-page-node-id="xy9BUQAV4TrfSWX8UClrAG"><span class="tag hot" data-page-node-id="Uh1r0nCS52PXYEcv4BySPn">核心</span></td>
+          <td data-page-node-id="QumOB9oSURC92RUAqTWhs9">孩子不是「我的作品」，是「另一个人」</td>
+          <td data-page-node-id="DiUMZVlLb9urHQfdBIBNHd">引导式书写：写下我 7 岁时最想被大人这样对待的一句话</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 data-page-node-id="vsmhDGLp48zDf8Qg1CPngs">1.2 副题的真正落点：「也看见自己」</h3>
+  <div class="card" data-page-node-id="1USZfRj0FvVSkSkHb75Xlw">
+    <p data-page-node-id="4W4L3UVJhjjk2QNKDGPQYF">这是本场沙龙<b data-page-node-id="w9Uw43doxXF4wKDy0IZRfU">区别于所有普通育儿讲座的地方</b>，也是最可能产生情绪高潮的部分。</p>
+    <ul data-page-node-id="iFsnkXalb9Dsh5bFI9hlmF">
+      <li data-page-node-id="steDdt3exCSipa0NtxOw3F">我们对孩子的怒，有相当一部分不是冲着眼前的孩子，而是冲着<b data-page-node-id="EtKJgbwfRs6gUQ32u734kH">当年那个没被这样对待的自己</b>。</li>
+      <li data-page-node-id="is5bTPf73SiCDOsh1YAKWm">我们要求孩子做到的，常常是我们小时候被要求、至今没做到的事。</li>
+      <li data-page-node-id="HJCHxXLnBwtoRNCQfjAV2m">「看见孩子」的技术很容易学，「看见自己」需要一次被允许的情绪释放。</li>
+    </ul>
+    <div class="note" data-page-node-id="5kq114GWiWAueUjfcogvHG"><b data-page-node-id="Ox3I277CUpeLIi7g8UzUuZ">设计底线：</b>不做心理治疗，不逼人分享。提供容器，但不打开别人没准备好打开的门。任何环节都允许「我只听，不说」。</div>
+  </div>
+
+  <div class="quote" data-page-node-id="1cbWy7MEZgQJxBLcwGC3TO">
+    「你蹲下来的时候，孩子第一次看清了你的脸；<br data-page-node-id="5uC4F9xOHCtiecKX2E50li">而你也第一次看清了，那个曾经仰着头看你的人，心里在想什么。」
+    <span class="src" data-page-node-id="DUAviW0OZ9u5y8bRpCKPGB">—— 建议作为主视觉/开场文案</span>
+  </div>
+</section>
+
+<!-- ============ 2. 人群与痛点 ============ -->
+<section data-page-node-id="BcDQmXE6EKuaeUMuJs2SAM">
+  <h2 data-page-node-id="is4CwKJ5G7mAa7lyRJaxim">二、谁来，带着什么来</h2>
+  <div class="h2sub" data-page-node-id="s91iYEIrqOOaUhvE0scAWB">招募文案的弹药库</div>
+  <div class="two" data-page-node-id="SXgcGy8TBriFO7w1stKgGf">
+    <div class="card" data-page-node-id="PhfuNPIGDWk7rxhHXIMwaC">
+      <h4 data-page-node-id="AxX1nL6DSuyogNP3L4LHKa">他们会带着这些痛点来 <span data-page-node-id="3J6r7WXGT1ndDlbzuVkJvl">招募文案直接用</span></h4>
+      <ul data-page-node-id="DH519B4RDfyp77XYuyNZlr">
+        <li data-page-node-id="OU3PBbGs13d5jsjC3fm7IA"><b data-page-node-id="6YSWiFaoW86SuarXlGMYuP">道理都懂，做不到。</b>发誓不吼，三分钟破功，然后陷入自责循环。</li>
+        <li data-page-node-id="MCV0dTXMHkGNuZI7AmsCCH"><b data-page-node-id="Fn6nZfyAr4YPFNuDJFTihs">看不见行为背后的需求。</b>只看到「他不听话」，看不到「他在求救」。</li>
+        <li data-page-node-id="N7JXsAzyhPt0pAEq1Evp1v"><b data-page-node-id="rgntOtRfxHFfRclfAlhYd4">把未完成的心愿投射给孩子。</b>「我都是为你好」说出口，自己心里也觉得哪里不对。</li>
+        <li data-page-node-id="uO8esV9LBHtS6jrVZFerPE"><b data-page-node-id="49dGbkDNWkYS8jfFDIo7t4">越用力越失控。</b>育儿书看了一堆，亲子关系反而更紧绷。</li>
+        <li data-page-node-id="ZCOHtYNC62LWS0rDGLSMFQ"><b data-page-node-id="mwcfjloEDaLGcK3IE40lew">忘了自己也曾经是小孩。</b>长大后，就用大人的逻辑审判小孩。</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="QRCXarB6s7IsqHfBpWwFPQ">
+      <h4 data-page-node-id="DwNy4E4k5mAEyuhPvu8ik9">走的时候他们能带走什么 <span data-page-node-id="D9tKKBBtxOXM9qLG6X5mcr">对外承诺</span></h4>
+      <ul data-page-node-id="YFuI3rvWUbwpvdTQ9RuQe7">
+        <li data-page-node-id="zcy7W9TWhVIUuKEJ89Jfbd"><b data-page-node-id="C8e8noxkMfrRiUURWKgLfG">一个动作：</b>「蹲下来 30 秒」——冲突发生时的第一反应替代品</li>
+        <li data-page-node-id="DzXqFVe21NUlSHWgstitMH"><b data-page-node-id="EWYzEbfAumrbI0Iyg9QOKc">一句话术：</b>把「你怎么又……」换成「我看到 / 我感到 / 我需要」</li>
+        <li data-page-node-id="6znCiWpqskv8FDQnIRrwBL"><b data-page-node-id="46I63vPxArj6OYMXDFyWsM">一次触动：</b>重新连接自己心里那个 7 岁的孩子</li>
+        <li data-page-node-id="kwUsJL9jGl61kjY3QLIqs2"><b data-page-node-id="CDVAlxBRYNW8YvyitPRpIy">一份清单：</b>现场共创的「下次想吼的时候，我可以……」集体智慧</li>
+        <li data-page-node-id="sSakJCllRVdoYMvxYDj6Jq"><b data-page-node-id="ysnelLI3GXppCCCtT9xXJA">一个承诺：</b>写在承诺卡上的 7 天微行动</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 形式决策 ============ -->
+<section data-page-node-id="4jNLP67sNFDCWvVGSv48FC">
+  <h2 data-page-node-id="nxICYRk9ZFpxbuYpHL0iuY">三、线上还是线下：决策建议</h2>
+  <div class="h2sub" data-page-node-id="XST8fujjAmtXoIffXsqnJm">题目说待定，这里给出判断依据和推荐</div>
+  <div class="card" data-page-node-id="wWJUYoWF2FcVWbLQWHNAp6">
+    <table data-page-node-id="SQ3RFJubk8zrYkh3Yrf9Fy">
+      <thead data-page-node-id="5VjmYlqc1J8Mtjg7xUIYxC"><tr data-page-node-id="8tGvoAui5BSpzINl19RdJI"><th style="width:110px;" data-page-node-id="KEwrz4A0vMv58aQhCX8m9E">维度</th><th data-page-node-id="SsQDpHPUvLL98JHBwUPXcU">线下（推荐）</th><th data-page-node-id="Ar97rMsIaEkOfgySDAt8US">线上</th></tr></thead>
+      <tbody data-page-node-id="yh0YZVkwadD3PtJAZyBSPY">
+        <tr data-page-node-id="5mLspDTFXmX9r4xIfIB4Qd"><td data-page-node-id="gFkieEH9TDuS8XSPAZv7NL"><b data-page-node-id="Aflyf4X7keGyRwB4WCkX9s">核心体验</b></td><td data-page-node-id="DqcWaq7f3zjcObHtaGkNcj">✅ 身体真的蹲下，冲击力强，是全场记忆点</td><td data-page-node-id="n8PBkjmF1yDbQQ99RL2KGw">⚠️ 只能靠想象与引导，体感打折</td></tr>
+        <tr data-page-node-id="7Xz4SoZQxp3KAsiFcPnnN2"><td data-page-node-id="xiuhFSIQJs4SdpykR73Hpp"><b data-page-node-id="9wtPwKfsTUPfCZxWHL7DM7">情绪安全</b></td><td data-page-node-id="xJxJ6AkAzwRv1TrpNIsjQJ">✅ 现场能量场，能托住情绪释放</td><td data-page-node-id="LqDwwd0VWpuTS5QTTFvBaj">⚠️ 容易分心，情绪难以建立</td></tr>
+        <tr data-page-node-id="cloG4pLp1ldSD4My2EUGKG"><td data-page-node-id="LkMZFrUypjdeJLssqo4kr4"><b data-page-node-id="CYCZFnNXExIbTbW0nk5Cyf">场地物料</b></td><td data-page-node-id="HMEObC9FhikASbb9Fjbx0H">⚠️ 需场地、坐垫、打印物料，成本 500–1500 元</td><td data-page-node-id="XTfYHjtX04PWRrigwoVlWG">✅ 几乎零成本</td></tr>
+        <tr data-page-node-id="1ze1k2BW3MlAEoeeVQX4nD"><td data-page-node-id="J0WLaG6KFYysdfERYnnuO0"><b data-page-node-id="Di2omAkjB0YbpF5wdDVCF2">覆盖人数</b></td><td data-page-node-id="qiY4g13WJ6wYZVT8K7dQbF">⚠️ 15–25 人封顶</td><td data-page-node-id="kJxfAKrZwMqiKBQZOv2DL9">✅ 20–40 人，可跨城市</td></tr>
+        <tr data-page-node-id="txWiOutaMjO0ZqloZLuUeV"><td data-page-node-id="9p9iLLW7AubTTo9cVhTSeE"><b data-page-node-id="sueVIZm8bMCZPdTyp0EW9C">传播沉淀</b></td><td data-page-node-id="pHhrfn72mJnO9Tp4IrswBz">✅ 照片/视频素材质量高，利于二次传播</td><td data-page-node-id="X5Q439qfq4QPBj0KE6zJMP">⚠️ 截图素材弱</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;" data-page-node-id="dtpepVFUe8rATwHZWLyORJ"><b data-page-node-id="m4ShAGdkCvD4sVUjJXvvwN">结论建议：</b>首场线下（15–25 人），把体验做扎实、素材拍好；<b data-page-node-id="oXhZMhNSpIEu03QWOKY4lR">第二场做线上版</b>，用线下沉淀的真实故事做内容，覆盖面翻倍。这也符合「灵感孵化器」持续产出的定位。</p>
+    <div class="note" data-page-node-id="qLYnSDJucGxw5BViAk3BMS"><b data-page-node-id="vA4f7ssDruKAVXf3hrN2kB">若选线上：</b>三个改造动作——① 提前 3 天寄/发「1 米视角」图片包，请家长自己拍一张家里蹲下来的照片；② 开场带领所有人站起来，把镜头垫高，或把摄像头调到仰角；③ 用「聊天区接龙」替代现场共创，用共享在线白板收集清单。</div>
+  </div>
+</section>
+
+<!-- ============ 4. 流程设计 ============ -->
+<section data-page-node-id="iQz38DXwc2iUucprls3YcB">
+  <h2 data-page-node-id="xg2luTgMd3yeobJNgDEFpD">四、流程设计（线下 120 分钟版）</h2>
+  <div class="h2sub" data-page-node-id="nWmocenKUBQwiIHsnPJGTh">这是全场最核心的执行文件</div>
+  <div class="card" data-page-node-id="VhuHrNBo1ajgAVHvE59oMX">
+    <table data-page-node-id="3W3huSlCCC7845Icl3hrKH">
+      <thead data-page-node-id="AlhF882pZxKyrt7Iiw7u1u">
+        <tr data-page-node-id="ALRIwpJKyBZLEu5upg7KZU"><th style="width:78px;" data-page-node-id="bRYCCf4EtqTsVn09goD0bZ">时间</th><th style="width:130px;" data-page-node-id="8NdFlrz3dHKzUTC8MVFpKY">环节</th><th data-page-node-id="aNqpr5uKaqGwwuFu7jUFO5">内容与带导语</th><th style="width:74px;" data-page-node-id="ClEIGNxgutMAKtiBkcS1IX">带领</th></tr>
+      </thead>
+      <tbody data-page-node-id="n4Hh8GJfpo4IpAzkBXiFZc">
+        <tr data-page-node-id="b2o38XBoMYI2SpUVM8KB3a">
+          <td class="time" data-page-node-id="kBweLyqYHfAxYSXiri5yvl">00–15′</td>
+          <td data-page-node-id="xkGX8mCjBV8IsDprK4ViFC"><b data-page-node-id="7GuoPKI6xa5CS1wWIYr0Sw">破冰 · 测身高</b><br data-page-node-id="zovdTeIM1EamOB6gfFJ87a"><span class="tag cool" data-page-node-id="Ik5k91fTLQlEWqQWwm8fEz">入场即开始</span></td>
+          <td data-page-node-id="jRAnDnkXbC5izfrvzCt9Rm">签到时测「你比孩子高多少厘米」，写在<u data-page-node-id="pyJBDQ5XYoJlnFMAewVU3x">身高差卡片</u>上别在胸前。全程不用真实姓名，只用「XX cm 的妈妈/爸爸」互称。<br data-page-node-id="xLC1DzyXHpbXkhXkwRlrFM"><i data-page-node-id="CXaCjVAiczzEJVijsscGXK">设计意图：一进场就让身体数据说话，不说教。</i></td>
+          <td class="who" data-page-node-id="MtDLGhn0w9KmFAhdIkXhOf">Nana<br data-page-node-id="mHN0cVzHdZha7nJ6bY0ahY">彩琼</td>
+        </tr>
+        <tr data-page-node-id="kqOwvNOzekbxI9atVbsmmN">
+          <td class="time" data-page-node-id="ILiO85DokBdYwqQzZGpn3r">15–25′</td>
+          <td data-page-node-id="5SFdn6BAfSC2QMpK5R4zzJ"><b data-page-node-id="1w8rxAHehEm1bBrCZfDPzx">开场 · 1 米的世界</b><br data-page-node-id="yLCmWeaLumODQnRIZliece"><span class="tag" data-page-node-id="NL7GBTWiEAOF56mqfT7exN">看见差距</span></td>
+          <td data-page-node-id="0QUrKR0ERDBb5OVdIkaWTL">关灯，播 2 分钟短片：以 1 米高度拍的世界——大人的腿、桌角、匆忙的脚步、被高举的手。播完不追问，只问一句：<b data-page-node-id="xEixBGaQ9fcl2Y7rbgksNd">「你看到了什么？」</b></td>
+          <td class="who" data-page-node-id="I0QxAKkrjADH09FvIbZ1tM">NIKI</td>
+        </tr>
+        <tr data-page-node-id="ae9Amn0fvGBqypgz7xDP4Q">
+          <td class="time" data-page-node-id="W9dRyDjq60ca93WH2NaVjE">25–45′</td>
+          <td data-page-node-id="y84O8bCYZOf6uCMAp031z0"><b data-page-node-id="OgK5s044ZtUdCzajdDQHaC">主体一 · 三层蹲下</b><br data-page-node-id="0rZkfjG09TkF7dfPsHKohE"><span class="tag" data-page-node-id="lxpJOJlRyn9MV1JXcHcBZm">认知</span></td>
+          <td data-page-node-id="1tfcPwaVZ2IFsyv3kEEFNX">讲「蹲下来」的物理层/心理层/关系层（见 1.1）。每个层次配一个真实小故事，<b data-page-node-id="R3Nx2FyRhvGZE33XmfJtMb">不讲理论，只讲故事</b>。<br data-page-node-id="lBGn9QNFpjzCvT5lSg8VRk">落点金句：<i data-page-node-id="e140ENiCEzsDd3OmFSgevy">「孩子不听我们的，他们一直在看我们。」</i></td>
+          <td class="who" data-page-node-id="nVVhKPXkEUET6SOfCIuai5">勤敏</td>
+        </tr>
+        <tr data-page-node-id="d69o2SoFrBrFsaJf4uSJpm">
+          <td class="time" data-page-node-id="LMh9DJZytGN75WGOL0gRGF">45–70′</td>
+          <td data-page-node-id="gfzb2CqcN3NbOeIMAapVVz"><b data-page-node-id="pU0WzL7pfgKBKy0c3hvIgk">主体二 · 视线交换</b><br data-page-node-id="rNvLSPrac92twlzxfliPE1"><span class="tag hot" data-page-node-id="ddV9SAFlhLZY0mzQCFOblS">全场高潮</span></td>
+          <td data-page-node-id="CBMjUnp6uANjGZpLIqOOAl">两人一组，A 站着、B 坐地上。A 说一句最常对孩子说的话（如「你怎么又磨蹭」），B 仰头听完说感受；<b data-page-node-id="GszMWIzlfSa4tMG6zVIq6q">然后互换</b>。第二轮 A 蹲下来再说一遍，B 说感受。<br data-page-node-id="cVDEIE2T263RkbPSR3sTwG">全场分享 3–4 个人即可，<b data-page-node-id="yLxf5dTjhWjjRtNVJSy52R">不点名、不追问</b>。</td>
+          <td class="who" data-page-node-id="eoXwfARnkcLEuDbxM9Pkef">勤敏<br data-page-node-id="nXZVFCWod9XGz29NgIK6xG">Nana</td>
+        </tr>
+        <tr data-page-node-id="UCn8nUHCVpktXPSJo9mP9V">
+          <td class="time" data-page-node-id="lSqPxbtZaIpxGG3HjXHXCQ">70–90′</td>
+          <td data-page-node-id="xMujISefY3V1lQZCMsEGft"><b data-page-node-id="J0oLSCpNOdr38MGGGfMdEB">主体三 · 看见自己</b><br data-page-node-id="WGyTIfnCj8kf4TAleaJafv"><span class="tag hot" data-page-node-id="8MseCUFjeqn9afEvitzLEj">情绪点</span></td>
+          <td data-page-node-id="pfKLs99UdGLJ1lCnVk6SGn">引导式书写（音乐 + 低光，5 分钟）：<br data-page-node-id="Vc2CCLxCPRD6T8CLhuA84R">① 我 7 岁那年，最想被大人这样对待的一句话是 ______<br data-page-node-id="7ZVukSf68hbPg7lsPQUNJs">② 我最近一次对孩子发火，其实我真正生气的是 ______<br data-page-node-id="BJDioFU94AFc4DTMMRT4NR">写完后自愿分享。<b data-page-node-id="bqO41wL3mfa4BAyg3uYGF8">写完的纸可以自己留着，不收。</b></td>
+          <td class="who" data-page-node-id="lShAYCzapPNPJmpKqLf6Vq">NIKI</td>
+        </tr>
+        <tr data-page-node-id="IaKqHDMoC9G8TpnF9sXq0F">
+          <td class="time" data-page-node-id="vIefjxyKhpHW21xHd9aWJ7">90–105′</td>
+          <td data-page-node-id="I5NpgOIFGvrbZKLqRKWn7M"><b data-page-node-id="BWM4jTQa1qaldxf3qDr0CV">共创 · 智慧父母工具箱</b></td>
+          <td data-page-node-id="bHWI8k5NHxteoOfc4VsYO3">4–5 人小组，10 分钟产出一张清单：<b data-page-node-id="3P2Umf3tWP5VchfUr0IY7J">「下次想吼的时候，我可以……」</b>。要求：只写<b data-page-node-id="s0xGqcGXEqSECgGBv30ceC">动作</b>，不写道理。各组贴在墙上，全场投票 Top 5，整理成电子版发给所有人。</td>
+          <td class="who" data-page-node-id="SVRTbZffM3ULjLfykn1kyT">Nana<br data-page-node-id="90uzZ9M3pZMUuZXzGLWG7c">如今</td>
+        </tr>
+        <tr data-page-node-id="luZIcbh6BQLM88OHkZb92m">
+          <td class="time" data-page-node-id="8gkbldeJzjtLRJPdk0m8LK">105–115′</td>
+          <td data-page-node-id="Jyi00TOFlrQyPe1onVxsvm"><b data-page-node-id="h5UOKkV46C7ZqJhoxHRfSD">收心 · 承诺卡</b></td>
+          <td data-page-node-id="hj1u0BMOucazuGm5J0OVCh">每人写一张 7 天微行动承诺卡，格式固定：<br data-page-node-id="68fmBx7UEgTekdd5I2JyP0"><i data-page-node-id="Q7pc5HUJ5JYgL1z4FD7UnL">「接下来 7 天，当孩子 ______ 的时候，我会先蹲下来 30 秒，然后 ______。」</i><br data-page-node-id="sZmqU3yI9PNCWBwRNN6VDF">写完贴到「承诺墙」，拍照留存，7 天后群内打卡。</td>
+          <td class="who" data-page-node-id="7b1sG0Ij8SW5DPyMv6EkL1">彩琼</td>
+        </tr>
+        <tr data-page-node-id="32T37jE5gcMKrTlPkiHWgu">
+          <td class="time" data-page-node-id="6BP1imst9a5U6LbbCYBxFs">115–120′</td>
+          <td data-page-node-id="Nj2nNXsxOedRf86NoqN1E5"><b data-page-node-id="bwTJZSxQoPfaiSy0YiTFUL">结尾 · 蹲下合影</b><br data-page-node-id="1jJeUxBFXnMhhdtE52dhTN"><span class="tag" data-page-node-id="rn7iE0rdAIPB0G9PMvq3Qw">记忆点</span></td>
+          <td data-page-node-id="bEAck6gLQWXwj3hEUfckvJ">所有人（含带领者）蹲下拍大合影。<br data-page-node-id="CW6BD103eD3D2NJEJUqWHe">结束语：<i data-page-node-id="Bp3LTO3kFmmhQNeBfubXC3">「今天我们蹲了 2 个小时。明天回家，先蹲 30 秒。」</i></td>
+          <td class="who" data-page-node-id="b4wx6sdfwyS8SFherdpYlq">全体</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note" data-page-node-id="4fpDcJvUTiOEtEzd9bGZSB">
+    <b data-page-node-id="mqJKyRkLeDMMcJ2NyigRiJ">线上 90 分钟浓缩版：</b>破冰 5′ → 1 米世界 8′ → 三层蹲下 15′ → 视线交换（改成「对着屏幕说出那句话，然后站起来走开再回来」）20′ → 看见自己 15′ → 共创（聊天区接龙）15′ → 承诺 + 结尾 12′。
+  </div>
+</section>
+
+<!-- ============ 5. 体验亮点 ============ -->
+<section data-page-node-id="8fCMGZMg2TAmOHgX8gMwpt">
+  <h2 data-page-node-id="TsUrcX9KxV2OEDZdIEaBHQ">五、六个记忆点设计</h2>
+  <div class="h2sub" data-page-node-id="SR5xQJX4Ip5Fxkke9rvOP8">决定这场沙龙「值不值得发朋友圈」的部分</div>
+  <div class="two" data-page-node-id="GUCB05A98IODpAte9RMeHI">
+    <div class="card" data-page-node-id="hFPPE1w8vYtC2sNRsw3uvh"><h4 data-page-node-id="GhUSxsqi8CiPzDT0X3okK0">① 1 米视角影像墙</h4>
+      <p data-page-node-id="3BKgd0wSEccNVnDEA9P828">事先征集成员用自己的手机贴地/齐孩子眼高拍摄 20 张照片，打印成照片墙。入场即冲击。<b data-page-node-id="dx843NSqjh647jdAmJinOs">线上版做成图片包提前发送。</b></p></div>
+    <div class="card" data-page-node-id="kzP0oLzn5N52wml7Qpibt4"><h4 data-page-node-id="Uv6WEzRBew8DkyHFOg3j6U">② 身高差卡片</h4>
+      <p data-page-node-id="5JdnJts5bQqo1dedmF3gH1">「我比孩子高 68 cm」。一张小卡，把抽象关系变成具体数字，全天佩戴，天然的破冰话题。</p></div>
+    <div class="card" data-page-node-id="XSxXBjPQUIUC2Zca7k4kpS"><h4 data-page-node-id="VP4CFCOnoGudfmAYA6GbKq">③ 视线交换练习</h4>
+      <p data-page-node-id="xqJiIvFRCUZWzcblpUbXkM">全场唯一必须动起来的环节。身体的记忆远强于道理的记忆——这是本场最可能被写进反馈表的部分。</p></div>
+    <div class="card" data-page-node-id="QgNe1HSWeIiniQGcCcGKsb"><h4 data-page-node-id="YjpQCcG8EwuMYaT3G5gkDJ">④ 三句话转换工具</h4>
+      <p data-page-node-id="KreTtTTyGKOldbkSofalPD">把「你怎么又……」→「我看到…… / 我感到…… / 我需要……」。现场给对照卡，回家直接贴冰箱。</p></div>
+    <div class="card" data-page-node-id="if2eSHBwZCEZHgp21eixbP"><h4 data-page-node-id="uv9oUCuQYFrSwEA4MKMSQX">⑤ 内在小孩书写卡</h4>
+      <p data-page-node-id="VuhuRygf5fJLIjjiq02xxh">「我 7 岁那年最想被这样对待的一句话」。写完不收、不评、不追问。给情绪留一个出口。</p></div>
+    <div class="card" data-page-node-id="ciANtH3oKxEAk2MLL1dzqO"><h4 data-page-node-id="FpIxveDOYM80z1oL7eXFhc">⑥ 蹲下的合影</h4>
+      <p data-page-node-id="9I2B7D3P85QuCRNycdk4AI">全场最后一张照片：<b data-page-node-id="HgwQp2qSS0sif6SsXXY4Ur">所有大人都蹲着</b>。照片本身就是最好的传播素材和主题注解。</p></div>
+  </div>
+</section>
+
+<!-- ============ 6. 分工 ============ -->
+<section data-page-node-id="IU6eIBNNmatZ9M7Vd4ln76">
+  <h2 data-page-node-id="ftLYrHsioIlYbnRDpR6G5D">六、五人分工（职能矩阵）</h2>
+  <div class="h2sub" data-page-node-id="SH9TiucprvCLO5Fl6xC8H0">先按职能认领，熟悉后再按特长微调</div>
+  <div class="card" data-page-node-id="S3cvc0EkzBS1TPq612Rdoz">
+    <table data-page-node-id="iAvBFkFOV06VRePdLQEHX6">
+      <thead data-page-node-id="qtk5wR5ZRFwuNRj9Qap56v"><tr data-page-node-id="ur1CUarj28kuNtRojSqzvT"><th style="width:74px;" data-page-node-id="sb2JGtIfYhIYH9tVzu5UAF">成员</th><th style="width:120px;" data-page-node-id="BjSSBFGasuhWHfrWIQClhM">角色</th><th data-page-node-id="jkSspBzKxRYC3nEr7frOkQ">具体负责</th><th style="width:88px;" data-page-node-id="1kXhsS4nf07nLBGQxesei9">交付物</th></tr></thead>
+      <tbody data-page-node-id="0cp68LG81Ob7SDOnGXXKOC">
+        <tr data-page-node-id="XYMiTx8HisG7sSB3UqudEL">
+          <td data-page-node-id="WPl3S2PB2U0BqPn0uSz5De"><b data-page-node-id="SrFGz0b2RvC89IilKHBooB">NIKI</b></td><td data-page-node-id="VvsjPa3w4kjEBWdcAEyA2s">发起人 · 总统筹 · 主题诠释</td>
+          <td data-page-node-id="kcMZBZrrj38GveiEHwAd2Z">主题定调与核心内容把关；开场与「看见自己」环节带领；全程决策拍板</td>
+          <td data-page-node-id="jIkmSv30yyPy0NY5XiZlho">主题诠释稿、开场与收尾</td>
+        </tr>
+        <tr data-page-node-id="NyBPZAJGjSEzGtma2xp3tL">
+          <td data-page-node-id="BFTZKoqNPAAFhgEsxkrqce"><b data-page-node-id="8fY9wQFpuisIWV72vxTpyO">勤敏</b></td><td data-page-node-id="IbgF8OcPoEjcbfnhl7TTK1">内容架构 · 现场引导 · 呈现教练</td>
+          <td data-page-node-id="DB4HtOZq44qwuQoCs7sue3">流程骨架与节奏设计；「三层蹲下」主讲；<b data-page-node-id="tqGp6a4bFzS9XWpqopne4h">视线交换</b>环节带领；为其他带领者做表达辅导与彩排把关</td>
+          <td data-page-node-id="2Hya2Y94aoMMdxseldq7Wu">流程脚本、带导语手册、彩排反馈</td>
+        </tr>
+        <tr data-page-node-id="mujzBBD8owknB8pNHgtGWY">
+          <td data-page-node-id="0BnF9q2BVfBqw72MDPSMrC"><b data-page-node-id="o6ONXlyg12NqmXTq4v45Yo">Nana</b></td><td data-page-node-id="EByiBhJJZxpFhlDJCq0uV5">体验设计 · 物料 · 场域</td>
+          <td data-page-node-id="WEmUXK3NB2PmThbVzKt5MQ">互动环节创意与道具；1 米视角影像墙；场地勘察与布置；音乐与灯光脚本</td>
+          <td data-page-node-id="UpJjuagIVGSuxzOxDDTllj">物料清单、场地方案、音乐单</td>
+        </tr>
+        <tr data-page-node-id="mL6EFD6qGnA1KQ6XVjVN8F">
+          <td data-page-node-id="TEaQGJLyywiooVQqFHCTnd"><b data-page-node-id="6d0lUzxWOrRiRBckyc5jXB">彩琼</b></td><td data-page-node-id="4e0EUE6NKZgtx57qpUmLaI">运营 · 招募 · 现场统筹</td>
+          <td data-page-node-id="r6m0B9CHGg73FlCtQ3D2jT">招募文案与渠道投放；报名表与签到；现场流程控场与计时；7 天后打卡提醒</td>
+          <td data-page-node-id="sfHNavFhBS0RsjM3BPoUDI">招募文案、报名表、签到表、社群运营</td>
+        </tr>
+        <tr data-page-node-id="Z1xF003n2zJCZjQRwnuJc8">
+          <td data-page-node-id="U5PYwODbCnRbk93bZtFhFO"><b data-page-node-id="rDL4Q1dEqZ4mC7R5d4h5Gc">如今</b></td><td data-page-node-id="oKsYwjaFlBjElaqJ1Iq7Z2">记录 · 沉淀 · 复盘</td>
+          <td data-page-node-id="2d1FAnFO6BXmW14uEmtDYT">摄影摄像；金句与反馈采集；共创清单整理；复盘文档；下期选题库</td>
+          <td data-page-node-id="2lR4d9ECf78H9QOU5c80QO">照片/视频、复盘报告、选题库</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note" data-page-node-id="bODx1wuZyohzMXJosbEYdG"><b data-page-node-id="Iby0aYT1mPMSUn8Cydlp6a">两条原则：</b>① 每人只扛一条主线，其他人做支援，避免五个人一起改同一份稿；② 所有带「带领」角色的成员，D-3 必须完整走一遍自己的环节（见第八节彩排）。</div>
+  </div>
+</section>
+
+<!-- ============ 7. 时间线 ============ -->
+<section data-page-node-id="yj27IH9YIWQ3exJdqNLiba">
+  <h2 data-page-node-id="873p2GjtxygnviNrUWM3Qi">七、倒计时时间表（以活动日 D 计）</h2>
+  <div class="h2sub" data-page-node-id="eAKn2W3MFt3zl0li2QSaKS">首场建议准备周期 3 周</div>
+  <div class="card" data-page-node-id="HRHflEqznpZ8TS9uSBCovV">
+    <div class="timeline" data-page-node-id="2J8fzDOICT79fd8sk2f4EU">
+      <div class="tl-item" data-page-node-id="1adFQYpGbCl9dnQ4Kvp9ZA">
+        <div class="tl-day" data-page-node-id="MEW1mU30VCfIRSEbnI7O5e">D-21　孵化会</div>
+        <div class="tl-title" data-page-node-id="4ODi1LHnxj6cYHQjnzHsSP">锁定形式 · 确认分工 · 定活动日期</div>
+        <div class="tl-desc" data-page-node-id="vlRDqcKIDGe7ZQdZfn998A">本次五人会议产出：线上/线下决策、场地候选、目标日期、分工认领。（议程见附录 A）</div>
+      </div>
+      <div class="tl-item" data-page-node-id="qR5LIss5hx6zJ3JaTfk07s">
+        <div class="tl-day" data-page-node-id="A5FGMFVCEVDvsVaU4HGLJA">D-14　骨架完成</div>
+        <div class="tl-title" data-page-node-id="PWFypz64lPtacnVSQgipFM">流程脚本定稿 · 招募文案定稿</div>
+        <div class="tl-desc" data-page-node-id="mSoNWp2GIELHOcxYxj4qG3">勤敏交流程脚本 V1；Nana 交物料清单；彩琼交招募文案与海报需求；NIKI 终审。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="MgjB5kviR3ydvKQURTj6jw">
+        <div class="tl-day" data-page-node-id="DpHWVj3vVZJODzj5wtngJm">D-12　开启招募</div>
+        <div class="tl-title" data-page-node-id="ECx5G9IwTpFcbO0cvTf1IF">海报发布 · 报名通道开启</div>
+        <div class="tl-desc" data-page-node-id="nfJ3CJqmfbWbVTaaKj2wFP">报名表必收三项：孩子年龄、最近一次亲子冲突、最想解决的问题（<b data-page-node-id="BcTF7ACH98uG69fPdcHmrT">第三项是下期选题库来源</b>）。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="CY7QCRIFoMKYxCJIkKiujC">
+        <div class="tl-day" data-page-node-id="UHfL3z6m1thIpP8rwQoEGd">D-7　中期检查</div>
+        <div class="tl-title" data-page-node-id="qYFLfoGBS0GdL8U3YvAdA2">报名达 60% · 物料下单 · 影像素材回收</div>
+        <div class="tl-desc" data-page-node-id="hH2LO0TC3UPURzsiwDL3On">若报名不足，启动「成员各带 2 位朋友」机制 + 第二轮海报（用真实报名者的问题做文案）。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="A2TT1lXvVsYEuEZT4zKqXR">
+        <div class="tl-day" data-page-node-id="Hb6oy09xGA5TTLQQuhyKZ4">D-3　全流程彩排</div>
+        <div class="tl-title" data-page-node-id="N7opocnDnvRsVrGYLU5yA9">线上走场一遍 · 计时 · 卡点</div>
+        <div class="tl-desc" data-page-node-id="PSAtm7eHkFG8DyWhJJxcoY">重点彩排三个环节：1 米世界转场、视线交换口令、书写环节音乐与灯光。每人讲自己的部分，其他四人当观众计时。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="cU1LBeeoOCIGf2v4eYGPl3">
+        <div class="tl-day" data-page-node-id="g2wMfMo6JclhF6Uh224Pzw">D-1　终检</div>
+        <div class="tl-title" data-page-node-id="lVaqR3qMZ0ZirpWEFMQK1z">场地确认 · 物料到位 · 设备测试</div>
+        <div class="tl-desc" data-page-node-id="eG9f6SKwDAjBkKfh4shw6O">投影/音响/麦克风、音乐播放列表、打印物料、坐垫数量、签到表、笔。发参会提醒（含地址与「穿舒服的衣服，我们会坐地上」）。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="faYCW6l340fepijUSdvRaE">
+        <div class="tl-day" data-page-node-id="EgoUwFTUZ6e9ZFsiCio8yP">D　活动日</div>
+        <div class="tl-title" data-page-node-id="ejEpp1MLR1ewcLr0tQ3oLn">提前 90 分钟到场布置</div>
+        <div class="tl-desc" data-page-node-id="HM1WOuAVS9lcOTFeSYjvPh">布置 → 设备复测 → 成员 15 分钟对齐 → 提前 20 分钟开门迎宾。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="EGcrPL6FoRkGjUXapHuCuD">
+        <div class="tl-day" data-page-node-id="QZpdgdWs8F4vvDT7Y6Ldbu">D+1　复盘会</div>
+        <div class="tl-title" data-page-node-id="9juNm2A9fBRhiJ97gs4dux">数据汇总 · 反馈整理 · 下期定题</div>
+        <div class="tl-desc" data-page-node-id="DPfPLHd6HNHdeEehsR7C4p">如今出复盘报告；彩琼发照片与共创清单给参与者；勤敏归档流程脚本 V2；NIKI 定下期主题。</div>
+      </div>
+      <div class="tl-item" data-page-node-id="dvzNH2AHfgcvRbglzsPONK">
+        <div class="tl-day" data-page-node-id="T8TGRirJgtA4u7yyIeu9Na">D+7　打卡闭环</div>
+        <div class="tl-title" data-page-node-id="TIyImM5dNCmJlh49zUkCGC">7 天微行动群内打卡</div>
+        <div class="tl-desc" data-page-node-id="dJt58tgsZOTxuIijyEpemA">这是把「一场活动」变成「一段关系」的关键动作，也是下期招募的口碑来源。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. 物料与预算 ============ -->
+<section data-page-node-id="UBnwDQCGk70obaRWVHaAUz">
+  <h2 data-page-node-id="J4AEdblcNnwYhxfs1l4rMW">八、物料清单与预算（线下 20 人）</h2>
+  <div class="h2sub" data-page-node-id="J2bsv7IqHWZUirHFAADII3">可按实际规模等比缩放</div>
+  <div class="card" data-page-node-id="iEJLqPzTLdES1UlqDHCA3V">
+    <table data-page-node-id="6tqfi3A7a3J5XdRC0VzvJc">
+      <thead data-page-node-id="SXjhlCqOObPzCuPIdOcOO5"><tr data-page-node-id="BEumvdUSJeTlHwxnRuN7iT"><th style="width:150px;" data-page-node-id="hww4BAgdc33vu85kDnhEgF">类别</th><th data-page-node-id="JplJxWpUU8uANrvPmlvdcF">明细</th><th style="width:88px;" data-page-node-id="AKMWFKPbOl80QXS1vcbtCQ">预算</th></tr></thead>
+      <tbody data-page-node-id="sRGBuGfvWl4UPvuPvFwqxg">
+        <tr data-page-node-id="tnA3ubQ3YpnalV6Q2W6PeT"><td data-page-node-id="27y2WpAcnRQJMG1MGh4ZEE">场地</td><td data-page-node-id="5SPAYiEYIxkrj1CmrhIQcE">社区/书店/共享空间 3 小时，需可席地或矮凳</td><td data-page-node-id="PfPhPakdHATbwECha2em2p">300–800</td></tr>
+        <tr data-page-node-id="NBqsT9Lb2FYvHvPSUsvwjH"><td data-page-node-id="QBqjADGDFluWi32owMDroI">印刷物料</td><td data-page-node-id="0jB5DnbXwrL0x5AJ9Mw8gY">身高差卡片、三句话转换卡、内在小孩书写卡、承诺卡（各 25 份）</td><td data-page-node-id="yGxalUJjZVyRkyOWavpBTz">100–200</td></tr>
+        <tr data-page-node-id="Pcdz6pBjYK0IzECR1mymdf"><td data-page-node-id="Qs3pppbZ0rZOArKdqtyamI">影像</td><td data-page-node-id="D64JGrclzGHI8cP1VbTTk1">1 米视角照片墙打印 20 张、承诺墙海报纸</td><td data-page-node-id="Gn7qSJrQWLZnGCPiP6sCEx">80–150</td></tr>
+        <tr data-page-node-id="KGzkiyijOMeYKnZ91HyxB0"><td data-page-node-id="4OSiqV2kHKp2dftsRxpnSg">氛围</td><td data-page-node-id="XaBls7bKpbEp9Da08czEE0">坐垫/地垫（可借用）、暖光小灯串、轻音乐播放列表</td><td data-page-node-id="KGIMaqkMKw1rQ5uVCvW9W3">0–200</td></tr>
+        <tr data-page-node-id="PPM8kTGwbyeKBcLyGnNbco"><td data-page-node-id="Oheg9p16pnAwpJScAKndAB">茶歇</td><td data-page-node-id="qWEKoKDFVbduTVB5gFN1QX">简单饮品点心（可选）</td><td data-page-node-id="tl7wUUu4owBoXoiYN3f8ap">0–300</td></tr>
+        <tr data-page-node-id="1zIovcaX4CaKnXZkkL3Sr6"><td data-page-node-id="n79EGgGasHhUlHw6sqQHxZ">设备</td><td data-page-node-id="D8hRvd4I1OdbBYpcF71WIT">投影/音响/麦（多数场地自带）</td><td data-page-node-id="bxfqPEGUjjAzNCU2QIc0wZ">0–100</td></tr>
+        <tr data-page-node-id="KlAexg89OpaHaAsipFXHoW"><td data-page-node-id="rYWvsXMAm2r1QVltNDamsj"><b data-page-node-id="tPqE5Uoh3HKyJ8f8QO7F1L">合计</b></td><td data-page-node-id="3WxHGewEnYoOp34MTM3Ri4"><b data-page-node-id="hwd67tmSR5O2nKxtCaY5gH">不含场地：约 200–600 元；含场地：约 500–1500 元</b></td><td data-page-node-id="W4n9FaaI3mKy2V0H1JPA5c"><b data-page-node-id="SCm74ZWG7vO4YgCBYEuNSF">—</b></td></tr>
+      </tbody>
+    </table>
+    <div class="note" data-page-node-id="ckYzb1KBDJW0EghwNlWhYi">若收取 39–69 元/人的场地茶歇费，20 人即可覆盖成本。首场建议低价或免费，优先做出口碑与素材。</div>
+  </div>
+</section>
+
+<!-- ============ 9. 风险预案 ============ -->
+<section data-page-node-id="ydo6nevsGWodgd6FdRNBLD">
+  <h2 data-page-node-id="AABhFby7SHGxfyQ6gZRkFB">九、风险与预案</h2>
+  <div class="h2sub" data-page-node-id="dmb4QhjJUb26FWbgzNx1Qa">提前想到的，就不叫事故</div>
+  <div class="card" data-page-node-id="SO1RwIRAEwg5AbId3Ar5GC">
+    <table data-page-node-id="KfUULwXSdsAdOWlj44pUCZ">
+      <thead data-page-node-id="TjWZAcwW1cCQDlmQs6oWY9"><tr data-page-node-id="1jUQNoZZIZIhYNazHT5QAb"><th style="width:150px;" data-page-node-id="tPDR9CT6zPIaZ7aB41dao5">风险</th><th style="width:90px;" data-page-node-id="Zp3tNzmAQnioWcFIf3F56C">概率</th><th data-page-node-id="ScTHZ1Lqp0YjcDIaW82sI7">预案</th></tr></thead>
+      <tbody data-page-node-id="b2fcEofo0SdWHFDC60rr4O">
+        <tr data-page-node-id="JN5cCd0avQjBr0x37dWWcj"><td data-page-node-id="3HkGe1xShDe3vxy1L2EayE">现场情绪失控（有人哭）</td><td data-page-node-id="XOmmyCOU0jHd9ffe3qlbUf"><span class="tag hot" data-page-node-id="qAJV2eJnSZpM2lVfLLQE0x">高</span></td><td data-page-node-id="Dh2OmVccdQGMyvu6ElYk1h">预设一名「情绪守护者」（建议 NIKI 或 Nana），备纸巾盒与安静角落；<b data-page-node-id="QfzsqT3b9BDKyFjapXgRvt">不围观、不安慰、只陪伴</b>。提前声明「流泪是被允许的」。</td></tr>
+        <tr data-page-node-id="MaJKIU3ERwuMWiqMNHEXdt"><td data-page-node-id="VWBu04rU9dBSOR81FWf8l5">有人拒绝参与体验环节</td><td data-page-node-id="c7YQurwk1DnGNyuTKTQJtx">中</td><td data-page-node-id="OEdHLy3G536ET64NZ6Bj8a">所有环节设「观察者选项」：可以只做动作不分享，可以只在心里回答。绝不点名。</td></tr>
+        <tr data-page-node-id="uvUZiRhTp5lv0bzssBXCaP"><td data-page-node-id="1zxn7c33w1BrWeCOuJ89jd">报名人数不足</td><td data-page-node-id="Rh6DBoJsZ7krFgXkH955UT">中</td><td data-page-node-id="YjBwzXbX8Zud0urPtUP7UU">成员各带 2 位真实朋友；二轮海报改用「真实家长提问」做文案；最低 12 人即可开场。</td></tr>
+        <tr data-page-node-id="KMIlpvYJrhqVcvCLZOvRdT"><td data-page-node-id="VI1kKLjaD0WVmsO9q5O9ly">时长失控（共创环节拖长）</td><td data-page-node-id="scDmyTzCiAdMdzXZLaQcUg">中</td><td data-page-node-id="Dj3Pva7RtJPJaOQGKN3MmG">彩琼为唯一计时官，举牌提醒；共创严格 10 分钟，超时由带领者直接收口。</td></tr>
+        <tr data-page-node-id="zq3mLGh94wAlkAlBGbo5F5"><td data-page-node-id="ivkuBolPfnSllIYtygP8r6">场地临时变更</td><td data-page-node-id="A3F1R1IccScbTTrLx4cO1y">低</td><td data-page-node-id="62aDDTyESykChCl6djPCVn">D-7 前锁定备选场地 1 个；线上版预案随时可切换。</td></tr>
+        <tr data-page-node-id="fvABSDWGBCgW8dGfDWaaJQ"><td data-page-node-id="iamL9Czl4aBol3dkC2kEN1">出现「育儿观冲突」的争执</td><td data-page-node-id="muWmoEiEzdtKSRHzus4Eg5">低</td><td data-page-node-id="azPognzDsqTiujA0lvfpMh">带领者话术：<i data-page-node-id="8Hy97ueFZ08rOo5HhnLUNA">「这里没有标准答案，只有适不适合你的孩子。」</i>立即转向下一个环节。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 10. 成功标准 ============ -->
+<section data-page-node-id="VW3CVoDsyInhdBMjlFrZFp">
+  <h2 data-page-node-id="rVug8Ro3dkX6rSYyjis9QP">十、怎么算成功</h2>
+  <div class="h2sub" data-page-node-id="0GaalIghHpe1JvMwEvqg9V">用数据说话，便于第二场改进</div>
+  <div class="two" data-page-node-id="VZMCRvlljwzLydeFKEwXhc">
+    <div class="card" data-page-node-id="i5QczABn3XpvPXA5pOObFQ">
+      <h4 data-page-node-id="iR7uweXJxwzMvks2wJFGAI">硬指标</h4>
+      <ul class="check" data-page-node-id="kRtuB0xe7d4nzIDc8JnPwm">
+        <li data-page-node-id="3NU2WC8NgEpEBb0kcjpbLo">到场率 ≥ 80%（报名 25 人，到场 ≥ 20 人）</li>
+        <li data-page-node-id="hWIeL7F6aWt85VSuaOAcUA">满意度 ≥ 4.5 / 5</li>
+        <li data-page-node-id="FyOQ9txOcH1t0cg40FR6Z5">「最触动的环节」投票中，「视线交换」或「看见自己」进前二</li>
+        <li data-page-node-id="28Az5qOGxEjbnXwNYplNGQ">承诺卡回收率 100%</li>
+        <li data-page-node-id="gwwCkHSBLlBcHH4C0Ao7Bf">D+7 群内打卡率 ≥ 40%</li>
+        <li data-page-node-id="4rGs2WFLrO5qsyAzGVRbOi">现场照片/视频可产出 1 条 60 秒短视频 + 1 篇图文回顾</li>
+      </ul>
+    </div>
+    <div class="card" data-page-node-id="9PKgyJE4NGjLQA2wIxPehW">
+      <h4 data-page-node-id="lcv8d1ygaHMxEaQZwaQlrX">软指标（反馈表直接问）</h4>
+      <ul class="check" data-page-node-id="ypF8zenbEkrtfDLSAFNEmK">
+        <li data-page-node-id="0GWoqm5GXh1qC3Ix3jDpDQ">有没有哪一句话，你回家还会想起？</li>
+        <li data-page-node-id="zAwIXNj0kMqmM8A53fNDBM">你今晚回家会不会试一次「蹲下来 30 秒」？</li>
+        <li data-page-node-id="teqp7j83ZJZdtQORJPR4o0">有没有一个瞬间，你想起了小时候的自己？</li>
+        <li data-page-node-id="eNOaXM2F2oXzfQmsKqi9yk">如果办第二场，你会带谁来？</li>
+        <li data-page-node-id="3AKNHQufdO0BD5MVs578EF">下一期你最想聊哪个话题？（选题库）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. 延展 ============ -->
+<section data-page-node-id="UCnc8a5usWaSpDCDl1Z1hJ">
+  <h2 data-page-node-id="q5jsEXJCd5edxqwU5qQ1zy">十一、从「一场」到「一个系列」</h2>
+  <div class="h2sub" data-page-node-id="HndY6ktPazCRft5COqsGE7">灵感孵化器的长期价值所在</div>
+  <div class="card" data-page-node-id="U4kN7jQd1i5KFoSnQBMq55">
+    <table data-page-node-id="EtgbBf7ml0LoT2xrR927CG">
+      <thead data-page-node-id="R6n8jsy8Eyi315b4DFnAWe"><tr data-page-node-id="WVeDaJKONh73N74EHVo0ht"><th style="width:120px;" data-page-node-id="JdX1bkSs6HcXjgHHOlasFf">阶段</th><th data-page-node-id="lv47j4zxRUmABqSlINQ0gR">动作</th></tr></thead>
+      <tbody data-page-node-id="sqXdkGE6I1cVE5jDnkkH0j">
+        <tr data-page-node-id="z2hjyUAzfcdDhjtRiBiMRg"><td data-page-node-id="oYNALdnuLqJhMkmgIQ4yj4"><b data-page-node-id="eI4fh1MF2pjxh4CAjXrInr">第 1 场</b></td><td data-page-node-id="SuG3xncIFgjgDDcmA6eH3Q">线下首演，跑通流程、拍好素材、收集真实故事</td></tr>
+        <tr data-page-node-id="vi0cy1y4M2Ru4Dcf6kBtJc"><td data-page-node-id="4Ncqz7lOqPH9cLBCwQAGFq"><b data-page-node-id="angYHoOmhF31AM28AXRLwm">第 2 场</b></td><td data-page-node-id="VGeIP78TWBsMm521mhqv3E">线上版，用第一场真实故事做内容，覆盖面翻倍，同步验证线上模型</td></tr>
+        <tr data-page-node-id="6E78zMaGfWon3jwMn1Ho7s"><td data-page-node-id="80Y3lZGWRpsmLXD2ryC7yM"><b data-page-node-id="WRfwmVn2wi3v3LeI4ciuHn">系列化</b></td><td data-page-node-id="LqlAlyzyCx7wrRTGF9PBJe">《智慧父母》沙龙做成季度系列，每期一个动词主题：<br data-page-node-id="M5jTsYgSzhKUwWzRjJRR3H"><span class="tag" data-page-node-id="GJJgPd19pQVnDvZteo7qDF">蹲下来</span><span class="tag" data-page-node-id="zcunO07iGGRGGH1aS1nMCy">等一下</span><span class="tag" data-page-node-id="gKBTtVX799KMzn1mEt1NuK">闭嘴 3 秒</span><span class="tag" data-page-node-id="PH0YnIDrEbkEQ8t8u6q55p">说对不起</span><span class="tag" data-page-node-id="r2z7Te6PH7Kc36z4Q5QqEt">我先抱你</span></td></tr>
+        <tr data-page-node-id="TblOjYAg6Lls7AcKzsHP40"><td data-page-node-id="IkowfgHwDzJQL6blF6xJ5s"><b data-page-node-id="8kDLXv6DURlrFkixPU67JI">沉淀</b></td><td data-page-node-id="jnEWz3yS10Kf872YZkKUbO">每期的共创清单、真实故事、金句汇集成《智慧父母 · 家长共创手册》，成为组织资产</td></tr>
+        <tr data-page-node-id="sAmzzygiPOlAdUfZjA8new"><td data-page-node-id="I16AMXGpDVq3qlQkWrxoM1"><b data-page-node-id="VWuxP1P8EBK5r7NeQmZbUD">深化</b></td><td data-page-node-id="dE23mB2gOB4ToWNLlNasLB">对有意愿的家长开放 4 周陪伴小组 / 工作坊，从单次活动走向持续关系</td></tr>
+      </tbody>
+    </table>
+    <div class="note" data-page-node-id="rwqCysAahAaU5e4DLDKteI"><b data-page-node-id="pyuQm6W8e90iy99wCpczau">可选加料（视成员背景与受众接受度决定是否启用）：</b>若成员中有人类图 / 性格类型 / 生命数字等体系背景，可在「看见孩子」环节增设一个 15 分钟的可选模块——<b data-page-node-id="KT1jpS0hBgv21HBltBMF2b">「看见孩子本来的样子」</b>，从气质类型角度帮助父母理解「孩子不是不听话，只是和我不一样」。建议首场作为彩蛋，不进主流程。</div>
+  </div>
+</section>
+
+<!-- ============ 附录 A ============ -->
+<section data-page-node-id="o9ZOCpDXLYXsvSa6RcUblM">
+  <h2 data-page-node-id="DhETqKHdR7hnBVS8PQnakr">附录 A　第一次孵化会议议程（60 分钟）</h2>
+  <div class="h2sub" data-page-node-id="LB6zOPt0XiVDGvH0qvBVzx">本次五人会议建议这样开</div>
+  <div class="card" data-page-node-id="EkLvDdJKoXOtUI70ZKRYZC">
+    <table data-page-node-id="gCrtdpSCj6Ry9NzTIyHaiB">
+      <thead data-page-node-id="vgcy9A6jILaqrOr4Ili2WN"><tr data-page-node-id="1KL7p8NgoMAVI2y4bo17gn"><th style="width:78px;" data-page-node-id="nBywM5nZRzNvG4AsiExSvn">时间</th><th style="width:130px;" data-page-node-id="YbdwD2bavIr3b5GAzHJ0m4">环节</th><th data-page-node-id="J3HTRGPZcHP36LBrNaZFAP">怎么开</th></tr></thead>
+      <tbody data-page-node-id="oFK2aOT3CdiB8XiNGEwNlu">
+        <tr data-page-node-id="4E8pjeM91CQNfnkmlKm6qh"><td class="time" data-page-node-id="8zgTl6dyzADCgoD3pvngPv">00–05′</td><td data-page-node-id="6Dchp1vmvSx9CzAxJYfw8V">为什么是「蹲下来」</td><td data-page-node-id="4EJczOp11IPw4FbDMI1KGv">NIKI 讲主题来源与自己的触动点（3 分钟，不讲方案只讲初心）</td></tr>
+        <tr data-page-node-id="COQXtDHSFuKN4z1tW7o6Zs"><td class="time" data-page-node-id="UMjT51Np46legkm1qVmamX">05–15′</td><td data-page-node-id="OZsITaMudCzOtircDiDvne">各自的第一反应</td><td data-page-node-id="QyKUi5FNIethiD0lZqgkaK">每人 2 分钟：听到这个主题，你脑子里出现的第一个画面/故事是什么？<b data-page-node-id="pMHR2AWxbSxtf0C3avM4GE">先收集，不评判。</b></td></tr>
+        <tr data-page-node-id="g9QjxaVJa9AiuSUUG9izhG"><td class="time" data-page-node-id="b4yStH3sXvzZ2QG6GIRqsK">15–35′</td><td data-page-node-id="VwkcChMGHf83VMEJdZZ8MX">过方案 · 挑骨头</td><td data-page-node-id="jqaCn3d0gMSjwndGDlQULG">勤敏过一遍本方案框架；四人只做一件事：<b data-page-node-id="7uKgjHffK2iAafibD3H4MV">找出「我觉得会冷场/会尴尬/不成立」的环节。</b></td></tr>
+        <tr data-page-node-id="vN5kjE9FengaeigOR9KD6M"><td class="time" data-page-node-id="R4Cu9RRNNADT5Bstj77Imu">35–50′</td><td data-page-node-id="A1jdeeQ13qWyXCDPRV4X1S">定三件事</td><td data-page-node-id="CDdNSxDhpt5gv77szvGhXH">① 线上还是线下 ② 目标日期 ③ 场地候选（线下）或平台（线上）</td></tr>
+        <tr data-page-node-id="xKonwdj268hf89HpxSuw5O"><td class="time" data-page-node-id="Rf7cqOLPNFQcDEzBgVTVD6">50–60′</td><td data-page-node-id="qaIFFB4eK6I9G8ZOxmWVFT">认领分工 · 约下次会</td><td data-page-node-id="Smm2MtBXzM9lBNbGpECnxp">按第六节职能矩阵认领；当场定 D-14 第二次会议时间</td></tr>
+      </tbody>
+    </table>
+    <div class="quote" style="margin-top:18px;" data-page-node-id="duotQKV0ZlklRJlHPcIF3z">
+      孵化会的产出不是「完美的方案」，<br data-page-node-id="F4pr8zN4ifYqLNxjiHOsjv">而是「五个人都愿意为它做点事」。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 附录 B ============ -->
+<section data-page-node-id="mn8rfgUSKKCsCrUjBnByd7">
+  <h2 data-page-node-id="S1pbKwY9zkaenmvG8A8PLu">附录 B　招募文案（可直接用）</h2>
+  <div class="h2sub" data-page-node-id="FoBF3zUnRhhGDINJXGtuRE">彩琼可直接取用改写</div>
+  <div class="card" data-page-node-id="FjOoA7aZCDc6FvcZsN8R2X">
+    <h3 data-page-node-id="oXZUKXe3dJRppjw6kiToUG">标题</h3>
+    <p data-page-node-id="qzKFOirasukUtzT9CyYnn7"><b data-page-node-id="sJBn69p2GCHKjKJfAYQIgi">《蹲下来》：你有多久没平视过你的孩子了？</b></p>
+    <h3 data-page-node-id="uq5wqBzcGsB8JB3hUFWhzy">正文</h3>
+    <p data-page-node-id="IPWxbNXoNMGOyuJkGSK0Bs">我们总是站着看孩子。<br data-page-node-id="7RY9mAY1e8EEsiU5HAK9D7">
+    站着说话，站着讲道理，站着发火。<br data-page-node-id="sNs4jlBHEpmkT7RIKlMCzV">
+    孩子的世界里，全是我们的膝盖。</p>
+    <p data-page-node-id="DFu1Iga9VkiAFRxZzvOIeG">这一场沙龙，我们不讲育儿理论，只做一件事：<br data-page-node-id="2XXTs5xp1arrLzJNTDJU43">
+    <b data-page-node-id="jbhsMDkd54HhZksgJnPPpw">真的蹲下来一次。</b></p>
+    <p data-page-node-id="8G5f4MpCe3HYOp0GV2QwOm">然后你会发现——<br data-page-node-id="XBIA0tX8PmD2hBzmgrn06O">
+    你看见的不只是孩子，<br data-page-node-id="7u3iEHrySoEV6k4hJ8SWVq">
+    还有那个当年仰着头、等一句温柔的话的自己。</p>
+    <p data-page-node-id="IBaDleO4X8wfAPKO6X0ANR">《智慧父母》沙龙 · 第 1 期<br data-page-node-id="YOqmrb5yW6swK9gAvE9uYk">
+    这不是一场讲座，是一次体验。请穿舒服的衣服，我们会坐到地上去。</p>
+    <h3 data-page-node-id="irGPeV3l1qGYfp55IEjzgH">信息栏</h3>
+    <ul data-page-node-id="hEsfCu5iFGL33mwGGXepb8">
+      <li data-page-node-id="OmAwHPo1X2F9N5eMKssgVZ"><b data-page-node-id="cBqGx4lRxnsDyxTM8D9QrN">主题：</b>《蹲下来》——看见孩子，也看见自己</li>
+      <li data-page-node-id="HCTVXebhjZ5XD7BZj63uXi"><b data-page-node-id="BNBrzsZhEGsYBq3N7h0ZOy">时间：</b>【待定】</li>
+      <li data-page-node-id="YFajBIUNwz3TcF5Nd4QF0z"><b data-page-node-id="DYE3Np3wr3rPCZBpVjn8Hr">地点：</b>【待定】</li>
+      <li data-page-node-id="e5HhmX2Zjs9IEF9ChjUxXG"><b data-page-node-id="uSrZlgmLNLF517LQI0iLff">人数：</b>限 20 人（体验式沙龙，席位有限）</li>
+      <li data-page-node-id="HBfiCUPfBdo4CpkaI5oLOE"><b data-page-node-id="3FDf7doBcWs2DHrmfYdZ4c">费用：</b>【待定】</li>
+      <li data-page-node-id="9NDDgZt94mJ9sC1ZL9dVPp"><b data-page-node-id="BnMUnSY63EGB16YbzVYAYm">报名：</b>【二维码 / 表单链接】</li>
+    </ul>
+  </div>
+</section>
+
+<footer data-page-node-id="udYAK3PYnqP3ezYRJCpru4">
+  《蹲下来》·《智慧父母》沙龙活动策划方案 V1　｜　灵感孵化器 · NIKI 发起<br data-page-node-id="HVOMW5k48nBSc8yWqjruGa">
+  本方案为共创底稿，欢迎四位成员直接在文档上批注修改
+</footer>
+
+</div>
+</body>
+</html>
