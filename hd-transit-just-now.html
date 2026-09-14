@@ -39,11 +39,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>人类图流日分析系统 · 此刻 Just Now</title>
-<script src="./astronomy.js"></script>
+<script src="./astronomy.js?v=1.5"></script>
 <script>
   // 优先用仓库内自托管库（同源，国内可访问）；缺失时回退到 CDN
   if (typeof Astronomy === 'undefined') {
-    document.write('<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js"><\/script>');
+    document.write('<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js?v=1.5"><\/script>');
   }
 </script>
 <style>
@@ -234,7 +234,7 @@
 
 <script>
 /* ===================== 数据层 ===================== */
-const VERSION = "V1.4";
+const VERSION = "V1.5";
 const DEG = 360/64; // 5.625°
 const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
 // Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门

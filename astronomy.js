@@ -1,3 +1,7 @@
+/*! 浏览器全局构建（由 CommonJS 自动包装）· 源自 astronomy-engine MIT */
+(function(root){
+  var module = { exports: {} };
+  var exports = module.exports;
 /**
     @preserve
 
@@ -9804,3 +9808,8 @@ class GravSimEndpoint {
         this.bodies = bodies;
     }
 }
+
+  // 暴露为全局
+  var api = (module.exports && module.exports.Astronomy) ? module.exports.Astronomy : module.exports;
+  root.Astronomy = api;
+})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
