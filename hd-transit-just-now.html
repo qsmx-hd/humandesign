@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  hd-transit-just-now.html  ·  人类图流日分析系统（此刻 / Just Now）
+  ----------------------------------------------------------------------------
+  VERSION: V1.3
+  DATE:    2026-09-14
+  AUTHOR:  虾哥 (Kan Man Tang) · 人类图 × 系统架构
+
+  算法溯源（CHANGELOG）
+  - V1.0  初版。基于人类图标准流日算法。
+  - V1.1  校准：锚点从「冬至点 270°」修正为「人类图新年 Gate 41 ≈ 黄经 302°
+          （约 1 月 22 日，与 Jovian/Maia Mechanics 流日日历一致）」；
+          64 闸门曼陀罗顺序改为 Rave Mandala 真实序列（41→19→13→…→60），
+          与 thehumandesignsystem.com 2026-09-13 16:12 UTC 流日数据完全吻合。
+  - V1.2  界面调整：将算法说明从页脚上移为「此刻主题」前的独立卡片，
+          并更新页脚版本与署名信息。
+  - V1.3  细节优化：算法说明卡片文案断行调整；报错提示默认隐藏；
+          删除 header 静态版本注释，改为由 VERSION 常量动态输出。
+  - V1.3b 版本号移至 footer 并动态输出：彻底移除 header 版本条，
+          算法说明节奏句尾「｜」改为「；」，footer 版本号由 VERSION 常量自动写入。
+          * 13 个天体黄道经度 → 闸门/爻线（每闸门 5.625°，Gate 41 黄经≈302° 为锚点）
+          * 地球 = 太阳 + 180°；南交 = 北交 + 180°
+          * 北交用平黄白交点多项式（Ω = 125.04452 − 1934.136261·T + …）
+          * 其余天体用 astronomy-engine（VSOP87 级精度，of-date 视黄经）
+          * 个人叠加：出生时刻=意识(黑)，出生前 88.0256 天=潜意识(红)
+  数据来源：36 通道 / 9 中心 64 闸门映射已多源交叉验证（Jovian / HDMatrix / CSDN / humandesign-api）
+
+  说明：天文计算依赖 astronomy-engine（CDN，jsdelivr→unpkg 双兜底）。
+        若 CDN 不可用，自动降级为「近似模式」：太阳/地球/月亮/南北交用低精度公式，
+        其余天体标记为「需联网」。
+  ============================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图流日分析系统 · 此刻 Just Now</title>
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js"></script>
+<script>
+  // CDN 兜底：jsdelivr 失败后尝试 unpkg
+  if (typeof Astronomy === 'undefined') {
+    document.write('<script src="https://unpkg.com/astronomy-engine/astronomy.js"><\/script>');
+  }
+</script>
+<style>
+  :root{
+    --bg:#F5F0E8; --bg2:#EFE7D8; --ink:#2D2118; --ink2:#6B5B4A;
+    --gold:#C4956A; --gold-d:#A9743F; --line:#D9CDB8;
+    --card:#FFFDF8; --good:#7A8B5A; --warn:#C4756B; --accent:#8A6D4B;
+    --shadow:0 2px 10px rgba(45,33,24,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;
+    line-height:1.6;}
+  header{background:linear-gradient(135deg,#2D2118,#4A3826);color:#F5F0E8;
+    padding:22px 20px 18px;text-align:center;}
+  header h1{margin:0;font-size:1.55rem;letter-spacing:1px}
+  header .sub{opacity:.82;font-size:.92rem;margin-top:4px}
+  header .ver{opacity:.6;font-size:.72rem;margin-top:6px}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+  .clockbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin:16px 0;box-shadow:var(--shadow);font-size:.9rem}
+  .clockbar b{color:var(--gold-d)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block;
+    margin-right:5px;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .grid{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:18px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px 16px 18px;box-shadow:var(--shadow)}
+  .card h2{margin:0 0 12px;font-size:1.08rem;color:var(--gold-d);
+    border-bottom:2px solid var(--line);padding-bottom:8px;display:flex;align-items:center;gap:8px}
+  .card h2 .tag{font-size:.7rem;background:var(--gold);color:#fff;padding:2px 8px;border-radius:20px;font-weight:400}
+  /* 天体卡片网格 */
+  .bodies{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .body{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;position:relative}
+  .body .bn{font-weight:700;font-size:.95rem}
+  .body .bg{font-size:1.5rem;font-weight:800;color:var(--gold-d);line-height:1.2}
+  .body .bl{font-size:.78rem;color:var(--ink2)}
+  .body .bc{font-size:.68rem;color:var(--accent);margin-top:2px}
+  .body.hot{background:#FBEFDD;border-color:var(--gold)}
+  .body .shared{position:absolute;top:6px;right:8px;font-size:.62rem;background:var(--accent);color:#fff;
+    padding:1px 6px;border-radius:10px}
+  /* mandala */
+  .mandala-wrap{text-align:center}
+  svg.mandala{width:100%;max-width:560px;height:auto;background:
+    radial-gradient(circle at 50% 50%, #FFFDF8 60%, #F3EBDB 100%);
+    border-radius:50%;border:1px solid var(--line)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:.78rem;margin-top:8px;color:var(--ink2)}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* 通道 / 列表 */
+  .chan{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .chan:last-child{border-bottom:none}
+  .chan .pill{background:var(--gold);color:#fff;font-weight:700;border-radius:8px;
+    padding:3px 9px;font-size:.82rem;white-space:nowrap}
+  .chan .ct{font-size:.92rem}
+  .chan .cc{font-size:.72rem;color:var(--accent);margin-left:6px}
+  .chan .cb{font-size:.76rem;color:var(--ink2);margin-top:2px}
+  .empty{color:var(--ink2);font-size:.86rem;padding:8px 0}
+  /* 解读 */
+  .interp{font-size:.9rem}
+  .interp .gate-item{padding:8px 0;border-bottom:1px dashed var(--line)}
+  .interp .gi-t{font-weight:700;color:var(--gold-d)}
+  .interp .gi-b{color:var(--ink2);font-size:.82rem}
+  /* 表单 */
+  details.overlay{margin:18px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:6px 16px 16px;box-shadow:var(--shadow)}
+  details.overlay summary{cursor:pointer;font-weight:700;color:var(--gold-d);padding:10px 0;font-size:1.02rem}
+  .formrow{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+  .formrow label{display:flex;flex-direction:column;font-size:.78rem;color:var(--ink2);gap:3px}
+  input{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:.9rem}
+  button{background:var(--gold-d);color:#fff;border:none;border-radius:8px;padding:9px 16px;
+    font-size:.9rem;cursor:pointer;font-weight:600}
+  button:hover{background:#8a5a2c}
+  .mini{font-size:.74rem;color:var(--ink2);margin-top:6px}
+  .center-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{font-size:.8rem;padding:4px 11px;border-radius:20px;border:1px solid var(--line)}
+  .chip.def{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .chip.open{background:#fff;color:var(--ink2)}
+  .typebox{background:var(--bg2);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:.92rem}
+  .typebox b{color:var(--gold-d);font-size:1.05rem}
+  .note{font-size:.76rem;color:var(--ink2);margin-top:10px;line-height:1.5}
+  footer{text-align:center;color:var(--ink2);font-size:.74rem;margin-top:30px;line-height:1.6}
+  .err{background:#fbeae8;color:#9b3a30;border:1px solid #e6b8b1;padding:12px 14px;border-radius:10px;margin:14px 0}
+  table.detail{width:100%;border-collapse:collapse;font-size:.84rem}
+  table.detail th,table.detail td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+  table.detail th{color:var(--gold-d);font-weight:600}
+  .hl{background:#FBEFDD}
+</style>
+</head>
+<body>
+<header>
+  <h1>🜂 人类图流日分析系统 · 此刻 Just Now</h1>
+  <div class="sub">13 天体实时黄道定位 × 64 闸门 × 36 通道 —— 把当下的宇宙能量场，翻译成你的身体图</div>
+</header>
+
+<div class="wrap">
+  <div class="clockbar" id="clockbar">
+    <span><span class="dot"></span>实时计算中…</span>
+  </div>
+
+  <div id="errbox" style="display:none"></div>
+
+  <!-- 算法说明 -->
+  <div class="card" style="margin-bottom:18px">
+    <h2>📐 算法说明 <span class="tag">计算原理</span></h2>
+    <div class="note" style="font-size:.84rem;line-height:1.85">
+      天体视黄经（黄道）÷ 5.625° = 闸门位；<br>
+      以人类图新年 Gate 41（黄经≈302°，约 1 月 22 日）为锚点，<br>
+      64 闸门按 Rave Mandala 真实序列排列；<br>
+      地球 = 太阳 + 180°，南交 = 北交 + 180°；<br>
+      北交用平黄白交点多项式；<br>
+      其余用 astronomy-engine(VSOP87)。<br><br>
+      流日节奏：<br>
+      太阳≈5.7天/闸门（每周主题）；<br>
+      月亮≈10.2小时/闸门（每日情绪流）；<br>
+      南北交≈3.5个月/闸门（长期方向）。<br>
+      本系统仅用于学习与自我探索，不构成任何形式的医疗/投资/人生建议。
+    </div>
+  </div>
+
+  <!-- 此刻四锚点摘要 -->
+  <div class="card" style="margin-bottom:18px">
+    <h2>🌟 此刻主题 <span class="tag">核心能量场</span></h2>
+    <div id="summary" class="interp"></div>
+  </div>
+
+  <div class="grid">
+    <!-- 曼陀罗 -->
+    <div class="card mandala-wrap">
+      <h2>🧭 流日曼陀罗 <span class="tag">64 闸门 · 36 通道</span></h2>
+      <div id="mandala"></div>
+      <div class="legend">
+        <span><i style="background:#C4956A"></i>被激活的闸门</span>
+        <span><i style="background:#E0B070"></i>激活中的通道</span>
+        <span><i style="background:#D9CDB8"></i>静默闸门/通道</span>
+      </div>
+      <div class="mini" id="mandala-mini"></div>
+    </div>
+
+    <!-- 13 天体 -->
+    <div class="card">
+      <h2>🪐 13 天体当前闸门 <span class="tag">明细</span></h2>
+      <div class="bodies" id="bodies"></div>
+      <div class="mini" id="speed-note"></div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:18px">
+    <!-- 激活通道 -->
+    <div class="card">
+      <h2>⚡ 此刻激活的通道 <span class="tag" id="chan-count">0</span></h2>
+      <div id="channels"></div>
+    </div>
+    <!-- 闸门解读 -->
+    <div class="card">
+      <h2>📖 激活闸门解读 <span class="tag" id="gate-count">0</span></h2>
+      <div id="gate-interp" class="interp"></div>
+    </div>
+  </div>
+
+  <!-- 个人叠加 -->
+  <details class="overlay" id="overlay">
+    <summary>🔗 个人叠加：输入出生时间，看「此刻宇宙」正激活你图上的哪些闸门与通道</summary>
+    <div class="formrow">
+      <label>出生日期<input type="date" id="b-date"></label>
+      <label>出生时间（当地）<input type="time" id="b-time" value="12:00"></label>
+      <label>时区偏移（小时）<input type="number" id="b-tz" value="8" step="1" style="width:90px"></label>
+    </div>
+    <div class="formrow">
+      <button id="b-calc">生成本人流日叠加</button>
+      <span class="mini">提示：人类图闸门计算只需「日期+时间」（已含时区换算为 UTC），无需出生地。出生前 88.0256 天为潜意识(红)计算基准。</span>
+    </div>
+    <div id="personal"></div>
+  </details>
+
+  <details class="overlay">
+    <summary>📐 13 天体明细表（闸门·爻·色·调·基）</summary>
+    <table class="detail" id="detail-table"></table>
+    <div class="note">色(color)/调(tone)/基(base) 为人类图「密码子」细分：每闸门 6 爻 × 6 色 × 6 调 × 5 基 = 384 爻位。流日解读以闸门+爻为主，色/调/基作深度参考。</div>
+  </details>
+
+  <footer>
+    <div style="margin-top:6px"><b id="footer-ver">人类图流日分析系统</b></div>
+    <div style="margin-top:4px">Powered by Kan Man Tang</div>
+  </footer>
+</div>
+
+<script>
+/* ===================== 数据层 ===================== */
+const VERSION = "V1.3";
+const DEG = 360/64; // 5.625°
+const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
+// Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门
+const MANDALA_SEQ = [
+  41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,
+  27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,
+  31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,
+  28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60
+];
+const SEQ_INDEX = {};
+MANDALA_SEQ.forEach((g,i)=>SEQ_INDEX[g]=i);
+
+// 64 闸门：名称 + 主题
+const GATES = {
+ 1:["自我表达","创意、独特表达，做自己的勇气"],
+ 2:["高我方向","内在罗盘，知道自己该往哪走"],
+ 3:["秩序/突变","在限制中突破，演化出新秩序"],
+ 4:["公式化","把混乱化为公式与逻辑答案"],
+ 5:["固定模式","对生活节奏与习惯的坚持"],
+ 6:["摩擦","关系中的磨合与性的吸引力"],
+ 7:["统御","领导与影响力的角色"],
+ 8:["贡献","以独特才华贡献群体"],
+ 9:["专注","聚焦细节，深耕不放弃"],
+ 10:["爱自己","活出真实自我，善待自己"],
+ 11:["想法","新点子与思维的开阔"],
+ 12:["谨慎","在恰当时机才表达，社交的分寸"],
+ 13:["见证","记录与分享集体经验"],
+ 14:["技能","把天赋能耐转化为力量"],
+ 15:["极端","对全人类的爱，拥抱极端中的和谐"],
+ 16:["技巧","十年磨一剑的才华"],
+ 17:["意见","形成并表达主观意见"],
+ 18:["修正","看见可改善之处，追求更好"],
+ 19:["需求","对联结与支持的渴望"],
+ 20:["当下","在当下果断行动"],
+ 21:["控制","掌控资源、带领群体的能力"],
+ 22:["优雅","以优雅与开放触动人心"],
+ 23:["同化","把洞见化为语言突破"],
+ 24:["回归","从内在找回理性与平静"],
+ 25:["灵性之爱","天真无邪、无私的爱与发起"],
+ 26:["利己","通过利己守护原则"],
+ 27:["滋养","照顾他人、传递价值观"],
+ 28:["无常","在无常中游戏，寻找意义"],
+ 29:["说「是」","对承诺全力以赴"],
+ 30:["梦想家","对体验与梦想的炽热渴望"],
+ 31:["影响力","以身作则，发挥影响力"],
+ 32:["持续","把成就延续下去"],
+ 33:["隐退","适时退隐，沉淀经验"],
+ 34:["力量","原始的生命力量与行动力"],
+ 35:["变化","在新鲜体验中成长"],
+ 36:["危机","在情绪危机中闪现灵光"],
+ 37:["友谊","家庭与社群的温情"],
+ 38:["挣扎","为生命意义而战"],
+ 39:["挑衅","以挑衅激发觉醒"],
+ 40:["独处","在独处中重新补给"],
+ 41:["幻想","孕育梦想与想象的种子"],
+ 42:["成长","在起落中逐渐成熟"],
+ 43:["洞见","灵光乍现的独特思维"],
+ 44:["警觉","对人与机会的敏锐警觉"],
+ 45:["君王","汇聚资源、散财聚人的王"],
+ 46:["身体","借由身体感官活出热爱"],
+ 47:["压抑","在困惑中逼出理解"],
+ 48:["深度","从深度与 mastery 中获益"],
+ 49:["原则","为所信的原则革命"],
+ 50:["价值观","以价值与责任滋养群体"],
+ 51:["震惊","以无畏的震惊发起行动"],
+ 52:["静止","如山般静止、专注当下"],
+ 53:["开始","新周期、新项目的展开"],
+ 54:["野心","向上的野心与驱动力"],
+ 55:["精神","情绪浪潮中涌出的丰盛灵性"],
+ 56:["刺激","以故事与刺激联结世界"],
+ 57:["直觉","温和而精准的直觉"],
+ 58:["喜悦","从改善与活力中找到喜悦"],
+ 59:["亲密","打破界限，走向亲密"],
+ 60:["限制","在限制中等待突变的时机"],
+ 61:["内在真理","向内探索不可知的真理"],
+ 62:["细节","对细节与严谨的压力"],
+ 63:["怀疑","以怀疑推动逻辑的完成"],
+ 64:["困惑","在混沌未明中孕育清晰"]
+};
+
+// 36 通道 [a,b,名称,回路]
+const CHANNELS = [
+ [1,8,"启发","个体"],[2,14,"脉动","个体"],[3,60,"突变","个体"],[12,22,"开放","个体"],
+ [23,43,"架构","个体"],[24,61,"觉知","个体"],[25,51,"发起","个体"],[28,38,"挣扎","个体"],
+ [39,55,"情绪","个体"],
+ [4,63,"逻辑","集体"],[5,15,"韵律","集体"],[7,31,"创始","集体"],[9,52,"专注","集体"],
+ [11,56,"好奇","集体"],[13,33,"足智多谋","集体"],[16,48,"才华","集体"],[17,62,"接受","集体"],
+ [18,58,"批评","集体"],[29,46,"发现","集体"],[30,41,"识别","集体"],[35,36,"无常","集体"],
+ [42,53,"成熟","集体"],[47,64,"抽象","集体"],
+ [6,59,"亲密","家族"],[19,49,"综合","家族"],[21,45,"金钱线","家族"],[26,44,"臣服","家族"],
+ [27,50,"保存","家族"],[32,54,"蜕变","家族"],[37,40,"社群","家族"],
+ [10,20,"觉醒","集成"],[10,57,"完美展现","集成"],[20,34,"魅力","集成"],[34,57,"力量","集成"],
+ [10,34,"探索","集成"],[20,57,"脑波","集成"]
+];
+
+// 9 中心 → 闸门
+const CENTERS = {
+ Head:{cn:"头脑中心",gates:[61,63,64]},
+ Ajna:{cn:"逻辑中心",gates:[4,11,17,24,43,47]},
+ Throat:{cn:"喉咙中心",gates:[8,12,16,20,23,31,33,35,45,56,62]},
+ G:{cn:"G中心",gates:[1,2,7,10,13,15,25,46]},
+ Heart:{cn:"意志力中心",gates:[21,26,40,51]},
+ Sacral:{cn:"荐骨中心",gates:[3,5,9,14,27,29,34,42,59]},
+ Solar:{cn:"情绪中心",gates:[6,22,30,36,37,49,55]},
+ Spleen:{cn:"直觉中心",gates:[18,28,32,44,48,50,57]},
+ Root:{cn:"根部中心",gates:[19,38,39,41,52,53,54,58,60]}
+};
+const GATE2CENTER = {};
+for(const c in CENTERS){ CENTERS[c].gates.forEach(g=>GATE2CENTER[g]=CENTERS[c].cn); }
+
+// 13 天体
+const BODIES = [
+ {id:"sun",cn:"太阳"},{id:"earth",cn:"地球"},{id:"moon",cn:"月亮"},
+ {id:"nnode",cn:"北交点"},{id:"snode",cn:"南交点"},
+ {id:"mercury",cn:"水星"},{id:"venus",cn:"金星"},{id:"mars",cn:"火星"},
+ {id:"jupiter",cn:"木星"},{id:"saturn",cn:"土星"},{id:"uranus",cn:"天王星"},
+ {id:"neptune",cn:"海王星"},{id:"pluto",cn:"冥王星"}
+];
+// 速度（度/天）用于「距下一闸门」估算
+const SPEED = {sun:0.9856,earth:0.9856,moon:13.176,nnode:-0.0529,snode:-0.0529,
+ mercury:1.383,jupiter:0.0831,saturn:0.0335,uranus:0.0117,neptune:0.0058,pluto:0.0038,
+ venus:1.602,mars:0.524};
+
+const USE_LIB = (typeof Astronomy !== 'undefined');
+
+/* ===================== 天文计算 ===================== */
+function julian(d){ return d.getTime()/86400000 + 2440587.5; }
+
+function obliquity(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  return 23.4392911 - 0.0130042*T - 1.64e-7*T*T + 5.04e-7*T*T*T;
+}
+function meanNodeLon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  // Meeus Astronomical Algorithms 2nd ed. Ch.47 平黄白交点
+  let om = 125.0445479 + T*(-1934.1362891 + T*(0.0020754 + T*(1/467441 - T/60616000)));
+  return ((om%360)+360)%360;
+}
+function trueNodeLon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const mean = meanNodeLon(d);
+  const Rad = Math.PI/180;
+  const D=(297.8501921 + 445267.1114034*T)*Rad;
+  const M=(357.5291092 + 35999.0502909*T)*Rad;
+  const Mp=(134.9633964 + 477198.8675055*T)*Rad;
+  const F=(93.2720950 + 483202.0175233*T)*Rad;
+  const corr = -1.4979*Math.sin(2*(D-F))
+               -0.1500*Math.sin(M)
+               -0.1226*Math.sin(2*D)
+               +0.1176*Math.sin(2*F)
+               -0.0801*Math.sin(2*(Mp-F));
+  return ((mean+corr)%360+360)%360;
+}
+// 低精度兜底：太阳/月亮（仅 CDN 失效时用）
+function lowSun(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const L0=280.46646+36000.76983*T+0.0003032*T*T;
+  const M=(357.52911+35999.05029*T-0.0001537*T*T)*Math.PI/180;
+  const C=(1.914602-0.004817*T)*Math.sin(M)+0.019993*Math.sin(2*M)+0.000289*Math.sin(3*M);
+  let lon=L0+C-0.00569; return ((lon%360)+360)%360;
+}
+function lowMoon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const Deg=Math.PI/180;
+  let L=218.3165+481267.8813*T
+    -6.29*Math.sin((134.9+477198.85*T)*Deg)
+    +1.27*Math.sin((259.2-413335.38*T)*Deg)
+    -0.66*Math.sin((235.7+890534.23*T)*Deg)
+    -0.21*Math.sin((269.9+954397.70*T)*Deg)
+    -0.20*Math.sin((357.5+35999.05*T)*Deg)
+    -0.15*Math.sin((186.6+966404.05*T)*Deg);
+  return ((L%360)+360)%360;
+}
+function bodyLon(id,d){
+  if(id==="earth") return (bodyLon("sun",d)+180)%360;
+  if(id==="snode") return (trueNodeLon(d)+180)%360;
+  if(id==="nnode") return trueNodeLon(d);
+  if(!USE_LIB){
+    if(id==="sun") return lowSun(d);
+    if(id==="moon") return lowMoon(d);
+    return null; // 其余需联网
+  }
+  const map={sun:"Sun",moon:"Moon",mercury:"Mercury",venus:"Venus",mars:"Mars",
+    jupiter:"Jupiter",saturn:"Saturn",uranus:"Uranus",neptune:"Neptune",pluto:"Pluto"};
+  try{
+    // GeoVector(视向地心) → Ecliptic(J2000 黄经) → 加岁差修正得「当日期黄经(回归黄道)」
+    const time=Astronomy.MakeTime(d);
+    const vec=Astronomy.GeoVector(Astronomy.Body[map[id]],time,true);
+    const ec=Astronomy.Ecliptic(vec);
+    const T=(julian(d)-2451545.0)/36525.0;
+    const precDeg=T*1.39697; // 岁差：回归黄经随日期递增 ≈1.397°/世纪
+    let lon=((ec.elon+precDeg)%360+360)%360;
+    return lon;
+  }catch(e){ return null; }
+}
+// 黄经 → 闸门/爻/色/调/基（Rave Mandala 序列，Gate 41 锚定 MANDALA_START ≈ 302°）
+function lonToGateLine(lon){
+  let x=(((lon-MANDALA_START)%360)+360)%360; // 0 在闸门41 起点
+  let gi=Math.floor(x/DEG);                  // 0..63 曼陀罗序列索引
+  let gate=MANDALA_SEQ[gi];
+  let within=x-gi*DEG;                       // 0..DEG
+  let line=Math.floor(within/(DEG/6))+1;
+  let w2=within%(DEG/6);
+  let color=Math.floor(w2/(DEG/36))+1;
+  let w3=w2%(DEG/36);
+  let tone=Math.floor(w3/(DEG/216))+1;
+  let w4=w3%(DEG/216);
+  let base=Math.floor(w4/(DEG/1080))+1;
+  return {gate,line,color,tone,base,within,x};
+}
+function computeTransit(d){
+  const r={};
+  BODIES.forEach(b=>{ const lon=bodyLon(b.id,d);
+    if(lon===null){ r[b.id]={cn:b.cn,gate:null}; }
+    else r[b.id]=Object.assign({cn:b.cn},lonToGateLine(lon)); });
+  return r;
+}
+
+/* ===================== 几何：曼陀罗 ===================== */
+function gateAngleDeg(gate){
+  let idx=SEQ_INDEX[gate]; // 0..63，按 Rave Mandala 真实序列
+  return 270+idx*DEG+DEG/2;
+}
+function gateXY(gate,r,cx,cy){
+  let ecl=gateAngleDeg(gate);
+  let th=(ecl-270)*Math.PI/180;
+  return {x:cx+r*Math.sin(th), y:cy-r*Math.cos(th)};
+}
+function buildMandala(activeGates,activeChans){
+  const cx=320,cy=320, R_OUT=292, R_CH=205, R_DOT=292;
+  let s=`<svg class="mandala" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="312" fill="none" stroke="#D9CDB8" stroke-width="1"/>`;
+  // 通道
+  CHANNELS.forEach(c=>{
+    const a=gateXY(c[0],R_CH,cx,cy), b=gateXY(c[1],R_CH,cx,cy);
+    const on=activeChans.some(ac=>ac.a===c[0]&&ac.b===c[1]);
+    s+=`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${on?'#E0B070':'#E7DEC9'}" stroke-width="${on?2.4:0.8}" opacity="${on?0.95:0.5}"/>`;
+  });
+  // 闸门刻度 + 数字
+  for(let g=1; g<=64; g++){
+    const mid=gateXY(g,R_OUT,cx,cy);
+    const inn=gateXY(g,R_OUT-16,cx,cy);
+    const hot=activeGates.has(g);
+    s+=`<line x1="${inn.x.toFixed(1)}" y1="${inn.y.toFixed(1)}" x2="${mid.x.toFixed(1)}" y2="${mid.y.toFixed(1)}" stroke="${hot?'#C4956A':'#C9BCA2'}" stroke-width="${hot?2.2:0.7}"/>`;
+    if(hot){
+      const dot=gateXY(g,R_DOT,cx,cy);
+      s+=`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="6.5" fill="#C4956A" stroke="#fff" stroke-width="1.5"/>`;
+    }
+    s+=`<text x="${mid.x.toFixed(1)}" y="${(mid.y+4).toFixed(1)}" text-anchor="middle" font-size="11" fill="${hot?'#A9743F':'#9A8A70'}" font-weight="${hot?700:400}">${g}</text>`;
+  }
+  // 中心
+  s+=`<circle cx="${cx}" cy="${cy}" r="60" fill="#FBEFDD" stroke="#C4956A" stroke-width="1.5"/>`;
+  s+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="13" fill="#A9743F" font-weight="700">此刻</text>`;
+  s+=`<text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="10" fill="#8A6D4B">流日曼陀罗</text>`;
+  s+=`</svg>`;
+  return s;
+}
+
+/* ===================== 渲染 ===================== */
+function fmtClock(d){
+  const p=n=>String(n).padStart(2,'0');
+  const loc=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  const u=new Date(d.getTime()+d.getTimezoneOffset()*60000);
+  const utc=`${u.getUTCFullYear()}-${p(u.getUTCMonth()+1)}-${p(u.getUTCDate())} ${p(u.getUTCHours())}:${p(u.getUTCMinutes())}:${p(u.getUTCSeconds())} UTC`;
+  return {loc,utc};
+}
+function gateName(g){ return GATES[g]?GATES[g][0]:("闸门"+g); }
+function gateTheme(g){ return GATES[g]?GATES[g][1]:""; }
+
+let LAST={}; // 缓存当前流日，供个人叠加使用
+function render(d){
+  const t=computeTransit(d);
+  LAST.t=t; LAST.date=d;
+  const clk=fmtClock(d);
+  document.getElementById("clockbar").innerHTML=
+    `<span><span class="dot"></span><b>此刻</b> ${clk.loc}</span>`+
+    `<span style="opacity:.7">｜ ${clk.utc}</span>`+
+    (USE_LIB?`<span style="opacity:.7">｜ 内核：astronomy-engine (VSOP87)</span>`
+            :`<span style="color:#C4756B">｜ 近似模式（CDN 不可用，仅日月交准确）</span>`);
+
+  // 汇聚激活闸门
+  const gateBodies={}; // gate -> [bodyIds]
+  let activeCount=0;
+  BODIES.forEach(b=>{ const g=t[b.id].gate;
+    if(g!==null){ (gateBodies[g]=gateBodies[g]||[]).push(b.id); } });
+  const activeGates=new Set(Object.keys(gateBodies).map(Number));
+  // 激活通道
+  const activeChans=[];
+  CHANNELS.forEach(c=>{ const a=gateBodies[c[0]], b=gateBodies[c[1]];
+    if(a&&b) activeChans.push({a:c[0],b:c[1],name:c[2],circuit:c[3],byA:a,byB:b}); });
+
+  // 四锚点摘要
+  const sun=t.sun.gate, earth=t.earth.gate, moon=t.moon.gate, nn=t.nnode.gate;
+  let sum=`<div class="gate-item"><span class="gi-t">☀ 太阳 · 闸门${sun} ${gateName(sun)}</span><div class="gi-b">今日主题由它主导——${gateTheme(sun)}</div></div>`;
+  if(earth!==null) sum+=`<div class="gate-item"><span class="gi-t">🌍 地球 · 闸门${earth} ${gateName(earth)}</span><div class="gi-b">与太阳对冲——你今天容易过度认同、或需要放下的对立能量面。</div></div>`;
+  if(moon!==null) sum+=`<div class="gate-item"><span class="gi-t">🌙 月亮 · 闸门${moon} ${gateName(moon)}</span><div class="gi-b">约每 10 小时换一闸门，是今日情绪与直觉的流动焦点。${gateTheme(moon)}</div></div>`;
+  if(nn!==null) sum+=`<div class="gate-item"><span class="gi-t">☊ 北交点 · 闸门${nn} ${gateName(nn)}</span><div class="gi-b">约 3.5 个月守一闸门，代表当下集体/你此阶段的成长方向。</div></div>`;
+  document.getElementById("summary").innerHTML=sum;
+
+  // 13 天体卡片
+  let bh="";
+  BODIES.forEach(b=>{ const o=t[b.id];
+    const shared=(o.gate!==null&&(gateBodies[o.gate]||[]).length>1)?`<span class="shared">×${(gateBodies[o.gate]||[]).length}</span>`:"";
+    const hot=(o.gate!==null&&activeGates.has(o.gate));
+    const bg=o.gate===null?"—":`${o.gate}<span style="font-size:.7rem">.${o.line}</span>`;
+    const bl=o.gate===null?"需联网计算":`第 ${o.line} 爻`;
+    const bc=o.gate===null?"":`色${o.color}·调${o.tone}·基${o.base}`;
+    bh+=`<div class="body ${hot?'hot':''}">${shared}<div class="bn">${b.cn}</div><div class="bg">${bg}</div><div class="bl">${bl}</div><div class="bc">${bc}</div></div>`;
+  });
+  document.getElementById("bodies").innerHTML=bh;
+  document.getElementById("speed-note").innerHTML=
+    `节奏：太阳≈5.7天/闸门｜月亮≈10.2小时/闸门｜南北交≈3.5个月/闸门。卡片高亮=该闸门被多天体同时激活。`;
+
+  // 曼陀罗
+  document.getElementById("mandala").innerHTML=buildMandala(activeGates,activeChans);
+  document.getElementById("mandala-mini").innerHTML=
+    `已激活闸门 <b>${activeGates.size}</b> / 64 ｜ 此刻激活通道 <b>${activeChans.length}</b> / 36`;
+
+  // 通道列表
+  let ch=`<div style="font-size:.8rem;color:var(--ink2);margin-bottom:6px">当一条通道的两端都被此刻天体占据，能量即「接通」。</div>`;
+  if(activeChans.length===0) ch+=`<div class="empty">此刻暂无两端同时接通的通道（多数闸门为「悬置闸门」，仍具主题能量）。</div>`;
+  activeChans.forEach(c=>{
+    ch+=`<div class="chan"><span class="pill">${c.a}-${c.b}</span>`+
+        `<div><div class="ct">${c.name} 通道<span class="cc">[${c.circuit}]</span></div>`+
+        `<div class="cb">${gateName(c.a)} ⇄ ${gateName(c.b)} ｜ 激活天体：${[...c.byA,...c.byB].map(x=>BODIES.find(b=>b.id===x).cn).join("、")}</div></div></div>`;
+  });
+  document.getElementById("channels").innerHTML=ch;
+  document.getElementById("chan-count").textContent=activeChans.length;
+
+  // 闸门解读
+  let gi="";
+  const sorted=[...activeGates].sort((a,b)=>a-b);
+  if(sorted.length===0) gi+=`<div class="empty">暂无激活闸门。</div>`;
+  sorted.forEach(g=>{
+    const bodies=gateBodies[g].map(x=>BODIES.find(b=>b.id===x));
+    const lines=bodies.map(b=>{const o=t[b.id];return `${b.cn}（第${o.line}爻）`;}).join("、");
+    gi+=`<div class="gate-item"><span class="gi-t">闸门 ${g} · ${gateName(g)}</span>`+
+        `<div class="gi-b">${gateTheme(g)}</div>`+
+        `<div class="gi-b" style="margin-top:3px">激活：${lines}</div></div>`;
+  });
+  document.getElementById("gate-interp").innerHTML=gi;
+  document.getElementById("gate-count").textContent=activeGates.size;
+
+  // 明细表
+  let dt=`<tr><th>天体</th><th>闸门</th><th>爻</th><th>色</th><th>调</th><th>基</th><th>中心</th></tr>`;
+  BODIES.forEach(b=>{ const o=t[b.id];
+    if(o.gate===null){ dt+=`<tr><td>${b.cn}</td><td colspan="6" style="color:#C4756B">需联网计算</td></tr>`; return; }
+    dt+=`<tr class="${activeGates.has(o.gate)?'hl':''}"><td>${b.cn}</td><td>${o.gate}</td><td>${o.line}</td><td>${o.color}</td><td>${o.tone}</td><td>${o.base}</td><td>${GATE2CENTER[o.gate]||'—'}</td></tr>`;
+  });
+  document.getElementById("detail-table").innerHTML=dt;
+
+}
+
+/* ===================== 个人叠加 ===================== */
+function computeNatal(birthDate){
+  const designDate=new Date(birthDate.getTime()-88.0256*86400000);
+  const pers={}, des={};
+  BODIES.forEach(b=>{
+    const p=bodyLon(b.id,birthDate), q=bodyLon(b.id,designDate);
+    if(p!==null) pers[b.id]=lonToGateLine(p).gate;
+    if(q!==null) des[b.id]=lonToGateLine(q).gate;
+  });
+  const natalSet=new Set(), side={};
+  for(const b in pers){ natalSet.add(pers[b]); side[pers[b]]='P'; }
+  for(const b in des){ natalSet.add(des[b]);
+    side[des[b]] = side[des[b]]==='P' ? 'B' : 'D'; }
+  // 定义中心
+  const defCenters=[];
+  for(const c in CENTERS){
+    if(CENTERS[c].gates.some(g=>natalSet.has(g))) defCenters.push(CENTERS[c].cn);
+  }
+  // 定义通道
+  const defChans=[];
+  CHANNELS.forEach(c=>{ if(natalSet.has(c[0])&&natalSet.has(c[1])) defChans.push(c); });
+  // 类型（简化判定）
+  const sacralDef=CENTERS.Sacral.gates.some(g=>natalSet.has(g));
+  const centerOf=g=>GATE2CENTER[g];
+  let type="反映者 (Reflector)", typeNote="无任何定义中心——以整月月亮周期为权威，等待一整轮月亮再做重大决定。";
+  if(defCenters.length>0){
+    if(sacralDef){
+      const mg=defChans.some(c=>(centerOf(c[0])==="荐骨中心"&&centerOf(c[1])==="喉咙中心")||(centerOf(c[1])==="荐骨中心"&&centerOf(c[0])==="喉咙中心"));
+      type= mg?"显示生产者 (Manifesting Generator)":"生产者 (Generator)";
+      typeNote= mg?"荐骨有定义，且荐骨直连喉咙——既能回应又能发起，多工而高效。策略：等待回应，再行动。":"荐骨有定义但不直连喉咙——以稳定生命能量「等待回应」为核心。策略：等回应，再行动。";
+    } else {
+      const manifestor=defChans.some(c=>{
+        const ca=centerOf(c[0]),cb=centerOf(c[1]);
+        const motor=["根部中心","意志力中心","情绪中心"].includes(ca)||["根部中心","意志力中心","情绪中心"].includes(cb);
+        const throat=(ca==="喉咙中心"||cb==="喉咙中心");
+        return motor&&throat;
+      });
+      if(manifestor){ type="显示者 (Manifestor)"; typeNote="无定义荐骨，但有动力中心直连喉咙——天生的发起者。策略：告知，再行动。"; }
+      else { type="投射者 (Projector)"; typeNote="无定义荐骨，至少有一处其他定义——识人用人的引导者。策略：等待邀请。"; }
+    }
+  }
+  return {pers,des,natalSet,side,defCenters,defChans,type,typeNote};
+}
+function renderPersonal(){
+  const dateStr=document.getElementById("b-date").value;
+  const timeStr=document.getElementById("b-time").value;
+  const tz=parseFloat(document.getElementById("b-tz").value)||8;
+  if(!dateStr){ document.getElementById("personal").innerHTML=`<div class="err">请先填写出生日期。</div>`; return; }
+  const [Y,M,D]=dateStr.split("-").map(Number);
+  const [h,m]=timeStr.split(":").map(Number);
+  // 当地时刻 → UTC
+  const localMs=Date.UTC(Y,M-1,D,h,m) - tz*3600000;
+  const birth=new Date(localMs);
+  if(isNaN(birth.getTime())){ document.getElementById("personal").innerHTML=`<div class="err">日期/时间格式有误。</div>`; return; }
+  if(!USE_LIB){ document.getElementById("personal").innerHTML=`<div class="err">个人叠加需完整 13 天体，请联网载入天文内核后重试。</div>`; return; }
+  const nat=computeNatal(birth);
+  const t=LAST.t;
+  // 个人被激活的闸门
+  const persGates=[...nat.natalSet].filter(g=>{
+    // 当前流日是否有天体在此闸门
+    return BODIES.some(b=>t[b.id].gate===g);
+  });
+  const transBodiesAt=g=>BODIES.filter(b=>t[b.id].gate===g);
+  // 个人活化的通道（一端定义、一端流日）
+  const liveChans=[];
+  CHANNELS.forEach(c=>{
+    const aN=nat.natalSet.has(c[0]), bN=nat.natalSet.has(c[1]);
+    const aT=BODIES.some(b=>t[b.id].gate===c[0]), bT=BODIES.some(b=>t[b.id].gate===c[1]);
+    if((aN&&bT)||(bN&&aT)) liveChans.push(c);
+  });
+
+  let html=`<div class="typebox"><b>${nat.type}</b><br><span style="font-size:.84rem">${nat.typeNote}</span></div>`;
+  html+=`<div style="margin-top:12px;font-weight:700;color:var(--gold-d)">定义中心（${nat.defCenters.length}/9）</div><div class="center-chips">`;
+  const allC=Object.values(CENTERS).map(c=>c.cn);
+  allC.forEach(cn=>{ const def=nat.defCenters.includes(cn);
+    html+=`<span class="chip ${def?'def':'open'}">${cn}</span>`; });
+  html+=`</div>`;
+  html+=`<div style="margin-top:10px;font-weight:700;color:var(--gold-d)">此刻正激活你的闸门（${persGates.length}）</div>`;
+  if(persGates.length===0) html+=`<div class="empty">此刻没有流日天体落在你的定义闸门上——你处于「采样」状态，正好观察环境能量。</div>`;
+  persGates.sort((a,b)=>a-b).forEach(g=>{
+    const bs=transBodiesAt(g).map(b=>`${b.cn}(第${t[b.id].line}爻)`).join("、");
+    const sd=nat.side[g]==='B'?"意识+潜意识":(nat.side[g]==='P'?"意识(黑)":"潜意识(红)");
+    html+=`<div class="gate-item"><span class="gi-t">闸门 ${g} · ${gateName(g)}</span>`+
+      `<div class="gi-b">${gateTheme(g)}</div>`+
+      `<div class="gi-b" style="margin-top:3px">流日激活：${bs} ｜ 你的定义面：${sd}</div></div>`;
+  });
+  html+=`<div style="margin-top:10px;font-weight:700;color:var(--gold-d)">此刻「点亮」你图上的通道（${liveChans.length}）</div>`;
+  if(liveChans.length===0) html+=`<div class="empty">此刻流日未与你的定义通道相接。</div>`;
+  liveChans.forEach(c=>{
+    html+=`<div class="chan"><span class="pill">${c[0]}-${c[1]}</span>`+
+      `<div><div class="ct">${c[2]} 通道<span class="cc">[${c[3]}]</span></div>`+
+      `<div class="cb">${gateName(c[0])} ⇄ ${gateName(c[1])}</div></div></div>`;
+  });
+  html+=`<div class="note">说明：出生时刻=意识(黑)计算；出生前 88.0256 天=潜意识(红)计算。类型与定义为简化判定，仅供探索参考。</div>`;
+  document.getElementById("personal").innerHTML=html;
+}
+
+/* ===================== 启动 ===================== */
+function tick(){ render(new Date()); }
+window.addEventListener("load",()=>{
+  document.getElementById("footer-ver").textContent =
+    `人类图流日分析系统 ${VERSION}`;
+  tick();
+  setInterval(tick, 60000); // 每分钟刷新「此刻」
+  document.getElementById("b-calc").addEventListener("click",renderPersonal);
+  // 默认填今天日期，方便即时体验
+  if(!document.getElementById("b-date").value){
+    const n=new Date(); const p=x=>String(x).padStart(2,'0');
+    document.getElementById("b-date").value=`${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())}`;
+  }
+});
+</script>
+</body>
+</html>

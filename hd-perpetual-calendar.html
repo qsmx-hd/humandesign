@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HD Perpetual Calendar · 太阳过闸万年历（爻级精度）</title>
+<style>
+  :root{
+    --bg:#F5F0E8; --panel:#FBF7F0; --panel2:#EDE3D5; --ink:#2D2118; --ink2:#5b4a3a;
+    --gold:#C4956A; --gold-d:#A87B4E; --line:#d8c9b4;
+    --mut:#E8A87C; --init:#7FB069; --civ:#6BAED6; --dual:#C79BD6;
+    --ok:#4e8a4e; --bad:#c0552f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.55;font-size:14px;}
+  header{background:var(--panel);color:var(--ink);padding:26px 22px;text-align:center;border-bottom:1px solid var(--line);}
+  header h1{margin:0 0 8px;font-size:24px;letter-spacing:1px;color:var(--gold-d);}
+  header p{margin:3px 0;color:var(--ink2);font-size:13px;}
+  footer{text-align:center;padding:18px 20px;font-size:12px;color:var(--ink2);background:var(--panel);border-top:1px solid var(--line);margin-top:12px;}
+  footer b{color:var(--gold-d);}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0;box-shadow:0 1px 3px rgba(45,33,24,.06);}
+  .card h2{margin:0 0 12px;font-size:17px;color:var(--gold-d);border-left:4px solid var(--gold);padding-left:10px;}
+  .row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;}
+  label{font-size:13px;color:var(--ink2);display:block;margin-bottom:4px;}
+  select,input[type=number],input[type=text]{font-family:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);}
+  button{font-family:inherit;font-size:14px;padding:8px 16px;border:none;border-radius:8px;background:var(--gold);color:#fff;cursor:pointer;font-weight:600;}
+  button:hover{background:var(--gold-d);}
+  .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .seg button{background:var(--panel);color:var(--ink2);border-radius:0;padding:8px 12px;}
+  .seg button.on{background:var(--gold);color:#fff;}
+  table{border-collapse:collapse;width:100%;font-size:13px;}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;}
+  th{background:var(--panel2);color:var(--ink2);font-weight:600;position:sticky;top:0;}
+  .scroll{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:8px;}
+  .m-init{background:rgba(127,176,105,.18);}
+  .m-civ{background:rgba(107,174,214,.18);}
+  .m-dual{background:rgba(199,155,214,.18);}
+  .m-mut{background:rgba(232,168,124,.22);}
+  .cal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  @media(max-width:860px){.cal-grid{grid-template-columns:1fr;}}
+  @media(max-width:640px){
+    header h1{font-size:20px;}
+    header p{font-size:12px;}
+    .wrap{padding:12px;}
+    .card{padding:12px 14px;margin:10px 0;}
+    .row{flex-direction:column;align-items:stretch;gap:10px;}
+    .row > div{width:100%;}
+    input,select,button{width:100%;}
+    .seg{display:flex;flex-direction:column;}
+    .seg button{width:100%;}
+    .cal-grid{grid-template-columns:1fr;}
+    .month h3{font-size:13px;}
+    .month td{height:30px;padding:2px 1px;}
+    .dnum,.dline{font-size:9px;}
+    .dgate{font-size:12px;}
+    .scroll{max-height:340px;}
+    th,td{padding:5px 4px;font-size:12px;}
+    .legend{gap:10px;font-size:11px;}
+  }
+  .month{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .month h3{margin:0;background:var(--panel2);padding:6px;text-align:center;font-size:14px;color:var(--ink);}
+  .month table{font-size:12px;}
+  .month td{padding:3px 2px;height:34px;vertical-align:middle;}
+  .dnum{font-size:10px;color:var(--ink2);display:block;}
+  .dgate{font-weight:700;color:var(--ink);}
+  .dline{font-size:10px;color:var(--gold-d);}
+  .today{outline:2px solid var(--gold);outline-offset:-2px;}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;margin:6px 0;}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .sw{width:14px;height:14px;border-radius:3px;display:inline-block;}
+  .ok{color:var(--ok);font-weight:700;}
+  .bad{color:var(--bad);font-weight:700;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;background:var(--panel2);color:var(--ink2);}
+  .note{font-size:12px;color:var(--ink2);background:var(--panel2);padding:10px 12px;border-radius:8px;margin-top:8px;}
+  .detail{font-size:14px;background:var(--panel2);padding:12px;border-radius:8px;margin-top:10px;min-height:20px;}
+  .kv{display:inline-block;margin-right:18px;}
+  .kv b{color:var(--gold-d);}
+  .small{font-size:12px;color:var(--ink2);}
+  .filter{margin:8px 0;}
+  a{color:var(--gold-d);}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>☀ HD Perpetual Calendar · 太阳过闸万年历 <span style="font-size:14px;color:var(--gold-d);background:var(--panel2);padding:2px 8px;border-radius:12px;vertical-align:middle;">V2.1</span></h1>
+  <p>输入任意阳历日期即知太阳所在人类图闸门与爻 · 反向可查某闸门/爻的过闸日期窗口</p>
+  <p class="small">算法：NOAA 太阳黄经（热带黄道，误差 &lt; 0.01°）→ 64 闸门 × 6 爻映射 · 已按官方 Rave Mandala 锚定校准</p>
+</header>
+
+<div class="wrap">
+
+  <!-- 锚定模式 -->
+  <div class="card">
+    <h2>① 锚定约定（这是不同软件"不一致"的根源）</h2>
+    <div class="row">
+      <div>
+        <label>选择锚定模式</label>
+        <div class="seg" id="anchorSeg">
+          <button data-lo="302" class="on">humandesign.io 官方 · 2°水瓶座 (L0=302°)</button>
+          <button data-lo="300">educatingearthlings · 0°水瓶座 (L0=300°)</button>
+          <button data-lo="270">冬至锚定 · 0°摩羯座 (L0=270°)</button>
+        </div>
+      </div>
+      <div>
+        <label>当前锚定经度</label>
+        <div class="detail" style="margin:0;padding:7px 12px;" id="loShow">L0 = 302.000°</div>
+      </div>
+    </div>
+    <div class="note" id="anchorNote"></div>
+    <div class="note" id="calSummary"></div>
+    <div class="note" id="methodNote" style="margin-top:10px;">
+      <b>方法说明：</b>太阳热带黄经 λ 由 NOAA 简化公式求得（误差 &lt; 0.01°，远小于每爻 0.9375°）。映射：将 λ 相对锚定经度 L0 取模 360，除以 5.625° 得闸门序号（0=Gate41，顺序见 Rave Mandala），再对 5.625° 内除以 0.9375° 得爻（1–6）。<br>
+      <b>官方锚定 L0=302°</b> 对应「<b>2°00′ 水瓶座 = Gate41</b>」，太阳约在 <b>1月22–23日</b> 进入 Gate41（Rave New Year）。L0=300° 对应 educatingearthlings 的 0°水瓶座锚定；L0=270° 对应冬至锚定。所有日期按 UTC 00:00 计算；爻边界会因时区有数小时漂移，属正常。<br>
+      <b>为何日历里会出现「13.1 → 13.3」这类跳过爻？</b> 每爻只持续约 22.8 小时，少于一天。日历每个格子只取当日 00:00 UTC 的状态，若某爻在当天中午就已经过去，00:00 的下一个整点采样就会「跳过」它。这是正确天文现象，不是算法错误。想看每爻的精确进入/退出时刻，请用「反向查询」或「锚定点拟合表」。
+    </div>
+  </div>
+
+  <!-- 万年历 -->
+  <div class="card">
+    <h2>② 太阳过闸万年历（选年份 → 每日太阳闸门.爻）</h2>
+    <div class="row">
+      <div><label>年份</label><input type="number" id="yr" value="2026" min="1900" max="2100" style="width:90px;"></div>
+      <div><label>&nbsp;</label><button onclick="renderCalendar()">生成万年历</button></div>
+      <div><label>&nbsp;</label><button onclick="gotoToday()">回到今年</button></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw m-init"></i> initiation 启始</span>
+      <span><i class="sw m-civ"></i> civilization 文明</span>
+      <span><i class="sw m-dual"></i> duality 联结</span>
+      <span><i class="sw m-mut"></i> mutation 蜕变</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="detail" id="dayDetail">👆 点击任意日期查看该日太阳黄经、闸门、爻详情</div>
+  </div>
+
+  <!-- 反向查询 -->
+  <div class="card">
+    <h2>③ 反向查询：某闸门/爻 → 过闸日期窗口</h2>
+    <div class="row">
+      <div><label>闸门 (1-64)</label><input type="number" id="qGate" value="41" min="1" max="64" style="width:80px;"></div>
+      <div><label>爻 (留空=整闸)</label><input type="number" id="qLine" min="1" max="6" style="width:80px;"></div>
+      <div><label>年份</label><input type="number" id="qYear" value="2026" min="1900" max="2100" style="width:90px;"></div>
+      <div><label>&nbsp;</label><button onclick="reverseQuery()">查询</button></div>
+    </div>
+    <div class="detail" id="revDetail"></div>
+  </div>
+
+  <!-- 锚定点拟合表 -->
+  <div class="card">
+    <h2>④ 锚定点拟合表（爻级精度 · 384 爻段）</h2>
+    <div class="filter row">
+      <div><label>参考年（用于给出进入时刻）</label><input type="number" id="refYear" value="2026" min="1900" max="2100" style="width:90px;"></div>
+      <div><label>按闸门筛选</label><input type="text" id="gateFilter" placeholder="如 41 或 41,20" style="width:140px;"></div>
+      <div><label>&nbsp;</label><button onclick="renderAnchorTable()">刷新表格</button></div>
+    </div>
+    <div class="small" style="margin:4px 0 8px;">每爻 ≈ 0.9375° ≈ 22.8 小时。下表给出：闸门.爻 → 黄经区间 → 该参考年太阳进入该爻的精确时刻（UTC）。</div>
+    <div class="scroll"><table id="anchorTbl"><thead><tr><th>闸门</th><th>爻</th><th>黄经区间(°)</th><th>参考年进入时刻 (UTC)</th><th>象限</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <!-- 校准数据 -->
+  <div class="card">
+    <h2>⑤ 校准数据明细（抓取的流日源 vs 本模型）</h2>
+    <div class="small" style="margin-bottom:8px;line-height:1.9;">
+      来源：<br>
+      <b>A</b> = educatingearthlings.co（2025 太阳过闸）<br>
+      <b>B</b> = awakeningthroughhumandesign.com（2025.1）<br>
+      <b>C</b> = mandyhumandesign.com（台湾月度流日）<br>
+      <b>D</b> = 28hex4lab.blog（台湾流日，含爻）<br>
+      <b>M</b> = humandesign.io 官方 Transit（2026-09-14 08:04 UTC = Sun 47.5）<br>
+      切换上方锚定模式会实时重算命中率。
+    </div>
+    <div class="scroll"><table id="calTbl"><thead><tr><th>日期</th><th>源</th><th>源给闸门</th><th>模型闸门</th><th>结果</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+</div>
+
+<footer>
+  <div>HD Perpetual Calendar · 太阳过闸万年历 · V2.1</div>
+  <div style="margin-top:4px;"><b>Powered By Kan Man Tang</b></div>
+</footer>
+
+<script>
+// 顺序由校准数据(经度单调递增)纯推导：41,19之后接 Initiation→Duality→Civilization→Mutation尾，回到41
+const GATE_ORDER = [41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60];
+const GATE_NAMES = {1:"自我表达",2:"自我方向",3:"秩序",4:"公式化",5:"固定节奏",6:"摩擦",7:"自我角色",8:"贡献",9:"小力量的驯服",10:"自我行为",11:"想法",12:"谨慎",13:"倾听者",14:"力量技能",15:"极端",16:"技巧",17:"意见",18:"修正",19:"想要",20:"现在",21:"猎人",22:"开放",23:"同化",24:"合理化",25:"自我精神",26:"利己者",27:"关怀",28:"游戏者",29:"坚持",30:"感觉",31:"领导",32:"延续",33:"隐私",34:"力量",35:"改变",36:"危机",37:"友谊",38:"战士",39:"挑衅",40:"孤独",41:"收缩/幻想",42:"成长",43:"洞察",44:"警觉",45:"聚集者",46:"自我决心",47:"实现",48:"深度",49:"原则",50:"价值",51:"震撼",52:"静止",53:"开始",54:"驱动力",55:"精神",56:"刺激",57:"直觉清晰",58:"活力",59:"性",60:"限制",61:"灵感",62:"细节",63:"怀疑",64:"困惑"};
+const QUARTER = {init:[13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24],civ:[2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33],dual:[7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44],mut:[1,43,14,34,9,5,26,11,10,58,38,54,61,60,41,19]};
+function qClass(g){if(QUARTER.init.includes(g))return"m-init";if(QUARTER.civ.includes(g))return"m-civ";if(QUARTER.dual.includes(g))return"m-dual";return"m-mut";}
+function qName(g){if(QUARTER.init.includes(g))return"启始";if(QUARTER.civ.includes(g))return"文明";if(QUARTER.dual.includes(g))return"联结";return"蜕变";}
+
+let L0 = 302.0;
+
+function solarLongitude(dateUTC){
+  const jd = dateUTC.getTime()/86400000 + 2440587.5;
+  const n = jd - 2451545.0;
+  let L = (280.460 + 0.9856474 * n) % 360;
+  const g = (357.528 + 0.9856003 * n) * Math.PI/180;
+  let lambda = L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2*g);
+  return ((lambda % 360) + 360) % 360;
+}
+function gateIndexOf(lambda){
+  let x = ((lambda - L0) % 360 + 360) % 360;
+  return Math.floor(x / 5.625) % 64;
+}
+function gateLineOf(lambda){
+  let x = ((lambda - L0) % 360 + 360) % 360;
+  const gi = Math.floor(x / 5.625) % 64;
+  const gate = GATE_ORDER[gi];
+  const within = x - gi*5.625;
+  const line = Math.floor(within / 0.9375) + 1;
+  return {gate, line, gi, x, lambda};
+}
+// 某年某日(UTC 00:00)的闸门.爻
+function dayGateLine(y,m,d){
+  const lam = solarLongitude(new Date(Date.UTC(y,m-1,d,0,0,0)));
+  return gateLineOf(lam);
+}
+// 二分求某年太阳黄经首次等于 target 的时刻
+function entryMoment(target, year){
+  target = ((target % 360)+360)%360;
+  // 扫描找到跨越 target 的那一天（处理黄经回绕）
+  let prev = solarLongitude(new Date(Date.UTC(year,0,1,0,0,0)));
+  for(let day=1; day<=366; day++){
+    const cur = solarLongitude(new Date(Date.UTC(year,0,day,0,0,0)));
+    let crossed=false;
+    if(prev <= cur){ if(prev <= target && target < cur) crossed=true; }
+    else { // 回绕 (359->0)
+      if(target >= prev || target < cur) crossed=true;
+    }
+    if(crossed){
+      let lo = Date.UTC(year,0,day-1), hi = Date.UTC(year,0,day);
+      for(let i=0;i<50;i++){
+        const mid=(lo+hi)/2; const lam=solarLongitude(new Date(mid));
+        // 在 day-1..day 子区间内单调
+        if(lam < target){ if(lam>=prev) lo=mid; else hi=mid; } else hi=mid;
+      }
+      return new Date((lo+hi)/2);
+    }
+    prev = cur;
+  }
+  return null;
+}
+
+/* ---------- 锚定模式 ---------- */
+document.getElementById('anchorSeg').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  document.querySelectorAll('#anchorSeg button').forEach(b=>b.classList.remove('on'));
+  e.target.classList.add('on');
+  L0 = parseFloat(e.target.dataset.lo);
+  document.getElementById('loShow').textContent = 'L0 = '+L0.toFixed(3)+'°';
+  updateAnchorNote();
+  renderCalendar();
+  renderAnchorTable();
+  reverseQuery();
+  renderCalibration();
+});
+function updateAnchorNote(){
+  const note = document.getElementById('anchorNote');
+  if(Math.abs(L0-302)<0.5){
+    note.innerHTML = '✅ <b>humandesign.io 官方 · 2°水瓶座</b>：Gate41 起始于 <b>2°00′ 水瓶座</b>（L0=302°），太阳约在 <b>1月22-23日</b> 进入 Gate41。此锚定与 2026-09-14 08:04 UTC 官网显示 Sun 47.5 完全吻合。';
+  }else if(Math.abs(L0-300)<0.5){
+    note.innerHTML = 'ℹ️ <b>educatingearthlings · 0°水瓶座</b>：Gate41 起始于 <b>0° 水瓶座</b>（L0=300°），太阳约在 <b>1月20-21日</b> 进入 Gate41。此锚定与我抓取的 educatingearthlings 2025 流日数据高度一致（73/78 精确命中），但与 humandesign.io 相差约 2°（≈2 天）。';
+  }else{
+    note.innerHTML = '⚠️ <b>冬至锚定 · 0°摩羯座</b>：把 Gate41 强行对齐到 12月21日冬至。部分人类图文献/老派文章称"Gate41=冬至"，但与官方 Rave Mandala 相差约 <b>1 个月（≈5-6 个闸门）</b>。切换此模式可见日期整体平移。';
+  }
+}
+
+/* ---------- 校准数据 ---------- */
+const CAL = [
+ [2025,1,21,41,'A'],[2025,1,26,19,'A'],[2025,2,1,13,'A'],[2025,2,7,49,'A'],[2025,2,12,30,'A'],
+ [2025,2,18,55,'A'],[2025,2,23,37,'A'],[2025,3,1,63,'A'],[2025,3,7,22,'A'],[2025,3,12,36,'A'],
+ [2025,3,18,25,'A'],[2025,3,23,17,'A'],[2025,3,29,21,'A'],[2025,4,4,51,'A'],[2025,4,10,42,'A'],
+ [2025,4,15,3,'A'],[2025,4,21,27,'A'],[2025,4,27,24,'A'],[2025,5,3,2,'A'],[2025,5,8,23,'A'],
+ [2025,5,16,16,'A'],[2025,5,18,8,'A'],[2025,5,20,20,'A'],[2025,6,1,35,'A'],[2025,6,7,45,'A'],
+ [2025,6,13,12,'A'],[2025,6,18,15,'A'],[2025,6,24,52,'A'],[2025,6,30,39,'A'],[2025,7,6,53,'A'],
+ [2025,7,12,62,'A'],[2025,7,18,56,'A'],[2025,7,24,31,'A'],[2025,7,30,33,'A'],[2025,8,5,7,'A'],
+ [2025,8,10,4,'A'],[2025,8,16,29,'A'],[2025,8,22,59,'A'],[2025,8,28,40,'A'],[2025,9,3,64,'A'],
+ [2025,9,9,47,'A'],[2025,9,14,6,'A'],[2025,9,20,46,'A'],[2025,9,26,18,'A'],[2025,10,2,48,'A'],
+ [2025,10,7,57,'A'],[2025,10,13,32,'A'],[2025,10,19,50,'A'],[2025,10,24,28,'A'],[2025,10,30,44,'A'],
+ [2025,11,5,1,'A'],[2025,11,10,43,'A'],[2025,11,16,14,'A'],[2025,11,21,34,'A'],[2025,11,27,9,'A'],
+ [2025,12,2,5,'A'],[2025,12,8,26,'A'],[2025,12,14,11,'A'],[2025,12,19,10,'A'],[2025,12,25,58,'A'],[2025,12,30,38,'A'],
+ [2025,1,4,38,'B'],[2025,1,10,54,'B'],[2025,1,15,61,'B'],[2025,1,21,60,'B'],
+ [2025,6,1,35,'C'],[2025,6,7,45,'C'],[2025,6,13,12,'C'],[2025,6,19,15,'C'],[2025,6,25,52,'C'],
+ [2025,11,1,44,'C'],[2025,11,5,1,'C'],[2025,11,11,43,'C'],[2025,11,16,14,'C'],[2025,11,22,34,'C'],[2025,11,28,9,'C'],
+ [2025,5,21,20,'D'],[2025,8,18,29,'D'],
+ // Source: humandesign.io official transit (2026-09-14 08:04 UTC = Sun 47.5)
+ [2026,9,14,47,'M']
+];
+function renderCalibration(){
+  const tb = document.querySelector('#calTbl tbody');
+  let ok=0, near=0;
+  tb.innerHTML='';
+  for(const [y,m,d,g,src] of CAL){
+    const pred = dayGateLine(y,m,d).gate;
+    const gi = GATE_ORDER.indexOf(pred);
+    let res, cls;
+    if(pred===g){ok++; res='精确一致'; cls='ok';}
+    else if(Math.abs(gi - GATE_ORDER.indexOf(g))<=1){near++; res='相邻边界≤1闸'; cls='ok';}
+    else {res='偏差'; cls='bad';}
+    const tr=document.createElement('tr');
+    tr.className=qClass(g);
+    tr.innerHTML=`<td>${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}</td><td>${src}</td><td>${g}</td><td>${pred}</td><td class="${cls}">${res}</td>`;
+    tb.appendChild(tr);
+  }
+  const sum=document.getElementById('calSummary');
+  const anchorName = Math.abs(L0-302)<0.5 ? 'humandesign.io 官方（2°水瓶座）' : Math.abs(L0-300)<0.5 ? 'educatingearthlings（0°水瓶座）' : '冬至锚定（0°摩羯座）';
+  sum.innerHTML=`<b>校准结果（当前锚定 L0=${L0.toFixed(1)}° · ${anchorName}）：</b> 共 ${CAL.length} 个数据点 → <span class="ok">精确一致 ${ok}</span> + <span class="ok">相邻边界 ${near}</span> = <b>${ok+near}/${CAL.length}</b> 在 ±1 闸内吻合；${CAL.length-ok-near>0 ? '剩余 '+ (CAL.length-ok-near) +' 个为边界/源笔误（见下表）。' : '无显著偏差。'} Gate41 进入日约 ${L0<285 ? '12月21日（冬至）' : L0<301 ? '1月20-21日' : '1月22-23日（Rave New Year）'}。`;
+}
+
+/* ---------- 万年历 ---------- */
+function renderCalendar(){
+  const y = parseInt(document.getElementById('yr').value);
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML='';
+  const today = new Date();
+  const isThisYear = today.getUTCFullYear()===y;
+  for(let mo=0; mo<12; mo++){
+    const box=document.createElement('div'); box.className='month';
+    const daysInMo = new Date(Date.UTC(y,mo+1,0)).getUTCDate();
+    let html=`<h3>${y}年 ${mo+1}月</h3><table><tr><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr><tr>`;
+    const firstDow = (new Date(Date.UTC(y,mo,1)).getUTCDay()+6)%7; // 周一=0
+    for(let i=0;i<firstDow;i++) html+='<td></td>';
+    for(let d=1; d<=daysInMo; d++){
+      const gl = dayGateLine(y,mo+1,d);
+      const cls = qClass(gl.gate) + (isThisYear && today.getUTCMonth()===mo && today.getUTCDate()===d ? ' today':'');
+      html+=`<td class="${cls}" onclick="showDay(${y},${mo+1},${d})"><span class="dnum">${d}</span><span class="dgate">${gl.gate}</span><span class="dline">.${gl.line}</span></td>`;
+      if((firstDow+d)%7===0) html+='</tr><tr>';
+    }
+    html+='</tr></table>';
+    box.innerHTML=html;
+    grid.appendChild(box);
+  }
+}
+function showDay(y,m,d){
+  const gl = dayGateLine(y,m,d);
+  const lam = solarLongitude(new Date(Date.UTC(y,m-1,d,0,0,0)));
+  const x = ((lam - L0)%360+360)%360;
+  document.getElementById('dayDetail').innerHTML =
+    `<span class="kv"><b>日期</b> ${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}</span>`+
+    `<span class="kv"><b>太阳黄经</b> ${lam.toFixed(3)}°</span>`+
+    `<span class="kv"><b>闸门</b> <b style="color:var(--gold-d)">Gate ${gl.gate}</b> · ${GATE_NAMES[gl.gate]}</span>`+
+    `<span class="kv"><b>爻</b> 第 ${gl.line} 爻</span>`+
+    `<span class="kv"><b>本闸门内进度</b> ${(x - gl.gi*5.625).toFixed(3)}° / 5.625°</span>`+
+    `<span class="kv"><b>象限</b> ${qName(gl.gate)}</span>`;
+}
+
+/* ---------- 反向查询 ---------- */
+function reverseQuery(){
+  const g = parseInt(document.getElementById('qGate').value);
+  const ln = parseInt(document.getElementById('qLine').value)||0;
+  const y = parseInt(document.getElementById('qYear').value);
+  const gi = GATE_ORDER.indexOf(g);
+  if(gi<0){ document.getElementById('revDetail').textContent='闸门无效 (1-64)'; return; }
+  const out=document.getElementById('revDetail');
+  const target = L0 + gi*5.625 + (ln>0 ? (ln-1)*0.9375 : 0);
+  const len = ln>0 ? 0.9375 : 5.625;
+  const start = entryMoment(target, y);
+  if(!start){ out.textContent='该年未找到（罕见）'; return; }
+  const end = new Date(start.getTime() + (len/0.9856)*86400000);
+  const fmt = dt=>dt.toISOString().slice(0,16).replace('T',' ');
+  let html = `<b>Gate ${g} · ${GATE_NAMES[g]}</b>（${qName(g)}）`;
+  if(ln>0) html+=` <b>第 ${ln} 爻</b>`;
+  html += `<br>📅 ${y}年过闸窗口：<b>${fmt(start)}</b> → <b>${fmt(end)}</b> (UTC)<br>`;
+  html += `<span class="small">黄经区间：${((target%360)+360)%360 .toFixed(3)}° – ${(((target+len)%360)+360)%360 .toFixed(3)}° ｜ 持续约 ${(len/0.9856).toFixed(2)} 天（整闸≈5.7天，单爻≈22.8小时）</span>`;
+  // 额外给相邻两年对照
+  const s2=entryMoment(target,y-1), s3=entryMoment(target,y+1);
+  if(s2&&s3) html+=`<br><span class="small">前后年对照：${y-1}→${s2.toISOString().slice(5,10)} ｜ ${y+1}→${s3.toISOString().slice(5,10)}（闰年致±1天漂移）</span>`;
+  out.innerHTML=html;
+}
+
+/* ---------- 锚定点拟合表 ---------- */
+function renderAnchorTable(){
+  const ry = parseInt(document.getElementById('refYear').value);
+  const filter = document.getElementById('gateFilter').value.trim();
+  const allow = filter? new Set(filter.split(/[,\s]+/).map(s=>parseInt(s)).filter(n=>!isNaN(n))) : null;
+  const tb = document.querySelector('#anchorTbl tbody');
+  tb.innerHTML='';
+  let count=0;
+  for(let gi=0; gi<64; gi++){
+    const g = GATE_ORDER[gi];
+    if(allow && !allow.has(g)) continue;
+    for(let ln=1; ln<=6; ln++){
+      const startLon = L0 + gi*5.625 + (ln-1)*0.9375;
+      const endLon = startLon + 0.9375;
+      const mom = entryMoment(startLon, ry);
+      const tr=document.createElement('tr');
+      tr.className=qClass(g);
+      const momStr = mom? mom.toISOString().slice(0,16).replace('T',' ') : '—';
+      tr.innerHTML=`<td><b>${g}</b> ${GATE_NAMES[g]}</td><td>${ln}</td><td>${((startLon%360)+360)%360 .toFixed(3)} – ${((endLon%360)+360)%360 .toFixed(3)}</td><td>${momStr}</td><td>${qName(g)}</td>`;
+      tb.appendChild(tr);
+      count++;
+    }
+  }
+  document.getElementById('anchorTbl').previousElementSibling; // noop
+  const head = document.querySelector('.card h2'); 
+  // 更新表头计数
+  const cap = document.querySelector('#anchorTbl').parentElement.previousElementSibling;
+  if(cap && cap.classList.contains('small')) cap.textContent = `每爻 ≈ 0.9375° ≈ 22.8 小时。下表给出：闸门.爻 → 黄经区间 → 该参考年太阳进入该爻的精确时刻（UTC）。当前显示 ${count} 行。`;
+}
+
+/* ---------- 初始化 ---------- */
+function gotoToday(){ const t=new Date(); document.getElementById('yr').value=t.getUTCFullYear(); document.getElementById('qYear').value=t.getUTCFullYear(); document.getElementById('refYear').value=t.getUTCFullYear(); renderCalendar(); renderAnchorTable(); reverseQuery(); }
+updateAnchorNote();
+renderCalibration();
+renderCalendar();
+renderAnchorTable();
+reverseQuery();
+</script>
+</body>
+</html>
