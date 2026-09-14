@@ -3,8 +3,8 @@
   ============================================================================
   hd-transit-just-now.html  ·  人类图流日分析系统（此刻 / Just Now）
   ----------------------------------------------------------------------------
-  VERSION: V1.8
-  DATE:    2026-09-14
+  VERSION: V2.0
+  DATE:    2026-09-15
   AUTHOR:  虾哥 (Kan Man Tang) · 人类图 × 系统架构
 
   算法溯源（CHANGELOG）
@@ -35,6 +35,16 @@
           与 PLANET_OVERLAY（行星叠加分层表），按能量权重自动编排
           太阳(今日基调)→地球(潜意识)→月亮(情绪流)→北交(成长方向)→其余激活天体，
           每段含「基调 + 决策提示 + 行星叠加」三栏。单文件内联，无需额外依赖。
+  - V1.9  移动端输入优化：出生日期拆分为「年 / 月 / 日」三个独立数字输入框，
+          出生时间改为 HH:MM 文本输入，避免移动端 date/time picker 滚轮选年困难；
+          时区偏移改为文本+小数键盘，方便直接键入。
+          页面结构：「13 天体明细表」移至「个人叠加」之前，并默认展开。
+          Header 文案更新："身体图"→"人类图"，新增副标题"此刻，整个宇宙在为你闪烁"；
+          算法说明卡片标点与段落间距微调。
+  - V2.0  Header 结构优化：将副标题拆分为独立三行——
+          第一行「13 天体实时黄道定位 × 64 闸门 × 36 通道」、
+          第二行「把当下的宇宙能量场，翻译成你的人类图」、
+          第三行「此刻，整个宇宙在为你闪烁」，层级更清晰。
           * 13 个天体黄道经度 → 闸门/爻线（每闸门 5.625°，Gate 41 黄经≈302° 为锚点）
           * 地球 = 太阳 + 180°；南交 = 北交 + 180°
           * 北交用平黄白交点多项式（Ω = 125.04452 − 1934.136261·T + …）
@@ -134,9 +144,19 @@
   details.overlay{margin:18px 0;background:var(--card);border:1px solid var(--line);
     border-radius:14px;padding:6px 16px 16px;box-shadow:var(--shadow)}
   details.overlay summary{cursor:pointer;font-weight:700;color:var(--gold-d);padding:10px 0;font-size:1.02rem}
-  .formrow{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+  .formrow{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0;align-items:flex-end}
   .formrow label{display:flex;flex-direction:column;font-size:.78rem;color:var(--ink2);gap:3px}
   input{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:.9rem}
+  .date-group{display:flex;gap:6px}
+  .date-group input{text-align:center}
+  @media(max-width:480px){
+    .formrow{gap:10px}
+    .formrow label{font-size:.8rem}
+    input{font-size:16px} /* 防止 iOS 自动缩放 */
+    .date-group input{width:64px!important}
+    #b-time{width:86px!important}
+    #b-tz{width:64px!important}
+  }
   button{background:var(--gold-d);color:#fff;border:none;border-radius:8px;padding:9px 16px;
     font-size:.9rem;cursor:pointer;font-weight:600}
   button:hover{background:#8a5a2c}
@@ -159,7 +179,9 @@
 <body>
 <header>
   <h1>🜂 人类图流日分析系统 · 此刻 Just Now</h1>
-  <div class="sub">13 天体实时黄道定位 × 64 闸门 × 36 通道 —— 把当下的宇宙能量场，翻译成你的身体图</div>
+  <div class="sub">13 天体实时黄道定位 × 64 闸门 × 36 通道</div>
+  <div class="sub" style="margin-top:4px">把当下的宇宙能量场，翻译成你的人类图</div>
+  <div class="sub" style="margin-top:6px;font-weight:500;opacity:.92">此刻，整个宇宙在为你闪烁</div>
 </header>
 
 <div class="wrap">
@@ -174,7 +196,7 @@
     <h2>📐 算法说明 <span class="tag">计算原理</span></h2>
     <div class="note" style="font-size:.84rem;line-height:1.85">
       天体视黄经（黄道）÷ 5.625° = 闸门位；<br>
-      以人类图新年 Gate 41（黄经≈302°，约 1 月 22 日）为锚点，<br>
+      以人类图新年 Gate 41（黄经≈302°，约 1 月 22 日）为锚点；<br>
       64 闸门按 Rave Mandala 真实序列排列；<br>
       地球 = 太阳 + 180°，南交 = 北交 + 180°；<br>
       北交用平黄白交点多项式；<br>
@@ -182,7 +204,7 @@
       流日节奏：<br>
       太阳≈5.7天/闸门（每周主题）；<br>
       月亮≈10.2小时/闸门（每日情绪流）；<br>
-      南北交≈3.5个月/闸门（长期方向）。<br>
+      南北交≈3.5个月/闸门（长期方向）。<br><br>
       本系统仅用于学习与自我探索，不构成任何形式的医疗/投资/人生建议。
     </div>
   </div>
@@ -233,25 +255,32 @@
     <div id="transit-reading" class="interp"></div>
   </div>
 
+  <!-- 13 天体明细表 -->
+  <details class="overlay" open>
+    <summary>📐 13 天体明细表（闸门·爻·色·调·基）</summary>
+    <table class="detail" id="detail-table"></table>
+    <div class="note">色(color)/调(tone)/基(base) 为人类图「密码子」细分：每闸门 6 爻 × 6 色 × 6 调 × 5 基 = 384 爻位。流日解读以闸门+爻为主，色/调/基作深度参考。</div>
+  </details>
+
   <!-- 个人叠加 -->
   <details class="overlay" id="overlay">
     <summary>🔗 个人叠加：输入出生时间，看「此刻宇宙」正激活你图上的哪些闸门与通道</summary>
     <div class="formrow">
-      <label>出生日期<input type="date" id="b-date"></label>
-      <label>出生时间（当地）<input type="time" id="b-time" value="12:00"></label>
-      <label>时区偏移（小时）<input type="number" id="b-tz" value="8" step="1" style="width:90px"></label>
+      <label>出生日期
+        <div class="date-group">
+          <input type="text" inputmode="numeric" id="b-year" placeholder="年" maxlength="4" style="width:72px">
+          <input type="text" inputmode="numeric" id="b-month" placeholder="月" maxlength="2" style="width:56px">
+          <input type="text" inputmode="numeric" id="b-day" placeholder="日" maxlength="2" style="width:56px">
+        </div>
+      </label>
+      <label>出生时间（当地）<input type="text" id="b-time" value="12:00" placeholder="HH:MM" maxlength="5" style="width:90px"></label>
+      <label>时区偏移（小时）<input type="text" inputmode="decimal" id="b-tz" value="8" style="width:70px"></label>
     </div>
     <div class="formrow">
       <button id="b-calc">生成本人流日叠加</button>
       <span class="mini">提示：人类图闸门计算只需「日期+时间」（已含时区换算为 UTC），无需出生地。出生前 88.0256 天为潜意识(红)计算基准。</span>
     </div>
     <div id="personal"></div>
-  </details>
-
-  <details class="overlay">
-    <summary>📐 13 天体明细表（闸门·爻·色·调·基）</summary>
-    <table class="detail" id="detail-table"></table>
-    <div class="note">色(color)/调(tone)/基(base) 为人类图「密码子」细分：每闸门 6 爻 × 6 色 × 6 调 × 5 基 = 384 爻位。流日解读以闸门+爻为主，色/调/基作深度参考。</div>
   </details>
 
   <footer>
@@ -262,7 +291,7 @@
 
 <script>
 /* ===================== 数据层 ===================== */
-const VERSION = "V1.8";
+const VERSION = "V2.0";
 const DEG = 360/64; // 5.625°
 const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
 // Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门
@@ -1077,11 +1106,13 @@ function computeNatal(birthDate){
   return {pers,des,natalSet,side,defCenters,defChans,type,typeNote};
 }
 function renderPersonal(){
-  const dateStr=document.getElementById("b-date").value;
-  const timeStr=document.getElementById("b-time").value;
+  const year=parseInt(document.getElementById("b-year").value,10);
+  const month=parseInt(document.getElementById("b-month").value,10);
+  const day=parseInt(document.getElementById("b-day").value,10);
+  const timeStr=document.getElementById("b-time").value||"12:00";
   const tz=parseFloat(document.getElementById("b-tz").value)||8;
-  if(!dateStr){ document.getElementById("personal").innerHTML=`<div class="err">请先填写出生日期。</div>`; return; }
-  const [Y,M,D]=dateStr.split("-").map(Number);
+  if(!year||!month||!day){ document.getElementById("personal").innerHTML=`<div class="err">请先填写完整出生日期（年 / 月 / 日）。</div>`; return; }
+  const Y=year, M=month, D=day;
   const [h,m]=timeStr.split(":").map(Number);
   // 当地时刻 → UTC
   const localMs=Date.UTC(Y,M-1,D,h,m) - tz*3600000;
@@ -1139,9 +1170,11 @@ window.addEventListener("load",()=>{
   setInterval(tick, 60000); // 每分钟刷新「此刻」
   document.getElementById("b-calc").addEventListener("click",renderPersonal);
   // 默认填今天日期，方便即时体验
-  if(!document.getElementById("b-date").value){
-    const n=new Date(); const p=x=>String(x).padStart(2,'0');
-    document.getElementById("b-date").value=`${n.getFullYear()}-${p(n.getMonth()+1)}-${p(n.getDate())}`;
+  if(!document.getElementById("b-year").value){
+    const n=new Date();
+    document.getElementById("b-year").value=n.getFullYear();
+    document.getElementById("b-month").value=n.getMonth()+1;
+    document.getElementById("b-day").value=n.getDate();
   }
 });
 </script>
