@@ -3,7 +3,7 @@
   ============================================================================
   hd-transit-just-now.html  ·  人类图流日分析系统（此刻 / Just Now）
   ----------------------------------------------------------------------------
-  VERSION: V1.3
+  VERSION: V1.4
   DATE:    2026-09-14
   AUTHOR:  虾哥 (Kan Man Tang) · 人类图 × 系统架构
 
@@ -19,6 +19,9 @@
           删除 header 静态版本注释，改为由 VERSION 常量动态输出。
   - V1.3b 版本号移至 footer 并动态输出：彻底移除 header 版本条，
           算法说明节奏句尾「｜」改为「；」，footer 版本号由 VERSION 常量自动写入。
+  - V1.4  修复「国内联网仍不算行星闸门」：根因为 jsdelivr/unpkg 在大陆被墙/超时，
+          USE_LIB=false 退化为近似模式（仅日月交可算，外行星显示「需联网」）。
+          改为仓库内自托管 astronomy.js（./astronomy.js，同源可访问），CDN 仅作兜底。
           * 13 个天体黄道经度 → 闸门/爻线（每闸门 5.625°，Gate 41 黄经≈302° 为锚点）
           * 地球 = 太阳 + 180°；南交 = 北交 + 180°
           * 北交用平黄白交点多项式（Ω = 125.04452 − 1934.136261·T + …）
@@ -26,8 +29,8 @@
           * 个人叠加：出生时刻=意识(黑)，出生前 88.0256 天=潜意识(红)
   数据来源：36 通道 / 9 中心 64 闸门映射已多源交叉验证（Jovian / HDMatrix / CSDN / humandesign-api）
 
-  说明：天文计算依赖 astronomy-engine（CDN，jsdelivr→unpkg 双兜底）。
-        若 CDN 不可用，自动降级为「近似模式」：太阳/地球/月亮/南北交用低精度公式，
+  说明：天文计算依赖仓库内自托管 astronomy-engine（./astronomy.js，同源、国内可访问），
+        CDN 仅作兜底。若库未载入，自动降级为「近似模式」：太阳/地球/月亮/南北交用低精度公式，
         其余天体标记为「需联网」。
   ============================================================================
 -->
@@ -36,11 +39,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>人类图流日分析系统 · 此刻 Just Now</title>
-<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js"></script>
+<script src="./astronomy.js"></script>
 <script>
-  // CDN 兜底：jsdelivr 失败后尝试 unpkg
+  // 优先用仓库内自托管库（同源，国内可访问）；缺失时回退到 CDN
   if (typeof Astronomy === 'undefined') {
-    document.write('<script src="https://unpkg.com/astronomy-engine/astronomy.js"><\/script>');
+    document.write('<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js"><\/script>');
   }
 </script>
 <style>
@@ -231,7 +234,7 @@
 
 <script>
 /* ===================== 数据层 ===================== */
-const VERSION = "V1.3";
+const VERSION = "V1.4";
 const DEG = 360/64; // 5.625°
 const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
 // Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门
