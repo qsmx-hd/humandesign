@@ -3,7 +3,7 @@
   ============================================================================
   hd-transit-just-now.html  ·  人类图流日分析系统（此刻 / Just Now）
   ----------------------------------------------------------------------------
-  VERSION: V1.4
+  VERSION: V1.7
   DATE:    2026-09-14
   AUTHOR:  虾哥 (Kan Man Tang) · 人类图 × 系统架构
 
@@ -22,6 +22,14 @@
   - V1.4  修复「国内联网仍不算行星闸门」：根因为 jsdelivr/unpkg 在大陆被墙/超时，
           USE_LIB=false 退化为近似模式（仅日月交可算，外行星显示「需联网」）。
           改为仓库内自托管 astronomy.js（./astronomy.js，同源可访问），CDN 仅作兜底。
+  - V1.5  将 astronomy.js 由 CommonJS 构建包装为浏览器全局构建（IIFE），
+          修正 `<script>` 直载时 `exports` 未定义导致 `Astronomy` 全局变量缺失的问题。
+          13 个天体全部可正常算出门。
+  - V1.6  修复时钟栏 UTC 显示：移除 `getTimezoneOffset()` 二次回拨，
+          直接用 `getUTC*` 方法取 UTC 时间；修正 UTC+8 时区下差 8 小时的显示错误。
+  - V1.7  曼陀罗图优化：被激活闸门的色块圆点半径由 6.5 放大到 10，
+          并把数字外移避免被色块遮挡；激活数字加粗加大（12px / weight 800），
+          提升可读性。
           * 13 个天体黄道经度 → 闸门/爻线（每闸门 5.625°，Gate 41 黄经≈302° 为锚点）
           * 地球 = 太阳 + 180°；南交 = 北交 + 180°
           * 北交用平黄白交点多项式（Ω = 125.04452 − 1934.136261·T + …）
@@ -234,7 +242,7 @@
 
 <script>
 /* ===================== 数据层 ===================== */
-const VERSION = "V1.5";
+const VERSION = "V1.7";
 const DEG = 360/64; // 5.625°
 const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
 // Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门
@@ -464,7 +472,7 @@ function gateXY(gate,r,cx,cy){
   return {x:cx+r*Math.sin(th), y:cy-r*Math.cos(th)};
 }
 function buildMandala(activeGates,activeChans){
-  const cx=320,cy=320, R_OUT=292, R_CH=205, R_DOT=292;
+  const cx=320,cy=320, R_OUT=292, R_CH=205, R_DOT=282, R_NUM=298, R_NUM_HOT=304;
   let s=`<svg class="mandala" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">`;
   s+=`<circle cx="${cx}" cy="${cy}" r="312" fill="none" stroke="#D9CDB8" stroke-width="1"/>`;
   // 通道
@@ -473,17 +481,18 @@ function buildMandala(activeGates,activeChans){
     const on=activeChans.some(ac=>ac.a===c[0]&&ac.b===c[1]);
     s+=`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${on?'#E0B070':'#E7DEC9'}" stroke-width="${on?2.4:0.8}" opacity="${on?0.95:0.5}"/>`;
   });
-  // 闸门刻度 + 数字
+  // 闸门刻度 + 数字：激活闸门圆点放大并放在刻度内侧，数字外移到圆点之外避免重叠
   for(let g=1; g<=64; g++){
     const mid=gateXY(g,R_OUT,cx,cy);
-    const inn=gateXY(g,R_OUT-16,cx,cy);
+    const inn=gateXY(g,R_OUT-12,cx,cy);
     const hot=activeGates.has(g);
-    s+=`<line x1="${inn.x.toFixed(1)}" y1="${inn.y.toFixed(1)}" x2="${mid.x.toFixed(1)}" y2="${mid.y.toFixed(1)}" stroke="${hot?'#C4956A':'#C9BCA2'}" stroke-width="${hot?2.2:0.7}"/>`;
+    s+=`<line x1="${inn.x.toFixed(1)}" y1="${inn.y.toFixed(1)}" x2="${mid.x.toFixed(1)}" y2="${mid.y.toFixed(1)}" stroke="${hot?'#C4956A':'#C9BCA2'}" stroke-width="${hot?2.6:0.7}"/>`;
     if(hot){
       const dot=gateXY(g,R_DOT,cx,cy);
-      s+=`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="6.5" fill="#C4956A" stroke="#fff" stroke-width="1.5"/>`;
+      s+=`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="10" fill="#C4956A" stroke="#fff" stroke-width="2"/>`;
     }
-    s+=`<text x="${mid.x.toFixed(1)}" y="${(mid.y+4).toFixed(1)}" text-anchor="middle" font-size="11" fill="${hot?'#A9743F':'#9A8A70'}" font-weight="${hot?700:400}">${g}</text>`;
+    const numPos=gateXY(g,hot?R_NUM_HOT:R_NUM,cx,cy);
+    s+=`<text x="${numPos.x.toFixed(1)}" y="${(numPos.y+4).toFixed(1)}" text-anchor="middle" font-size="${hot?12:11}" fill="${hot?'#A9743F':'#9A8A70'}" font-weight="${hot?800:400}">${g}</text>`;
   }
   // 中心
   s+=`<circle cx="${cx}" cy="${cy}" r="60" fill="#FBEFDD" stroke="#C4956A" stroke-width="1.5"/>`;
@@ -497,8 +506,8 @@ function buildMandala(activeGates,activeChans){
 function fmtClock(d){
   const p=n=>String(n).padStart(2,'0');
   const loc=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
-  const u=new Date(d.getTime()+d.getTimezoneOffset()*60000);
-  const utc=`${u.getUTCFullYear()}-${p(u.getUTCMonth()+1)}-${p(u.getUTCDate())} ${p(u.getUTCHours())}:${p(u.getUTCMinutes())}:${p(u.getUTCSeconds())} UTC`;
+  // d.getTime() 已是 UTC 时间戳，直接用 getUTC* 系列方法取出 UTC 时间，不要再用 getTimezoneOffset 回拨
+  const utc=`${d.getUTCFullYear()}-${p(d.getUTCMonth()+1)}-${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())} UTC`;
   return {loc,utc};
 }
 function gateName(g){ return GATES[g]?GATES[g][0]:("闸门"+g); }
