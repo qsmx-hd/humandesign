@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="yQGAFfxoqsMGGeVUW6qA3W">
+<head data-page-node-id="LoLv7r3mkuq5Zx7g1gvTDv">
+<meta charset="UTF-8" data-page-node-id="3mk8sqbxy7E2xZMlRdeLn9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="Z4x8ZjKN6aHeA3zOFlS6g9">
 <title>预约分析师咨询 · 勤思妙享</title>
 <style>
 :root {
@@ -47,17 +47,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .bk-section-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;}
 .bk-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));color:white;font-size:13px;font-weight:800;flex-shrink:0;}
 
-/* ===== ANALYST ===== */
-.bk-analyst{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
-.bk-avatar{width:88px;height:88px;border-radius:24px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:36px;color:white;font-weight:800;flex-shrink:0;box-shadow:0 6px 20px rgba(108,92,231,0.3);}
-.bk-analyst-info{flex:1;min-width:240px;}
-.bk-analyst-name{font-size:23px;font-weight:800;}
-.bk-analyst-title{font-size:14px;color:var(--purple);font-weight:700;margin:4px 0 10px;}
-.bk-analyst-meta{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--text-2);}
+/* ===== ANALYST（数据驱动 · 可扩展） ===== */
+.bk-analysts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.bk-analyst-card{border:2px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;background:white;position:relative;display:flex;gap:16px;align-items:center;}
+.bk-analyst-card:hover{border-color:var(--purple-light);}
+.bk-analyst-card.active{border-color:var(--purple);background:#f7f5ff;box-shadow:0 4px 18px rgba(108,92,231,0.15);}
+.bk-analyst-card .bk-avatar{width:62px;height:62px;border-radius:18px;font-size:26px;flex-shrink:0;}
+.bk-analyst-card .bk-analyst-info{min-width:0;flex:1;}
+.bk-analyst-card .bk-analyst-name{font-size:19px;font-weight:800;}
+.bk-analyst-card .bk-analyst-title{font-size:12.5px;color:var(--purple);font-weight:700;margin:2px 0 8px;}
+.bk-analyst-card .bk-analyst-meta{gap:14px;font-size:12px;margin-top:0;}
+.bk-analyst-card .bk-tags{margin-top:10px;}
+.bk-analyst-card .bk-tags .bk-tag{font-size:11px;padding:3px 9px;}
+.bk-avatar{width:62px;height:62px;border-radius:18px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:26px;color:white;font-weight:800;flex-shrink:0;box-shadow:0 6px 20px rgba(108,92,231,0.3);}
+.bk-analyst-info{flex:1;min-width:0;}
+.bk-analyst-name{font-size:19px;font-weight:800;}
+.bk-analyst-title{font-size:12.5px;color:var(--purple);font-weight:700;margin:2px 0 8px;}
+.bk-analyst-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text-2);margin-top:8px;}
 .bk-analyst-meta b{color:var(--text);}
 .bk-rating{color:#f39c12;font-weight:700;}
 .bk-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
-.bk-tag{font-size:12px;font-weight:600;padding:4px 12px;border-radius:10px;background:#f3f0ff;color:#5a4fcf;border:1px solid #ddd5ff;}
+.bk-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;background:#f3f0ff;color:#5a4fcf;border:1px solid #ddd5ff;}
+.bk-analyst-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--border);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;transition:all .2s;}
+.bk-analyst-card.active .bk-analyst-check{background:linear-gradient(135deg,var(--purple),var(--pink));}
+.bk-analyst-placeholder{border:2px dashed #d3c9f2;border-radius:16px;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--text-2);background:#faf8ff;gap:8px;min-height:118px;}
+.bk-analyst-placeholder .ph-ic{font-size:30px;opacity:.55;}
+.bk-analyst-placeholder .ph-t{font-size:14px;font-weight:800;color:#7c6fc0;}
+.bk-analyst-placeholder .ph-s{font-size:12px;line-height:1.6;}
 
 /* ===== TYPE CARDS ===== */
 .bk-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
@@ -152,191 +168,175 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 /* ===== MOBILE ===== */
 @media (max-width:640px){
   .bk-form-grid{grid-template-columns:1fr;}
-  .bk-analyst{flex-direction:column;text-align:center;}
-  .bk-analyst-meta{justify-content:center;}
-  .bk-tags{justify-content:center;}
+  .bk-analyst-card{flex-direction:column;text-align:center;}
+  .bk-analyst-card .bk-analyst-meta{justify-content:center;}
+  .bk-analyst-card .bk-tags{justify-content:center;}
   .series-hero h1{font-size:30px;}
   .bk-section{padding:22px 18px;}
 }
 </style>
 </head>
-<body>
+<body data-page-node-id="3Ze8OFExS3zxDpiWNXzV1I">
 
 <!-- ===== NAV ===== -->
-<nav class="top-nav">
-  <div class="nav-inner">
-    <div class="nav-logo">勤思妙享</div>
-    <a class="nav-btn" href="index.html">首页</a>
-    <a class="nav-btn" href="beginner.html">入门</a>
-    <a class="nav-btn" href="intermediate.html">进阶</a>
-    <a class="nav-btn" href="advanced.html">高阶</a>
-    <a class="nav-btn" href="human-design-guide.html">指南</a>
-    <a class="nav-btn active" href="booking.html">预约咨询</a>
+<nav class="top-nav" data-page-node-id="fv73b1CL7B3NxphfCKmcGX">
+  <div class="nav-inner" data-page-node-id="An6MOIwcImSfatgm5s7e97">
+    <div class="nav-logo" data-page-node-id="SmBUsFG7L4n91W0jHAltUo">勤思妙享</div>
+    <a class="nav-btn" href="index.html" data-page-node-id="wlU183OwFDjIPSWfSqu6rV">首页</a>
+    <a class="nav-btn" href="beginner.html" data-page-node-id="JcVmeZSeKZCBuGaAUsQUwP">入门</a>
+    <a class="nav-btn" href="intermediate.html" data-page-node-id="S2E0xxx3QD6ZduE7odBP3V">进阶</a>
+    <a class="nav-btn" href="advanced.html" data-page-node-id="KxxTaCSdXHiCvZAMa8JwtF">高阶</a>
+    <a class="nav-btn" href="human-design-guide.html" data-page-node-id="rQTU9IXLKYZhVb8s6tmNS0">指南</a>
+    <a class="nav-btn active" href="booking.html" data-page-node-id="rRRrzBAUIbMtufSjEbDYss">预约咨询</a>
   </div>
 </nav>
 
 <!-- ===== HERO ===== -->
-<header class="series-hero">
-  <div class="hero-badge">1 对 1 人类图解读</div>
-  <h1>预约分析师咨询</h1>
-  <p>把你的类型、权威与人生角色，交给专业分析师，用一次深度对话照见自己。</p>
-  <div class="hero-steps">
-    <span class="hero-step">① 选咨询师</span>
-    <span class="hero-step">② 选日期时段</span>
-    <span class="hero-step">③ 填咨询信息</span>
-    <span class="hero-step">④ 确认预约</span>
+<header class="series-hero" data-page-node-id="n02EHyMYqeUdKQw5bddW57">
+  <div class="hero-badge" data-page-node-id="uOOLDJYzfWGeswcfC49eIZ">1 对 1 人类图解读</div>
+  <h1 data-page-node-id="pUePOUg7VFUCKkyVNzPGZd">预约分析师咨询</h1>
+  <p data-page-node-id="0zxBtIK1s7902tU3vO6Dsa">把你的类型、权威与人生角色，交给专业分析师，用一次深度对话照见自己。</p>
+  <div class="hero-steps" data-page-node-id="6Rm6UBpKhG2y22icW4twWE">
+    <span class="hero-step" data-page-node-id="6W7XxS7NKW2wIzquVFcvt9">① 选咨询师</span>
+    <span class="hero-step" data-page-node-id="PEMFaz2lKhrSBUyBrLjiFs">② 选日期时段</span>
+    <span class="hero-step" data-page-node-id="S7DdBtQrMOPQ56Vvx6QQEZ">③ 填咨询信息</span>
+    <span class="hero-step" data-page-node-id="uBF1hpTYoNM01xgqYwJ18d">④ 确认预约</span>
   </div>
 </header>
 
-<main class="bk-wrap">
+<main class="bk-wrap" data-page-node-id="6z0uR0vkYOLBWhTpM15DXw">
 
-  <!-- 步骤 1：分析师 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">1</span>你的分析师</div>
-    <div class="bk-section-sub">本时段由以下认证分析师为你服务</div>
-    <div class="bk-analyst">
-      <div class="bk-avatar">邓</div>
-      <div class="bk-analyst-info">
-        <div class="bk-analyst-name">邓勤敏</div>
-        <div class="bk-analyst-title">人类图认证分析师 · 认证讲师</div>
-        <div class="bk-analyst-meta">
-          <span>从业 <b>8 年</b></span>
-          <span>已解读 <b>1200+</b> 案例</span>
-          <span class="bk-rating">★ 4.9 满意度</span>
-        </div>
-        <div class="bk-tags">
-          <span class="bk-tag">类型与权威</span>
-          <span class="bk-tag">关系动力</span>
-          <span class="bk-tag">人生角色</span>
-          <span class="bk-tag">轮回交叉</span>
-        </div>
-      </div>
-    </div>
+  <!-- 步骤 1：分析师（数据驱动，可扩展新增） -->
+  <section class="bk-section" data-page-node-id="51QF4R9qppUydYV5OdVXqK">
+    <div class="bk-section-title" data-page-node-id="Iw3LrcDAXDqzVHDhY5rrcw"><span class="bk-num" data-page-node-id="OpK3Ye4EuA5eI0yUNUhf5m">1</span>选择你的分析师</div>
+    <div class="bk-section-sub" data-page-node-id="tWjZ9VmVBBRNaA5IQdj6w5">本时段由以下认证分析师为你服务（点击卡片选择，团队持续扩充中）</div>
+    <div class="bk-analysts" id="bkAnalysts" data-page-node-id="yEd1H0ryk8BVpkC9goSele"></div>
   </section>
 
   <!-- 步骤 2：咨询类型 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">2</span>选择咨询类型</div>
-    <div class="bk-section-sub">不同咨询目标，对应不同时长与深度</div>
-    <div class="bk-types" id="bkTypes">
-      <div class="bk-type active" data-type="首次解读" data-dur="90分钟" data-price="599">
-        <div class="bk-type-check">✓</div>
-        <div class="bk-type-name">首次解读咨询</div>
-        <div class="bk-type-dur">时长 90 分钟</div>
-        <div class="bk-type-desc">从零开始梳理你的类型、权威、人生角色与定义，建立完整自我认知框架。</div>
-        <div class="bk-type-price">¥599 <small>/ 次</small></div>
+  <section class="bk-section" data-page-node-id="8OZ6S53De10XDMJX1lB0LK">
+    <div class="bk-section-title" data-page-node-id="W8WYoczaFyA1owXmnGaJ8i"><span class="bk-num" data-page-node-id="oodacRg7Jx8RVk6NjEDEnT">2</span>选择咨询类型</div>
+    <div class="bk-section-sub" data-page-node-id="TDIdKS3UMxqDtTMRyQIJM3">不同咨询目标，对应不同时长与深度</div>
+    <div class="bk-types" id="bkTypes" data-page-node-id="Bx6blaADpX540YXib5vETa">
+      <div class="bk-type" data-type="系统深度" data-dur="90分钟" data-price="1499" data-page-node-id="NtJrGFcNjZbIVUwxVlD74W">
+        <div class="bk-type-check" data-page-node-id="CBXMKI3QHMRheevmoyQuHv">✓</div>
+        <div class="bk-type-name" data-page-node-id="xcyTZAwICT0SsAEy1mGpg5">系统深度咨询</div>
+        <div class="bk-type-dur" data-page-node-id="r5Vw3JpWEvohxd8G2PzcNb">时长 90 分钟</div>
+        <div class="bk-type-desc" data-page-node-id="H3ROGecfJrhnfKckIiACIm">系统梳理你的全部人类图要素（类型 / 权威 / 人生角色 / 定义 / 通道 / 轮回交叉），建立完整自我认知框架，并做深度个案解析与落地建议。</div>
+        <div class="bk-type-price" data-page-node-id="qfQmcGHDNuOou8WiEQ6hZc">¥1499 <small data-page-node-id="QmVgikpOwFbvDuUuo0EbK9">/ 次</small></div>
       </div>
-      <div class="bk-type" data-type="深度解读" data-dur="60分钟" data-price="399">
-        <div class="bk-type-check">✓</div>
-        <div class="bk-type-name">深度解读咨询</div>
-        <div class="bk-type-dur">时长 60 分钟</div>
-        <div class="bk-type-desc">聚焦某一主题（关系 / 职业 / 决策）做深入拆解，适合已初步了解自己的你。</div>
-        <div class="bk-type-price">¥399 <small>/ 次</small></div>
+      <div class="bk-type active" data-type="焦点解读" data-dur="60分钟" data-price="399" data-page-node-id="ibA1P25kTgXAclQfAxzZDn">
+        <div class="bk-type-check" data-page-node-id="g3B1JoOCa9dFvgqdAED8C4">✓</div>
+        <div class="bk-type-name" data-page-node-id="Jllh1gBHGIJQZoijuixmPq">焦点解读咨询</div>
+        <div class="bk-type-dur" data-page-node-id="SWTEyLvH9vM7SArM9oyKsn">时长 60 分钟</div>
+        <div class="bk-type-desc" data-page-node-id="z5NT4pDuCp9Yzx0VFw8ZpT">聚焦你当下最关心的单一焦点主题（关系 / 职业 / 决策），做深入拆解，给出可立刻落地的行动建议。</div>
+        <div class="bk-type-price" data-page-node-id="Y5dNoAo951h79q582QY0Jg">¥399 <small data-page-node-id="bhhCpzhuvm2zgcTNE6uBkm">/ 次</small></div>
       </div>
-      <div class="bk-type" data-type="跟进咨询" data-dur="30分钟" data-price="199">
-        <div class="bk-type-check">✓</div>
-        <div class="bk-type-name">跟进咨询</div>
-        <div class="bk-type-dur">时长 30 分钟</div>
-        <div class="bk-type-desc">针对上次咨询的落地实践做回顾与微调，短平快地解决当下卡点。</div>
-        <div class="bk-type-price">¥199 <small>/ 次</small></div>
+      <div class="bk-type" data-type="跟进咨询" data-dur="30分钟" data-price="199" data-page-node-id="9zVkPxmf7fpcyC8WHdS9zN">
+        <div class="bk-type-check" data-page-node-id="VoHVgJR6eGNpCAe85A63KL">✓</div>
+        <div class="bk-type-name" data-page-node-id="tlikXPN901KzU3UT92GQQG">跟进咨询</div>
+        <div class="bk-type-dur" data-page-node-id="aoZCAXYVVNYbJQvbBKbD60">时长 30 分钟</div>
+        <div class="bk-type-desc" data-page-node-id="jUiFUisMBirxvlRseQzAIN">针对上次咨询的落地实践做回顾与微调，短平快地解决当下卡点。</div>
+        <div class="bk-type-price" data-page-node-id="uPdga72wCNmOTenf3Te8HI">¥199 <small data-page-node-id="1O75vIFPGbt9KQAAyuqjmI">/ 次</small></div>
       </div>
     </div>
   </section>
 
   <!-- 步骤 3：日期 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">3</span>选择日期</div>
-    <div class="bk-section-sub">可预约未来 14 天，工作时间 09:00–12:00 / 14:00–18:00</div>
-    <div class="bk-dates" id="bkDates"></div>
+  <section class="bk-section" data-page-node-id="nS4GiElFTpBNDdejBFBNNn">
+    <div class="bk-section-title" data-page-node-id="ykWSB8V1WFZEcLLi7RDX7k"><span class="bk-num" data-page-node-id="Xd36wtHDu2o2dzj60HUV3K">3</span>选择日期</div>
+    <div class="bk-section-sub" data-page-node-id="FHCtBx7zA0YDGoghlx5DEN">可预约未来 14 天，工作时间 09:00–12:00 / 14:00–18:00</div>
+    <div class="bk-dates" id="bkDates" data-page-node-id="0nrETUnCsOM5X9DUfkJVb6"></div>
   </section>
 
   <!-- 步骤 4：时段 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">4</span>选择时段</div>
-    <div class="bk-section-sub" id="bkSlotHint">请先选择上方日期</div>
-    <div id="bkSlots"></div>
+  <section class="bk-section" data-page-node-id="aBZlTWmEBVnSPKu9amnoQn">
+    <div class="bk-section-title" data-page-node-id="h6TTzYv8bkQAInb83sz7h6"><span class="bk-num" data-page-node-id="vlhSEsjHkEsZyArqKRojNg">4</span>选择时段</div>
+    <div class="bk-section-sub" id="bkSlotHint" data-page-node-id="ma38x0FW9afNV54BXCi6Vw">请先选择上方日期</div>
+    <div id="bkSlots" data-page-node-id="RgEzWrBfUTynRYC6ZlnMTE"></div>
   </section>
 
   <!-- 步骤 5：信息 + 确认 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">5</span>填写咨询信息</div>
-    <div class="bk-section-sub">信息仅用于本次预约确认，分析师会提前为你准备</div>
-    <div class="bk-form-grid">
-      <div class="bk-field">
-        <label>姓名 <span class="req">*</span></label>
-        <input class="bk-input" id="bkName" placeholder="你的称呼">
+  <section class="bk-section" data-page-node-id="VOjY4oP9t5WO22IMmqyUkW">
+    <div class="bk-section-title" data-page-node-id="b5O9OcuC9UHaQRap1wrFDe"><span class="bk-num" data-page-node-id="zB86DbtSkBGmDQHrh4Otbi">5</span>填写咨询信息</div>
+    <div class="bk-section-sub" data-page-node-id="Eo1iXdT0C5D4AJW3P5afgr">信息仅用于本次预约确认，分析师会提前为你准备</div>
+    <div class="bk-form-grid" data-page-node-id="oDGyZFFZK0mE8luKObAKUK">
+      <div class="bk-field" data-page-node-id="gG5HFDBBSBkVLOrOPuyxT4">
+        <label data-page-node-id="LceALTIONuVOx7VplF0pe2">姓名 <span class="req" data-page-node-id="wE0bquMx6s3kJgrUZGusRg">*</span></label>
+        <input class="bk-input" id="bkName" placeholder="你的称呼" data-page-node-id="zyHaC6dH1cpNejK2z9dgsG">
       </div>
-      <div class="bk-field">
-        <label>手机号 <span class="req">*</span></label>
-        <input class="bk-input" id="bkPhone" placeholder="11 位手机号" inputmode="numeric" maxlength="11">
+      <div class="bk-field" data-page-node-id="wZlrDb36dpabU280L0u9St">
+        <label data-page-node-id="bRO8OnGF7OWrojDC3T9X1b">手机号 <span class="req" data-page-node-id="lZs64JNVaB723skElaDOSH">*</span></label>
+        <input class="bk-input" id="bkPhone" placeholder="11 位手机号" inputmode="numeric" maxlength="11" data-page-node-id="0tjfahEFpc8n0pKXKv86Bf">
       </div>
-      <div class="bk-field">
-        <label>微信号</label>
-        <input class="bk-input" id="bkWechat" placeholder="选填，便于发送资料">
+      <div class="bk-field" data-page-node-id="GQgDwDiuUKENYZ1pHl5nAf">
+        <label data-page-node-id="HB1hnHCZcfiBxamABdmoIN">微信号</label>
+        <input class="bk-input" id="bkWechat" placeholder="选填，便于发送资料" data-page-node-id="ujrPbPDimmMDIqiRm9ea2t">
       </div>
-      <div class="bk-field">
-        <label>你的类型</label>
-        <select class="bk-select" id="bkTypeSel">
-          <option value="">暂不清楚 / 待解读</option>
-          <option>显示者</option>
-          <option>生产者</option>
-          <option>显示生产者</option>
-          <option>投射者</option>
-          <option>反映者</option>
+      <div class="bk-field" data-page-node-id="tPDdA6D7CAWyyIS4mUqDwi">
+        <label data-page-node-id="j2SYfGPCqvh7Vfzx0TMFM8">你的类型</label>
+        <select class="bk-select" id="bkTypeSel" data-page-node-id="cHzjtrqhxAGWUaest9h55F">
+          <option value="" data-page-node-id="M6hLm17bWD0e4lKAqP6vm0">暂不清楚 / 待解读</option>
+          <option data-page-node-id="WiOtLxKCk4OAveZuQR6QBB">显示者</option>
+          <option data-page-node-id="MXvndQUw4x19DQLLHkSxeC">生产者</option>
+          <option data-page-node-id="Fc1fTXqt8VmDHiRFEEYpBv">显示生产者</option>
+          <option data-page-node-id="kALACvRgcv4dExxpFsACuA">投射者</option>
+          <option data-page-node-id="AajQCzLARsZbXUSZl2KV1Z">反映者</option>
         </select>
       </div>
-      <div class="bk-field full">
-        <label>想重点探讨的主题</label>
+      <div class="bk-field full" data-page-node-id="wB831zbu5Ixa1wb1LyJRM3">
+        <label data-page-node-id="naJMfhkZO9iAzWvMH58OAg">想重点探讨的主题</label>
         <textarea class="bk-textarea" id="bkTopic" placeholder="例如：职场中的决策困惑、亲密关系里的沟通模式、是否该换赛道……"></textarea>
       </div>
     </div>
 
-    <div class="bk-summary">
-      <div class="bk-summary-title">📋 预约摘要</div>
-      <div class="bk-summary-row"><span class="k">咨询类型</span><span class="v" id="sumType">首次解读咨询（90分钟）</span></div>
-      <div class="bk-summary-row"><span class="k">预约日期</span><span class="v empty" id="sumDate">未选择</span></div>
-      <div class="bk-summary-row"><span class="k">预约时段</span><span class="v empty" id="sumTime">未选择</span></div>
-      <div class="bk-summary-row"><span class="k">咨询费用</span><span class="v" id="sumPrice">¥599</span></div>
+    <div class="bk-summary" data-page-node-id="voS2LB2DN5psxnzuhlBHwV">
+      <div class="bk-summary-title" data-page-node-id="BWcgDrCXYkTAhETon0iT46">📋 预约摘要</div>
+      <div class="bk-summary-row" data-page-node-id="dLDqwgWdkBeAT9J5Q1wD9f"><span class="k" data-page-node-id="PKshz2jZlItGiuTCKh7bTO">咨询分析师</span><span class="v" id="sumAnalyst" data-page-node-id="8afrB3azu8593Yo9atXiwH">邓勤敏</span></div>
+      <div class="bk-summary-row" data-page-node-id="VaH5053WbQNdGRtnPGaxA1"><span class="k" data-page-node-id="PHJedtldjcLhOp53buxVEw">咨询类型</span><span class="v" id="sumType" data-page-node-id="IN5JDdT4VO96JNxVHyAV7t">焦点解读咨询（60分钟）</span></div>
+      <div class="bk-summary-row" data-page-node-id="iyEDoirtivvkNjaMsAAk5U"><span class="k" data-page-node-id="FBHaHJkZO2hwwQ36ttgMRa">预约日期</span><span class="v empty" id="sumDate" data-page-node-id="SE1GWggmgdlXYkhxeXfHO6">未选择</span></div>
+      <div class="bk-summary-row" data-page-node-id="ujch5iGZnpWRfmMdOZWqAp"><span class="k" data-page-node-id="5Zop7pG8LgpHIGclfccY4l">预约时段</span><span class="v empty" id="sumTime" data-page-node-id="Wa9MbWE01SR8oK723Q8Pdz">未选择</span></div>
+      <div class="bk-summary-row" data-page-node-id="FOE3VFAduZ2OVdjfH2vhIC"><span class="k" data-page-node-id="qR1EfJlxTLiSJvWsgS8VMX">咨询费用</span><span class="v" id="sumPrice" data-page-node-id="F95gb42P5EZmqrZsHRqbXF">¥399</span></div>
     </div>
 
-    <button class="bk-submit" id="bkSubmit" disabled>请选择日期与时段</button>
+    <button class="bk-submit" id="bkSubmit" disabled data-page-node-id="XDGzEmgF7uPOkrMooMWIp9">请选择日期与时段</button>
   </section>
 
   <!-- 我的预约 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">★</span>我的预约</div>
-    <div class="bk-section-sub">本设备本地保存，可随时查看或取消</div>
-    <div class="bk-my-list" id="bkMyList"></div>
+  <section class="bk-section" data-page-node-id="JA3nidf2gW29z2SPz3kA1z">
+    <div class="bk-section-title" data-page-node-id="lA4TMOcpLrkwrnGSLGIZCB"><span class="bk-num" data-page-node-id="xRpXtwGArMULGBgokmEAr8">★</span>我的预约</div>
+    <div class="bk-section-sub" data-page-node-id="FdtlHCF23KToOD4911u1zn">本设备本地保存，可随时查看或取消</div>
+    <div class="bk-my-list" id="bkMyList" data-page-node-id="eQHW45adgFmGPH3j0k8F74"></div>
   </section>
 
   <!-- 须知 -->
-  <section class="bk-section">
-    <div class="bk-section-title"><span class="bk-num">i</span>预约须知</div>
-    <ul class="bk-notes">
-      <li>咨询前请准备好你的人类图（出生日期、时间、地点越精确越好），首次解读将以此为基准。</li>
-      <li>预约成功后，分析师会在 24 小时内通过你留的手机号 / 微信与你确认，并发送线上会议链接。</li>
-      <li>如需取消或改期，请至少提前 <b>24 小时</b> 操作；不足 24 小时取消将视为爽约，名额不予保留。</li>
-      <li>每段咨询为整点开始、整点结束的 1 小时单元；迟到不补时，请提前 5 分钟进入会议室。</li>
-      <li>午休时间 12:00–14:00 不安排咨询，晚间不开放预约。</li>
+  <section class="bk-section" data-page-node-id="Tj5dLtXCseVMhXngBNHh5w">
+    <div class="bk-section-title" data-page-node-id="BMyFLPs42dzrpHgCHwzaT9"><span class="bk-num" data-page-node-id="0Ee2nqh3XTFEXprsSLy515">i</span>预约须知</div>
+    <ul class="bk-notes" data-page-node-id="UP17wsz3h9DEepGFt1w9Mv">
+      <li data-page-node-id="TCrFmkLdTCWsZnhDZcHUVC">咨询前请准备好你的人类图（出生日期、时间、地点越精确越好），系统深度咨询将以此为基准。</li>
+      <li data-page-node-id="6thQ0QCHCDCrohbHFUiqVN">预约成功后，分析师会在 24 小时内通过你留的手机号 / 微信与你确认，并发送线上会议链接。</li>
+      <li data-page-node-id="pGRrjcxkDNYMcfELCQ3HEc">如需取消或改期，请至少提前 <b data-page-node-id="JPfTvtHHL6EPQ90PzJHBcI">24 小时</b> 操作；不足 24 小时取消将视为爽约，名额不予保留。</li>
+      <li data-page-node-id="guXNp0CnhkF5wyNKPMApHL">每段咨询为整点开始、整点结束的 1 小时单元；迟到不补时，请提前 5 分钟进入会议室。</li>
+      <li data-page-node-id="ybKnGtLFBswkJWHjy3T4E7">午休时间 12:00–14:00 不安排咨询，晚间不开放预约。</li>
     </ul>
   </section>
 
 </main>
 
 <!-- ===== FOOTER ===== -->
-<footer class="series-footer">
-  <h2>用人类图，读懂你自己</h2>
-  <p>勤思妙享 · 人类图入门到精通系列</p>
+<footer class="series-footer" data-page-node-id="LfCrd1EThXyAvxOvJ7EjCM">
+  <h2 data-page-node-id="5G1zRkMYRv1a74EMeCwlPA">用人类图，读懂你自己</h2>
+  <p data-page-node-id="5FUFHlPD9Uo7HLiOOGABMi">勤思妙享 · 人类图入门到精通系列 v6.0</p>
 </footer>
 
 <!-- ===== MODAL ===== -->
-<div class="bk-modal-mask" id="bkModal">
-  <div class="bk-modal">
-    <div class="ic">🎉</div>
-    <h3>预约提交成功</h3>
-    <p id="bkModalText">我们已收到你的预约，分析师会尽快与你确认。</p>
-    <p style="font-size:13px;color:var(--text-2);">请保持手机畅通，注意查收确认信息。</p>
-    <button class="bk-submit ok" id="bkModalOk">好的，我知道了</button>
+<div class="bk-modal-mask" id="bkModal" data-page-node-id="xxZjAVbnYYGeVGTkcLsN1l">
+  <div class="bk-modal" data-page-node-id="cunH9LGgD89mkdzDxIRzZp">
+    <div class="ic" data-page-node-id="ll4iV0h5rJpYY5PykMI5z6">🎉</div>
+    <h3 data-page-node-id="7AMmBtK7REK6vHbAVljQLd">预约提交成功</h3>
+    <p id="bkModalText" data-page-node-id="jzBCluBNOXD5mcW536JbDr">我们已收到你的预约，分析师会尽快与你确认。</p>
+    <p style="font-size:13px;color:var(--text-2);" data-page-node-id="aDGevt6klHEZrTV6luvtfg">请保持手机畅通，注意查收确认信息。</p>
+    <button class="bk-submit ok" id="bkModalOk" data-page-node-id="JvnoaVhg5SzK46fEplHLHN">好的，我知道了</button>
   </div>
 </div>
 
@@ -344,13 +344,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 (function(){
   "use strict";
 
+  /* ========== VERSION & CHANGELOG ==========
+     VERSION: v6.0
+     2026-09-18  v6.0
+       - 咨询类型「首次解读咨询」更名为「系统深度咨询」，价格调整为 ¥1499/次
+       - 咨询类型「深度解读咨询」更名为「焦点解读咨询」，并设为默认选项
+       - 「你的分析师」模块重构为数据驱动（ANALYSTS 数组），支持点选分析师，
+         并预留「新增分析师 · 敬请期待」虚线占位卡，后续新增分析师只需往数组追加对象
+       - 预约记录新增 analyst 字段；摘要与「我的预约」展示所选分析师
+  =========================================== */
+
   /* ---------- 状态 ---------- */
   var state = {
-    type: { name: '首次解读咨询', dur: '90分钟', price: 599 },
+    analyst: { id: 'dengqinmin', name: '邓勤敏' },
+    type: { name: '焦点解读咨询', dur: '60分钟', price: 399 },
     date: null,      // {y,m,d,label,iso}
     time: null,      // '09:00' ...
     selectedSlotEl: null
   };
+
+  /* ---------- 分析师数据（可扩展：新增分析师往此数组追加对象即可） ---------- */
+  var ANALYSTS = [
+    {
+      id: 'dengqinmin',
+      initial: '邓',
+      name: '邓勤敏',
+      title: '人类图认证分析师 · 认证讲师',
+      meta: [
+        { t: '从业',   v: '8 年' },
+        { t: '已解读', v: '1200+ 案例' },
+        { t: '满意度', v: '★ 4.9', rating: true }
+      ],
+      tags: ['类型与权威', '关系动力', '人生角色', '轮回交叉']
+    }
+    /* 预留：新增分析师示例
+    ,{
+      id: 'xxx',
+      initial: '李',
+      name: '李分析师',
+      title: '人类图认证分析师',
+      meta: [ {t:'从业',v:'5 年'}, {t:'已解读',v:'600+ 案例'}, {t:'满意度',v:'★ 4.8',rating:true} ],
+      tags: ['类型与权威','职业动力']
+    }
+    */
+  ];
 
   var WEEK = ['周日','周一','周二','周三','周四','周五','周六'];
   var MORNING = ['09:00','10:00','11:00'];
@@ -370,6 +407,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       '👤 称呼：' + b.name,
       '📱 手机：' + b.phone,
       '💬 微信：' + (b.wechat || '—'),
+      '🔮 分析师：' + (b.analyst || '—'),
       '🔮 咨询类型：' + b.type + '（' + b.dur + ' · ¥' + b.price + '）',
       '📅 预约时段：' + b.label + ' ' + b.time,
       '📝 咨询主题：' + (b.topic || '—'),
@@ -429,6 +467,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       map[b.iso][b.time] = true;
     });
     return map;
+  }
+
+  /* ---------- 渲染分析师（数据驱动，可扩展） ---------- */
+  function renderAnalysts(){
+    var box = $('bkAnalysts'); box.innerHTML = '';
+    ANALYSTS.forEach(function(a){
+      var card = document.createElement('div');
+      card.className = 'bk-analyst-card' + (state.analyst && state.analyst.id === a.id ? ' active' : '');
+      var metaHtml = a.meta.map(function(m){
+        return '<span' + (m.rating ? ' class="bk-rating"' : '') + '>' + m.t + ' <b>' + m.v + '</b></span>';
+      }).join('');
+      var tagsHtml = a.tags.map(function(t){ return '<span class="bk-tag">' + t + '</span>'; }).join('');
+      card.innerHTML =
+        '<div class="bk-analyst-check">✓</div>' +
+        '<div class="bk-avatar">' + a.initial + '</div>' +
+        '<div class="bk-analyst-info">' +
+          '<div class="bk-analyst-name">' + a.name + '</div>' +
+          '<div class="bk-analyst-title">' + a.title + '</div>' +
+          '<div class="bk-analyst-meta">' + metaHtml + '</div>' +
+          '<div class="bk-tags">' + tagsHtml + '</div>' +
+        '</div>';
+      card.addEventListener('click', function(){ selectAnalyst(a, card); });
+      box.appendChild(card);
+    });
+    // 预留新增分析师位置（虚线占位卡，不可选）
+    var ph = document.createElement('div');
+    ph.className = 'bk-analyst-placeholder';
+    ph.innerHTML =
+      '<div class="ph-ic">➕</div>' +
+      '<div class="ph-t">新增分析师 · 敬请期待</div>' +
+      '<div class="ph-s">团队持续扩充中，<br>新增认证分析师将直接出现在此处</div>';
+    box.appendChild(ph);
+  }
+
+  function selectAnalyst(a, card){
+    state.analyst = { id: a.id, name: a.name };
+    Array.prototype.forEach.call(document.querySelectorAll('.bk-analyst-card'), function(c){ c.classList.remove('active'); });
+    card.classList.add('active');
+    updateSummary();
   }
 
   /* ---------- 渲染日期 ---------- */
@@ -540,6 +617,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
   /* ---------- 摘要 + 提交按钮 ---------- */
   function updateSummary(){
+    $('sumAnalyst').textContent = state.analyst.name;
     $('sumType').textContent = state.type.name + '（' + state.type.dur + '）';
     $('sumPrice').textContent = '¥' + state.type.price;
     var dEl = $('sumDate'), tEl = $('sumTime');
@@ -564,6 +642,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
     var booking = {
       id: Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      analyst: state.analyst.name,
+      analystId: state.analyst.id,
       type: state.type.name,
       dur: state.type.dur,
       price: state.type.price,
@@ -580,11 +660,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     var arr = loadBookings(); arr.push(booking); saveBookings(arr);
     notifyOwner(booking);   // 推送提醒到分析师微信（已配置 token 时）
 
-    $('bkModalText').textContent = '已为你预约 ' + state.date.label + ' ' + state.time + ' 的' + state.type.name + '。';
+    $('bkModalText').textContent = '已为你预约 ' + state.date.label + ' ' + state.time + ' 的' + state.type.name + '（分析师：' + state.analyst.name + '）。';
     $('bkModal').classList.add('show');
 
     // 重置选择，刷新该日期时段（新预约标记为已约满）
-    var keepDate = state.date;
     state.time = null; state.selectedSlotEl = null;
     renderSlots(); updateSummary(); renderMy();
     // 清空表单部分字段
@@ -606,7 +685,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       var item = document.createElement('div'); item.className='bk-my-item';
       var info = document.createElement('div'); info.className='bk-my-info';
       info.innerHTML = '<div><span class="d">'+b.label+'</span><span class="t">'+b.time+'</span></div>'+
-                       '<div class="sub">'+b.type+' · '+b.dur+(b.name?(' · '+b.name):'')+'</div>';
+                       '<div class="sub">'+b.type+' · '+b.dur+(b.analyst?(' · '+b.analyst):'')+(b.name?(' · '+b.name):'')+'</div>';
       var btn = document.createElement('button'); btn.className='bk-my-cancel'; btn.textContent='取消预约';
       btn.addEventListener('click', function(){ cancelBooking(b.id); });
       item.appendChild(info); item.appendChild(btn);
@@ -643,6 +722,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     return 0;
   }
 
+  renderAnalysts();
   renderDates();
   var firstIdx = firstAvailableDateIdx();
   // 自动选中第一个有空档的日期，并把对应日期 chip 高亮
