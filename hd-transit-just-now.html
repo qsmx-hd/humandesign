@@ -262,26 +262,8 @@
     <div class="note">色(color)/调(tone)/基(base) 为人类图「密码子」细分：每闸门 6 爻 × 6 色 × 6 调 × 5 基 = 384 爻位。流日解读以闸门+爻为主，色/调/基作深度参考。</div>
   </details>
 
-  <!-- 个人叠加 -->
-  <details class="overlay" id="overlay">
-    <summary>🔗 个人叠加：输入出生时间，看「此刻宇宙」正激活你图上的哪些闸门与通道</summary>
-    <div class="formrow">
-      <label>出生日期
-        <div class="date-group">
-          <input type="text" inputmode="numeric" id="b-year" placeholder="年" maxlength="4" style="width:72px">
-          <input type="text" inputmode="numeric" id="b-month" placeholder="月" maxlength="2" style="width:56px">
-          <input type="text" inputmode="numeric" id="b-day" placeholder="日" maxlength="2" style="width:56px">
-        </div>
-      </label>
-      <label>出生时间（当地）<input type="text" id="b-time" value="12:00" placeholder="HH:MM" maxlength="5" style="width:90px"></label>
-      <label>时区偏移（小时）<input type="text" inputmode="decimal" id="b-tz" value="8" style="width:70px"></label>
-    </div>
-    <div class="formrow">
-      <button id="b-calc">生成本人流日叠加</button>
-      <span class="mini">提示：人类图闸门计算只需「日期+时间」（已含时区换算为 UTC），无需出生地。出生前 88.0256 天为潜意识(红)计算基准。</span>
-    </div>
-    <div id="personal"></div>
-  </details>
+  <!-- 个人叠加：数据计算暂不准确，已按用户要求移除（2026-09-18）。
+       如需恢复，请参考版本历史中 computeNatal / renderPersonal 逻辑重新接入。 -->
 
   <footer>
     <div style="margin-top:6px"><b id="footer-ver">人类图流日分析系统</b></div>
@@ -1062,104 +1044,7 @@ function render(d){
   renderTransitReading(d,t);
 }
 
-/* ===================== 个人叠加 ===================== */
-function computeNatal(birthDate){
-  const designDate=new Date(birthDate.getTime()-88.0256*86400000);
-  const pers={}, des={};
-  BODIES.forEach(b=>{
-    const p=bodyLon(b.id,birthDate), q=bodyLon(b.id,designDate);
-    if(p!==null) pers[b.id]=lonToGateLine(p).gate;
-    if(q!==null) des[b.id]=lonToGateLine(q).gate;
-  });
-  const natalSet=new Set(), side={};
-  for(const b in pers){ natalSet.add(pers[b]); side[pers[b]]='P'; }
-  for(const b in des){ natalSet.add(des[b]);
-    side[des[b]] = side[des[b]]==='P' ? 'B' : 'D'; }
-  // 定义中心
-  const defCenters=[];
-  for(const c in CENTERS){
-    if(CENTERS[c].gates.some(g=>natalSet.has(g))) defCenters.push(CENTERS[c].cn);
-  }
-  // 定义通道
-  const defChans=[];
-  CHANNELS.forEach(c=>{ if(natalSet.has(c[0])&&natalSet.has(c[1])) defChans.push(c); });
-  // 类型（简化判定）
-  const sacralDef=CENTERS.Sacral.gates.some(g=>natalSet.has(g));
-  const centerOf=g=>GATE2CENTER[g];
-  let type="反映者 (Reflector)", typeNote="无任何定义中心——以整月月亮周期为权威，等待一整轮月亮再做重大决定。";
-  if(defCenters.length>0){
-    if(sacralDef){
-      const mg=defChans.some(c=>(centerOf(c[0])==="荐骨中心"&&centerOf(c[1])==="喉咙中心")||(centerOf(c[1])==="荐骨中心"&&centerOf(c[0])==="喉咙中心"));
-      type= mg?"显示生产者 (Manifesting Generator)":"生产者 (Generator)";
-      typeNote= mg?"荐骨有定义，且荐骨直连喉咙——既能回应又能发起，多工而高效。策略：等待回应，再行动。":"荐骨有定义但不直连喉咙——以稳定生命能量「等待回应」为核心。策略：等回应，再行动。";
-    } else {
-      const manifestor=defChans.some(c=>{
-        const ca=centerOf(c[0]),cb=centerOf(c[1]);
-        const motor=["根部中心","意志力中心","情绪中心"].includes(ca)||["根部中心","意志力中心","情绪中心"].includes(cb);
-        const throat=(ca==="喉咙中心"||cb==="喉咙中心");
-        return motor&&throat;
-      });
-      if(manifestor){ type="显示者 (Manifestor)"; typeNote="无定义荐骨，但有动力中心直连喉咙——天生的发起者。策略：告知，再行动。"; }
-      else { type="投射者 (Projector)"; typeNote="无定义荐骨，至少有一处其他定义——识人用人的引导者。策略：等待邀请。"; }
-    }
-  }
-  return {pers,des,natalSet,side,defCenters,defChans,type,typeNote};
-}
-function renderPersonal(){
-  const year=parseInt(document.getElementById("b-year").value,10);
-  const month=parseInt(document.getElementById("b-month").value,10);
-  const day=parseInt(document.getElementById("b-day").value,10);
-  const timeStr=document.getElementById("b-time").value||"12:00";
-  const tz=parseFloat(document.getElementById("b-tz").value)||8;
-  if(!year||!month||!day){ document.getElementById("personal").innerHTML=`<div class="err">请先填写完整出生日期（年 / 月 / 日）。</div>`; return; }
-  const Y=year, M=month, D=day;
-  const [h,m]=timeStr.split(":").map(Number);
-  // 当地时刻 → UTC
-  const localMs=Date.UTC(Y,M-1,D,h,m) - tz*3600000;
-  const birth=new Date(localMs);
-  if(isNaN(birth.getTime())){ document.getElementById("personal").innerHTML=`<div class="err">日期/时间格式有误。</div>`; return; }
-  if(!USE_LIB){ document.getElementById("personal").innerHTML=`<div class="err">个人叠加需完整 13 天体，请联网载入天文内核后重试。</div>`; return; }
-  const nat=computeNatal(birth);
-  const t=LAST.t;
-  // 个人被激活的闸门
-  const persGates=[...nat.natalSet].filter(g=>{
-    // 当前流日是否有天体在此闸门
-    return BODIES.some(b=>t[b.id].gate===g);
-  });
-  const transBodiesAt=g=>BODIES.filter(b=>t[b.id].gate===g);
-  // 个人活化的通道（一端定义、一端流日）
-  const liveChans=[];
-  CHANNELS.forEach(c=>{
-    const aN=nat.natalSet.has(c[0]), bN=nat.natalSet.has(c[1]);
-    const aT=BODIES.some(b=>t[b.id].gate===c[0]), bT=BODIES.some(b=>t[b.id].gate===c[1]);
-    if((aN&&bT)||(bN&&aT)) liveChans.push(c);
-  });
-
-  let html=`<div class="typebox"><b>${nat.type}</b><br><span style="font-size:.84rem">${nat.typeNote}</span></div>`;
-  html+=`<div style="margin-top:12px;font-weight:700;color:var(--gold-d)">定义中心（${nat.defCenters.length}/9）</div><div class="center-chips">`;
-  const allC=Object.values(CENTERS).map(c=>c.cn);
-  allC.forEach(cn=>{ const def=nat.defCenters.includes(cn);
-    html+=`<span class="chip ${def?'def':'open'}">${cn}</span>`; });
-  html+=`</div>`;
-  html+=`<div style="margin-top:10px;font-weight:700;color:var(--gold-d)">此刻正激活你的闸门（${persGates.length}）</div>`;
-  if(persGates.length===0) html+=`<div class="empty">此刻没有流日天体落在你的定义闸门上——你处于「采样」状态，正好观察环境能量。</div>`;
-  persGates.sort((a,b)=>a-b).forEach(g=>{
-    const bs=transBodiesAt(g).map(b=>`${b.cn}(第${t[b.id].line}爻)`).join("、");
-    const sd=nat.side[g]==='B'?"意识+潜意识":(nat.side[g]==='P'?"意识(黑)":"潜意识(红)");
-    html+=`<div class="gate-item"><span class="gi-t">闸门 ${g} · ${gateName(g)}</span>`+
-      `<div class="gi-b">${gateTheme(g)}</div>`+
-      `<div class="gi-b" style="margin-top:3px">流日激活：${bs} ｜ 你的定义面：${sd}</div></div>`;
-  });
-  html+=`<div style="margin-top:10px;font-weight:700;color:var(--gold-d)">此刻「点亮」你图上的通道（${liveChans.length}）</div>`;
-  if(liveChans.length===0) html+=`<div class="empty">此刻流日未与你的定义通道相接。</div>`;
-  liveChans.forEach(c=>{
-    html+=`<div class="chan"><span class="pill">${c[0]}-${c[1]}</span>`+
-      `<div><div class="ct">${c[2]} 通道<span class="cc">[${c[3]}]</span></div>`+
-      `<div class="cb">${gateName(c[0])} ⇄ ${gateName(c[1])}</div></div></div>`;
-  });
-  html+=`<div class="note">说明：出生时刻=意识(黑)计算；出生前 88.0256 天=潜意识(红)计算。类型与定义为简化判定，仅供探索参考。</div>`;
-  document.getElementById("personal").innerHTML=html;
-}
+/* ===================== 个人叠加（已移除，见上方 HTML 注释） ===================== */
 
 /* ===================== 启动 ===================== */
 function tick(){ render(new Date()); }
@@ -1168,14 +1053,7 @@ window.addEventListener("load",()=>{
     `人类图流日分析系统 ${VERSION}`;
   tick();
   setInterval(tick, 60000); // 每分钟刷新「此刻」
-  document.getElementById("b-calc").addEventListener("click",renderPersonal);
-  // 默认填今天日期，方便即时体验
-  if(!document.getElementById("b-year").value){
-    const n=new Date();
-    document.getElementById("b-year").value=n.getFullYear();
-    document.getElementById("b-month").value=n.getMonth()+1;
-    document.getElementById("b-day").value=n.getDate();
-  }
+  // 个人叠加模块已按用户要求移除（数据计算暂不准确）
 });
 </script>
 </body>
