@@ -75,6 +75,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .bk-analyst-placeholder .ph-t{font-size:14px;font-weight:800;color:#7c6fc0;}
 .bk-analyst-placeholder .ph-s{font-size:12px;line-height:1.6;}
 
+/* 分析师提示条 + 移动端轮播计数器 */
+.bk-analysts-bar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.bk-analysts-hint{font-size:12.5px;color:var(--text-2);}
+.bk-analysts-count{font-size:12px;font-weight:700;color:var(--purple);display:none;}   /* 仅移动端轮播时显示 */
+
 /* ===== TYPE CARDS ===== */
 .bk-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
 .bk-type{border:2px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;background:white;position:relative;}
@@ -164,13 +169,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .series-footer{background:linear-gradient(135deg,#2d1b69,#6c5ce7);color:white;padding:50px 40px;text-align:center;margin-top:50px;}
 .series-footer h2{font-size:24px;font-weight:800;margin-bottom:12px;}
 .series-footer p{opacity:0.8;font-size:14px;margin-bottom:24px;}
+.series-footer .bk-powered{opacity:0.6;font-size:12px;margin:0;letter-spacing:1px;font-weight:600;border-top:1px solid rgba(255,255,255,0.18);padding-top:16px;display:inline-block;}
 
 /* ===== MOBILE ===== */
 @media (max-width:640px){
   .bk-form-grid{grid-template-columns:1fr;}
-  .bk-analyst-card{flex-direction:column;text-align:center;}
+  /* 分析师较多时改为横向滑动卡片，避免页面被拉得过长 */
+  .bk-analysts{
+    display:flex;
+    grid-template-columns:unset;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:12px;
+    padding:4px 2px 14px;
+    scrollbar-width:none;            /* Firefox 隐藏滚动条 */
+  }
+  .bk-analysts::-webkit-scrollbar{display:none;}   /* WebKit 隐藏滚动条 */
+  .bk-analyst-card{flex-direction:column;text-align:center;flex:0 0 82%;scroll-snap-align:center;}
+  .bk-analyst-placeholder{flex:0 0 70%;scroll-snap-align:center;}
   .bk-analyst-card .bk-analyst-meta{justify-content:center;}
   .bk-analyst-card .bk-tags{justify-content:center;}
+  .bk-analysts-count{display:block;}  /* 移动端显示「k / N」位置指示 */
   .series-hero h1{font-size:30px;}
   .bk-section{padding:22px 18px;}
 }
@@ -210,36 +230,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   <section class="bk-section" data-page-node-id="51QF4R9qppUydYV5OdVXqK">
     <div class="bk-section-title" data-page-node-id="Iw3LrcDAXDqzVHDhY5rrcw"><span class="bk-num" data-page-node-id="OpK3Ye4EuA5eI0yUNUhf5m">1</span>选择你的分析师</div>
     <div class="bk-section-sub" data-page-node-id="tWjZ9VmVBBRNaA5IQdj6w5">本时段由以下认证分析师为你服务（点击卡片选择，团队持续扩充中）</div>
+    <div class="bk-analysts-bar">
+      <div class="bk-analysts-hint" id="bkAnalystsHint"></div>
+      <div class="bk-analysts-count" id="bkAnalystsCount"></div>
+    </div>
     <div class="bk-analysts" id="bkAnalysts" data-page-node-id="yEd1H0ryk8BVpkC9goSele"></div>
   </section>
 
   <!-- 步骤 2：咨询类型 -->
   <section class="bk-section" data-page-node-id="8OZ6S53De10XDMJX1lB0LK">
     <div class="bk-section-title" data-page-node-id="W8WYoczaFyA1owXmnGaJ8i"><span class="bk-num" data-page-node-id="oodacRg7Jx8RVk6NjEDEnT">2</span>选择咨询类型</div>
-    <div class="bk-section-sub" data-page-node-id="TDIdKS3UMxqDtTMRyQIJM3">不同咨询目标，对应不同时长与深度</div>
-    <div class="bk-types" id="bkTypes" data-page-node-id="Bx6blaADpX540YXib5vETa">
-      <div class="bk-type" data-type="系统深度" data-dur="90分钟" data-price="1499" data-page-node-id="NtJrGFcNjZbIVUwxVlD74W">
-        <div class="bk-type-check" data-page-node-id="CBXMKI3QHMRheevmoyQuHv">✓</div>
-        <div class="bk-type-name" data-page-node-id="xcyTZAwICT0SsAEy1mGpg5">系统深度咨询</div>
-        <div class="bk-type-dur" data-page-node-id="r5Vw3JpWEvohxd8G2PzcNb">时长 90 分钟</div>
-        <div class="bk-type-desc" data-page-node-id="H3ROGecfJrhnfKckIiACIm">系统梳理你的全部人类图要素（类型 / 权威 / 人生角色 / 定义 / 通道 / 轮回交叉），建立完整自我认知框架，并做深度个案解析与落地建议。</div>
-        <div class="bk-type-price" data-page-node-id="qfQmcGHDNuOou8WiEQ6hZc">¥1499 <small data-page-node-id="QmVgikpOwFbvDuUuo0EbK9">/ 次</small></div>
-      </div>
-      <div class="bk-type active" data-type="焦点解读" data-dur="60分钟" data-price="399" data-page-node-id="ibA1P25kTgXAclQfAxzZDn">
-        <div class="bk-type-check" data-page-node-id="g3B1JoOCa9dFvgqdAED8C4">✓</div>
-        <div class="bk-type-name" data-page-node-id="Jllh1gBHGIJQZoijuixmPq">焦点解读咨询</div>
-        <div class="bk-type-dur" data-page-node-id="SWTEyLvH9vM7SArM9oyKsn">时长 60 分钟</div>
-        <div class="bk-type-desc" data-page-node-id="z5NT4pDuCp9Yzx0VFw8ZpT">聚焦你当下最关心的单一焦点主题（关系 / 职业 / 决策），做深入拆解，给出可立刻落地的行动建议。</div>
-        <div class="bk-type-price" data-page-node-id="Y5dNoAo951h79q582QY0Jg">¥399 <small data-page-node-id="bhhCpzhuvm2zgcTNE6uBkm">/ 次</small></div>
-      </div>
-      <div class="bk-type" data-type="跟进咨询" data-dur="30分钟" data-price="199" data-page-node-id="9zVkPxmf7fpcyC8WHdS9zN">
-        <div class="bk-type-check" data-page-node-id="VoHVgJR6eGNpCAe85A63KL">✓</div>
-        <div class="bk-type-name" data-page-node-id="tlikXPN901KzU3UT92GQQG">跟进咨询</div>
-        <div class="bk-type-dur" data-page-node-id="aoZCAXYVVNYbJQvbBKbD60">时长 30 分钟</div>
-        <div class="bk-type-desc" data-page-node-id="jUiFUisMBirxvlRseQzAIN">针对上次咨询的落地实践做回顾与微调，短平快地解决当下卡点。</div>
-        <div class="bk-type-price" data-page-node-id="uPdga72wCNmOTenf3Te8HI">¥199 <small data-page-node-id="1O75vIFPGbt9KQAAyuqjmI">/ 次</small></div>
-      </div>
-    </div>
+    <div class="bk-section-sub" id="bkTypesHint" data-page-node-id="TDIdKS3UMxqDtTMRyQIJM3">不同咨询目标，对应不同时长与深度</div>
+    <!-- 咨询类型由 TYPES × 所选分析师的 rates 动态渲染（见脚本 renderTypes） -->
+    <div class="bk-types" id="bkTypes" data-page-node-id="Bx6blaADpX540YXib5vETa"></div>
   </section>
 
   <!-- 步骤 3：日期 -->
@@ -317,6 +320,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       <li data-page-node-id="6thQ0QCHCDCrohbHFUiqVN">预约成功后，分析师会在 24 小时内通过你留的手机号 / 微信与你确认，并发送线上会议链接。</li>
       <li data-page-node-id="pGRrjcxkDNYMcfELCQ3HEc">如需取消或改期，请至少提前 <b data-page-node-id="JPfTvtHHL6EPQ90PzJHBcI">24 小时</b> 操作；不足 24 小时取消将视为爽约，名额不予保留。</li>
       <li data-page-node-id="guXNp0CnhkF5wyNKPMApHL">每段咨询为整点开始、整点结束的 1 小时单元；迟到不补时，请提前 5 分钟进入会议室。</li>
+      <li data-page-node-id="6O6Lx3NrqNxh4vKfW9lFcX"><b data-page-node-id="eQ3PyFv0nGv2XzLw8tJm4A">各分析师的费用档位可能不同</b>：提交前请以「预约摘要 · 咨询费用」显示的金额为准，切换分析师后价格会自动更新。</li>
       <li data-page-node-id="ybKnGtLFBswkJWHjy3T4E7">午休时间 12:00–14:00 不安排咨询，晚间不开放预约。</li>
     </ul>
   </section>
@@ -326,7 +330,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 <!-- ===== FOOTER ===== -->
 <footer class="series-footer" data-page-node-id="LfCrd1EThXyAvxOvJ7EjCM">
   <h2 data-page-node-id="5G1zRkMYRv1a74EMeCwlPA">用人类图，读懂你自己</h2>
-  <p data-page-node-id="5FUFHlPD9Uo7HLiOOGABMi">勤思妙享 · 人类图入门到精通系列 v6.0</p>
+  <p id="bkFooterVer" data-page-node-id="5FUFHlPD9Uo7HLiOOGABMi">勤思妙享 · 人类图咨询预约系统 v9.0</p>
+  <p class="bk-powered" data-page-node-id="bKPPoweredByKMT">Powered By Kan Man Tang</p>
 </footer>
 
 <!-- ===== MODAL ===== -->
@@ -345,7 +350,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   "use strict";
 
   /* ========== VERSION & CHANGELOG ==========
-     VERSION: v6.0
+     VERSION: v9.0
+     2026-09-20  v9.0
+       - 【档期分组】已约时段由「仅按日期」升级为「分析师主体 × 日期」双键种子：
+         同一天不同分析师的可约档期各不相同，模拟真实排班差异；同一分析师同天档期会话内稳定
+       - 切换分析师时自动重置已选时段并重渲「步骤 4 时段」，提示文案显示当前分析师名
+       - 【移动端优化】分析师过多时（如 20 位）不再从上到下长排：≤640px 改为横向
+         scroll-snap 轮播卡片，隐藏滚动条；新增提示条「共 N 位 · 手机端可左右滑动」
+         与滚动联动的「k / N」位置指示器，桌面端保持网格不变
+     2026-09-20  v8.0
+       - 新增认证分析师「蕴宁」（initial: 蕴，焦橙→暖黄渐变），价位与团队标准档一致
+       - footer 改造为「研发生成」：文案改为「勤思妙享 · 人类图咨询预约系统」，
+         版本号由单一常量 VERSION 注入，改版本只动一处即全站同步（自动更新）
+       - footer 新增署名行「Powered By Kan Man Tang」
+     2026-09-20  v7.0
+       - 新增认证分析师「娜娜」；分析师卡片支持 per-analyst 头像配色（grad）
+       - 【定价架构升级】咨询类型抽离为 TYPES 数组（只存「标准档位」price），
+         分析师可在自身对象上用 rates 覆盖任意档位，未覆盖的自动继承标准档
+       - 新增取价组函数 priceOf(analyst, typeId) 与档位判定 rateTierOf(analyst)
+         → 实现「A 分析师对应 A 的收费档位」；日后调价只改 rates 里的数字
+       - 「咨询类型」区块改为数据驱动渲染（renderTypes），切换分析师时价目表实时重算，
+         副标题提示当前为「标准档 / 专属档」
+       - 预约记录 price 改为组函数实时计算，摘要与提交按钮金额同步
+       - 预约须知新增「不同分析师档位可能不同」说明
      2026-09-18  v6.0
        - 咨询类型「首次解读咨询」更名为「系统深度咨询」，价格调整为 ¥1499/次
        - 咨询类型「深度解读咨询」更名为「焦点解读咨询」，并设为默认选项
@@ -354,40 +381,125 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
        - 预约记录新增 analyst 字段；摘要与「我的预约」展示所选分析师
   =========================================== */
 
+  /* 单一版本号来源：footer 文案由它注入，改版本只动这一行 */
+  var VERSION = '9.0';
+
   /* ---------- 状态 ---------- */
   var state = {
-    analyst: { id: 'dengqinmin', name: '邓勤敏' },
-    type: { name: '焦点解读咨询', dur: '60分钟', price: 399 },
+    analystId: 'dengqinmin',   // 当前所选分析师
+    typeId: 'focus',           // 当前所选咨询类型
     date: null,      // {y,m,d,label,iso}
     time: null,      // '09:00' ...
     selectedSlotEl: null
   };
 
-  /* ---------- 分析师数据（可扩展：新增分析师往此数组追加对象即可） ---------- */
+  /* ---------- ① 咨询类型（只定义「标准档位」价格，与分析师解耦） ---------- */
+  var TYPES = [
+    {
+      id: 'system',
+      name: '系统深度咨询',
+      dur: '90分钟',
+      price: 1499,
+      desc: '系统梳理你的全部人类图要素（类型 / 权威 / 人生角色 / 定义 / 通道 / 轮回交叉），建立完整自我认知框架，并做深度个案解析与落地建议。'
+    },
+    {
+      id: 'focus',
+      name: '焦点解读咨询',
+      dur: '60分钟',
+      price: 399,
+      desc: '聚焦你当下最关心的单一焦点主题（关系 / 职业 / 决策），做深入拆解，给出可立刻落地的行动建议。'
+    },
+    {
+      id: 'followup',
+      name: '跟进咨询',
+      dur: '30分钟',
+      price: 199,
+      desc: '针对上次咨询的落地实践做回顾与微调，短平快地解决当下卡点。'
+    }
+  ];
+
+  /* ---------- ② 分析师数据（新增分析师：往此数组追加对象即可）
+       可选字段 rates：按 TYPES 的 id 覆盖价格，只写要改的档位，其余自动继承标准档。
+       例：rates: { focus: 499 }            → 仅「焦点解读咨询」收 499，其余用标准档
+           rates: { system:1999, focus:599 } → 多档位一起覆盖
+       不写 rates 字段 → 完全沿用标准档
+  ------------------------------------------------ */
   var ANALYSTS = [
     {
       id: 'dengqinmin',
       initial: '邓',
       name: '邓勤敏',
       title: '人类图认证分析师 · 认证讲师',
+      grad: ['#6c5ce7', '#fd79a8'],
       meta: [
         { t: '从业',   v: '8 年' },
         { t: '已解读', v: '1200+ 案例' },
         { t: '满意度', v: '★ 4.9', rating: true }
       ],
-      tags: ['类型与权威', '关系动力', '人生角色', '轮回交叉']
+      tags: ['类型与权威', '关系动力', '人生角色', '轮回交叉'],
+      rates: { system: 1499, focus: 399, followup: 199 }   // 主理人 · 标准档
+    },
+    {
+      id: 'nana',
+      initial: '娜',
+      name: '娜娜',
+      title: '人类图认证分析师 · 亲子与关系方向',
+      grad: ['#00cec9', '#0984e3'],
+      meta: [
+        { t: '从业',   v: '5 年' },
+        { t: '已解读', v: '600+ 案例' },
+        { t: '满意度', v: '★ 4.8', rating: true }
+      ],
+      tags: ['亲子养育', '情绪权威', '关系合拍', '职业转型'],
+      // 目前与邓勤敏同档；日后单独调价，只需改这里的数字，例如 focus: 499
+      rates: { system: 1499, focus: 399, followup: 199 }
+    },
+    {
+      id: 'yunning',
+      initial: '蕴',
+      name: '蕴宁',
+      title: '人类图认证分析师 · 职业与天赋方向',
+      grad: ['#e17055', '#fdcb6e'],
+      meta: [
+        { t: '从业',   v: '3 年' },
+        { t: '已解读', v: '300+ 案例' },
+        { t: '满意度', v: '★ 4.7', rating: true }
+      ],
+      tags: ['天赋识别', '职业转型', '优势运用', '决策模型'],
+      // 与团队标准档一致；单独调价只需改这里的数字
+      rates: { system: 1499, focus: 399, followup: 199 }
     }
-    /* 预留：新增分析师示例
-    ,{
-      id: 'xxx',
-      initial: '李',
-      name: '李分析师',
-      title: '人类图认证分析师',
-      meta: [ {t:'从业',v:'5 年'}, {t:'已解读',v:'600+ 案例'}, {t:'满意度',v:'★ 4.8',rating:true} ],
-      tags: ['类型与权威','职业动力']
-    }
-    */
   ];
+
+  /* ---------- ③ 取价组函数：A 分析师 × B 咨询类型 → 实际价格 ---------- */
+  function getAnalyst(id){
+    for (var i=0;i<ANALYSTS.length;i++){ if(ANALYSTS[i].id === id) return ANALYSTS[i]; }
+    return ANALYSTS[0];
+  }
+  function getType(id){
+    for (var i=0;i<TYPES.length;i++){ if(TYPES[i].id === id) return TYPES[i]; }
+    return TYPES[0];
+  }
+  function standardPrice(typeId){
+    for (var i=0;i<TYPES.length;i++){ if(TYPES[i].id === typeId) return TYPES[i].price; }
+    return 0;
+  }
+  /* 核心：先查该分析师的专属档位，没有则回落到标准档 */
+  function priceOf(analyst, typeId){
+    if (analyst && analyst.rates && typeof analyst.rates[typeId] === 'number'){
+      return analyst.rates[typeId];
+    }
+    return standardPrice(typeId);
+  }
+  /* 判定该分析师整体是否使用专属档位（用于 UI 提示） */
+  function rateTierOf(analyst){
+    if (!analyst || !analyst.rates) return 'standard';
+    for (var k in analyst.rates){
+      if (!analyst.rates.hasOwnProperty(k)) continue;
+      if (typeof analyst.rates[k] === 'number' && analyst.rates[k] !== standardPrice(k)) return 'custom';
+    }
+    return 'standard';
+  }
 
   var WEEK = ['周日','周一','周二','周三','周四','周五','周六'];
   var MORNING = ['09:00','10:00','11:00'];
@@ -446,9 +558,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); } catch(e){}
   }
 
-  /* 依据日期确定性地"预占"若干时段，模拟真实已约满 */
-  function seededBooked(iso){
-    var h = hashStr(iso);
+  /* 依据「分析师主体 × 日期」确定性地"预占"若干时段，模拟真实档期差异
+     —— 同一个日期，不同分析师的已约满时段各不相同（种子含 analystId），
+        且同一分析师同一天的档期在会话内保持稳定（刷新不跳变） */
+  function seededBooked(analystId, iso){
+    var h = hashStr(analystId + '|' + iso);
     var booked = {};
     var x = h;
     var n = 1 + (x % 3);          // 1~3 个已约满
@@ -472,23 +586,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   /* ---------- 渲染分析师（数据驱动，可扩展） ---------- */
   function renderAnalysts(){
     var box = $('bkAnalysts'); box.innerHTML = '';
-    ANALYSTS.forEach(function(a){
+    ANALYSTS.forEach(function(a, i){
       var card = document.createElement('div');
-      card.className = 'bk-analyst-card' + (state.analyst && state.analyst.id === a.id ? ' active' : '');
+      card.className = 'bk-analyst-card' + (state.analystId === a.id ? ' active' : '');
       var metaHtml = a.meta.map(function(m){
         return '<span' + (m.rating ? ' class="bk-rating"' : '') + '>' + m.t + ' <b>' + m.v + '</b></span>';
       }).join('');
       var tagsHtml = a.tags.map(function(t){ return '<span class="bk-tag">' + t + '</span>'; }).join('');
+      var avStyle = a.grad ? ' style="background:linear-gradient(135deg,' + a.grad[0] + ',' + a.grad[1] + ')"' : '';
       card.innerHTML =
         '<div class="bk-analyst-check">✓</div>' +
-        '<div class="bk-avatar">' + a.initial + '</div>' +
+        '<div class="bk-avatar"' + avStyle + '>' + a.initial + '</div>' +
         '<div class="bk-analyst-info">' +
           '<div class="bk-analyst-name">' + a.name + '</div>' +
           '<div class="bk-analyst-title">' + a.title + '</div>' +
           '<div class="bk-analyst-meta">' + metaHtml + '</div>' +
           '<div class="bk-tags">' + tagsHtml + '</div>' +
         '</div>';
-      card.addEventListener('click', function(){ selectAnalyst(a, card); });
+      card.addEventListener('click', function(){ selectAnalyst(i); });
       box.appendChild(card);
     });
     // 预留新增分析师位置（虚线占位卡，不可选）
@@ -496,15 +611,79 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     ph.className = 'bk-analyst-placeholder';
     ph.innerHTML =
       '<div class="ph-ic">➕</div>' +
-      '<div class="ph-t">新增分析师 · 敬请期待</div>' +
+      '<div class="ph-t">更多分析师 · 陆续加入</div>' +
       '<div class="ph-s">团队持续扩充中，<br>新增认证分析师将直接出现在此处</div>';
     box.appendChild(ph);
+    // 提示条：桌面展示总数，移动端提示可滑动
+    var hint = $('bkAnalystsHint');
+    if (hint) hint.textContent = '共 ' + ANALYSTS.length + ' 位认证分析师 · 手机端可左右滑动浏览';
+    updateAnalystCount();
   }
 
-  function selectAnalyst(a, card){
-    state.analyst = { id: a.id, name: a.name };
-    Array.prototype.forEach.call(document.querySelectorAll('.bk-analyst-card'), function(c){ c.classList.remove('active'); });
-    card.classList.add('active');
+  /* 移动端横向轮播：根据滚动位置更新「当前 k / N」位置指示 */
+  function updateAnalystCount(){
+    var box = $('bkAnalysts'), cnt = $('bkAnalystsCount');
+    if (!box || !cnt) return;
+    var cards = box.querySelectorAll('.bk-analyst-card');
+    var total = cards.length;
+    if (!total){ cnt.textContent=''; return; }
+    var center = box.scrollLeft + box.clientWidth/2;
+    var idx = 0, best = Infinity;
+    for (var i=0;i<cards.length;i++){
+      var cc = cards[i].offsetLeft + cards[i].offsetWidth/2;
+      var d = Math.abs(cc - center);
+      if (d < best){ best = d; idx = i; }
+    }
+    cnt.textContent = (idx+1) + ' / ' + total;
+  }
+
+  function selectAnalyst(i){
+    var a = ANALYSTS[i];
+    if (!a) return;
+    var changed = (state.analystId !== a.id);
+    state.analystId = a.id;
+    Array.prototype.forEach.call(document.querySelectorAll('.bk-analyst-card'), function(c, k){
+      if (k === i) c.classList.add('active'); else c.classList.remove('active');
+    });
+    renderTypes();      // 关键：换人 → 价目表按该分析师的档位重算
+    if (changed) {      // 换人 → 档期（已约时段）随之不同，重置时段并重渲
+      state.time = null;
+      state.selectedSlotEl = null;
+      renderSlots();
+    }
+    updateSummary();
+  }
+
+  /* ---------- 渲染咨询类型（TYPES × 当前分析师档位） ---------- */
+  function renderTypes(){
+    var box = $('bkTypes'); box.innerHTML = '';
+    var a = getAnalyst(state.analystId);
+    TYPES.forEach(function(t){
+      var price = priceOf(a, t.id);
+      var el = document.createElement('div');
+      el.className = 'bk-type' + (state.typeId === t.id ? ' active' : '');
+      el.setAttribute('data-type', t.name);
+      el.innerHTML =
+        '<div class="bk-type-check">✓</div>' +
+        '<div class="bk-type-name">' + t.name + '</div>' +
+        '<div class="bk-type-dur">时长 ' + t.dur + '</div>' +
+        '<div class="bk-type-desc">' + t.desc + '</div>' +
+        '<div class="bk-type-price">¥' + price + ' <small>/ 次</small></div>';
+      el.addEventListener('click', function(){ selectType(t.id); });
+      box.appendChild(el);
+    });
+    var hint = $('bkTypesHint');
+    if (hint){
+      var custom = rateTierOf(a) === 'custom';
+      hint.innerHTML = '当前展示 <b>' + a.name + '</b> 的价目表 · ' +
+        (custom ? '专属档位' : '标准档位') +
+        '；各分析师档位可能不同，切换分析师后价格自动更新。';
+    }
+  }
+
+  function selectType(id){
+    state.typeId = id;
+    renderTypes();
     updateSummary();
   }
 
@@ -553,12 +732,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       $('bkSlotHint').textContent = '请先选择上方日期';
       return;
     }
-    $('bkSlotHint').textContent = '当前选择：' + state.date.label + '（绿色为可约，灰色为已约满或已过）';
+    $('bkSlotHint').textContent = getAnalyst(state.analystId).name + ' · ' + state.date.label + '（绿色为可约，灰色为已约满或已过）';
 
     var now = new Date();
     var todayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var isToday = sameDay(new Date(state.date.y, state.date.m, state.date.d), todayObj);
-    var bookedSeed = seededBooked(state.date.iso);
+    var bookedSeed = seededBooked(state.analystId, state.date.iso);   // 档期按分析师主体成组
     var userMap = userBookedByDate()[state.date.iso] || {};
 
     function group(title, arr){
@@ -601,25 +780,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     updateSummary();
   }
 
-  /* ---------- 咨询类型 ---------- */
-  Array.prototype.forEach.call(document.querySelectorAll('.bk-type'), function(card){
-    card.addEventListener('click', function(){
-      document.querySelectorAll('.bk-type').forEach(function(c){ c.classList.remove('active'); });
-      card.classList.add('active');
-      state.type = {
-        name: card.getAttribute('data-type'),
-        dur: card.getAttribute('data-dur'),
-        price: parseInt(card.getAttribute('data-price'),10)
-      };
-      updateSummary();
-    });
-  });
+  /* ---------- 咨询类型：事件绑定已由 renderTypes/selectType 统一处理 ---------- */
 
   /* ---------- 摘要 + 提交按钮 ---------- */
   function updateSummary(){
-    $('sumAnalyst').textContent = state.analyst.name;
-    $('sumType').textContent = state.type.name + '（' + state.type.dur + '）';
-    $('sumPrice').textContent = '¥' + state.type.price;
+    var a = getAnalyst(state.analystId), t = getType(state.typeId);
+    var price = priceOf(a, t.id);
+    $('sumAnalyst').textContent = a.name;
+    $('sumType').textContent = t.name + '（' + t.dur + '）';
+    $('sumPrice').textContent = '¥' + price;
     var dEl = $('sumDate'), tEl = $('sumTime');
     if(state.date){ dEl.textContent = state.date.label; dEl.classList.remove('empty'); }
     else { dEl.textContent='未选择'; dEl.classList.add('empty'); }
@@ -629,7 +798,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     var ok = state.date && state.time;
     var btn = $('bkSubmit');
     btn.disabled = !ok;
-    btn.textContent = ok ? ('确认预约 · ' + state.type.price + '元') : '请选择日期与时段';
+    btn.textContent = ok ? ('确认预约 · ' + price + '元') : '请选择日期与时段';
   }
 
   /* ---------- 提交 ---------- */
@@ -640,13 +809,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     if(!name){ alert('请填写你的称呼'); $('bkName').focus(); return; }
     if(!/^1[3-9]\d{9}$/.test(phone)){ alert('请填写正确的 11 位手机号'); $('bkPhone').focus(); return; }
 
+    var a = getAnalyst(state.analystId), t = getType(state.typeId);
+
     var booking = {
       id: Date.now() + '_' + Math.random().toString(36).slice(2,7),
-      analyst: state.analyst.name,
-      analystId: state.analyst.id,
-      type: state.type.name,
-      dur: state.type.dur,
-      price: state.type.price,
+      analyst: a.name,
+      analystId: a.id,
+      rateTier: rateTierOf(a),          // standard | custom，便于日后对账
+      type: t.name,
+      typeId: t.id,
+      dur: t.dur,
+      price: priceOf(a, t.id),          // 组函数实时计算，不依赖 DOM
       iso: state.date.iso,
       label: state.date.label,
       time: state.time,
@@ -660,7 +833,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     var arr = loadBookings(); arr.push(booking); saveBookings(arr);
     notifyOwner(booking);   // 推送提醒到分析师微信（已配置 token 时）
 
-    $('bkModalText').textContent = '已为你预约 ' + state.date.label + ' ' + state.time + ' 的' + state.type.name + '（分析师：' + state.analyst.name + '）。';
+    $('bkModalText').textContent = '已为你预约 ' + state.date.label + ' ' + state.time + ' 的' + t.name + '（分析师：' + a.name + '，' + booking.price + ' 元）。';
     $('bkModal').classList.add('show');
 
     // 重置选择，刷新该日期时段（新预约标记为已约满）
@@ -709,7 +882,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       var dt = datesData[i];
       var dObj = new Date(dt.y, dt.m, dt.d);
       var isToday = sameDay(dObj, todayObj);
-      var bookedSeed = seededBooked(dt.iso);
+      var bookedSeed = seededBooked(state.analystId, dt.iso);
       var open = false;
       for (var s=0;s<ALL_SLOTS.length;s++){
         var t = ALL_SLOTS[s];
@@ -723,6 +896,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   }
 
   renderAnalysts();
+  renderTypes();          // 价目表随默认分析师的档位渲染
   renderDates();
   var firstIdx = firstAvailableDateIdx();
   // 自动选中第一个有空档的日期，并把对应日期 chip 高亮
@@ -731,6 +905,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   else { renderSlots(); }
   renderMy();
   updateSummary();
+  // footer 版本号由单一常量注入（改版本只动 VERSION 一处）
+  var fv = $('bkFooterVer');
+  if (fv) fv.textContent = '勤思妙享 · 人类图咨询预约系统 v' + VERSION;
+  // 移动端分析师横向轮播：滚动 / 缩放时更新「k / N」位置指示
+  var abox = $('bkAnalysts');
+  if (abox) abox.addEventListener('scroll', updateAnalystCount, { passive:true });
+  window.addEventListener('resize', updateAnalystCount);
 })();
 </script>
 
