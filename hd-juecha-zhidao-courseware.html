@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 觉察之道 ｜ 完整课件</title>
+<!--
+  《人类图 · 觉察之道》｜完整课件
+  VERSION: V3  ·  2026-09-21
+  V3（2026-09-21）：首屏引导语删除「它把蓝狮子《觉察之道》…做成体验」一句；「生活中修行四个次第」「觉察四个层次」「看盯挖改」三处四宫格改为一行 2 个（≤620px 单列）；文末资源卡改为一行 2 个
+  V2（2026-09-21）：删除侧边栏页脚（勤思妙享/版本号/手册速查卡链接）；首屏 hero 居中排列；文末资源卡顺序调整（练习手册落到第二行）
+  V1（2026-09-21）：首版（侧边导航 · 基础篇 9 模块 + 应用篇 7 模块 · 课程包四件套互链）
+-->
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-sidebar:#2D2118; --bg-sidebar-hover:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --text-sidebar:#D8C8B8; --text-sidebar-active:#F5E6D3;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:10px; --radius-lg:14px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85}
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:300px;background:var(--bg-sidebar);color:var(--text-sidebar);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;transition:transform .3s ease;display:flex;flex-direction:column}
+.sidebar-header{padding:24px 20px 18px;border-bottom:1px solid rgba(196,149,106,.2);text-align:center}
+.sidebar-header .logo{font-size:12px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sidebar-header h1{font-family:var(--serif);font-size:18px;color:var(--text-sidebar-active);font-weight:normal;line-height:1.4}
+.sidebar-header .sub{font-size:12px;color:var(--primary-l);margin-top:6px}
+.level-nav{flex:1;padding:10px 0}
+.level-section{margin-bottom:2px}
+.level-title{padding:12px 20px 8px;font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.level-title:hover{color:var(--gold-l)}
+.level-title .arrow{font-size:10px;margin-left:auto;transition:transform .2s}
+.level-title.collapsed .arrow{transform:rotate(-90deg)}
+.level-lessons{overflow:hidden}
+.level-title.collapsed + .level-lessons{max-height:0!important}
+.lesson{padding:9px 20px 9px 30px;font-size:14px;color:var(--text-sidebar);display:block;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.lesson:hover{background:var(--bg-sidebar-hover);color:var(--text-sidebar-active)}
+.lesson.active{background:var(--bg-sidebar-hover);color:var(--gold-l);border-left-color:var(--gold)}
+
+/* Content */
+.main{margin-left:300px;flex:1;padding:0}
+.topbar{position:sticky;top:0;z-index:90;background:rgba(245,240,232,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:12px 18px}
+.topbar .t-logo{font-family:var(--serif);color:var(--dark);font-weight:700}
+.topbar .menu-btn{background:var(--dark);color:#fff;border:0;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.content{max-width:860px;margin:0 auto;padding:40px 28px 80px}
+.hero-mini{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:34px 30px;margin-bottom:30px;text-align:center}
+.hero-mini .eyebrow{color:var(--gold-l);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+.hero-mini h1{font-family:var(--serif);font-size:30px;color:#fff;margin:10px 0 8px}
+.hero-mini p{color:#E8D8C5;font-size:15px;line-height:1.8}
+
+.module{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--shadow);scroll-margin-top:20px}
+.module .mno{display:inline-block;font-family:var(--serif);font-size:13px;color:#fff;background:var(--primary);border-radius:20px;padding:3px 14px;letter-spacing:1px;margin-bottom:10px}
+.module h2{font-family:var(--serif);font-size:24px;color:var(--dark);margin-bottom:6px;line-height:1.35}
+.module .en{color:var(--primary-d);font-size:13px;letter-spacing:1px;margin-bottom:14px}
+.module h3{font-size:17px;color:var(--primary-d);margin:22px 0 8px;padding-left:12px;border-left:4px solid var(--gold)}
+.module p{margin:8px 0;color:var(--text)}
+.module ul{margin:8px 0 12px;padding-left:22px}
+.module li{margin:6px 0}
+.module .lead-q{font-family:var(--serif);font-style:italic;color:var(--dark-soft);background:#FBF3E6;border-left:4px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.hd-box{background:linear-gradient(135deg,#FBF1E2,#F5EAD8);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+.hd-box .tag{display:inline-block;font-size:12px;color:#fff;background:var(--awake);border-radius:6px;padding:2px 10px;margin-bottom:8px;letter-spacing:1px}
+.ex{background:#FBF3E6;border:1px dashed var(--primary);border-radius:10px;padding:12px 16px;margin:14px 0;color:var(--dark-soft);font-size:14.5px}
+.ex b{color:var(--primary-d)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.four .f{background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:8px;padding:14px}
+.four .f .step{font-family:var(--serif);font-size:22px;color:var(--primary-d)}
+.four .f h4{font-size:15px;color:var(--dark);margin:4px 0 6px}
+.four .f p{font-size:13px;color:var(--text-l);margin:0}
+/* 指令：一行 2 个卡片（四个次第 / 四个层次 / 看盯挖改） */
+.four.two{grid-template-columns:repeat(2,1fr)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:560px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-sidebar);color:#F5E6D3;font-weight:600}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}.sg{color:var(--awake);font-weight:600}
+.toc-note{font-size:13px;color:var(--text-l);background:#FAF4EA;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .content{padding:24px 18px 70px;max-width:100%}
+  .module{padding:20px 18px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+  .overlay.show{display:block}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:620px){.four.two{grid-template-columns:1fr}.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">HUMAN DESIGN × AWARENESS</div>
+      <h1>人类图 · 觉察之道</h1>
+      <div class="sub">完整课件 · 用觉察活出设计</div>
+      <a href="hd-juecha-zhidao-course.html" style="display:inline-block;margin-top:10px;font-size:13px;color:#F5E6D3;text-decoration:none;border:1px solid rgba(245,230,211,.4);border-radius:20px;padding:4px 14px">← 课程主页</a>
+    </div>
+    <nav class="level-nav">
+      <div class="level-section">
+        <div class="level-title" data-toggle>基础篇 · 用觉察活出设计 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m00">00 缘起：当人类图遇见觉察</a>
+          <a class="lesson" href="#m01">01 在生活中修行</a>
+          <a class="lesson" href="#m02">02 什么是觉察</a>
+          <a class="lesson" href="#m03">03 座下修 · 以事炼心</a>
+          <a class="lesson" href="#m04">04 座上修 · 观念头</a>
+          <a class="lesson" href="#m05">05 看盯挖改 × 非我主题</a>
+          <a class="lesson" href="#m06">06 放下执著</a>
+          <a class="lesson" href="#m07">07 衡量标准</a>
+          <a class="lesson" href="#m08">08 21 天觉察练习</a>
+        </div>
+      </div>
+      <div class="level-section">
+        <div class="level-title" data-toggle>应用篇 · 在场景中活出设计 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m09">09 在等待中修行</a>
+          <a class="lesson" href="#m10">10 在告知中修行</a>
+          <a class="lesson" href="#m11">11 在回应中修行</a>
+          <a class="lesson" href="#m12">12 在关系中修行</a>
+          <a class="lesson" href="#m13">13 在情绪中修行</a>
+          <a class="lesson" href="#m14">14 在困境中修行</a>
+          <a class="lesson" href="#m15">15 像修行人一样生活</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="t-logo">人类图 · 觉察之道</div>
+      <button class="menu-btn" id="menuBtn">☰ 目录</button>
+    </div>
+    <div class="content">
+      <div class="hero-mini">
+        <div class="eyebrow">THE PATH OF AWARENESS</div>
+        <h1>用觉察，活出你的设计</h1>
+        <p>这不是又一门「读懂图」的课。图是地图，觉察是走路。</p>
+      </div>
+
+      <!-- 00 -->
+      <section class="module" id="m00">
+        <span class="mno">模块 00</span>
+        <h2>缘起：当人类图遇见觉察之道</h2>
+        <div class="en">Why Human Design Needs Awareness</div>
+        <p>人类图给你一张极其精准的<strong>设计蓝图</strong>：你是谁、怎样与世界正确互动、身体如何替你做决定。但绝大多数人卡在同一个地方——<strong>「我知道，但我做不到。」</strong></p>
+        <div class="lead-q">「知道设计，不等于活出设计。」中间的桥，就是觉察。</div>
+        <h3>非我，就是「机器 / 奴隶」状态</h3>
+        <p>《觉察之道》里说，绝大多数人活得像一台被程序控制的机器，被情绪和习气带走而不自知。这恰恰就是人类图说的<strong>非我（Not-Self）</strong>状态：偏离了类型、策略与权威，活成了头脑替你编写的反应模式。</p>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>人类图的「去条件化」是目标，觉察之道提供的是<strong>每天可执行的练习</strong>。两者指向同一件事：从被设计控制，回到自由的天空。</p></div>
+        <h3>本课程不做的事 / 做的事</h3>
+        <ul>
+          <li>❌ 不重复讲授人类图基础理论知识（那是为了「读懂」）。</li>
+          <li>✅ 教你如何在吃饭、走路、情绪、关系里，把策略与权威「做出来」。</li>
+          <li>✅ 用「看盯挖改」对治你的非我主题，让它越来越少出现。</li>
+        </ul>
+        <div class="ex"><b>觉察作业 · </b>拿出你的人类图报告，圈出你的<strong>类型、策略、内在权威、非我主题</strong>。这就是你这趟旅程的「靶心」。</div>
+      </section>
+
+      <!-- 01 -->
+      <section class="module" id="m01">
+        <span class="mno">模块 01</span>
+        <h2>在生活中修行：座上修与座下修</h2>
+        <div class="en">Practice in Daily Life</div>
+        <p>修行不在山上，在人类图的日常里。练习分两种形式，<strong>没有谁更重要</strong>：</p>
+        <ul>
+          <li><b>座上修</b>：专门静坐，练习觉察、读图、与自己的设计相处（基础练习）。</li>
+          <li><b>座下修</b>：下座之后，在吃饭、走路、工作、关系里应用觉察（基础 + 应用练习）。</li>
+        </ul>
+        <h3>生活中修行的四个次第</h3>
+        <div class="four two">
+          <div class="f"><div class="step">一</div><h4>假装修行</h4><p>爱谈国学佛法，听大师课、读经典，但从不真的练。修行只是生活调味剂。</p></div>
+          <div class="f"><div class="step">二</div><h4>把修行当工具</h4><p>遇到问题才想起觉察，顺利时就忘。图只在「有用」时被翻出来。</p></div>
+          <div class="f"><div class="step">三</div><h4>在生活中练习</h4><p>每天刻意练习：静坐觉察、动作觉察、即刻觉察。修行成了生活的一部分。</p></div>
+          <div class="f"><div class="step">四</div><h4>修行即生活</h4><p>修行无时不在、无处不在。基础与应用、座上座下，都是一回事——在觉察中生活。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>你的<strong>定义中心</strong>是「固定程序」，<strong>开放中心</strong>是「条件化区域」。座下修的核心，就是在开放中心被外界「撞一下」时，第一时间看见，不被带走。</p></div>
+        <div class="ex"><b>课堂练习 · </b>今天选一件日常小事（如吃饭、刷牙、通勤），把觉知放到身体动作上，像给大地盖印章一样走每一步。体会「一具尸体在做这件事」与「我真的在这里」的区别。</div>
+      </section>
+
+      <!-- 02 -->
+      <section class="module" id="m02">
+        <span class="mno">模块 02</span>
+        <h2>什么是觉察</h2>
+        <div class="en">What Is Awareness</div>
+        <p>一句话：<strong>觉察，是知道此刻的正在发生。</strong>「知道」就是知道；「此刻」是当下，不是过去未来；「正在发生」包括你的语言、想法、行为，以及看见的、听见的、感觉到的。</p>
+        <div class="lead-q">原则：只是知道，不跟随。不拒不迎。</div>
+        <p>知道自己在生气，这是觉察；知道脚在痛，这是觉察；听见孩子哭，知道，这也是觉察。一旦你「跟随」了——从「我生气了」滑到「他凭什么这样对我」，就不再是觉察，而是被念头带走。</p>
+        <h3>为什么觉察能解脱？</h3>
+        <ul>
+          <li>「当你看见山，你已在山之外；当你看见情绪，你已在情绪之外。」</li>
+          <li>情绪的本质也是念头。你跟随它、拒绝它，都是在给它能量；只是知道，它自己会消散——像一杯浊水，放着不动，自然清澈。</li>
+        </ul>
+        <h3>觉察的四个层次</h3>
+        <div class="four two">
+          <div class="f"><div class="step">1</div><h4>感知每一个动作</h4><p>走路放脚上、喝水感受手。最容易，却最难一直保持。</p></div>
+          <div class="f"><div class="step">2</div><h4>看见每一个念头</h4><p>念头如瀑布，一不小心就被内容带走。较难。</p></div>
+          <div class="f"><div class="step">3</div><h4>看见每一次情绪</h4><p>情绪更强烈，最难停下。但这恰是自由的入口。</p></div>
+          <div class="f"><div class="step">4</div><h4>发生</h4><p>无法练习，只能自己发生。像花自己开——持续觉察，就是允许它发生。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>「不跟随念头」= 不听头脑（Voice）的指挥。「头脑」在人类图里正是那个想替你做决定的「非我声音」。觉察，就是让荐骨 / 情绪 / 脾等<strong>真实权威</strong>重新上岗。</p></div>
+        <div class="ex"><b>觉察作业 · </b>用十分钟，准备纸笔，试着记录闪过的念头。你会发现：原来自己有这么多念头，且许多「邪恶或羞耻」。不必评判，只是知道。</div>
+      </section>
+
+      <!-- 03 -->
+      <section class="module" id="m03">
+        <span class="mno">模块 03</span>
+        <h2>座下修 · 以事炼心</h2>
+        <div class="en">Off-Cushion Practice</div>
+        <p>下座之后，才是真正的考场。以事炼心，就是在每一个日常动作与对境里，练习「知道此刻的正在发生」。</p>
+        <h3>三个入手处</h3>
+        <ul>
+          <li><b>感知身体的动作</b>：走路、打字、喝水，把觉知放到身体上。你不在想别的事，才真的「在」。</li>
+          <li><b>看见当下的念头</b>：念头升起，看见就好。练习越多，越能在被带走之前那一瞬「看见」。</li>
+          <li><b>回到当下</b>：被带走是常态。关键不是不丢，而是丢了能回来——回来，就是觉察。</li>
+        </ul>
+        <div class="lead-q">「绝大多数人，睁着眼也在做梦。他们永远不在他们在的地方。」</div>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>你越是<strong>开放中心</strong>多的人（尤其无定义 G 中心、无定义情绪中心），越容易被环境带走。座下修就是反复练习：被带走了，认出来，温柔地回来。这不靠意志，靠觉察。</p></div>
+        <div class="ex"><b>课堂练习 · </b>选一段通勤路，全程把觉知放在脚底与地面接触的感觉上。手机响、念头起，一笑，回到脚底。记录一次「回来」的体验。</div>
+      </section>
+
+      <!-- 04 -->
+      <section class="module" id="m04">
+        <span class="mno">模块 04</span>
+        <h2>座上修 · 观念头</h2>
+        <div class="en">On-Cushion Practice</div>
+        <p>专门静坐，是让「看见念头」成为可能的地基。没有这个基础，生活中的应用无从谈起。</p>
+        <h3>基本练习</h3>
+        <ul>
+          <li>找个安静处，坐稳，闭上或微闭眼睛。</li>
+          <li>把注意力轻轻放在呼吸，或身体某个感觉上。</li>
+          <li>念头一定会来。一来，<strong>看见</strong>它，不评判，不跟随，回到呼吸。</li>
+          <li>一整天可能都在「被带走—回来—被带走—回来」。这就是练习本身。</li>
+        </ul>
+        <h3>循序渐进</h3>
+        <p>从一次 5 分钟开始，慢慢加长。重要的不是时长，而是「能及时看见念头、不被带走」。藏地的牦牛一站一整晚，并非修行好——打坐需要真的能看见。</p>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>静坐时，可以把注意力放在你的<strong>权威中心</strong>上：荐骨型感受腹部的「嗯哼」、脾型感受身体瞬间的低语、情绪型只是观察波浪起伏而不当下决定。让权威在静中「开机」。</p></div>
+        <div class="ex"><b>觉察作业 · </b>连续 3 天，每天静坐 5 分钟，只做一件事：念头来，看见，回来。记录「今天被带走了几次、回来了几次」。</div>
+      </section>
+
+      <!-- 05 核心 -->
+      <section class="module" id="m05">
+        <span class="mno">模块 05 · 核心</span>
+        <h2>看盯挖改 × 非我主题</h2>
+        <div class="en">See-Stare-Dig-Change · Against Not-Self</div>
+        <p>这是全书最强的方法，也是本课程的<strong>灵魂章</strong>。当你的非我主题（痛苦信号）升起，用四步法，把它转回策略与权威。</p>
+        <div class="four two">
+          <div class="f"><div class="step">看</div><h4>看见情绪</h4><p>及时看见「我又不在设计里了」。越早越好，错过就容易被带走。</p></div>
+          <div class="f"><div class="step">盯</div><h4>盯住情绪</h4><p>把注意力放到身体感受上，像研究精神病人一样研究自己。不继续、不被带走。</p></div>
+          <div class="f"><div class="step">挖</div><h4>挖执著点</h4><p>找<strong>自己的</strong>问题：背后的执著是什么？尽量挖具体，不挖别人的问题。</p></div>
+          <div class="f"><div class="step">改</div><h4>改变行为</h4><p>与以往相反地做。针对非我，回到你的策略与权威。</p></div>
+        </div>
+        <h3>五大类型 · 非我主题 × 看盯挖改</h3>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>非我主题</th><th>签名</th><th>四步回到设计</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>看见「没检查荐骨就答应」→ 盯胸口卡堵 → 挖「想用头脑掌控」→ 回：听嗯哼</td></tr>
+              <tr><td><b>显示生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>看见「多头并进不落地」→ 盯混乱能量 → 挖「怕慢」→ 回：一次一件事</td></tr>
+              <tr><td><b>显示者</b></td><td class="ns">愤怒</td><td class="sg">平静</td><td>看见「被误解阻拦」→ 盯胸口紧缩 → 挖「需被认可才动」→ 回：行动前告知</td></tr>
+              <tr><td><b>投射者</b></td><td class="ns">苦涩</td><td class="sg">成功</td><td>看见「好心没人听」→ 盯心口堵 → 挖「想被看见胜过去等」→ 回：智慧留给懂的人</td></tr>
+              <tr><td><b>反映者</b></td><td class="ns">失望</td><td class="sg">喜悦+惊喜</td><td>看见「环境不对」→ 盯全身不安 → 挖「急着给答案」→ 回：跟月亮周期，先问环境</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>常见错误</h3>
+        <ul>
+          <li>① 看盯挖改是<strong>对治情绪</strong>的，普通念头只需「看 + 改」。</li>
+          <li>② 「看」是看<strong>自己的情绪</strong>，不是看别人的、不是看现象。</li>
+          <li>③ 「盯」是盯<strong>情绪与身体</strong>，不是盯事情发展过程。</li>
+          <li>④ 「挖」是挖<strong>自己的</strong>问题，不是挖别人的（「我看不惯素质差的人」= 在挖别人）。</li>
+          <li>⑤ 「改」是<strong>真实行为</strong>，不是表决心（「我以后不抱怨了」是决心，不是改）。</li>
+        </ul>
+        <h3>常用辅助方法</h3>
+        <ul>
+          <li><b>不迁怒</b>：情绪中容易踢猫，及时看见，自然不被影响。</li>
+          <li><b>不甩锅</b>：自我习惯把责任推给别人，挖出来。</li>
+          <li><b>贴条「觉察」</b>：桌面、手机壳贴两个字，时时提醒。</li>
+          <li><b>事前提醒</b>：知道绩效会不公、见父母会催婚，进门前提早提起觉察。</li>
+          <li><b>了解世间八法</b>：得/失、乐/苦、誉/毁、称/讥——挖不到执著时，往这八条上靠。</li>
+          <li><b>停止编故事</b>：头脑是最好的编剧，看见它在编，止。</li>
+        </ul>
+        <div class="ex"><b>课堂练习 · </b>用 300 字以内，按【看】【盯】【挖】【改】记录一次非我情绪。模板：情绪起来 → 意识放身体某处几秒消失【盯】→ 执著点是______【挖】→ 我没______，换了______做法【改】。</div>
+      </section>
+
+      <!-- 06 -->
+      <section class="module" id="m06">
+        <span class="mno">模块 06</span>
+        <h2>如何放下执著</h2>
+        <div class="en">Letting Go of Attachment</div>
+        <p>减少妄想执著，是智慧增长的唯一途径；而觉察，是最适合生活的放下方式。六种下手处：</p>
+        <ul>
+          <li><b>转移执著</b>：把注意力从「我要结果」转向过程与当下。</li>
+          <li><b>向内求</b>：所有修行都是要求自己，不是要求别人。别用觉察去「改」伴侣。</li>
+          <li><b>明事理</b>：看清楚情绪与执著的本质，见地提升了，放下才容易。</li>
+          <li><b>确定人生主线</b>：你的<strong>轮回交叉（Incarnation Cross）</strong>就是灵魂主线。主线清晰，枝节执著自然轻。</li>
+          <li><b>纯粹利他</b>：少想自己，多关心他人苦有没有少一点。</li>
+          <li><b>了知真相</b>：功名利禄本是镜花水月；你本来就是天空。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>人类的<strong>轮回交叉</strong>回答了「我为何而来」。当你把能量锚定在人生主线上，那些「孩子成绩、别人眼光、升职加薪」的枝节执著，会自然松动。看盯挖改挖到最后，往往挖到「我偏离了主线」。</p></div>
+        <div class="ex"><b>觉察作业 · </b>翻开你的图，写下你的轮回交叉名称与一句话含义。问自己：今天让我抓狂的那件事，和我的主线有关吗？</div>
+      </section>
+
+      <!-- 07 -->
+      <section class="module" id="m07">
+        <span class="mno">模块 07</span>
+        <h2>衡量标准：去条件化的三个迹象</h2>
+        <div class="en">Three Indicators of Progress</div>
+        <p>修行不是比打坐时长。衡量有没有进步，看智慧是否增长，可落到三个日常指标：</p>
+        <div class="four">
+          <div class="f"><div class="step">1</div><h4>情绪指标</h4><p>发脾气、内心抱怨的频率与被影响时长。记两周，明显看出来。</p></div>
+          <div class="f"><div class="step">2</div><h4>执著减少</h4><p>以前看不惯的，现在不在意了。妈妈不再为儿子不肯睡而焦虑，就是。</p></div>
+          <div class="f"><div class="step">3</div><h4>他人评价</h4><p>家人某天自然说「你最近好像变了，没那么爱生气了」。这是真进步。</p></div>
+        </div>
+        <h3>进步的征兆</h3>
+        <ul>
+          <li>遇到对境，不容易起烦恼；偶尔还会幽默应对（<strong>幽默和智慧是双胞胎</strong>）。</li>
+          <li>越来越<strong>少想到自己</strong>——遇到事，先关心那只蟑螂，而非别人怎么评价我。</li>
+          <li>觉察在线时，激烈情绪自然少。</li>
+        </ul>
+        <div class="lead-q">修行口诀：「自己最差，老实听话！」先给自己定个小目标——<strong>坚持练习一百天</strong>。</div>
+        <div class="hd-box"><span class="tag">人类图 × 觉察</span><p>去条件化的标志，正是你的<strong>签名（满足/平静/成功/喜悦）</strong>越来越多出现，非我主题越来越少。把三个指标做成周度自评，比「感觉自己懂了」可靠得多。</p></div>
+      </section>
+
+      <!-- 08 -->
+      <section class="module" id="m08">
+        <span class="mno">模块 08</span>
+        <h2>21 天觉察练习 · 人类图日记</h2>
+        <div class="en">21-Day Awareness Practice</div>
+        <p>觉察是「马步冲拳」——一招练二十年，也能成顶尖高手。21 天，把方法变成肌肉记忆。</p>
+        <h3>每日结构</h3>
+        <ul>
+          <li><b>晨间 5 分钟</b>：座上修，静心，把注意力放到你的权威中心。</li>
+          <li><b>日间锚点</b>：在桌面 / 手机壳贴「觉察」；易触发场景（会议、见父母）提前提醒。</li>
+          <li><b>晚间 3 分钟</b>：写一篇看盯挖改觉察日记（≤300 字），对照你的非我主题。</li>
+        </ul>
+        <div class="ex"><b>结营标志 · </b>不是「没情绪了」，而是：情绪一来你能立刻看见，且大部分时候不被带走。那一刻，你已经是自由的。</div>
+        <p class="toc-note">配套《学员练习手册》含：每日觉察打卡表、看盯挖改情绪卡（按类型）、非我觉察日志、21 天日历。可直接打印使用。</p>
+      </section>
+
+      <!-- 09 -->
+      <section class="module" id="m09">
+        <span class="mno">模块 09</span>
+        <h2>应用篇 · 在等待中修行</h2>
+        <div class="en">Practice in Waiting</div>
+        <p>专为<strong>投射者</strong>（等待邀请）与<strong>反映者</strong>（等待 28 天）定制。你们最大的非我，是把「等待」误读为「被动 / 被忽略」。</p>
+        <ul>
+          <li><b>投射者</b>：等待邀请 ≠ 什么都不做。是先把光准备好，让对的人来邀请。苦涩升起时，挖「我急于被看见」。</li>
+          <li><b>反映者</b>：任何重大决策前追踪完整 28 天月亮周期。失望升起时，先问「这个环境对我健康吗？」</li>
+        </ul>
+        <div class="hd-box"><span class="tag">觉察练习</span><p>当「怎么没人请我 / 怎么还不来」的怨气起来——<b>看</b>见它，<b>盯</b>住心口，<b>挖</b>「我需要被认可才值得」，<b>改</b>回：把才华打磨好，信任对的邀请会来。</p></div>
+      </section>
+
+      <!-- 10 -->
+      <section class="module" id="m10">
+        <span class="mno">模块 10</span>
+        <h2>应用篇 · 在告知中修行</h2>
+        <div class="en">Practice in Informing</div>
+        <p>给<strong>显示者</strong>。你的策略是「告知」——行动前让人知道你要做什么。愤怒，往往来自「被阻拦」或「压抑自己以适应环境」。</p>
+        <ul>
+          <li>愤怒升起：<b>看</b>见「我又在缩小自己」；<b>挖</b>「我需要被认可才敢行动」。</li>
+          <li><b>改</b>回：一句「我要做 X」就够了，不请求许可，只是告知。</li>
+        </ul>
+        <div class="ex"><b>觉察锚点 · </b>「你不是粗鲁——你是需要空间的前瞻者。」把告知做足，平静自然回来。</div>
+      </section>
+
+      <!-- 11 -->
+      <section class="module" id="m11">
+        <span class="mno">模块 11</span>
+        <h2>应用篇 · 在回应中修行</h2>
+        <div class="en">Practice in Responding</div>
+        <p>给<strong>生产者 / 显示生产者</strong>（占 70%+）。策略是「等待回应」——让荐骨的嗯哼 / 嗯嗯做主。</p>
+        <ul>
+          <li>挫败升起：多半是「说了 YES 却没检查荐骨」。<b>盯</b>住腹部，<b>挖</b>「我用头脑答应了」。</li>
+          <li><b>改</b>回：遇到事，先问身体「嗯哼（是）/ 嗯嗯（否）」，让回应自然发生。</li>
+        </ul>
+        <div class="ex"><b>觉察锚点 · </b>「等待回应，是你的力量。」显示生产者天生多元激情，不是分散，是多元设计——但每一次，都要过荐骨这关。</div>
+      </section>
+
+      <!-- 12 -->
+      <section class="module" id="m12">
+        <span class="mno">模块 12</span>
+        <h2>应用篇 · 在关系中修行</h2>
+        <div class="en">Practice in Relationships</div>
+        <p>关系是人类图最容易「撞车」的地方。看清彼此的设计差异，比改造对方有效一万倍。</p>
+        <ul>
+          <li><b>投射者</b>需要「被看见、被邀请」；别追着给建议，等被问再给。</li>
+          <li><b>显示者</b>需要「被理解、被告知」；别拦，先听他说要做什么。</li>
+          <li><b>生产者</b>需要「被回应」；别替他决定，问他身体怎么说。</li>
+          <li><b>反映者</b>需要「健康的空间与环境」；先保障环境，再谈目标。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">觉察练习</span><p>关系冲突时，先做「看盯挖改」处理自己的非我，再处理事情。情绪在，智慧不在，事情一定处理不好。把情绪和事情分开。</p></div>
+      </section>
+
+      <!-- 13 -->
+      <section class="module" id="m13">
+        <span class="mno">模块 13</span>
+        <h2>应用篇 · 在情绪中修行</h2>
+        <div class="en">Practice in Emotion</div>
+        <p>把每一次负面情绪，变成一次回家的练习。情绪不是敌人，是提醒你「偏离设计」的信号灯。</p>
+        <ul>
+          <li>痛苦信号（非我）亮起 → 用看盯挖改，回到策略与权威。</li>
+          <li>满足信号（签名）亮起 → 认出它，允许自己停在设计里多待一会儿。</li>
+          <li>记住：你可以没有财富自由，但可以实现<strong>情绪自由</strong>。</li>
+        </ul>
+        <div class="ex"><b>觉察作业 · </b>本周挑一次最强情绪，完整走一遍四步，写进日记。重点：挖到点要<strong>具体</strong>，落在自己身上。</div>
+      </section>
+
+      <!-- 14 -->
+      <section class="module" id="m14">
+        <span class="mno">模块 14</span>
+        <h2>应用篇 · 在困境中修行</h2>
+        <div class="en">Practice in Hardship</div>
+        <p>病痛、失控、不确定——这些「不确定」，正是练习觉察最好的道场。你无法决定生活，但可以决定如何面对生活。</p>
+        <ul>
+          <li>身体痛时，把觉知放到疼痛处，像研究它一样，不抗拒。</li>
+          <li>恐惧时，<b>看</b>见恐惧，若不停，就<b>盯</b>住身体感受，像研究精神病人一样研究自己。</li>
+          <li>把情绪和事情分开：先让恐惧消失（回到权威），再来处理事情。</li>
+        </ul>
+        <div class="lead-q">「当你不再关心自己的得失，只是关心世界有没有变好一点——那时，你的自我已消失，真我出现，慈悲出现。」</div>
+      </section>
+
+      <!-- 15 -->
+      <section class="module" id="m15">
+        <span class="mno">模块 15</span>
+        <h2>应用篇 · 像修行人一样生活</h2>
+        <div class="en">Live as an Awakened One</div>
+        <p>终极状态：<strong>修行即生活，生活即修行。</strong>修行不是某一刻，是每一刻；不是一件事，是每一件事。</p>
+        <ul>
+          <li>你可以看戏，可以演戏，你知道自己在做什么——你是自由的，在任何时候。</li>
+          <li>一切都是游戏。功名利禄，镜花水月；痛苦烦恼，亦是游戏一场。</li>
+          <li>不期待「发生」发生。踏向彼岸的每一步，都是彼岸本身。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 觉察 · 终</span><p>当你的类型、策略、权威，不再是需要「记起」的知识，而是像呼吸一样的自然反应——那一刻，你活出了图，也醒了过来。图是地图，觉察是走路；你，本来就是天空。</p></div>
+        <div class="ex"><b>结课赠言 · </b>不期待证悟，但要一辈子修行。祝福你。</div>
+      </section>
+
+      <div class="resnav" style="margin-top:34px">
+        <a class="home" href="hd-juecha-zhidao-course.html">🏠 课程主页<small>返回课程全貌与报名入口</small></a>
+        <a href="hd-juecha-zhidao-courseware.html">📖 完整课件<span class="tag">当前页</span><small>你正在这里</small></a>
+        <a href="hd-juecha-zhidao-cheatsheet.html">🃏 觉察速查卡<small>类型锚点 · 四步法 · 世间八法</small></a>
+        <a href="hd-juecha-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 看盯挖改情绪卡 · 可打印</small></a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),menuBtn=document.getElementById('menuBtn');
+function openNav(){sidebar.classList.add('open');overlay.classList.add('show');}
+function closeNav(){sidebar.classList.remove('open');overlay.classList.remove('show');}
+menuBtn&&menuBtn.addEventListener('click',openNav);
+overlay.addEventListener('click',closeNav);
+document.querySelectorAll('.lesson').forEach(function(l){
+  l.addEventListener('click',function(){if(window.innerWidth<=900)closeNav();});
+});
+document.querySelectorAll('.level-title').forEach(function(t){
+  t.addEventListener('click',function(){t.classList.toggle('collapsed');});
+});
+// active highlight
+var lessons=document.querySelectorAll('.lesson'),sections=document.querySelectorAll('.module');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur='';
+  sections.forEach(function(s){if(s.offsetTop<=pos)cur=s.id;});
+  lessons.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>

@@ -667,27 +667,6 @@
   footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
   footer a:hover { color: #fff; }
 
-  /* ===== JUMP LINKS ===== */
-  .jump-bar {
-    position: fixed; right: 20px; bottom: 30px; z-index: 998;
-    display: flex; flex-direction: column; gap: 8px;
-    max-height: calc(100vh - 110px);
-    overflow-y: auto; scrollbar-width: none;
-  }
-  .jump-bar::-webkit-scrollbar { display: none; }
-  .jump-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    border: none; cursor: pointer; font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    transition: transform .2s;
-    flex-shrink: 0;
-  }
-  .jump-btn:hover { transform: scale(1.1); }
-  .jump-btn.beginner { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
-  .jump-btn.intermediate { background: linear-gradient(135deg, #c94fa0, #f4a234); }
-  .jump-btn.advanced { background: linear-gradient(135deg, #8b5cf6, #14b8a6); }
-  .jump-btn.home { background: var(--card-bg); border: 2px solid var(--border); }
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -889,26 +868,33 @@
     <!-- 三大分类下拉（内联第一行，桌面端悬停/点击展开） -->
     <div class="nav-dropdown" data-page-node-id="ja5Wcu4dUJnJ3pmMn9984Y">
       <button class="nav-cat" type="button" data-page-node-id="hzGC1R930BoWLXsEXrFZg6">📚 教学研究 <span class="caret" data-page-node-id="vxW8OxKbYXGXXx7zP9ipkx">▾</span></button>
-      <div class="mega-panel mega-wide" data-page-node-id="blclJFG4cotj4zHlphA6dO">
+      <div class="mega-panel mega-wide mega-right" data-page-node-id="blclJFG4cotj4zHlphA6dO">
         <div class="mega-group" data-page-node-id="TwewtEtEGocW6oB5wP8axI">
           <div class="mega-group-title" data-page-node-id="2UPeD8rpatOX2mklQbe0z7">📣 人类图领读者计划</div>
           <a href="human-design-reader-program-70days.html" target="_blank" data-page-node-id="vW4nnIKafOCYaakPPZOTAR">📘 70天通读版</a>
           <a href="human-design-reader-program-7days.html" target="_blank" data-page-node-id="dXmzRGiW86UOqSuesNjNrc">📗 7天精读版</a>
         </div>
         <div class="mega-group" data-page-node-id="miZMDiesqBR1XKjk9gUX9B">
-          <div class="mega-group-title" data-page-node-id="hdFYzx2PzCbuMtZIj7tXrF">📚 人类图课程</div>
+          <div class="mega-group-title" data-page-node-id="hdFYzx2PzCbuMtZIj7tXrF">🧩 人类图·交叉应用</div>
           <a href="human-design-guide.html" target="_blank" data-page-node-id="OyKuIuFEF34lg34e26jRjd">📖 入门手册</a>
           <a href="qhd-courseware.html" target="_blank" data-page-node-id="CyvkLhdYXuV8XlckK5Y6Kb">⚛️ 量子人类图</a>
           <a href="astro-hd-courseware.html" target="_blank" data-page-node-id="rd18He2AgMJa7hDOizGZFX">🪐 占星人类图</a>
           <a href="hd-leadership-course.html" target="_blank" data-page-node-id="Dzs0Nkaavp2CwrdRFcH8J5">🦁 人类图领导力</a>
           <a href="hd-coaching-course.html" target="_blank" data-page-node-id="t1wwyiX2PGEfddwsnNR4yS">🎯 人类图教练</a>
-          <a href="hd-four-arts-course.html" target="_blank" data-page-node-id="OtWnR4W1ucW9jQCvKERJdv">🎨 人类图实践艺术</a>
-          <a href="hd-the-art-of-communication.html" target="_blank" data-page-node-id="5dr7Ng1uVBMq35ozBtReOqES">💬 沟通的艺术</a>
           <a href="hd-talent-course.html" target="_blank" data-page-node-id="ZkmVTV2URMK82XxjfdrldL">🎁 天赋才华课程</a>
           <a href="Working-by-Design.html" target="_blank" data-page-node-id="Z1H6x455ic6CIy9FjFzPbE">📐 按设计工作</a>
           <a href="hd-four-arrows-course.html" target="_blank" data-page-node-id="zEyL4EFPGIGxPU6ch5EUOm">🏹 人类图四箭头</a>
           <a href="cube-course-exec-variable.html" target="_blank" data-page-node-id="QQxolyizpH85u53tXliQjS">🧭 决策环境设计</a>
-          <a href="genekeys-tizhengzhilv-course.html" target="_blank" data-page-node-id="fQhrK5K3XFiuPWrNIDSCwJ">🧬 基因天命·体证之旅</a>
+        </div>
+        <div class="mega-group">
+          <div class="mega-group-title">🎨 人类图·艺术系列</div>
+          <a href="hd-four-arts-course.html" target="_blank">🎨 人类图实践艺术</a>
+          <a href="hd-the-art-of-communication.html" target="_blank">💬 沟通的艺术</a>
+          <a href="genekeys-tizhengzhilv-course.html" target="_blank">🧬 基因天命·体证之旅</a>
+        </div>
+        <div class="mega-group">
+          <div class="mega-group-title">🧘 人类图·问道系列</div>
+          <a href="hd-juecha-zhidao-course.html" target="_blank">💡 人类图·觉察之道</a>
         </div>
       </div>
     </div>
@@ -929,6 +915,7 @@
           <a href="bg5-maps.html" target="_blank" data-page-node-id="HHLUGW7VRsLLwlarsqgFfd">👥 BG5商业应用</a>
           <a href="ctb-analysis.html" target="_blank" data-page-node-id="AG6U91Uxhqc7mehP8vK5k4">🌈 CTB变量分析</a>
           <a href="hd_birth_time_calibration.html" target="_blank" data-page-node-id="fF0JaxKkUyIEQ85lCfF3Q7">⏱️ 生时校准</a>
+          <a href="hd-death-chart.html" target="_blank" data-page-node-id="dC7hK2pQ9rS1tU5vW8xYz">🌑 人类图死亡时刻出图</a>
           <a href="hd-affirmation-cards.html" target="_blank" data-page-node-id="b2EHnlwwFPQGcPSSOw9h5e">🃏 抽卡中心</a>
         </div>
         <div class="mega-group" data-page-node-id="ein7EAvHwNjPcTZicWtXmz">
@@ -1590,6 +1577,49 @@
       </div>
     </a>
 
+
+        <a href="hd-perpetual-calendar.html" target="_blank" class="tool-card" style="border-color:#C4956A;">
+      <div class="tool-card-banner" style="background:linear-gradient(135deg,#2D2118,#8B6914,#E8C07D);">
+        <span class="tool-card-emoji">🌞</span>
+        <span class="tool-card-level">星历工具</span>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-title">太阳过闸万年历</div>
+        <div class="tool-card-desc">按日查阅太阳所落闸门与爻位，配合流日节奏安排重要决策，一张表看完整年能量走向</div>
+        <div class="tool-card-topics">
+          <span class="tool-card-topic">太阳过闸</span>
+          <span class="tool-card-topic">闸门爻位</span>
+          <span class="tool-card-topic">年度节奏</span>
+          <span class="tool-card-topic">择时参考</span>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-card-meta">万年历 · 星历工具</span>
+          <span class="tool-card-link">打开万年历 →</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="hd-transit-just-now.html" target="_blank" class="tool-card" style="border-color:#4A6A8A;">
+      <div class="tool-card-banner" style="background:linear-gradient(135deg,#1a2a40,#4A6A8A,#F2DF74);">
+        <span class="tool-card-emoji">🌅</span>
+        <span class="tool-card-level">实时行运</span>
+      </div>
+      <div class="tool-card-body">
+        <div class="tool-card-title">人类图流日分析系统</div>
+        <div class="tool-card-desc">实时计算当下天体行运，看流日闸门如何叠加你的本命设计，捕捉当天能量主题与行动窗口</div>
+        <div class="tool-card-topics">
+          <span class="tool-card-topic">实时行运</span>
+          <span class="tool-card-topic">流日闸门</span>
+          <span class="tool-card-topic">本命叠加</span>
+          <span class="tool-card-topic">行动窗口</span>
+        </div>
+        <div class="tool-card-footer">
+          <span class="tool-card-meta">流日分析 · VSOP87 校准</span>
+          <span class="tool-card-link">打开系统 →</span>
+        </div>
+      </div>
+    </a>
+
     <a href="hd-coaching-course.html" target="_blank" class="tool-card" style="border-color:#FF6B35;" data-page-node-id="XjkgnN7xNuLWczUHy1j8XY">
       <div class="tool-card-banner" style="background:linear-gradient(135deg,#FF6B35,#FF8C42,#FFD700);" data-page-node-id="hfWyqC6v2BhQOXRsTNY8r6">
         <span class="tool-card-emoji" data-page-node-id="DlndSQjuPgQTQn7qE3gMF8">🎯</span>
@@ -1947,34 +1977,7 @@
   <p style="margin-top:8px;" data-page-node-id="CbzyHTXxroAlJMXYXxqeDC">Powered By Kan Man Tang</p>
 </footer>
 
-<!-- ===== JUMP BUTTONS ===== -->
-<div class="jump-bar" data-page-node-id="DdSAcuLN54FJJABNBjjQMd">
-  <button class="jump-btn home" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部" data-page-node-id="7a4wibfqxoE8MNGhyhQ77i">↑</button>
-  <button class="jump-btn beginner" onclick="document.getElementById('beginner').scrollIntoView({behavior:'smooth'})" title="入门系列" data-page-node-id="CN2CObjqMCVHEuHWvqlZoM">🌱</button>
-  <button class="jump-btn intermediate" onclick="document.getElementById('intermediate').scrollIntoView({behavior:'smooth'})" title="进阶系列" data-page-node-id="mhvo5JlVx0QdnZmLvVRkIf">🌿</button>
-  <button class="jump-btn advanced" onclick="document.getElementById('advanced').scrollIntoView({behavior:'smooth'})" title="高阶系列" data-page-node-id="GyUhUo7CQANmTsDO2sCOqE">🌳</button>
-  <button class="jump-btn advanced" onclick="window.open('index.html#freetool','_blank')" title="免费出图" style="background:linear-gradient(135deg,#ffd700,#ff8c00);" data-page-node-id="2MUpHxYrlFQPfBhlXHHIKm">🔮</button>
-  <button class="jump-btn" onclick="window.open('booking.html','_blank')" title="预约咨询" style="background:linear-gradient(135deg,#c94fa0,#f4a234);color:#fff;" data-page-node-id="5dPQGQk9Nfa9jdVVs7lrse">📅</button>
-  <button class="jump-btn beginner" onclick="window.open('human-design-guide.html','_blank')" title="入门手册" data-page-node-id="vtqAj49CZN27CYRBr5zC7n">📖</button>
-  <button class="jump-btn" onclick="window.open('qhd-courseware.html','_blank')" title="量子人类图" style="background:linear-gradient(135deg,#ff00ff,#00ffff);color:#fff;" data-page-node-id="OUFiRdD4opGYvD3WQVO7yI">⚛️</button>
-  <button class="jump-btn" onclick="window.open('astro-hd-courseware.html','_blank')" title="占星人类图" style="background:linear-gradient(135deg,#1a1040,#c94fa0,#8b5cf6);color:#fff;" data-page-node-id="2BYepMPwXb73eiZr9cZv8D">🪐</button>
-  <button class="jump-btn" onclick="window.open('hd-coaching-course.html','_blank')" title="人类图教练" style="background:linear-gradient(135deg,#FF6B35,#FF8C42,#FFD700);color:#fff;" data-page-node-id="wTUN56XwLHIrYmdYpXnIkC">🎯</button>
-  <button class="jump-btn" onclick="window.open('hd-four-arts-course.html','_blank')" title="人类图实践艺术" style="background:linear-gradient(135deg,#C4956A,#E0A96D,#F5D08A);color:#fff;" data-page-node-id="fNMQ9t57GCzoL1hKEEetri">🎨</button>
-  <button class="jump-btn" onclick="window.open('hd-the-art-of-communication.html','_blank')" title="沟通的艺术" style="background:linear-gradient(135deg,#5D4A38,#A8743F,#EBDCC4);color:#fff;" data-page-node-id="XSGn7p37hbR6sr8ZCLtghnQJ">💬</button>
-  <button class="jump-btn" onclick="window.open('hd-talent-course.html','_blank')" title="天赋才华课程" style="background:linear-gradient(135deg,#B8860B,#C4956A,#E8C07D);color:#fff;" data-page-node-id="Au9xxtUCVv3Imj8rIeGtAM">🎁</button>
-  <button class="jump-btn" onclick="window.open('humandesign-insurance-2.0.html','_blank')" title="优增优育项目" style="background:linear-gradient(135deg,#1A5F7A,#2E86AB,#57C5B6);color:#fff;" data-page-node-id="yQNy63LoUmwdxcwPOATnIi">🚀</button>
-  <button class="jump-btn" onclick="window.open('human-design-gates/index.html','_blank')" title="64 闸门完全指南" style="background:linear-gradient(135deg,#2c6e6f,#2ab8a0);color:#fff;" data-page-node-id="c0Fiq4Yz2uIsAInWBBFIJS"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="KHKAeS6aLaakVwxoO2k2rh"><path d="M5 21V6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v15" data-page-node-id="OIWFAPilF0HiNQKXExZKtO"/><line x1="3" y1="21" x2="21" y2="21" data-page-node-id="8DbBQBLuUqp9EDTNeVcova"/><line x1="12" y1="6" x2="12" y2="21" data-page-node-id="FgW4jtdqna9nWXr868JrFa"/><circle cx="9.5" cy="13" r="0.8" fill="white" stroke="none" data-page-node-id="X542yzQ9zpCuZCRn1BUaws"/><circle cx="14.5" cy="13" r="0.8" fill="white" stroke="none" data-page-node-id="qL2HWy1g8YXM4yvhWbIRTu"/></svg></button>
-  <button class="jump-btn" onclick="window.open('36%20Channels/36-channels.html','_blank')" title="36条通道" style="background:linear-gradient(135deg,#6c3fc5,#c94fa0);color:#fff;" data-page-node-id="0uBoJMCtGJAlc3Ak33xi4F">🔗</button>
-  <button class="jump-btn" onclick="window.open('384-lines.html','_blank')" title="384爻工具" style="background:linear-gradient(135deg,#C4956A,#8B6914);color:#fff;" data-page-node-id="j7enDOrtlgavFywZU59EOm">🔢</button>
-  <button class="jump-btn" onclick="window.open('192-crosses.html','_blank')" title="192轮回交叉" style="background:linear-gradient(135deg,#5C4033,#C4956A);color:#fff;" data-page-node-id="kJNFHCKAZZPMiOxKz8IvRB">✨</button>
-  <button class="jump-btn" onclick="window.open('genekeys.html','_blank')" title="基因天命" style="background:linear-gradient(135deg,#6c3fc5,#c94fa0);color:#fff;" data-page-node-id="aI6TIwOZSZfA4Bp0lsnu3n">🧬</button>
-  <button class="jump-btn" onclick="window.open('wealth.html','_blank')" title="财运之道" style="background:linear-gradient(135deg,#2D2118,#8B5E3C,#C9A84C);color:#fff;" data-page-node-id="RDYiAKTsQz7lZAKYqD5ISx">💰</button>
-  <button class="jump-btn" onclick="window.open('bg5-maps.html','_blank')" title="BG5商业应用" style="background:linear-gradient(135deg,#2D2118,#5C4A32,#C4956A);color:#fff;" data-page-node-id="2SD8LeTADEBVCPVeAvvlKO">👥</button>
-  <button class="jump-btn" onclick="window.open('ctb-analysis.html','_blank')" title="CTB变量分析" style="background:linear-gradient(135deg,#2D2118,#8B6914,#C4956A);color:#fff;" data-page-node-id="0RzlVnwHYdWM5V7djIMj3s">🌈</button>
-  <button class="jump-btn" onclick="window.open('hd_birth_time_calibration.html','_blank')" title="生时校准服务" style="background:linear-gradient(135deg,#1a2a40,#4A6A8A,#C4956A);color:#fff;" data-page-node-id="wmvNaKTYcGPaeysZ48M7sJ">⏱️</button>
-  <button class="jump-btn" onclick="window.open('hd-affirmation-cards.html','_blank')" title="抽卡中心" style="background:linear-gradient(135deg,#2D2118,#8B5E3C,#C4956A);color:#fff;" data-page-node-id="nAB7aDpaeeCRolsHMPBlNp"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="gOne4PMylfjp3Fb0JHYBvY"><rect x="3" y="3" width="11" height="18" rx="2" data-page-node-id="0krcw8VkLPB1D6Om4iH9FF"/><rect x="10" y="5" width="11" height="18" rx="2" data-page-node-id="rZqqzw0100RPTMOVqjvzjs"/><line x1="6" y1="8" x2="8" y2="8" data-page-node-id="p5NlbN3ijGwFJdkSCDcN14"/><line x1="6" y1="11" x2="8" y2="11" data-page-node-id="JPabQ4BRe8DhSvEDUqm1Lz"/><line x1="6" y1="14" x2="8" y2="14" data-page-node-id="2v9OXtWTwBGw5nrXFq36Li"/></svg></button>
-<!-- AI人类图大师入口已下线，源文件 chat.html 保留 -->
-</div>
+<!-- 📌 右侧悬浮跳转按钮组（.jump-bar）已于 2026-09-22 按需求移除 -->
 
 <script>
 function showTab(tab) {

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 觉察之道 ｜ 用觉察，活出你的设计</title>
+<!--
+  《人类图 · 觉察之道》｜课程主页（落地页）
+  VERSION: V3  ·  2026-09-21
+  V3（2026-09-21）：「适合人群」改为一行 3 个（≤860px 两列、≤560px 单列）；资源卡改为一行 2 个；删除 footer 免责声明行（含 .src 样式）
+  V2（2026-09-21）：Hero 内容居中排列；理念/课程地图/看盯挖改三段引导语按句换行；「适合人群」把教练 / 咨询师移至第二行；footer 改为「《人类图 · 觉察之道》/ Powered By Kan Man Tang」；占比数字校正（生产者 70%→37%、显示者 9%→8%）
+  V1（2026-09-21）：首版（暖棕金品牌配色 · 响应式导航 · 课程包四件套互链）
+-->
+<meta name="description" content="《人类图·觉察之道》—— 把人类图从「知识」变成「体验」。一门用觉察活出真实设计的实修课程，由邓勤敏（Kan Man Tang）主讲。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-deep:#2D2118; --bg-deep2:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:12px; --radius-sm:8px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;}
+img{max-width:100%}
+a{color:var(--primary-d);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.brandbar{position:sticky;top:0;z-index:200;background:rgba(45,33,24,.97);backdrop-filter:blur(8px);color:#F5E6D3;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.brandbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:var(--serif);font-size:18px;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:8px}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.nav{display:flex;gap:22px;font-size:14px}
+.nav a{color:#E8D8C5;opacity:.85;transition:.2s;white-space:nowrap}
+.nav a:hover{opacity:1;color:var(--gold-l)}
+.navToggle{display:none;background:none;border:0;color:#F5E6D3;font-size:24px;cursor:pointer;line-height:1}
+.mnav{display:none;flex-direction:column;background:var(--bg-deep2);padding:8px 0}
+.mnav a{padding:12px 20px;color:#E8D8C5;font-size:15px;border-bottom:1px solid rgba(255,255,255,.05)}
+
+/* Hero */
+.hero{position:relative;padding:74px 0 64px;background:
+  radial-gradient(1200px 400px at 80% -10%,rgba(212,168,67,.18),transparent),
+  linear-gradient(160deg,#2D2118 0%,#3D3128 55%,#4A3D32 100%);color:#F5E6D3;overflow:hidden;text-align:center}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border:1px solid rgba(212,168,67,.25);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:200px;height:200px;border:1px solid rgba(196,149,106,.22);border-radius:50%}
+.hero .eyebrow{letter-spacing:5px;font-size:12px;color:var(--gold-l);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,6vw,52px);line-height:1.25;color:#fff;font-weight:700;margin-bottom:8px}
+.hero h1 .accent{color:var(--gold-l)}
+.hero .lead{font-size:clamp(16px,2.4vw,20px);color:#E8D8C5;max-width:760px;margin:18px auto 10px;line-height:1.75}
+.hero .verse{font-family:var(--serif);font-style:italic;color:var(--primary-l);font-size:15px;margin:22px 0 30px;opacity:.92}
+.cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-block;padding:13px 26px;border-radius:40px;font-size:15px;font-weight:600;cursor:pointer;border:0;transition:.2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--primary));color:#2D2118;box-shadow:0 6px 18px rgba(212,168,67,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(212,168,67,.45)}
+.btn-ghost{background:transparent;color:#F5E6D3;border:1px solid rgba(245,230,211,.4)}
+.btn-ghost:hover{background:rgba(245,230,211,.1)}
+
+section{padding:60px 0}
+.sec-head{text-align:center;margin-bottom:38px}
+.sec-head .kicker{color:var(--primary-d);letter-spacing:3px;font-size:12px;font-weight:700;text-transform:uppercase}
+.sec-head h2{font-family:var(--serif);font-size:clamp(24px,4vw,34px);color:var(--dark);margin:8px 0 12px;font-weight:700}
+.sec-head p{color:var(--text-l);max-width:680px;margin:0 auto;font-size:15px}
+
+/* 双螺旋 */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+.dual .col{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.dual .col h3{font-family:var(--serif);font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.dual .col.know h3{color:var(--primary-d)}
+.dual .col.do h3{color:var(--awake)}
+.dual .col .tag{font-size:12px;letter-spacing:2px;color:var(--text-l);text-transform:uppercase;margin-bottom:14px;display:block}
+.dual .col ul{list-style:none}
+.dual .col li{padding:8px 0 8px 24px;position:relative;border-bottom:1px dashed var(--border);font-size:14.5px}
+.dual .col li:last-child{border-bottom:0}
+.dual .col li::before{content:"◆";position:absolute;left:0;top:8px;color:var(--gold);font-size:11px}
+.bridge{text-align:center;margin:26px auto 0;max-width:640px;background:linear-gradient(135deg,var(--primary),var(--gold));color:#2D2118;padding:14px 22px;border-radius:40px;font-weight:600;font-size:15px;box-shadow:var(--shadow-md)}
+
+/* 模块地图 */
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.mcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.2s;position:relative;overflow:hidden}
+.mcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.mcard .no{font-family:var(--serif);font-size:34px;color:var(--primary-l);line-height:1;opacity:.7}
+.mcard h3{font-size:17px;color:var(--dark);margin:10px 0 6px;font-weight:700}
+.mcard p{font-size:13.5px;color:var(--text-l);line-height:1.7}
+.mcard .pill{display:inline-block;font-size:11px;color:var(--primary-d);background:#FBF1E2;border:1px solid var(--border);border-radius:20px;padding:2px 10px;margin-top:10px}
+.band{background:var(--bg-deep);color:#F5E6D3;border-radius:var(--radius);padding:14px 20px;margin:30px 0 6px;font-family:var(--serif);font-size:17px;display:flex;align-items:center;gap:10px}
+.band .bar{width:4px;height:20px;background:var(--gold);border-radius:2px}
+
+/* 核心表 */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow);margin-top:10px}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:620px}
+th,td{border:1px solid var(--border);padding:11px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-deep);color:#F5E6D3;font-weight:600;letter-spacing:.5px}
+td b{color:var(--dark)}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}
+.sg{color:var(--awake);font-weight:600}
+
+/* 适合人群 */
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.who .w{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.who .w .ic{font-size:26px;margin-bottom:8px}
+.who .w h4{font-size:16px;color:var(--dark);margin-bottom:6px}
+.who .w p{font-size:13.5px;color:var(--text-l)}
+
+/* 路径 */
+.path{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.path .p{background:var(--bg-card);border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.path .p h3{font-family:var(--serif);font-size:20px;color:var(--dark);margin-bottom:4px}
+.path .p .days{color:var(--primary-d);font-weight:700;font-size:14px;margin-bottom:10px}
+.path .p ul{list-style:none;padding-left:0}
+.path .p li{padding:5px 0 5px 22px;position:relative;font-size:14px}
+.path .p li::before{content:"✓";position:absolute;left:0;color:var(--awake);font-weight:700}
+
+/* 讲师 */
+.teacher{display:grid;grid-template-columns:160px 1fr;gap:26px;align-items:center;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+.teacher .ava{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;color:#fff;margin:0 auto;box-shadow:var(--shadow-md)}
+.teacher h3{font-family:var(--serif);font-size:23px;color:var(--dark);margin-bottom:4px}
+.teacher .role{color:var(--primary-d);font-size:14px;margin-bottom:12px}
+.teacher p{font-size:14.5px;color:var(--text-l);line-height:1.8}
+
+/* CTA banner */
+.join{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:46px 30px;text-align:center;box-shadow:var(--shadow-md)}
+.join h2{font-family:var(--serif);font-size:clamp(22px,4vw,30px);color:#fff;margin-bottom:12px}
+.join p{color:#E8D8C5;max-width:620px;margin:0 auto 24px;font-size:15px}
+footer{background:var(--bg-deep);color:#C9BBA8;text-align:center;padding:30px 20px;font-size:13px;line-height:1.9}
+
+@media(max-width:860px){
+  .nav{display:none}
+  .navToggle{display:block}
+  .dual{grid-template-columns:1fr}
+  .path{grid-template-columns:1fr}
+  .teacher{grid-template-columns:1fr;text-align:center}
+  .teacher .ava{margin-bottom:6px}
+  section{padding:44px 0}
+  .who{grid-template-columns:repeat(2,1fr)}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:560px){
+  .who{grid-template-columns:1fr}
+  .resnav{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>人类图 · 觉察之道</div>
+    <nav class="nav">
+      <a href="#idea">核心理念</a>
+      <a href="#map">课程地图</a>
+      <a href="#core">看盯挖改</a>
+      <a href="#who">适合谁</a>
+      <a href="#path">学习路径</a>
+      <a href="#teacher">讲师</a>
+      <a href="#join">报名</a>
+      <a href="hd-juecha-zhidao-courseware.html">课件</a>
+      <a href="hd-juecha-zhidao-workbook.html">手册</a>
+      <a href="hd-juecha-zhidao-cheatsheet.html">速查卡</a>
+    </nav>
+    <button class="navToggle" aria-label="菜单" onclick="document.getElementById('mnav').classList.toggle('mblock')">☰</button>
+  </div>
+  <div class="mnav" id="mnav">
+    <a href="#idea">核心理念</a><a href="#map">课程地图</a><a href="#core">看盯挖改</a>
+    <a href="#who">适合谁</a><a href="#path">学习路径</a><a href="#teacher">讲师</a>    <a href="#join">报名</a>
+    <a href="hd-juecha-zhidao-courseware.html">课件</a>
+    <a href="hd-juecha-zhidao-workbook.html">手册</a>
+    <a href="hd-juecha-zhidao-cheatsheet.html">速查卡</a>
+  </div>
+</div>
+<style>.mblock{display:flex!important}</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HUMAN DESIGN × THE PATH OF AWARENESS</div>
+    <h1>人类图 · <span class="accent">觉察之道</span></h1>
+    <p class="lead">不是又一门「读懂你的图」的课。<br>这是一门让你真正<strong>活出</strong>设计图的实修课——用觉察，把人类图从知识变成体验。</p>
+    <p class="verse">「觉察之道，即是醒来之道。」—— 蓝狮子《觉察之道》</p>
+    <div class="cta">
+      <a class="btn btn-gold" href="#join">开始这趟旅程</a>
+      <a class="btn btn-ghost" href="#map">查看课程地图</a>
+    </div>
+  </div>
+</header>
+
+<section id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">THE DUAL HELIX</span>
+      <h2>人类图是地图，觉察是走路</h2>
+      <p>市面上的课程大多止步于「知道」：知道自己是生产者、知道策略是等待回应。<br>但知道设计，不等于活出设计。中间的桥，就是觉察。</p>
+    </div>
+    <div class="dual">
+      <div class="col know">
+        <span class="tag">知 · 人类图设计蓝图</span>
+        <h3>📐 它告诉你「你是谁」</h3>
+        <ul>
+          <li><b>类型与策略</b>：你与世界正确互动的开关</li>
+          <li><b>内在权威</b>：你的身体决策系统（荐骨 / 情绪 / 脾…）</li>
+          <li><b>九大中心</b>：定义 vs 开放（开放=条件化区域）</li>
+          <li><b>非我主题</b>：偏离设计时的痛苦信号（挫败 / 愤怒 / 苦涩 / 失望）</li>
+          <li><b>签名</b>：活出设计时的满足信号</li>
+        </ul>
+      </div>
+      <div class="col do">
+        <span class="tag">行 · 觉察之道实修法</span>
+        <h3>🧭 它教你「如何活出来」</h3>
+        <ul>
+          <li><b>觉察</b>：知道此刻的正在发生（只是知道，不跟随）</li>
+          <li><b>看盯挖改</b>：对治非我情绪的实操四步</li>
+          <li><b>座上修 / 座下修</b>：持续练习的两条腿</li>
+          <li><b>去条件化</b>：人类图 7 年 × 觉察一生，同一条路</li>
+          <li><b>醒来</b>：从「机器 / 奴隶」回到自由的天空</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bridge">🌉 觉察，就是让人类图从「知识」变成「体验」的那一座桥</div>
+  </div>
+</section>
+
+<section id="map" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CURRICULUM MAP</span>
+      <h2>课程地图 · 15 个实修模块</h2>
+      <p>基础篇打底，应用篇落地。<br>不堆知识，每个模块都配练习——人类图是「做出来」的，不是「听出来」的。</p>
+    </div>
+
+    <div class="band"><span class="bar"></span>基础篇 · 用觉察，活出设计</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">00</div><h3>缘起：当人类图遇见觉察</h3><p>图是地图，觉察是走路。为什么「读懂图」之后，你还是活不出设计？</p><span class="pill">开篇 · 定位</span></div>
+      <div class="mcard"><div class="no">01</div><h3>在生活中修行</h3><p>座上修（静心读图）与座下修（日常活图），两条腿走路。</p><span class="pill">总论</span></div>
+      <div class="mcard"><div class="no">02</div><h3>什么是觉察</h3><p>觉察 = 知道此刻的正在发生。只是知道、不跟随，正对应「去条件化」。</p><span class="pill">心法</span></div>
+      <div class="mcard"><div class="no">03</div><h3>座下修 · 以事炼心</h3><p>感知身体动作、看见念头，在日常中识别「非我声音」。</p><span class="pill">练习</span></div>
+      <div class="mcard"><div class="no">04</div><h3>座上修 · 观念头</h3><p>静坐中与自己的图相处，认出头脑（Voice）的干扰。</p><span class="pill">练习</span></div>
+      <div class="mcard"><div class="no">05</div><h3>看盯挖改 × 非我主题</h3><p>核心章：用四步法对治挫败 / 愤怒 / 苦涩 / 失望，回到策略与权威。</p><span class="pill">核心 · 必学</span></div>
+      <div class="mcard"><div class="no">06</div><h3>放下执著</h3><p>从非我到真实设计，向内求，确定你的人生主线（轮回交叉）。</p><span class="pill">进阶</span></div>
+      <div class="mcard"><div class="no">07</div><h3>衡量标准</h3><p>去条件化的三个迹象：情绪指标、执著减少、他人评价。</p><span class="pill">复盘</span></div>
+      <div class="mcard"><div class="no">08</div><h3>21 天觉察练习</h3><p>人类图日记 + 每日打卡，把方法变成肌肉记忆。</p><span class="pill">实修</span></div>
+    </div>
+
+    <div class="band"><span class="bar"></span>应用篇 · 在场景中，活出设计</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">09</div><h3>在等待中修行</h3><p>投射者 / 反映者的必修课：等待邀请、等待 28 天。</p><span class="pill">类型定制</span></div>
+      <div class="mcard"><div class="no">10</div><h3>在告知中修行</h3><p>显示者：行动前先告知，化解愤怒，拿到平静。</p><span class="pill">类型定制</span></div>
+      <div class="mcard"><div class="no">11</div><h3>在回应中修行</h3><p>生产者 / 显示生产者：检查荐骨，让「嗯哼」做主。</p><span class="pill">类型定制</span></div>
+      <div class="mcard"><div class="no">12</div><h3>在关系中修行</h3><p>被看见（投射者）、被理解（显示者）、被邀约（反映者）。</p><span class="pill">关系</span></div>
+      <div class="mcard"><div class="no">13</div><h3>在情绪中修行</h3><p>把每一次情绪，变成一次回家的练习。</p><span class="pill">情绪</span></div>
+      <div class="mcard"><div class="no">14</div><h3>在困境中修行</h3><p>病痛、失控、不确定——不确定，正是练习觉察的道场。</p><span class="pill">韧性</span></div>
+      <div class="mcard"><div class="no">15</div><h3>像修行人一样生活</h3><p>修行即生活，生活即修行。一切都是游戏。</p><span class="pill">究竟</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="core">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CORE METHOD</span>
+      <h2>看盯挖改 × 非我主题</h2>
+      <p>人类图的非我主题（Not-Self），正是觉察之道里说的「机器 / 奴隶」状态。<br>当痛苦信号升起，用四步法把它转回设计。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>类型</th><th>策略</th><th>非我主题<br><small>（痛苦信号）</small></th><th>签名<br><small>（满足信号）</small></th><th>看盯挖改 · 回到设计</th></tr></thead>
+        <tbody>
+          <tr><td><b>生产者<br>Generator</b><br><small>37%</small></td><td>等待回应</td><td class="ns">挫败<br>Frustration</td><td class="sg">满足<br>Satisfaction</td><td>看见「说了 YES 却没检查荐骨」→ 盯住胸口卡堵 → 挖「我想用头脑掌控结果」→ 回到：先听身体的嗯哼/嗯嗯</td></tr>
+          <tr><td><b>显示生产者<br>MG</b><br><small>33%</small></td><td>等待回应<br>（更多主动）</td><td class="ns">挫败</td><td class="sg">满足</td><td>看见「多头并进却都不落地」→ 盯住混乱的能量 → 挖「我怕慢下来就不够」→ 回到：检查荐骨，一次一件事</td></tr>
+          <tr><td><b>显示者<br>Manifestor</b><br><small>8%</small></td><td>告知<br>Inform</td><td class="ns">愤怒<br>Anger</td><td class="sg">平静<br>Peace</td><td>看见「被误解、被阻拦」→ 盯住胸口的紧缩 → 挖「我需要被认可才能行动」→ 回到：行动前先告知，不请求许可</td></tr>
+          <tr><td><b>投射者<br>Projector</b><br><small>20%</small></td><td>等待邀请</td><td class="ns">苦涩<br>Bitterness</td><td class="sg">成功<br>Success</td><td>看见「好心建议却没人听」→ 盯住心口的堵 → 挖「我想被看见胜过等待被邀请」→ 回到：把智慧留给慧眼识你的人</td></tr>
+          <tr><td><b>反映者<br>Reflector</b><br><small>1%</small></td><td>等待 28 天</td><td class="ns">失望<br>Disappointment</td><td class="sg">喜悦+惊喜</td><td>看见「环境不对、决策仓促」→ 盯住全身的不安 → 挖「我急着给答案」→ 回到：跟随月亮周期，先问环境健不健康</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--text-l);margin-top:14px;text-align:center">💡 四步口诀：<b>看</b>见情绪 · <b>盯</b>住身体 · <b>挖</b>自己的执著 · <b>改</b>回策略与权威</p>
+  </div>
+</section>
+
+<section id="who" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">WHO IS IT FOR</span>
+      <h2>这门课，适合这样的你</h2>
+      <p>无论你是人类图老手还是刚入门，只要你想「活出来」而非「读出来」，这里就有你的位置。</p>
+    </div>
+    <div class="who">
+      <div class="w"><div class="ic">🗺️</div><h4>读懂图却活不出的人</h4><p>知道策略权威，一遇事就回到老模式。你需要的是「做出来」的方法。</p></div>
+      <div class="w"><div class="ic">🧘</div><h4>实修 / 冥想爱好者</h4><p>已在练习觉察、正念，希望用人类图让练习更有方向、更对「设计」下功夫。</p></div>
+      <div class="w"><div class="ic">💡</div><h4>人类图解读师 / 分析师</h4><p>从「解读」升级到「陪伴转化」，学会陪客户把图活成日常。</p></div>
+      <div class="w"><div class="ic">🌱</div><h4>关系困顿的探索者</h4><p>在亲密、亲子、职场关系里反复受伤，想从设计层面看见源头。</p></div>
+      <div class="w"><div class="ic">🤝</div><h4>教练 / 咨询师</h4><p>把看盯挖改整合进教练对话，帮客户识别非我、回到决策系统。</p></div>
+      <div class="w"><div class="ic">🔥</div><h4>想「醒来」的人</h4><p>不满足于鸡汤与技巧，想要一条能落地的「醒来之道」。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">LEARNING PATH</span>
+      <h2>两条学习路径</h2>
+      <p>觉察之道不是听明白的，是练出来的。给自己一个小目标，先坚持起来。</p>
+    </div>
+    <div class="path">
+      <div class="p">
+        <h3>🌤️ 21 天入门实修</h3>
+        <div class="days">每天 10–15 分钟 · 一对一定向陪伴</div>
+        <ul>
+          <li>建立「每日觉察」的基本节奏</li>
+          <li>掌握看盯挖改，能处理日常小情绪</li>
+          <li>认出自己的非我主题与触发点</li>
+          <li>完成 21 篇人类图觉察日记</li>
+          <li>体验「觉察在线，情绪自然少」</li>
+        </ul>
+      </div>
+      <div class="p">
+        <h3>🌳 100 天扎根练习</h3>
+        <div class="days">把练习变成呼吸 · 口诀：「自己最差，老实听话」</div>
+        <ul>
+          <li>从「工具式修行」走向「在生活中练习」</li>
+          <li>去条件化迹象开始稳定显现</li>
+          <li>在等待 / 告知 / 回应中自然对齐设计</li>
+          <li>关系、情绪、困境中不被轻易带走</li>
+          <li>迈向「修行即生活，生活即修行」</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="teacher" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">YOUR GUIDE</span>
+      <h2>带课讲师</h2>
+    </div>
+    <div class="teacher">
+      <div class="ava">邓</div>
+      <div>
+        <h3>邓勤敏（Kan Man Tang）</h3>
+        <div class="role">人类图分析师 · 量子人类图教练 · 勤思妙享创始人</div>
+        <p>深耕人类图与教练技术的整合教学，擅长把抽象的「设计蓝图」翻译成可在生活里落地的实修练习。本课程以蓝狮子《觉察之道》（必经之路出品）的实修体系为骨架，与人类图「去条件化」内核深度交织——不只教你读懂图，更陪你「活出图」。相信：图是地图，觉察是走路；知道设计，不等于活出设计。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="join">
+      <h2>准备好，用觉察活出你的设计了吗？</h2>
+      <p>不期待证悟，但要一辈子修行。从今天的一次「看见」开始——你本来就是天空，只是暂时以为自己是乌云。</p>
+      <div class="cta" style="justify-content:center">
+        <a class="btn btn-gold" href="#">立即加入 21 天实修</a>
+        <a class="btn btn-ghost" href="#map">下载课程大纲</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">COURSE KIT</span>
+      <h2>课程资源包 · 四件套</h2>
+      <p>落地页之外，配套三份资料。建议顺序：先读课件建立框架，再用手册练习，速查卡随身翻。</p>
+    </div>
+    <div class="resnav">
+      <a class="home" href="hd-juecha-zhidao-course.html">📘 课程主页<span class="tag">你在这里</span><small>课程全貌、理念与报名入口</small></a>
+      <a href="hd-juecha-zhidao-courseware.html">📖 完整课件<small>15 模块教学正文 · 看盯挖改×非我主题</small></a>
+      <a href="hd-juecha-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 看盯挖改情绪卡 · 可打印</small></a>
+      <a href="hd-juecha-zhidao-cheatsheet.html">🃏 觉察速查卡<small>类型锚点 · 四步法 · 世间八法 · 随身</small></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>《人类图 · 觉察之道》</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+document.querySelectorAll('.mnav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mnav').classList.remove('mblock')));
+</script>
+</body>
+</html>

@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  hd-death-chart.html  ·  人类图死亡时刻出图（Death Chart）
+  ----------------------------------------------------------------------------
+  VERSION: V1.1
+  DATE:    2026-09-22
+  AUTHOR:  虾哥 (Kan Man Tang) · 人类图 × 系统架构
+  算法溯源：复用 hd-transit-just-now.html 的已校准天文引擎
+           （闸门锚点 Gate 41 ≈ 黄经 302.326°，Rave Mandala 序列，
+            与 thehumandesignsystem.com 流日数据校准一致）。
+  死亡出图逻辑：
+    出生人格 = 出生时刻；出生设计 = 出生前 88° 太阳弧（≈88.9 天）；
+    临终行运 = 逝去时刻 13 天体；将临终行运叠加于本命定义之上，
+    比较「本命定义通道 / 临终被强化 / 临终由行运完整接通 / 仅因临终行运临时点亮」。
+  说明：人类图不预测死亡时间，本工具仅作行运叠加的研究案例。
+  ----------------------------------------------------------------------------
+  CHANGELOG
+    V1.1  2026-09-22  ① footer 精简为两行（人类图死亡时刻出图 V1.1 / Powered By Kan Man Tang）；
+                      ② 引擎溯源与免责声明移入新增「备注栏 · 温馨提示」，一行只写一句话；
+                      ③ hd-transit-just-now.html 加超链接可点击跳转；
+                      ④ 修复 footer 版本行「人类图死亡时刻出图」重复显示的问题。
+    V1.0  2026-09-20  首版：复用 hd-transit-just-now.html 已校准天文引擎，
+                      产出「本命定义 × 临终行运」叠加报告。
+  ============================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图死亡时刻出图 · Death Chart</title>
+<script src="./astronomy.js?v=1.5"></script>
+<script>
+  if (typeof Astronomy === 'undefined') {
+    try { document.write('<script src="https://cdn.jsdelivr.net/npm/astronomy-engine/astronomy.js?v=1.5"><\/script>'); } catch(e){}
+  }
+</script>
+<style>
+
+  :root{
+    --bg:#F5F0E8; --bg2:#EFE7D8; --ink:#2D2118; --ink2:#6B5B4A;
+    --gold:#C4956A; --gold-d:#A9743F; --line:#D9CDB8;
+    --card:#FFFDF8; --good:#7A8B5A; --warn:#C4756B; --accent:#8A6D4B;
+    --shadow:0 2px 10px rgba(45,33,24,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;
+    line-height:1.6;}
+  header{background:linear-gradient(135deg,#2D2118,#4A3826);color:#F5F0E8;
+    padding:22px 20px 18px;text-align:center;}
+  header h1{margin:0;font-size:1.55rem;letter-spacing:1px}
+  header .sub{opacity:.82;font-size:.92rem;margin-top:4px}
+  header .ver{opacity:.6;font-size:.72rem;margin-top:6px}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+  .clockbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin:16px 0;box-shadow:var(--shadow);font-size:.9rem}
+  .clockbar b{color:var(--gold-d)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block;
+    margin-right:5px;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .grid{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:18px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px 16px 18px;box-shadow:var(--shadow)}
+  .card h2{margin:0 0 12px;font-size:1.08rem;color:var(--gold-d);
+    border-bottom:2px solid var(--line);padding-bottom:8px;display:flex;align-items:center;gap:8px}
+  .card h2 .tag{font-size:.7rem;background:var(--gold);color:#fff;padding:2px 8px;border-radius:20px;font-weight:400}
+  /* 天体卡片网格 */
+  .bodies{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .body{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;position:relative}
+  .body .bn{font-weight:700;font-size:.95rem}
+  .body .bg{font-size:1.5rem;font-weight:800;color:var(--gold-d);line-height:1.2}
+  .body .bl{font-size:.78rem;color:var(--ink2)}
+  .body .bc{font-size:.68rem;color:var(--accent);margin-top:2px}
+  .body.hot{background:#FBEFDD;border-color:var(--gold)}
+  .body .shared{position:absolute;top:6px;right:8px;font-size:.62rem;background:var(--accent);color:#fff;
+    padding:1px 6px;border-radius:10px}
+  /* mandala */
+  .mandala-wrap{text-align:center}
+  svg.mandala{width:100%;max-width:560px;height:auto;background:
+    radial-gradient(circle at 50% 50%, #FFFDF8 60%, #F3EBDB 100%);
+    border-radius:50%;border:1px solid var(--line)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:.78rem;margin-top:8px;color:var(--ink2)}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* 通道 / 列表 */
+  .chan{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .chan:last-child{border-bottom:none}
+  .chan .pill{background:var(--gold);color:#fff;font-weight:700;border-radius:8px;
+    padding:3px 9px;font-size:.82rem;white-space:nowrap}
+  .chan .ct{font-size:.92rem}
+  .chan .cc{font-size:.72rem;color:var(--accent);margin-left:6px}
+  .chan .cb{font-size:.76rem;color:var(--ink2);margin-top:2px}
+  .empty{color:var(--ink2);font-size:.86rem;padding:8px 0}
+  /* 解读 */
+  .interp{font-size:.9rem}
+  .interp .gate-item{padding:8px 0;border-bottom:1px dashed var(--line)}
+  .interp .gi-t{font-weight:700;color:var(--gold-d)}
+  .interp .gi-b{color:var(--ink2);font-size:.82rem}
+  /* 流日能量解读 */
+  .gr{border-bottom:1px dashed var(--line);padding:10px 0}
+  .gr:last-child{border-bottom:none}
+  .gr-t{font-weight:700;color:var(--gold-d);font-size:.95rem}
+  .gr-t .gr-line{font-size:.72rem;color:var(--accent);margin-left:6px;font-weight:400}
+  .gr-theme{font-size:.88rem;margin-top:4px;line-height:1.7}
+  .gr-decision{font-size:.84rem;color:var(--ink2);margin-top:4px;line-height:1.65}
+  .gr-overlay{font-size:.78rem;color:var(--gold-d);margin-top:5px;background:var(--bg2);
+    border-radius:8px;padding:6px 10px;line-height:1.6}
+  /* 表单 */
+  details.overlay{margin:18px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:6px 16px 16px;box-shadow:var(--shadow)}
+  details.overlay summary{cursor:pointer;font-weight:700;color:var(--gold-d);padding:10px 0;font-size:1.02rem}
+  .formrow{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0;align-items:flex-end}
+  .formrow label{display:flex;flex-direction:column;font-size:.78rem;color:var(--ink2);gap:3px}
+  input{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:.9rem}
+  .date-group{display:flex;gap:6px}
+  .date-group input{text-align:center}
+  @media(max-width:480px){
+    .formrow{gap:10px}
+    .formrow label{font-size:.8rem}
+    input{font-size:16px} /* 防止 iOS 自动缩放 */
+    .date-group input{width:64px!important}
+    #b-time{width:86px!important}
+    #b-tz{width:64px!important}
+  }
+  button{background:var(--gold-d);color:#fff;border:none;border-radius:8px;padding:9px 16px;
+    font-size:.9rem;cursor:pointer;font-weight:600}
+  button:hover{background:#8a5a2c}
+  .mini{font-size:.74rem;color:var(--ink2);margin-top:6px}
+  .center-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{font-size:.8rem;padding:4px 11px;border-radius:20px;border:1px solid var(--line)}
+  .chip.def{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .chip.open{background:#fff;color:var(--ink2)}
+  .typebox{background:var(--bg2);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:.92rem}
+  .typebox b{color:var(--gold-d);font-size:1.05rem}
+  .note{font-size:.76rem;color:var(--ink2);margin-top:10px;line-height:1.5}
+  footer{text-align:center;color:var(--ink2);font-size:.74rem;margin-top:30px;line-height:1.6}
+  /* 备注栏（V1.1 新增）：页脚上方的提示区，一行只写一句话 */
+  .remarks{background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:12px;padding:14px 18px;margin-top:26px;box-shadow:var(--shadow)}
+  .remarks-title{font-size:.92rem;font-weight:700;color:var(--gold-d);margin-bottom:8px}
+  .remarks-line{font-size:.82rem;color:var(--ink2);line-height:1.9}
+  .remarks-line a{color:var(--gold-d);text-decoration:none;border-bottom:1px dotted var(--gold)}
+  .remarks-line a:hover{color:var(--accent);border-bottom-style:solid}
+  .err{background:#fbeae8;color:#9b3a30;border:1px solid #e6b8b1;padding:12px 14px;border-radius:10px;margin:14px 0}
+  table.detail{width:100%;border-collapse:collapse;font-size:.84rem}
+  table.detail th,table.detail td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+  table.detail th{color:var(--gold-d);font-weight:600}
+  .hl{background:#FBEFDD}
+
+  .kv{font-size:.92rem;padding:5px 0;border-bottom:1px dashed var(--line)}
+  .kv:last-child{border-bottom:none}
+  .insight-card{background:#FBEFDD;border:1px solid var(--gold)}
+  .insight{border-left:4px solid var(--gold);background:#FFFDF8;padding:8px 12px;border-radius:8px;
+    font-size:.86rem;line-height:1.7;margin-top:8px}
+  .err{background:#fbeae8;color:#9b3a30;border:1px solid #e6b8b1;padding:12px 14px;border-radius:10px;margin:14px 0}
+  /* 曼陀罗：窄屏横向滚动保持字号可读（不缩放） */
+  .mandala-wrap{overflow-x:auto}
+  svg.mandala{min-width:500px}
+  @media(max-width:480px){ input{font-size:16px} .formrow label{font-size:.8rem} }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌑 人类图死亡时刻出图 · Death Chart</h1>
+  <div class="sub">以出生本命定义 × 临终时刻行运，解读生命最后的能量叠加</div>
+  <div class="sub" style="margin-top:4px">输入生辰与逝时，自动生成「本命定义 + 临终行运」对比报告</div>
+  <div class="sub ver" style="margin-top:6px">人类图不预测死亡时间 · 仅作行运叠加的研究案例</div>
+</header>
+
+<div class="wrap">
+  <div id="errbox" class="err" style="display:none"></div>
+
+  <div class="card">
+    <h2>🕯️ 出生 &amp; 逝去时刻 <span class="tag">输入</span></h2>
+    <div class="formrow">
+      <label>姓名 / 备注<input id="f-name" placeholder="如：Whitney Houston"></label>
+    </div>
+    <div class="formrow">
+      <label>出生·年<input id="b-y" type="number" min="1800" max="2100"></label>
+      <label>月<input id="b-mo" type="number" min="1" max="12"></label>
+      <label>日<input id="b-d" type="number" min="1" max="31"></label>
+      <label>时<input id="b-h" type="number" min="0" max="23"></label>
+      <label>分<input id="b-mi" type="number" min="0" max="59"></label>
+      <label>UTC偏移<input id="b-tz" type="number" step="0.5"><span class="mini">北京 +8 / 纽约夏时 -4 / 洛杉矶 -8</span></label>
+    </div>
+    <div class="formrow">
+      <label>逝去·年<input id="d-y" type="number" min="1800" max="2200"></label>
+      <label>月<input id="d-mo" type="number" min="1" max="12"></label>
+      <label>日<input id="d-d" type="number" min="1" max="31"></label>
+      <label>时<input id="d-h" type="number" min="0" max="23"></label>
+      <label>分<input id="d-mi" type="number" min="0" max="59"></label>
+      <label>UTC偏移<input id="d-tz" type="number" step="0.5"></label>
+    </div>
+    <div class="formrow">
+      <button id="btn-go" type="button">🌑 生成死亡时刻出图</button>
+      <button id="btn-demo" type="button" style="background:var(--gold)">载入示例：Whitney Houston</button>
+    </div>
+    <div class="note">计算口径：出生人格=出生时刻；出生设计=出生前 88° 太阳弧（≈88.9 天）；临终行运=逝去时刻 13 天体。闸门锚点 Gate 41 ≈ 黄经 302.326°（Rave Mandala 序列），与 thehumandesignsystem.com 流日数据校准一致。北交用平黄白交点；其余用 astronomy-engine (VSOP87)。</div>
+  </div>
+
+  <div id="result" style="display:none"></div>
+
+  <!-- 备注栏 · 温馨提示（V1.1：原 footer 的引擎溯源与免责声明移入此处，一行一句话） -->
+  <div class="remarks">
+    <div class="remarks-title">📌 温馨提示</div>
+    <div class="remarks-line">引擎复用自 <a href="hd-transit-just-now.html" target="_blank" rel="noopener">hd-transit-just-now.html（VSOP87 校准）</a>。</div>
+    <div class="remarks-line">本工具仅用于学习与自我探索，不构成任何形式的医疗 / 投资 / 人生建议。</div>
+  </div>
+</div>
+
+<footer>
+  <div>人类图死亡时刻出图 <b id="footer-ver">V1.1</b></div>
+  <div style="margin-top:6px">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+/* ===== 复用引擎（来自 hd-transit-just-now.html，已与 thehumandesignsystem.com 流日数据校准） ===== */
+const DEG = 360/64; // 5.625°
+const MANDALA_START = 302.326; // Gate 41 起始黄经（经 2026-01-22 与 Jovian 流日日历校准）
+// Rave Mandala 真实序列：按太阳年度运行顺序排列的 64 闸门
+const MANDALA_SEQ = [
+  41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,
+  27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,
+  31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,
+  28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60
+];
+const SEQ_INDEX = {};
+MANDALA_SEQ.forEach((g,i)=>SEQ_INDEX[g]=i);
+
+// 64 闸门：名称 + 主题
+const GATES = {
+ 1:["自我表达","创意、独特表达，做自己的勇气"],
+ 2:["高我方向","内在罗盘，知道自己该往哪走"],
+ 3:["秩序/突变","在限制中突破，演化出新秩序"],
+ 4:["公式化","把混乱化为公式与逻辑答案"],
+ 5:["固定模式","对生活节奏与习惯的坚持"],
+ 6:["摩擦","关系中的磨合与性的吸引力"],
+ 7:["统御","领导与影响力的角色"],
+ 8:["贡献","以独特才华贡献群体"],
+ 9:["专注","聚焦细节，深耕不放弃"],
+ 10:["爱自己","活出真实自我，善待自己"],
+ 11:["想法","新点子与思维的开阔"],
+ 12:["谨慎","在恰当时机才表达，社交的分寸"],
+ 13:["见证","记录与分享集体经验"],
+ 14:["技能","把天赋能耐转化为力量"],
+ 15:["极端","对全人类的爱，拥抱极端中的和谐"],
+ 16:["技巧","十年磨一剑的才华"],
+ 17:["意见","形成并表达主观意见"],
+ 18:["修正","看见可改善之处，追求更好"],
+ 19:["需求","对联结与支持的渴望"],
+ 20:["当下","在当下果断行动"],
+ 21:["控制","掌控资源、带领群体的能力"],
+ 22:["优雅","以优雅与开放触动人心"],
+ 23:["同化","把洞见化为语言突破"],
+ 24:["回归","从内在找回理性与平静"],
+ 25:["灵性之爱","天真无邪、无私的爱与发起"],
+ 26:["利己","通过利己守护原则"],
+ 27:["滋养","照顾他人、传递价值观"],
+ 28:["无常","在无常中游戏，寻找意义"],
+ 29:["说「是」","对承诺全力以赴"],
+ 30:["梦想家","对体验与梦想的炽热渴望"],
+ 31:["影响力","以身作则，发挥影响力"],
+ 32:["持续","把成就延续下去"],
+ 33:["隐退","适时退隐，沉淀经验"],
+ 34:["力量","原始的生命力量与行动力"],
+ 35:["变化","在新鲜体验中成长"],
+ 36:["危机","在情绪危机中闪现灵光"],
+ 37:["友谊","家庭与社群的温情"],
+ 38:["挣扎","为生命意义而战"],
+ 39:["挑衅","以挑衅激发觉醒"],
+ 40:["独处","在独处中重新补给"],
+ 41:["幻想","孕育梦想与想象的种子"],
+ 42:["成长","在起落中逐渐成熟"],
+ 43:["洞见","灵光乍现的独特思维"],
+ 44:["警觉","对人与机会的敏锐警觉"],
+ 45:["君王","汇聚资源、散财聚人的王"],
+ 46:["身体","借由身体感官活出热爱"],
+ 47:["压抑","在困惑中逼出理解"],
+ 48:["深度","从深度与 mastery 中获益"],
+ 49:["原则","为所信的原则革命"],
+ 50:["价值观","以价值与责任滋养群体"],
+ 51:["震惊","以无畏的震惊发起行动"],
+ 52:["静止","如山般静止、专注当下"],
+ 53:["开始","新周期、新项目的展开"],
+ 54:["野心","向上的野心与驱动力"],
+ 55:["精神","情绪浪潮中涌出的丰盛灵性"],
+ 56:["刺激","以故事与刺激联结世界"],
+ 57:["直觉","温和而精准的直觉"],
+ 58:["喜悦","从改善与活力中找到喜悦"],
+ 59:["亲密","打破界限，走向亲密"],
+ 60:["限制","在限制中等待突变的时机"],
+ 61:["内在真理","向内探索不可知的真理"],
+ 62:["细节","对细节与严谨的压力"],
+ 63:["怀疑","以怀疑推动逻辑的完成"],
+ 64:["困惑","在混沌未明中孕育清晰"]
+};
+
+
+/* ===== 流日能量解读库（源自 2026-09-13 transit-engine/theme-lib.js · 导师校订 V2）=====
+   含 64 闸门「流日基调(theme) + 决策提示(decision)」与行星叠加分层表 PLANET_OVERLAY。
+   该库为自动生成「流日能量解读」模块的数据库；详见 changelog V1.8。 */
+const GATE_NAMES = {
+  1: '创生 / 自我表达', 2: '方向 / 接收', 3: '秩序 / 繁衍', 4: '公式 / 理解',
+  5: '节律 / 固定模式', 6: '亲密 / 摩擦', 7: '统御 / 榜样', 8: '贡献 / 启发',
+  9: '专注 / 决心', 10: '自我之爱 / 行为', 11: '平和 / 思绪', 12: '谨慎 / 开放',
+  13: '观察者 / 同伴', 14: '力量 / 技巧', 15: '极端 / 节律', 16: '才华 / 技能',
+  17: '意见 / 接纳', 18: '修正 / 判断', 19: '欲求 / 综合', 20: '当下 / 觉醒',
+  21: '猎人 / 控制', 22: '优雅 / 开放', 23: '碎裂 / 建构', 24: '回归 / 觉知',
+  25: '宇宙之爱 / 精神', 26: '神圣 / 保存', 27: '养育 / 保存', 28: '挣扎 / 无限',
+  29: '说"不" / 承诺', 30: '渴望 / 梦醒', 31: '领导 / 影响', 32: '延续 / 转化',
+  33: '隐退 / 隐私', 34: '力量 / 活力', 35: '改变 / 无常', 36: '危机 / 无常',
+  37: '友爱 / 家庭', 38: '战士 / 挣扎', 39: '挑衅 / 释放', 40: '交付 / 社群',
+  41: '收缩 / 渴望', 42: '成长 / 成熟', 43: '洞察 / 建构', 44: '警觉 / 警觉性',
+  45: '君主 / 同步', 46: '推动 / 决心', 47: '压迫 / 澄清', 48: '深度 / 智慧',
+  49: '原则 / 辨别', 50: '价值 / 保存', 51: '震荡 / 开创', 52: '静态 / 专注',
+  53: '开始 / 诞生', 54: '野心 / 转化', 55: '精神 / 情绪', 56: '刺激 / 漫游',
+  57: '纯粹 / 直觉', 58: '喜悦 / 活力', 59: '亲密 / 繁殖', 60: '接受 / 限制',
+  61: '内在真理 / 神秘', 62: '详情 / 谦逊', 63: '怀疑 / 逻辑', 64: '困惑 / 完成前',
+};
+
+const GATE_LIBRARY = {
+  1: {
+    name: GATE_NAMES[1],
+    theme: '创造的火花与表达的冲动。流日落在闸门1，集体的创造力被点燃——新想法、新项目、想"被看见被听见"的冲动会涌上来。这是开启与自我表达的原始动能。',
+    decision: '宜——把想法落成一句表达、一段文字、一个雏形；忌——未经自身策略就滔滔不绝，或强推自己的创意让别人接不住。',
+  },
+  2: {
+    name: GATE_NAMES[2],
+    theme: '方向感与接收的能量。流日落在闸门2，内在罗盘被放大，你更清楚"该往哪走"，也更容易接收而非索取——这是被动等待中被赋予方向的智慧。',
+    decision: '宜——信任内在方向，安静接收讯息；忌——被他人方向裹挟，或急于给出答案证明自己有方向。',
+  },
+  3: {
+    name: GATE_NAMES[3],
+    theme: '把混乱变成秩序的本能，以及生命自我繁衍、自我修复的节奏。流日落在闸门3，适合处理"乱"、建立流程，并放手那些不可控的部分。',
+    decision: '宜——收拾混乱、启动有节奏的事；忌——想控制所有变量，为无序而焦虑。',
+  },
+  4: {
+    name: GATE_NAMES[4],
+    theme: '从碎片中归纳出"公式"、理解规律的能力。流日落在闸门4，先收集信息、后形成结论的节奏被放大——这是"先懂再讲"的能量。',
+    decision: '宜——多做调研、积累素材；忌——急于下结论，或把公式生硬套用到人身上。',
+  },
+  5: {
+    name: GATE_NAMES[5],
+    theme: '固定节律与日常锚点。流日落在闸门5，保持节奏比改变更重要——流日的波动不应打乱你赖以稳定的节律。',
+    decision: '宜——回归日常节律，用它稳住一天；忌——被临时波动带离锚点，轻易打破自己的固定模式。',
+  },
+  6: {
+    name: GATE_NAMES[6],
+    theme: '亲密与摩擦并存——关系中必要的张力，既是靠近也是边界的摩擦。流日落在闸门6，关系里的"不对劲"其实是信号。',
+    decision: '宜——允许关系中的张力存在，从中读懂边界；忌——急于消除摩擦，或逃避到无接触。',
+  },
+  7: {
+    name: GATE_NAMES[7],
+    theme: '被看见、成为榜样的召唤。流日落在闸门7，你被推到"被注视"的位置——先活出自己，影响才自然发生。',
+    decision: '宜——以身作则，让行为成为示范；忌——为被认可而表演，活成别人想看的样子。',
+  },
+  8: {
+    name: GATE_NAMES[8],
+    theme: '贡献与启发的能量。流日落在闸门8，你有启发他人的冲动与价值——但启发的礼物要在对的时机递出。',
+    decision: '宜——在被邀请时给予启发；忌——未经邀请强行贡献，或把自己的标准强加于人。',
+  },
+  9: {
+    name: GATE_NAMES[9],
+    theme: '单点深耕的专注力。流日落在闸门9，适合把精力聚焦在一件值得的事上，让"决心"穿透表层。',
+    decision: '宜——专注一件值得的事直到透；忌——分散到太多方向，样样浅尝。',
+  },
+  10: {
+    name: GATE_NAMES[10],
+    theme: '自我之爱与行为的一致。流日落在闸门10，活出"爱自己"的校准——当行为与内在价值对齐，人生自会端正。',
+    decision: '宜——让行为对齐内在价值；忌——为讨好他人而偏离自己，用委屈换和谐。',
+  },
+  11: {
+    name: GATE_NAMES[11],
+    theme: '思绪平静流动，灵感来去自然。流日落在闸门11，头脑的波动被放大，但念头像云，不必抓取每一朵。',
+    decision: '宜——让灵感飘过，记下有趣的；忌——抓住每个念头当真，陷入空想。',
+  },
+  12: {
+    name: GATE_NAMES[12],
+    theme: '谨慎与开放——先观望再决定。流日落在闸门12，适合保持"开放但谨慎"的姿态，重要的决定留给内在权威。',
+    decision: '宜——先静观、保持开放；忌——仓促承诺，或被当下情绪推着表态。',
+  },
+  13: {
+    name: GATE_NAMES[13],
+    theme: '观察者与同伴——记录、见证、陪伴。流日落在闸门13，你站在"看见"的位置，记忆与他人的故事经由你被承载。',
+    decision: '宜——见证与记录，做那个在场的同伴；忌——冲到前台代替别人活，或把观察变成评判。',
+  },
+  14: {
+    name: GATE_NAMES[14],
+    theme: '力量与技巧——用对的方式使力。流日落在闸门14，效率被放大，懂得借力的人事半功倍。',
+    decision: '宜——用巧劲、找杠杆；忌——蛮力硬拼，用体力掩盖方法缺失。',
+  },
+  15: {
+    name: GATE_NAMES[15],
+    theme: '极端的拉扯与中道。流日落在闸门15，两极被放大，你需在"全有或全无"之间找到属于自己的节律与平衡。',
+    decision: '宜——觉察两极、找平衡中道；忌——被任一极端带走，在过度与匮乏间摇摆。',
+  },
+  16: {
+    name: GATE_NAMES[16],
+    theme: '才华与技能——可被看见的能力。流日落在闸门16，先练熟再展示，天赋需要在打磨后才会发光。',
+    decision: '宜——打磨技能、默默精进；忌——未熟先秀，用半成品博取关注。',
+  },
+  17: {
+    name: GATE_NAMES[17],
+    theme: '意见与接纳——先接纳再表达。流日落在闸门17，少一点"应该"，多一点"我听见了"。',
+    decision: '宜——先听再讲，让意见有根；忌——急于给意见，用"为你好"掩盖控制。',
+  },
+  18: {
+    name: GATE_NAMES[18],
+    theme: '修正的眼光——看见可改进之处。流日落在闸门18，洞察力在线，但修正的刀要握得轻。',
+    decision: '宜——建设性地修正、优化；忌——苛责式批判，把"可更好"变成"不够好"。',
+  },
+  19: {
+    name: GATE_NAMES[19],
+    theme: '欲求升起——想要是能量。流日落在闸门19，辨清这股渴望是你的，还是环境投射给你的。',
+    decision: '宜——感受欲求、厘清来源；忌——被欲求驱动妄动，把"想要"当"需要"。',
+  },
+  20: {
+    name: GATE_NAMES[20],
+    theme: '当下的觉醒与行动力。流日落在闸门20，此刻的力量最强，做能立刻回应的事，能量不等人。',
+    decision: '宜——回应此刻、即时行动；忌——拖延到"以后"，让当下的动能流失。',
+  },
+  21: {
+    name: GATE_NAMES[21],
+    theme: '控制与猎取的冲动。流日落在闸门21，想掌控时先问：这是回应，还是抓取？',
+    decision: '宜——有意识、负责任地掌控；忌——抓取式控制，把人事物当猎物。',
+  },
+  22: {
+    name: GATE_NAMES[22],
+    theme: '优雅与开放——情绪以美的方式流动。流日落在闸门22，允许自己被触动，情感是通往他人的桥。',
+    decision: '宜——让美感与情绪自然流动；忌——封闭情感，用理性把心门关上。',
+  },
+  23: {
+    name: GATE_NAMES[23],
+    theme: '碎裂与建构——旧结构松动，新的正在成形。流日落在闸门23，不必慌，瓦解往往是重组的前奏。',
+    decision: '宜——允许重构、迎接新观点；忌——紧抓旧框架，抗拒必要的碎裂。',
+  },
+  24: {
+    name: GATE_NAMES[24],
+    theme: '回归内在与觉知。流日落在闸门24，绕一圈终会回来——你需要的答案往往就在"回来"的路上。',
+    decision: '宜——给自己回归与沉淀的时间；忌——抗拒回旋，硬要在外面找到答案。',
+  },
+  25: {
+    name: GATE_NAMES[25],
+    theme: '无条件接纳的能量——宇宙之爱。流日落在闸门25，先爱己再爱人，接纳此刻如其所是。',
+    decision: '宜——无条件接纳此刻与自己；忌——有条件地付出，把爱变成交换。',
+  },
+  26: {
+    name: GATE_NAMES[26],
+    theme: '神圣保存——守护真正重要的。流日落在闸门26，懂得保存的人，才留得住能量与资源。',
+    decision: '宜——守护核心价值与资源；忌——囤积无用之物，或耗尽自己保存错的东西。',
+  },
+  27: {
+    name: GATE_NAMES[27],
+    theme: '养育他人。流日落在闸门27，给出照顾前，先确认自己还有余——养育从自养开始。',
+    decision: '宜——照顾真正值得的人与事；忌——耗尽自己养育别人，把被需要当价值。',
+  },
+  28: {
+    name: GATE_NAMES[28],
+    theme: '玩得起也放得下。流日落在闸门28，面对无限，关键是全然投入也全然放下，别困在"必须赢"。',
+    decision: '宜——全然投入、也随时能放下；忌——死撑硬扛，把坚持变成执念。',
+  },
+  29: {
+    name: GATE_NAMES[29],
+    theme: '说"不"的能力与承诺。流日落在闸门29，承诺前先听内在权威——说"好"要慎重，说"不"是力量。',
+    decision: '宜——谨慎承诺、有选择地说好；忌——为显得"好"而答应，承诺超出承载。',
+  },
+  30: {
+    name: GATE_NAMES[30],
+    theme: '渴望与梦醒——想要的背后，是恐惧还是热爱？流日落在闸门30，看清再动，别被渴望盲目牵走。',
+    decision: '宜——看清渴望的根源；忌——被渴望驱动盲动，把冲动当方向。',
+  },
+  31: {
+    name: GATE_NAMES[31],
+    theme: '自然影响集体。流日落在闸门31，你的存在本身就在影响他人——告知而非强推，影响力自会发生。',
+    decision: '宜——自然地领导与影响；忌——强推观点，或用位子压人。',
+  },
+  32: {
+    name: GATE_NAMES[32],
+    theme: '延续与转化——守住对的，转化错的。流日落在闸门32，不急于换，时间会替你筛选。',
+    decision: '宜——延续有价值的事物；忌——轻易弃旧，或死守已失效的。',
+  },
+  33: {
+    name: GATE_NAMES[33],
+    theme: '隐退与隐私——需要充电时，允许自己消失一下。流日落在闸门33，退后不是逃避，是蓄能。',
+    decision: '宜——退后充电、保留隐私；忌——被迫社交，或用热闹掩盖疲惫。',
+  },
+  34: {
+    name: GATE_NAMES[34],
+    theme: '原始力量与活力。流日落在闸门34，这是你的燃料——用在"回应"之事上才不耗竭，替别人背则空转。',
+    decision: '宜——把力量用在回应之事；忌——替别人背燃料，或无方向地蛮干。',
+  },
+  35: {
+    name: GATE_NAMES[35],
+    theme: '改变与无常。流日落在闸门35，变化本身就是主题——跟着流走，别硬抗，体验后才懂。',
+    decision: '宜——体验变化、允许流动；忌——抗拒改变，或把无常当威胁。',
+  },
+  36: {
+    name: GATE_NAMES[36],
+    theme: '危机与无常——危机里藏着转机。流日落在闸门36，先稳住，再在波动中看清隐藏的礼物。',
+    decision: '宜——在波动中稳住阵脚；忌——慌乱决策，或被危机吓退放弃。',
+  },
+  37: {
+    name: GATE_NAMES[37],
+    theme: '友爱与家庭——社群的温度。流日落在闸门37，适合连接而非孤立，归属感是最好的滋养。',
+    decision: '宜——连接社群、经营关系；忌——孤立自己，或用给予换取爱的证明。',
+  },
+  38: {
+    name: GATE_NAMES[38],
+    theme: '战士与挣扎——有价值的挣扎值得，无谓的别硬扛。流日落在闸门38，找到"为何而战"才有意义。',
+    decision: '宜——为有意义的而战；忌——无意义消耗，把对抗当存在感。',
+  },
+  39: {
+    name: GATE_NAMES[39],
+    theme: '挑衅与释放——被刺激时，先看这是谁的议题。流日落在闸门39，释放张力胜过陷入对抗。',
+    decision: '宜——释放张力、看清代价；忌——陷入对抗，或用挑衅证明自己。',
+  },
+  40: {
+    name: GATE_NAMES[40],
+    theme: '交付与社群——完成并交付。流日落在闸门40，让贡献落地，社群因你的交付而完整。',
+    decision: '宜——交付成果、善始善终；忌——只做不收尾，或独自扛不愿求援。',
+  },
+  41: {
+    name: GATE_NAMES[41],
+    theme: '收缩与渴望——能量内收时，允许自己不想"要"。流日落在闸门41，渴望需要蓄势，不必时刻向外抓取。',
+    decision: '宜——允许能量内收、等待渴望成熟；忌——强迫自己扩张，或错把空虚当渴望。',
+  },
+  42: {
+    name: GATE_NAMES[42],
+    theme: '成长与成熟——耐心等待成熟，不催熟。流日落在闸门42，真正的结果需要时间的发酵。',
+    decision: '宜——耐心等待成熟；忌——急于求成，在果子未熟时强摘。',
+  },
+  43: {
+    name: GATE_NAMES[43],
+    theme: '洞察与建构——灵感来时记录下来，别急着讲。流日落在闸门43，先建构完整，再分享。',
+    decision: '宜——记录灵感、先想透；忌——未成形就宣讲，或用突发洞察压倒人。',
+  },
+  44: {
+    name: GATE_NAMES[44],
+    theme: '警觉性——警觉是天赋。流日落在闸门44，你对环境的敏锐能护你周全，但警觉不等于猜疑。',
+    decision: '宜——信任警觉、留意信号；忌—— paranoid 多疑，把所有人都当威胁。',
+  },
+  45: {
+    name: GATE_NAMES[45],
+    theme: '君主与同步——资源与同步的能量。流日落在闸门45，等邀请再主导，财富与影响力在同步中流动。',
+    decision: '宜——等被邀请再主导、促成同步；忌——抢当主角，或强推自己的资源方案。',
+  },
+  46: {
+    name: GATE_NAMES[46],
+    theme: '推动与决心——有决心地推动。流日落在闸门46，方向对了才有推力，盲目硬推只会磨损。',
+    decision: '宜——坚定推动对的方向；忌——盲目硬推，用蛮力掩盖方向不明。',
+  },
+  47: {
+    name: GATE_NAMES[47],
+    theme: '头脑的压迫感与澄清。流日落在闸门47，越是想逼出答案，越被困住——答案会自己来，前提是先放下"求解"。',
+    decision: '宜——放下求解、等待澄清；忌——强迫头脑想通，在压迫感里打转。',
+  },
+  48: {
+    name: GATE_NAMES[48],
+    theme: '深度与智慧——不怕深，但别溺在不确定里。流日落在闸门48，真正的智慧在深处，需耐心潜入。',
+    decision: '宜——深入探索、信任深度；忌——困在不确定里犹豫不决，或浅尝辄止。',
+  },
+  49: {
+    name: GATE_NAMES[49],
+    theme: '原则与辨别——什么该变，什么不变。流日落在闸门49，辨别的能量上线，变革从"看清"开始。',
+    decision: '宜——辨别价值、有选择地变革；忌——为变而变，或固守已失效的原则。',
+  },
+  50: {
+    name: GATE_NAMES[50],
+    theme: '价值与保存——守住核心价值，其余可流动。流日落在闸门50，知道什么不可让，才谈得上自由。',
+    decision: '宜——守护核心价值；忌——死守不重要的事，或为流动而放弃底线。',
+  },
+  51: {
+    name: GATE_NAMES[51],
+    theme: '震荡与开创——被点燃时先接地，再决定是否发起。流日落在闸门51，那股"冲劲"是开创的引擎。',
+    decision: '宜——接地后再开创、用冲击破局；忌——冲动发起，或被震荡带着失控。',
+  },
+  52: {
+    name: GATE_NAMES[52],
+    theme: '静态与专注——静下来反而最有力量。流日落在闸门52，别急着动，静止本身就是一种掌控。',
+    decision: '宜——静止专注、沉淀；忌——无谓躁动，用忙碌掩盖内在不安。',
+  },
+  53: {
+    name: GATE_NAMES[53],
+    theme: '开始与诞生——新事物萌芽。流日落在闸门53，允许它慢慢长，开始需要耐心而非催促。',
+    decision: '宜——启动新事、拥抱开端；忌——催熟开始，或对萌芽苛求立刻结果。',
+  },
+  54: {
+    name: GATE_NAMES[54],
+    theme: '野心与转化——野心是燃料。流日落在闸门54，用在值得的方向，转化才有意义。',
+    decision: '宜——有意识地把野心投向值得处；忌——无方向消耗，或被野心吞没。',
+  },
+  55: {
+    name: GATE_NAMES[55],
+    theme: '精神与情绪——情绪如浪。流日落在闸门55，不评判只体验，浪起浪落自有节律。',
+    decision: '宜——体验情绪波动、让它流过；忌——据一时情绪做决定，或压抑感受。',
+  },
+  56: {
+    name: GATE_NAMES[56],
+    theme: '刺激与漫游——好奇带你去很远。流日落在闸门56，自由探索值得，但要记得回来。',
+    decision: '宜——自由探索、保持好奇；忌——迷失不归，或被刺激牵着漫无目的。',
+  },
+  57: {
+    name: GATE_NAMES[57],
+    theme: '纯粹直觉——直觉最清。流日落在闸门57，先信它再想，头脑的杂音往往晚于直觉的真。',
+    decision: '宜——信任直觉的清音；忌——用头脑分析覆盖直觉，错过第一反应。',
+  },
+  58: {
+    name: GATE_NAMES[58],
+    theme: '喜悦与活力——做带来喜悦的事，活力自然回流。流日落在闸门58，生命力在喜悦中 replenished。',
+    decision: '宜——做带来喜悦的事；忌——压抑活力，或用"应该"掐灭兴致。',
+  },
+  59: {
+    name: GATE_NAMES[59],
+    theme: '亲密与繁殖——连接与亲密的能量。流日落在闸门59，边界之内，亲密可以自由流动。',
+    decision: '宜——允许亲密与连接流动；忌——越过边界，或把融合误当合一。',
+  },
+  60: {
+    name: GATE_NAMES[60],
+    theme: '接受与限制——限制即边界。流日落在闸门60，先接受限制，出路才会在边界内浮现。',
+    decision: '宜——接受限制、在框内寻路；忌——对抗边界，或幻想无拘无束。',
+  },
+  61: {
+    name: GATE_NAMES[61],
+    theme: '内在真理与神秘——领悟不必解释给别人。流日落在闸门61，神秘的答案在静默中显形。',
+    decision: '宜——容纳未知、让领悟沉淀；忌——急于解释，或用逻辑拆解神秘。',
+  },
+  62: {
+    name: GATE_NAMES[62],
+    theme: '详情与谦逊——细节见真章。流日落在闸门62，谦逊地补全每一个精确，宏大藏在微小里。',
+    decision: '宜——关注细节、精确补全；忌——忽略精确，或在细节里迷失全局。',
+  },
+  63: {
+    name: GATE_NAMES[63],
+    theme: '怀疑与逻辑——怀疑催促你验证。流日落在闸门63，健康的怀疑是求真，卡住的怀疑是内耗。',
+    decision: '宜——用怀疑驱动验证；忌——困于怀疑、迟迟不敢下结论。',
+  },
+  64: {
+    name: GATE_NAMES[64],
+    theme: '完成前的困惑——混乱是完成的前奏。流日落在闸门64，给时间澄清，答案会在尘埃落定时出现。',
+    decision: '宜——允许混乱、等待澄清；忌——急于定论，在迷雾里强行收尾。',
+  },
+};
+
+const PLANET_OVERLAY = {
+  sun:       '太阳流经：这是今日集体的「基调主题」，能量最稳定、最可被你用于一天的定向。',
+  earth:     '地球流经：这是今日潜意识的「身体基调」，你未必察觉，却深深影响感受与本能反应。',
+  mercury:   '水星流经：主题落在沟通与思维层——今天容易就此闸门反复琢磨、说出来、写下来。',
+  venus:     '金星流经：主题落在价值与情感层——今天对此闸门的体验带着「美与值得与否」的滤镜。',
+  mars:      '火星流经：主题落在行动层——对此闸门有「想做」的冲动，注意是否经过自身策略。',
+  jupiter:   '木星流经：主题被放大、被祝福——此闸门的能量扩张，宜善用其正向面、避免过度。',
+  saturn:    '土星流经：主题被考验、被收束——此闸门需经责任与现实的打磨才落地，慢即是稳。',
+  uranus:    '天王星流经：主题突发、松动——此闸门可能迎来意外的开启或颠覆，拥抱不确定。',
+  neptune:   '海王星流经：主题被消融、带灵性——边界模糊，宜体验非执着，警惕错觉。',
+  pluto:     '冥王星流经：主题被深层转化——此闸门触及「放下旧我」的课题，是蜕变也是阵痛。',
+  northNode: '北交流经：主题触及命运节点——此闸门与你的成长方向共振，值得认真对待。',
+};
+
+const PLANET_ZH = {
+  sun: '太阳', earth: '地球', mercury: '水星', venus: '金星', mars: '火星',
+  jupiter: '木星', saturn: '土星', uranus: '天王星', neptune: '海王星', pluto: '冥王星', northNode: '北交',
+};
+
+// —— 流日系统补充：月亮 / 南交的行星叠加提示（theme-lib V2 原表未含）——
+PLANET_OVERLAY.moon  = '月亮流经：主题落在情绪与直觉层——约每 10 小时换一闸门，今天的感受随情绪浪潮流动，不做一时情绪的囚徒。';
+PLANET_OVERLAY.snode = '南交流经：主题落在释放与放下层——与北交相对，是你需要松手、让能量回流的方向。';
+
+// 36 通道 [a,b,名称,回路]
+const CHANNELS = [
+ [1,8,"启发","个体"],[2,14,"脉动","个体"],[3,60,"突变","个体"],[12,22,"开放","个体"],
+ [23,43,"架构","个体"],[24,61,"觉知","个体"],[25,51,"发起","个体"],[28,38,"挣扎","个体"],
+ [39,55,"情绪","个体"],
+ [4,63,"逻辑","集体"],[5,15,"韵律","集体"],[7,31,"创始","集体"],[9,52,"专注","集体"],
+ [11,56,"好奇","集体"],[13,33,"足智多谋","集体"],[16,48,"才华","集体"],[17,62,"接受","集体"],
+ [18,58,"批评","集体"],[29,46,"发现","集体"],[30,41,"识别","集体"],[35,36,"无常","集体"],
+ [42,53,"成熟","集体"],[47,64,"抽象","集体"],
+ [6,59,"亲密","家族"],[19,49,"综合","家族"],[21,45,"金钱线","家族"],[26,44,"臣服","家族"],
+ [27,50,"保存","家族"],[32,54,"蜕变","家族"],[37,40,"社群","家族"],
+ [10,20,"觉醒","集成"],[10,57,"完美展现","集成"],[20,34,"魅力","集成"],[34,57,"力量","集成"],
+ [10,34,"探索","集成"],[20,57,"脑波","集成"]
+];
+
+// 9 中心 → 闸门
+const CENTERS = {
+ Head:{cn:"头脑中心",gates:[61,63,64]},
+ Ajna:{cn:"逻辑中心",gates:[4,11,17,24,43,47]},
+ Throat:{cn:"喉咙中心",gates:[8,12,16,20,23,31,33,35,45,56,62]},
+ G:{cn:"G中心",gates:[1,2,7,10,13,15,25,46]},
+ Heart:{cn:"意志力中心",gates:[21,26,40,51]},
+ Sacral:{cn:"荐骨中心",gates:[3,5,9,14,27,29,34,42,59]},
+ Solar:{cn:"情绪中心",gates:[6,22,30,36,37,49,55]},
+ Spleen:{cn:"直觉中心",gates:[18,28,32,44,48,50,57]},
+ Root:{cn:"根部中心",gates:[19,38,39,41,52,53,54,58,60]}
+};
+const GATE2CENTER = {};
+for(const c in CENTERS){ CENTERS[c].gates.forEach(g=>GATE2CENTER[g]=CENTERS[c].cn); }
+
+// 13 天体
+const BODIES = [
+ {id:"sun",cn:"太阳"},{id:"earth",cn:"地球"},{id:"moon",cn:"月亮"},
+ {id:"nnode",cn:"北交点"},{id:"snode",cn:"南交点"},
+ {id:"mercury",cn:"水星"},{id:"venus",cn:"金星"},{id:"mars",cn:"火星"},
+ {id:"jupiter",cn:"木星"},{id:"saturn",cn:"土星"},{id:"uranus",cn:"天王星"},
+ {id:"neptune",cn:"海王星"},{id:"pluto",cn:"冥王星"}
+];
+// 速度（度/天）用于「距下一闸门」估算
+const SPEED = {sun:0.9856,earth:0.9856,moon:13.176,nnode:-0.0529,snode:-0.0529,
+ mercury:1.383,jupiter:0.0831,saturn:0.0335,uranus:0.0117,neptune:0.0058,pluto:0.0038,
+ venus:1.602,mars:0.524};
+
+const USE_LIB = (typeof Astronomy !== 'undefined');
+
+/* ===================== 天文计算 ===================== */
+function julian(d){ return d.getTime()/86400000 + 2440587.5; }
+
+function obliquity(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  return 23.4392911 - 0.0130042*T - 1.64e-7*T*T + 5.04e-7*T*T*T;
+}
+function meanNodeLon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  // Meeus Astronomical Algorithms 2nd ed. Ch.47 平黄白交点
+  let om = 125.0445479 + T*(-1934.1362891 + T*(0.0020754 + T*(1/467441 - T/60616000)));
+  return ((om%360)+360)%360;
+}
+function trueNodeLon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const mean = meanNodeLon(d);
+  const Rad = Math.PI/180;
+  const D=(297.8501921 + 445267.1114034*T)*Rad;
+  const M=(357.5291092 + 35999.0502909*T)*Rad;
+  const Mp=(134.9633964 + 477198.8675055*T)*Rad;
+  const F=(93.2720950 + 483202.0175233*T)*Rad;
+  const corr = -1.4979*Math.sin(2*(D-F))
+               -0.1500*Math.sin(M)
+               -0.1226*Math.sin(2*D)
+               +0.1176*Math.sin(2*F)
+               -0.0801*Math.sin(2*(Mp-F));
+  return ((mean+corr)%360+360)%360;
+}
+// 低精度兜底：太阳/月亮（仅 CDN 失效时用）
+function lowSun(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const L0=280.46646+36000.76983*T+0.0003032*T*T;
+  const M=(357.52911+35999.05029*T-0.0001537*T*T)*Math.PI/180;
+  const C=(1.914602-0.004817*T)*Math.sin(M)+0.019993*Math.sin(2*M)+0.000289*Math.sin(3*M);
+  let lon=L0+C-0.00569; return ((lon%360)+360)%360;
+}
+function lowMoon(d){
+  const T=(julian(d)-2451545.0)/36525.0;
+  const Deg=Math.PI/180;
+  let L=218.3165+481267.8813*T
+    -6.29*Math.sin((134.9+477198.85*T)*Deg)
+    +1.27*Math.sin((259.2-413335.38*T)*Deg)
+    -0.66*Math.sin((235.7+890534.23*T)*Deg)
+    -0.21*Math.sin((269.9+954397.70*T)*Deg)
+    -0.20*Math.sin((357.5+35999.05*T)*Deg)
+    -0.15*Math.sin((186.6+966404.05*T)*Deg);
+  return ((L%360)+360)%360;
+}
+function bodyLon(id,d){
+  if(id==="earth") return (bodyLon("sun",d)+180)%360;
+  if(id==="snode") return (trueNodeLon(d)+180)%360;
+  if(id==="nnode") return trueNodeLon(d);
+  if(!USE_LIB){
+    if(id==="sun") return lowSun(d);
+    if(id==="moon") return lowMoon(d);
+    return null; // 其余需联网
+  }
+  const map={sun:"Sun",moon:"Moon",mercury:"Mercury",venus:"Venus",mars:"Mars",
+    jupiter:"Jupiter",saturn:"Saturn",uranus:"Uranus",neptune:"Neptune",pluto:"Pluto"};
+  try{
+    // GeoVector(视向地心) → Ecliptic(J2000 黄经) → 加岁差修正得「当日期黄经(回归黄道)」
+    const time=Astronomy.MakeTime(d);
+    const vec=Astronomy.GeoVector(Astronomy.Body[map[id]],time,true);
+    const ec=Astronomy.Ecliptic(vec);
+    const T=(julian(d)-2451545.0)/36525.0;
+    const precDeg=T*1.39697; // 岁差：回归黄经随日期递增 ≈1.397°/世纪
+    let lon=((ec.elon+precDeg)%360+360)%360;
+    return lon;
+  }catch(e){ return null; }
+}
+// 黄经 → 闸门/爻/色/调/基（Rave Mandala 序列，Gate 41 锚定 MANDALA_START ≈ 302°）
+function lonToGateLine(lon){
+  let x=(((lon-MANDALA_START)%360)+360)%360; // 0 在闸门41 起点
+  let gi=Math.floor(x/DEG);                  // 0..63 曼陀罗序列索引
+  let gate=MANDALA_SEQ[gi];
+  let within=x-gi*DEG;                       // 0..DEG
+  let line=Math.floor(within/(DEG/6))+1;
+  let w2=within%(DEG/6);
+  let color=Math.floor(w2/(DEG/36))+1;
+  let w3=w2%(DEG/36);
+  let tone=Math.floor(w3/(DEG/216))+1;
+  let w4=w3%(DEG/216);
+  let base=Math.floor(w4/(DEG/1080))+1;
+  return {gate,line,color,tone,base,within,x};
+}
+function computeTransit(d){
+  const r={};
+  BODIES.forEach(b=>{ const lon=bodyLon(b.id,d);
+    if(lon===null){ r[b.id]={cn:b.cn,gate:null}; }
+    else r[b.id]=Object.assign({cn:b.cn},lonToGateLine(lon)); });
+  return r;
+}
+
+/* ===================== 几何：曼陀罗 ===================== */
+function gateAngleDeg(gate){
+  let idx=SEQ_INDEX[gate]; // 0..63，按 Rave Mandala 真实序列
+  return 270+idx*DEG+DEG/2;
+}
+function gateXY(gate,r,cx,cy){
+  let ecl=gateAngleDeg(gate);
+  let th=(ecl-270)*Math.PI/180;
+  return {x:cx+r*Math.sin(th), y:cy-r*Math.cos(th)};
+}
+function buildMandala(activeGates,activeChans){
+  const cx=320,cy=320, R_OUT=292, R_CH=205, R_DOT=282, R_NUM=298, R_NUM_HOT=304;
+  let s=`<svg class="mandala" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="312" fill="none" stroke="#D9CDB8" stroke-width="1"/>`;
+  // 通道
+  CHANNELS.forEach(c=>{
+    const a=gateXY(c[0],R_CH,cx,cy), b=gateXY(c[1],R_CH,cx,cy);
+    const on=activeChans.some(ac=>ac.a===c[0]&&ac.b===c[1]);
+    s+=`<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${on?'#E0B070':'#E7DEC9'}" stroke-width="${on?2.4:0.8}" opacity="${on?0.95:0.5}"/>`;
+  });
+  // 闸门刻度 + 数字：激活闸门圆点放大并放在刻度内侧，数字外移到圆点之外避免重叠
+  for(let g=1; g<=64; g++){
+    const mid=gateXY(g,R_OUT,cx,cy);
+    const inn=gateXY(g,R_OUT-12,cx,cy);
+    const hot=activeGates.has(g);
+    s+=`<line x1="${inn.x.toFixed(1)}" y1="${inn.y.toFixed(1)}" x2="${mid.x.toFixed(1)}" y2="${mid.y.toFixed(1)}" stroke="${hot?'#C4956A':'#C9BCA2'}" stroke-width="${hot?2.6:0.7}"/>`;
+    if(hot){
+      const dot=gateXY(g,R_DOT,cx,cy);
+      s+=`<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="10" fill="#C4956A" stroke="#fff" stroke-width="2"/>`;
+    }
+    const numPos=gateXY(g,hot?R_NUM_HOT:R_NUM,cx,cy);
+    s+=`<text x="${numPos.x.toFixed(1)}" y="${(numPos.y+4).toFixed(1)}" text-anchor="middle" font-size="${hot?12:11}" fill="${hot?'#A9743F':'#9A8A70'}" font-weight="${hot?800:400}">${g}</text>`;
+  }
+  // 中心
+  s+=`<circle cx="${cx}" cy="${cy}" r="60" fill="#FBEFDD" stroke="#C4956A" stroke-width="1.5"/>`;
+  s+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="13" fill="#A9743F" font-weight="700">此刻</text>`;
+  s+=`<text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="10" fill="#8A6D4B">流日曼陀罗</text>`;
+  s+=`</svg>`;
+  return s;
+}
+
+/* ===================== 渲染 ===================== */
+function fmtClock(d){
+  const p=n=>String(n).padStart(2,'0');
+  const loc=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  // d.getTime() 已是 UTC 时间戳，直接用 getUTC* 系列方法取出 UTC 时间，不要再用 getTimezoneOffset 回拨
+  const utc=`${d.getUTCFullYear()}-${p(d.getUTCMonth()+1)}-${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())} UTC`;
+  return {loc,utc};
+}
+function gateName(g){ return GATES[g]?GATES[g][0]:("闸门"+g); }
+function gateTheme(g){ return GATES[g]?GATES[g][1]:""; }
+/* ===== 死亡时刻出图逻辑 ===== */
+
+/* ===================== 死亡时刻出图（Death Chart） ===================== */
+const VERSION = "V1.1";
+
+function utcFromInput(y,mo,d,h,mi,tz){
+  // 本地墙钟 → UTC 瞬间（UTC = 本地 - 时区偏移）
+  const ms = Date.UTC(+y, +mo-1, +d, +h, +mi, 0) - (+tz)*3600*1000;
+  return new Date(ms);
+}
+function sunLonAt(date){ return bodyLon("sun", date); }
+
+// 出生设计点：太阳回溯 88°（黄经）对应的时刻——人类图潜意识（设计）计算基准
+function designTime(birth){
+  const bSun = sunLonAt(birth);
+  let best=null, bestErr=1e9, bestDays=0;
+  for(let days=78; days<=95; days+=0.01){
+    const t = new Date(birth.getTime() - days*86400000);
+    const sl = sunLonAt(t);
+    let diff = ((bSun - sl)%360+360)%360; // 太阳已回溯的度数
+    let err = Math.abs(diff - 88);
+    if(err < bestErr){ bestErr=err; best=t; bestDays=days; }
+    if(diff > 88 + 4) break;
+  }
+  return {t:best, days:bestDays};
+}
+
+// 本命：人格(出生时刻) + 设计(出生前 88° 太阳弧) 合并得到 64 激活闸门与定义通道
+function computeNatal(birth){
+  const personality = computeTransit(birth);
+  const dres = designTime(birth);
+  const design = computeTransit(dres.t);
+  const persGates = {}, desGates = {};
+  BODIES.forEach(b=>{
+    const pg = personality[b.id].gate, dg = design[b.id].gate;
+    if(pg!=null) persGates[pg]=b.id;
+    if(dg!=null) desGates[dg]=b.id;
+  });
+  const natalGates = new Set([...Object.keys(persGates).map(Number), ...Object.keys(desGates).map(Number)]);
+  const definedChans = [];
+  CHANNELS.forEach(c=>{ if(natalGates.has(c[0]) && natalGates.has(c[1])) definedChans.push({a:c[0],b:c[1],name:c[2],circuit:c[3]}); });
+  return {personality, design, designTime:dres.t, designDays:dres.days, persGates, desGates, natalGates, definedChans};
+}
+
+// 死亡时刻出图分析：本命定义 × 临终 13 天体行运叠加
+function analyze(birth, death){
+  const nat = computeNatal(birth);
+  const deathT = computeTransit(death);
+  const deathGates = new Set(BODIES.filter(b=>deathT[b.id].gate!=null).map(b=>deathT[b.id].gate));
+  // 本命已定义、临终被行运强化的通道
+  const reinforced = [];
+  nat.definedChans.forEach(c=>{
+    const aIn = deathGates.has(c.a), bIn = deathGates.has(c.b);
+    if(aIn||bIn) reinforced.push(Object.assign({}, c, {aDeath:aIn, bDeath:bIn}));
+  });
+  // 临终由行运完整接通（两端皆在临终天象）
+  const deathClosed = [];
+  // 仅因临终行运临时点亮（一端本命、另一端临终天象）
+  const transientLit = [];
+  CHANNELS.forEach(c=>{
+    const an=nat.natalGates.has(c[0]), bn=nat.natalGates.has(c[1]);
+    const ad=deathGates.has(c[0]), bd=deathGates.has(c[1]);
+    if(ad && bd) deathClosed.push({a:c[0],b:c[1],name:c[2],circuit:c[3]});
+    if((an!==bn) && (ad||bd)) transientLit.push({a:c[0],b:c[1],name:c[2],circuit:c[3], fromDeath: ad?c[0]:c[1]});
+  });
+  return {nat, deathT, deathGates, reinforced, deathClosed, transientLit};
+}
+
+function gateBlock(zh, o){
+  if(!o || o.gate==null) return "";
+  const lib = GATE_LIBRARY[o.gate];
+  const name = lib&&lib.name?` · ${lib.name}`:"";
+  return `<div class="gr"><div class="gr-t">${zh} · 闸门${o.gate}${name}<span class="gr-line">第 ${o.line} 爻</span></div>`+
+    (lib?`<div class="gr-theme">${lib.theme||""}</div>`:"")+
+    (lib&&lib.decision?`<div class="gr-decision">📌 ${lib.decision}</div>`:"")+`</div>`;
+}
+
+function bodyTable(t){
+  let dt=`<tr><th>天体</th><th>闸门</th><th>爻</th><th>色</th><th>调</th><th>基</th><th>中心</th></tr>`;
+  BODIES.forEach(b=>{ const o=t[b.id];
+    if(o.gate==null){ dt+=`<tr><td>${b.cn}</td><td colspan="6" style="color:#C4756B">需联网计算</td></tr>`; return; }
+    dt+=`<tr><td>${b.cn}</td><td>${o.gate}</td><td>${o.line}</td><td>${o.color}</td><td>${o.tone}</td><td>${o.base}</td><td>${GATE2CENTER[o.gate]||'—'}</td></tr>`;
+  });
+  return dt;
+}
+
+function chanList(list){
+  if(list.length===0) return `<div class="empty">无</div>`;
+  let h="";
+  list.forEach(c=>{
+    h+=`<div class="chan"><span class="pill">${c.a}-${c.b}</span>`+
+       `<div><div class="ct">${c.name} 通道<span class="cc">[${c.circuit}]</span></div>`+
+       `<div class="cb">${gateName(c.a)} ⇄ ${gateName(c.b)}</div></div></div>`;
+  });
+  return h;
+}
+
+function renderDeath(name, birth, death){
+  const R = analyze(birth, death);
+  const nat = R.nat, dt = R.deathT;
+  const birthU = fmtClock(birth).utc, deathU = fmtClock(death).utc, desU = fmtClock(nat.designTime).utc;
+
+  // 曼陀罗
+  const birthMandala = buildMandala(nat.natalGates, nat.definedChans.map(c=>({a:c.a,b:c.b})));
+  const deathMandala = buildMandala(R.deathGates, R.deathClosed.map(c=>({a:c.a,b:c.b})));
+
+  // 闸门 28（唯一直接以死亡恐惧为主题）
+  const g28natal = nat.natalGates.has(28), g28death = R.deathGates.has(28);
+  const g28 = (g28natal||g28death)
+    ? `<div class="insight" style="border-left-color:#C4756B">⚠ 闸门 28（挣扎之门）${g28natal?'在本命定义中':'在临终天象中'}出现——64 闸门中唯一直接以「对死亡的恐惧」为主题的闸门。其恐惧本质是「生命没有意义」；找到值得为之奋斗的事，恐惧即转化为智慧。</div>`
+    : `<div class="note">本例闸门 28（唯一直接以死亡恐惧为主题的闸门）在本命与临终天象中均未出现。</div>`;
+
+  const pSun = nat.personality.sun.gate, dSun = dt.sun.gate, dEarth = dt.earth.gate, dMoon = dt.moon.gate;
+
+  let html = "";
+  // 总览
+  html += `<div class="card"><h2>📊 总览 <span class="tag">核心结论</span></h2>`+
+    `<div class="interp">`+
+    `<div class="kv"><b>${name||'匿名'}</b> ｜ 出生 ${birthU} ｜ 逝去 ${deathU}</div>`+
+    `<div class="kv">出生设计点（潜意识）：<b>${desU}</b>（回溯约 ${nat.designDays.toFixed(2)} 天 / 88° 太阳弧）</div>`+
+    `<div class="kv">本命定义通道 <b>${nat.definedChans.length}</b> 条 ｜ 临终天象激活闸门 <b>${R.deathGates.size}</b> / 64</div>`+
+    `<div class="kv">临终被行运强化的本命通道 <b>${R.reinforced.length}</b> 条 ｜ 临终由行运完整接通 <b>${R.deathClosed.length}</b> 条 ｜ 仅因临终行运临时点亮 <b>${R.transientLit.length}</b> 条</div>`+
+    `</div></div>`;
+
+  // 曼陀罗对照
+  html += `<div class="grid">`+
+    `<div class="card mandala-wrap"><h2>🧬 本命曼陀罗 <span class="tag">出生定义</span></h2><div>${birthMandala}</div>`+
+      `<div class="legend"><span><i style="background:#C4956A"></i>激活闸门</span><span><i style="background:#E0B070"></i>定义通道</span><span><i style="background:#D9CDB8"></i>静默</span></div>`+
+      `<div class="mini">定义通道 ${nat.definedChans.length} / 36 ｜ 激活闸门 ${nat.natalGates.size} / 64</div></div>`+
+    `<div class="card mandala-wrap"><h2>🌑 临终曼陀罗 <span class="tag">逝去时刻行运</span></h2><div>${deathMandala}</div>`+
+      `<div class="legend"><span><i style="background:#C4956A"></i>行运闸门</span><span><i style="background:#E0B070"></i>行运接通</span><span><i style="background:#D9CDB8"></i>静默</span></div>`+
+      `<div class="mini">行运激活闸门 ${R.deathGates.size} / 64 ｜ 行运接通通道 ${R.deathClosed.length} / 36</div></div>`+
+    `</div>`;
+
+  // 本命定义通道
+  let defHtml = `<div style="font-size:.8rem;color:var(--ink2);margin-bottom:6px">本命（人格+设计）两端都被激活即「定义」。标注说明该通道在临终天象中是否被行运强化/接通。</div>`;
+  if(nat.definedChans.length===0) defHtml += `<div class="empty">本命暂无两端闭合的定义通道（开放中心较多，属正常）。</div>`;
+  nat.definedChans.forEach(c=>{
+    const rein = R.reinforced.find(x=>x.a===c.a&&x.b===c.b);
+    let mark = "";
+    if(rein) mark = ` <span class="cc" style="color:#C4756B">· 临终被行运强化（${rein.aDeath?'闸门'+rein.a:'闸门'+rein.b} 在临终天象）</span>`;
+    defHtml += `<div class="chan"><span class="pill">${c.a}-${c.b}</span>`+
+      `<div><div class="ct">${c.name} 通道<span class="cc">[${c.circuit}]</span></div>`+
+      `<div class="cb">${gateName(c.a)} ⇄ ${gateName(c.b)}${mark}</div></div></div>`;
+  });
+  html += `<div class="card"><h2>⚡ 本命定义通道 <span class="tag">${nat.definedChans.length}</span></h2>${defHtml}</div>`;
+
+  // 临终临时点亮（核心洞察）
+  let tlHtml = `<div style="font-size:.86rem;line-height:1.8;margin-bottom:8px">这些通道<b>一端本命已定义、另一端被临终行运点亮</b>——生前并不稳定接通，但在生命最后一刻被宇宙短暂「合上」。它们揭示临终那一刻被临时激活的主题能量。</div>`;
+  if(R.transientLit.length===0){
+    tlHtml += `<div class="empty">本例临终行运未临时点亮任何新通道（天象的「定义模式」较分散）。</div>`;
+  } else {
+    tlHtml += chanList(R.transientLit);
+  }
+  html += `<div class="card insight-card"><h2>💡 仅因临终行运临时点亮的通道 <span class="tag">${R.transientLit.length}</span></h2>${tlHtml}</div>`;
+
+  // 临终主题
+  let theme = gateBlock("☀ 临终·太阳", dt.sun) + gateBlock("🌍 临终·地球", dt.earth) +
+              gateBlock("🌙 临终·月亮", dt.moon) + gateBlock("☊ 临终·北交", dt.nnode);
+  html += `<div class="card"><h2>🕯️ 临终主题 <span class="tag">行运基调</span></h2>`+
+    `<div class="interp">${theme}</div>`+
+    `<div class="kv" style="margin-top:8px">人格太阳：出生在 <b>闸门 ${pSun} ${gateName(pSun)}</b> → 临终太阳行运到 <b>闸门 ${dSun} ${gateName(dSun)}</b>（地球在闸门 ${dEarth} ${gateName(dEarth)}）</div>`+
+    g28 + `</div>`;
+
+  // 明细表（3 个）
+  html += `<details class="overlay" open><summary>📐 出生·人格 明细（闸门·爻·色·调·基）</summary><table class="detail">${bodyTable(nat.personality)}</table>`+
+    `<div class="note">人格 = 出生时刻 13 天体，对应「意识 / 黑体图」。</div></details>`;
+  html += `<details class="overlay"><summary>📐 出生·设计 明细（出生前 88° 太阳弧）</summary><table class="detail">${bodyTable(nat.design)}</table>`+
+    `<div class="note">设计 = 出生前约 88° 太阳弧时刻，对应「身体 / 潜意识 / 红体图」。</div></details>`;
+  html += `<details class="overlay"><summary>📐 临终·行运 明细（逝去时刻 13 天体）</summary><table class="detail">${bodyTable(dt)}</table>`+
+    `<div class="note">临终行运 = 逝去时刻 13 天体在黄道的位置，叠加于本命之上。</div></details>`;
+
+  // 免责声明
+  html += `<div class="note" style="margin-top:14px;background:var(--bg2);padding:10px 14px;border-radius:10px">`+
+    `⚠️ 人类图<b>不预测死亡时间</b>。死亡时刻出图仅是以「行运叠加本命」方式研究生命终点的能量场，属高阶分析案例，不构成任何医疗/人生建议。Ra Uru Hu 的核心结论是：别操心死后，把此生的策略与权威活对才是正事。</div>`;
+
+  const box = document.getElementById("result");
+  box.innerHTML = html;
+  box.style.display = "block";
+  window.scrollTo({top: box.offsetTop-20, behavior:"smooth"});
+}
+
+function showErr(msg){
+  const e = document.getElementById("errbox");
+  e.style.display = "block"; e.innerHTML = msg;
+}
+function go(){
+  document.getElementById("errbox").style.display="none";
+  try{
+    const g = id => document.getElementById(id).value.trim();
+    const birth = utcFromInput(g("b-y"),g("b-mo"),g("b-d"),g("b-h"),g("b-mi"),g("b-tz"));
+    const death = utcFromInput(g("d-y"),g("d-mo"),g("d-d"),g("d-h"),g("d-mi"),g("d-tz"));
+    if(isNaN(birth.getTime())||isNaN(death.getTime())){ showErr("日期/时间解析失败，请检查输入（年/月/日/时/分 均为数字）。"); return; }
+    if(death.getTime() <= birth.getTime()){ showErr("逝去时刻必须晚于出生时刻。"); return; }
+    renderDeath(g("f-name"), birth, death);
+  }catch(err){ showErr("计算出错："+err.message); }
+}
+
+function loadDemo(){
+  const set=(id,v)=>document.getElementById(id).value=v;
+  set("f-name","Whitney Houston");
+  set("b-y",1963);set("b-mo",8);set("b-d",9);set("b-h",20);set("b-mi",55);set("b-tz",-4);
+  set("d-y",2012);set("d-mo",2);set("d-d",12);set("d-h",15);set("d-mi",55);set("d-tz",-8);
+  go();
+}
+
+window.addEventListener("load",()=>{
+  document.getElementById("footer-ver").textContent = VERSION;
+  document.getElementById("btn-go").addEventListener("click", go);
+  document.getElementById("btn-demo").addEventListener("click", loadDemo);
+  if(!USE_LIB){
+    const eb=document.getElementById("errbox");
+    eb.style.display="block";
+    eb.innerHTML="⚠ 天文库未载入，已降级为近似模式（仅日月交准确）。请确认 ./astronomy.js 与页面同目录，或联网加载 CDN 兜底。";
+  }
+});
+// 立即渲染示例（兼容无 load 事件的校验/服务端环境；浏览器中脚本位于 body 末尾，DOM 已就绪）
+try { loadDemo(); } catch(e){}
+
+</script>
+</body>
+</html>
