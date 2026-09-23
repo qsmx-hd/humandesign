@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 开心之道 ｜ 完整课件</title>
+<!--
+  《人类图 · 开心之道》｜完整课件
+  VERSION: V1  ·  2026-09-22
+  整合骨架：赵越教授《开心》（开心经营 / 3M / 四度 / 金刚认知·见事情BAC / 觉止STOP / 转见转心）× 人类图
+  结构对齐《人类图·觉察之道》课件：侧边分级导航 + 基础篇(00-07) + 应用篇(08-15) + 课程包四件套互链
+  四宫格（金刚认知/觉止四步/知识→智慧四步/四度修炼）统一用 .four.two（一行 2 个，≤620px 单列）
+-->
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-sidebar:#2D2118; --bg-sidebar-hover:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --text-sidebar:#D8C8B8; --text-sidebar-active:#F5E6D3;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:10px; --radius-lg:14px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85}
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:300px;background:var(--bg-sidebar);color:var(--text-sidebar);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;transition:transform .3s ease;display:flex;flex-direction:column}
+.sidebar-header{padding:24px 20px 18px;border-bottom:1px solid rgba(196,149,106,.2);text-align:center}
+.sidebar-header .logo{font-size:12px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sidebar-header h1{font-family:var(--serif);font-size:18px;color:var(--text-sidebar-active);font-weight:normal;line-height:1.4}
+.sidebar-header .sub{font-size:12px;color:var(--primary-l);margin-top:6px}
+.level-nav{flex:1;padding:10px 0}
+.level-section{margin-bottom:2px}
+.level-title{padding:12px 20px 8px;font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.level-title:hover{color:var(--gold-l)}
+.level-title .arrow{font-size:10px;margin-left:auto;transition:transform .2s}
+.level-title.collapsed .arrow{transform:rotate(-90deg)}
+.level-lessons{overflow:hidden}
+.level-title.collapsed + .level-lessons{max-height:0!important}
+.lesson{padding:9px 20px 9px 30px;font-size:14px;color:var(--text-sidebar);display:block;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.lesson:hover{background:var(--bg-sidebar-hover);color:var(--text-sidebar-active)}
+.lesson.active{background:var(--bg-sidebar-hover);color:var(--gold-l);border-left-color:var(--gold)}
+
+/* Content */
+.main{margin-left:300px;flex:1;padding:0}
+.topbar{position:sticky;top:0;z-index:90;background:rgba(245,240,232,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:12px 18px}
+.topbar .t-logo{font-family:var(--serif);color:var(--dark);font-weight:700}
+.topbar .menu-btn{background:var(--dark);color:#fff;border:0;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.content{max-width:860px;margin:0 auto;padding:40px 28px 80px}
+.hero-mini{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:34px 30px;margin-bottom:30px;text-align:center}
+.hero-mini .eyebrow{color:var(--gold-l);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+.hero-mini h1{font-family:var(--serif);font-size:30px;color:#fff;margin:10px 0 8px}
+.hero-mini p{color:#E8D8C5;font-size:15px;line-height:1.8}
+
+.module{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--shadow);scroll-margin-top:20px}
+.module .mno{display:inline-block;font-family:var(--serif);font-size:13px;color:#fff;background:var(--primary);border-radius:20px;padding:3px 14px;letter-spacing:1px;margin-bottom:10px}
+.module h2{font-family:var(--serif);font-size:24px;color:var(--dark);margin-bottom:6px;line-height:1.35}
+.module .en{color:var(--primary-d);font-size:13px;letter-spacing:1px;margin-bottom:14px}
+.module h3{font-size:17px;color:var(--primary-d);margin:22px 0 8px;padding-left:12px;border-left:4px solid var(--gold)}
+.module p{margin:8px 0;color:var(--text)}
+.module ul{margin:8px 0 12px;padding-left:22px}
+.module li{margin:6px 0}
+.module .lead-q{font-family:var(--serif);font-style:italic;color:var(--dark-soft);background:#FBF3E6;border-left:4px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.hd-box{background:linear-gradient(135deg,#FBF1E2,#F5EAD8);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+.hd-box .tag{display:inline-block;font-size:12px;color:#fff;background:var(--awake);border-radius:6px;padding:2px 10px;margin-bottom:8px;letter-spacing:1px}
+.ex{background:#FBF3E6;border:1px dashed var(--primary);border-radius:10px;padding:12px 16px;margin:14px 0;color:var(--dark-soft);font-size:14.5px}
+.ex b{color:var(--primary-d)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.four .f{background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:8px;padding:14px}
+.four .f .step{font-family:var(--serif);font-size:22px;color:var(--primary-d)}
+.four .f h4{font-size:15px;color:var(--dark);margin:4px 0 6px}
+.four .f p{font-size:13px;color:var(--text-l);margin:0}
+/* 指令：一行 2 个卡片（金刚认知 / 觉止四步 / 知识→智慧四步 / 四度修炼） */
+.four.two{grid-template-columns:repeat(2,1fr)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:560px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-sidebar);color:#F5E6D3;font-weight:600}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}.sg{color:var(--awake);font-weight:600}
+.toc-note{font-size:13px;color:var(--text-l);background:#FAF4EA;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .content{padding:24px 18px 70px;max-width:100%}
+  .module{padding:20px 18px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+  .overlay.show{display:block}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:620px){.four.two{grid-template-columns:1fr}.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">HUMAN DESIGN × JOY</div>
+      <h1>人类图 · 开心之道</h1>
+      <div class="sub">完整课件 · 用人类图打开心扉</div>
+      <a href="hd-kaixin-zhidao-course.html" style="display:inline-block;margin-top:10px;font-size:13px;color:#F5E6D3;text-decoration:none;border:1px solid rgba(245,230,211,.4);border-radius:20px;padding:4px 14px">← 课程主页</a>
+    </div>
+    <nav class="level-nav">
+      <div class="level-section">
+        <div class="level-title" data-toggle>基础篇 · 用人类图打开心扉 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m00">00 缘起：人类图遇见开心经营</a>
+          <a class="lesson" href="#m01">01 开心是什么：打开心扉</a>
+          <a class="lesson" href="#m02">02 人类图是开心的地基</a>
+          <a class="lesson" href="#m03">03 3M 模型 × 人类图</a>
+          <a class="lesson" href="#m04">04 四度修炼 × 人类图</a>
+          <a class="lesson" href="#m05">05 心关上 vs 心打开</a>
+          <a class="lesson" href="#m06">06 生理底层：HPA ↔ 快乐激素</a>
+          <a class="lesson" href="#m07">07 知识→智慧四步</a>
+          <a class="lesson" href="#m08">08 三层四度修炼图</a>
+        </div>
+      </div>
+      <div class="level-section">
+        <div class="level-title" data-toggle>应用篇 · 在场景里打开心扉 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m09">09 觉止 STOP × 策略</a>
+          <a class="lesson" href="#m10">10 情绪 ABC × 开放中心</a>
+          <a class="lesson" href="#m11">11 见事情 BAC × 去条件化</a>
+          <a class="lesson" href="#m12">12 转心：与未来做朋友</a>
+          <a class="lesson" href="#m13">13 在关系中打开心扉</a>
+          <a class="lesson" href="#m14">14 在困境中打开心扉</a>
+          <a class="lesson" href="#m15">15 像开心的人一样生活</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="t-logo">人类图 · 开心之道</div>
+      <button class="menu-btn" id="menuBtn">☰ 目录</button>
+    </div>
+    <div class="content">
+      <div class="hero-mini">
+        <div class="eyebrow">THE PATH OF JOY</div>
+        <h1>用人类图，打开你的心扉</h1>
+        <p>这不是又一门「读懂图」的课。图是地图，开心是打开心扉。</p>
+      </div>
+
+      <!-- 00 -->
+      <section class="module" id="m00">
+        <span class="mno">模块 00</span>
+        <h2>缘起：当人类图遇见「开心经营」</h2>
+        <div class="en">Why Human Design Meets The Joy</div>
+        <p>赵越教授在《开心》里说：<strong>「开心」是一个动词——打开心扉。</strong>它是一个方法、一个动作；打开之后，你就得到一个开心的状态，这又是一种结果。绝大多数人把开心当成「等来的形容词」，却忘了它本是「主动打开的动作」。</p>
+        <div class="lead-q">「知道设计，不等于活出设计。活出设计，心才会真正打开。」中间的桥，就是开心的练习。</div>
+        <h3>不开心的真相：心门关上了</h3>
+        <p>《开心》用科学说明：当人偏离设计、被情绪与习气带走，就活在应激里（HPA 轴持续分泌皮质醇）。这恰恰就是人类图说的<strong>非我（Not-Self）</strong>状态——心关上了，开心被锁在门外。</p>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>人类图的「去条件化」是目标，赵越教授的「开心经营」提供的是<strong>每天可执行的练习</strong>（3M / 四度 / 觉止 / 见事情）。两者指向同一件事：从被设计控制，回到自由的天空。</p></div>
+        <h3>本课程不做的事 / 做的事</h3>
+        <ul>
+          <li>❌ 不重复讲授人类图基础理论知识（那是为了「读懂」）。</li>
+          <li>✅ 教你如何在吃饭、走路、情绪、关系里，把策略与权威「做出来」，把心打开。</li>
+          <li>✅ 用「觉止 STOP / 见事情 BAC / 转见转心」对治非我，让签名（开心）流动起来。</li>
+        </ul>
+        <div class="ex"><b>觉察作业 · </b>拿出你的人类图报告，圈出你的<strong>类型、策略、内在权威、非我主题、签名</strong>。这就是你这趟「打开心扉」旅程的靶心。</div>
+      </section>
+
+      <!-- 01 -->
+      <section class="module" id="m01">
+        <span class="mno">模块 01</span>
+        <h2>开心是什么：打开心扉</h2>
+        <div class="en">What Is Joy</div>
+        <p>一般我们说「开心」是形容词，形容一种精神状态。但《开心》强调它更是<strong>动词</strong>——打开心扉。方法对了（打开），状态（开心）自然来；状态来了，又成为结果。</p>
+        <div class="lead-q">「开心经营」也有两层含义：开心需要经营才能获得；通过不断把心打开，告别精神内耗，经营自在人生。」</div>
+        <h3>开心的三个科学前提</h3>
+        <ul>
+          <li><b>知行合一</b>：本书用严谨逻辑从「理」打通，再通过训练从「行」做到，随时随地可用。</li>
+          <li><b>基于科学的智慧</b>：融合西方生物学/心理学与东方儒释道智慧，借科学的梯子开启内心自有智慧。</li>
+          <li><b>空杯心态</b>：全然空杯，不带评判地聆听——这是接收一切的前提。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>「打开心扉」= 让真实权威重新上岗。你的荐骨/情绪/脾一旦做主，非我声音就退场——心，自然就开了。人类图给的，正是「怎么打开」的开关。</p></div>
+        <div class="ex"><b>课堂练习 · </b>今天刻意做一次「打开」：遇到让你皱眉的事，先不评判，对自己说「我把心打开一点点」。体会眉头松开与紧缩的区别。</div>
+      </section>
+
+      <!-- 02 -->
+      <section class="module" id="m02">
+        <span class="mno">模块 02</span>
+        <h2>人类图是开心的地基</h2>
+        <div class="en">Human Design As The Foundation</div>
+        <p>赵越教授说开心需要从「心的层面」下功夫。而人类图，正是你心（与身）的精准蓝图——它告诉你：你是谁、怎样与世界正确互动、身体如何替你做决定。</p>
+        <div class="four two">
+          <div class="f"><div class="step">图</div><h4>类型与策略</h4><p>你与世界正确互动的开关。策略对了，内耗就少，心就容易开。</p></div>
+          <div class="f"><div class="step">权</div><h4>内在权威</h4><p>身体的决策系统（荐骨/情绪/脾/自我投射）。让权威做主 = 打开心扉。</p></div>
+          <div class="f"><div class="step">中</div><h4>九大中心</h4><p>定义中心是固定程序，开放中心是条件化区域——后者最容易被「撞」而心关上。</p></div>
+          <div class="f"><div class="step">名</div><h4>签名 / 非我</h4><p>签名（满足/平静/成功/喜悦）= 心打开；非我主题 = 心关上。这就是开心的仪表盘。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>把《开心》的「心」翻译成人类图语言：<strong>心 = 你的权威中心 + 定义中心</strong>；「心门关上」= 非我主题亮起；「打开心扉」= 回到策略与权威，让签名流动。</p></div>
+        <div class="ex"><b>觉察作业 · </b>在图上找到你的权威中心，写一句话：「我的开心开关在______（荐骨/情绪/脾/自我投射）。」</div>
+      </section>
+
+      <!-- 03 -->
+      <section class="module" id="m03">
+        <span class="mno">模块 03</span>
+        <h2>3M 模型 × 人类图：三重境界的开心</h2>
+        <div class="en">3M Model × Human Design</div>
+        <p>赵越教授用 <strong>3M 模型</strong>概括人类认知的三重境界，也是开心的三个层次——从物质的快乐，到心智的安乐，再到心性的极乐。这条路径贯穿全书。</p>
+        <div class="four two">
+          <div class="f"><div class="step">M1</div><h4>Material 物质快乐</h4><p>身体层面的满足：吃好、睡好、运动。对应人类图——照顾好你的<strong>身体权威中心</strong>，让多巴胺/血清素/内啡肽自然分泌。</p></div>
+          <div class="f"><div class="step">M2</div><h4>Mental 心智安乐</h4><p>念头与情绪层的安稳：不被 ABC 的 B（信念）绑架。对应——<strong>去条件化</strong>开放中心，分清事与情。</p></div>
+          <div class="f"><div class="step">M3</div><h4>Mind 心性极乐</h4><p>与天地合一的究竟安乐。对应——活出设计、权威做主后的<strong>自由天空</strong>，即你的签名状态。</p></div>
+          <div class="f"><div class="step">↑</div><h4>一通百通</h4><p>境界提升后看什么都一样。人类图的「去条件化」与 3M 升华，是同一方向的两条腿。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>你不必先「修成圣人」才有开心。<strong>先从 M1（身体权威）落地</strong>：生产者去检查荐骨、显示者先告知、投射者等邀请——每一类都有自己的「物质快乐开关」。</p></div>
+        <div class="ex"><b>课堂练习 · </b>给今天的自己定位：我此刻卡在 M1/M2/M3 哪一层？写下一件能立刻提升该层开心的小事。</div>
+      </section>
+
+      <!-- 04 -->
+      <section class="module" id="m04">
+        <span class="mno">模块 04</span>
+        <h2>四度修炼 × 人类图：重练认知境界</h2>
+        <div class="en">Four Dimensions × Human Design</div>
+        <p>赵越教授说「开心经营」的方法是<strong>四度修炼</strong>：高、广、深、远四个维度的提升，对应开心的四个维度——上、下、左、右。其中<strong>高度（宏观系统视角）最要紧</strong>，高度够了，远、广、深自然跟上。</p>
+        <div class="four two">
+          <div class="f"><div class="step">高</div><h4>高度</h4><p>从设计的宏观视角看人生：不纠结表象胜负。人类图帮你「升维」——你是生产者不是失败者。</p></div>
+          <div class="f"><div class="step">广</div><h4>广度</h4><p>全面看问题：接纳所有类型都有各自正确活法，不拿自己的策略要求别人。</p></div>
+          <div class="f"><div class="step">深</div><h4>深度</h4><p>看本质：看清非我主题不过是「开放中心被撞」，不是你不好。</p></div>
+          <div class="f"><div class="step">远</div><h4>远度</h4><p>时间维度：用 7 年去条件化、用轮回交叉看人生主线，不在一时情绪里判定。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>四度修炼是「提升境界」，人类图是「看清设计」。两者合力：<strong>用高度跳出剧情，用深度安住设计，用远度穿越周期</strong>——开心就有了结构支撑。</p></div>
+        <div class="ex"><b>觉察作业 · </b>挑一件烦心事，分别用「高/广/深/远」写一句重新解读的话。</div>
+      </section>
+
+      <!-- 05 -->
+      <section class="module" id="m05">
+        <span class="mno">模块 05 · 核心</span>
+        <h2>心关上 vs 心打开：开心的仪表盘</h2>
+        <div class="en">Closed vs Open Heart</div>
+        <p>这是全书与全课最强的一张表。<strong>非我主题 = 心门关上（不开心）；签名 = 心打开（开心）。</strong>当痛苦信号升起，用开心经营的方法把它转回设计。</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>非我（心关上）</th><th>签名（心打开）</th><th>开心经营 · 回到设计</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>说了 YES 没过荐骨？觉止 STOP，回腹部嗯哼；把事与情分开。</td></tr>
+              <tr><td><b>显示生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>多头不落地？盯混乱能量，一次一件事；用静坐补内啡肽。</td></tr>
+              <tr><td><b>显示者</b></td><td class="ns">愤怒</td><td class="sg">平静</td><td>被阻拦？行动前先告知（觉止后的表达）；不缩小自己。</td></tr>
+              <tr><td><b>投射者</b></td><td class="ns">苦涩</td><td class="sg">成功</td><td>好心没人听？转见：智慧留给懂的人；先被看见再给。</td></tr>
+              <tr><td><b>反映者</b></td><td class="ns">失望</td><td class="sg">喜悦+惊喜</td><td>环境不对？先问环境健不健康；随月亮周期，转心预备开心。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>一句话口诀</h3>
+        <div class="lead-q">「心关上」就：觉止 → 见事情 → 转见/转心；「心打开」就：停在设计里，多待一会儿。</div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>把「开心」当成仪表盘而非目标：非我亮灯=提示「我去条件化的功课来了」；签名亮灯=奖励「我正在设计里」。</p></div>
+        <div class="ex"><b>课堂练习 · </b>用 200 字写一次「心关上→心打开」的转化：哪个非我亮了 → 用了哪招 → 签名回来了多少。</div>
+      </section>
+
+      <!-- 06 -->
+      <section class="module" id="m06">
+        <span class="mno">模块 06</span>
+        <h2>生理底层：不开心持久，开心可练</h2>
+        <div class="en">The Biology Of Joy</div>
+        <p>《开心》用脑分子生物学讲清：为什么不开心那么难走出来，又为什么开心可以被「练」出来。</p>
+        <h3>不开心的生理：HPA 轴与皮质醇</h3>
+        <ul>
+          <li><b>应激反应</b>：遇到威胁，下丘脑-垂体-肾上腺轴（HPA 轴）启动，分泌肾上腺素与皮质醇。</li>
+          <li><b>皮质醇难清</b>：肾上腺素 2 秒清除，但<strong>皮质醇至少要两天</strong>才代谢完——所以一次暴怒，余波能缠你两天。</li>
+          <li><b>陈年旧见</b>：反复创伤会固化进 HPA 轴，形成「杯弓蛇影」的自动化反应。</li>
+        </ul>
+        <h3>开心的生理：三种快乐激素</h3>
+        <div class="four two">
+          <div class="f"><div class="step">多</div><h4>多巴胺</h4><p>奖赏/动力。完成小事就分泌，让你轻快、想再来一次。</p></div>
+          <div class="f"><div class="step">血</div><h4>血清素</h4><p>放松/抗焦虑。晒太阳、运动都升；许多抗抑郁药即增血清素。</p></div>
+          <div class="f"><div class="step">内</div><h4>内啡肽</h4><p>内在欣快感。极限运动产生，<strong>冥想、静坐、瑜伽也会提高</strong>——这正是人类图「座上修」的生理依据。</p></div>
+          <div class="f"><div class="step">呼</div><h4>呼吸法</h4><p>深长腹式呼吸（吸到下丹田）能快速降皮质醇、激活副交感——觉止 STOP 的科学底座。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>你的<strong>权威中心本身就是快乐激素开关</strong>：荐骨型的「嗯哼」带来笃定（多巴胺），情绪型的「等波浪过去」避免皮质醇堆积，脾型的瞬间直觉让你轻盈。静坐 = 给内啡肽充电。</p></div>
+        <div class="ex"><b>觉察作业 · </b>今天做 5 分钟腹式呼吸（吸到下丹田），记录之后 30 分钟的情绪松紧变化。</div>
+      </section>
+
+      <!-- 07 -->
+      <section class="module" id="m07">
+        <span class="mno">模块 07</span>
+        <h2>知识→智慧四步：拂去心上的灰尘</h2>
+        <div class="en">From Knowledge To Wisdom</div>
+        <p>赵越教授从汉字拆解点出关键：「痴」= 病+知（知识多了反成病）；「慧」= 心+扫帚（扫去心上灰尘）。本书终极目的，是把知识变成智慧。</p>
+        <div class="four two">
+          <div class="f"><div class="step">一</div><h4>发现灰尘</h4><p>认出心上积攒的陈见、经验、固见——即人类图的<strong>非我声音</strong>。</p></div>
+          <div class="f"><div class="step">二</div><h4>拂去灰尘</h4><p>用去条件化练习（觉止/见事情）扫掉——回到策略与权威。</p></div>
+          <div class="f"><div class="step">三</div><h4>瞥见光芒</h4><p>心性光芒初现：你第一次「只是知道，不被带走」。</p></div>
+          <div class="f"><div class="step">四</div><h4>开启智慧</h4><p>真实权威稳定上岗，活出设计——这正是人类图说的「去条件化完成」。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>「拂去灰尘」= 人类图 7 年去条件化；「瞥见光芒」= 签名（满足/平静/成功/喜悦）开始频繁出现。<strong>开心经营与去条件化，是同一件事的两种说法。</strong></p></div>
+        <div class="ex"><b>觉察作业 · </b>写下一条你最固执的「心上灰尘」（如「我必须被认可才有价值」），标注它属于哪类非我主题。</div>
+      </section>
+
+      <!-- 08 -->
+      <section class="module" id="m08">
+        <span class="mno">模块 08</span>
+        <h2>三层四度修炼图：先破「固」</h2>
+        <div class="en">The Three-Layer Map</div>
+        <p>赵越教授把全书体系画成「三层四度修炼图」：最底下是破<strong>「固」</strong>——冲破固有模式；往上沿 3M（物质→心智→心性）层层升华。</p>
+        <ul>
+          <li><b>破「固」</b>：固有反应模式 = 人类图的「非我自动程序」。第一步就是看见它、停一下。</li>
+          <li><b>物质层</b>：照顾身体权威，管理 HPA 轴（觉止、呼吸、运动）。</li>
+          <li><b>心智层</b>：用情绪 ABC / 见事情 BAC 纠偏信念，去条件化开放中心。</li>
+          <li><b>心性层</b>：觉止后进入「见事情需、利言行」，走向极乐。</li>
+        </ul>
+        <div class="lead-q">口诀：「自己最差，老实听话！」先给自己定个小目标——坚持练习一百天。</div>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>破「固」的抓手，就是你图的<strong>策略</strong>：生产者破「抢答」之固、显示者破「压抑/冲动」之固、投射者破「硬要给」之固、反映者破「仓促决定」之固。</p></div>
+        <p class="toc-note">配套《学员练习手册》含：设计靶心、每日三层结构、觉止情绪卡、见事情 BAC 日志、21 天日历。可直接打印使用。</p>
+      </section>
+
+      <!-- 09 -->
+      <section class="module" id="m09">
+        <span class="mno">模块 09</span>
+        <h2>应用篇 · 觉止 STOP × 人类图策略</h2>
+        <div class="en">STOP × Strategy</div>
+        <p>赵越教授的<strong>觉止 STOP</strong>是全书的「定海神针」：S 感觉(Sensation)、T 呼吸(Take a breath)、O 观察(Observe)、P 继续(Proceed)。核心口诀「<strong>觉止见，事情需，利言行</strong>」——必须先觉止，才能理智沟通。</p>
+        <div class="four two">
+          <div class="f"><div class="step">S</div><h4>感觉</h4><p>觉察身体反应：拳头紧、眉头皱、胃缩紧——情绪来了的信号。</p></div>
+          <div class="f"><div class="step">T</div><h4>呼吸</h4><p>深长腹式呼吸到<strong>下丹田</strong>（非肺），激活副交感，降皮质醇。</p></div>
+          <div class="f"><div class="step">O</div><h4>观察</h4><p>回到平静、不受干扰，再理智地「见」事与情。</p></div>
+          <div class="f"><div class="step">P</div><h4>继续</h4><p>带着觉知往前走，利言行——不再被情绪左右。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 开心 · 共振</span><p>STOP 的「停一下」，正是人类图<strong>策略的内核</strong>：生产者「等回应」、显示者「先告知」、投射者「等邀请」、反映者「等 28 天」——本质都是「先觉止，让真实权威出来，再行动」。觉止，让策略从知识变成肌肉。</p></div>
+        <div class="ex"><b>课堂练习 · </b>下次情绪上头，默念「觉止」做三次下丹田呼吸，再决定说不说、做不做。记录：停与不停，结果差多少？</div>
+      </section>
+
+      <!-- 10 -->
+      <section class="module" id="m10">
+        <span class="mno">模块 10</span>
+        <h2>应用篇 · 情绪 ABC × 开放中心</h2>
+        <div class="en">ABC × Open Centers</div>
+        <p>情绪 ABC 理论（Ellis）：A 激发事件只是<strong>间接原因</strong>，B 你对事件的<strong>信念才是直接决定因素</strong>，C 才是情绪与行为反应。所以同一件事，不同的人反应天差地别。</p>
+        <ul>
+          <li><b>A（事）</b>：外界撞到你的开放中心——被否定、被忽视、被催促。</li>
+          <li><b>B（信念/非我声音）</b>：头脑立刻编的故事（「他看不起我」「我不够好」）。</li>
+          <li><b>C（情）</b>：随之而来的痛苦信号——挫败/愤怒/苦涩/失望。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>人类图的<strong>开放中心</strong>就是 ABC 的「放大器」：无定义情绪中心的人，极易把 A 解读成针对自己的 B。练习：把 A 与 C 分开，认清 B 是「非我声音」而非事实——这就是去条件化的心智操作。</p></div>
+        <div class="ex"><b>觉察作业 · </b>挑一次情绪，拆成 A（发生了什么）/ B（我信了什么）/ C（我什么感受）。看看 B 是否站得住脚。</div>
+      </section>
+
+      <!-- 11 -->
+      <section class="module" id="m11">
+        <span class="mno">模块 11</span>
+        <h2>应用篇 · 见事情 BAC × 去条件化（转见）</h2>
+        <div class="en">See-Thing-BAC × Deconditioning</div>
+        <p>赵越教授以《金刚经》「应无所住而生其心」为核，总结出<strong>金刚认知模型·见事情 BAC</strong>：见(See) 事(Thing/事件) 情(Emotion) 需(Need)。关键在于——<strong>把「事」与「情」分开</strong>，不被情绪当事实。</p>
+        <div class="four two">
+          <div class="f"><div class="step">见</div><h4>见（觉止后）</h4><p>理智地看清楚：刚才是 A 事件、我的 B 信念、C 情绪，三者别混。</p></div>
+          <div class="f"><div class="step">事</div><h4>事（A）</h4><p>客观发生了什么？只陈述事实，不加评判、不编故事。</p></div>
+          <div class="f"><div class="step">情</div><h4>情（C）</h4><p>我此刻的情绪是什么？承认它，但不把「我的情绪」当成「事的真相」。</p></div>
+          <div class="f"><div class="step">需</div><h4>需（Need）</h4><p>我真正需要的是什么？回到权威，给出利言行的回应。</p></div>
+        </div>
+        <h3>转见：与过去的负面情绪和解</h3>
+        <p>标签思维（选择性注意/扭曲/保留）让我们困在「受害者」剧本里。<strong>转见</strong>，就是用金刚认知把自己「再养一遍」，改写旧见。对应人类图：你那些固化进 HPA 轴的陈见，正是开放中心被长期条件化——见事情 BAC 是解法的心智钥匙。</p>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>「转见」= 人类图<strong>去条件化的回顾式工作</strong>：认出「这不是我，是我被环境装上的非我程序」，然后温柔地解开。去条件化不是否定过去，是与之和解。</p></div>
+        <div class="ex"><b>课堂练习 · </b>写一件一直介怀的旧事，用「见事情需」重新叙述：当时的事(A)、我的情(C)、我真正的需(Need)分别是什么？</div>
+      </section>
+
+      <!-- 12 -->
+      <section class="module" id="m12">
+        <span class="mno">模块 12</span>
+        <h2>应用篇 · 转心：与未来的正面情绪做朋友</h2>
+        <div class="en">Turn-The-Heart · Befriend The Future</div>
+        <p>除了出事后的「转见」，赵越教授还准备了<strong>转心</strong>——在问题发生前就滋养心力，提前预备自己的开心状态，与未来的正面情绪做朋友。</p>
+        <ul>
+          <li><b>需求层次升级</b>：从匮乏型需求（钱/认可/地位）走向成长型需求（自我实现、利他），是获得终极快乐的一条途径。</li>
+          <li><b>不让未来成为焦虑源</b>：未来还没来，多数焦虑是头脑编的剧本。把能量放在「此刻可做的事」。</li>
+          <li><b>主动创造正面情绪</b>：用血清素（晒太阳/运动）、内啡肽（静坐/瑜伽）提前给身心充电。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 开心</span><p>转心，对应人类图「<strong>信任你的设计</strong>」：生产者信任荐骨会回应、投射者信任对的人会邀请、反映者信任月亮周期会澄清。把焦虑换成「设计自有节奏」的笃定——这正是签名（平静/喜悦）的来源。</p></div>
+        <div class="ex"><b>觉察作业 · </b>写下一件你反复焦虑的「未来」，用转心改写为：「我此刻能为它做的一件小事是______。」</div>
+      </section>
+
+      <!-- 13 -->
+      <section class="module" id="m13">
+        <span class="mno">模块 13</span>
+        <h2>应用篇 · 在关系中打开心扉</h2>
+        <div class="en">Joy In Relationships</div>
+        <p>关系是人类图最容易「撞车」、也最容易「打开」的地方。看清彼此的设计差异，比改造对方有效一万倍。</p>
+        <ul>
+          <li><b>投射者</b>需要「被看见、被邀请」；别追着给建议，等被问再给——给他心打开的空间。</li>
+          <li><b>显示者</b>需要「被理解、被告知」；别拦，先听他说要做什么——理解就是打开。</li>
+          <li><b>生产者</b>需要「被回应」；别替他决定，问他身体怎么说——回应让他满足。</li>
+          <li><b>反映者</b>需要「健康的空间与环境」；先保障环境，再谈目标——环境对了他就喜悦。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 开心 · 练习</span><p>关系冲突时，先对自己做「觉止 STOP + 见事情」处理非我，再处理事情。情绪在，智慧不在；先让彼此的心打开，事自然成。</p></div>
+      </section>
+
+      <!-- 14 -->
+      <section class="module" id="m14">
+        <span class="mno">模块 14</span>
+        <h2>应用篇 · 在困境中打开心扉</h2>
+        <div class="en">Joy In Hardship</div>
+        <p>病痛、失控、不确定——这些「不确定」，正是练习打开心扉最好的道场。你无法决定生活，但可以决定如何面对生活。</p>
+        <ul>
+          <li>身体痛时，把觉知放到疼痛处，像研究它一样，不抗拒（对应 M1 物质层）。</li>
+          <li>恐惧/焦虑时，<b>觉止</b>：S 感觉身体、T 下丹田呼吸、O 观察、P 继续。</li>
+          <li>陈年创伤（固化 HPA 轴）：用「转见」慢慢改写旧见，不急于一次到位。</li>
+          <li>把情绪和事情分开：先让皮质醇下降（回到权威），再来处理事情。</li>
+        </ul>
+        <div class="lead-q">「当你不再关心自己的得失，只是关心世界有没有变好一点——那时，你的自我已消失，真我出现，慈悲出现。」</div>
+      </section>
+
+      <!-- 15 -->
+      <section class="module" id="m15">
+        <span class="mno">模块 15</span>
+        <h2>应用篇 · 像开心的人一样生活</h2>
+        <div class="en">Live As A Joyful One</div>
+        <p>终极状态：<strong>开心即生活，生活即开心。</strong>从物质快乐（M1），走到心智安乐（M2），最终安住心性极乐（M3）。开心不是某一刻，是每一刻。</p>
+        <ul>
+          <li>你可以看戏，可以演戏，你知道自己在做什么——你是自由的，在任何时候。</li>
+          <li>一切都是游戏。功名利禄，镜花水月；痛苦烦恼，亦是游戏一场。</li>
+          <li><strong>知行合一，从修开始</strong>：不期待永远开心，但要一辈子练习打开。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 开心 · 终</span><p>当你的类型、策略、权威，不再是需要「记起」的知识，而是像呼吸一样的自然反应——那一刻，你活出了图，也打开了心。图是地图，开心是打开心扉；你，本来就是天空。</p></div>
+        <div class="ex"><b>结课赠言 · </b>不期待永远开心，但要一辈子练习打开。祝福你。</div>
+      </section>
+
+      <div class="resnav" style="margin-top:34px">
+        <a class="home" href="hd-kaixin-zhidao-course.html">🏠 课程主页<small>返回课程全貌与报名入口</small></a>
+        <a href="hd-kaixin-zhidao-courseware.html">📖 完整课件<span class="tag">当前页</span><small>你正在这里</small></a>
+        <a href="hd-kaixin-zhidao-cheatsheet.html">🃏 开心速查卡<small>类型锚点 · 觉止四步 · 见事情BAC</small></a>
+        <a href="hd-kaixin-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 觉止情绪卡 · 可打印</small></a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),menuBtn=document.getElementById('menuBtn');
+function openNav(){sidebar.classList.add('open');overlay.classList.add('show');}
+function closeNav(){sidebar.classList.remove('open');overlay.classList.remove('show');}
+menuBtn&&menuBtn.addEventListener('click',openNav);
+overlay.addEventListener('click',closeNav);
+document.querySelectorAll('.lesson').forEach(function(l){
+  l.addEventListener('click',function(){if(window.innerWidth<=900)closeNav();});
+});
+document.querySelectorAll('.level-title').forEach(function(t){
+  t.addEventListener('click',function(){t.classList.toggle('collapsed');});
+});
+var lessons=document.querySelectorAll('.lesson'),sections=document.querySelectorAll('.module');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur='';
+  sections.forEach(function(s){if(s.offsetTop<=pos)cur=s.id;});
+  lessons.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>
