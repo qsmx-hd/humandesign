@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 财运之道 ｜ 完整课件</title>
+<!--
+  《人类图 · 财运之道》｜完整课件
+  VERSION: V1  ·  2026-09-24
+  双螺旋骨架：人类图财富地图（类型·策略·权威·财运闸门六类）× 哈维·艾克《有钱人和你想的不一样》17 财富档案
+  整合主轴：顺应你的设计 × 重塑你的财富蓝图 → 让财富自然流入
+  结构对齐《人类图·觉察之道》《人类图·开心之道》课件：侧边分级导航 + 基础篇(00-07) + 应用篇(08-15) + 课程包四件套互链
+  每个应用篇模块 = 财富档案信念对照 + 致富法则 + 宣言 + 像有钱人一样行动 + 「人类图 × 财运」落地框
+  知识来源：人类图财运框架整合自《财运之道·人类图财富分析-Kan Man Tang》；财富思维整合自哈维·艾克著《有钱人和你想的不一样》。仅供学习参考，不替代专业财务/投资建议。
+-->
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-sidebar:#2D2118; --bg-sidebar-hover:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --text-sidebar:#D8C8B8; --text-sidebar-active:#F5E6D3;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:10px; --radius-lg:14px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85}
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:300px;background:var(--bg-sidebar);color:var(--text-sidebar);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;transition:transform .3s ease;display:flex;flex-direction:column}
+.sidebar-header{padding:24px 20px 18px;border-bottom:1px solid rgba(196,149,106,.2);text-align:center}
+.sidebar-header .logo{font-size:12px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sidebar-header h1{font-family:var(--serif);font-size:18px;color:var(--text-sidebar-active);font-weight:normal;line-height:1.4}
+.sidebar-header .sub{font-size:12px;color:var(--primary-l);margin-top:6px}
+.level-nav{flex:1;padding:10px 0}
+.level-section{margin-bottom:2px}
+.level-title{padding:12px 20px 8px;font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.level-title:hover{color:var(--gold-l)}
+.level-title .arrow{font-size:10px;margin-left:auto;transition:transform .2s}
+.level-title.collapsed .arrow{transform:rotate(-90deg)}
+.level-lessons{overflow:hidden}
+.level-title.collapsed + .level-lessons{max-height:0!important}
+.lesson{padding:9px 20px 9px 30px;font-size:14px;color:var(--text-sidebar);display:block;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.lesson:hover{background:var(--bg-sidebar-hover);color:var(--text-sidebar-active)}
+.lesson.active{background:var(--bg-sidebar-hover);color:var(--gold-l);border-left-color:var(--gold)}
+
+/* Content */
+.main{margin-left:300px;flex:1;padding:0}
+.topbar{position:sticky;top:0;z-index:90;background:rgba(245,240,232,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:12px 18px}
+.topbar .t-logo{font-family:var(--serif);color:var(--dark);font-weight:700}
+.topbar .menu-btn{background:var(--dark);color:#fff;border:0;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.content{max-width:860px;margin:0 auto;padding:40px 28px 80px}
+.hero-mini{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:34px 30px;margin-bottom:30px;text-align:center}
+.hero-mini .eyebrow{color:var(--gold-l);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+.hero-mini h1{font-family:var(--serif);font-size:30px;color:#fff;margin:10px 0 8px}
+.hero-mini p{color:#E8D8C5;font-size:15px;line-height:1.8}
+
+.module{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--shadow);scroll-margin-top:20px}
+.module .mno{display:inline-block;font-family:var(--serif);font-size:13px;color:#fff;background:var(--primary);border-radius:20px;padding:3px 14px;letter-spacing:1px;margin-bottom:10px}
+.module h2{font-family:var(--serif);font-size:24px;color:var(--dark);margin-bottom:6px;line-height:1.35}
+.module .en{color:var(--primary-d);font-size:13px;letter-spacing:1px;margin-bottom:14px}
+.module h3{font-size:17px;color:var(--primary-d);margin:22px 0 8px;padding-left:12px;border-left:4px solid var(--gold)}
+.module p{margin:8px 0;color:var(--text)}
+.module ul{margin:8px 0 12px;padding-left:22px}
+.module li{margin:6px 0}
+.module .lead-q{font-family:var(--serif);font-style:italic;color:var(--dark-soft);background:#FBF3E6;border-left:4px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.hd-box{background:linear-gradient(135deg,#FBF1E2,#F5EAD8);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+.hd-box .tag{display:inline-block;font-size:12px;color:#fff;background:var(--awake);border-radius:6px;padding:2px 10px;margin-bottom:8px;letter-spacing:1px}
+.ex{background:#FBF3E6;border:1px dashed var(--primary);border-radius:10px;padding:12px 16px;margin:14px 0;color:var(--dark-soft);font-size:14.5px}
+.ex b{color:var(--primary-d)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.four .f{background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:8px;padding:14px}
+.four .f .step{font-family:var(--serif);font-size:22px;color:var(--primary-d)}
+.four .f h4{font-size:15px;color:var(--dark);margin:4px 0 6px}
+.four .f p{font-size:13px;color:var(--text-l);margin:0}
+/* 一行 2 个卡片（贫穷信念/致富法则 对照等） */
+.four.two{grid-template-columns:repeat(2,1fr)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:560px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-sidebar);color:#F5E6D3;font-weight:600}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}.sg{color:var(--awake);font-weight:600}
+.toc-note{font-size:13px;color:var(--text-l);background:#FAF4EA;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+.declare{background:linear-gradient(135deg,var(--primary),var(--gold));color:#2D2118;border-radius:10px;padding:14px 18px;margin:14px 0;font-family:var(--serif);font-size:17px;font-weight:700;text-align:center;box-shadow:var(--shadow)}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .content{padding:24px 18px 70px;max-width:100%}
+  .module{padding:20px 18px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+  .overlay.show{display:block}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:620px){.four.two{grid-template-columns:1fr}.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">HUMAN DESIGN × WEALTH</div>
+      <h1>人类图 · 财运之道</h1>
+      <div class="sub">完整课件 · 顺应设计，让财富流入</div>
+      <a href="hd-caiyun-zhidao-course.html" style="display:inline-block;margin-top:10px;font-size:13px;color:#F5E6D3;text-decoration:none;border:1px solid rgba(245,230,211,.4);border-radius:20px;padding:4px 14px">← 课程主页</a>
+    </div>
+    <nav class="level-nav">
+      <div class="level-section">
+        <div class="level-title" data-toggle>基础篇 · 用人类图看清财富地图 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m00">00 缘起：人类图遇见有钱人思维</a>
+          <a class="lesson" href="#m01">01 财富蓝图：你的金钱程序</a>
+          <a class="lesson" href="#m02">02 人类图是财富地图</a>
+          <a class="lesson" href="#m03">03 财运报告解读：财运闸门六类</a>
+          <a class="lesson" href="#m04">04 类型×策略 → 财富行动</a>
+          <a class="lesson" href="#m05">05 内在权威 → 财富决策</a>
+          <a class="lesson" href="#m06">06 财富宣言：改写程序</a>
+          <a class="lesson" href="#m07">07 核心决策：像有钱人思考</a>
+        </div>
+      </div>
+      <div class="level-section">
+        <div class="level-title" data-toggle>应用篇 · 17 财富档案活进设计 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m08">08 创造者·赢家·致力</a>
+          <a class="lesson" href="#m09">09 想大·专注机会</a>
+          <a class="lesson" href="#m10">10 欣赏·交往赢家</a>
+          <a class="lesson" href="#m11">11 宣传·大于问题</a>
+          <a class="lesson" href="#m12">12 接受者·按结果取酬</a>
+          <a class="lesson" href="#m13">13 两个都要·专注净值</a>
+          <a class="lesson" href="#m14">14 管理钱·让钱工作</a>
+          <a class="lesson" href="#m15">15 带恐惧行动·持续成长</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="t-logo">人类图 · 财运之道</div>
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')">☰ 目录</button>
+    </div>
+    <div class="overlay" id="overlay" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.remove('show')"></div>
+
+    <div class="content">
+      <div class="hero-mini">
+        <div class="eyebrow">HUMAN DESIGN × THE PATH OF WEALTH</div>
+        <h1>人类图 · 财运之道 · 完整课件</h1>
+        <p>把哈维·艾克的 17 个财富档案，落到你的类型·策略·权威·财运闸门上。<br>顺应设计 × 重塑蓝图 → 让财富自然流入。</p>
+      </div>
+
+      <!-- 基础篇 -->
+      <div class="module" id="m00">
+        <span class="mno">00</span>
+        <h2>缘起：当人类图遇见有钱人思维</h2>
+        <div class="en">The Meeting Point · Why Money Still Doesn't Flow</div>
+        <p class="lead-q">「读懂了图、看完了致富书，为什么钱还是没来？」——因为「知道设计」不等于「活出设计」，「读完思维」不等于「改了程序」。</p>
+        <p>人类图像一张精准的<b>财富地图</b>：它告诉你，你天生适合用什么方式创造价值、做什么决策、在哪里有天赋。而哈维·艾克（Harv Eker）的《有钱人和你想的不一样》，则是一套改写<b>金钱程序</b>的 17 个财富档案。</p>
+        <p>两者一合：地图告诉你「路在哪」，程序告诉你「别开错方向」。本课程的主轴只有一句——<b>顺应你的设计，重塑你的财富蓝图，让财富自然流入。</b></p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>你不必逼自己去学「别人的赚钱方式」。先看清自己的设计（类型/策略/权威/财运闸门），再用有钱人思维把脑中的匮乏程序一条条改写——财富会顺着你本来的样子流进来。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>拿出一张纸，左边写「我学到的人类图设计」，右边写「我脑中对金钱的一个旧信念」。这就是本课程要缝合的两半。</div>
+      </div>
+
+      <div class="module" id="m01">
+        <span class="mno">01</span>
+        <h2>财富蓝图：你脑中那张金钱程序地图</h2>
+        <div class="en">Wealth Blueprint · The Four Quadrants</div>
+        <p>哈维·艾克说：你的<b>财富蓝图</b>，就是你对金钱、财富、自己配不配得的内在设定。它由四个象限共同决定你的「财富终点」：</p>
+        <div class="four two">
+          <div class="f"><div class="step">物</div><h4>物质层面</h4><p>你实际做了什么、怎么行动、怎么管理钱。</p></div>
+          <div class="f"><div class="step">精</div><h4>精神层面</h4><p>你的念头、信念、自我对话（你对自己说「我值得吗」）。</p></div>
+          <div class="f"><div class="step">情</div><h4>情感层面</h4><p>你对金钱的真实感受：是恐惧、羞耻，还是自在？</p></div>
+          <div class="f"><div class="step">灵</div><h4>灵性层面</h4><p>你是否相信「我生来丰盛」「我值得被滋养」。</p></div>
+        </div>
+        <p>蓝图不是天生的，是童年被「安装」的。好消息是：<b>能装进去的，就能重装。</b></p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>人类图恰好对应这四个层面：物质=按类型策略行动；精神=用内在权威替代头脑噪音；情感=识别非我主题的匮乏感；灵性=去条件化后，认回「我本自丰盛」。图，是把蓝图从「被安装」翻成「我知晓」的钥匙。</p>
+        </div>
+        <div class="ex"><b>觉察作业 · </b>在四个象限各写一句你从小听来的金钱家训（如「钱是省出来的」）。下节课我们用设计去对照它。</div>
+      </div>
+
+      <div class="module" id="m02">
+        <span class="mno">02</span>
+        <h2>人类图是财富地图</h2>
+        <div class="en">Human Design as the Map of Wealth</div>
+        <p>人类图用几个核心元素，直接对应你的「天生赚钱方式」：</p>
+        <div class="four two">
+          <div class="f"><div class="step">型</div><h4>类型与策略</h4><p>你与世界正确互动的开关，也是「正确行动」的开关——做对的事，钱才流得动。</p></div>
+          <div class="f"><div class="step">权</div><h4>内在权威</h4><p>身体的决策系统（荐骨/情绪/脾/意志力），让身体替你做财务决定。</p></div>
+          <div class="f"><div class="step">中</div><h4>九大中心</h4><p>定义（稳定天赋）vs 开放（易被外界条件化的区域）。开放中心是「学别人赚钱」的陷阱区。</p></div>
+          <div class="f"><div class="step">门</div><h4>财运闸门</h4><p>你图中被定义的闸门，对应六类财富天赋——下节课细解。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>非我主题（偏离设计时的痛苦信号）在金钱上表现为「匮乏卡点」：生产者硬干→挫败、显示者不告知→愤怒受阻、投射者硬推→苦涩、反映者硬决→失望。活回设计，这些卡点自然消解，财富开始流动。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>翻出你的人类图报告，标出：类型、策略、内在权威。这就是你财富地图的三个坐标。</div>
+      </div>
+
+      <div class="module" id="m03">
+        <span class="mno">03</span>
+        <h2>财运报告解读：你的财运闸门六类</h2>
+        <div class="en">Wealth Gates · Six Streams of Money</div>
+        <p>在《财运之道·人类图财富分析》里，所有与财富相关的闸门被归为六类「财富河流」。你图中<b>被定义的闸门</b>落在哪一类，就说明你的财富天赋属于哪一条流：</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类别</th><th>财富天赋</th><th>代表闸门</th><th>关键词</th></tr></thead>
+            <tbody>
+              <tr><td><b>①财富·资源·能量</b></td><td>把资源、能量、力量化为价值</td><td>14 · 8 · 1 · 2 · 34 · 27 · 3</td><td>资源、贡献、创世、滋养、秩序</td></tr>
+              <tr><td><b>②领导·影响·号召</b></td><td>聚合人群、发出影响力</td><td>45 · 21 · 31 · 16 · 20</td><td>王者、聚集、热情、当下</td></tr>
+              <tr><td><b>③野心·跃升·成就</b></td><td>驱动自己向上、突破、成就</td><td>54 · 38 · 39 · 52 · 53</td><td>野心、战士、发展、专注</td></tr>
+              <tr><td><b>④专业·价值·持续</b></td><td>深耕专业、打磨可延续的价值</td><td>48 · 32 · 18 · 28 · 50</td><td>深井、延续、修正、冒险家、价值</td></tr>
+              <tr><td><b>⑤直觉·感知·人际</b></td><td>靠感知与人脉创造丰盛</td><td>57 · 59 · 6 · 37 · 40</td><td>直觉、打破障碍、亲密、家庭</td></tr>
+              <tr><td><b>⑥语言·表达·传播</b></td><td>用表达、传播、故事变现</td><td>12 · 33 · 35 · 56</td><td>谨慎、变化、经验、故事</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="toc-note">示例闸门：3=秩序（新开始）· 16=热情（技能）· 53=发展（开始）· 48=深井（智慧）· 18=修正（精进）· 28=冒险家（极限）· 12=谨慎（停顿）。你的报告会标出你具体拥有哪些。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>读报告的姿势：先找「我拥有哪几类闸门」——这是你天然的财富入口；再看「哪类是空的」——那不是缺陷，而是提醒你别用别人的河去填自己的田。顺着拥有的流，财富才自然。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>在你的报告上勾出财运闸门六类，圈出你最突出的 1–2 类，写下：「我的财富天赋主要在___」。</div>
+      </div>
+
+      <div class="module" id="m04">
+        <span class="mno">04</span>
+        <h2>类型×策略 → 财富行动方式</h2>
+        <div class="en">Type × Strategy · The Right Way to Act</div>
+        <p>财富的流动，先卡在「行动方式」对不对。用错策略，越努力越卡。</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>正确策略</th><th>财富行动方式</th><th>用错会怎样</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b></td><td>等待回应</td><td>只对荐骨「嗯哼」的事投入，从对的热情里创造价值</td><td class="ns">硬干不热爱的事→挫败、耗尽</td></tr>
+              <tr><td><b>显示生产者</b></td><td>等待回应（更多主动）</td><td>把多元热情聚焦成一阵阵冲刺，一次一件事</td><td class="ns">多头并进→钱来了留不住</td></tr>
+              <tr><td><b>显示者</b></td><td>告知 Inform</td><td>行动前先「告知」，打开通道再自由开创</td><td class="ns">不告知→被阻、机会流失</td></tr>
+              <tr><td><b>投射者</b></td><td>等待邀请</td><td>等被看见、被邀请再给，把精力留给识货的人</td><td class="ns">硬推自己→苦涩、累</td></tr>
+              <tr><td><b>反映者</b></td><td>等待 28 天</td><td>重大财务决定随月亮周期（约28天）再定</td><td class="ns">在对的环境硬决→失望</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="declare">顺策略而行，钱顺你而来；逆策略而动，钱逆你而去。</div>
+        <div class="ex"><b>觉察作业 · </b>回忆一次「很努力却没结果」的赚钱经历，对照上表：你是逆了哪种策略？</div>
+      </div>
+
+      <div class="module" id="m05">
+        <span class="mno">05</span>
+        <h2>内在权威 → 财富决策系统</h2>
+        <div class="en">Inner Authority · The Body Decides</div>
+        <p>有钱人思维强调「按结果拿酬劳、敢想大」——但这些都建立在<b>决策正确</b>上。人类图的内在权威，就是替你做财务决定的身体智慧：</p>
+        <div class="four two">
+          <div class="f"><div class="step">荐</div><h4>荐骨权威</h4><p>问身体「嗯哼/嗯嗯」。持续的事要过荐骨，别用头脑算。</p></div>
+          <div class="f"><div class="step">情</div><h4>情绪权威</h4><p>等情绪「落定」再决，不在高潮/低谷签字。</p></div>
+          <div class="f"><div class="step">脾</div><h4>脾/直觉权威</h4><p>当下那一瞬的直觉，快、准、不解释。</p></div>
+          <div class="f"><div class="step">意</div><h4>意志力/自我权威</h4><p>在「我决心要做」的坚定里找答案，而非讨好。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>头脑的「匮乏剧本」最爱在金钱上抢话：恐惧时它喊「快跑」，贪婪时它喊「全压」。把决定权交还给你的内在权威，就是用「身体的丰盛感」替代「头脑的恐惧感」。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>下次面临一笔开销/投资，先别算账，先问权威：荐骨说「嗯哼」吗？情绪平静吗？把答案记下来再行动。</div>
+      </div>
+
+      <div class="module" id="m06">
+        <span class="mno">06</span>
+        <h2>财富宣言：用手放胸口改写程序</h2>
+        <div class="en">The Declaration · Hand on Heart</div>
+        <p>哈维·艾克给了一个强有力的方法：<b>手放胸口，念出你的财富宣言</b>。这不是鸡汤，而是给潜意识「重装程序」。</p>
+        <p>流程：找一个安静时刻 → 手放左胸 → 用坚定的语气念出宣言（如「我创造我的人生」「我是个很棒的接受者」）→ 感受胸腔的震动 → 每天重复，直到它变成你的默认设定。</p>
+        <div class="declare">「我所宣之于口的，正在成为我的现实。这是有钱人的脑袋。」</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>把宣言和你的设计绑定：生产者念「我的满足，来自对的事」；显示者念「我行动前先告知，通道为我打开」；投射者念「我等被看见，再给价值」——让宣言说你的语言，程序才装得进。</p>
+        </div>
+        <div class="ex"><b>觉察作业 · </b>从本课后的 17 条宣言里，选 1 条最戳你的，抄在小卡片上，每天手放胸口念 3 遍，坚持 21 天。</div>
+      </div>
+
+      <div class="module" id="m07">
+        <span class="mno">07</span>
+        <h2>核心决策：像有钱人一样思考</h2>
+        <div class="en">The Four Steps to Rewire · 修改语言程式</div>
+        <p>当一句匮乏旧信念冒出来（「我不配拥有这么多」），别硬压，用这四步就地改写：</p>
+        <div class="four two">
+          <div class="f"><div class="step">1</div><h4>察觉</h4><p>看见它：「啊，我又在播贫穷程序了。」</p></div>
+          <div class="f"><div class="step">2</div><h4>理解</h4><p>明白它从哪来：家训、环境、被安装的程序。</p></div>
+          <div class="f"><div class="step">3</div><h4>划清界限</h4><p>「这不是我的真相，只是旧程序。」</p></div>
+          <div class="f"><div class="step">4</div><h4>提出宣言</h4><p>立刻念出对应的有钱人宣言，覆盖它。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>结合你的设计：察觉时，先认出这是「非我主题的匮乏感」还是「真实的权威信号」。若是前者，回到策略权威、念宣言；若是后者，那不是恐惧，是身体在说「别」。分得清，才改得对。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>写下你最常冒出的 3 句金钱旧信念，为每句配一句「有钱人宣言」做覆盖。这就是你的私人改写手册。</div>
+      </div>
+
+      <!-- 应用篇 -->
+      <div class="module" id="m08">
+        <span class="mno">08</span>
+        <h2>创造者·赢家·致力</h2>
+        <div class="en">Wealth Files 1·2·3 · Create · Win · Commit</div>
+        <p class="lead-q">「你是自己人生的受害者，还是创造者？」——这是财富的第一道分水岭。</p>
+        <div class="four two">
+          <div class="f"><div class="step">档1</div><h4>我创造我的人生</h4><p><b class="ns">穷人</b>：我是受害者，环境/他人决定我。<br><b class="sg">富人</b>：我创造我的人生。<br>受害者三特征：责怪·合理化·抱怨。</p></div>
+          <div class="f"><div class="step">档2</div><h4>玩金钱游戏为了赢</h4><p><b class="ns">穷人</b>：为了「不要输」。<br><b class="sg">富人</b>：为了赢。<br>设定明确财务目标，写下来贴墙上。</p></div>
+          <div class="f"><div class="step">档3</div><h4>致力让自己有钱</h4><p>三层：想要(wish)→选择(choose)→致力(commit)。<br>从「我想要」升级到「我致力」。</p></div>
+        </div>
+        <div class="declare">我创造我的人生。我玩金钱游戏是为了赢。我致力让自己有钱。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>创造者心态 = 顺着设计行动。生产者先过荐骨再「创造」，显示者先告知再「开创」，投射者等邀请再「贡献」——当你用对的方式成为创造者，你不是在「对抗命运」，而是在「活出蓝图的预设」。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①停止任何一句责怪/抱怨，改为「我为结果负100%责任」。②写下三个具体财务目标（净值/年收入/存款）贴墙。③做一个公开的财务承诺：「我致力今年___」。</div>
+      </div>
+
+      <div class="module" id="m09">
+        <span class="mno">09</span>
+        <h2>想大·专注机会</h2>
+        <div class="en">Wealth Files 4·5 · Think Big · Focus on Opportunity</div>
+        <div class="four two">
+          <div class="f"><div class="step">档4</div><h4>想得很大</h4><p>穷人想小，怕失望。<b class="sg">你的收入∝市场认定的价值。</b>敢把目标放大10倍。</p></div>
+          <div class="f"><div class="step">档5</div><h4>专注机会而非障碍</h4><p>穷人先看障碍，富人先看机会。<br>预备·开火·瞄准：先行动再调整，别瞄准到不动。</p></div>
+        </div>
+        <div class="declare">我立志发大财。我专注于机会。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>想大，要过你的内在权威——不是头脑的贪，是身体「嗯哼」的扩张感。专注机会，要顺策略：显示者用告知打开机会、投射者等人把机会送上门、生产者等回应再抓机会。机会是顺着设计撞上来的。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①把当前最大财务目标×10，写下来。②每天列出 3 个新机会。③练习一次「先开火再瞄准」的小行动（如先发一条价值朋友圈，再优化）。</div>
+      </div>
+
+      <div class="module" id="m10">
+        <span class="mno">10</span>
+        <h2>欣赏·交往赢家</h2>
+        <div class="en">Wealth Files 6·7 · Appreciate · Associate</div>
+        <div class="four two">
+          <div class="f"><div class="step">档6</div><h4>欣赏有钱人</h4><p>你批判的，你无法拥有。祝福你想要的事物：看到有钱人/奢侈品，说「祝福他们，我也值得」。</p></div>
+          <div class="f"><div class="step">档7</div><h4>与成功者交往</h4><p>能量会传染，你的收入≈最近5人的平均。远离抱怨圈，加入向上圈。</p></div>
+        </div>
+        <div class="declare">我欣赏有钱人。我常与积极、成功的人交往。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>这正对应「开放中心的条件化」：你的开放情绪/开放自我，最容易吸收身边人的金钱频率。用设计保护自己——投射者挑剔「谁值得我交往」，反映者先问「这环境健康吗」，别让匮乏圈子重写你的程序。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①下次嫉妒/批判有钱人，立刻转成一句祝福。②盘点社交圈，减掉1个抱怨型关系，加1个向上圈子/人物。</div>
+      </div>
+
+      <div class="module" id="m11">
+        <span class="mno">11</span>
+        <h2>宣传·大于问题</h2>
+        <div class="en">Wealth Files 8·9 · Promote · Be Bigger</div>
+        <div class="four two">
+          <div class="f"><div class="step">档8</div><h4>乐意宣传自己</h4><p>领导者赚得更多。富人不怕被看见，敢公开分享自己的价值。</p></div>
+          <div class="f"><div class="step">档9</div><h4>永远大过于问题</h4><p>容器隐喻：把容器做大，问题就变小。你永远大过于你的问题。</p></div>
+        </div>
+        <div class="declare">我乐意宣传自己。我永远大过于我的问题。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>宣传，要顺类型：显示者天生该「告知」世界，投射者靠「被邀请后精准发声」，生产者用成果本身说话。别用错方式硬宣传——显示者闷声做、投射者抢麦，都会卡住。把容器（你的设计）做大，问题自然小。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①本周一次「自我宣传」：公开分享一个成果/价值。②遇到困难，自问「容器放大10倍，这事算什么」。</div>
+      </div>
+
+      <div class="module" id="m12">
+        <span class="mno">12</span>
+        <h2>接受者·按结果取酬</h2>
+        <div class="en">Wealth Files 10·11 · Receiver · Paid by Results</div>
+        <div class="four two">
+          <div class="f"><div class="step">档10</div><h4>很棒的接受者</h4><p>金钱磁铁：接受力与给予力要平衡。接受时只说「谢谢」，别贬低自己。</p></div>
+          <div class="f"><div class="step">档11</div><h4>按结果拿酬劳</h4><p>穷人按时间卖钱（有天花板），富人按结果拿酬劳，永不设收入上限。</p></div>
+        </div>
+        <div class="declare">我是个很棒的接受者。我按结果拿酬劳，永不设收入上限。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>「接受」是开放的闸门——很多人的开放中心（尤其开放 ego/开放情绪）让他们在收钱时缩回去。练习：收到钱/赞美，张开双手接，只说谢谢。按结果取酬，则呼应你的财运闸门天赋——用对的那类价值去交换。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①下次被夸/收钱，不说「没什么」，只说「谢谢，我值得」。②为现有收入找一项「按结果计酬」的机会（绩效/分成/咨询）。</div>
+      </div>
+
+      <div class="module" id="m13">
+        <span class="mno">13</span>
+        <h2>两个都要·专注净值</h2>
+        <div class="en">Wealth Files 12·13 · Both · Net Worth</div>
+        <div class="four two">
+          <div class="f"><div class="step">档12</div><h4>如何两个都要</h4><p>丰裕思维：不是「要么A要么B」，而是「我两个都要」。</p></div>
+          <div class="f"><div class="step">档13</div><h4>专注净值</h4><p>四轮：增加收入 / 增加存款比例 / 增加投资报酬 / 简化生活。</p></div>
+        </div>
+        <div class="declare">我两者都要。我专注净值。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>「两个都要」破解的是稀缺心态——它常来自非我主题的恐惧。用权威确认你真想要什么，再用丰裕思维扩张可能性。专注净值而非流水，则把注意力从「我赚多少」转到「我留下/生出了多少」，正好对齐「让钱工作」。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①把一句「要么…要么」改写为「两个都要」。②算清自己的净值，写一份「四轮」计划（增收/增储/增投/简化）。</div>
+      </div>
+
+      <div class="module" id="m14">
+        <span class="mno">14</span>
+        <h2>管理钱·让钱工作</h2>
+        <div class="en">Wealth Files 14·15 · Manage · Leverage</div>
+        <p><b>档案14 妥善管理钱</b>——收入分配建议（发薪先拨，再花）：</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>账户</th><th>比例</th><th>用途</th></tr></thead>
+            <tbody>
+              <tr><td><b>财务自由账户 FFA</b></td><td>10%</td><td>长期投资，永不花，只用来生钱</td></tr>
+              <tr><td>财务自由罐</td><td>—</td><td>短期机会/学习小投资</td></tr>
+              <tr><td>玩乐账户</td><td>10%</td><td>必须花掉，奖励自己（很重要！）</td></tr>
+              <tr><td>长期储蓄</td><td>10%</td><td>安全垫</td></tr>
+              <tr><td>教育</td><td>10%</td><td>持续学习成长</td></tr>
+              <tr><td>需求</td><td>50%</td><td>生活必需</td></tr>
+              <tr><td>付出/慈善</td><td>10%</td><td>回流，丰盛的循环</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><b>档案15 让钱替你工作</b>——从「用时间换钱」走向「用系统/资产换钱」，建立被动收入。被动收入 > 主动收入，是财务自由的拐点。</p>
+        <div class="declare">我妥善管理我的钱。我让钱替我工作。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>「让钱工作」要顺你的财运闸门：有「专业·价值·持续」类（48/32/18）的人适合长期深耕复利；有「领导·影响·号召」类（45/31）的人适合聚合资源杠杆；有「野心·跃升·成就」类（54/53）的人适合大胆跃迁。用你的流去「让钱工作」，而非模仿别人的赛道。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①开设 FFA 账户，发薪先拨10%进去，写下「永不花」。②用 FFA 做第一笔投资/建立一项被动收入。③别漏了玩乐账户的10%——开心，是丰盛的燃料。</div>
+      </div>
+
+      <div class="module" id="m15">
+        <span class="mno">15</span>
+        <h2>带恐惧行动·持续成长</h2>
+        <div class="en">Wealth Files 16·17 · Act Despite Fear · Keep Growing</div>
+        <div class="four two">
+          <div class="f"><div class="step">档16</div><h4>带着恐惧行动</h4><p>舒服区=财富区。你的财富上限，等于你愿带恐惧行动的边界。</p></div>
+          <div class="f"><div class="step">档17</div><h4>持续学习成长</h4><p>成为→去做→拥有：先成为有钱人（身份/思维），再去做，最后拥有。</p></div>
+        </div>
+        <div class="declare">我带着恐惧行动。我持续学习成长。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 财运</span>
+          <p>「带恐惧行动」不是鲁莽，是用权威确认方向后，容许恐惧同在——显示者告知后行动、投射者等邀请后出手，恐惧仍在，但设计替你托底。「成为→去做→拥有」也呼应去条件化：先活成设计里的丰盛者，财富自然跟来。</p>
+        </div>
+        <div class="ex"><b>像有钱人一样行动 · </b>①列出「想做但害怕」的3件事，本周做1件。②每月读1本财富/商业书，找一个值得跟随的导师。③把身份从「想有钱的人」改成「我就是丰盛的设计者」。</div>
+      </div>
+
+      <div class="toc-note" style="text-align:center;font-size:14px;padding:18px">
+        ✦ 十六模块到此。记住主轴：<b>顺应你的设计（人类图）× 重塑你的蓝图（17 财富档案）→ 让财富自然流入。</b> ✦
+      </div>
+
+      <div class="resnav">
+        <a class="home" href="hd-caiyun-zhidao-course.html">📘 课程主页<span class="tag">返回</span><small>课程全貌、理念与报名入口</small></a>
+        <a href="hd-caiyun-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 财富蓝图 · 可打印</small></a>
+        <a href="hd-caiyun-zhidao-cheatsheet.html">🃏 财运速查卡<small>类型锚点 · 财运闸门六类 · 17宣言</small></a>
+        <a href="hd-caiyun-zhidao-course.html#join">✉️ 报名实修<small>立即加入 21 天 / 100 天</small></a>
+      </div>
+
+      <div class="toc-note" style="font-size:12.5px;color:var(--text-l)">
+        知识来源声明：人类图财运框架整合自《财运之道·人类图财富分析-Kan Man Tang》（邓勤敏）；财富思维整合自哈维·艾克（Harv Eker）著《有钱人和你想的不一样》。本课件仅供学习参考，<b>不替代</b>专业财务规划、投资或法律税务建议。涉及具体投资，请咨询持牌专业人士。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 折叠分级
+  document.querySelectorAll('.level-title').forEach(t=>{
+    t.addEventListener('click',()=>t.classList.toggle('collapsed'));
+  });
+  // 滚动高亮 + 点击跳转关闭抽屉
+  const lessons=[...document.querySelectorAll('.lesson')];
+  lessons.forEach(l=>l.addEventListener('click',()=>{
+    if(window.innerWidth<=900){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+  }));
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;lessons.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+id));}});
+  },{rootMargin:'-30% 0px -60% 0px'});
+  document.querySelectorAll('.module').forEach(m=>obs.observe(m));
+</script>
+</body>
+</html>

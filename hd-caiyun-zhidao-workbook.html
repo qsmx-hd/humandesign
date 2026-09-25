@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 财运之道 ｜ 学员练习手册</title>
+<!--
+  《人类图 · 财运之道》｜学员练习手册
+  VERSION: V1  ·  2026-09-24
+  双螺旋骨架：人类图财富地图（类型·策略·权威·财运闸门六类）× 哈维·艾克《有钱人和你想的不一样》17 财富档案
+  整合主轴：顺应你的设计 × 重塑财富蓝图 → 让财富自然流入
+  结构对齐《人类图·觉察之道》《人类图·开心之道》练习手册；含设计靶心 / 财富蓝图 / 每日三层 / 宣言卡 / 17 档案觉察卡 / 21 天打卡（JS）
+  知识来源：人类图财运框架整合自《财运之道·人类图财富分析-Kan Man Tang》；财富思维整合自哈维·艾克著《有钱人和你想的不一样》。仅供学习参考，不替代专业财务/投资建议。
+-->
+<style>
+:root{--bg:#F5F0E8;--gold:#C4956A;--brown:#8B6644;--dark:#2D2118;--border:#E8DCC8;--med:#5A4634;--awake:#5B7B6F;--notself:#9C5B4D;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:14.5px;line-height:1.8}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 60px}
+header{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:14px;padding:28px 26px;margin-bottom:22px;text-align:center}
+header h1{margin:0 0 8px;font-size:25px;font-family:"Noto Serif SC",serif}
+header .sub{font-size:15px;opacity:.96}
+header .meta{margin-top:12px;font-size:13px;opacity:.92}
+h2{color:var(--brown);font-size:20px;border-left:6px solid var(--gold);padding:8px 12px;margin:30px 0 12px;background:#FAF6EE;border-radius:6px;font-family:"Noto Serif SC",serif}
+h3{color:var(--dark);font-size:16px;margin:20px 0 8px}
+p{margin:8px 0}
+ul{margin:6px 0 14px;padding-left:22px}
+li{margin:5px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--brown);color:#fff}
+tr:nth-child(even) td{background:#FAF6EE}
+.ex{background:#FBF3E6;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:10px 0;color:var(--med)}
+.ex b{color:var(--brown)}
+.box{background:#FAF6EE;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+.box .t{font-weight:700;color:var(--brown);margin-bottom:6px}
+.fill{border-bottom:1px solid var(--border);display:inline-block;min-width:140px;padding:0 4px}
+.linelog{border-bottom:1px dotted var(--border);min-height:34px;margin:8px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.daycard{border:1px solid var(--border);border-radius:10px;padding:14px;background:#FFFBF5;margin:10px 0}
+.daycard .dn{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:15px}
+footer{text-align:center;color:var(--med);font-size:12px;margin-top:40px;border-top:1px solid var(--border);padding-top:16px}
+@media print{body{font-size:12.5px}header{background:var(--brown)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}table th{-webkit-print-color-adjust:exact;print-color-adjust:exact}.decl{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.step-tbl td:first-child,.step-tbl th:first-child{width:96px;min-width:96px;white-space:nowrap}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:600px){.resnav{grid-template-columns:1fr}}
+.layer{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.layer .L{border-radius:10px;padding:12px 14px;font-size:13px;background:#FFFBF5;border:1px solid var(--border)}
+.layer .L .h{font-family:"Noto Serif SC",serif;font-weight:700;color:var(--brown);font-size:15px;margin-bottom:4px}
+.layer .L .s{color:var(--gold-d);font-size:11.5px}
+@media(max-width:600px){.layer{grid-template-columns:1fr}}
+/* 宣言卡 */
+.decl{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:12px;padding:18px 20px;margin:10px 0;font-family:"Noto Serif SC",serif;font-size:16px;font-weight:700}
+/* 21天日历 */
+.cal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.cal .cell{border:1px solid var(--border);border-radius:8px;padding:8px;min-height:74px;background:#FFFBF5;font-size:12px}
+.cal .cell .d{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:13px}
+.cal .cell .chk{margin-top:6px;color:var(--med)}
+@media(max-width:600px){.cal{grid-template-columns:1fr 1fr}}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.sig label{display:flex;align-items:center;gap:6px;background:#FAF6EE;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;justify-content:flex-start}
+@media(max-width:600px){.sig{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>人类图 · 财运之道</h1>
+  <div class="sub">学员练习手册 · 顺应设计，让财富自然流入 · 配套 21 天实修</div>
+  <div class="meta">整合：人类图财富地图 × 哈维·艾克 17 财富档案</div>
+</header>
+
+<div class="ex"><b>提醒 · </b>人类图与财富思维都是自我探索工具，<b>不替代</b>专业财务规划 / 投资 / 法律税务建议。练习中若触及深层金钱创伤，请寻求专业帮助。</div>
+
+<h2>一、我的设计靶心</h2>
+<p>翻开你的人类图报告，先把「靶心」圈出来。<b>顺着设计行动，就是财富流入的起点</b>。</p>
+<div class="box">
+  <div class="t">填一填（对着你的图抄写）</div>
+  <p>类型 Type：<span class="fill">&nbsp;</span></p>
+  <p>策略 Strategy：<span class="fill">&nbsp;</span></p>
+  <p>内在权威 Authority：<span class="fill">&nbsp;</span></p>
+  <p>非我主题 Not-Self（匮乏卡点）：<span class="fill">&nbsp;</span></p>
+  <p>签名 Signature（丰盛信号）：<span class="fill">&nbsp;</span>（满足 / 平静 / 成功 / 喜悦+惊喜）</p>
+  <p>轮回交叉 Incarnation Cross：<span class="fill">&nbsp;</span></p>
+</div>
+<div class="box">
+  <div class="t">我的财运闸门六类（勾出报告中被定义的）</div>
+  <div class="sig">
+    <label><input type="checkbox"> ①财富·资源·能量</label>
+    <label><input type="checkbox"> ②领导·影响·号召</label>
+    <label><input type="checkbox"> ③野心·跃升·成就</label>
+    <label><input type="checkbox"> ④专业·价值·持续</label>
+    <label><input type="checkbox"> ⑤直觉·感知·人际</label>
+    <label><input type="checkbox"> ⑥语言·表达·传播</label>
+  </div>
+  <p style="margin-top:8px">我最突出的财富天赋：<span class="fill">&nbsp;</span></p>
+</div>
+
+<h2>二、我的财富蓝图（四象自查）</h2>
+<p>哈维·艾克说，财富蓝图由四个象限决定。写下你此刻在每个象限的真实设定——<b>看清楚，才能重装</b>。</p>
+<table>
+  <tr><th>象限</th><th>我从小听来/现在相信的金钱家训</th><th>它让我卡在…</th></tr>
+  <tr><td><b>物质</b></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>精神</b></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>情感</b></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>灵性</b></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<div class="ex"><b>改写练习 · </b>从上面挑一句最限制你的旧家训，用本课「修改语言程式四步」（察觉→理解→划清界限→提出宣言）写一句覆盖宣言：<span class="linelog">&nbsp;</span></div>
+
+<h2>三、每日三层练习结构</h2>
+<p>财富是「做出来」的。建议每天三层都走一遍——顺设计、改程序、落行动。</p>
+<table>
+  <tr><th>时段</th><th>练习</th><th>三层落点</th></tr>
+  <tr><td>晨间 5 分钟</td><td>设定财富意图 · 念 1 句宣言（手放胸口）</td><td><b>精神</b>：用宣言重装程序，让真实权威「开机」。</td></tr>
+  <tr><td>日间随时</td><td>专注机会 · 顺策略行动</td><td><b>物质</b>：生产者等回应、显示者先告知、投射者等邀请，做对的事。</td></tr>
+  <tr><td>情绪升起时</td><td>识别匮乏卡点</td><td><b>情感</b>：非我主题亮起→回到策略权威，用宣言覆盖恐惧。</td></tr>
+  <tr><td>晚间 3 分钟</td><td>财富日记</td><td><b>灵性</b>：记一件今天「财富流入/丰盛」的小事与一句感谢。</td></tr>
+</table>
+
+<h2>四、财富宣言卡（手放胸口）</h2>
+<p>流程：安静 → 手放左胸 → 坚定念出 → 感受胸腔震动 → 每天重复。从下面 17 条里先选 1–3 条属于你的。</p>
+<div class="decl">① 我创造我的人生。　　② 我玩金钱游戏是为了赢。　　③ 我致力让自己有钱。</div>
+<div class="decl">④ 我立志发大财。　　⑤ 我专注于机会。　　⑥ 我欣赏有钱人。</div>
+<div class="decl">⑦ 我常与积极、成功的人交往。　　⑧ 我乐意宣传自己。</div>
+<div class="decl">⑨ 我永远大过于我的问题。　　⑩ 我是个很棒的接受者。</div>
+<div class="decl">⑪ 我按结果拿酬劳，永不设收入上限。　　⑫ 我两者都要。</div>
+<div class="decl">⑬ 我专注净值。　　⑭ 我妥善管理我的钱。　　⑮ 我让钱替我工作。</div>
+<div class="decl">⑯ 我带着恐惧行动。　　⑰ 我持续学习成长。</div>
+<div class="box">
+  <div class="t">我的专属宣言（抄写 + 每日念）</div>
+  <p>1. <span class="linelog">&nbsp;</span></p>
+  <p>2. <span class="linelog">&nbsp;</span></p>
+  <p>3. <span class="linelog">&nbsp;</span></p>
+</div>
+
+<h2>五、17 财富档案 · 觉察卡</h2>
+<p>每个档案都是一次「穷人 vs 富人」的信念对照。遇到金钱卡点时，翻到对应编号，做一次改写。</p>
+<div class="layer">
+  <div class="L"><div class="h">档1 创造者</div><div class="s">我创造我的人生</div>受害者三特征：责怪·合理化·抱怨。为结果负100%责任。</div>
+  <div class="L"><div class="h">档2 赢家</div><div class="s">玩金钱游戏为了赢</div>写下明确财务目标，贴墙上。</div>
+  <div class="L"><div class="h">档3 致力</div><div class="s">致力让自己有钱</div>想要→选择→致力，做公开承诺。</div>
+  <div class="L"><div class="h">档4 想大</div><div class="s">我立志发大财</div>收入∝市场价值，目标×10。</div>
+  <div class="L"><div class="h">档5 机会</div><div class="s">我专注于机会</div>预备·开火·瞄准，先动再调。</div>
+  <div class="L"><div class="h">档6 欣赏</div><div class="s">我欣赏有钱人</div>你批判的无法拥有，祝福它。</div>
+  <div class="L"><div class="h">档7 圈子</div><div class="s">与成功者交往</div>能量会传染，远离抱怨圈。</div>
+  <div class="L"><div class="h">档8 宣传</div><div class="s">我乐意宣传自己</div>领导者赚得更多，敢被看见。</div>
+  <div class="L"><div class="h">档9 容器</div><div class="s">大过于问题</div>容器放大，问题就变小。</div>
+  <div class="L"><div class="h">档10 接受</div><div class="s">很棒的接受者</div>收钱/赞美只说谢谢。</div>
+  <div class="L"><div class="h">档11 结果</div><div class="s">按结果取酬</div>永不设收入上限。</div>
+  <div class="L"><div class="h">档12 丰裕</div><div class="s">我两者都要</div>丰裕思维，非二选一。</div>
+  <div class="L"><div class="h">档13 净值</div><div class="s">我专注净值</div>四轮：增收/增储/增投/简化。</div>
+  <div class="L"><div class="h">档14 管理</div><div class="s">妥善管理钱</div>FFA 10% 永不花，先拨再花。</div>
+  <div class="L"><div class="h">档15 杠杆</div><div class="s">让钱替我工作</div>建立被动收入。</div>
+  <div class="L"><div class="h">档16 恐惧</div><div class="s">带恐惧行动</div>舒服区=财富区。</div>
+  <div class="L"><div class="h">档17 成长</div><div class="s">持续学习</div>成为→去做→拥有。</div>
+</div>
+
+<h2>六、21 天财富实修打卡</h2>
+<p>每天完成：①念专属宣言 ②一次顺设计的财富行动 ③一则丰盛日记。打 ✓ 即可。</p>
+<div class="cal" id="cal"></div>
+<div class="ex"><b>复盘 · </b>21 天后回头看：哪一天最顺？那天你用对了哪种策略/权威？把它变成你的「财富默认模式」。</div>
+
+<h2>七、财运口诀卡（随身）</h2>
+<div class="box">
+  <div class="t">每天念一遍</div>
+  <p>· 图是地图，思维是程序；<b>顺应设计 × 改写程序，财富自然来</b>。</p>
+  <p>· 卡点就「察觉 → 划清界限 → 回策略权威」；流动就停在设计里，让钱多待会儿。</p>
+  <p>· 我创造我的人生；我是个很棒的接受者；我带着恐惧行动，持续成长。</p>
+</div>
+
+<div class="resnav">
+  <a class="home" href="hd-caiyun-zhidao-course.html">📘 课程主页<span class="tag">返回</span><small>课程全貌、理念与报名入口</small></a>
+  <a href="hd-caiyun-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 人类图×17财富档案</small></a>
+  <a href="hd-caiyun-zhidao-cheatsheet.html">🃏 财运速查卡<small>类型锚点 · 财运闸门六类 · 17宣言</small></a>
+  <a href="hd-caiyun-zhidao-course.html#join">✉️ 报名实修<small>立即加入 21 天 / 100 天</small></a>
+</div>
+
+<footer>
+  <div>《人类图 · 财运之道》学员练习手册</div>
+  <div>仅供学习参考，不替代专业财务建议</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+</div>
+
+<script>
+  // 生成 21 天打卡日历（3 列 × 7 行）
+  const cal=document.getElementById('cal');
+  for(let i=1;i<=21;i++){
+    const c=document.createElement('div');
+    c.className='cell';
+    c.innerHTML='<div class="d">第 '+i+' 天</div><div class="chk">☐ 宣言　☐ 行动　☐ 日记</div>';
+    cal.appendChild(c);
+  }
+</script>
+</body>
+</html>
