@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 效能之道 ｜ 学员练习手册</title>
+<!--
+  《人类图 · 效能之道》｜学员练习手册
+  VERSION: V1  ·  2026-09-27
+  changelog:
+    V1(2026-09-27) 初版。双螺旋骨架：人类图效能地图（类型·策略·权威·非我）× 柯维《高效能人士的七个习惯》。
+    整合主轴：活出你的设计 × 修炼七个习惯 → 由内而外，效能自然涌现。
+    结构对齐《人类图·觉察之道》《人类图·开心之道》《人类图·财运之道》练习手册。
+    重点融合原书「付诸行动」练习：七习惯自评分、影响圈挑战表、使命宣言六步骤、时间矩阵自评、
+    情感账户日志、双赢平衡评估、倾听自查、第三选择五步、四层面更新计划、21 天打卡（JS）。
+    类型占比：生产者37% / 显示生产者33% / 投射者21% / 显示者8% / 反映者1%。
+  知识来源：人类图框架来自本站人类图知识体系；七个习惯知识模型与练习整合自史蒂芬·柯维著《高效能人士的七个习惯（25周年纪念版）》。仅供学习参考。
+-->
+<style>
+:root{--bg:#F5F0E8;--gold:#C4956A;--brown:#8B6644;--dark:#2D2118;--border:#E8DCC8;--med:#5A4634;--awake:#5B7B6F;--notself:#9C5B4D;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:14.5px;line-height:1.8}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 60px}
+header{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:14px;padding:28px 26px;margin-bottom:22px;text-align:center}
+header h1{margin:0 0 8px;font-size:25px;font-family:"Noto Serif SC",serif}
+header .sub{font-size:15px;opacity:.96}
+header .meta{margin-top:12px;font-size:13px;opacity:.92}
+h2{color:var(--brown);font-size:20px;border-left:6px solid var(--gold);padding:8px 12px;margin:30px 0 12px;background:#FAF6EE;border-radius:6px;font-family:"Noto Serif SC",serif}
+h3{color:var(--dark);font-size:16px;margin:20px 0 8px}
+p{margin:8px 0}
+ul{margin:6px 0 14px;padding-left:22px}
+li{margin:5px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--brown);color:#fff}
+tr:nth-child(even) td{background:#FAF6EE}
+.ex{background:#FBF3E6;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:10px 0;color:var(--med)}
+.ex b{color:var(--brown)}
+.box{background:#FAF6EE;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+.box .t{font-weight:700;color:var(--brown);margin-bottom:6px}
+.fill{border-bottom:1px solid var(--border);display:inline-block;min-width:140px;padding:0 4px}
+.linelog{border-bottom:1px dotted var(--border);min-height:34px;margin:8px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.daycard{border:1px solid var(--border);border-radius:10px;padding:14px;background:#FFFBF5;margin:10px 0}
+.daycard .dn{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:15px}
+footer{text-align:center;color:var(--med);font-size:12px;margin-top:40px;border-top:1px solid var(--border);padding-top:16px}
+@media print{body{font-size:12.5px}header{background:var(--brown)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}table th{-webkit-print-color-adjust:exact;print-color-adjust:exact}.decl{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.step-tbl td:first-child,.step-tbl th:first-child{width:96px;min-width:96px;white-space:nowrap}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:600px){.resnav{grid-template-columns:1fr}}
+.layer{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.layer .L{border-radius:10px;padding:12px 14px;font-size:13px;background:#FFFBF5;border:1px solid var(--border)}
+.layer .L .h{font-family:"Noto Serif SC",serif;font-weight:700;color:var(--brown);font-size:15px;margin-bottom:4px}
+.layer .L .s{color:var(--med);font-size:11.5px}
+@media(max-width:600px){.layer{grid-template-columns:1fr}}
+/* 宣言卡 */
+.decl{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:12px;padding:18px 20px;margin:10px 0;font-family:"Noto Serif SC",serif;font-size:16px;font-weight:700;text-align:center}
+/* 21天日历 */
+.cal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.cal .cell{border:1px solid var(--border);border-radius:8px;padding:8px;min-height:74px;background:#FFFBF5;font-size:12px}
+.cal .cell .d{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:13px}
+.cal .cell .chk{margin-top:6px;color:var(--med)}
+@media(max-width:600px){.cal{grid-template-columns:1fr 1fr}}
+.sig{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.sig label{display:flex;align-items:center;gap:6px;background:#FAF6EE;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;justify-content:flex-start}
+@media(max-width:600px){.sig{grid-template-columns:1fr}}
+.score{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:4px}
+.score span{text-align:center;border:1px solid var(--border);border-radius:6px;padding:4px 0;font-size:12px;cursor:pointer;background:#FFFBF5}
+.score span:hover{border-color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>人类图 · 效能之道</h1>
+  <div class="sub">学员练习手册 · 由内而外，效能自然涌现 · 配套 21 天实修</div>
+  <div class="meta">整合：人类图效能地图 × 柯维《高效能人士的七个习惯》付诸行动练习</div>
+</header>
+
+<div class="ex"><b>提醒 · </b>人类图与七个习惯都是自我探索与成长工具。练习中若触及深层情绪创伤，请寻求专业帮助。</div>
+
+<h2>一、我的设计靶心</h2>
+<p>翻开你的人类图报告，先把「靶心」圈出来。<b>顺着设计行动，是高效能的起点</b>。</p>
+<div class="box">
+  <div class="t">填一填（对着你的图抄写）</div>
+  <p>类型 Type（生产者 37% / 显示生产者 33% / 投射者 21% / 显示者 8% / 反映者 1%）：<span class="fill">&nbsp;</span></p>
+  <p>策略 Strategy：<span class="fill">&nbsp;</span></p>
+  <p>内在权威 Authority：<span class="fill">&nbsp;</span></p>
+  <p>非我主题 Not-Self（效能红灯）：<span class="fill">&nbsp;</span>（挫败 / 愤怒 / 苦涩 / 失望）</p>
+  <p>签名 Signature（顺流信号）：<span class="fill">&nbsp;</span>（满足 / 平静 / 成功 / 喜悦+惊喜）</p>
+  <p>轮回交叉 Incarnation Cross：<span class="fill">&nbsp;</span></p>
+</div>
+
+<h2>二、成熟模式图 · 我在哪里（原书练习）</h2>
+<p>成长三阶段：<b>依赖期（你照顾我）→ 独立期（我可以）→ 互赖期（我们可以）</b>。</p>
+<div class="box">
+  <div class="t">定位与反思</div>
+  <p>我现在主要处于：<span class="fill">&nbsp;</span>（依赖期 / 独立期 / 互赖期）</p>
+  <p>我的什么行为和态度，让我处于目前这种状况？</p>
+  <div class="linelog">&nbsp;</div>
+  <div class="linelog">&nbsp;</div>
+  <p>我最需要在哪方面做出努力：<span class="fill">&nbsp;</span></p>
+</div>
+
+<h2>三、七个习惯自评分（原书练习）</h2>
+<p>对每个习惯打分（1 极差～6 杰出），算出总分。<b>读完本课程后请再做一次，对照进步</b>。</p>
+<table>
+  <tr><th>习惯</th><th>关键问句（圈出与你相符的分数）</th><th>得分</th></tr>
+  <tr><td><b>① 积极主动</b></td><td>我是否专注于影响圈，语言里少有「但愿/我办不到」？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>② 以终为始</b></td><td>我是否有清晰的使命宣言，并以此校准日常选择？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>③ 要事第一</b></td><td>我是否每周安排第二象限事务，不被紧急小事牵着走？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>④ 双赢思维</b></td><td>我是否寻求双方受益的方案，而非非赢即输？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>⑤ 知彼解己</b></td><td>我是否先倾听理解，再表达自己？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>⑥ 统合综效</b></td><td>我是否珍视差异，与人共创超越各自原案的方案？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td><b>⑦ 不断更新</b></td><td>我是否定期在身体/精神/智力/社会情感四层面更新自己？</td><td>1 · 2 · 3 · 4 · 5 · 6</td></tr>
+  <tr><td colspan="2" style="text-align:right"><b>总分</b></td><td><span class="fill">&nbsp;</span> / 42</td></tr>
+</table>
+<div class="ex"><b>习惯拆解 · </b>列出一个好习惯与一个坏习惯，分别写出其<b>知识</b>（做什么/为何做）、<b>技巧</b>（如何做）、<b>意愿</b>（想做）。坏习惯要打破，写下三件着手做的事。</div>
+
+<h2>四、影响圈 vs 关注圈 · 挑战表（原书练习）</h2>
+<table>
+  <tr><th>本周的挑战/问题</th><th>归属（影响圈 / 关注圈）</th><th>我的瞬间回应</th><th>下周我将如何改变回应</th></tr>
+  <tr><td><span class="linelog">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><span class="linelog">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<div class="ex"><b>语言转换 · </b>消极语言「但愿 / 我办不到 / 我不得不 / 要是」→ 积极语言「我能 / 我要 / 我宁愿」。写下最近一句消极回应及其积极改写：<span class="linelog">&nbsp;</span></div>
+<div class="ex"><b>30 天试验（原书）· </b>试行「积极主动」原则 30 天，记录影响圈有何变化。另写下你的三个愿望（想开发的新才能 / 想去的旅行 / 想改变的一件事）及实现计划。</div>
+
+<h2>五、我的使命宣言工作区（原书六步骤）</h2>
+<div class="box">
+  <div class="t">愿景检查六问（先答再写）</div>
+  <p>①我现在的生活状况如何？它让我快乐吗？有成就感吗？</p>
+  <div class="linelog">&nbsp;</div>
+  <p>②是什么一直吸引着我？③我少年时想做的是什么？④目前最让我感兴趣的是什么？</p>
+  <div class="linelog">&nbsp;</div>
+  <p>⑤最让我灵魂满足的是什么？⑥我做什么事情最擅长？</p>
+  <div class="linelog">&nbsp;</div>
+</div>
+<table class="step-tbl">
+  <tr><th>步骤</th><th>动作</th><th>我的笔记</th></tr>
+  <tr><td><b>1 畅想</b></td><td>写下影响你的人 / 20 年后想成为的人 / 对我最重要的事</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>2 放松</b></td><td>放下笔，走开几分钟</td><td>—</td></tr>
+  <tr><td><b>3 整理</b></td><td>圈出想列入宣言的关键词句</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>4 初稿</b></td><td>随身带一周，每天增删</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>5 定稿</b></td><td>周末定稿，放在随时可翻阅之处</td><td>见下方宣言卡</td></tr>
+  <tr><td><b>6 检查</b></td><td>每月自问：它还代表最佳的自我吗？</td><td><span class="fill">下次检查：&nbsp;</span></td></tr>
+</table>
+<div class="box">
+  <div class="t">我的角色（≤7 个，每个写一句「理想业绩」）</div>
+  <p>1. <span class="fill">&nbsp;</span>　2. <span class="fill">&nbsp;</span>　3. <span class="fill">&nbsp;</span>　4. <span class="fill">&nbsp;</span></p>
+  <p>5. <span class="fill">&nbsp;</span>　6. <span class="fill">&nbsp;</span>　7. <span class="fill">&nbsp;</span></p>
+</div>
+<div class="decl">我的使命宣言：<span class="fill" style="min-width:320px;border-color:rgba(255,255,255,.6)">&nbsp;</span></div>
+<div class="ex"><b>人类图对照 · </b>把使命宣言与你的<b>轮回交叉</b>放在一起读：方向一致吗？实现方式过你的<b>策略与权威</b>了吗？（生产者过荐骨 / 显示者先告知 / 投射者等邀请 / 反映者随 28 天周期）</div>
+
+<h2>六、时间矩阵自查（原书练习）</h2>
+<p>估算你一周时间的实际分配，再写下你<b>想要</b>的分配：</p>
+<table>
+  <tr><th>象限</th><th>内容</th><th>实际 %</th><th>想要 %</th></tr>
+  <tr><td><b>Ⅰ 重要且紧急</b></td><td>危机、迫近的截止</td><td><span class="fill">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td></tr>
+  <tr><td><b>Ⅱ 重要不紧急</b></td><td class="sg" style="color:#5B7B6F">规划、关系、学习、休息、预防</td><td><span class="fill">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td></tr>
+  <tr><td><b>Ⅲ 紧急不重要</b></td><td>别人的「要事」、打扰</td><td><span class="fill">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td></tr>
+  <tr><td><b>Ⅳ 不紧急不重要</b></td><td>琐碎消遣</td><td><span class="fill">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td></tr>
+</table>
+<div class="box">
+  <div class="t">本周最优先的三项第二象限事务（原书「我的周任务」）</div>
+  <p>1. <span class="fill">&nbsp;</span></p>
+  <p>2. <span class="fill">&nbsp;</span></p>
+  <p>3. <span class="fill">&nbsp;</span></p>
+</div>
+<div class="ex"><b>授权练习（原书）· </b>列出五个优先事务并排序；为第 4、5 项设计「责任型授权」（聚焦结果、给足信任）：授权给谁？<span class="fill">&nbsp;</span>　何时？<span class="fill">&nbsp;</span></div>
+<div class="ex"><b>每周计划 30 分钟（原书四步骤）· </b>①写下关键角色 ②选 1–2 个本周要务 ③以周为单位排程 ④用 A/B/C、1/2/3 排序，逐日调整。</div>
+
+<h2>七、情感账户日志（原书练习）</h2>
+<p>选一位你想改进关系的人。存款记（+），提款记（−），每次提款写下补救措施。</p>
+<table>
+  <tr><th>日期</th><th>事件</th><th>+ / −</th><th>（提款）补救 / 下次改进</th></tr>
+  <tr><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td><td><span class="fill">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<div class="box">
+  <div class="t">存款计划</div>
+  <p>结余刻度（−10 ～ +10）：<span class="fill">&nbsp;</span></p>
+  <p>三件对方会认可的存款：①<span class="fill">&nbsp;</span> ②<span class="fill">&nbsp;</span> ③<span class="fill">&nbsp;</span></p>
+</div>
+<p>七种存款方式自查：理解别人 · 注意小节 · 信守承诺 · 阐明期望 · 正直诚信 · 勇于道歉 · 无条件的爱——本周我最该补的一笔存款是：<span class="fill">&nbsp;</span></p>
+
+<h2>八、双赢平衡评估 + 倾听自查（原书练习）</h2>
+<div class="grid2">
+  <div class="box">
+    <div class="t">双赢平衡（敢作敢为 vs 善解人意）</div>
+    <p>关系 1：<span class="fill">&nbsp;</span></p>
+    <p>平衡情况：<span class="fill">&nbsp;</span></p>
+    <p>需要采取的行动：<span class="fill">&nbsp;</span></p>
+    <p>关系 2：<span class="fill">&nbsp;</span></p>
+    <p>平衡情况：<span class="fill">&nbsp;</span></p>
+    <p>需要采取的行动：<span class="fill">&nbsp;</span></p>
+  </div>
+  <div class="box">
+    <div class="t">倾听自查（习惯五）</div>
+    <p>我的回应常属于哪种「自传式回应」？</p>
+    <p>□ 价值判断　□ 追根究底</p>
+    <p>□ 好为人师　□ 自以为是</p>
+    <p>我最希望重来的一次谈话：<span class="fill">&nbsp;</span></p>
+    <p>移情聆听版的重演（四阶段：复述→解释→渗入感觉→解释+感情）：</p>
+    <div class="linelog">&nbsp;</div>
+    <div class="linelog">&nbsp;</div>
+  </div>
+</div>
+<div class="ex"><b>双赢协议五要素（原书）· </b>为一段关系/合作写下：预期结果 <span class="fill">&nbsp;</span>｜ 指导方针 <span class="fill">&nbsp;</span>｜ 可用资源 <span class="fill">&nbsp;</span>｜ 任务考核 <span class="fill">&nbsp;</span>｜ 奖惩制度 <span class="fill">&nbsp;</span></div>
+
+<h2>九、第三选择工作区（原书五步骤）</h2>
+<div class="box">
+  <div class="t">选一个想达成统合综效的问题或关系</div>
+  <p>问题/机遇：<span class="fill">&nbsp;</span></p>
+  <p>①详细说明问题：<span class="linelog">&nbsp;</span></p>
+  <p>②倾听别人的意见（对方真正在意什么）：<span class="linelog">&nbsp;</span></p>
+  <p>③表达我自己的意见：<span class="linelog">&nbsp;</span></p>
+  <p>④集思广益的火花：<span class="linelog">&nbsp;</span></p>
+  <p>⑤第三种变通方案：<span class="linelog">&nbsp;</span></p>
+</div>
+<div class="ex"><b>差异练习（原书）· </b>写下一位同事的品质清单（才智/背景/人际技能/性格）。他与你的差别有多大？这些差异能怎样帮你们完成共同的事业？</div>
+
+<h2>十、四层面更新计划（原书练习）</h2>
+<table>
+  <tr><th>层面</th><th>等同强化</th><th>我确实享受的更新活动</th><th>本周安排</th></tr>
+  <tr><td><b>身体</b></td><td>个人愿景（习惯一）</td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>精神</b></td><td>自我领导（习惯二）</td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>智力</b></td><td>自我管理（习惯三）</td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>社会/情感</b></td><td>公众成功（习惯四五六）</td><td><span class="linelog">&nbsp;</span></td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<div class="ex"><b>更新循环 · </b>计划 → 执行 → 评价，一段时间只做一样。执行 3–4 周后评价：什么起了作用？什么需要调整？<span class="linelog">&nbsp;</span></div>
+<div class="ex"><b>急躁急救包（原书）· </b>快失去理智时：①吸口氧气（深呼吸三次）②前瞻性内省（一个月后我还在意吗？）③选择你的回应。人类图加持：红灯亮起时，先回策略权威，再选回应。</div>
+
+<h2>十一、每日三层练习结构</h2>
+<p>效能是「练出来」的。建议每天三层都走一遍——顺设计、修习惯、记红灯。</p>
+<table>
+  <tr><th>时段</th><th>练习</th><th>三层落点</th></tr>
+  <tr><td>晨间 5 分钟</td><td>念使命宣言 · 定当日要事（第二象限）</td><td><b>以终为始</b>：方向先于速度。</td></tr>
+  <tr><td>日间随时</td><td>顺策略行动 · 说积极语言</td><td><b>积极主动</b>：力所能及处用力。</td></tr>
+  <tr><td>冲突出现时</td><td>先倾听（四阶段）→ 找第三选择</td><td><b>知彼解己/统合综效</b>：先诊断后开方。</td></tr>
+  <tr><td>晚间 3 分钟</td><td>效能日记：红灯亮过吗？存款了吗？</td><td><b>不断更新</b>：日日复盘，日日磨锯。</td></tr>
+</table>
+
+<h2>十二、21 天效能实修打卡</h2>
+<p>每天完成：①念使命宣言 ②一次顺设计的要事行动 ③一则效能日记（红灯/存款）。打 ✓ 即可。</p>
+<div class="cal" id="cal"></div>
+<div class="ex"><b>复盘 · </b>21 天后回头看：哪一天最顺？那天你用对了哪种策略/习惯？把它变成你的「高效能默认模式」。并重新做一次「七个习惯自评分」，与起点对照。</div>
+
+<h2>十三、效能口诀卡（随身）</h2>
+<div class="box">
+  <div class="t">每天念一遍</div>
+  <p>· 图是出厂设置，习惯是操作系统；<b>活出设计 × 修炼习惯，由内而外</b>。</p>
+  <p>· 红灯亮起 → 暂停 → 回策略权威 → 从影响圈重新出手。</p>
+  <p>· 积极主动 · 以终为始 · 要事第一 · 双赢思维 · 知彼解己 · 统合综效 · 不断更新。</p>
+</div>
+
+<div class="resnav">
+  <a class="home" href="hd-xiaoneng-zhidao-course.html">📘 课程主页<span class="tag">返回</span><small>课程全貌、理念与报名入口</small></a>
+  <a href="hd-xiaoneng-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 人类图×七个习惯</small></a>
+  <a href="hd-xiaoneng-zhidao-cheatsheet.html">🃏 效能速查卡<small>类型锚点 · 成熟模式图 · 七习惯速查</small></a>
+  <a href="hd-xiaoneng-zhidao-course.html#join">✉️ 报名实修<small>立即加入 21 天 / 100 天</small></a>
+</div>
+
+<footer>
+  <div>《人类图 · 效能之道》学员练习手册</div>
+  <div>七个习惯练习整合自史蒂芬·柯维《高效能人士的七个习惯（25周年纪念版）》｜仅供学习参考</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+</div>
+
+<script>
+  // 生成 21 天打卡日历（3 列 × 7 行）
+  const cal=document.getElementById('cal');
+  for(let i=1;i<=21;i++){
+    const c=document.createElement('div');
+    c.className='cell';
+    c.innerHTML='<div class="d">第 '+i+' 天</div><div class="chk">☐ 宣言　☐ 行动　☐ 日记</div>';
+    cal.appendChild(c);
+  }
+</script>
+</body>
+</html>

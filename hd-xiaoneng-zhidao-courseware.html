@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 效能之道 ｜ 完整课件</title>
+<!--
+  《人类图 · 效能之道》｜完整课件
+  VERSION: V2  ·  2026-09-27
+  changelog:
+    V2(2026-09-27) 卡片栅格改版：.four 由 auto-fit（桌面3列）改为固定2列，移动端(≤620px)回退单列；消除落单卡片。
+    V1(2026-09-27) 初版。双螺旋骨架：人类图效能地图（类型·策略·权威·非我·成熟模式图）× 柯维《高效能人士的七个习惯》知识模型。
+    整合主轴：活出你的设计 × 修炼七个习惯 → 由内而外，效能自然涌现。
+    结构对齐《人类图·觉察之道》《人类图·开心之道》《人类图·财运之道》课件：侧边分级导航 + 基础篇(00-07) + 应用篇(08-15) + 课程包四件套互链。
+    每个模块 = 七习惯知识模型（含原书「付诸行动」练习）+ 「人类图 × 效能」落地框。
+    类型占比：生产者37% / 显示生产者33% / 投射者21% / 显示者8% / 反映者1%。
+  知识来源：人类图框架来自本站人类图知识体系；七个习惯知识模型与练习整合自史蒂芬·柯维（Stephen R. Covey）著《高效能人士的七个习惯（25周年纪念版）》。仅供学习参考。
+-->
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-sidebar:#2D2118; --bg-sidebar-hover:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --text-sidebar:#D8C8B8; --text-sidebar-active:#F5E6D3;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:10px; --radius-lg:14px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85}
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:300px;background:var(--bg-sidebar);color:var(--text-sidebar);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;transition:transform .3s ease;display:flex;flex-direction:column}
+.sidebar-header{padding:24px 20px 18px;border-bottom:1px solid rgba(196,149,106,.2);text-align:center}
+.sidebar-header .logo{font-size:12px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sidebar-header h1{font-family:var(--serif);font-size:18px;color:var(--text-sidebar-active);font-weight:normal;line-height:1.4}
+.sidebar-header .sub{font-size:12px;color:var(--primary-l);margin-top:6px}
+.level-nav{flex:1;padding:10px 0}
+.level-section{margin-bottom:2px}
+.level-title{padding:12px 20px 8px;font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.level-title:hover{color:var(--gold-l)}
+.level-title .arrow{font-size:10px;margin-left:auto;transition:transform .2s}
+.level-title.collapsed .arrow{transform:rotate(-90deg)}
+.level-lessons{overflow:hidden}
+.level-title.collapsed + .level-lessons{max-height:0!important}
+.lesson{padding:9px 20px 9px 30px;font-size:14px;color:var(--text-sidebar);display:block;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.lesson:hover{background:var(--bg-sidebar-hover);color:var(--text-sidebar-active)}
+.lesson.active{background:var(--bg-sidebar-hover);color:var(--gold-l);border-left-color:var(--gold)}
+
+/* Content */
+.main{margin-left:300px;flex:1;padding:0}
+.topbar{position:sticky;top:0;z-index:90;background:rgba(245,240,232,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:12px 18px}
+.topbar .t-logo{font-family:var(--serif);color:var(--dark);font-weight:700}
+.topbar .menu-btn{background:var(--dark);color:#fff;border:0;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.content{max-width:860px;margin:0 auto;padding:40px 28px 80px}
+.hero-mini{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:34px 30px;margin-bottom:30px;text-align:center}
+.hero-mini .eyebrow{color:var(--gold-l);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+.hero-mini h1{font-family:var(--serif);font-size:30px;color:#fff;margin:10px 0 8px}
+.hero-mini p{color:#E8D8C5;font-size:15px;line-height:1.8}
+
+.module{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--shadow);scroll-margin-top:20px}
+.module .mno{display:inline-block;font-family:var(--serif);font-size:13px;color:#fff;background:var(--primary);border-radius:20px;padding:3px 14px;letter-spacing:1px;margin-bottom:10px}
+.module h2{font-family:var(--serif);font-size:24px;color:var(--dark);margin-bottom:6px;line-height:1.35}
+.module .en{color:var(--primary-d);font-size:13px;letter-spacing:1px;margin-bottom:14px}
+.module h3{font-size:17px;color:var(--primary-d);margin:22px 0 8px;padding-left:12px;border-left:4px solid var(--gold)}
+.module p{margin:8px 0;color:var(--text)}
+.module ul{margin:8px 0 12px;padding-left:22px}
+.module li{margin:6px 0}
+.module .lead-q{font-family:var(--serif);font-style:italic;color:var(--dark-soft);background:#FBF3E6;border-left:4px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.hd-box{background:linear-gradient(135deg,#FBF1E2,#F5EAD8);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+.hd-box .tag{display:inline-block;font-size:12px;color:#fff;background:var(--awake);border-radius:6px;padding:2px 10px;margin-bottom:8px;letter-spacing:1px}
+.ex{background:#FBF3E6;border:1px dashed var(--primary);border-radius:10px;padding:12px 16px;margin:14px 0;color:var(--dark-soft);font-size:14.5px}
+.ex b{color:var(--primary-d)}
+.four{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
+.four .f{background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:8px;padding:14px}
+.four .f .step{font-family:var(--serif);font-size:22px;color:var(--primary-d)}
+.four .f h4{font-size:15px;color:var(--dark);margin:4px 0 6px}
+.four .f p{font-size:13px;color:var(--text-l);margin:0}
+/* 一行 2 个卡片（低效/高效 对照等） */
+.four.two{grid-template-columns:repeat(2,1fr)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:560px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-sidebar);color:#F5E6D3;font-weight:600}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}.sg{color:var(--awake);font-weight:600}
+.toc-note{font-size:13px;color:var(--text-l);background:#FAF4EA;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+.declare{background:linear-gradient(135deg,var(--primary),var(--gold));color:#2D2118;border-radius:10px;padding:14px 18px;margin:14px 0;font-family:var(--serif);font-size:17px;font-weight:700;text-align:center;box-shadow:var(--shadow)}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .content{padding:24px 18px 70px;max-width:100%}
+  .module{padding:20px 18px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+  .overlay.show{display:block}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:620px){.four,.four.two{grid-template-columns:1fr}.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">HUMAN DESIGN × 7 HABITS</div>
+      <h1>人类图 · 效能之道</h1>
+      <div class="sub">完整课件 · 由内而外，效能涌现</div>
+      <a href="hd-xiaoneng-zhidao-course.html" style="display:inline-block;margin-top:10px;font-size:13px;color:#F5E6D3;text-decoration:none;border:1px solid rgba(245,230,211,.4);border-radius:20px;padding:4px 14px">← 课程主页</a>
+    </div>
+    <nav class="level-nav">
+      <div class="level-section">
+        <div class="level-title" data-toggle>基础篇 · 用人类图看清效能地图 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m00">00 缘起：人类图遇见七个习惯</a>
+          <a class="lesson" href="#m01">01 思维定式与由内而外</a>
+          <a class="lesson" href="#m02">02 人类图是效能地图</a>
+          <a class="lesson" href="#m03">03 成熟模式图：三阶段总览</a>
+          <a class="lesson" href="#m04">04 习惯一 积极主动 × 影响圈</a>
+          <a class="lesson" href="#m05">05 习惯二 以终为始 × 使命宣言</a>
+          <a class="lesson" href="#m06">06 习惯三 要事第一 × 时间矩阵</a>
+          <a class="lesson" href="#m07">07 情感账户：公众成功的地基</a>
+        </div>
+      </div>
+      <div class="level-section">
+        <div class="level-title" data-toggle>应用篇 · 七个习惯活进设计 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m08">08 习惯四 双赢思维</a>
+          <a class="lesson" href="#m09">09 习惯五 知彼解己</a>
+          <a class="lesson" href="#m10">10 习惯六 统合综效</a>
+          <a class="lesson" href="#m11">11 习惯七 不断更新</a>
+          <a class="lesson" href="#m12">12 类型 × 个人成功</a>
+          <a class="lesson" href="#m13">13 类型 × 公众成功</a>
+          <a class="lesson" href="#m14">14 非我主题 × 效能红灯</a>
+          <a class="lesson" href="#m15">15 21 天整合实修</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="t-logo">人类图 · 效能之道</div>
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')">☰ 目录</button>
+    </div>
+    <div class="overlay" id="overlay" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.remove('show')"></div>
+
+    <div class="content">
+      <div class="hero-mini">
+        <div class="eyebrow">HUMAN DESIGN × THE 7 HABITS</div>
+        <h1>人类图 · 效能之道 · 完整课件</h1>
+        <p>把柯维《高效能人士的七个习惯》的知识模型与「付诸行动」练习，落到你的类型·策略·权威上。<br>活出设计 × 修炼习惯 → 由内而外，效能自然涌现。</p>
+      </div>
+
+      <!-- 基础篇 -->
+      <div class="module" id="m00">
+        <span class="mno">00</span>
+        <h2>缘起：当人类图遇见七个习惯</h2>
+        <div class="en">The Meeting Point · Why Effort Still Doesn't Pay Off</div>
+        <p class="lead-q">「读了图、翻完了七习惯，为什么生活还是原地打转？」——因为「知道设计」不等于「活出设计」，「读懂习惯」不等于「修成了习惯」。</p>
+        <p>人类图像一张精准的<b>出厂设置图</b>：它告诉你，你天生用什么方式与世界互动、做什么决策、能量从哪来。而史蒂芬·柯维（Stephen R. Covey）的《高效能人士的七个习惯》，则是一套任何人都可以修炼的<b>效能操作系统</b>。</p>
+        <p>两者一合：出厂设置告诉你「你是谁」，操作系统告诉你「怎么运转得更顺」。本课程的主轴只有一句——<b>活出你的设计，修炼你的习惯，由内而外，效能自然涌现。</b></p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>你不必逼自己去学「别人的自律模板」。先看清自己的设计（类型/策略/权威），再用七个习惯把日常行为一点点修炼成型——效能不是装出来的，是顺着设计长出来的。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>拿出一张纸，左边写「我的人类图设计三要素」（类型/策略/权威），右边写「我最想改变的一个低效能习惯」。这就是本课程要缝合的两半。</div>
+      </div>
+
+      <div class="module" id="m01">
+        <span class="mno">01</span>
+        <h2>思维定式与由内而外：效能的地基</h2>
+        <div class="en">Paradigms &amp; Inside-Out · P/PC Balance</div>
+        <p>柯维全书的地基只有两块：<b>思维定式</b>与<b>P/PC 平衡</b>。</p>
+        <h3>🔑 思维定式：你看世界的眼镜</h3>
+        <p>我们看到的不是客观世界本身，而是我们「条件限制之下」看到的世界。想改变行为，先检查「眼镜」；想让生活发生实质性变化，必须关注<b>我们观察自己和世界的方式</b>——这就是「由内而外」（Inside-Out）。</p>
+        <h3>🥚 P/PC 平衡：鹅生金蛋</h3>
+        <p><b>P（Production）</b>是产出——金蛋；<b>PC（Production Capability）</b>是产能——会下金蛋的鹅。效能的真正定义就是两者的平衡：只顾下蛋不管鹅，鹅会死；只养鹅不取蛋，日子过不下去。真正的资产是你自己。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>人类图把「由内而外」说得更彻底：你的非我主题（挫败/愤怒/苦涩/失望）就是「眼镜被别人戴久了」的信号。而 P/PC 里最贵的 PC，就是你的能量类型——生产者的荐骨能量、投射者有限的能量池，都是「鹅」，用错了方式猛取蛋，效能必崩。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①描述一次「判断过于匆忙」的推测经历：你当时推测了什么？②列出影响你日常生活的五个原则，标注是积极还是消极影响。③对照你的图：哪一个「旧眼镜」最该换上「设计视角」？</div>
+      </div>
+
+      <div class="module" id="m02">
+        <span class="mno">02</span>
+        <h2>人类图是效能地图</h2>
+        <div class="en">Human Design as the Map of Effectiveness</div>
+        <p>人类图用几个核心元素，直接对应你的「天生高效方式」：</p>
+        <div class="four two">
+          <div class="f"><div class="step">型</div><h4>类型与策略</h4><p>你与世界正确互动的开关（生产者 37% / 显示生产者 33% / 投射者 21% / 显示者 8% / 反映者 1%）——做对的事，力气才不白花。</p></div>
+          <div class="f"><div class="step">权</div><h4>内在权威</h4><p>身体的决策系统（荐骨/情绪/脾/意志力），效能的第一道闸门：决策对了，后面全顺。</p></div>
+          <div class="f"><div class="step">中</div><h4>九大中心</h4><p>定义（稳定天赋）vs 开放（易被条件化）。开放中心正是「学别人自律」最常翻车的地方。</p></div>
+          <div class="f"><div class="step">灯</div><h4>非我主题</h4><p>挫败/愤怒/苦涩/失望——效能红灯。灯亮了，先回设计，再谈方法论。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>读图的姿势：先看「我拥有什么」（定义与天赋），再看「我在模仿谁」（开放中心与非我）。效能之道的第一课就是：把力气从「补短板」挪回「顺天赋」。</p>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>翻开你的人类图报告，标出：类型、策略、内在权威、非我主题。这就是你效能地图的四个坐标。</div>
+      </div>
+
+      <div class="module" id="m03">
+        <span class="mno">03</span>
+        <h2>成熟模式图：依赖 → 独立 → 互赖</h2>
+        <div class="en">The Maturity Continuum · From Dependence to Independence to Interdependence</div>
+        <p>七个习惯不是零散的技巧，而是一条「成熟模式图」（Maturity Continuum）——人类成长的三个阶段：</p>
+        <div class="four">
+          <div class="f"><div class="step">依赖</div><h4>你照顾我</h4><p>「你来」「你要负责」「我做不了」。围绕「你」的观念。</p></div>
+          <div class="f"><div class="step">独立</div><h4>我可以</h4><p>「我可以做到」「我负责」「我自主」。习惯一二三 → 个人领域的成功。</p></div>
+          <div class="f"><div class="step">互赖</div><h4>我们可以</h4><p>「我们可以做到」「我们合作」「共创更大的可能」。习惯四五六 → 公众领域的成功。</p></div>
+          <div class="f"><div class="step">更新</div><h4>不断更新</h4><p>习惯七「磨锯子」，持续强化前六个习惯，螺旋上升。</p></div>
+        </div>
+        <p><b>习惯 = 知识 × 技巧 × 意愿</b>三者交织：知识是「做什么、为何做」，技巧是「如何做」，意愿是「想做」。三者缺一，习惯不成。</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>习惯</th><th>低效能表现</th><th>高效能表现</th><th>关键模型</th></tr></thead>
+            <tbody>
+              <tr><td><b>① 积极主动</b></td><td class="ns">受害者：责怪·合理化·抱怨</td><td class="sg">选择创造自己的人生</td><td>影响圈 / 关注圈</td></tr>
+              <tr><td><b>② 以终为始</b></td><td class="ns">忙碌且茫然，梯子搭错墙</td><td class="sg">看清方向再出发</td><td>两次创造 / 使命宣言</td></tr>
+              <tr><td><b>③ 要事第一</b></td><td class="ns">被紧急小事追着跑</td><td class="sg">要事不放第二</td><td>时间矩阵 / 第二象限</td></tr>
+              <tr><td><b>④ 双赢思维</b></td><td class="ns">赢/输：非强即弱</td><td class="sg">世界之大，人人有份</td><td>六模式 / 双赢协议</td></tr>
+              <tr><td><b>⑤ 知彼解己</b></td><td class="ns">不诊断就开方</td><td class="sg">先理解别人，再求被理解</td><td>移情聆听四阶段</td></tr>
+              <tr><td><b>⑥ 统合综效</b></td><td class="ns">1+1=0.5（敌对）或 1.5（妥协）</td><td class="sg">1+1＞2 创造式合作</td><td>第三选择 / 尊重差异</td></tr>
+              <tr><td><b>⑦ 不断更新</b></td><td class="ns">没空磨锯子，越锯越钝</td><td class="sg">保护并优化最重要的资产——自己</td><td>四层面更新</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①给七个习惯各打分（1 极差～6 杰出），算总分看现状。②列出一个好习惯与一个坏习惯，分别写出对应的知识、技巧、意愿。③在成熟模式图上定位自己：你更常卡在「依赖」还是「不敢互赖」？</div>
+      </div>
+
+      <div class="module" id="m04">
+        <span class="mno">04</span>
+        <h2>习惯一 积极主动 × 影响圈</h2>
+        <div class="en">Habit 1 · Be Proactive · Circle of Influence</div>
+        <p class="lead-q">「在刺激与回应之间存在一个空间——那里藏着我们选择回应的自由。」</p>
+        <p>积极主动不是「拼命干」，而是<b>选择回应的自由</b>：依据原则与价值观、而非情绪或环境做决定。人类独有四项禀赋——<b>自觉、良知、想象力、自主意志</b>。</p>
+        <h3>⭕ 关注圈 vs 影响圈</h3>
+        <div class="four two">
+          <div class="f"><div class="step">关</div><h4>关注圈</h4><p>你关心但未必能控制的事：他人弱点、环境问题。紧盯这里→消极能量→影响圈<b>缩小</b>。语言特征：「但愿」「我办不到」「我不得不」。</p></div>
+          <div class="f"><div class="step">影</div><h4>影响圈</h4><p>你力所能及的事。专注这里→积极能量→影响圈<b>扩大</b>。语言特征：「我能」「我要」「我宁愿」。影响圈的核心是<b>承诺与信守</b>。</p></div>
+        </div>
+        <p>三类问题都在影响圈内解决：<b>可直接控制</b>（培养习惯）、<b>可间接控制</b>（施加影响）、<b>无法控制</b>（微笑接受，不浪费能量）。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>设计的维度：你的影响圈边界，由你的类型决定——生产者的回应、显示者的告知、投射者的邀请、反映者的环境。等待不是消极，是把有限的「影响圈兵力」投在正确的时点上。主动，指的是「态度与准备」，不是「越权乱动」。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①回想过去几周的两三件消极回应，改写成积极回应；下周倾听自己的语言。②写下本周挑战，归入影响圈/关注圈，各选一个改变应对方式。③试行「积极主动」30 天，记录影响圈的变化。</div>
+      </div>
+
+      <div class="module" id="m05">
+        <span class="mno">05</span>
+        <h2>习惯二 以终为始 × 使命宣言</h2>
+        <div class="en">Habit 2 · Begin with the End in Mind · Mission Statement</div>
+        <p class="lead-q">「许多人埋头苦干，到头来却发现梯子搭错了墙。」</p>
+        <p><b>任何事物都经过两次创造</b>：先在脑海里酝酿（智力创造），再是实质创造。以终为始，就是用「人生终点」反推「今天该怎么活」。</p>
+        <h3>🪦 葬礼心灵演练</h3>
+        <p>想象你出席自己的葬礼：亲戚、挚友、同事、社团伙伴四个人上台致辞。你希望他们如何评价你的人格、成就与贡献？——那些答案，就是你真正的「终点」。</p>
+        <h3>📜 个人使命宣言六步骤</h3>
+        <div class="four">
+          <div class="f"><div class="step">1</div><h4>开动脑经畅想</h4><p>写下影响你的人、20 年后想成为的人、对你最重要的事。</p></div>
+          <div class="f"><div class="step">2</div><h4>放松一下</h4><p>放下笔，走开几分钟。</p></div>
+          <div class="f"><div class="step">3</div><h4>整理思绪</h4><p>圈出想列入宣言的关键想法与词句。</p></div>
+          <div class="f"><div class="step">4</div><h4>写出初稿</h4><p>随身带一周，每天增删批注。</p></div>
+          <div class="f"><div class="step">5</div><h4>完成定稿</h4><p>周末定稿，放在随时可翻阅之处。</p></div>
+          <div class="f"><div class="step">6</div><h4>定期检查</h4><p>每月自问：它还代表最佳的我吗？</p></div>
+        </div>
+        <p>同时写下你的<b>人生角色</b>（≤7 个：伴侣/父母/职业/朋友…），并为每个角色设定目标；再检视你的<b>生活中心</b>——安全感从哪来（配偶/金钱/工作/名利/原则…）。以<b>原则</b>为中心，才稳。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>你的<b>轮回交叉</b>（Incarnation Cross）就是人类图版的人生使命坐标；策略与权威则保证使命的实现方式不跑偏。生产者的使命要「过荐骨」，投射者的使命要「等邀请兑现」，显示者的使命要「先告知再开创」——使命是对的方向，策略是对的姿势。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①写下愿景检查六问的答案（现在的生活让我快乐吗？最让我灵魂满足的是什么？）。②按六步骤写出使命宣言初稿。③列出你的 ≤7 个角色。④与家人/团队共创一份共同使命宣言。</div>
+      </div>
+
+      <div class="module" id="m06">
+        <span class="mno">06</span>
+        <h2>习惯三 要事第一 × 时间管理矩阵</h2>
+        <div class="en">Habit 3 · Put First Things First · Time Management Matrix</div>
+        <p class="lead-q">「重要之事决不可受芝麻绿豆小事牵绊。」—— 歌德</p>
+        <p>要事第一是习惯二的<b>实质创造</b>：把梦想（目标、愿景、价值观）组织与实践出来。核心工具是时间管理矩阵：</p>
+        <div class="four">
+          <div class="f"><div class="step">Ⅰ</div><h4>重要且紧急</h4><p>危机、迫近截止。消耗过度 → 压力、倦怠。</p></div>
+          <div class="f"><div class="step">Ⅱ</div><h4>重要不紧急</h4><p class="sg">预防、规划、关系、学习、休息。<b>高效能人士的心脏地带。</b></p></div>
+          <div class="f"><div class="step">Ⅲ</div><h4>紧急不重要</h4><p class="ns">不速之客、某些电话与会议。<b>「重要」是别人的。</b></p></div>
+          <div class="f"><div class="step">Ⅳ</div><h4>不紧急不重要</h4><p class="ns">琐碎消遣、逃避性事务。麻醉剂。</p></div>
+        </div>
+        <h3>🧭 第二象限组织法</h3>
+        <p>以<b>周</b>为视角（而非日）：①写下关键角色 ②选出本周 1–2 个要务 ③安排一周任务与约会 ④用 A/B/C、1/2/3 排序逐日调整。每周投资 20–30 分钟做计划。</p>
+        <p><b>授权</b>：分「指令型」与<b>「责任型」授权</b>——后者聚焦结果、给足信任，是情感账户的大额存款。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>人类图提醒：先管能量，再管时间。生产者把「嗯哼的事」排进第二象限，效率天然碾压；投射者的要事是「等对邀请 + 休息回血」，休息本身就是第二象限；显示者要为「告知与开创」留白；反映者要为「环境觉察」留白。按类型定义你的「要事」，矩阵才不是空表格。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①按矩阵 8 题自评，估算每象限时间占比，连续记录三天实际活动对照。②写下本周最优先的三项第二象限事务。③列出五个优先事务并排序，把第 4、5 项练习「责任型授权」。④每周 30 分钟做周计划四步骤。</div>
+      </div>
+
+      <div class="module" id="m07">
+        <span class="mno">07</span>
+        <h2>情感账户：公众成功的地基</h2>
+        <div class="en">The Emotional Bank Account · Foundation of Public Victory</div>
+        <p>从独立走向互赖之前，先认识人际关系的底层货币——<b>情感账户</b>：存款增加信任，提款消耗信任。七种主要存款方式：</p>
+        <div class="four">
+          <div class="f"><div class="step">①</div><h4>理解别人</h4><p>用对方在意的方式对待他，一切存款的前提。</p></div>
+          <div class="f"><div class="step">②</div><h4>注意小节</h4><p>小事最伤人也最暖心：疏忽礼貌，账户悄悄漏钱。</p></div>
+          <div class="f"><div class="step">③</div><h4>信守承诺</h4><p>言出必行；做不到就提前说明并重新承诺。</p></div>
+          <div class="f"><div class="step">④</div><h4>阐明期望</h4><p>把模糊的期待说清楚，避免「误会型提款」。</p></div>
+          <div class="f"><div class="step">⑤</div><h4>正直诚信</h4><p>不背后攻击他人；表里如一产生信任。</p></div>
+          <div class="f"><div class="step">⑥</div><h4>勇于道歉</h4><p>真诚道歉是存款；屡错屡犯式道歉是提款。</p></div>
+          <div class="f"><div class="step">⑦</div><h4>无条件的爱</h4><p>给人安全感与自信，鼓励对方肯定自我、追求成长。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>不同类型的「存款语言」天然不同：生产者用陪伴做事存款、显示者用告知消除不确定感、投射者用「被看见的欣赏」存款、反映者用「尊重其节奏」存款。读懂对方的类型，是把「我对你好」存成「他感到被爱」的翻译器。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①选一个人做情感账户评估：存款记（+）、提款记（−），每次提款写下补救措施。②写下周内三件对方认可的存款、三件提款，逐一去完成。③用 −10～+10 标出当前结余。</div>
+      </div>
+
+      <!-- 应用篇 -->
+      <div class="module" id="m08">
+        <span class="mno">08</span>
+        <h2>习惯四 双赢思维：六模式与双赢协议</h2>
+        <div class="en">Habit 4 · Think Win-Win</div>
+        <p class="lead-q">「世界之大，人人都有足够的立足空间——他人之得，不必视为自己之失。」</p>
+        <p>人际交往的<b>六种模式</b>：利人利己（双赢）· 损人利己（赢/输）· 舍己为人（输/赢）· 两败俱伤（输/输）· 独善其身（赢）· 好聚好散（无交易）。双赢者把生活看作<b>合作的舞台，而不是竞技场</b>。</p>
+        <p>双赢的品德基础：<b>诚信、成熟（敢作敢为又善解人意）、知足</b>。由品德建立双赢关系，再衍生<b>双赢协议</b>，由双赢体系（结构）培育环境，最后以双赢过程达成。</p>
+        <h3>📑 双赢协议五要素</h3>
+        <div class="four">
+          <div class="f"><div class="step">1</div><h4>预期结果</h4><p>确认目标与「何时达成」。</p></div>
+          <div class="f"><div class="step">2</div><h4>指导方针</h4><p>实现结果的规范边界。</p></div>
+          <div class="f"><div class="step">3</div><h4>可用资源</h4><p>人力、财力、技术支持。</p></div>
+          <div class="f"><div class="step">4</div><h4>任务考核</h4><p>评估标准与时间节点。</p></div>
+          <div class="f"><div class="step">5</div><h4>奖惩制度</h4><p>明确的奖惩规则。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>双赢要顺类型节奏：显示者「先告知」就是双赢的启动键（消除对方的不确定感）；投射者「等邀请后签协议」才签得成；生产者「过荐骨再承诺」承诺才守得住；反映者「28 天后再签字」。用别人的节奏逼签双赢，只会双赢变双输。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①选两段重要关系，评估「敢作敢为 vs 善解人意」是否失衡，写下需要采取的行动。②换位思考：写下对方如何看待现状，再谈双赢方案。③为一段关系设计双赢协议五要素，并承诺在具体生活领域实践。</div>
+      </div>
+
+      <div class="module" id="m09">
+        <span class="mno">09</span>
+        <h2>习惯五 知彼解己：移情聆听</h2>
+        <div class="en">Habit 5 · Seek First to Understand, Then to Be Understood</div>
+        <p class="lead-q">「一个不诊断就开方子的医生，你敢信吗？——可我们在沟通里天天干这事。」</p>
+        <p>人际沟通最大的浪费，就是<b>不诊断就开方</b>。四种常见的「自传式回应」：价值判断、追根究底、好为人师、自以为是。解药是<b>移情聆听</b>（Empathic Listening），四个阶段：</p>
+        <div class="four">
+          <div class="f"><div class="step">Ⅰ</div><h4>复述语句</h4><p>「你已受不了了，觉得上学太无聊。」——先专心听。</p></div>
+          <div class="f"><div class="step">Ⅱ</div><h4>加入解释</h4><p>用自己的词句重述：「你不想上学了。」</p></div>
+          <div class="f"><div class="step">Ⅲ</div><h4>渗入感觉</h4><p>「你觉得很有挫折感。」——右脑开始体会心情。</p></div>
+          <div class="f"><div class="step">Ⅳ</div><h4>解释+感情</h4><p>「你对上学有很深的挫折感。」——左右脑并用。</p></div>
+        </div>
+        <p>先理解别人需要<b>仁慈心</b>，再争取被理解需要<b>勇气</b>；表达时顺序是：品格→（共鸣）→逻辑→情感，先「听懂」，再「说清」。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>投射者（占比 21%）在这一课上有天然优势：天生带着「看人」的感知力，移情聆听几乎是出厂技能——但务必等<b>被邀请</b>再给洞察，否则好建议也成了越界开方。其他类型则更要刻意练习：生产者少急着「做事式回应」，显示者少急着「决策式回应」，先听完，再动。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①请家人/同事给你的倾听打 1–4 分，回忆没被好好倾听的感受。②本周记下与「最难交流的人」的对话，判断属于哪种自传式回应。③找机会捂住耳朵只观察身体语言。④选一次希望重来的谈话，写下移情聆听版的重演。</div>
+      </div>
+
+      <div class="module" id="m10">
+        <span class="mno">10</span>
+        <h2>习惯六 统合综效：创造第三选择</h2>
+        <div class="en">Habit 6 · Synergize · The Third Alternative</div>
+        <p class="lead-q">「非按照我的方式，亦非遵循你的方式，而是创造第三种更好的办法。」</p>
+        <p>统合综效 = <b>整体大于部分之和</b>。它的精髓是<b>判断和尊重差异，取长补短</b>。沟通三层次：</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>层次</th><th>信任度</th><th>特点</th><th>结果</th></tr></thead>
+            <tbody>
+              <tr><td class="ns"><b>低层次沟通</b></td><td>低</td><td>互相提防、步步为营、依赖法律条款</td><td class="ns">1+1=0.5</td></tr>
+              <tr><td><b>中间层次</b></td><td>中</td><td>互相尊重、礼貌但保守</td><td>1+1=1.5（妥协）</td></tr>
+              <tr><td class="sg"><b>高层次·统合综效</b></td><td>高</td><td>敞开胸怀、欣赏差异、坦诚交流</td><td class="sg">1+1=8、16 甚至 1600</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>🛤️ 寻找第三选择的五步骤</h3>
+        <div class="four">
+          <div class="f"><div class="step">1</div><h4>说明问题</h4><p>详细说明问题或机遇。</p></div>
+          <div class="f"><div class="step">2</div><h4>倾听别人</h4><p>先听懂对方的思路与顾虑。</p></div>
+          <div class="f"><div class="step">3</div><h4>表达自己</h4><p>清晰说出你的观点。</p></div>
+          <div class="f"><div class="step">4</div><h4>集思广益</h4><p>一起开动头脑风暴。</p></div>
+          <div class="f"><div class="step">5</div><h4>共找最佳</h4><p>共同找到超越双方原案的第三方案。</p></div>
+        </div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>人类图就是一部「差异说明书」：37% 生产者、33% 显示生产者、21% 投射者、8% 显示者、1% 反映者——一个团队天然就是差异集合体。统合综效的第一步不是技巧，而是认出「他不是故意跟你不同，他是设计不同」。恼你的人，往往是你最好的老师。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①做「你对差异有多尊重」自评（10–50 分）。②写下一位同事的品质清单（才智/背景/人际技能/性格），问：差异如何帮我们共同成事？③回想你拒绝一个主意的内心独白，检视是否「因为不是我的主意」。④用五步骤对某个冲突实践一次第三选择。</div>
+      </div>
+
+      <div class="module" id="m11">
+        <span class="mno">11</span>
+        <h2>习惯七 不断更新：磨锯四层面</h2>
+        <div class="en">Habit 7 · Sharpen the Saw · Renew the Four Dimensions</div>
+        <p class="lead-q">「锯树五小时疲惫不堪？——为什么不花五分钟，把锯子磨锋利？」</p>
+        <p>习惯七保护并优化你最重要的资产——<b>你自己</b>。在四个层面持续更新：</p>
+        <div class="four">
+          <div class="f"><div class="step">身</div><h4>身体</h4><p>运动、营养、休息。等同于强化个人愿景（习惯一）。</p></div>
+          <div class="f"><div class="step">灵</div><h4>精神</h4><p>价值确认、冥想、自然、音乐。等同于强化自我领导（习惯二）。</p></div>
+          <div class="f"><div class="step">智</div><h4>智力</h4><p>阅读、规划、写作。等同于强化自我管理（习惯三）。</p></div>
+          <div class="f"><div class="step">情</div><h4>社会/情感</h4><p>服务、同理、安全感。等同于强化公众成功（习惯四五六）。</p></div>
+        </div>
+        <p>更新循环：<b>计划 → 执行 → 评价</b>，一段时间只做一样；每天约一小时，可以把几个层面合并（如与朋友边散步边深谈=身体+社会情感）。</p>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>用九大中心校准你的「磨锯法」：荐骨型能量要多运动放电；情绪中心未定义的人，别在情绪风暴时定计划（先等情绪澄清）；开放头脑要在睡前「写下而非带着」问题。投射者尤其注意——休息与独处不是第四象限，是你效能系统的核心维护项。</p>
+        </div>
+        <div class="ex"><b>付诸行动（原书练习）· </b>①用四层面检测表自检，找出失衡的层面。②写下「五件有益于灵魂的事」。③为每个层面列「确实享受」的更新活动并制定计划。④执行 3–4 周后评价：什么起了作用？什么需要调整？</div>
+      </div>
+
+      <div class="module" id="m12">
+        <span class="mno">12</span>
+        <h2>类型 × 个人成功：独立期的类型打法</h2>
+        <div class="en">Type × Personal Victory · Habits 1-2-3</div>
+        <p>个人成功三习惯（积极主动/以终为始/要事第一），落到五种类型上是五种打法：</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>习惯一 · 主动的正确姿势</th><th>习惯二 · 使命的方向盘</th><th>习惯三 · 要事的定义</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b><br><small>37%</small></td><td>在回应中主动：态度先行，荐骨说了才算</td><td>使命必须「过荐骨」——盘点让你满足的事</td><td>把「嗯哼的事」放进第二象限</td></tr>
+              <tr><td><b>显示生产者</b><br><small>33%</small></td><td>快速回应+一次一件事</td><td>使命清单可能很多——聚焦成冲刺</td><td>警惕第Ⅲ象限的「急事」偷走冲刺</td></tr>
+              <tr><td><b>显示者</b><br><small>8%</small></td><td>主动=行动前告知，减少阻力</td><td>为「开创」写使命：要影响什么？</td><td>为告知与开创留白，不被日程填满</td></tr>
+              <tr><td><b>投射者</b><br><small>21%</small></td><td>主动=修炼本事+等对邀请</td><td>使命靠「被看见」兑现——先成为行家</td><td>休息与观察是要事，不是懈怠</td></tr>
+              <tr><td><b>反映者</b><br><small>1%</small></td><td>主动=持续觉察环境与身心</td><td>使命宣言随周期演化，允许修改</td><td>重大决定随 28 天周期排程</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>在上表找到你的类型行，抄下三句话贴在工位：这就是你「个人成功」的类型口诀。</div>
+      </div>
+
+      <div class="module" id="m13">
+        <span class="mno">13</span>
+        <h2>类型 × 公众成功：互赖期的类型打法</h2>
+        <div class="en">Type × Public Victory · Habits 4-5-6</div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>习惯四 · 双赢的开局</th><th>习惯五 · 倾听的天赋区</th><th>习惯六 · 统合综效的角色</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b><br><small>37%</small></td><td>用「一起干」的在场感建立信任</td><td>少用「我来做给你看」代替倾听</td><td>团队的动力引擎与执行者</td></tr>
+              <tr><td><b>显示生产者</b><br><small>33%</small></td><td>谈成一件事再开下一件</td><td>警惕多头并行时只顾说</td><td>把多点才华编织成方案</td></tr>
+              <tr><td><b>显示者</b><br><small>8%</small></td><td>先告知，让对方有安全感</td><td>少急着宣布结论，先听完</td><td>打破僵局的开拓者</td></tr>
+              <tr><td><b>投射者</b><br><small>21%</small></td><td>等邀请后再提双赢方案</td><td class="sg"><b>天然优势：移情聆听、先诊断后开方</b></td><td>看见每个人差异价值的指挥者</td></tr>
+              <tr><td><b>反映者</b><br><small>1%</small></td><td>用「环境是否健康」做双赢的试金石</td><td>感知关系的温度与团队氛围</td><td>团队的「天气雷达」与镜子</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ex"><b>课堂练习 · </b>找出你团队/家庭里与你类型不同的两个人，用上表对照：他们的「不同行为」其实是哪种类型打法？为每个人写一句新的欣赏。</div>
+      </div>
+
+      <div class="module" id="m14">
+        <span class="mno">14</span>
+        <h2>非我主题 × 效能红灯自查</h2>
+        <div class="en">Not-Self Theme · The Red Light of Effectiveness</div>
+        <p>七个习惯修不动，多半不是「方法不对」，而是「灯还亮着」。非我主题是设计的自检仪：</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>红灯</th><th>类型</th><th>它在说什么</th><th>先回设计，再用习惯</th></tr></thead>
+            <tbody>
+              <tr><td class="ns"><b>挫败</b></td><td>生产者 / 显示生产者</td><td>「我在干没回应的事」</td><td>停下 → 重新过荐骨 → 习惯三重排要事</td></tr>
+              <tr><td class="ns"><b>愤怒</b></td><td>显示者</td><td>「我又被阻力卡住了」</td><td>补一次告知 → 习惯四重启双赢开局</td></tr>
+              <tr><td class="ns"><b>苦涩</b></td><td>投射者</td><td>「没被看见，好建议没人听」</td><td>撤回未邀请的付出 → 习惯五深耕倾听优势</td></tr>
+              <tr><td class="ns"><b>失望</b></td><td>反映者</td><td>「环境不对，我硬撑了」</td><td>换环境/延后决定 → 习惯二重写当下使命</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>口诀：<b>红灯亮起 → 暂停 → 回策略权威 → 从影响圈重新出手</b>。习惯是引擎油，设计是底盘——底盘歪了，机油救不了车。</p>
+        <div class="ex"><b>付诸行动（原书练习改编）· </b>本周每天睡前记录：今天红灯亮过吗？当时我在哪个圈（影响圈/关注圈）？下一次同样的场景，我的一句「积极回应」是什么？</div>
+      </div>
+
+      <div class="module" id="m15">
+        <span class="mno">15</span>
+        <h2>21 天整合实修：计划 · 执行 · 评价</h2>
+        <div class="en">The 21-Day Integration · Plan, Execute, Evaluate</div>
+        <p>把七个习惯拆进 21 天：第 1 周「看见」（习惯一二 + 设计靶心），第 2 周「聚焦」（习惯三 + 情感账户），第 3 周「合流」（习惯四五六七 + 类型打法）。</p>
+        <div class="four">
+          <div class="f"><div class="step">计</div><h4>计划</h4><p>每周 20–30 分钟：写角色 → 选要务 → 排程 → 排序。</p></div>
+          <div class="f"><div class="step">行</div><h4>执行</h4><p>每天三层：晨间意图 · 日间顺策略行动 · 晚间效能日记。</p></div>
+          <div class="f"><div class="step">评</div><h4>评价</h4><p>每周复盘：红灯亮过几次？影响圈扩大了吗？</p></div>
+          <div class="f"><div class="step">更</div><h4>更新</h4><p>21 天后重新给七个习惯打分，与起点对照。</p></div>
+        </div>
+        <div class="declare">活出你的设计，修炼你的习惯——由内而外，效能自然涌现。</div>
+        <div class="hd-box">
+          <span class="tag">人类图 × 效能</span>
+          <p>实修的终点不是「变成高效能模板人」，而是成为「按自己设计高效运转的唯一版本」。磨亮你的锯子，然后用你自己的姿势去锯你的树。</p>
+        </div>
+        <div class="ex"><b>结业行动 · </b>①完成 21 天打卡。②重写一版使命宣言。③选一个 100 天扎根目标（情感账户/双赢协议/四层面更新任选其一），写下第一步。</div>
+      </div>
+
+      <div class="toc-note" style="text-align:center;font-size:14px;padding:18px">
+        ✦ 十六模块到此。记住主轴：<b>活出你的设计（人类图）× 修炼你的习惯（七个习惯）→ 由内而外，效能自然涌现。</b> ✦
+      </div>
+
+      <div class="resnav">
+        <a class="home" href="hd-xiaoneng-zhidao-course.html">📘 课程主页<span class="tag">返回</span><small>课程全貌、理念与报名入口</small></a>
+        <a href="hd-xiaoneng-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 使命宣言 · 情感账户日志 · 可打印</small></a>
+        <a href="hd-xiaoneng-zhidao-cheatsheet.html">🃏 效能速查卡<small>类型锚点 · 成熟模式图 · 七习惯速查</small></a>
+        <a href="hd-xiaoneng-zhidao-course.html#join">✉️ 报名实修<small>立即加入 21 天 / 100 天</small></a>
+      </div>
+
+      <div class="toc-note" style="font-size:12.5px;color:var(--text-l)">
+        知识来源声明：人类图框架来自本站人类图知识体系（邓勤敏）；七个习惯知识模型与「付诸行动」练习整合自史蒂芬·柯维（Stephen R. Covey）著《高效能人士的七个习惯（25周年纪念版）》。本课件仅供学习参考。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 折叠分级
+  document.querySelectorAll('.level-title').forEach(t=>{
+    t.addEventListener('click',()=>t.classList.toggle('collapsed'));
+  });
+  // 滚动高亮 + 点击跳转关闭抽屉
+  const lessons=[...document.querySelectorAll('.lesson')];
+  lessons.forEach(l=>l.addEventListener('click',()=>{
+    if(window.innerWidth<=900){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+  }));
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;lessons.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+id));}});
+  },{rootMargin:'-30% 0px -60% 0px'});
+  document.querySelectorAll('.module').forEach(m=>obs.observe(m));
+</script>
+</body>
+</html>

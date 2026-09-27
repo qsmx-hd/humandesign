@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 效能之道 ｜ 用人类图，修炼高效能人生</title>
+<!--
+  《人类图 · 效能之道》｜课程主页（落地页）
+  VERSION: V1  ·  2026-09-27
+  changelog:
+    V1(2026-09-27) 初版。双螺旋骨架：知·人类图效能地图（类型·策略·权威·非我·成熟模式图）× 行·柯维《高效能人士的七个习惯》知识模型（影响圈/使命宣言/时间矩阵/情感账户/双赢协议/移情聆听/第三选择/磨锯四层面）。
+    整合主轴：活出你的设计 × 修炼七个习惯 → 由内而外，效能自然涌现。
+    重点融合书中每章末尾「付诸行动」练习。类型占比：生产者37% / 显示生产者33% / 投射者21% / 显示者8% / 反映者1%。
+  文件套装：course / courseware / workbook / cheatsheet（均以 hd-xiaoneng-zhidao- 前缀，互相相对链接）
+  知识来源声明：人类图框架来自本站人类图知识体系；七个习惯知识模型与练习整合自史蒂芬·柯维（Stephen R. Covey）著《高效能人士的七个习惯（25周年纪念版）》。仅供学习参考。
+-->
+<meta name="description" content="《人类图·效能之道》—— 把史蒂芬·柯维《高效能人士的七个习惯》的知识模型与付诸行动练习，落到你的类型、策略与权威上，一门由内而外修炼高效能人生的实修课程，由邓勤敏（Kan Man Tang）主讲。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-deep:#2D2118; --bg-deep2:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:12px; --radius-sm:8px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;}
+img{max-width:100}
+a{color:var(--primary-d);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.brandbar{position:sticky;top:0;z-index:200;background:rgba(45,33,24,.97);backdrop-filter:blur(8px);color:#F5E6D3;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.brandbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:var(--serif);font-size:18px;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:8px}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.nav{display:flex;gap:22px;font-size:14px}
+.nav a{color:#E8D8C5;opacity:.85;transition:.2s;white-space:nowrap}
+.nav a:hover{opacity:1;color:var(--gold-l)}
+.navToggle{display:none;background:none;border:0;color:#F5E6D3;font-size:24px;cursor:pointer;line-height:1}
+.mnav{display:none;flex-direction:column;background:var(--bg-deep2);padding:8px 0}
+.mnav a{padding:12px 20px;color:#E8D8C5;font-size:15px;border-bottom:1px solid rgba(255,255,255,.05)}
+
+/* Hero */
+.hero{position:relative;padding:74px 0 64px;background:
+  radial-gradient(1200px 400px at 80% -10%,rgba(212,168,67,.18),transparent),
+  linear-gradient(160deg,#2D2118 0%,#3D3128 55%,#4A3D32 100%);color:#F5E6D3;overflow:hidden;text-align:center}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border:1px solid rgba(212,168,67,.25);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:200px;height:200px;border:1px solid rgba(196,149,106,.22);border-radius:50%}
+.hero .eyebrow{letter-spacing:5px;font-size:12px;color:var(--gold-l);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,6vw,52px);line-height:1.25;color:#fff;font-weight:700;margin-bottom:8px}
+.hero h1 .accent{color:var(--gold-l)}
+.hero .lead{font-size:clamp(16px,2.4vw,20px);color:#E8D8C5;max-width:760px;margin:18px auto 10px;line-height:1.75}
+.hero .verse{font-family:var(--serif);font-style:italic;color:var(--primary-l);font-size:15px;margin:22px 0 30px;opacity:.92}
+.cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-block;padding:13px 26px;border-radius:40px;font-size:15px;font-weight:600;cursor:pointer;border:0;transition:.2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--primary));color:#2D2118;box-shadow:0 6px 18px rgba(212,168,67,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(212,168,67,.45)}
+.btn-ghost{background:transparent;color:#F5E6D3;border:1px solid rgba(245,230,211,.4)}
+.btn-ghost:hover{background:rgba(245,230,211,.1)}
+
+section{padding:60px 0}
+.sec-head{text-align:center;margin-bottom:38px}
+.sec-head .kicker{color:var(--primary-d);letter-spacing:3px;font-size:12px;font-weight:700;text-transform:uppercase}
+.sec-head h2{font-family:var(--serif);font-size:clamp(24px,4vw,34px);color:var(--dark);margin:8px 0 12px;font-weight:700}
+.sec-head p{color:var(--text-l);max-width:680px;margin:0 auto;font-size:15px}
+
+/* 双螺旋 */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+.dual .col{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.dual .col h3{font-family:var(--serif);font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.dual .col.know h3{color:var(--primary-d)}
+.dual .col.do h3{color:var(--awake)}
+.dual .col .tag{font-size:12px;letter-spacing:2px;color:var(--text-l);text-transform:uppercase;margin-bottom:14px;display:block}
+.dual .col ul{list-style:none}
+.dual .col li{padding:8px 0 8px 24px;position:relative;border-bottom:1px dashed var(--border);font-size:14.5px}
+.dual .col li:last-child{border-bottom:0}
+.dual .col li::before{content:"◆";position:absolute;left:0;top:8px;color:var(--gold);font-size:11px}
+.bridge{text-align:center;margin:26px auto 0;max-width:640px;background:linear-gradient(135deg,var(--primary),var(--gold));color:#2D2118;padding:14px 22px;border-radius:40px;font-weight:600;font-size:15px;box-shadow:var(--shadow-md)}
+
+/* 模块地图 */
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.mcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.2s;position:relative;overflow:hidden}
+.mcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.mcard .no{font-family:var(--serif);font-size:34px;color:var(--primary-l);line-height:1;opacity:.7}
+.mcard h3{font-size:17px;color:var(--dark);margin:10px 0 6px;font-weight:700}
+.mcard p{font-size:13.5px;color:var(--text-l);line-height:1.7}
+.mcard .pill{display:inline-block;font-size:11px;color:var(--primary-d);background:#FBF1E2;border:1px solid var(--border);border-radius:20px;padding:2px 10px;margin-top:10px}
+.band{background:var(--bg-deep);color:#F5E6D3;border-radius:var(--radius);padding:14px 20px;margin:30px 0 6px;font-family:var(--serif);font-size:17px;display:flex;align-items:center;gap:10px}
+.band .bar{width:4px;height:20px;background:var(--gold);border-radius:2px}
+
+/* 核心表 */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow);margin-top:10px}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:640px}
+th,td{border:1px solid var(--border);padding:11px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-deep);color:#F5E6D3;font-weight:600;letter-spacing:.5px}
+td b{color:var(--dark)}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}
+.sg{color:var(--awake);font-weight:600}
+
+/* 适合人群 */
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.who .w{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.who .w .ic{font-size:26px;margin-bottom:8px}
+.who .w h4{font-size:16px;color:var(--dark);margin-bottom:6px}
+.who .w p{font-size:13.5px;color:var(--text-l)}
+
+/* 路径 */
+.path{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.path .p{background:var(--bg-card);border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.path .p h3{font-family:var(--serif);font-size:20px;color:var(--dark);margin-bottom:4px}
+.path .p .days{color:var(--primary-d);font-weight:700;font-size:14px;margin-bottom:10px}
+.path .p ul{list-style:none;padding-left:0}
+.path .p li{padding:5px 0 5px 22px;position:relative;font-size:14px}
+.path .p li::before{content:"✓";position:absolute;left:0;color:var(--awake);font-weight:700}
+
+/* 讲师 */
+.teacher{display:grid;grid-template-columns:160px 1fr;gap:26px;align-items:center;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+.teacher .ava{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;color:#fff;margin:0 auto;box-shadow:var(--shadow-md)}
+.teacher h3{font-family:var(--serif);font-size:23px;color:var(--dark);margin-bottom:4px}
+.teacher .role{color:var(--primary-d);font-size:14px;margin-bottom:12px}
+.teacher p{font-size:14.5px;color:var(--text-l);line-height:1.8}
+
+/* CTA banner */
+.join{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:14px;padding:46px 30px;text-align:center;box-shadow:var(--shadow-md)}
+.join h2{font-family:var(--serif);font-size:clamp(22px,4vw,30px);color:#fff;margin-bottom:12px}
+.join p{color:#E8D8C5;max-width:620px;margin:0 auto 24px;font-size:15px}
+footer{background:var(--bg-deep);color:#C9BBA8;text-align:center;padding:30px 20px;font-size:13px;line-height:1.9}
+
+@media(max-width:860px){
+  .nav{display:none}
+  .navToggle{display:block}
+  .dual{grid-template-columns:1fr}
+  .path{grid-template-columns:1fr}
+  .teacher{grid-template-columns:1fr;text-align:center}
+  .teacher .ava{margin-bottom:6px}
+  section{padding:44px 0}
+  .who{grid-template-columns:repeat(2,1fr)}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:560px){
+  .who{grid-template-columns:1fr}
+  .resnav{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>人类图 · 效能之道</div>
+    <nav class="nav">
+      <a href="#idea">核心理念</a>
+      <a href="#map">课程地图</a>
+      <a href="#core">效能模型</a>
+      <a href="#who">适合谁</a>
+      <a href="#path">学习路径</a>
+      <a href="#teacher">讲师</a>
+      <a href="#join">报名</a>
+      <a href="hd-xiaoneng-zhidao-courseware.html">课件</a>
+      <a href="hd-xiaoneng-zhidao-workbook.html">手册</a>
+      <a href="hd-xiaoneng-zhidao-cheatsheet.html">速查卡</a>
+    </nav>
+    <button class="navToggle" aria-label="菜单" onclick="document.getElementById('mnav').classList.toggle('mblock')">☰</button>
+  </div>
+  <div class="mnav" id="mnav">
+    <a href="#idea">核心理念</a><a href="#map">课程地图</a><a href="#core">效能模型</a>
+    <a href="#who">适合谁</a><a href="#path">学习路径</a><a href="#teacher">讲师</a><a href="#join">报名</a>
+    <a href="hd-xiaoneng-zhidao-courseware.html">课件</a>
+    <a href="hd-xiaoneng-zhidao-workbook.html">手册</a>
+    <a href="hd-xiaoneng-zhidao-cheatsheet.html">速查卡</a>
+  </div>
+</div>
+<style>.mblock{display:flex!important}</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HUMAN DESIGN × THE 7 HABITS</div>
+    <h1>人类图 · <span class="accent">效能之道</span></h1>
+    <p class="lead">不是又一门「读懂你的图」的课，也不是又一次「翻完七习惯」的打卡。<br>这是一门把史蒂芬·柯维的 7 个习惯与「付诸行动」练习，落到你的类型、策略与权威上的实修课——<b>由内而外，效能自然涌现</b>。</p>
+    <p class="verse">「思想决定行动，行动决定习惯，习惯决定品德，品德决定命运。」—— 《高效能人士的七个习惯》<br>「先活出你的设计，再修炼你的习惯——图是出厂设置，习惯是操作系统。」—— 效能之道</p>
+    <div class="cta">
+      <a class="btn btn-gold" href="#join">开始这趟旅程</a>
+      <a class="btn btn-ghost" href="#map">查看课程地图</a>
+    </div>
+  </div>
+</header>
+
+<section id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">THE DUAL HELIX</span>
+      <h2>人类图是出厂设置，七个习惯是操作系统</h2>
+      <p>市面上的课程大多止步于「知道」：知道自己是投射者、知道要积极主动。<br>但知道设计，不等于活出设计；读完习惯，不表示改了行为。真正的效能，是让两者在每日练习里汇合。</p>
+    </div>
+    <div class="dual">
+      <div class="col know">
+        <span class="tag">知 · 人类图效能地图</span>
+        <h3>📐 它告诉你「你的效能长什么样」</h3>
+        <ul>
+          <li><b>类型与策略</b>：你与世界正确互动、正确「用力」的开关（生产者 37% / 显示生产者 33% / 投射者 21% / 显示者 8% / 反映者 1%）</li>
+          <li><b>内在权威</b>：身体的决策系统，效能的第一道闸门</li>
+          <li><b>成熟模式图</b>：你的设计指明，你在依赖期 / 独立期 / 互赖期天然的位置与节奏</li>
+          <li><b>非我主题</b>：偏离设计时的效能红灯（挫败 / 愤怒 / 苦涩 / 失望）</li>
+          <li><b>去条件化</b>：放下「别人教你的努力方式」，回到自己的设计</li>
+        </ul>
+      </div>
+      <div class="col do">
+        <span class="tag">行 · 七个习惯</span>
+        <h3>🗝️ 它教你「如何修炼效能操作系统」</h3>
+        <ul>
+          <li><b>思维定式与由内而外</b>：改变行为之前，先看「你看世界的眼镜」</li>
+          <li><b>个人成功三习惯</b>：积极主动（影响圈）· 以终为始（使命宣言）· 要事第一（时间矩阵）</li>
+          <li><b>公众成功三习惯</b>：双赢思维（双赢协议）· 知彼解己（移情聆听）· 统合综效（第三选择）</li>
+          <li><b>不断更新</b>：身体 / 精神 / 智力 / 社会情感，四个层面磨锯</li>
+          <li><b>付诸行动</b>：每个习惯都配柯维原书的落地练习，知行结合</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bridge">🌉 效能之道，就是让人类图从「出厂设置」变成「高效能人生」的那一座桥——活出设计 × 修炼习惯，由内而外</div>
+  </div>
+</section>
+
+<section id="map" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CURRICULUM MAP</span>
+      <h2>课程地图 · 16 个实修模块</h2>
+      <p>基础篇打底，应用篇落地。<br>不堆知识，每个模块都把柯维原书「付诸行动」的练习搬进你的设计——效能是「练出来」的，不是「想出来」的。</p>
+    </div>
+
+    <div class="band"><span class="bar"></span>基础篇 · 用人类图，看清你的效能地图</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">00</div><h3>缘起：当人类图遇见七个习惯</h3><p>图是出厂设置，习惯是操作系统。为什么「懂图」「读完书」之后，效能还是没变？</p><span class="pill">开篇 · 定位</span></div>
+      <div class="mcard"><div class="no">01</div><h3>思维定式与由内而外</h3><p>先看「眼镜」再谈改变；P/PC 平衡（鹅生金蛋）：只顾产出不计产能，效能必崩。</p><span class="pill">地基</span></div>
+      <div class="mcard"><div class="no">02</div><h3>人类图是效能地图</h3><p>类型·策略·权威·非我主题——你的设计蓝图，正是「如何顺着自己高效」的地基。</p><span class="pill">总论</span></div>
+      <div class="mcard"><div class="no">03</div><h3>成熟模式图：依赖→独立→互赖</h3><p>七个习惯的成长三阶段总览，对齐你的设计现状：你卡在哪一阶段？</p><span class="pill">总览</span></div>
+      <div class="mcard"><div class="no">04</div><h3>习惯一 积极主动 × 影响圈</h3><p>关注圈 vs 影响圈、三类问题、语言的能量——用设计确认「力所能及」在哪。</p><span class="pill">个人成功</span></div>
+      <div class="mcard"><div class="no">05</div><h3>习惯二 以终为始 × 使命宣言</h3><p>两次创造、葬礼心灵演练、使命宣言六步骤——与你的轮回交叉互相对照。</p><span class="pill">个人成功</span></div>
+      <div class="mcard"><div class="no">06</div><h3>习惯三 要事第一 × 时间矩阵</h3><p>四象限与第二象限组织法——再叠加人类图：能量管理优于时间管理。</p><span class="pill">个人成功</span></div>
+      <div class="mcard"><div class="no">07</div><h3>情感账户：公众成功的地基</h3><p>七种存款方式，从独立走向互赖——类型不同，你的「存款语言」也不同。</p><span class="pill">人际地基</span></div>
+    </div>
+
+    <div class="band"><span class="bar"></span>应用篇 · 把七个习惯，活进你的设计</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">08</div><h3>习惯四 双赢思维</h3><p>人际交往六模式、双赢协议五要素——按类型设计你的双赢节奏。</p><span class="pill">公众成功</span></div>
+      <div class="mcard"><div class="no">09</div><h3>习惯五 知彼解己</h3><p>先诊断后开方、移情聆听四阶段、四种自传式回应——投射者21%的天然优势课。</p><span class="pill">公众成功</span></div>
+      <div class="mcard"><div class="no">10</div><h3>习惯六 统合综效</h3><p>尊重差异、沟通三层次、寻找第三选择五步骤——差异不是障碍，是原料。</p><span class="pill">公众成功</span></div>
+      <div class="mcard"><div class="no">11</div><h3>习惯七 不断更新</h3><p>磨锯四层面（身体/精神/智力/社会情感）× 人类图九大中心的能量补给。</p><span class="pill">自我提升</span></div>
+      <div class="mcard"><div class="no">12</div><h3>类型 × 个人成功</h3><p>习惯一二三的类型打法：生产者回应式主动、显示者告知式以终为始、投射者邀请式要事第一。</p><span class="pill">整合</span></div>
+      <div class="mcard"><div class="no">13</div><h3>类型 × 公众成功</h3><p>习惯四五六的类型打法：五种类型的双赢、倾听与统合综效，各有天然路径。</p><span class="pill">整合</span></div>
+      <div class="mcard"><div class="no">14</div><h3>非我主题 × 效能红灯</h3><p>挫败/愤怒/苦涩/失望 = 效能自检仪：红灯亮起，先回设计，再谈习惯。</p><span class="pill">自检</span></div>
+      <div class="mcard"><div class="no">15</div><h3>21 天整合实修</h3><p>计划·执行·评价：把七个习惯拆进 21 天打卡，磨亮你的锯子，活出你的设计。</p><span class="pill">究竟</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="core">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CORE MODEL</span>
+      <h2>类型 × 效能转化 · 效能红灯 → 顺流状态</h2>
+      <p>人类图的非我主题，就是「偏离设计、效能卡住」的状态；活出设计，习惯才修得动。<br>当效能红灯亮起，先回到策略权威，再用对应的习惯把它转回顺流。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>类型</th><th>策略</th><th>效能红灯<br><small>（非我·卡点）</small></th><th>顺流状态<br><small>（设计·签名）</small></th><th>人类图落地 · 回到顺流</th></tr></thead>
+        <tbody>
+          <tr><td><b>生产者<br>Generator</b><br><small>37%</small></td><td>等待回应</td><td class="ns">挫败<br>Frustration</td><td class="sg">满足<br>Satisfaction</td><td>看见「硬干不热爱的事」→ 习惯一：只在影响圈内选回应；用习惯三把荐骨「嗯哼」的事放进第二象限。</td></tr>
+          <tr><td><b>显示生产者<br>MG</b><br><small>33%</small></td><td>等待回应<br>（更多主动）</td><td class="ns">挫败<br>Frustration</td><td class="sg">满足<br>Satisfaction</td><td>看见「多头并进、事事打断」→ 习惯三一次一件事；把多元热情聚焦成一阵阵冲刺。</td></tr>
+          <tr><td><b>显示者<br>Manifestor</b><br><small>8%</small></td><td>告知<br>Inform</td><td class="ns">愤怒<br>Anger</td><td class="sg">平静<br>Peace</td><td>看见「不告知就被阻碍」→ 习惯一先做影响圈内可控的事：行动前告知，把阻力化成顺风。</td></tr>
+          <tr><td><b>投射者<br>Projector</b><br><small>21%</small></td><td>等待邀请</td><td class="ns">苦涩<br>Bitterness</td><td class="sg">成功<br>Success</td><td>看见「好建议没人听、硬推自己累」→ 习惯五知彼解己是天然优势：等邀请再给，先诊断后开方。</td></tr>
+          <tr><td><b>反映者<br>Reflector</b><br><small>1%</small></td><td>等待 28 天</td><td class="ns">失望<br>Disappointment</td><td class="sg">喜悦+惊喜</td><td>看见「在对的环境硬做决定」→ 习惯二先写使命宣言，重大决定随月亮周期（约28天）再定。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--text-l);margin-top:14px;text-align:center">💡 一句话口诀：<b>红灯亮起</b>就「暂停 → 回策略权威 → 从影响圈重新出手」；<b>顺流</b>就停在设计里，用习惯让能量持续复利。</p>
+  </div>
+</section>
+
+<section id="who" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">WHO IS IT FOR</span>
+      <h2>这门课，适合这样的你</h2>
+      <p>无论你是人类图老手还是刚入门，只要你想「顺着自己的设计变高效」而非「逼自己复制别人的自律模板」，这里就有你的位置。</p>
+    </div>
+    <div class="who">
+      <div class="w"><div class="ic">📖</div><h4>读过七个习惯却没改变的人</h4><p>道理都懂，一到工作生活就回到老模式。你需要的是把练习接进自己设计的方法。</p></div>
+      <div class="w"><div class="ic">🗺️</div><h4>读懂图却活不出的人</h4><p>知道策略权威，一忙起来就硬干硬推。用成熟模式图定位卡点，练习里慢慢松开。</p></div>
+      <div class="w"><div class="ic">⚙️</div><h4>长期「很忙很低效」的人</h4><p>被第一、三象限追着跑。用时间矩阵 + 能量管理，把要事放回第一位。</p></div>
+      <div class="w"><div class="ic">🤝</div><h4>管理者 / 团队负责人</h4><p>情感账户、双赢协议、统合综效——把公众成功三习惯变成团队语言。</p></div>
+      <div class="w"><div class="ic">💡</div><h4>人类图解读师 / 分析师</h4><p>从「解读类型」升级到「陪伴成长」，学会用七个习惯陪客户把设计活成日常。</p></div>
+      <div class="w"><div class="ic">🌱</div><h4>想持续精进的人</h4><p>不满足于鸡汤与技巧，想要一条能落地、可自检、日日更新的「由内而外」之道。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">LEARNING PATH</span>
+      <h2>两条学习路径</h2>
+      <p>效能之道不是听明白的，是练出来的。给自己一个小目标，先坚持起来。</p>
+    </div>
+    <div class="path">
+      <div class="p">
+        <h3>🌤️ 21 天效能入门</h3>
+        <div class="days">每天 10–15 分钟 · 觉察·练习·行动 三层打卡</div>
+        <ul>
+          <li>建立「每日效能觉察」的基本节奏</li>
+          <li>认出自己的非我·效能红灯触发点</li>
+          <li>写出一句专属使命宣言并天天念</li>
+          <li>用时间矩阵完成一次「第二象限周计划」</li>
+          <li>完成 21 篇效能觉察日记</li>
+        </ul>
+      </div>
+      <div class="p">
+        <h3>🌳 100 天高效能扎根</h3>
+        <div class="days">把练习变成呼吸 · 口诀：「由内而外，先设计，后习惯」</div>
+        <ul>
+          <li>从「工具式修行」走向「在生活中练习」</li>
+          <li>七个习惯逐个稳定落地（附柯维原书练习）</li>
+          <li>在等待 / 告知 / 回应中自然对齐设计</li>
+          <li>建立情感账户与双赢协议的人际系统</li>
+          <li>迈向「身体·精神·智力·社会情感」四层面更新</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="teacher" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">YOUR GUIDE</span>
+      <h2>带课讲师</h2>
+    </div>
+    <div class="teacher">
+      <div class="ava">邓</div>
+      <div>
+        <h3>邓勤敏（Kan Man Tang）</h3>
+        <div class="role">人类图分析师 · 量子人类图教练 · 勤思妙享创始人</div>
+        <p>深耕人类图与效能成长的整合教学，已研发并交付《觉察之道》《开心之道》《财运之道》系列课程。本课程以史蒂芬·柯维（Stephen R. Covey）《高效能人士的七个习惯》的知识模型为骨架，重点融合原书每章末尾「付诸行动」的练习，与人类图「类型·策略·权威·非我主题·成熟模式图」内核深度交织——不只教你读懂图，更陪你「活出设计，修炼习惯，由内而外，让效能自然涌现」。相信：图是出厂设置，习惯是操作系统；由内而外，效能自来。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="join">
+      <h2>准备好，用你的设计修炼高效能人生了吗？</h2>
+      <p>不期待立刻脱胎换骨，但要一辈子练习「由内而外」。<br>从今天的一次「影响圈觉察」开始——你本就是自己的第一份资产，磨亮锯子，效能自来。</p>
+      <div class="cta" style="justify-content:center">
+        <a class="btn btn-gold" href="#">立即加入 21 天实修</a>
+        <a class="btn btn-ghost" href="#map">下载课程大纲</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">COURSE KIT</span>
+      <h2>课程资源包 · 四件套</h2>
+      <p>落地页之外，配套三份资料。建议顺序：先读课件建立框架，再用手册练习，速查卡随身翻。</p>
+    </div>
+    <div class="resnav">
+      <a class="home" href="hd-xiaoneng-zhidao-course.html">📘 课程主页<span class="tag">你在这里</span><small>课程全貌、理念与报名入口</small></a>
+      <a href="hd-xiaoneng-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 人类图×七个习惯 · 知识模型全解</small></a>
+      <a href="hd-xiaoneng-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 使命宣言 · 情感账户日志 · 可打印</small></a>
+      <a href="hd-xiaoneng-zhidao-cheatsheet.html">🃏 效能速查卡<small>类型锚点 · 成熟模式图 · 七习惯速查</small></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>《人类图 · 效能之道》</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+document.querySelectorAll('.mnav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mnav').classList.remove('mblock')));
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 效能之道 ｜ 效能速查卡</title>
+<!--
+  《人类图 · 效能之道》｜效能速查卡
+  VERSION: V1  ·  2026-09-27
+  changelog:
+    V1(2026-09-27) 初版。结构对齐《人类图·觉察之道》《人类图·开心之道》《人类图·财运之道》速查卡。
+    含五大类型效能锚点（生产者37%/显示生产者33%/投射者21%/显示者8%/反映者1%）/ 成熟模式图三阶段 /
+    七个习惯速查（低效vs高效+关键模型+原书练习）/ 每日口诀。
+  知识来源：人类图框架来自本站人类图知识体系；七个习惯整合自史蒂芬·柯维著《高效能人士的七个习惯（25周年纪念版）》。仅供学习参考。
+-->
+<style>
+:root{--bg:#F5F0E8;--card:#FFFBF5;--dark:#2D2118;--gold:#C4956A;--gold-d:#A87B52;--brown:#8B6644;--border:#E8DCC8;--awake:#5B7B6F;--notself:#9C5B4D;--text:#3D3530;--text-l:#6B5D52;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:22px 16px 60px}
+header{text-align:center;padding:18px 10px 8px}
+header .kick{color:var(--gold-d);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+header h1{font-family:"Noto Serif SC",serif;font-size:26px;color:var(--dark);margin:6px 0 4px}
+header p{color:var(--text-l);font-size:13.5px}
+.sec-t{font-family:"Noto Serif SC",serif;color:var(--dark);font-size:18px;border-left:5px solid var(--gold);padding-left:10px;margin:30px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.grid5{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(45,33,24,.07);position:relative;overflow:hidden}
+.card .pct{position:absolute;top:10px;right:14px;font-family:"Noto Serif SC",serif;font-size:30px;color:var(--gold);opacity:.35}
+.card h3{font-size:17px;color:var(--brown);margin-bottom:2px}
+.card .strat{font-size:12.5px;color:var(--gold-d);margin-bottom:8px}
+.card .row{font-size:13.5px;margin:5px 0;display:flex;gap:6px}
+.card .row .k{color:var(--text-l);flex:0 0 56px}
+.ns{color:var(--notself);font-weight:700}.sg{color:var(--awake);font-weight:700}
+.card .anchor{background:#FBF3E6;border:1px dashed var(--gold);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13px;color:var(--brown)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.four .f{background:var(--card);border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:10px;padding:14px;text-align:center}
+.four .f .big{font-family:"Noto Serif SC",serif;font-size:34px;color:var(--gold-d);line-height:1}
+.four .f h4{font-size:15px;color:var(--dark);margin:6px 0 4px}
+.four .f p{font-size:12.5px;color:var(--text-l);margin:0}
+.layer{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.layer .L{background:var(--card);border:1px solid var(--border);border-top:4px solid var(--awake);border-radius:10px;padding:14px}
+.layer .L .h{font-family:"Noto Serif SC",serif;font-weight:700;color:var(--brown);font-size:16px;margin-bottom:3px}
+.layer .L .s{color:var(--gold-d);font-size:11.5px;margin-bottom:5px}
+.layer .L p{font-size:12.5px;color:var(--text-l);margin:0}
+.h7{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.h7 .H{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(45,33,24,.07)}
+.h7 .H .no{font-family:"Noto Serif SC",serif;font-size:22px;color:var(--gold-d);font-weight:700}
+.h7 .H h4{font-size:15.5px;color:var(--dark);margin:2px 0 6px}
+.h7 .H p{font-size:12.5px;color:var(--text-l);margin:4px 0}
+.h7 .H .tool{background:#FBF3E6;border:1px dashed var(--gold);border-radius:8px;padding:6px 10px;font-size:12.5px;color:var(--brown);margin-top:8px}
+.mantra{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:14px;padding:22px;margin-top:14px;text-align:center}
+.mantra h3{color:#fff;font-family:"Noto Serif SC",serif;font-size:19px;margin-bottom:8px}
+.mantra p{font-size:14px;opacity:.96;margin:4px 0}
+footer{text-align:center;color:var(--text-l);font-size:12px;margin-top:34px;border-top:1px solid var(--border);padding-top:14px}
+@media(max-width:560px){.grid,.grid5,.h7,.layer{grid-template-columns:1fr}.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){.layer{grid-template-columns:1fr 1fr}}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:560px){.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kick">HUMAN DESIGN × 7 HABITS · QUICK CARD</div>
+  <h1>人类图 · 效能之道 ｜ 效能速查卡</h1>
+  <p>贴在桌面、存进手机。效能卡住时，翻一眼，回策略权威，修一个习惯，由内而外重新出发。</p>
+</header>
+
+<div class="sec-t">① 五大类型 · 效能锚点</div>
+<div class="grid5">
+  <div class="card"><div class="pct">37%</div><h3>生产者<br>Generator</h3><div class="strat">策略：等待回应</div>
+    <div class="row"><span class="k">红灯</span><span class="ns">挫败</span></div>
+    <div class="row"><span class="k">顺流</span><span class="sg">满足</span></div>
+    <div class="row"><span class="k">权威</span><span>荐骨（嗯哼/嗯嗯）</span></div>
+    <div class="anchor">锚点：「只对荐骨嗯哼的事用力。」把嗯哼的事放进第二象限，效率天然翻倍。</div>
+  </div>
+  <div class="card"><div class="pct">33%</div><h3>显示生产者<br>MG</h3><div class="strat">策略：等待回应（更多主动）</div>
+    <div class="row"><span class="k">红灯</span><span class="ns">挫败</span></div>
+    <div class="row"><span class="k">顺流</span><span class="sg">满足</span></div>
+    <div class="row"><span class="k">权威</span><span>荐骨 / 情绪</span></div>
+    <div class="anchor">锚点：一次一件事。多元热情聚焦成冲刺，不被急事（Ⅲ象限）偷走。</div>
+  </div>
+  <div class="card"><div class="pct">8%</div><h3>显示者<br>Manifestor</h3><div class="strat">策略：告知 Inform</div>
+    <div class="row"><span class="k">红灯</span><span class="ns">愤怒</span></div>
+    <div class="row"><span class="k">顺流</span><span class="sg">平静</span></div>
+    <div class="row"><span class="k">权威</span><span>情绪 / 脾 / 意志力</span></div>
+    <div class="anchor">锚点：「行动前说一句『我要做 X』。」告知是双赢的开局键，为开创留白。</div>
+  </div>
+  <div class="card"><div class="pct">21%</div><h3>投射者<br>Projector</h3><div class="strat">策略：等待邀请</div>
+    <div class="row"><span class="k">红灯</span><span class="ns">苦涩</span></div>
+    <div class="row"><span class="k">顺流</span><span class="sg">成功</span></div>
+    <div class="row"><span class="k">权威</span><span>情绪 / 脾 / 自我投射</span></div>
+    <div class="anchor">锚点：「知彼解己是出厂技能。」等邀请再给洞察，先诊断后开方；休息是要事。</div>
+  </div>
+  <div class="card"><div class="pct">1%</div><h3>反映者<br>Reflector</h3><div class="strat">策略：等待 28 天</div>
+    <div class="row"><span class="k">红灯</span><span class="ns">失望</span></div>
+    <div class="row"><span class="k">顺流</span><span class="sg">喜悦+惊喜</span></div>
+    <div class="row"><span class="k">权威</span><span> lunar 月亮（约 28 天）</span></div>
+    <div class="anchor">锚点：「环境不对，决定先放放。」重大决定随月亮周期排程，使命宣言允许修改。</div>
+  </div>
+</div>
+
+<div class="sec-t">② 成熟模式图 · 三阶段一更新</div>
+<div class="layer">
+  <div class="L"><div class="h">依赖期</div><div class="s">围绕「你」：你照顾我</div><p>低效能语言：「你来」「我办不到」。起点，不可耻，但别久留。</p></div>
+  <div class="L"><div class="h">独立期</div><div class="s">习惯一二三 · 个人成功</div><p>积极主动 → 以终为始 → 要事第一。语言：「我可以」「我负责」。</p></div>
+  <div class="L"><div class="h">互赖期</div><div class="s">习惯四五六 · 公众成功</div><p>双赢思维 → 知彼解己 → 统合综效。语言：「我们可以」。</p></div>
+  <div class="L"><div class="h">不断更新</div><div class="s">习惯七 · 螺旋上升</div><p>身体·精神·智力·社会情感四层面磨锯，强化全部前六习惯。</p></div>
+</div>
+
+<div class="sec-t">③ 七个习惯速查 · 低效 → 高效</div>
+<div class="h7">
+  <div class="H"><div class="no">①</div><h4>积极主动 BE PROACTIVE</h4><p class="ns">低效：受害者模式——责怪·合理化·抱怨</p><p class="sg">高效：在刺激与回应间选择回应的自由</p><div class="tool">关键模型：影响圈/关注圈 · 三类问题 · 原书练习：语言改写 + 30天试验</div></div>
+  <div class="H"><div class="no">②</div><h4>以终为始 BEGIN WITH THE END IN MIND</h4><p class="ns">低效：忙碌且茫然，梯子搭错墙</p><p class="sg">高效：一切事物两次创造，先智力后实质</p><div class="tool">关键模型：葬礼演练 · 使命宣言六步骤 · 角色≤7 · 原书练习：愿景六问</div></div>
+  <div class="H"><div class="no">③</div><h4>要事第一 PUT FIRST THINGS FIRST</h4><p class="ns">低效：被紧急小事追着跑</p><p class="sg">高效：要事不放第二，聚焦Ⅱ象限</p><div class="tool">关键模型：时间矩阵 · 第二象限周计划 · 责任型授权 · 原书练习：三日活动记录</div></div>
+  <div class="H"><div class="no">④</div><h4>双赢思维 THINK WIN-WIN</h4><p class="ns">低效：赢/输竞技场思维</p><p class="sg">高效：合作舞台，他人之得非我之失</p><div class="tool">关键模型：六交往模式 · 双赢协议五要素 · 原书练习：敢作敢为×善解人意平衡表</div></div>
+  <div class="H"><div class="no">⑤</div><h4>知彼解己 SEEK FIRST TO UNDERSTAND</h4><p class="ns">低效：不诊断就开方</p><p class="sg">高效：先理解别人，再求被理解</p><div class="tool">关键模型：移情聆听四阶段 · 四种自传式回应 · 原书练习：倾听打分 + 重来一次的谈话</div></div>
+  <div class="H"><div class="no">⑥</div><h4>统合综效 SYNERGIZE</h4><p class="ns">低效：1+1=0.5（提防）或 1.5（妥协）</p><p class="sg">高效：1+1＞2，创造第三选择</p><div class="tool">关键模型：沟通三层次 · 尊重差异 · 第三选择五步骤 · 原书练习：差异尊重自评</div></div>
+  <div class="H"><div class="no">⑦</div><h4>不断更新 SHARPEN THE SAW</h4><p class="ns">低效：没空磨锯子，越锯越钝</p><p class="sg">高效：优化最重要的资产——自己</p><div class="tool">关键模型：四层面更新 · 计划-执行-评价 · 原书练习：四层面检测表 + 更新计划</div></div>
+</div>
+
+<div class="sec-t">④ 效能红灯 · 自检仪</div>
+<div class="four">
+  <div class="f"><div class="big">挫败</div><h4>生产者 / 显示生产者</h4><p>「我在干没回应的事」→ 停下，重新过荐骨</p></div>
+  <div class="f"><div class="big">愤怒</div><h4>显示者</h4><p>「我被阻力卡住」→ 补一次告知</p></div>
+  <div class="f"><div class="big">苦涩</div><h4>投射者</h4><p>「没被看见」→ 撤回未邀请的付出，深耕倾听</p></div>
+  <div class="f"><div class="big">失望</div><h4>反映者</h4><p>「环境不对」→ 换环境，决定延后</p></div>
+</div>
+
+<div class="sec-t">⑤ 每日口诀</div>
+<div class="mantra">
+  <h3>活出设计 × 修炼习惯 → 由内而外，效能自然涌现</h3>
+  <p>红灯亮起 → 暂停 → 回策略权威 → 从影响圈重新出手。</p>
+  <p>积极主动 · 以终为始 · 要事第一 · 双赢思维 · 知彼解己 · 统合综效 · 不断更新。</p>
+</div>
+
+<div class="resnav">
+  <a class="home" href="hd-xiaoneng-zhidao-course.html">📘 课程主页<span class="tag">返回</span><small>课程全貌、理念与报名入口</small></a>
+  <a href="hd-xiaoneng-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 人类图×七个习惯</small></a>
+  <a href="hd-xiaoneng-zhidao-workbook.html">📝 练习手册<small>21 天打卡 · 使命宣言 · 情感账户日志 · 可打印</small></a>
+  <a href="hd-xiaoneng-zhidao-course.html#join">✉️ 报名实修<small>立即加入 21 天 / 100 天</small></a>
+</div>
+
+<footer>
+  <div>《人类图 · 效能之道》效能速查卡</div>
+  <div>七个习惯整合自史蒂芬·柯维《高效能人士的七个习惯（25周年纪念版）》｜仅供学习参考</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+</div>
+</body>
+</html>
