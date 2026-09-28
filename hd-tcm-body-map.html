@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>身体地图 · 人类图 × 中医五行</title>
+<script src="tcm-data.js"></script>
+<style>
+  :root{
+    --cream:#F5F0E8; --gold:#C4956A; --brown:#2D2118; --brown2:#5A4634;
+    --line:#E3D9C8; --card:#FFFDF8; --gold-l:#E8D5BC;
+    --el-木:#6B8E5A; --el-火:#A65B4B; --el-土:#B08D4F; --el-金:#8C8C9A; --el-水:#4A6FA5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--brown);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.75;padding:0 0 60px;-webkit-tap-highlight-color:transparent;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 14px;}
+
+  /* ---------- 顶栏（V2：标题组居中，删右侧注释） ---------- */
+  header{background:linear-gradient(160deg,#FFFDF8,#F7EFE2);border-bottom:3px double var(--gold);padding:20px 14px 16px;margin-bottom:8px;}
+  .hd-in{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;}
+  h1{font-size:1.5rem;letter-spacing:.04em;}
+  h1 .ver{margin-left:10px;vertical-align:middle;position:relative;top:-2px;}
+  h1 small{font-size:.72rem;font-weight:400;color:var(--brown2);letter-spacing:.1em;display:block;margin-top:4px;}
+  .ver{display:inline-block;background:var(--gold);color:#fff;border-radius:4px;padding:1px 9px;font-size:.76rem;}
+
+  /* ---------- 导航（V2：6 键均分整页宽度，移动端 3×2） ---------- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-bottom:18px;}
+  .nav-in{max-width:1120px;margin:0 auto;padding:0 8px;display:grid;grid-template-columns:repeat(6,1fr);}
+  nav button{background:none;border:none;border-bottom:3px solid transparent;padding:11px 4px;font-size:.9rem;color:var(--brown2);cursor:pointer;font-family:inherit;white-space:nowrap;text-align:center;transition:.15s;}
+  nav button:hover{color:var(--brown);background:#F1E9DC;}
+  nav button.on{color:var(--brown);border-bottom-color:var(--gold);font-weight:600;}
+  @media(max-width:920px){ nav button{font-size:.8rem;padding:10px 2px;} }
+
+  h2{font-size:1.12rem;margin:0 0 12px;padding-left:11px;border-left:5px solid var(--gold);}
+  h3{font-size:.98rem;margin:18px 0 8px;color:var(--brown);}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;box-shadow:0 1px 3px rgba(45,33,24,.04);}
+  .warn{background:#FBF3E4;border-color:var(--gold);}
+  .meta{color:var(--brown2);font-size:.8rem;}
+  .sec{display:none;}
+  .sec.on{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- 控件 ---------- */
+  input,select,textarea{border:1px solid var(--line);background:#fff;color:var(--brown);border-radius:8px;padding:8px 11px;font-size:.9rem;font-family:inherit;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-l);border-color:var(--gold);}
+  button{font-family:inherit;cursor:pointer;}
+  .btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:.9rem;transition:.15s;}
+  .btn:hover{background:#B4845A;}
+  .btn.ghost{background:#fff;color:var(--brown);border:1px solid var(--gold);}
+  .btn.ghost:hover{background:#F7EFE2;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+  /* ---------- 闸门查询 ---------- */
+  .gate-out{margin-top:14px;}
+  .gcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff;border-left:5px solid var(--gold);}
+  .gcard-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+  .gsym{font-size:2.1rem;line-height:1;color:var(--brown);}
+  .gname{font-size:1.05rem;font-weight:600;}
+  .gno{display:inline-block;background:var(--brown);color:var(--cream);border-radius:20px;padding:1px 11px;font-size:.78rem;}
+  .chain{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.86rem;margin:8px 0;}
+  .chain .step{background:#F7EFE2;border-radius:7px;padding:3px 10px;border:1px solid var(--line);}
+  .chain .arr{color:var(--gold);font-weight:700;}
+  .el{display:inline-block;min-width:1.5em;text-align:center;border-radius:5px;color:#fff;font-size:.78rem;padding:1px 6px;}
+  .e-木{background:var(--el-木);} .e-火{background:var(--el-火);} .e-土{background:var(--el-土);}
+  .e-金{background:var(--el-金);} .e-水{background:var(--el-水);}
+  .rel-g{color:#5a7d4a;font-weight:600;} .rel-b{color:#a65b4b;font-weight:600;} .rel-n{color:var(--brown2);font-weight:600;}
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0;}
+  .kv div{background:#FAF6EE;border-radius:8px;padding:7px 11px;font-size:.84rem;}
+  .kv b{display:block;color:var(--brown2);font-size:.72rem;font-weight:400;letter-spacing:.06em;}
+
+  /* ---------- 五行地图 ---------- */
+  .mapgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;}
+  @media(max-width:860px){.mapgrid{grid-template-columns:1fr;}}
+  #wuxingSvg{width:100%;height:auto;display:block;}
+  .wx-node{cursor:pointer;transition:.18s;}
+  .wx-node:hover circle{filter:brightness(1.08);}
+  .wx-node .ring{fill:none;stroke-width:3;opacity:0;transition:.25s;}
+  .wx-node.hot .ring{opacity:1;}
+  .wx-node .lbl{font-size:15px;font-weight:700;fill:#fff;pointer-events:none;font-family:"Microsoft YaHei",sans-serif;}
+  .wx-node .sub{font-size:10px;fill:rgba(255,255,255,.92);pointer-events:none;font-family:"Microsoft YaHei",sans-serif;}
+  .wx-edge{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:.28;transition:.25s;}
+  .wx-edge.sheng{stroke:#C4956A;}
+  .wx-edge.ke{stroke:#A65B4B;stroke-dasharray:6 5;}
+  .wx-edge.hot{opacity:1;stroke-width:3.6;}
+  .edge-lbl{font-size:9.5px;fill:var(--brown2);font-family:"Microsoft YaHei",sans-serif;pointer-events:none;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--brown2);margin-top:6px;}
+  .legend i{display:inline-block;width:22px;height:0;border-top:2.4px solid;vertical-align:middle;margin-right:4px;}
+  .lg-sheng{border-color:#C4956A;} .lg-ke{border-color:#A65B4B;border-top-style:dashed;}
+
+  /* ---------- 身体时钟 ---------- */
+  .clockgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px;align-items:start;}
+  @media(max-width:860px){.clockgrid{grid-template-columns:1fr;}}
+  #clockSvg{width:100%;height:auto;max-width:520px;display:block;margin:0 auto;}
+  .ck-wedge{cursor:pointer;transition:.15s;}
+  .ck-wedge:hover{opacity:.82;}
+  .ck-t{font-size:12px;font-weight:700;font-family:"Microsoft YaHei",sans-serif;pointer-events:none;}
+  .ck-m{font-size:9px;font-family:"Microsoft YaHei",sans-serif;pointer-events:none;}
+  .now-box{border:2px solid var(--gold);border-radius:12px;padding:14px 16px;background:linear-gradient(150deg,#FFFDF8,#FBF3E4);}
+  .now-box .big{font-size:1.9rem;font-weight:700;line-height:1.2;}
+  .now-box .tm{font-size:.86rem;color:var(--brown2);letter-spacing:.05em;}
+  .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:#A65B4B;margin-right:6px;animation:pl 1.6s infinite;}
+  @keyframes pl{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
+
+  /* ---------- 表格 ---------- */
+  table{width:100%;border-collapse:collapse;font-size:.85rem;background:#fff;}
+  th{background:var(--brown);color:var(--cream);padding:8px 10px;text-align:left;font-weight:600;}
+  td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top;}
+  tr:nth-child(even) td{background:#FAF6EE;}
+  tr.clickable{cursor:pointer;}
+  tr.clickable:hover td{background:#F3EADA;}
+  .tw{overflow:auto;max-height:600px;border:1px solid var(--line);border-radius:10px;}
+
+  /* ---------- PHS / 四箭头 ---------- */
+  .phs-el{display:block;width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 13px;margin:7px 0;text-align:left;background:#fff;transition:.15s;}
+  .phs-el:hover{border-color:var(--gold);background:#FBF7EF;}
+  .phs-el.on{border-color:var(--gold);background:#FBF3E4;box-shadow:0 0 0 2px var(--gold-l);}
+  .phs-el b{font-size:.9rem;}
+  .phs-hint{font-size:.82rem;color:var(--brown2);margin-top:5px;line-height:1.7;display:none;}
+  .phs-el.on .phs-hint{display:block;}
+  .type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;}
+  .type-card{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:#fff;cursor:pointer;transition:.15s;}
+  .type-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+  .type-card.on{border-color:var(--gold);background:#FBF3E4;box-shadow:0 2px 8px rgba(196,149,106,.18);}
+  .type-card .tn{font-size:1rem;font-weight:700;margin-bottom:4px;}
+  .type-card .tt{font-size:.8rem;color:var(--brown2);line-height:1.65;}
+
+  /* ---------- 结果框 ---------- */
+  .out{border-radius:11px;border:1px solid var(--line);background:#fff;padding:14px 16px;margin-top:12px;}
+  .out.empty{background:#FAF6EE;color:var(--brown2);font-size:.85rem;text-align:center;padding:22px;}
+  .out h4{font-size:.95rem;margin:12px 0 6px;color:var(--brown);}
+  .out h4:first-child{margin-top:0;}
+  .out ul{margin:4px 0 0 18px;font-size:.86rem;line-height:1.85;}
+  .out li::marker{color:var(--gold);}
+  .tag{display:inline-block;border-radius:20px;padding:2px 10px;font-size:.74rem;margin:0 4px 4px 0;}
+  .tag.cls{background:#E8F0E2;color:#4A6B3A;}
+  .tag.hyp{background:#FBF0DF;color:#8C6432;}
+  .tag.for{background:#F7E4E1;color:#8C3A2E;}
+  .copybox{background:#FBF7EF;border:1px dashed var(--gold);border-radius:10px;padding:12px 15px;font-size:.86rem;color:var(--brown2);position:relative;padding-right:80px;}
+  .copybox button{position:absolute;right:10px;top:9px;}
+  details{border:1px solid var(--line);border-radius:11px;background:#fff;padding:0;margin:12px 0;overflow:hidden;}
+  summary{cursor:pointer;padding:12px 16px;font-size:.92rem;font-weight:600;background:#FAF6EE;list-style:none;}
+  summary::-webkit-details-marker{display:none;}
+  summary::before{content:'▸ ';color:var(--gold);font-weight:700;}
+  details[open] summary::before{content:'▾ ';}
+  details .dbody{padding:14px 16px;}
+  .chk{transform:scale(1.2);accent-color:#C4956A;cursor:pointer;}
+  .done td{color:#9a8a74;}
+  /* 汇总区（文字 + 雷达）响应式 */
+  .sum-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,290px);gap:16px;align-items:start;margin-top:10px;}
+  footer{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;color:var(--brown2);font-size:.82rem;text-align:center;line-height:2;}
+  footer .pbt{display:block;margin-top:4px;letter-spacing:.14em;font-size:.76rem;color:var(--gold);}
+  @media(max-width:720px){
+    h1{font-size:1.2rem;} th,td{padding:5px 6px;} table{font-size:.76rem;}
+    .hide-m{display:none;} .gsym{font-size:1.6rem;}
+    .nav-in{grid-template-columns:repeat(3,1fr);}
+    .sum-grid{grid-template-columns:1fr;}
+    #modal{padding:12px !important;}
+    #modal > div{margin:16px auto !important;padding:16px 14px !important;}
+    .copybox{padding-right:15px;padding-top:44px;}
+    .copybox button{top:auto;bottom:9px;right:10px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-in">
+    <h1>🫀 身体地图<span class="ver" id="ver"></span><small>人类图 × 中医五行 · 传统养生文化视角</small></h1>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-in" id="nav">
+    <button data-sec="gate" class="on">🔍 查我的闸门</button>
+    <button data-sec="wuxing">🌿 五行地图</button>
+    <button data-sec="clock">🕒 身体时钟</button>
+    <button data-sec="phs">📐 四箭头 / PHS</button>
+    <button data-sec="type">👤 类型 → 五行</button>
+    <button data-sec="lib">📚 完整数据</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ 免责 ============ -->
+<div class="card warn" style="margin-top:0;">
+  <b>⚠️ 使用前提</b>
+  <p id="disclaimer" style="margin:6px 0;font-size:.88rem;"></p>
+  <p id="convention" class="meta" style="margin:0 0 10px;font-size:.8rem;line-height:1.8;"></p>
+  <div class="row" id="levels" style="margin-top:0;"></div>
+</div>
+
+<!-- ============ ① 查我的闸门 ============ -->
+<section class="sec on" id="sec-gate">
+  <h2>🔍 查我的闸门</h2>
+  <div class="card">
+    <p class="meta" style="margin-bottom:10px;">输入你人类图中的闸门号（可多个，用逗号 / 空格 / 顿号分隔），立刻看到对应的卦象、上下卦、五行脏腑与体用生克。</p>
+    <div class="row">
+      <input id="gateIn" type="text" placeholder="例如：1, 29, 55, 34" style="flex:1;min-width:210px;" inputmode="numeric">
+      <button class="btn" id="gateGo">开始解读</button>
+      <button class="btn ghost" id="gateDemo">试试示例</button>
+      <button class="btn ghost" id="gateClear">清空</button>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <span class="meta">快捷：</span>
+      <button class="btn ghost" data-quick="1,29,55">三例（1/29/55）</button>
+      <button class="btn ghost" data-quick="all">全部 64 闸门</button>
+    </div>
+  </div>
+  <div class="out empty" id="gateOut">还没有输入 —— 填上你的闸门号，这里会出结果。</div>
+</section>
+
+<!-- ============ ② 五行地图 ============ -->
+<section class="sec" id="sec-wuxing">
+  <h2>🌿 五脏五行地图</h2>
+  <div class="card">
+    <div class="mapgrid">
+      <div>
+        <svg id="wuxingSvg" viewBox="0 0 460 460" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="legend">
+          <span><i class="lg-sheng"></i>相生（顺生）</span>
+          <span><i class="lg-ke"></i>相克（隔克）</span>
+          <span>点任一脏 → 高亮它的生克链</span>
+        </div>
+      </div>
+      <div id="wxPanel" class="out empty">点左边的任一脏（肝 / 心 / 脾 / 肺 / 肾），这里会显示它的生克关系与对应闸门。</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">体藏五行分布（64 卦按下卦统计）</h3>
+    <div class="row" id="statChips" style="gap:7px;"></div>
+    <p class="meta" style="margin-top:9px;">坎（水）、离（火）作为下卦各仅见于 8 卦，故体藏肾 / 心各 8；金（乾兑）、木（震巽）、土（艮坤）各 16 —— <b>「心肾难求」</b>，也正是中医「心肾相交」最珍贵的意思。</p>
+  </div>
+</section>
+
+<!-- ============ ③ 身体时钟 ============ -->
+<section class="sec" id="sec-clock">
+  <h2>🕒 十二时辰身体时钟</h2>
+  <div class="clockgrid">
+    <div class="card" style="margin-top:0;">
+      <svg id="clockSvg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg"></svg>
+      <p class="meta" style="text-align:center;margin-top:4px;">子午流注 · 寅居正上，顺时针一周为一日</p>
+    </div>
+    <div>
+      <div class="now-box" id="nowBox"></div>
+      <div class="card">
+        <h3 style="margin-top:0;">类型作息参照（假说级）</h3>
+        <select id="typeSelClock" style="width:100%;">
+          <option value="">— 选择你的类型 —</option>
+        </select>
+        <div id="typeClockOut" class="meta" style="margin-top:10px;">选一个类型，看它的时辰建议。</div>
+      </div>
+    </div>
+  </div>
+  <details>
+    <summary>📖 子午流注十二时辰全表</summary>
+    <div class="dbody">
+      <div class="tw"><table id="zwlzTable"></table></div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ ④ 四箭头 / PHS ============ -->
+<section class="sec" id="sec-phs">
+  <h2>📐 四箭头 / PHS 原生健康系统</h2>
+  <div class="card warn">
+    <b>📌 标注等级：假说级</b>
+    <p class="meta" style="margin-top:6px;">Ra Uru Hu 未建立 PHS 与中医的对应关系。以下为本项目的「文化解释层」，只作自我观察的参照维度，<b>不属于人类图体系内的正式对应</b>，也不构成任何医疗建议。</p>
+  </div>
+
+  <h3>① 消化方式（Determination）→ 中医呼应</h3>
+  <div class="card" id="phsDig"></div>
+
+  <h3>② 适宜环境（Environment）→ 中医呼应</h3>
+  <div class="card" id="phsEnv"></div>
+
+  <h3>③ 四箭头朝向 → 阴阳呼应</h3>
+  <div class="card" id="arrowBox"></div>
+</section>
+
+<!-- ============ ⑤ 类型 ============ -->
+<section class="sec" id="sec-type">
+  <h2>👤 四大类型 → 五行偏性</h2>
+  <div class="card warn">
+    <b>📌 标注等级：假说级</b>
+    <p class="meta" style="margin-top:6px;">类型与五行在此仅作类比，帮助记忆与自我观察，不改变任何人类图体系内的判读。</p>
+  </div>
+  <div class="type-grid" id="typeGrid"></div>
+  <div class="out empty" id="typeOut">点上面任一类型，看它的五行偏性与时辰建议。</div>
+</section>
+
+<!-- ============ ⑥ 完整数据 + 校核 ============ -->
+<section class="sec" id="sec-lib">
+  <h2>📚 完整数据表</h2>
+
+  <details open>
+    <summary>🗺 64 闸门 → 卦 → 五脏 全表（点行看详情）</summary>
+    <div class="dbody">
+      <div class="row" style="margin-bottom:10px;">
+        <label class="meta">筛选体藏五行：<select id="libFilter"><option value="">全部</option><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></label>
+        <span class="meta" id="libCount"></span>
+      </div>
+      <div class="tw"><table id="libTable"></table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>🌞 二十四节气黄经表（与人类图轮盘同坐标系）</summary>
+    <div class="dbody">
+      <div class="row" id="termChips" style="gap:6px;"></div>
+      <p class="meta" id="notes" style="margin-top:10px;"></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>✅ 64 闸门逐行校核（开发用 · 数据精修）</summary>
+    <div class="dbody">
+      <div class="row" style="margin-bottom:10px;">
+        <label class="meta">筛选体藏五行：<select id="chkFilter"><option value="">全部</option><option>木</option><option>火</option><option>土</option><option>金</option><option>水</option></select></label>
+        <button class="btn ghost" id="resetChk">重置勾选</button>
+        <span class="meta" id="chkProgress"></span>
+      </div>
+      <div class="tw"><table id="chkTable"></table></div>
+      <p class="meta" style="margin-top:9px;">校核要点：① 卦名与闸门对应（文王序）② 上/下卦是否有误 ③ 体用生克判定 ④ 情志/开窍按《内经》脏象。勾选状态自动保存。</p>
+    </div>
+  </details>
+
+  <h3>📋 全站统一免责口径（复制即用）</h3>
+  <div class="copybox" id="copybox">
+    <span id="disclaimer2"></span>
+    <button class="btn" id="copyBtn">复制</button>
+  </div>
+</section>
+
+<footer id="footer"></footer>
+</div>
+
+<!-- ============ 闸门详情弹层 ============ -->
+<div id="modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(45,33,24,.5);padding:20px;overflow:auto;">
+  <div style="max-width:560px;margin:40px auto;background:var(--card);border-radius:14px;padding:20px 22px;box-shadow:0 12px 40px rgba(0,0,0,.28);" id="modalIn"></div>
+</div>
+
+<script>
+/* hd-tcm-body-map.html —— 渲染脚本 · 内嵌 changelog
+ * V2 (2026-09-28) 版式改版（用户截图标注三项）+ 移动端自检优化：
+ *   - header：标题组（h1+版本徽章+副题）整体居中，删除右侧「hd-tcm / humandesign-V38 生态 / 日期」注释
+ *   - nav：6 按钮改 grid 均分整页宽度（桌面 6 等分，≤920px 缩字号，≤720px 3×2 两行）
+ *   - 「体用约定」整段从 footer 移入「使用前提」文本框（免责句之后、三级标注之前）
+ *   - footer 精简为「身体地图 + 版本号」+ 新起一行「Powered By Kan Man Tang」
+ *   - 新增 PAGE_VERSION 常量统一管理页面版本号（与数据版本 TCM_META.version 分离）
+ *   - 移动端优化：弹层 padding/边距压缩、copybox 按钮移至右下避免压字、
+ *     nav 3 列 grid、sum-grid 单列；Playwright 375px 无横向溢出复验
+ * V1 (2026-09-28) 首版：从 tcm-check.html（校核台）升级为「身体地图」工具
+ *   - ① 查我的闸门（批量输入 → 逐条解读 + 五行雷达汇总） ② 五脏五行 SVG 地图（点选高亮生克）
+ *   - ③ 十二时辰身体时钟（SVG 环 + 实时高亮 + 类型建议） ④ 四箭头/PHS → 中医呼应
+ *   - ⑤ 类型 → 五行偏性（含显示生产者双五行） ⑥ 完整数据表（64 闸门全表 / 节气 / 校核台折叠）
+ *   - 闸门详情弹层 + 一键复制；沿用暖棕金配色；移动端单列
+ * V1a (2026-09-28) 自检修复（Playwright 无头 50 项回归全绿后交付）：
+ *   - fix: 卡片/弹层/表格/复制文案中 t.g → t.gate（getGateTcm 返回字段名为 gate，
+ *          原 t.g 在数字字面量上取属性得 undefined，全站闸门号显示为空）
+ *   - fix: 五行地图比和卦行 pure.map(x=>x.gate) → pure.join(' / ')（pure 是闸门号数组；
+ *          且 Array.join 会把 undefined 渲染成空串，导致显示为「////」，undefined 扫描抓不到）
+ *   - fix: observeHint 用克体分支去掉绕弯的 KE 嵌套判断，改为直述「X受克易郁」
+ *   - test: _browser_test.js 50 项（导航/SVG/时钟/闸门/PHS/类型/弹层/校核/移动端/全页泄漏扫描）
+ */
+(function(){
+  'use strict';
+  const $  = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const elBadge = e => `<span class="el e-${e}">${e}</span>`;
+  const TYPES = Object.keys(TYPES_ZH);
+
+  /* ---------- 顶栏 / 免责 ---------- */
+  /* V2 起页面版本独立于数据版本（TCM_META.version 只描述 tcm-data.js），
+     页面 h1 徽章与 footer 统一由 PAGE_VERSION 管理 */
+  const PAGE_VERSION = 'V2';
+  $('#ver').textContent = PAGE_VERSION;
+  $('#disclaimer').textContent = TCM_META.disclaimer;
+  $('#disclaimer2').textContent = TCM_META.disclaimer;
+  $('#convention').textContent = '体用约定：' + TCM_META.convention;
+  $('#footer').innerHTML = `身体地图 ${PAGE_VERSION}<span class="pbt">Powered By Kan Man Tang</span>`;
+  $('#levels').innerHTML = Object.values(TCM_META.levels).map(l =>
+    `<span class="tag" style="background:${l.color};color:#fff;" title="${esc(l.desc)}">${l.label}</span>`).join('')
+    + `<span class="meta" style="flex:1;min-width:240px;">经典级＝典籍可溯｜假说级＝本项目文化解释层｜禁区＝禁止出现的表述</span>`;
+
+  /* ---------- 导航 ---------- */
+  $('#nav').addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    $$('#nav button').forEach(x => x.classList.toggle('on', x===b));
+    $$('.sec').forEach(s => s.classList.toggle('on', s.id === 'sec-'+b.dataset.sec));
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ---------- 通用：闸门卡片 ---------- */
+  function gateCard(g, opts){
+    const t = getGateTcm(g); if(!t) return '';
+    opts = opts || {};
+    const use = `${elBadge(t.useEl)} ${t.up.sym}${t.up.name}·${t.up.image} → ${t.use.zang}${t.use.fu}`;
+    const body= `${elBadge(t.bodyEl)} ${t.low.sym}${t.low.name}·${t.low.image} → ${t.body.zang}${t.body.fu}`;
+    return `<div class="gcard" data-g="${g}">
+      <div class="gcard-top">
+        <span class="gsym">${t.sym}</span>
+        <div>
+          <span class="gno">闸门 ${t.gate}</span>
+          <div class="gname">${esc(t.name)}（${esc(t.hex)}卦）</div>
+        </div>
+        ${opts.del ? '<button class="btn ghost" style="margin-left:auto;padding:4px 12px;font-size:.8rem;" data-del="'+g+'">移除</button>' : ''}
+      </div>
+      <div class="chain">
+        <span class="step">闸门 ${t.gate}</span><span class="arr">→</span>
+        <span class="step">${esc(t.name)}（${t.sym}）</span><span class="arr">→</span>
+        <span class="step">上卦 ${t.up.sym}${esc(t.up.name)} / 下卦 ${t.low.sym}${esc(t.low.name)}</span><span class="arr">→</span>
+        <span class="step">体${t.bodyEl} · 用${t.useEl}</span>
+      </div>
+      <div class="kv">
+        <div><b>上卦 · 用（外 / 象）</b>${use}</div>
+        <div><b>下卦 · 体（内 / 藏）</b>${body}</div>
+      </div>
+      <div class="kv">
+        <div><b>体用生克</b><span class="${relCls(t.rel.rel)}">${t.rel.rel}</span>（${t.rel.sixKin}）<br><span class="meta">${esc(t.rel.hint)}</span></div>
+        <div><b>情志 · 开窍 · 五味</b>${t.body.emotion} · 开窍于${t.body.orifice} · ${t.body.flavor}味</div>
+        <div><b>应季 · 应色</b>${t.body.season} · ${t.body.color}</div>
+      </div>
+      <p class="meta" style="margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;">💡 ${esc(observeHint(t))}</p>
+    </div>`;
+  }
+  function relCls(r){ return /用生体|体克用|比和/.test(r) ? 'rel-g' : /用克体|体生用/.test(r) ? 'rel-b' : 'rel-n'; }
+
+  /* 身体观察引导（不构成建议，只引导自我观察） */
+  function observeHint(t){
+    const m = {
+      '用生体': `外层（${t.use.zang}）在滋养内层（${t.body.zang}），本卦的动力是"被支持"。可留意：什么时候你感觉外界在补你？`,
+      '体生用': `内层（${t.body.zang}）在向外输出给（${t.use.zang}），本卦的动力是"给予 / 消耗"。可留意：你在哪些事上最容易掏空自己？`,
+      '用克体': `外层（${t.use.zang}）在压内层（${t.body.zang}），本卦的动力是"受制 / 承压"。中医讲「${t.body.zang}受克易郁」，可留意：压力来时身体的哪个部位先紧？`,
+      '体克用': `内层（${t.body.zang}）在主导外层（${t.use.zang}），本卦的动力是"掌控 / 输出"。可留意：你在什么状态下最有掌控感？`,
+      '比和':   `内外同属${t.bodyEl}，五行纯粹。中医讲同类相求，${t.body.zang}系统在此卦最"纯"。可留意：说到${t.body.emotion}这个情绪词，你的身体有反应吗？`
+    };
+    return (m[t.rel.rel] || '') + `（此为传统养生文化视角的自我观察引导，非医疗建议。）`;
+  }
+
+  /* ---------- ① 查闸门 ---------- */
+  const state = { gates: [] };
+  function parseGates(str){
+    return [...new Set(String(str).split(/[,，、\s;；|]+/).map(x => parseInt(x,10))
+      .filter(n => Number.isInteger(n) && n>=1 && n<=64))].sort((a,b)=>a-b);
+  }
+  /* 五行雷达（纯 SVG 手绘，五轴＝木火土金水） */
+  function radarSvg(counts, total){
+    const ORDER = ['木','火','土','金','水'];
+    const COL = { '木':'#6B8E5A','火':'#A65B4B','土':'#B08D4F','金':'#8C8C9A','水':'#4A6FA5' };
+    const cx = 130, cy = 128, R = 88;
+    const max = Math.max(4, ...ORDER.map(e => counts[e]||0));   // 动态上限，至少 4
+    const pt = (i, r) => { const a = (-90 + i*72) * Math.PI/180; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; };
+    let h = '';
+    /* 网格环 */
+    [0.25,0.5,0.75,1].forEach(f => {
+      const pts = ORDER.map((_,i) => pt(i, R*f).map(v=>v.toFixed(1)).join(',')).join(' ');
+      h += `<polygon points="${pts}" fill="none" stroke="#E3D9C8" stroke-width="1"/>`;
+    });
+    /* 轴线 + 轴标签 */
+    ORDER.forEach((e,i) => {
+      const [x,y] = pt(i, R);
+      h += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E3D9C8" stroke-width="1"/>`;
+      const [lx,ly] = pt(i, R + 22);
+      const c = counts[e]||0;
+      h += `<text x="${lx}" y="${ly-2}" text-anchor="middle" font-size="12" font-weight="700" fill="${COL[e]}" font-family="Microsoft YaHei">${e}</text>
+            <text x="${lx}" y="${ly+11}" text-anchor="middle" font-size="10" fill="#5A4634" font-family="Microsoft YaHei">${c}${total?` (${Math.round(c/total*100)}%)`:''}</text>`;
+    });
+    /* 数据多边形 */
+    const dpts = ORDER.map((e,i) => pt(i, R * Math.min(1, (counts[e]||0)/max)).map(v=>v.toFixed(1)).join(',')).join(' ');
+    h += `<polygon points="${dpts}" fill="#C4956A" fill-opacity=".34" stroke="#C4956A" stroke-width="2.4" stroke-linejoin="round"/>`;
+    ORDER.forEach((e,i) => {
+      const [x,y] = pt(i, R * Math.min(1, (counts[e]||0)/max));
+      h += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${COL[e]}" stroke="#fff" stroke-width="1.5"/>`;
+    });
+    h += `<circle cx="${cx}" cy="${cy}" r="2.5" fill="#5A4634"/>`;
+    return `<svg viewBox="0 0 260 268" style="width:100%;max-width:290px;height:auto;display:block;margin:0 auto;">${h}</svg>`;
+  }
+
+  function renderGates(){
+    const box = $('#gateOut');
+    if(!state.gates.length){ box.className='out empty'; box.textContent='还没有输入 —— 填上你的闸门号，这里会出结果。'; return; }
+    box.className = 'out';
+    const cards = state.gates.map(g => gateCard(g, {del:true})).join('');
+    /* 汇总：五行 / 脏腑 计数 */
+    const cnt = {}, zang = {};
+    state.gates.forEach(g => { const t=getGateTcm(g); cnt[t.bodyEl]=(cnt[t.bodyEl]||0)+1; zang[t.body.zang]=(zang[t.body.zang]||0)+1; });
+    const relCnt = {};
+    state.gates.forEach(g => { const r=getGateTcm(g).rel.rel; relCnt[r]=(relCnt[r]||0)+1; });
+    const topEl = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+    const topZang = Object.entries(zang).sort((a,b)=>b[1]-a[1])[0];
+    const weak = ['木','火','土','金','水'].filter(e => !cnt[e]);
+    box.innerHTML = `
+      <div class="row" style="justify-content:space-between;align-items:baseline;">
+        <h4 style="margin:0;">📊 汇总（${state.gates.length} 个闸门）</h4>
+        <button class="btn ghost" id="copySum" style="padding:4px 12px;font-size:.8rem;">复制汇总</button>
+      </div>
+      <div class="sum-grid">
+        <div>
+          <div class="row" style="gap:6px;margin-bottom:10px;">${Object.keys(WUXING).map(e=>`<span class="tag hyp">${elBadge(e)} ${WUXING[e].zang} × ${cnt[e]||0}</span>`).join('')}</div>
+          <ul>
+            <li>体藏（下卦）最多的是 <b>${topZang?topZang[0]:'—'}</b>（${topZang?topZang[1]:0} 个），五行偏 <b>${topEl?topEl[0]:'—'}</b>。</li>
+            ${weak.length ? `<li>你的闸门里<b>没有</b>体藏${weak.map(e=>WUXING[e].zang).join(' / ')} 的卦 —— 可作观察维度，不是「缺什么」。</li>` : '<li>五行五脏全覆盖，体藏分布完整。</li>'}
+            <li>体用关系分布：${Object.entries(relCnt).map(([k,v])=>`${k} ${v}`).join(' · ')}</li>
+            <li class="meta">提醒：单卦的体用只反映该闸门的"内外结构"，要结合你完整的 BodyGraph 一起看，不宜单独下结论。</li>
+          </ul>
+        </div>
+        <div>
+          <div class="meta" style="text-align:center;margin-bottom:4px;">体藏五行分布雷达</div>
+          ${radarSvg(cnt, state.gates.length)}
+        </div>
+      </div>
+      <h4>🔎 逐个闸门</h4>
+      ${cards}`;
+    $('#copySum').addEventListener('click', () => {
+      const lines = [`【我的闸门 · 中医五行视角】共 ${state.gates.length} 个`, ''];
+      state.gates.forEach(g => { const t=getGateTcm(g);
+        lines.push(`闸门 ${t.gate} ${t.sym} ${t.name}：体${t.body.zang}（${t.bodyEl}）· 用${t.use.zang}（${t.useEl}）｜${t.rel.rel}`); });
+      lines.push('', `体藏分布：${Object.keys(WUXING).map(e=>`${WUXING[e].zang}${cnt[e]||0}`).join(' / ')}`);
+      lines.push('', TCM_META.disclaimer);
+      copy(lines.join('\n'), $('#copySum'));
+    });
+  }
+  function doGateInput(){
+    const gs = parseGates($('#gateIn').value);
+    if(!gs.length){ alert('请输入 1–64 之间的闸门号'); return; }
+    state.gates = gs; renderGates();
+  }
+  $('#gateGo').addEventListener('click', doGateInput);
+  $('#gateIn').addEventListener('keydown', e => { if(e.key==='Enter') doGateInput(); });
+  $('#gateClear').addEventListener('click', () => { $('#gateIn').value=''; state.gates=[]; renderGates(); });
+  $('#gateDemo').addEventListener('click', () => { $('#gateIn').value='1, 29, 55'; doGateInput(); });
+  $$('[data-quick]').forEach(b => b.addEventListener('click', () => {
+    $('#gateIn').value = b.dataset.quick === 'all' ? Array.from({length:64},(_,i)=>i+1).join(',') : b.dataset.quick;
+    doGateInput();
+  }));
+  $('#gateOut').addEventListener('click', e => {
+    const d = e.target.dataset.del; if(!d) return;
+    state.gates = state.gates.filter(g => g !== +d); renderGates();
+  });
+
+  /* ---------- ② 五行地图 ---------- */
+  const WX = [
+    { el:'木', ang:-90, zang:'肝' }, { el:'火', ang:-18, zang:'心' },
+    { el:'土', ang:54,  zang:'脾' }, { el:'金', ang:126, zang:'肺' }, { el:'水', ang:198, zang:'肾' }
+  ];
+  function pt(ang, r, cx, cy){ const a=ang*Math.PI/180; return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
+  (function drawWuxing(){
+    const svg = $('#wuxingSvg'); if(!svg) return;
+    const cx=230, cy=230, R=145;   /* 五角环半径 */
+    const COL = { '木':'#6B8E5A','火':'#A65B4B','土':'#B08D4F','金':'#8C8C9A','水':'#4A6FA5' };
+    let h = '';
+    /* 相生边（顺五角）：木→火→土→金→水→木 */
+    const order = ['木','火','土','金','水'];
+    for(let i=0;i<5;i++){
+      const a=WX[i], b=WX[(i+1)%5];
+      const [x1,y1]=pt(a.ang,R, cx,cy), [x2,y2]=pt(b.ang,R, cx,cy);
+      h += `<path class="wx-edge sheng" data-from="${a.el}" data-to="${b.el}" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+    }
+    /* 相克边（隔一）：木→土→水→火→金→木 */
+    for(let i=0;i<5;i++){
+      const a=WX[i], b=WX[(i+2)%5];
+      const [x1,y1]=pt(a.ang,R, cx,cy), [x2,y2]=pt(b.ang,R, cx,cy);
+      h += `<path class="wx-edge ke" data-from="${a.el}" data-to="${b.el}" d="M${x1} ${y1} L${x2} ${y2}"/>`;
+    }
+    /* 节点 */
+    WX.forEach((n,i) => {
+      const [x,y] = pt(n.ang, R, cx, cy);
+      const w = WUXING[n.el];
+      const cnt = getGateByElement(n.el).length;
+      h += `<g class="wx-node" data-el="${n.el}" transform="translate(${x},${y})">
+        <circle class="ring" r="40" stroke="${COL[n.el]}"/>
+        <circle r="34" fill="${COL[n.el]}"/>
+        <text class="lbl" text-anchor="middle" y="-2">${w.zang}</text>
+        <text class="sub" text-anchor="middle" y="12">${n.el}·${cnt}卦</text>
+      </g>`;
+    });
+    /* 中心 */
+    h += `<circle cx="${cx}" cy="${cy}" r="52" fill="#FFFDF8" stroke="#E3D9C8"/>
+      <text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="13" font-weight="700" fill="#5A4634" font-family="Microsoft YaHei">五行</text>
+      <text x="${cx}" y="${cy+13}" text-anchor="middle" font-size="11" fill="#5A4634" font-family="Microsoft YaHei">生 · 克</text>`;
+    svg.innerHTML = h;
+  })();
+  /* 高亮逻辑 */
+  function highlightWx(el){
+    const svg = $('#wuxingSvg');
+    $$('.wx-node', svg).forEach(n => n.classList.toggle('hot', n.dataset.el===el));
+    $$('.wx-edge').forEach(e => {
+      const on = e.dataset.from===el || e.dataset.to===el;
+      e.classList.toggle('hot', on);
+    });
+    const w = WUXING[el];
+    const shengTo = SHENG[el], shengFrom = Object.keys(SHENG).find(k=>SHENG[k]===el);
+    const keTo = KE[el], keFrom = Object.keys(KE).find(k=>KE[k]===el);
+    const gates = getGateByElement(el);
+    const pure = gates.filter(g => getGateTcm(g).useEl===el);   /* 上下同五行（比和）的闸门号 */
+    $('#wxPanel').className = 'out';
+    $('#wxPanel').innerHTML = `
+      <h4 style="margin-top:0;">${elBadge(el)} ${w.zang} · ${w.fu} <span class="meta">（体藏 ${gates.length} 卦）</span></h4>
+      <div class="kv">
+        <div><b>情志</b>${w.emotion}</div><div><b>开窍</b>${w.orifice}</div>
+        <div><b>五味</b>${w.flavor}</div><div><b>季节 / 色</b>${w.season} · ${w.color}</div>
+      </div>
+      <h4>相生关系</h4>
+      <ul>
+        <li><b>${el}生${shengTo}</b> → ${w.zang}养${WUXING[shengTo].zang}（母生子）</li>
+        <li><b>${shengFrom}生${el}</b> → ${WUXING[shengFrom].zang}生${w.zang}（${el}为子）</li>
+      </ul>
+      <h4>相克关系</h4>
+      <ul>
+        <li><b>${el}克${keTo}</b> → ${w.zang}制约${WUXING[keTo].zang}</li>
+        <li><b>${keFrom}克${el}</b> → ${WUXING[keFrom].zang}制约${w.zang}（受克方）</li>
+      </ul>
+      <h4>体藏为${w.zang}的闸门（${gates.length}）</h4>
+      <div class="row" style="gap:5px;">${gates.map(g=>`<button class="btn ghost" style="padding:2px 9px;font-size:.78rem;" data-gate="${g}">${g}</button>`).join('')}</div>
+      ${pure.length ? `<p class="meta" style="margin-top:8px;">内外同属${el}（比和卦）：${pure.join(' / ')}</p>` : ''}
+      <h4>身体观察提示</h4>
+      <p style="font-size:.86rem;">中医讲「${w.zang}在志为${w.emotion}，在窍为${w.orifice}，在味为${w.flavor}，其色${w.color}，旺于${w.season}」。
+      可留意：${w.emotion}这类情绪出现时，你的身体哪里有反应？（传统养生文化视角，非医疗建议）</p>`;
+  }
+  $('#wuxingSvg').addEventListener('click', e => {
+    const n = e.target.closest('.wx-node'); if(!n) return;
+    highlightWx(n.dataset.el);
+  });
+
+  /* 统计 chips */
+  const cntEl = {};
+  GATES_TCM.forEach(r => { const e = TRIGRAMS[r.low].element; cntEl[e]=(cntEl[e]||0)+1; });
+  $('#statChips').innerHTML = Object.keys(WUXING).map(e =>
+    `<span class="tag hyp">${elBadge(e)} ${WUXING[e].zang} × ${cntEl[e]||0}</span>`).join('');
+
+  /* 详情弹层内点闸门号 */
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-gate]'); if(!b) return;
+    openGateModal(+b.dataset.gate);
+  });
+  function openGateModal(g){
+    const t = getGateTcm(g); if(!t) return;
+    $('#modalIn').innerHTML = `<div class="row" style="justify-content:space-between;">
+        <h3 style="margin:0;">闸门 ${t.gate} · ${t.sym} ${esc(t.name)}</h3>
+        <button class="btn ghost" id="mClose" style="padding:4px 12px;">关闭</button></div>
+      ${gateCard(g)}
+      <div class="row" style="margin-top:10px;"><button class="btn" id="mCopy">复制本卦解读</button></div>`;
+    $('#modal').style.display = 'block';
+    $('#mClose').onclick = () => $('#modal').style.display='none';
+    $('#mCopy').onclick = () => {
+      const txt = `【闸门 ${t.gate} · ${t.name}】${t.sym}\n体藏：${t.body.zang}${t.body.fu}（${t.bodyEl}）｜用象：${t.use.zang}${t.use.fu}（${t.useEl}）\n体用：${t.rel.rel}（${t.rel.sixKin}）— ${t.rel.hint}\n情志：${t.body.emotion}｜开窍：${t.body.orifice}｜五味：${t.body.flavor}｜应季：${t.body.season}\n${TCM_META.disclaimer}`;
+      copy(txt, $('#mCopy'));
+    };
+  }
+  $('#modal').addEventListener('click', e => { if(e.target.id==='modal') $('#modal').style.display='none'; });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') $('#modal').style.display='none'; });
+
+  /* ---------- ③ 身体时钟 ---------- */
+  const HOURS = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  const COLH = { '木':'#6B8E5A','火':'#A65B4B','土':'#B08D4F','金':'#8C8C9A','水':'#4A6FA5' };
+  function drawClock(){
+    const svg = $('#clockSvg'); if(!svg) return;
+    const cx=260, cy=260, rOut=225, rIn=118;
+    let h = '';
+    /* 12 扇区：寅居正上(-90°)，顺时针 */
+    const startIdx = HOURS.indexOf('寅');
+    for(let i=0;i<12;i++){
+      const zi = (startIdx + i) % 12;
+      const name = HOURS[zi];
+      const z = ZIWULIUZHU.find(x => x.hour === name);
+      const a0 = -90 + i*30 - 15, a1 = a0 + 30;
+      const p = (ang,r) => pt(ang, r, cx, cy);
+      const [x1,y1]=p(a0,rOut), [x2,y2]=p(a1,rOut), [x3,y3]=p(a1,rIn), [x4,y4]=p(a0,rIn);
+      const [tx,ty] = p((a0+a1)/2, (rOut+rIn)/2);
+      const dark = z.el==='水' || z.el==='木';
+      h += `<path class="ck-wedge" data-hour="${name}" d="M${x1} ${y1} A${rOut} ${rOut} 0 0 1 ${x2} ${y2} L${x3} ${y3} A${rIn} ${rIn} 0 0 0 ${x4} ${y4} Z"
+              fill="${COLH[z.el]}" fill-opacity=".82" stroke="#F5F0E8" stroke-width="2"/>
+        <text class="ck-t" x="${tx}" y="${ty-4}" text-anchor="middle" fill="${dark?'#fff':'#fff'}">${name}时</text>
+        <text class="ck-m" x="${tx}" y="${ty+10}" text-anchor="middle" fill="rgba(255,255,255,.92)">${z.meridian}</text>`;
+    }
+    /* 中心 */
+    h += `<circle cx="${cx}" cy="${cy}" r="${rIn-8}" fill="#FFFDF8" stroke="#E3D9C8" stroke-width="2"/>`;
+    svg.innerHTML = h;
+    /* 当前时辰高亮（画在最上层） */
+    const now = new Date().getHours();
+    const zn = getHourNow(now);
+    if(zn){
+      const i = (HOURS.indexOf(zn.hour) - startIdx + 12) % 12;
+      const a0 = -90 + i*30 - 15 + 2.2, a1 = a0 + 30 - 4.4;
+      const p = (ang,r) => pt(ang, r, cx, cy);
+      const [x1,y1]=p(a0,rOut+7), [x2,y2]=p(a1,rOut+7), [x3,y3]=p(a1,rIn-6), [x4,y4]=p(a0,rIn-6);
+      svg.insertAdjacentHTML('beforeend',
+        `<path d="M${x1} ${y1} A${rOut+7} ${rOut+7} 0 0 1 ${x2} ${y2} L${x3} ${y3} A${rIn-6} ${rIn-6} 0 0 0 ${x4} ${y4} Z"
+           fill="none" stroke="#C4956A" stroke-width="5" stroke-linejoin="round" style="pointer-events:none;"/>
+         <circle cx="${cx}" cy="${cy}" r="${rIn-8}" fill="none" stroke="#C4956A" stroke-width="2.5" style="pointer-events:none;"/>`);
+    }
+    /* 当前时辰说明 */
+    const nowStr = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+    $('#nowBox').innerHTML = zn ? `
+      <div class="meta"><span class="pulse"></span>此刻（${nowStr}）</div>
+      <div class="big">${zn.hour}时 ${elBadge(zn.el)}</div>
+      <div class="tm">${zn.time} · ${zn.meridian}当令</div>
+      <p class="meta" style="margin-top:8px;">${esc(zn.hdLink)}</p>` : '<div class="meta">时间读取失败</div>';
+    /* 点击时辰 */
+    svg.addEventListener('click', e => {
+      const w = e.target.closest('.ck-wedge'); if(!w) return;
+      const z = ZIWULIUZHU.find(x => x.hour === w.dataset.hour);
+      $('#nowBox').innerHTML = `
+        <div class="meta">🖱 已选</div>
+        <div class="big">${z.hour}时 ${elBadge(z.el)}</div>
+        <div class="tm">${z.time} · ${z.meridian}当令</div>
+        <p class="meta" style="margin-top:8px;">${esc(z.hdLink)}</p>
+        <p class="meta" style="margin-top:6px;border-top:1px dashed var(--line);padding-top:6px;">${z.meridian.slice(0,-1)}属${z.el} → 对应 ${WUXING[z.el].zang}${WUXING[z.el].fu}，在志为${WUXING[z.el].emotion}，开窍于${WUXING[z.el].orifice}</p>`;
+    });
+  }
+  $('#typeSelClock').innerHTML = '<option value="">— 选择你的类型 —</option>' +
+    TYPES.map(k => `<option value="${k}">${TYPES_ZH[k].cn} ${k}</option>`).join('');
+  $('#typeSelClock').addEventListener('change', e => {
+    const t = getTypeTcm(e.target.value);
+    if(!t){ $('#typeClockOut').className='meta'; $('#typeClockOut').textContent='选一个类型，看它的时辰建议。'; return; }
+    $('#typeClockOut').className = '';
+    const els = typeEls(t);
+    $('#typeClockOut').innerHTML = `<b>${t.cn} · 五行偏${typeElBadges(t)}（${t.yang?'阳':'阴'}）</b>
+      <p style="font-size:.85rem;margin:6px 0;">${esc(t.trait)}</p>
+      <ul style="font-size:.85rem;margin-left:16px;">${t.hours.map(h=>`<li><b>${h.h}</b>时 · ${esc(h.note)}</li>`).join('')}</ul>
+      <p class="meta">对应脏象：${els.map(x=>WUXING[x].zang).join(' / ')} —— ${els.map(x=>`${WUXING[x].zang}在志为${WUXING[x].emotion}`).join('，')}</p>
+      <p class="meta">标注等级：假说级 · 仅供作息参照，非医疗建议</p>`;
+  });
+  /* 子午流注全表 */
+  $('#zwlzTable').innerHTML = `<thead><tr><th>时辰</th><th>时间</th><th>当令经络</th><th>五行</th><th class="hide-m">类型作息参考（假说级）</th></tr></thead><tbody>` +
+    ZIWULIUZHU.map(z => `<tr class="clickable" data-hour-link="${z.hour}"><td><b>${z.hour}</b></td><td>${z.time}</td>
+      <td>${z.meridian}</td><td>${elBadge(z.el)}</td><td class="hide-m">${esc(z.hdLink)}</td></tr>`).join('') + '</tbody>';
+  $('#zwlzTable').addEventListener('click', e => {
+    const tr = e.target.closest('[data-hour-link]'); if(!tr) return;
+    $$('#nav button').forEach(x => x.classList.toggle('on', x.dataset.sec==='clock'));
+    $$('.sec').forEach(s => s.classList.toggle('on', s.id==='sec-clock'));
+    const z = ZIWULIUZHU.find(x=>x.hour===tr.dataset.hourLink);
+    $('#nowBox').innerHTML = `<div class="meta">🖱 已选</div><div class="big">${z.hour}时 ${elBadge(z.el)}</div>
+      <div class="tm">${z.time} · ${z.meridian}当令</div>
+      <p class="meta" style="margin-top:8px;">${esc(z.hdLink)}</p>`;
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  /* ---------- ④ PHS / 四箭头 ---------- */
+  function phsBlock(kind, mount){
+    const g = PHS_ZH[kind];
+    mount.innerHTML = `<p class="meta" style="margin-bottom:8px;">点击展开 →（六型完整对照）</p>` +
+      g.items.map(i => `<button class="phs-el" data-kind="${kind}" data-key="${i.key}">
+        <b>${elBadge(i.el)} ${esc(i.cn)}</b> <span class="meta">${esc(i.key)} · 对应${WUXING[i.el].zang}${WUXING[i.el].fu}</span>
+        <div class="phs-hint">${esc(i.hint)}<br><span class="tag hyp" style="margin-top:6px;">假说级</span></div>
+      </button>`).join('');
+  }
+  phsBlock('digestion', $('#phsDig'));
+  phsBlock('environment', $('#phsEnv'));
+  $$('.phs-el').forEach(b => b.addEventListener('click', () => {
+    const was = b.classList.contains('on');
+    $$(`.phs-el[data-kind="${b.dataset.kind}"]`).forEach(x => x.classList.remove('on'));
+    if(!was) b.classList.add('on');
+  }));
+  $('#arrowBox').innerHTML = Object.keys(ARROWS_ZH).map(k => {
+    const a = ARROWS_ZH[k];
+    return `<div style="border-bottom:1px dashed var(--line);padding:10px 0;">
+      <b style="font-size:.92rem;">${esc(a.title)}</b>
+      <div class="kv" style="margin:8px 0 0;">
+        <div><b>${esc(a.left)}</b>${esc(a.leftHint)}</div>
+        <div><b>${esc(a.right)}</b>${esc(a.rightHint)}</div>
+      </div></div>`;
+  }).join('') + `<p class="meta" style="margin-top:10px;">四箭头取「左＝阳／主动，右＝阴／被动」为本项目约定，用于记忆与自我观察，非体系内正式定义。<span class="tag hyp">假说级</span></p>`;
+
+  /* ---------- ⑤ 类型 ---------- */
+  /* 类型 → 五行可能是一对（如显示生产者 土木兼），统一取数组 */
+  const typeEls = t => t.dual ? t.dual : [t.el];
+  function typeElBadges(t){
+    return typeEls(t).map(e => elBadge(e)).join(t.dual ? '<span class="meta" style="margin:0 3px;">兼</span>' : '');
+  }
+  $('#typeGrid').innerHTML = TYPES.map(k => {
+    const t = TYPES_ZH[k];
+    return `<div class="type-card" data-type="${k}">
+      <div class="tn">${t.cn} ${typeElBadges(t)}</div>
+      <div class="tt">${esc(t.trait.slice(0,46))}…</div>
+      <div class="meta" style="margin-top:6px;">${t.yang?'阳':'阴'} · ${k}${t.dual?' · 双五行':''}</div>
+    </div>`;
+  }).join('');
+  $$('.type-card').forEach(c => c.addEventListener('click', () => {
+    $$('.type-card').forEach(x => x.classList.toggle('on', x===c));
+    const t = getTypeTcm(c.dataset.type);
+    const els = typeEls(t);
+    const zangLine = els.map(e => `<div><b>${elBadge(e)} ${WUXING[e].zang} / ${WUXING[e].fu}</b>${WUXING[e].emotion} · 开窍于${WUXING[e].orifice} · ${WUXING[e].flavor}味 · 应${WUXING[e].season}</div>`).join('');
+    const gateRows = els.map(e => `<div style="margin-top:8px;"><b class="meta">体藏${WUXING[e].zang}的闸门（${getGateByElement(e).length}）</b><div class="row" style="gap:5px;margin-top:4px;">${getGateByElement(e).map(g=>`<button class="btn ghost" style="padding:2px 9px;font-size:.78rem;" data-gate="${g}">${g}</button>`).join('')}</div></div>`).join('');
+    $('#typeOut').className = 'out';
+    $('#typeOut').innerHTML = `
+      <h4 style="margin-top:0;">${t.cn} ${typeElBadges(t)} · ${t.yang?'阳':'阴'}（${t.key}）</h4>
+      <p style="font-size:.88rem;">${esc(t.trait)}</p>
+      <h4>时辰建议（假说级）</h4>
+      <ul>${t.hours.map(h => `<li><b>${h.h}</b>时 — ${esc(h.note)}</li>`).join('')}</ul>
+      <h4>对应五行脏象${t.dual?'（双五行）':''}</h4>
+      <div class="kv" style="grid-template-columns:1fr;">${zangLine}</div>
+      <h4>体藏闸门</h4>
+      ${gateRows}
+      <p class="meta" style="margin-top:10px;">类型与五行的对应为项目部类，不改变人类图体系内的类型判读。<span class="tag hyp">假说级</span></p>`;
+  }));
+
+  /* ---------- ⑥ 完整数据表 + 校核 ---------- */
+  function libRow(r){
+    const t = getGateTcm(r.g);
+    return `<tr class="clickable" data-gate="${r.g}" data-el="${t.bodyEl}">
+      <td><b>${t.gate}</b></td><td class="gsym" style="font-size:1.25rem;">${t.sym}</td><td>${esc(t.name)}</td>
+      <td>${elBadge(t.useEl)}${t.up.sym}${esc(t.up.name)}</td>
+      <td>${elBadge(t.bodyEl)}${t.low.sym}${esc(t.low.name)}</td>
+      <td class="${relCls(t.rel.rel)}">${t.rel.rel}</td>
+      <td>${t.body.zang}${t.body.fu}<span class="hide-m meta"> / ${t.body.emotion}·${t.body.orifice}</span></td>
+    </tr>`;
+  }
+  function renderLib(){
+    const f = $('#libFilter').value;
+    const rows = GATES_TCM.filter(r => !f || TRIGRAMS[r.low].element===f);
+    $('#libTable').innerHTML = `<thead><tr><th>闸门</th><th>卦</th><th>卦名</th><th>上卦·用</th><th>下卦·体</th><th>体用</th><th>体藏·情志</th></tr></thead><tbody>${rows.map(libRow).join('')}</tbody>`;
+    $('#libCount').textContent = `显示 ${rows.length} / 64`;
+  }
+  $('#libFilter').addEventListener('change', renderLib); renderLib();
+
+  /* 校核台 */
+  const LS='hdTcmCheckV2';
+  const checked = new Set(JSON.parse(localStorage.getItem(LS)||'[]'));
+  function chkRow(r){
+    const t = getGateTcm(r.g);
+    return `<tr data-el="${t.bodyEl}" class="${checked.has(r.g)?'done':''}">
+      <td><input type="checkbox" class="chk" data-cg="${r.g}" ${checked.has(r.g)?'checked':''}></td>
+      <td><b>${r.g}</b></td><td style="font-size:1.2rem;">${t.sym}</td><td>${esc(r.name)}</td>
+      <td>${elBadge(t.useEl)}${t.up.sym}${esc(t.up.name)}</td>
+      <td>${elBadge(t.bodyEl)}${t.low.sym}${esc(t.low.name)}</td>
+      <td>${t.rel.rel}<span class="hide-m meta">（${t.rel.sixKin}）</span></td>
+      <td>${t.body.zang}·${t.body.fu}</td>
+    </tr>`;
+  }
+  function renderChk(){
+    const f = $('#chkFilter').value;
+    const rows = GATES_TCM.filter(r => !f || TRIGRAMS[r.low].element===f);
+    $('#chkTable').innerHTML = `<thead><tr><th>✓</th><th>闸门</th><th>卦</th><th>卦名</th><th>上卦·用</th><th>下卦·体</th><th>体用生克</th><th>体藏·腑</th></tr></thead><tbody>${rows.map(chkRow).join('')}</tbody>`;
+    $('#chkProgress').textContent = `已核 ${checked.size} / 64`;
+  }
+  $('#chkFilter').addEventListener('change', renderChk);
+  $('#chkTable').addEventListener('change', e => {
+    const g = +e.target.dataset.cg; if(!g) return;
+    e.target.checked ? checked.add(g) : checked.delete(g);
+    e.target.closest('tr').classList.toggle('done', e.target.checked);
+    localStorage.setItem(LS, JSON.stringify([...checked]));
+    $('#chkProgress').textContent = `已核 ${checked.size} / 64`;
+  });
+  $('#resetChk').addEventListener('click', () => {
+    if(confirm('确认清空全部校核勾选？')){ checked.clear(); localStorage.removeItem(LS); renderChk(); }
+  });
+  renderChk();
+
+  /* 节气 */
+  $('#termChips').innerHTML = [...SOLAR_TERMS].sort((a,b)=>a.lon-b.lon).map(t =>
+    `<span class="tag ${t.lon===300?'':'hyp'}" style="${t.lon===300?'background:var(--gold);color:#fff;':''}">${t.name} ${t.lon}°</span>`).join('');
+  $('#notes').innerHTML = TCM_META.notes.map(n => '· '+esc(n)).join('<br>');
+
+  /* 复制通用 */
+  async function copy(text, btn){
+    try { await navigator.clipboard.writeText(text); } catch(e){
+      const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select();
+      try{document.execCommand('copy');}catch(_){} document.body.removeChild(ta);
+    }
+    const old = btn.textContent; btn.textContent='已复制 ✓';
+    setTimeout(()=>btn.textContent=old, 1600);
+  }
+  $('#copyBtn').addEventListener('click', () => copy(TCM_META.disclaimer, $('#copyBtn')));
+
+  /* 初始渲染 */
+  renderGates();
+  drawClock();
+})();
+</script>
+</body>
+</html>
