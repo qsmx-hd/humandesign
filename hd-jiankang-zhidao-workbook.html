@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 健康之道 ｜ 学员练习手册</title>
+<!--
+  《人类图 · 健康之道》｜学员练习手册
+  VERSION: V1  ·  2026-09-28
+  双螺旋骨架：人类图健康地图（类型·策略·权威·PHS 四箭头）× 中医养生之道（五行脏象·情志·子午流注·节气）
+  整合主轴：顺应你的设计 × 顺时而养 → 把身体还给它本来的节奏
+  结构对齐《人类图·觉察之道》《人类图·开心之道》《人类图·财运之道》练习手册；含设计靶心 / 五行身体自察 / 每日三层 / 宣言卡 / PHS 觉察卡 / 21 天打卡（localStorage 自动保存）/ 口诀卡
+  知识来源：人类图健康框架整合自 humandesign-V38「人类图 × 中医」可行性研究与 tcm-data.js 数据底座；中医内容以《黄帝内经》通行框架为底本，参考无名氏《内证观察笔记》东方身体观（仅取隐喻与文化叙事）。
+  红线声明：全部内容为传统养生文化视角下的自我认知参考，不构成任何医疗建议、诊断或治疗方案；如有身体不适，请及时就医。
+-->
+<style>
+:root{--bg:#F5F0E8;--gold:#C4956A;--brown:#8B6644;--dark:#2D2118;--border:#E8DCC8;--med:#5A4634;--awake:#5B7B6F;--notself:#9C5B4D;--gold-d:#A87B52;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:14.5px;line-height:1.8}
+.wrap{max-width:880px;margin:0 auto;padding:24px 18px 60px}
+header{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:14px;padding:28px 26px;margin-bottom:22px;text-align:center}
+header h1{margin:0 0 8px;font-size:25px;font-family:"Noto Serif SC",serif}
+header .sub{font-size:15px;opacity:.96}
+header .meta{margin-top:12px;font-size:13px;opacity:.92}
+h2{color:var(--brown);font-size:20px;border-left:6px solid var(--gold);padding:8px 12px;margin:30px 0 12px;background:#FAF6EE;border-radius:6px;font-family:"Noto Serif SC",serif}
+h3{color:var(--dark);font-size:16px;margin:20px 0 8px}
+p{margin:8px 0}
+ul{margin:6px 0 14px;padding-left:22px}
+li{margin:5px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--brown);color:#fff}
+tr:nth-child(even) td{background:#FAF6EE}
+.ex{background:#FBF3E6;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:10px 0;color:var(--med)}
+.ex b{color:var(--brown)}
+.box{background:#FAF6EE;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:12px 0}
+.box .t{font-weight:700;color:var(--brown);margin-bottom:6px}
+.fill{border-bottom:1px solid var(--border);display:inline-block;min-width:140px;padding:0 4px}
+.linelog{border-bottom:1px dotted var(--border);min-height:34px;margin:8px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.daycard{border:1px solid var(--border);border-radius:10px;padding:14px;background:#FFFBF5;margin:10px 0}
+.daycard .dn{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:15px}
+footer{text-align:center;color:var(--med);font-size:12px;margin-top:40px;border-top:1px solid var(--border);padding-top:16px;line-height:2}
+@media print{body{font-size:12.5px}header{background:var(--brown)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}table th{-webkit-print-color-adjust:exact;print-color-adjust:exact}.decl{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:600px){.resnav{grid-template-columns:1fr}}
+.sig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.sig label{display:flex;align-items:center;gap:6px;background:#FAF6EE;border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;justify-content:flex-start}
+@media(max-width:600px){.sig{grid-template-columns:1fr}}
+/* 宣言卡 */
+.decl{background:linear-gradient(135deg,var(--brown),var(--gold));color:#fff;border-radius:12px;padding:18px 20px;margin:10px 0;font-family:"Noto Serif SC",serif;font-size:16px;font-weight:700}
+/* 21天日历 */
+.cal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.cal .cell{border:1px solid var(--border);border-radius:8px;padding:8px;min-height:84px;background:#FFFBF5;font-size:12px}
+.cal .cell .d{font-family:"Noto Serif SC",serif;color:var(--gold);font-weight:700;font-size:13px}
+.cal .cell label{display:flex;gap:5px;align-items:center;margin-top:5px;cursor:pointer;color:var(--med)}
+@media(max-width:600px){.cal{grid-template-columns:1fr 1fr}}
+.save-hint{font-size:12.5px;color:var(--med);background:#FAF6EE;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>人类图 · 健康之道</h1>
+  <div class="sub">学员练习手册 · 顺设计而养，借中医而调 · 配套 21 天实修</div>
+  <div class="meta">整合：人类图健康地图 × 中医养生之道（传统养生文化视角）</div>
+</header>
+
+<div class="ex"><b>提醒 · </b>人类图与中医养生内容均为<b>自我认知参考</b>，<b>不构成</b>任何医疗建议、诊断或治疗方案，<b>不替代</b>专业医疗。身体不适请及时就医。练习中的所有「脏象观察」都是文化视角的记录，不是体检结论。</div>
+
+<h2>一、我的设计靶心</h2>
+<p>翻开你的人类图报告，先把「靶心」圈出来。<b>顺着设计行动，就是身体回到节奏的起点</b>。</p>
+<div class="box">
+  <div class="t">填一填（对着你的图抄写）</div>
+  <p>类型 Type：<span class="fill">&nbsp;</span></p>
+  <p>策略 Strategy：<span class="fill">&nbsp;</span></p>
+  <p>内在权威 Authority：<span class="fill">&nbsp;</span></p>
+  <p>非我主题 Not-Self（失衡信号）：<span class="fill">&nbsp;</span></p>
+  <p>签名 Signature（安康信号）：<span class="fill">&nbsp;</span>（满足 / 平静 / 成功 / 喜悦+惊喜）</p>
+  <p>我的 PHS 消化型：<span class="fill">&nbsp;</span>　环境型：<span class="fill">&nbsp;</span></p>
+  <p>轮回交叉 Incarnation Cross：<span class="fill">&nbsp;</span></p>
+</div>
+
+<h2>二、我的五行身体自察（文化视角观察）</h2>
+<p>对照五行脏象桥，给最近一个月的身体状态做一次「气候记录」。<b>这不是诊断，是观察——像写天气日记一样写它。</b></p>
+<table>
+  <tr><th>五行</th><th>脏 / 腑</th><th>情志</th><th>开窍 / 五味 / 应季</th><th>最近一个月，它「来电」了吗？（自由记录）</th></tr>
+  <tr><td><b>木</b></td><td>肝 / 胆</td><td>怒</td><td>目 · 酸 · 春</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>火</b></td><td>心 / 小肠</td><td>喜</td><td>舌 · 苦 · 夏</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>土</b></td><td>脾 / 胃</td><td>思</td><td>口 · 甘 · 长夏</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>金</b></td><td>肺 / 大肠</td><td>悲</td><td>鼻 · 辛 · 秋</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>水</b></td><td>肾 / 膀胱</td><td>恐</td><td>耳 · 咸 · 冬</td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<div class="box">
+  <div class="t">自查四问（勾选最常来访的）</div>
+  <div class="sig">
+    <label><input type="checkbox"> 最近哪种情志最常来？</label>
+    <label><input type="checkbox"> 哪个时辰我总是最累？</label>
+    <label><input type="checkbox"> 口味最近偏爱哪一味？</label>
+    <label><input type="checkbox"> 哪个季节我最难熬？</label>
+    <label><input type="checkbox"> 我的入睡窗在几点？</label>
+    <label><input type="checkbox"> 独处还是热闹让我回电？</label>
+  </div>
+  <p style="margin-top:8px">我最想先观察的一条：<span class="fill" style="min-width:260px">&nbsp;</span></p>
+</div>
+<div class="ex"><b>纪律 · </b>查你的关键闸门（人格 / 设计太阳地球、人生角色）→ 得出「体藏」五行，写在上表对应行。<b>「没有某脏」≠「缺什么」</b>——只是观察维度，不是缺陷报告。</div>
+
+<h2>三、每日三层练习结构</h2>
+<p>不求多，求稳。每天三个锚点，各 3–5 分钟。</p>
+<div class="daycard"><div class="dn">晨 · 时辰锚点</div><p>醒来不摸手机，先问身体：「今天的电量几格？」按你的类型安排一天的「放电优先级」。</p></div>
+<div class="daycard"><div class="dn">午 · 消化锚点</div><p>按 PHS 消化型吃一顿「只改怎么吃、不改吃什么」的饭：只吃 / 逐味 / 冷热 / 手食 / 静食 / 光线——饭后记录一条体感。</p></div>
+<div class="daycard"><div class="dn">晚 · 烧干复盘</div><p>睡前三问：① 今天荐骨（或你的能量）烧干了吗？② 有没有替别人扛情绪？③ 明天哪件事值得用黄金两小时？</p></div>
+
+<h2>四、身体宣言卡（手放胸口，每天念一遍）</h2>
+<div class="decl">我不再用别人的方式，审判自己的身体。<br>我听见它，就回到策略与权威——<br>顺设计而养，借中医而调；不做医疗，只为生活。</div>
+<p>写下你的专属身体宣言（一句即可）：<span class="fill" style="min-width:320px">&nbsp;</span></p>
+
+<h2>五、PHS × 中医 · 觉察卡</h2>
+<h3>消化六型（勾出你的型，练它三周）</h3>
+<table>
+  <tr><th>消化型</th><th>怎么吃</th><th>我的体感记录</th></tr>
+  <tr><td><b>食欲型</b> Appetite</td><td>眼不见不吃，吃时只吃</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>味型</b> Taste</td><td>尊重味觉，逐味而食</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>渴型</b> Thirst</td><td>留意冷热饮偏好与反馈</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>触型</b> Touch</td><td>动手握持着吃</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>声型</b> Sound</td><td>找到你的声音环境（静 / 伴声）</td><td><span class="linelog">&nbsp;</span></td></tr>
+  <tr><td><b>光型</b> Light</td><td>调整就餐光线（明 / 暗）</td><td><span class="linelog">&nbsp;</span></td></tr>
+</table>
+<h3>环境六型（勾出你的型，给环境打分）</h3>
+<div class="sig">
+  <label><input type="checkbox"> 洞穴 Cave · 封闭安全</label>
+  <label><input type="checkbox"> 市场 Market · 人流信息</label>
+  <label><input type="checkbox"> 厨房 Kitchen · 转化发生</label>
+  <label><input type="checkbox"> 山 Mountain · 高视角</label>
+  <label><input type="checkbox"> 谷 Valley · 低处纳气</label>
+  <label><input type="checkbox"> 岸 Shore · 水陆交界</label>
+</div>
+<p>我最常待的三个地方，按我的环境型打分：A 地 <span class="fill" style="min-width:40px">&nbsp;</span> 分；B 地 <span class="fill" style="min-width:40px">&nbsp;</span> 分；C 地 <span class="fill" style="min-width:40px">&nbsp;</span> 分。本周最小改动：<span class="fill" style="min-width:200px">&nbsp;</span></p>
+
+<h2>六、21 天身体实修打卡</h2>
+<div class="save-hint">☑ 勾选自动保存在本机浏览器（localStorage），随时回来继续。</div>
+<div class="cal" id="cal"></div>
+
+<h2>七、健康口诀卡（随身）</h2>
+<table>
+  <tr><th>场景</th><th>口诀</th></tr>
+  <tr><td>失衡信号升起（挫败 / 愤怒 / 苦涩 / 失望）</td><td><b>信号是信使，不是敌人</b>——停 → 读 → 回策略权威 → 记日记</td></tr>
+  <tr><td>想照搬别人的养生法</td><td><b>不装别人的人生</b>——先查我的类型与电量</td></tr>
+  <tr><td>情绪卡住</td><td><b>一辨二归三回四放</b>——先分清是谁的情绪</td></tr>
+  <tr><td>不知道怎么吃</td><td><b>怎么吃比吃什么先成立</b>——先练我的消化型</td></tr>
+  <tr><td>身体莫名不对</td><td><b>先查环境，再查自己</b>（反映者尤其）</td></tr>
+  <tr><td>想给别人「解读健康」</td><td><b>不做医疗，只为生活</b>——三句自检再开口</td></tr>
+  <tr><td>每天收工</td><td><b>顺设计而养，借中医而调</b>——把身体还给节奏</td></tr>
+</table>
+
+<div class="resnav">
+  <a class="home" href="hd-jiankang-zhidao-course.html">📘 课程主页<span class="tag">入口</span><small>课程全貌、理念与报名入口</small></a>
+  <a href="hd-jiankang-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 五行脏象桥 × PHS 四箭头</small></a>
+  <a href="hd-jiankang-zhidao-workbook.html">📝 练习手册<span class="tag">你在这里</span><small>21 天身体打卡 · 情志觉察卡 · 可打印</small></a>
+  <a href="hd-jiankang-zhidao-cheatsheet.html">🃏 健康速查卡<small>类型锚点 · 五行脏象 · 十二时辰 · 随身</small></a>
+</div>
+
+<footer>
+  <div>《人类图 · 健康之道》 · Powered By Kan Man Tang</div>
+  <div>本手册为传统养生文化视角下的自我认知参考，不构成任何医疗建议；如有身体不适，请及时就医。</div>
+</footer>
+</div>
+
+<script>
+/* 21 天打卡 · localStorage 自动保存（健康之道 V1） */
+const TASKS = [
+  '晨：醒来先问电量，再摸手机',
+  '午：按消化型吃一顿，记录体感',
+  '晚：荐骨烧干了吗？复盘三问',
+  '记一篇身体觉察日记',
+  '查 1 个闸门的五行脏象（观察不判断）',
+  '情绪来了：一辨二归三回四放',
+  '按环境型给常待之地打分',
+  '找到今天的黄金两小时并守住它',
+  '把「怎么吃」练满一天',
+  '给一位朋友讲一句五行脏象（带标注）'
+];
+const KEY='hd-jiankang-zhidao-workbook-v1';
+const cal=document.getElementById('cal');
+let state={};
+try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){state={}}
+for(let d=1;d<=21;d++){
+  const t=TASKS[(d-1)%TASKS.length];
+  const cell=document.createElement('div');cell.className='cell';
+  cell.innerHTML=`<div class="d">Day ${d}</div><div class="task">${t}</div>
+    <label><input type="checkbox" data-day="${d}" ${state[d]?'checked':''}> 完成</label>`;
+  cal.appendChild(cell);
+}
+cal.addEventListener('change',e=>{
+  const d=e.target.dataset.day;
+  if(d){state[d]=e.target.checked;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(err){}}
+});
+</script>
+</body>
+</html>

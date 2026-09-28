@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 健康之道 ｜ 顺应设计，把身体还给节奏</title>
+<!--
+  《人类图 · 健康之道》｜课程主页（落地页）
+  VERSION: V1  ·  2026-09-28
+  双螺旋骨架：
+    知 · 人类图健康地图（类型·策略·权威·九大中心 / PHS 四箭头 / 非我→安康 / 去条件化）
+    × 行 · 中医养生之道（五行脏象 / 情志养生 / 子午流注 / 二十四节气 / 内证身体观）
+  整合主轴：顺应你的设计 × 顺时而养 → 把身体还给它本来的节奏
+  风格对齐《人类图·觉察之道》《人类图·开心之道》《人类图·财运之道》《人类图·效能之道》（暖棕金品牌配色 · 响应式导航 · 课程包四件套互链）
+  文件套装：course / courseware / workbook / cheatsheet（均以 hd-jiankang-zhidao- 前缀，互相相对链接）
+  知识来源声明：人类图健康框架整合自 humandesign-V38「人类图 × 中医」可行性研究（2026-09-28，结论：分三层推进）与 tcm-data.js 数据底座（64 闸门→卦→五行→脏象静态推导链）；中医内容以《黄帝内经》通行框架为底本，并参考无名氏《内证观察笔记：真图本中医解剖学纲目》（广西师范大学出版社，全书 492 页）的东方身体观叙事——该书属「内证体验性知识」，本课程只取其隐喻、结构类比与文化叙事，不作为生理学事实引用。
+  红线声明：所有中医内容均为传统养生文化视角下的自我认知参考，不构成任何医疗建议、诊断或治疗方案；64 闸门与脏腑经络的对应为「自建文化解释层」（假说级），非人类图体系内事实。如有身体不适，请及时就医并遵循专业医师指导。
+-->
+<meta name="description" content="《人类图·健康之道》—— 把《黄帝内经》的五行时序与《内证观察笔记》的东方身体观，落到你的类型、权威与 PHS 设计上。一门顺应设计、顺时而养的身体实修课程，由邓勤敏（Kan Man Tang）主讲。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-deep:#2D2118; --bg-deep2:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:12px; --radius-sm:8px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;}
+img{max-width:100%}
+a{color:var(--primary-d);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.brandbar{position:sticky;top:0;z-index:200;background:rgba(45,33,24,.97);backdrop-filter:blur(8px);color:#F5E6D3;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.brandbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:var(--serif);font-size:18px;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:8px}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.nav{display:flex;gap:22px;font-size:14px}
+.nav a{color:#E8D8C5;opacity:.85;transition:.2s;white-space:nowrap}
+.nav a:hover{opacity:1;color:var(--gold-l)}
+.navToggle{display:none;background:none;border:0;color:#F5E6D3;font-size:24px;cursor:pointer;line-height:1}
+.mnav{display:none;flex-direction:column;background:var(--bg-deep2);padding:8px 0}
+.mnav a{padding:12px 20px;color:#E8D8C5;font-size:15px;border-bottom:1px solid rgba(255,255,255,.05)}
+
+/* Hero */
+.hero{position:relative;padding:74px 0 64px;background:
+  radial-gradient(1200px 400px at 80% -10%,rgba(212,168,67,.18),transparent),
+  linear-gradient(160deg,#2D2118 0%,#3D3128 55%,#4A3D32 100%);color:#F5E6D3;overflow:hidden;text-align:center}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border:1px solid rgba(212,168,67,.25);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:200px;height:200px;border:1px solid rgba(196,149,106,.22);border-radius:50%}
+.hero .eyebrow{letter-spacing:5px;font-size:12px;color:var(--gold-l);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,6vw,52px);line-height:1.25;color:#fff;font-weight:700;margin-bottom:8px}
+.hero h1 .accent{color:var(--gold-l)}
+.hero .lead{font-size:clamp(16px,2.4vw,20px);color:#E8D8C5;max-width:760px;margin:18px auto 10px;line-height:1.75}
+.hero .verse{font-family:var(--serif);font-style:italic;color:var(--primary-l);font-size:15px;margin:22px 0 30px;opacity:.92}
+.cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-block;padding:13px 26px;border-radius:40px;font-size:15px;font-weight:600;cursor:pointer;border:0;transition:.2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--primary));color:#2D2118;box-shadow:0 6px 18px rgba(212,168,67,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(212,168,67,.45)}
+.btn-ghost{background:transparent;color:#F5E6D3;border:1px solid rgba(245,230,211,.4)}
+.btn-ghost:hover{background:rgba(245,230,211,.1)}
+
+section{padding:60px 0}
+.sec-head{text-align:center;margin-bottom:38px}
+.sec-head .kicker{color:var(--primary-d);letter-spacing:3px;font-size:12px;font-weight:700;text-transform:uppercase}
+.sec-head h2{font-family:var(--serif);font-size:clamp(24px,4vw,34px);color:var(--dark);margin:8px 0 12px;font-weight:700}
+.sec-head p{color:var(--text-l);max-width:680px;margin:0 auto;font-size:15px}
+
+/* 双螺旋 */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+.dual .col{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.dual .col h3{font-family:var(--serif);font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.dual .col.know h3{color:var(--primary-d)}
+.dual .col.do h3{color:var(--awake)}
+.dual .col .tag{font-size:12px;letter-spacing:2px;color:var(--text-l);text-transform:uppercase;margin-bottom:14px;display:block}
+.dual .col ul{list-style:none}
+.dual .col li{padding:8px 0 8px 24px;position:relative;border-bottom:1px dashed var(--border);font-size:14.5px}
+.dual .col li:last-child{border-bottom:0}
+.dual .col li::before{content:"◆";position:absolute;left:0;top:8px;color:var(--gold);font-size:11px}
+.bridge{text-align:center;margin:26px auto 0;max-width:640px;background:linear-gradient(135deg,var(--primary),var(--gold));color:#2D2118;padding:14px 22px;border-radius:40px;font-weight:600;font-size:15px;box-shadow:var(--shadow-md)}
+
+/* 模块地图 */
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.mcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.2s;position:relative;overflow:hidden}
+.mcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.mcard .no{font-family:var(--serif);font-size:34px;color:var(--primary-l);line-height:1;opacity:.7}
+.mcard h3{font-size:17px;color:var(--dark);margin:10px 0 6px;font-weight:700}
+.mcard p{font-size:13.5px;color:var(--text-l);line-height:1.7}
+.mcard .pill{display:inline-block;font-size:11px;color:var(--primary-d);background:#FBF1E2;border:1px solid var(--border);border-radius:20px;padding:2px 10px;margin-top:10px}
+.band{background:var(--bg-deep);color:#F5E6D3;border-radius:var(--radius);padding:14px 20px;margin:30px 0 6px;font-family:var(--serif);font-size:17px;display:flex;align-items:center;gap:10px}
+.band .bar{width:4px;height:20px;background:var(--gold);border-radius:2px}
+
+/* 核心表 */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow);margin-top:10px}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:640px}
+th,td{border:1px solid var(--border);padding:11px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-deep);color:#F5E6D3;font-weight:600;letter-spacing:.5px}
+td b{color:var(--dark)}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}
+.sg{color:var(--awake);font-weight:600}
+
+/* 适合人群 */
+.who{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.who .w{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.who .w .ic{font-size:26px;margin-bottom:8px}
+.who .w h4{font-size:16px;color:var(--dark);margin-bottom:6px}
+.who .w p{font-size:13.5px;color:var(--text-l)}
+
+/* 路径 */
+.path{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.path .p{background:var(--bg-card);border:1px solid var(--border);border-left:5px solid var(--gold);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.path .p h3{font-family:var(--serif);font-size:20px;color:var(--dark);margin-bottom:4px}
+.path .p .days{color:var(--primary-d);font-weight:700;font-size:14px;margin-bottom:10px}
+.path .p ul{list-style:none;padding-left:0}
+.path .p li{padding:5px 0 5px 22px;position:relative;font-size:14px}
+.path .p li::before{content:"✓";position:absolute;left:0;color:var(--awake);font-weight:700}
+
+/* 讲师 */
+.teacher{display:grid;grid-template-columns:160px 1fr;gap:26px;align-items:center;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
+.teacher .ava{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:30px;color:#fff;margin:0 auto;box-shadow:var(--shadow-md)}
+.teacher h3{font-family:var(--serif);font-size:23px;color:var(--dark);margin-bottom:4px}
+.teacher .role{color:var(--primary-d);font-size:14px;margin-bottom:12px}
+.teacher p{font-size:14.5px;color:var(--text-l);line-height:1.8}
+
+/* CTA banner */
+.join{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:46px 30px;text-align:center;box-shadow:var(--shadow-md)}
+.join h2{font-family:var(--serif);font-size:clamp(22px,4vw,30px);color:#fff;margin-bottom:12px}
+.join p{color:#E8D8C5;max-width:620px;margin:0 auto 24px;font-size:15px}
+footer{background:var(--bg-deep);color:#C9BBA8;text-align:center;padding:30px 20px;font-size:13px;line-height:1.9}
+
+@media(max-width:860px){
+  .nav{display:none}
+  .navToggle{display:block}
+  .dual{grid-template-columns:1fr}
+  .path{grid-template-columns:1fr}
+  .teacher{grid-template-columns:1fr;text-align:center}
+  .teacher .ava{margin-bottom:6px}
+  section{padding:44px 0}
+  .who{grid-template-columns:repeat(2,1fr)}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#5B7B6F;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:560px){
+  .who{grid-template-columns:1fr}
+  .resnav{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>人类图 · 健康之道</div>
+    <nav class="nav">
+      <a href="#idea">核心理念</a>
+      <a href="#map">课程地图</a>
+      <a href="#core">健康模型</a>
+      <a href="#who">适合谁</a>
+      <a href="#path">学习路径</a>
+      <a href="#teacher">讲师</a>
+      <a href="#join">报名</a>
+      <a href="hd-jiankang-zhidao-courseware.html">课件</a>
+      <a href="hd-jiankang-zhidao-workbook.html">手册</a>
+      <a href="hd-jiankang-zhidao-cheatsheet.html">速查卡</a>
+    </nav>
+    <button class="navToggle" aria-label="菜单" onclick="document.getElementById('mnav').classList.toggle('mblock')">☰</button>
+  </div>
+  <div class="mnav" id="mnav">
+    <a href="#idea">核心理念</a><a href="#map">课程地图</a><a href="#core">健康模型</a>
+    <a href="#who">适合谁</a><a href="#path">学习路径</a><a href="#teacher">讲师</a>    <a href="#join">报名</a>
+    <a href="hd-jiankang-zhidao-courseware.html">课件</a>
+    <a href="hd-jiankang-zhidao-workbook.html">手册</a>
+    <a href="hd-jiankang-zhidao-cheatsheet.html">速查卡</a>
+  </div>
+</div>
+<style>.mblock{display:flex!important}</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HUMAN DESIGN × THE PATH OF HEALTH</div>
+    <h1>人类图 · <span class="accent">健康之道</span></h1>
+    <p class="lead">不是又一门「照着别人养生」的课，也不是把图算成体检报告。<br>这是一门把《黄帝内经》的五行时序，落到你的类型、权威与 PHS 设计上的身体实修课——<b>顺应设计而养，把身体还给节奏</b>。</p>
+    <p class="verse">「恬淡虚无，真气从之；精神内守，病安从来。」——《黄帝内经 · 素问》<br>「顺设计而养，借中医而调。」—— 健康之道 · 课程主轴</p>
+    <div class="cta">
+      <a class="btn btn-gold" href="#join">开始这趟旅程</a>
+      <a class="btn btn-ghost" href="#map">查看课程地图</a>
+    </div>
+  </div>
+</header>
+
+<section id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">THE DUAL HELIX</span>
+      <h2>人类图是地图，中医是身体的用法说明书</h2>
+      <p>市面上的养生方法大多属于「别人」：别人的作息、别人的食补、别人的功法。<br>但别人的方法，未必是你的设计。人类图告诉你「你是谁」，中医告诉你「身体怎么用」——两者相加，才是你自己的健康之道。</p>
+    </div>
+    <div class="dual">
+      <div class="col know">
+        <span class="tag">知 · 人类图健康地图</span>
+        <h3>📐 它告诉你「你的身体怎么充电」</h3>
+        <ul>
+          <li><b>类型与策略</b>：你的能量充电 / 放电协议（养生第一义：电量管理）</li>
+          <li><b>内在权威</b>：身体的决策系统（荐骨 / 情绪 / 脾…）——身体先于头脑知道答案</li>
+          <li><b>九大中心</b>：定义 = 恒常能量流，开放 = 采样放大区</li>
+          <li><b>PHS 四箭头</b>：消化 · 环境 · 动机 · 视角——身体出厂设定的使用说明书</li>
+          <li><b>非我主题</b>：偏离设计时的失衡信号（挫败 / 愤怒 / 苦涩 / 失望）</li>
+        </ul>
+      </div>
+      <div class="col do">
+        <span class="tag">行 · 中医养生之道</span>
+        <h3>🌿 它教你「身体怎么用最顺」</h3>
+        <ul>
+          <li><b>五行脏象</b>：木火土金水 × 肝心脾肺肾（情志 · 开窍 · 五味 · 应季）</li>
+          <li><b>情志养生</b>：怒喜思悲恐——情绪是身体的气候</li>
+          <li><b>子午流注</b>：十二时辰气血当令，作息跟着经络走</li>
+          <li><b>二十四节气</b>：春生夏长秋收冬藏，与流年行运同一条黄道</li>
+          <li><b>内证身体观</b>：太极器官 · 命门 · 十二条河——东方身体观的想象力</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bridge">🌉 健康之道，就是让人类图从「知识」变成「体感」的那一座桥——顺设计而养，借中医而调</div>
+  </div>
+</section>
+
+<section id="map" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CURRICULUM MAP</span>
+      <h2>课程地图 · 16 个实修模块</h2>
+      <p>基础篇打底，应用篇落地。<br>不堆知识，每个模块都配练习——健康是「养出来」的，不是「听出来」的。</p>
+    </div>
+
+    <div class="band"><span class="bar"></span>基础篇 · 用人类图，看见身体的设计</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">00</div><h3>缘起：当人类图遇见中医</h3><p>易医同源：64 卦即 64 闸门。人类图取走了易经的「卦」，中医守着「脏腑经络」——缺的那一半，正好补位。</p><span class="pill">开篇 · 定位</span></div>
+      <div class="mcard"><div class="no">01</div><h3>健康的重新定义</h3><p>人类图没有「病的语言」，只有「对 / 错地使用能量」；中医讲「正气存内，邪不可干」。先修关系，再谈方法。</p><span class="pill">总论</span></div>
+      <div class="mcard"><div class="no">02</div><h3>类型 × 能量管理</h3><p>生产者的油箱、投射者的省电模式、显示者的点火系统、反映者的晴雨表。养生的第一义：别拿别人的生活方式养自己。</p><span class="pill">核心</span></div>
+      <div class="mcard"><div class="no">03</div><h3>内在权威：身体的决策系统</h3><p>荐骨 / 情绪 / 脾 / 直觉……身体先于头脑知道答案；「元神识神」的东方互证。</p><span class="pill">核心</span></div>
+      <div class="mcard"><div class="no">04</div><h3>九大中心 × 身体地图</h3><p>定义中心 = 恒常能量流，开放中心 = 采样放大。与脏象的类比读法（标注：类比，非对应）。</p><span class="pill">模型</span></div>
+      <div class="mcard"><div class="no">05</div><h3>非我主题：失衡的信号灯</h3><p>挫败 / 愤怒 / 苦涩 / 失望不是敌人，是身体的报警器。听见它，就回到设计。</p><span class="pill">必学</span></div>
+      <div class="mcard"><div class="no">06</div><h3>五行脏象桥</h3><p>64 卦上下经卦 → 五行 → 脏象：唯一「零争议」的静态推导链；体用约定与三级标注。</p><span class="pill">独创</span></div>
+      <div class="mcard"><div class="no">07</div><h3>情志养生</h3><p>怒喜思悲恐 × 五脏；开放情绪中心吸纳他人情绪，与「七情致病」互讲；「恬淡虚无」的实修。</p><span class="pill">情绪</span></div>
+    </div>
+
+    <div class="band"><span class="bar"></span>应用篇 · 把养生活进你的设计</div>
+    <div class="modules">
+      <div class="mcard"><div class="no">08</div><h3>PHS 消化 × 脾胃运化</h3><p>食欲 / 味 / 渴 / 触 / 声 / 光六型：怎么吃比吃什么先成立；五味入五脏的参考维度。</p><span class="pill">类型定制</span></div>
+      <div class="mcard"><div class="no">09</div><h3>PHS 环境 × 环境养生</h3><p>洞穴 / 市场 / 厨房 / 山 / 谷 / 岸：身体在什么空间里运行正确；中医「因地制宜」的居处智慧。</p><span class="pill">类型定制</span></div>
+      <div class="mcard"><div class="no">10</div><h3>四箭头：动机与视角</h3><p>为什么看（动机）× 从哪看（视角）；「上工治神」——观察身体的方式，决定身体给你什么答案。</p><span class="pill">进阶</span></div>
+      <div class="mcard"><div class="no">11</div><h3>子午流注 × 类型作息</h3><p>十二时辰气血当令：生产者烧干荐骨再睡、投射者早睡养肾、反映者随月观察。</p><span class="pill">实修</span></div>
+      <div class="mcard"><div class="no">12</div><h3>二十四节气 × 流年行运</h3><p>Rave 新年（太阳进 41.1 闸）与大寒同在黄经 300°–302°；春生夏长秋收冬藏，年运对照。</p><span class="pill">独创</span></div>
+      <div class="mcard"><div class="no">13</div><h3>身体地图实操</h3><p>输入你的闸门：卦 → 五行 → 脏腑 → 情志，逐条自查；单闸门不下结论，完整图一起看。</p><span class="pill">工具</span></div>
+      <div class="mcard"><div class="no">14</div><h3>内证之眼：东方身体观</h3><p>太阳系是「超大太极器官」、命门二十四节气值日、十二条河——借内证的想象力，重新看见身体。</p><span class="pill">视野</span></div>
+      <div class="mcard"><div class="no">15</div><h3>边界与究竟：第一戒律</h3><p>不诊断、不治疗、不替代就医。养生是生活方式，不是处方；健康之道最终为生活服务。</p><span class="pill">红线 · 必读</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="core">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">CORE MODEL</span>
+      <h2>类型 × 身体养护 · 失衡信号 → 安康信号</h2>
+      <p>人类图的非我主题，就是「偏离设计、身体先报警」的状态；活出设计，身体才有回到节奏的条件。<br>当失衡信号升起，用它做路标，把它转回设计。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>类型</th><th>策略</th><th>失衡信号<br><small>（非我 · 身体）</small></th><th>安康信号<br><small>（设计 · 签名）</small></th><th>健康之道 · 回到身体</th></tr></thead>
+        <tbody>
+          <tr><td><b>生产者<br>Generator</b><br><small>37%</small></td><td>等待回应</td><td class="ns">挫败<br>Frustration</td><td class="sg">满足<br>Satisfaction</td><td>看见「硬干透支、越累越停不下来」→ 只对荐骨「嗯哼」的事用力；睡前把荐骨烧干，身体才肯放你入睡。</td></tr>
+          <tr><td><b>显示生产者<br>MG</b><br><small>33%</small></td><td>等待回应<br>（更多主动）</td><td class="ns">挫败</td><td class="sg">满足</td><td>看见「多线并行、吃饭像加油」→ 一次一件事；进食慢下来，给脾胃留出运化的时间。</td></tr>
+          <tr><td><b>显示者<br>Manifestor</b><br><small>8%</small></td><td>告知<br>Inform</td><td class="ns">愤怒<br>Anger</td><td class="sg">平静<br>Peace</td><td>看见「不告知处处碰壁、火气攻心」→ 怒伤肝；行动前先告知，气顺了，路就顺了。</td></tr>
+          <tr><td><b>投射者<br>Projector</b><br><small>21%</small></td><td>等待邀请</td><td class="ns">苦涩<br>Bitterness</td><td class="sg">成功<br>Success</td><td>看见「硬撑着营业、精力被看穿」→ 省电模式就是你的养生法：早睡、少耗、等被邀请。</td></tr>
+          <tr><td><b>反映者<br>Reflector</b><br><small>1%</small></td><td>等待 28 天</td><td class="ns">失望<br>Disappointment</td><td class="sg">喜悦+惊喜</td><td>看见「环境一乱全身不对」→ 你是环境的晴雨表：先换环境，再谈养生；重大决定过 28 天。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="band" style="margin-top:40px"><span class="bar"></span>五行脏象桥 · 64 卦落到五脏（经典级）</div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>五行</th><th>对应经卦</th><th>脏 / 腑</th><th>情志</th><th>开窍</th><th>五味</th><th>应季</th></tr></thead>
+        <tbody>
+          <tr><td><b>木</b></td><td>震 ☳ · 巽 ☴</td><td>肝 / 胆</td><td>怒</td><td>目</td><td>酸</td><td>春</td></tr>
+          <tr><td><b>火</b></td><td>离 ☲</td><td>心 / 小肠</td><td>喜</td><td>舌</td><td>苦</td><td>夏</td></tr>
+          <tr><td><b>土</b></td><td>艮 ☶ · 坤 ☷</td><td>脾 / 胃</td><td>思</td><td>口</td><td>甘</td><td>长夏</td></tr>
+          <tr><td><b>金</b></td><td>乾 ☰ · 兑 ☱</td><td>肺 / 大肠</td><td>悲</td><td>鼻</td><td>辛</td><td>秋</td></tr>
+          <tr><td><b>水</b></td><td>坎 ☵</td><td>肾 / 膀胱</td><td>恐</td><td>耳</td><td>咸</td><td>冬</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--text-l);margin-top:14px;text-align:center;line-height:2">💡 体用约定：下卦为体（内 / 藏），上卦为用（外 / 象）。梅花易数以动爻定体用，静态盘无动爻，取下卦为体是本项目约定，供参考维度使用。<br>标注：五行脏象为《黄帝内经》通行框架（经典级）；「闸门 → 脏腑」整体对应属文化解释层（假说级）。本页内容为传统养生文化视角下的自我认知参考，不构成任何医疗建议。</p>
+  </div>
+</section>
+
+<section id="who" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">WHO IS IT FOR</span>
+      <h2>这门课，适合这样的你</h2>
+      <p>无论你是人类图老手还是刚入门，只要你想「按自己的设计养生」而非「照别人的方子硬补」，这里就有你的位置。</p>
+    </div>
+    <div class="who">
+      <div class="w"><div class="ic">🗺️</div><h4>读懂图却养不好生的人</h4><p>知道策略权威，作息饮食还是老样子。你需要的是把设计「养出来」的方法。</p></div>
+      <div class="w"><div class="ic">🔋</div><h4>总觉得没电的人</h4><p>忙不是病，但长期「电量见底」是信号。先看清能量是否一直用错了地方。</p></div>
+      <div class="w"><div class="ic">💡</div><h4>人类图解读师 / 分析师</h4><p>健康话题是高频提问。这套带边界、带标注的应答框架，让你敢接、也接得稳。</p></div>
+      <div class="w"><div class="ic">🍵</div><h4>中医养生爱好者</h4><p>懂点五行经络时令，想让养生和自己的设计对上号——不再泛泛而「养」。</p></div>
+      <div class="w"><div class="ic">🤝</div><h4>教练 / 咨询师</h4><p>把身心对话整合进教练 / 咨询场景，帮客户看见失衡信号背后的设计根源。</p></div>
+      <div class="w"><div class="ic">🔥</div><h4>想把身体用一辈子的人</h4><p>不追热点养生法，想按自己的设计过好四季与一生。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">LEARNING PATH</span>
+      <h2>两条学习路径</h2>
+      <p>健康之道不是听明白的，是养出来的。给自己一个小目标，先坚持起来。</p>
+    </div>
+    <div class="path">
+      <div class="p">
+        <h3>🌤️ 21 天身体觉察</h3>
+        <div class="days">每天 10–15 分钟 · 身体日记 + 类型作息打卡</div>
+        <ul>
+          <li>建立「每日身体觉察」的基本节奏</li>
+          <li>认出自己的非我失衡身体信号</li>
+          <li>按 PHS 消化类型吃一周，记录体感</li>
+          <li>找到自己的当令时辰与最佳入睡窗</li>
+          <li>完成 21 篇身体觉察日记</li>
+        </ul>
+      </div>
+      <div class="p">
+        <h3>🌳 100 天养生扎根</h3>
+        <div class="days">把练习变成呼吸 · 口诀：「顺设计而养，借中医而调」</div>
+        <ul>
+          <li>从「打卡式养生」走向「在生活中养」</li>
+          <li>时辰作息与节气节点开始稳定落地</li>
+          <li>情志升起时，能回到中心与权威</li>
+          <li>能把五行脏象桥讲给别人听</li>
+          <li>迈向「养生即生活方式」的状态</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="teacher" style="background:linear-gradient(180deg,#F5F0E8,#EFE7D8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">YOUR GUIDE</span>
+      <h2>带课讲师</h2>
+    </div>
+    <div class="teacher">
+      <div class="ava">邓</div>
+      <div>
+        <h3>邓勤敏（Kan Man Tang）</h3>
+        <div class="role">人类图分析师 · 量子人类图教练 · 勤思妙享创始人</div>
+        <p>深耕人类图与东方养生智慧的整合教学。本课程以《黄帝内经》五行时序为中医骨架，借无名氏《内证观察笔记》的东方身体观打开想象力，与人类图「类型·策略·权威·PHS」内核深度交织——不只教你读懂图，更陪你「把身体还给设计」。相信：图是地图，身体是路；顺设计而养，身体自己会回来。所有中医内容均为传统养生文化视角，不构成医疗建议。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="join">
+      <h2>准备好，把身体还给设计了吗？</h2>
+      <p>不追求妙手回春，但要一辈子「顺着自己活」。<br>从今天的一次「身体觉察」开始——你本来就懂得养自己，只是太久没听它的。</p>
+      <div class="cta" style="justify-content:center">
+        <a class="btn btn-gold" href="#">立即加入 21 天实修</a>
+        <a class="btn btn-ghost" href="#map">下载课程大纲</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources" style="background:linear-gradient(180deg,#EFE7D8,#F5F0E8)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">COURSE KIT</span>
+      <h2>课程资源包 · 四件套</h2>
+      <p>落地页之外，配套三份资料。建议顺序：先读课件建立框架，再用手册练习，速查卡随身翻。</p>
+    </div>
+    <div class="resnav">
+      <a class="home" href="hd-jiankang-zhidao-course.html">📘 课程主页<span class="tag">你在这里</span><small>课程全貌、理念与报名入口</small></a>
+      <a href="hd-jiankang-zhidao-courseware.html">📖 完整课件<small>16 模块教学正文 · 五行脏象桥 × PHS 四箭头</small></a>
+      <a href="hd-jiankang-zhidao-workbook.html">📝 练习手册<small>21 天身体打卡 · 情志觉察卡 · 可打印</small></a>
+      <a href="hd-jiankang-zhidao-cheatsheet.html">🃏 健康速查卡<small>类型锚点 · 五行脏象 · 十二时辰 · 随身</small></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>《人类图 · 健康之道》</div>
+  <div>Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+document.querySelectorAll('.mnav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mnav').classList.remove('mblock')));
+</script>
+</body>
+</html>
