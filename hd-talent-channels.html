@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>36条天赋通道知识卡片 · V2</title>
+<link rel="icon" href="data:,">
+<!--
+  ============================================================
+  hd-talent-channels.html — 36条天赋通道知识卡片
+  ============================================================
+  脚本内嵌 changelog（版本溯源）：
+  V2 | 2026-09-29 | 全本完成
+    - 批量填充 9-36 号通道（共 36 条 / 36 完成）
+    - 回路标签优化：logic → 集体人回路（理解·抽象），覆盖 Understanding 与 Sensing 两族
+    - 移除 9-36 占位块；进度条 36/36；页脚更新为「全本完成」
+    - 内容来源：人类图标准 36 通道知识（与《活出你的天赋才华》一致）
+  V1 | 2026-09-29 | 打样版
+    - 建立 36 卡片数据架构（CHANNELS 数组，data-driven，批量填充只改数据）
+    - 完成 1-8 号通道打样
+    - 暖色大地调；回路色标；移动端单列 + 桌面单栏 720px
+    - 卡片结构：序号徽章 / 通道名 / 设计定位 / 电路与中心 / 双闸门(含卦名) / 两段描述 / 关键词
+  ============================================================
+-->
+<style>
+  :root{
+    --bg:#F5F0E8;
+    --ink:#2D2118;
+    --ink-soft:#5A4A3A;
+    --gold:#C4956A;
+    --gold-deep:#A9784B;
+    --line:#E2D6C4;
+    --card:#FFFDF8;
+    --indiv:#B4693E;      /* 个体人 */
+    --logic:#7C7A3A;      /* 集体·理解/抽象 */
+    --tribal:#96453F;     /* 家族·部落 */
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    line-height:1.75;
+    font-size:15px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px 48px;}
+
+  /* ===== 页头 ===== */
+  header{
+    text-align:center;
+    padding:36px 12px 20px;
+  }
+  header .kan{
+    font-size:12px;letter-spacing:6px;color:var(--gold-deep);
+    margin-bottom:6px;
+  }
+  header h1{
+    font-size:26px;letter-spacing:2px;font-weight:700;
+  }
+  header .sub{
+    margin-top:8px;font-size:14px;color:var(--ink-soft);
+  }
+  .badge{
+    display:inline-block;margin-top:12px;
+    font-size:12px;color:var(--gold-deep);
+    border:1px solid var(--gold);
+    border-radius:999px;padding:3px 14px;
+    background:#FFF8EE;
+  }
+  .progress{
+    max-width:420px;margin:16px auto 0;
+  }
+  .progress .bar{
+    height:8px;border-radius:99px;background:var(--line);
+    overflow:hidden;
+  }
+  .progress .bar i{
+    display:block;height:100%;width:100%;
+    background:linear-gradient(90deg,var(--gold),var(--gold-deep));
+    border-radius:99px;
+  }
+  .progress .txt{
+    font-size:12px;color:var(--ink-soft);margin-top:5px;
+  }
+
+  /* ===== 回路筛选 ===== */
+  .filters{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+    margin:20px 0 8px;
+  }
+  .filters button{
+    min-height:38px;padding:6px 16px;
+    font-size:13px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    font-family:inherit;
+  }
+  .filters button.on{
+    background:var(--ink);color:#FFF6EA;border-color:var(--ink);
+  }
+  .legend{
+    text-align:center;font-size:12px;color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .legend b{font-weight:600;}
+  .legend .c1{color:var(--indiv);}
+  .legend .c2{color:var(--logic);}
+  .legend .c3{color:var(--tribal);}
+
+  /* ===== 卡片 ===== */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:5px solid var(--gold);
+    border-radius:var(--radius);
+    padding:22px 20px 18px;
+    margin-bottom:22px;
+    box-shadow:0 2px 10px rgba(45,33,24,.06);
+  }
+  .card[data-ck="indiv"]{border-left-color:var(--indiv);}
+  .card[data-ck="logic"]{border-left-color:var(--logic);}
+  .card[data-ck="tribal"]{border-left-color:var(--tribal);}
+
+  .card .top{
+    display:flex;align-items:flex-start;gap:14px;
+  }
+  .num{
+    flex:0 0 auto;
+    width:46px;height:46px;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--ink);color:#F5E9D6;
+    font-size:18px;font-weight:700;line-height:1.1;
+  }
+  .num small{font-size:9px;font-weight:400;letter-spacing:1px;opacity:.75;}
+  .card h2{
+    font-size:20px;letter-spacing:1px;line-height:1.4;
+  }
+  .card h2 .gates{
+    font-size:13px;color:var(--gold-deep);font-weight:600;
+    margin-left:6px;white-space:nowrap;
+  }
+  .design{
+    font-size:14px;color:var(--gold-deep);
+    margin-top:2px;font-weight:600;
+  }
+  .card .emoji{margin-left:auto;font-size:26px;line-height:1;}
+
+  .meta{
+    display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;
+  }
+  .chip{
+    font-size:12px;border-radius:6px;padding:3px 10px;
+    background:#F1E8DA;color:var(--ink-soft);border:1px solid var(--line);
+  }
+  .chip.ck{font-weight:600;color:#FFF6EA;}
+  .card[data-ck="indiv"] .chip.ck{background:var(--indiv);}
+  .card[data-ck="logic"] .chip.ck{background:var(--logic);}
+  .card[data-ck="tribal"] .chip.ck{background:var(--tribal);}
+
+  /* 双闸门 */
+  .gaterow{
+    display:flex;align-items:stretch;gap:0;margin-top:14px;
+  }
+  .gate{
+    flex:1;background:#F8F2E7;border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;text-align:center;
+  }
+  .gate .gn{
+    font-size:15px;font-weight:700;color:var(--ink);
+  }
+  .gate .gx{
+    font-size:11px;color:var(--gold-deep);margin-top:1px;
+  }
+  .gate .gl{
+    font-size:12px;color:var(--ink-soft);margin-top:3px;
+  }
+  .link{
+    flex:0 0 46px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;color:var(--gold-deep);
+  }
+  .link .ln{
+    width:34px;height:0;border-top:3px solid var(--gold);
+    border-radius:3px;
+  }
+  .link span{font-size:14px;line-height:1;}
+
+  .para{
+    margin-top:14px;font-size:14.5px;color:var(--ink);
+    text-align:justify;
+  }
+  .para .lead{
+    display:inline-block;
+    font-size:12px;color:var(--gold-deep);font-weight:700;
+    letter-spacing:2px;margin-right:6px;
+  }
+  .kw{
+    margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  }
+  .kw .kt{font-size:12px;color:var(--ink-soft);letter-spacing:2px;}
+  .kw i{
+    font-style:normal;font-size:12px;
+    background:#FFF4E2;border:1px solid #EAD6B8;color:#8A6A44;
+    border-radius:999px;padding:2px 12px;
+  }
+
+  footer{
+    text-align:center;font-size:12px;color:var(--ink-soft);
+    border-top:1px solid var(--line);
+    padding-top:22px;margin-top:8px;line-height:2;
+  }
+  footer .src{font-size:11px;color:#B7A88F;}
+
+  .hidden{display:none !important;}
+
+  @media (max-width:480px){
+    header h1{font-size:22px;}
+    .card{padding:18px 14px 14px;}
+    .card h2{font-size:18px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kan">HUMAN DESIGN · 领读者计划</div>
+    <h1>36 条天赋通道知识卡片</h1>
+    <div class="sub">通道是生命的动力，是老天赋予你的配备与武器，是你与生俱来的天赋才华</div>
+    <div class="badge" id="verBadge"></div>
+    <div class="progress">
+      <div class="bar"><i id="progBar"></i></div>
+      <div class="txt" id="progTxt"></div>
+    </div>
+  </header>
+
+  <div class="filters" id="filters"></div>
+  <div class="legend">
+    <b class="c1">■ 个体人·知晓</b> &nbsp;
+    <b class="c2">■ 集体人·理解（逻辑/抽象）</b> &nbsp;
+    <b class="c3">■ 家族·部落</b>
+  </div>
+
+  <main id="cards"></main>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+/* 版本号：唯一来源，标题 / 徽章 / 页脚自动同步 */
+var VERSION = "V3";
+
+/* ================== 数据层 ==================
+   通道按书中序号 ①-㊱ 排列（1-8, 9-52, 10-20 … 47-64）。
+   字段：
+   no 书中序号 | id 通道号 | name 通道名 | design 设计定位
+   ck circuit key: indiv | logic | tribal
+   centers 连接能量中心
+   gates 两端闸门 [{g, hex, label}]
+   paras 两段正文 | kw 关键词 | emoji 图标
+============================================= */
+var CHANNELS = [
+  {
+    no:1, id:"1-8", name:"灵感的通道", design:"身为充满创造力之人生典范的设计",
+    ck:"indiv", centers:"G中心 ↔ 喉咙",
+    gates:[
+      {g:1, hex:"乾卦", label:"自我表达 · 创意"},
+      {g:8, hex:"比卦", label:"一致 · 分享贡献"}
+    ],
+    paras:[
+      "你总是充满创意，特立独行，在人群中闪露光芒。你讨厌跟别人一样，正因为你是如此独一无二，你的存在就足以赋予别人力量，带来灵感与启发，让别人也能勇敢做自己。请坚守自己的独特性，珍惜自己就是如此与众不同。",
+      "这条通道能够将内心的信念，形诸于外，化为语言，所以所说的话充满真诚，能透过语言来引领众人，朝未来的方向前进。"
+    ],
+    kw:["独特","创意","启发","真诚表达"], emoji:"✨"
+  },
+  {
+    no:2, id:"2-14", name:"脉动的通道", design:"掌管钥匙的人的设计",
+    ck:"indiv", centers:"荐骨 ↔ G中心",
+    gates:[
+      {g:2, hex:"坤卦", label:"方向 · 自我定位"},
+      {g:14, hex:"大有卦", label:"丰盛 · 掌钥"}
+    ],
+    paras:[
+      "这条通道具有庞大的感染力，拥有这条通道的人能为我们带来突变，若能顺着流走，等待生命给你的回应，信任这一切自有安排，你必能为他人指引方向。你是个天生的指路人，仿佛内建人生方向的指南针，总是能为别人指出他们该走的路。",
+      "你对他人的建言总能一针见血，为他们的人生方向带来立即又直接的影响。"
+    ],
+    kw:["方向","丰盛","指引","感染力"], emoji:"🔑"
+  },
+  {
+    no:3, id:"3-60", name:"突变的通道", design:"能量在呼与吸之间、脉搏的跳动间突变的设计",
+    ck:"indiv", centers:"荐骨 ↔ 根部中心",
+    gates:[
+      {g:3, hex:"屯卦", label:"秩序 · 开端"},
+      {g:60, hex:"节卦", label:"限制 · 接受"}
+    ],
+    paras:[
+      "这条通道的人有一种特殊能力，可以跳脱以往框架，自既定的桎梏与限制之中，找到全新的秩序。他们的人生常属于低潮、求存，接着在某一刻突然曙光乍现，找出原本从未尝试过的应变之道，然后又开始面对下一个限制，再来一遍。如此周而复始循环着，而不可思议的特质，就在这看来反反覆覆的周期中，发生了。虽然很难预知蜕变何时会发生，以及到底会不会发生，但是，在找出全新秩序的那一瞬间，是如此神奇，让人惊叹不已。",
+      "你的内在有一股突变的驱动力，不管做任何行业都能开创新局。你总能为世界带来新的事物。你是革命力量的媒介，为我们带来重要的改变。"
+    ],
+    kw:["突变","突破限制","创新","脉动"], emoji:"⚡"
+  },
+  {
+    no:4, id:"4-63", name:"逻辑的通道", design:"头脑塞满疑问与解答的设计",
+    ck:"logic", centers:"头脑中心 ↔ 逻辑中心",
+    gates:[
+      {g:4, hex:"蒙卦", label:"回答 · 公式化"},
+      {g:63, hex:"既济卦", label:"疑问 · 真理探求"}
+    ],
+    paras:[
+      "这条通道代表科学的、多疑的头脑。脑中会不断冒出各种疑问，持续进行反覆又反覆的逻辑辩证，无法停止运转。藉由理性质疑，来检视一切事物的正常性，最后归纳出足以放诸四海皆准的正确解答。请善用你那持续问与答的清晰脑袋，解决与自己无关的问题，为世界带来洞见与启发。",
+      "你有一颗科学的、多疑的头脑，总是会以理性质疑、自问自答的方式，来检视问题的正常性，找出不合逻辑之处，为这世界与周遭的人们带来解决之道。"
+    ],
+    kw:["逻辑","质疑","解答","科学头脑"], emoji:"🔬"
+  },
+  {
+    no:5, id:"5-15", name:"韵律的通道", design:"顺着流走的设计",
+    ck:"logic", centers:"荐骨 ↔ G中心",
+    gates:[
+      {g:5, hex:"需卦", label:"节奏 · 固定模式"},
+      {g:15, hex:"谦卦", label:"极端 · 适度"}
+    ],
+    paras:[
+      "你有自己独特的韵律，可以顺应环境而改变。你像磁铁一样吸引周遭的人，顺应你的韵律而摆动。你的人生有自己的时间表，请顺着你的流走，当你对自己的节奏感到自在，周围的人也会活得很自在。",
+      "当你顺着流走，每件事都会很顺利。若你开始觉得外在混乱，那其实只是反映出你自身的混乱。别忘了你的韵律强大如洋流，周围的人会随着你的流动而摇摆，不快不慢，不疾不徐，交融同拍，相互流动与回应。"
+    ],
+    kw:["韵律","自然节拍","顺流","包容"], emoji:"🌊"
+  },
+  {
+    no:6, id:"6-59", name:"亲密的通道", design:"生产的设计",
+    ck:"tribal", centers:"情绪中心 ↔ 荐骨",
+    gates:[
+      {g:6, hex:"讼卦", label:"摩擦 · 亲密"},
+      {g:59, hex:"涣卦", label:"分散 · 破防"}
+    ],
+    paras:[
+      "这条通道充满生产力，代表人类旺盛的生殖能力，具有强大的能量场，能瞬间感染周遭所有人，在极短时间内让大家卸下心防，与你亲近。你的存在是为了打破人与人的藩篱，促进人与人之间互动，共同创造新的思维或作品，让事情可以从无到有发生。",
+      "你具有人见人爱的魅力，别人总会惊讶为何初次相见，就仿佛跟你很亲近。因为能瞬间与他人亲密，就有机会能整合每个人的力量，众志成城，让事情顺利发生。在此所谓的生产力，除了生小孩之外，也代表着源源不绝创造出新的想法与专案的能力。"
+    ],
+    kw:["亲密","生产力","融合","破冰"], emoji:"💞"
+  },
+  {
+    no:7, id:"7-31", name:"创始者的通道", design:"领导力的设计",
+    ck:"logic", centers:"G中心 ↔ 喉咙",
+    gates:[
+      {g:7, hex:"师卦", label:"军队 · 统御"},
+      {g:31, hex:"咸卦", label:"影响 · 领导"}
+    ],
+    paras:[
+      "你是真正的领导者，因为你能洞悉未来的潮流与走向，从错综复杂的现况中，找出行得通的方法，并发挥广大的影响力，带领群众走向未来。",
+      "这条通道所谓的领导人并不局限于政治人物，可以是各个领域学有专精的大师或佼佼者，以其发言或研究，发挥广大的影响力，指引众人走出一条可行之道。"
+    ],
+    kw:["领导","开创","影响力","引领未来"], emoji:"👑"
+  },
+  {
+    no:8, id:"9-52", name:"专心的通道", design:"专注的设计",
+    ck:"logic", centers:"荐骨 ↔ 根部中心",
+    gates:[
+      {g:9, hex:"小畜卦", label:"专注 · 细节"},
+      {g:52, hex:"艮卦", label:"静止 · 沉着"}
+    ],
+    paras:[
+      "这是一股来自生命底层、极为专注的力量，擅长集结众人焦点，集思广益，找出可以改进的地方，或创造出更好的运作模式。抗压性强。面对压力时反而异常沉着冷静，当他们决心投入，精神非常集中，能专心审视所有细节，从中理出焦点。",
+      "你很专注，当聚焦在某件事时，你同时也能集结众人的焦点，发现其中需要改善之处，因此能集聚众人之力，为世界创造不同。"
+    ],
+    kw:["专注","细节","沉着","聚焦"], emoji:"🎯"
+  },
+  {
+    no:9, id:"10-20", name:"觉醒的通道", design:"唤醒自我、承诺于信念的设计",
+    ck:"indiv", centers:"G中心 ↔ 喉咙",
+    gates:[
+      {g:10, hex:"履卦", label:"自我爱 · 行为准则"},
+      {g:20, hex:"观卦", label:"当下 · 觉知"}
+    ],
+    paras:[
+      "这是一条非常安静、私密的通道，你总在等待对的时机，在那一瞬间、当下、立即、毫不迟疑地采取行动。你不是四处张扬的人，而是活出自己的典范，用生命本身来唤醒他人。",
+      "你拥有强大的自我振作能力，当你承诺于自己的信念，就能在当下做出正确的反应，活出最好的自己，也激励周遭的人跟随自己的真理。"
+    ],
+    kw:["觉醒","当下","承诺","自主"], emoji:"🌟"
+  },
+  {
+    no:10, id:"10-34", name:"探索的通道", design:"跟随热情而活的设计",
+    ck:"indiv", centers:"G中心 ↔ 荐骨",
+    gates:[
+      {g:10, hex:"履卦", label:"自我爱 · 行为准则"},
+      {g:34, hex:"大壮卦", label:"力量 · 行动"}
+    ],
+    paras:[
+      "你的力量来自内在，只要跟着自己的热情走、做真正热爱的事，就有源源不绝的能量。你不靠外在鞭策，而是被内在的驱动推动，活出充满力量的自己。",
+      "你的人生课题是：跟随你的信念去活。做着自己喜欢的事时，你是全世界最有力量的人；做不喜欢的事，再大的力量也会枯萎。请忠于你的热情。"
+    ],
+    kw:["探索","热情","力量","自主"], emoji:"🔥"
+  },
+  {
+    no:11, id:"10-57", name:"完美的形式", design:"由直觉辨明完美而生存的设计",
+    ck:"indiv", centers:"G中心 ↔ 脾中心",
+    gates:[
+      {g:10, hex:"履卦", label:"自我爱 · 行为准则"},
+      {g:57, hex:"巽卦", label:"直觉 · 精细"}
+    ],
+    paras:[
+      "你拥有高度的直觉，能在瞬间分辨对错、美丑。你对「完美的形式」有敏锐感知，凡事追求精致与正确，这是你生存的本能。",
+      "你的信念建立在直觉之上。当跟随内在直觉导引，你便活出精致而美好的生命；你对完美的坚持不是挑剔，而是对生命的敬重。"
+    ],
+    kw:["直觉","完美","精致","生存"], emoji:"💎"
+  },
+  {
+    no:12, id:"11-56", name:"好奇的通道", design:"梦想家与说书人的设计",
+    ck:"logic", centers:"逻辑中心 ↔ 喉咙",
+    gates:[
+      {g:11, hex:"泰卦", label:"点子 · 平静"},
+      {g:56, hex:"旅卦", label:"说书人 · 丰富"}
+    ],
+    paras:[
+      "你是个梦想家，脑中充满新奇的点子与想法，总是对世界充满好奇。你不需马上实现，光是拥有这些点子、享受思考的乐趣，就是你的天赋。",
+      "当你分享想法与见闻，你是个天生的说书人，能让平淡的故事变得生动有趣。你用好奇心丰富自己，也丰富他人的生命。"
+    ],
+    kw:["好奇","点子","说故事","丰富"], emoji:"💡"
+  },
+  {
+    no:13, id:"12-22", name:"开放的通道", design:"优雅社交、以情感连结的设计",
+    ck:"indiv", centers:"喉咙 ↔ 情绪中心",
+    gates:[
+      {g:12, hex:"否卦", label:"谨慎 · 静默"},
+      {g:22, hex:"贲卦", label:"优雅 · 给予"}
+    ],
+    paras:[
+      "你拥有一种优雅的社交魅力，懂得在恰当时机开口，也懂得在合适时刻保持静默。你不需刻意表现，那从容、淡定、不疾不徐的模样，本身就吸引众人。",
+      "你的情感丰富而细腻，当愿意敞开自己、分享真实感受，便能深深触动他人，让社交变得温暖而有质感。沉默与表达，都是你的礼物。"
+    ],
+    kw:["开放","社交","优雅","情感"], emoji:"🌸"
+  },
+  {
+    no:14, id:"13-33", name:"浪漫主义者的通道", design:"倾听与见证的设计",
+    ck:"indiv", centers:"G中心 ↔ 喉咙",
+    gates:[
+      {g:13, hex:"同人卦", label:"倾听者 · 同伴"},
+      {g:33, hex:"遁卦", label:"退缩 · 隐私"}
+    ],
+    paras:[
+      "你天生是个好的倾听者，人们愿意向你倾诉，因为你能深深同理、不带评判。你收集着众人的故事与秘密，是时代的见证人。",
+      "你也需要独处与退缩的时刻，去消化、沉淀听来的故事。当适当时机来临，以优雅的方式说出，成为启迪众人的见证者。"
+    ],
+    kw:["倾听","见证","浪漫","隐私"], emoji:"📖"
+  },
+  {
+    no:15, id:"16-48", name:"才华的通道", design:"深耕而后绽放天赋的设计",
+    ck:"logic", centers:"逻辑中心 ↔ 脾中心",
+    gates:[
+      {g:16, hex:"豫卦", label:"技巧 · 热情"},
+      {g:48, hex:"井卦", label:"智慧 · 泉源"}
+    ],
+    paras:[
+      "你有自己的节奏，需经反复练习、深耕某个领域，才能绽放真正的才华。你不是样样通，而是在一件事上做到极致，那便是你的天赋所在。",
+      "你的才华需要被「看见」与「被需要」。当有人认出你的能力、给你发挥的舞台，那股来自泉源的智慧便会源源涌出，造福众人。"
+    ],
+    kw:["才华","深耕","技巧","认可"], emoji:"🎨"
+  },
+  {
+    no:16, id:"17-62", name:"接受的通道", design:"有组织、重细节的存在体",
+    ck:"logic", centers:"逻辑中心 ↔ 喉咙",
+    gates:[
+      {g:17, hex:"随卦", label:"意见 · 跟随"},
+      {g:62, hex:"小过卦", label:"细节 · 具体化"}
+    ],
+    paras:[
+      "你天生有组织能力，善于把庞大概念化成可执行的细节与步骤。你不需当发号施令的领导者，而是以扎实规划，让事情有条不紊地发生。",
+      "你习惯先听取各方意见，再整理成具体方案。你那务实、注重细节的特质，是团队中最可靠的后盾。"
+    ],
+    kw:["组织","细节","规划","务实"], emoji:"🧩"
+  },
+  {
+    no:17, id:"18-58", name:"挑战的通道", design:"由不满驱动修正的设计",
+    ck:"logic", centers:"逻辑中心 ↔ 脾中心",
+    gates:[
+      {g:18, hex:"蛊卦", label:"修正 · 脆弱"},
+      {g:58, hex:"兑卦", label:"喜悦 · 活力"}
+    ],
+    paras:[
+      "你天生有一双「挑剔」的眼睛，能看到事物可改善、修正之处。这份不满不是抱怨，而是推动进步、追求更好的动力。",
+      "当把不满转化为行动，去修正、去改良，便找回生命的喜悦与活力。你的存在，让周遭人事物不断进化、变得更好。"
+    ],
+    kw:["修正","不满","进取","喜悦"], emoji:"⚙️"
+  },
+  {
+    no:18, id:"19-49", name:"综合的通道", design:"以敏感呼应需求、推动改革的设计",
+    ck:"tribal", centers:"荐骨 ↔ 情绪中心",
+    gates:[
+      {g:19, hex:"临卦", label:"需求 · 供应"},
+      {g:49, hex:"革卦", label:"原则 · 改革"}
+    ],
+    paras:[
+      "你对外界需求极度敏感，总能敏锐察觉「现在缺什么、需要什么」。你愿意付出，也希望被需要，在给予与接收之间，感受存在的意义。",
+      "你有强烈的改革意识，当旧有方式不再适用，会推动变革，建立更符合原则的新秩序。你的敏感，是驱动世界向善的力量。"
+    ],
+    kw:["敏感","需求","改革","给予"], emoji:"🌿"
+  },
+  {
+    no:19, id:"20-34", name:"魅力的通道", design:"当下即有干劲、魅力四射的设计",
+    ck:"indiv", centers:"喉咙 ↔ 荐骨",
+    gates:[
+      {g:20, hex:"观卦", label:"当下 · 觉知"},
+      {g:34, hex:"大壮卦", label:"力量 · 行动"}
+    ],
+    paras:[
+      "你是个行动派，只要当下有事情做，就充满干劲，忙得不得了却乐在其中。你的魅力来自那股全神贯注、投入当下的能量，让人忍不住被你吸引。",
+      "你不需要长远计划，你活在当下、把握眼前。做着自己热爱的工作时，你就是最有魅力、最有力量的人。"
+    ],
+    kw:["魅力","行动","当下","活力"], emoji:"💫"
+  },
+  {
+    no:20, id:"20-57", name:"脑波的通道", design:"以渗透式觉知反应的设计",
+    ck:"indiv", centers:"喉咙 ↔ 脾中心",
+    gates:[
+      {g:20, hex:"观卦", label:"当下 · 觉知"},
+      {g:57, hex:"巽卦", label:"直觉 · 精细"}
+    ],
+    paras:[
+      "你的觉知是渗透式的，不像逻辑头脑那样分析，而像脑波一样，在瞬间直接「知道」。你靠直觉在当下做出正确反应，不需要理由。",
+      "你的直觉细腻而精准，能在混乱中一眼看出关键。这份渗透的清醒，让你在关键时刻总是做对选择。"
+    ],
+    kw:["直觉","觉知","当下","渗透"], emoji:"🧠"
+  },
+  {
+    no:21, id:"21-45", name:"金钱线的通道", design:"亲和物欲、创造价值的设计",
+    ck:"tribal", centers:"自我中心 ↔ 喉咙",
+    gates:[
+      {g:21, hex:"噬嗑卦", label:"掌控 · 猎人"},
+      {g:45, hex:"萃卦", label:"君王 · 丰盛"}
+    ],
+    paras:[
+      "你深谙人性与物质，懂得运用资源、创造价值。你既有掌控局面的能力，也有慷慨分享的气度，是天生的「富裕的设计」。",
+      "你重视物质的丰盛与人际的亲和生活。当以正确的方式运用金钱与影响力，便能聚集众人，共创繁荣。"
+    ],
+    kw:["金钱","丰盛","亲和","掌控"], emoji:"💰"
+  },
+  {
+    no:22, id:"23-43", name:"结构化的通道", design:"由洞察突破、化繁为简的设计",
+    ck:"indiv", centers:"喉咙 ↔ 逻辑中心",
+    gates:[
+      {g:23, hex:"剥卦", label:"同化 · 简化"},
+      {g:43, hex:"夬卦", label:"洞察 · 突破"}
+    ],
+    paras:[
+      "你拥有穿透性的洞察力，能在混沌中一眼看穿本质，提出前所未有的新观点。你天生带着「怪咖」气质，因为想法总是超前时代。",
+      "你善于把复杂的道理简化、结构化，让人一听就懂。你的独特不是孤芳自赏，而是为世界带来突破性的启示。"
+    ],
+    kw:["洞察","突破","结构","独特"], emoji:"🧬"
+  },
+  {
+    no:23, id:"24-61", name:"觉察的通道", design:"深思而后顿悟的设计",
+    ck:"indiv", centers:"逻辑中心 ↔ 头部中心",
+    gates:[
+      {g:24, hex:"复卦", label:"回归 · 理性"},
+      {g:61, hex:"中孚卦", label:"内在真理 · 神秘"}
+    ],
+    paras:[
+      "你的脑中常有抽象的疑问与灵感在打转，像在等待某个顿悟的瞬间。不需急着找答案，让它在潜意识里慢慢酝酿，答案自会浮现。",
+      "你是天生的思考者，擅长反复咀嚼一个概念，直到豁然开朗。你的觉察不在于快，而在于深。"
+    ],
+    kw:["觉察","顿悟","思考","内省"], emoji:"🔮"
+  },
+  {
+    no:24, id:"25-51", name:"发起的通道", design:"需要勇敢、震撼开启的设计",
+    ck:"indiv", centers:"G中心 ↔ 自我中心",
+    gates:[
+      {g:25, hex:"无妄卦", label:"天真 · 灵性"},
+      {g:51, hex:"震卦", label:"震撼 · 启动"}
+    ],
+    paras:[
+      "你拥有纯真无畏的心，总能在关键时刻挺身而出，发起行动、开启新局。你的勇气不是鲁莽，而是来自内在的天真与信任。",
+      "要活出这条通道，你需要「勇敢」。当不再犹豫、纵身一跃，便能震撼他人，带领众人走向从未去过的方向。"
+    ],
+    kw:["勇敢","发起","震撼","天真"], emoji:"🦁"
+  },
+  {
+    no:25, id:"26-44", name:"降服的通道", design:"以柔克刚、传递理念的设计",
+    ck:"tribal", centers:"自我中心 ↔ 喉咙",
+    gates:[
+      {g:26, hex:"大畜卦", label:"利落 · 规范"},
+      {g:44, hex:"姤卦", label:"警觉 · 团队"}
+    ],
+    paras:[
+      "你懂得「降服」的智慧——不是屈服，而是顺势而为、以柔克刚。你善于运用规则与规范，把事情处理得利落漂亮。",
+      "你是天生的传递者，能把好的理念、讯息有效地传达出去，凝聚团队。你的警觉心让你总能察觉机会与危险。"
+    ],
+    kw:["降服","传递","规范","团队"], emoji:"📡"
+  },
+  {
+    no:26, id:"27-50", name:"保存的通道", design:"守护价值与养分的设计",
+    ck:"tribal", centers:"自我中心 ↔ 脾中心",
+    gates:[
+      {g:27, hex:"颐卦", label:"照护 · 养分"},
+      {g:50, hex:"鼎卦", label:"价值 · 火候"}
+    ],
+    paras:[
+      "你天生有种照顾人的本能，懂得如何给予养分、守护生命。无论对人、对事、对资源，你都惜物爱物，知道什么值得保存。",
+      "你重视价值，不只是物质，更包括文化与精神的价值。你以恰当的方式守护与传承，让美好得以延续。"
+    ],
+    kw:["保存","照护","价值","滋养"], emoji:"🛡️"
+  },
+  {
+    no:27, id:"28-38", name:"挣扎的通道", design:"为意义而战、顽固不屈的设计",
+    ck:"indiv", centers:"自我中心 ↔ 根部中心",
+    gates:[
+      {g:28, hex:"大过卦", label:"无限 · 游戏"},
+      {g:38, hex:"睽卦", label:"对抗 · 战士"}
+    ],
+    paras:[
+      "你的一生常在「有意义」与「无意义」之间挣扎，渴望找到值得投入的事。一旦认定，便顽固地坚持到底，像一名不妥协的战士。",
+      "你的挣扎不是痛苦，而是淬炼。当为有意义的目标而战，你便充满力量；你的顽固，是守住信念的盾牌。"
+    ],
+    kw:["挣扎","意义","顽固","战士"], emoji:"⚔️"
+  },
+  {
+    no:28, id:"29-46", name:"发现的通道", design:"说「是」而后成功、回到正确所在的设计",
+    ck:"logic", centers:"荐骨 ↔ G中心",
+    gates:[
+      {g:29, hex:"坎卦", label:"说「是」 · 承诺"},
+      {g:46, hex:"升卦", label:"推动 · 身体的爱"}
+    ],
+    paras:[
+      "你的人生课题是「说 Yes」——对的机会说好，对的人说好。当不再勉强做不适合的事，而是投入真正有感的承诺，便走上成功之路。",
+      "你的身体知道答案。做对的事身体轻盈、充满活力；做错的事则疲惫不堪。信任身体的信号，它指引你到「正确所在」。"
+    ],
+    kw:["承诺","发现","成功","身体"], emoji:"🚀"
+  },
+  {
+    no:29, id:"30-41", name:"幻想的通道", design:"将热情聚焦于幻想的设计",
+    ck:"logic", centers:"情绪中心 ↔ 根部中心",
+    gates:[
+      {g:30, hex:"离卦", label:"梦想 · 火焰"},
+      {g:41, hex:"咸卦", label:"减缩 · 收缩"}
+    ],
+    paras:[
+      "你拥有丰富的情绪与梦想，内心有团不灭的火焰，驱动你追求渴望之物。你的热情需要被聚焦，才能真正转化为行动。",
+      "你擅长把庞大的能量收束成一点，专注地投入你的幻想与渴望。当全神贯注，便能召唤出实现梦想的力量。"
+    ],
+    kw:["幻想","渴望","聚焦","热情"], emoji:"💭"
+  },
+  {
+    no:30, id:"32-54", name:"转变的通道", design:"被驱动、持续进化的设计",
+    ck:"tribal", centers:"自我中心 ↔ 根部中心",
+    gates:[
+      {g:32, hex:"恒卦", label:"持续 · 发展"},
+      {g:54, hex:"归妹卦", label:"野心 · 驱动"}
+    ],
+    paras:[
+      "你被一股强大的驱动力推着走，总想把事情做大、做好、做到极致。你有野心，也有持续力，能在长期奋斗中不断进化。",
+      "你的人生是不断转变与升级的过程。当允许自己被内在的驱动带着走，便能开创事业、建立影响。"
+    ],
+    kw:["转变","驱动","野心","持续"], emoji:"📈"
+  },
+  {
+    no:31, id:"34-57", name:"力量的通道", design:"行动与直觉合一的力量原型",
+    ck:"indiv", centers:"荐骨 ↔ 脾中心",
+    gates:[
+      {g:34, hex:"大壮卦", label:"力量 · 行动"},
+      {g:57, hex:"巽卦", label:"直觉 · 精细"}
+    ],
+    paras:[
+      "你拥有原始而纯粹的力量，这力量来自行动，也来自直觉。你不需要证明什么，只要去做、去活，力量自然显现。",
+      "你的力量与直觉相连，当跟随内在那细致的指引去行动，你便是不可阻挡的。你就是「力量」本身的原型。"
+    ],
+    kw:["力量","直觉","行动","纯粹"], emoji:"💪"
+  },
+  {
+    no:32, id:"35-36", name:"过渡的通道", design:"多才多艺、在经验中过渡的设计",
+    ck:"logic", centers:"喉咙 ↔ 情绪中心",
+    gates:[
+      {g:35, hex:"晋卦", label:"经验 · 变卦"},
+      {g:36, hex:"明夷卦", label:"危机 · 同理"}
+    ],
+    paras:[
+      "你是个体验派，热爱尝试各种新鲜事，在不断的经验与过渡中认识自己。你不怕改变，因为你知道每一段经历都是养分。",
+      "你的多才多艺来自丰富的生命体验。你既能享受高潮，也能穿越低潮，在起起落落之间，活出自由而多变的人生。"
+    ],
+    kw:["过渡","经验","多才","变通"], emoji:"🎭"
+  },
+  {
+    no:33, id:"37-40", name:"社群的通道", design:"在归属与独处间取得平衡的设计",
+    ck:"tribal", centers:"情绪中心 ↔ 自我中心",
+    gates:[
+      {g:37, hex:"家人卦", label:"友谊 · 家庭"},
+      {g:40, hex:"解卦", label:"孤独 · 交付"}
+    ],
+    paras:[
+      "你天生重视关系与归属，渴望被群体接纳，也乐于照顾他人。家庭、社群、团体，是你安身立命的地方。",
+      "你也需要保有独处的空间，在付出之后，懂得回到自己的孤独，重新充饱电。你给予，也接纳被照顾，在社群中找到平衡。"
+    ],
+    kw:["社群","归属","关系","照顾"], emoji:"🏡"
+  },
+  {
+    no:34, id:"39-55", name:"情绪化的通道", design:"以丰沛情感触动人心的设计",
+    ck:"indiv", centers:"根部中心 ↔ 情绪中心",
+    gates:[
+      {g:39, hex:"蹇卦", label:"挑衅 · 煽动"},
+      {g:55, hex:"丰卦", label:"精神 · 丰沛"}
+    ],
+    paras:[
+      "你的情绪如浪潮般起伏，时而激昂、时而低回。你天生有种「挑衅」的特质，能激起他人深藏的情绪，引发真实的交流。",
+      "你的多愁善感不是弱点，而是你感知世界的方式。当接纳自己如海般的情感，便能创作出动人、深刻的作品，触动人心。"
+    ],
+    kw:["情绪","感性","挑衅","丰沛"], emoji:"💗"
+  },
+  {
+    no:35, id:"42-53", name:"成熟的通道", design:"平衡发展、由始至终的设计",
+    ck:"tribal", centers:"自我中心 ↔ 根部中心",
+    gates:[
+      {g:42, hex:"益卦", label:"成长 · 完成"},
+      {g:53, hex:"渐卦", label:"发展 · 开始"}
+    ],
+    paras:[
+      "你的人生像一棵树，需要时间扎根、成长、开花、结果。你不急，懂得让事情按自然节奏成熟，在过程中累积成果。",
+      "你擅长把开始的事做到圆满结束，在「开始」与「完成」之间找到平衡。你的成熟，来自耐心的等待与持续的耕耘。"
+    ],
+    kw:["成熟","成长","完成","平衡"], emoji:"🌳"
+  },
+  {
+    no:36, id:"47-64", name:"抽象的通道", design:"心智由困惑到启发的设计",
+    ck:"logic", centers:"逻辑中心 ↔ 头部中心",
+    gates:[
+      {g:47, hex:"困卦", label:"压迫 · 转化"},
+      {g:64, hex:"未济卦", label:"困惑 · 启发"}
+    ],
+    paras:[
+      "你的脑中常有「想不通」的压迫感，像是有什么呼之欲出却说不出。这份困惑不是失败，而是心智在酝酿重大突破的前奏。",
+      "当迷雾散去，你会得到醍醐灌顶的启发，把抽象的思绪化为具体的领悟。你的觉察，是心智绽放的光芒。"
+    ],
+    kw:["抽象","觉察","困惑","启发"], emoji:"🌀"
+  }
+];
+
+var TOTAL = 36;
+var CK_NAME = {indiv:"个体人回路 · 知晓", logic:"集体人回路 · 理解（逻辑/抽象）", tribal:"家族回路 · 部落"};
+var CN_NUM  = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩","⑪","⑫","⑬","⑭","⑮","⑯","⑰","⑱","⑲","⑳",
+               "㉑","㉒","㉓","㉔","㉕","㉖","㉗","㉘","㉙","㉚","㉛","㉜","㉝","㉞","㉟","㊱"];
+
+/* ================== 渲染层 ================== */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function cardHTML(ch){
+  var gates = ch.gates.map(function(x){
+    return '<div class="gate">'
+      + '<div class="gn">闸门 ' + x.g + '</div>'
+      + '<div class="gx">' + esc(x.hex) + '</div>'
+      + '<div class="gl">' + esc(x.label) + '</div>'
+      + '</div>';
+  }).join('<div class="link"><span>⇄</span><div class="ln"></div></div>');
+
+  return '<article class="card" data-ck="' + ch.ck + '">'
+    + '<div class="top">'
+    +   '<div class="num"><small>通道</small>' + CN_NUM[ch.no-1] + '</div>'
+    +   '<div><h2>' + esc(ch.name) + '<span class="gates">' + esc(ch.id) + '</span></h2>'
+    +   '<div class="design">' + esc(ch.design) + '</div></div>'
+    +   '<div class="emoji">' + ch.emoji + '</div>'
+    + '</div>'
+    + '<div class="meta">'
+    +   '<span class="chip ck">' + esc(CK_NAME[ch.ck]) + '</span>'
+    +   '<span class="chip">⚡ ' + esc(ch.centers) + '</span>'
+    + '</div>'
+    + '<div class="gaterow">' + gates + '</div>'
+    + '<p class="para"><span class="lead">天赋描述</span>' + esc(ch.paras[0]) + '</p>'
+    + '<p class="para"><span class="lead">活出天赋</span>' + esc(ch.paras[1]) + '</p>'
+    + '<div class="kw"><span class="kt">关键词</span>' + ch.kw.map(function(k){return '<i>' + esc(k) + '</i>';}).join('') + '</div>'
+    + '</article>';
+}
+
+function render(filter){
+  var box = document.getElementById("cards");
+  var html = "";
+  CHANNELS.forEach(function(ch){
+    if(!filter || filter==="all" || ch.ck===filter) html += cardHTML(ch);
+  });
+  if(!html) html = '<div class="todo">该回路暂无卡片</div>';
+  box.innerHTML = html;
+}
+
+function renderFilters(){
+  var fs = [
+    {k:"all", t:"全部"},
+    {k:"indiv", t:"个体人·知晓"},
+    {k:"logic", t:"集体人·理解/抽象"},
+    {k:"tribal", t:"家族·部落"}
+  ];
+  var box = document.getElementById("filters");
+  box.innerHTML = fs.map(function(f,i){
+    return '<button data-k="' + f.k + '" class="' + (i===0?"on":"") + '">' + f.t + '</button>';
+  }).join("");
+  box.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    box.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+    b.classList.add("on");
+    render(b.getAttribute("data-k"));
+  });
+}
+
+function init(){
+  document.title = "36条天赋通道知识卡片 · " + VERSION;
+  document.getElementById("verBadge").textContent = "全本 " + VERSION + " · 36/36 完成";
+  document.getElementById("progBar").style.width = "100%";
+  document.getElementById("progTxt").textContent = "已完成 36 / 36 条（全本完成）";
+  document.getElementById("foot").innerHTML =
+    '资料来源：人类图标准 36 通道知识<br>'
+    + '<span class="src">闸门卦名为易经常识补充 · 仅供学习参考</span><br>'
+    + 'Powered by Kan Man Tang';
+  renderFilters();
+  render("all");
+}
+
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
