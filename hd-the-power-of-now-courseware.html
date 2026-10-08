@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>人类图 · 当下之道 ｜ 完整课件</title>
+<!--
+  《人类图 · 当下之道》｜完整课件 · 人类图×《当下的力量》(The Power of Now)
+  VERSION: V1  ·  2026-10-08
+  V1（2026-10-08）：首版（侧边导航 · 基础篇 9 模块 + 应用篇 7 模块 · 课程包四件套互链）
+    每个模块含「人类图 × 当下」融合框与临在练习；核心章 05 痛苦之身 × 非我主题
+-->
+<style>
+:root{
+  --bg:#F5F0E8; --bg-card:#FFFBF5; --bg-sidebar:#2D2118; --bg-sidebar-hover:#3D3128;
+  --primary:#C4956A; --primary-l:#D8B898; --primary-d:#A87B52;
+  --gold:#D4A843; --gold-l:#E8C868;
+  --dark:#2D2118; --dark-soft:#4A3D32; --text:#3D3530; --text-l:#6B5D52;
+  --text-sidebar:#D8C8B8; --text-sidebar-active:#F5E6D3;
+  --border:#E8DCC8; --border-d:#D4C4B0;
+  --notself:#9C5B4D; --awake:#5B7B6F; --now:#3E7C8C; --now-l:#6FA7B6;
+  --shadow:0 2px 8px rgba(45,33,24,.08); --shadow-md:0 6px 22px rgba(45,33,24,.14);
+  --radius:10px; --radius-lg:14px;
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85}
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:300px;background:var(--bg-sidebar);color:var(--text-sidebar);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;transition:transform .3s ease;display:flex;flex-direction:column}
+.sidebar-header{padding:24px 20px 18px;border-bottom:1px solid rgba(62,124,140,.3);text-align:center}
+.sidebar-header .logo{font-size:12px;color:var(--now-l);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sidebar-header h1{font-family:var(--serif);font-size:18px;color:var(--text-sidebar-active);font-weight:normal;line-height:1.4}
+.sidebar-header .sub{font-size:12px;color:var(--primary-l);margin-top:6px}
+.level-nav{flex:1;padding:10px 0}
+.level-section{margin-bottom:2px}
+.level-title{padding:12px 20px 8px;font-size:12px;color:var(--now-l);letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.level-title:hover{color:var(--gold-l)}
+.level-title .arrow{font-size:10px;margin-left:auto;transition:transform .2s}
+.level-title.collapsed .arrow{transform:rotate(-90deg)}
+.level-lessons{overflow:hidden}
+.level-title.collapsed + .level-lessons{max-height:0!important}
+.lesson{padding:9px 20px 9px 30px;font-size:14px;color:var(--text-sidebar);display:block;cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.lesson:hover{background:var(--bg-sidebar-hover);color:var(--text-sidebar-active)}
+.lesson.active{background:var(--bg-sidebar-hover);color:var(--now-l);border-left-color:var(--now)}
+
+/* Content */
+.main{margin-left:300px;flex:1;padding:0}
+.topbar{position:sticky;top:0;z-index:90;background:rgba(245,240,232,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:12px 18px}
+.topbar .t-logo{font-family:var(--serif);color:var(--dark);font-weight:700}
+.topbar .menu-btn{background:var(--dark);color:#fff;border:0;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer}
+.content{max-width:860px;margin:0 auto;padding:40px 28px 80px}
+.hero-mini{background:linear-gradient(135deg,#2D2118,#4A3D32);color:#F5E6D3;border-radius:var(--radius-lg);padding:34px 30px;margin-bottom:30px;text-align:center}
+.hero-mini .eyebrow{color:var(--now-l);letter-spacing:4px;font-size:11px;text-transform:uppercase}
+.hero-mini h1{font-family:var(--serif);font-size:30px;color:#fff;margin:10px 0 8px}
+.hero-mini p{color:#E8D8C5;font-size:15px;line-height:1.8}
+
+.module{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 28px;margin-bottom:24px;box-shadow:var(--shadow);scroll-margin-top:20px}
+.module .mno{display:inline-block;font-family:var(--serif);font-size:13px;color:#fff;background:var(--now);border-radius:20px;padding:3px 14px;letter-spacing:1px;margin-bottom:10px}
+.module h2{font-family:var(--serif);font-size:24px;color:var(--dark);margin-bottom:6px;line-height:1.35}
+.module .en{color:var(--primary-d);font-size:13px;letter-spacing:1px;margin-bottom:14px}
+.module h3{font-size:17px;color:var(--now);margin:22px 0 8px;padding-left:12px;border-left:4px solid var(--gold)}
+.module p{margin:8px 0;color:var(--text)}
+.module ul{margin:8px 0 12px;padding-left:22px}
+.module li{margin:6px 0}
+.module .lead-q{font-family:var(--serif);font-style:italic;color:var(--dark-soft);background:#FBF3E6;border-left:4px solid var(--now);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.hd-box{background:linear-gradient(135deg,#EAF2F4,#F0E8DA);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:16px 0}
+.hd-box .tag{display:inline-block;font-size:12px;color:#fff;background:var(--now);border-radius:6px;padding:2px 10px;margin-bottom:8px;letter-spacing:1px}
+.ex{background:#FBF3E6;border:1px dashed var(--primary);border-radius:10px;padding:12px 16px;margin:14px 0;color:var(--dark-soft);font-size:14.5px}
+.ex b{color:var(--primary-d)}
+.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.four .f{background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--now);border-radius:8px;padding:14px}
+.four .f .step{font-family:var(--serif);font-size:22px;color:var(--now)}
+.four .f h4{font-size:15px;color:var(--dark);margin:4px 0 6px}
+.four .f p{font-size:13px;color:var(--text-l);margin:0}
+.four.two{grid-template-columns:repeat(2,1fr)}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:10px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);min-width:560px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;font-size:13.5px}
+th{background:var(--bg-sidebar);color:#F5E6D3;font-weight:600}
+tr:nth-child(even) td{background:#FAF4EA}
+.ns{color:var(--notself);font-weight:600}.sg{color:var(--awake);font-weight:600}
+.toc-note{font-size:13px;color:var(--text-l);background:#FAF4EA;border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:10px 0}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.4)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .content{padding:24px 18px 70px;max-width:100%}
+  .module{padding:20px 18px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+  .overlay.show{display:block}
+}
+.resnav{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.resnav a{display:block;background:#FFFBF5;border:1px solid #E8DCC8;border-radius:12px;padding:16px 18px;box-shadow:0 2px 8px rgba(45,33,24,.08);transition:.2s;color:#A87B52;font-weight:600;font-size:15px;text-decoration:none}
+.resnav a:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(45,33,24,.14);border-color:#C4956A}
+.resnav a small{display:block;font-size:12.5px;color:#6B5D52;font-weight:400;margin-top:5px;line-height:1.5}
+.resnav a .tag{display:inline-block;font-size:11px;color:#fff;background:#3E7C8C;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:400}
+.resnav a.home{border-left:5px solid #C4956A}
+@media(max-width:620px){.four.two{grid-template-columns:1fr}.resnav{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">HUMAN DESIGN × THE POWER OF NOW</div>
+      <h1>人类图 · 当下之道</h1>
+      <div class="sub">完整课件 · 用临在活出设计</div>
+      <a href="hd-the-power-of-now-course.html" style="display:inline-block;margin-top:10px;font-size:13px;color:#F5E6D3;text-decoration:none;border:1px solid rgba(245,230,211,.4);border-radius:20px;padding:4px 14px">← 课程主页</a>
+    </div>
+    <nav class="level-nav">
+      <div class="level-section">
+        <div class="level-title" data-toggle>基础篇 · 用临在活出设计 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m00">00 缘起：当人类图遇见当下</a>
+          <a class="lesson" href="#m01">01 你不等于你的大脑</a>
+          <a class="lesson" href="#m02">02 观察者：那个不动的你</a>
+          <a class="lesson" href="#m03">03 临在：当下的力量</a>
+          <a class="lesson" href="#m04">04 内在身体：与权威扎根</a>
+          <a class="lesson" href="#m05">05 痛苦之身 × 非我主题</a>
+          <a class="lesson" href="#m06">06 心理时间 vs 当下</a>
+          <a class="lesson" href="#m07">07 臣服：接纳你的设计</a>
+          <a class="lesson" href="#m08">08 21 天临在练习</a>
+        </div>
+      </div>
+      <div class="level-section">
+        <div class="level-title" data-toggle>应用篇 · 在场景中活出临在 <span class="arrow">▼</span></div>
+        <div class="level-lessons">
+          <a class="lesson" href="#m09">09 在等待中修行</a>
+          <a class="lesson" href="#m10">10 在告知中修行</a>
+          <a class="lesson" href="#m11">11 在回应中修行</a>
+          <a class="lesson" href="#m12">12 在关系中修行</a>
+          <a class="lesson" href="#m13">13 在情绪中修行</a>
+          <a class="lesson" href="#m14">14 在困境中修行</a>
+          <a class="lesson" href="#m15">15 像临在者一样生活</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="t-logo">人类图 · 当下之道</div>
+      <button class="menu-btn" id="menuBtn">☰ 目录</button>
+    </div>
+    <div class="content">
+      <div class="hero-mini">
+        <div class="eyebrow">THE POWER OF NOW</div>
+        <h1>用临在，活出你的设计</h1>
+        <p>这不是又一门「读懂图」的课。图是地图，临在是走路。</p>
+      </div>
+
+      <!-- 00 -->
+      <section class="module" id="m00">
+        <span class="mno">模块 00</span>
+        <h2>缘起：当人类图遇见当下的力量</h2>
+        <div class="en">Why Human Design Meets The Power of Now</div>
+        <p>人类图给你一张极其精准的<strong>设计蓝图</strong>：你是谁、怎样与世界正确互动、身体如何替你做决定。但绝大多数人卡在同一个地方——<strong>「我知道，但我做不到。」</strong></p>
+        <div class="lead-q">「知道设计，不等于活出设计。」中间的桥，就是临在——也是人类图说的「去条件化」。</div>
+        <h3>托勒与人类图，说的是同一件事</h3>
+        <ul>
+          <li><b>托勒</b>：「你不等于你的大脑。」你头脑里的声音，不是你。</li>
+          <li><b>人类图</b>：「头脑（mind）不是你的决策中心。」真正的决定，来自你的<strong>内在权威</strong>。</li>
+          <li>思维认同 = 非我（Not-Self）状态；离开头脑、回到身体，就是回到设计。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>人类图的「去条件化」是<strong>目标</strong>，托勒的「观察者临在」是<strong>每天可执行的练习</strong>。两者指向同一件事：从被头脑控制，回到自由的天空。</p></div>
+        <h3>本课程不做的事 / 做的事</h3>
+        <ul>
+          <li>❌ 不重复讲授人类图基础理论知识（那是为了「读懂」）。</li>
+          <li>✅ 教你如何在吃饭、走路、情绪、关系里，把策略与权威「做出来」。</li>
+          <li>✅ 用「观·退·回」三步，对治非我的痛苦之身，让它越来越少出现。</li>
+        </ul>
+        <div class="ex"><b>临在作业 · </b>拿出你的人类图报告，圈出你的<strong>类型、策略、内在权威、非我主题</strong>。这就是你这趟旅程的「靶心」。</div>
+      </section>
+
+      <!-- 01 -->
+      <section class="module" id="m01">
+        <span class="mno">模块 01</span>
+        <h2>你不等于你的大脑</h2>
+        <div class="en">You Are Not Your Mind</div>
+        <p>托勒说：几乎每个人脑海里都有一个不停评论、推测、批判、担忧的声音。「观察思考者」——倾听你脑袋里的声音，并作为一个<strong>观察者的临在</strong>。你很快会认识到：那里有一种声音，而我在这里倾听它、观察它。这是一种自我存在，而不是思维。</p>
+        <div class="lead-q">「迈向开悟之途最为关键的一步是：从对思维的认同中摆脱出来。」</div>
+        <h3>为什么「你不等于大脑」＝「头脑不是权威」</h3>
+        <ul>
+          <li>人类图里，<strong>头脑（mind）是一个「建议者」，不是决策中心</strong>。它擅长分析、比较、担忧，却不该替你做人生决定。</li>
+          <li>当你「认同」头脑的声音、把它当真，你就掉进<strong>非我（Not-Self）</strong>——用错的能量做决定。</li>
+          <li>真正的决定来自<strong>内在权威</strong>：荐骨的嗯哼、情绪的波浪、脾的瞬间直觉、G 的方向。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>下次头脑说「你应该…」「万一…」，练习对它微笑——像冲着孩子调皮的动作微笑。你不再认真对待思维的内容，因为你的自我不再依赖于它。</p></div>
+        <div class="ex"><b>临在作业 · </b>今天花 5 分钟，只是「听」你脑海里的声音，不评判、不跟随。认出：「那是思维在说话，不是我。」</div>
+      </section>
+
+      <!-- 02 -->
+      <section class="module" id="m02">
+        <span class="mno">模块 02</span>
+        <h2>观察者：在思维与情绪背后，那个不动的你</h2>
+        <div class="en">The Watcher Behind Thought</div>
+        <p>当你在倾听思维时，你不仅意识到了这种思维，还意识到了你在<strong>观察</strong>这种思维。这样，一个新的意识层面产生了——在思维之下或之后的一种有意识的临在，那就是你更深的自我。</p>
+        <div class="lead-q">观察者一旦在场，思维就丧失了力量，很快消散——因为你不再通过对思维的认同为它注入活力。</div>
+        <h3>观察者 ＝ 人类图的「去条件化」</h3>
+        <ul>
+          <li>你的<strong>开放中心</strong>是「条件化区域」：被外界一撞，就自动起反应（非我）。</li>
+          <li>去条件化，不是消灭反应，而是：在反应升起的刹那，<strong>认出它、不跟随、温柔地回来</strong>。</li>
+          <li>那个「认出」的，就是观察者；那个「回来」的，就是你的设计。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>定义中心是你的「固定程序」（稳定锚点），开放中心是「被撞的雷区」。观察者的练习，就是反复在雷区被踩中时，退后一步，让定义中心与权威重新上岗。</p></div>
+        <div class="ex"><b>临在作业 · </b>下次被一句话刺到，先别回嘴。在心里说：「我看见一个反应升起了。」只这一句，你就已经从反应里脱身半步。</div>
+      </section>
+
+      <!-- 03 -->
+      <section class="module" id="m03">
+        <span class="mno">模块 03</span>
+        <h2>临在：当下的力量</h2>
+        <div class="en">Presence · The Power of Now</div>
+        <p>临在，就是完全地进入当下时刻。把意识从思维中收回——这是心灵旅程最关键的一步。它把原本陷入多余思维中的大量意识释放出来。一个简单有效的方法：将你的注意力从思维中直接转移到身体内，感受那个内在无形的能量场。</p>
+        <div class="lead-q">「在思维开始活跃的那一刻，你所拥有的一切就只是对思维的记忆而已。」当下的力量，只在思维止息处显现。</div>
+        <h3>日常里的临在练习</h3>
+        <div class="four two">
+          <div class="f"><div class="step">步</div><h4>脚步临在</h4><p>上下楼梯，每一步、每一刻、每一次呼吸都全神贯注。把觉知放在脚底与地面接触的感觉上。</p></div>
+          <div class="f"><div class="step">洗</div><h4>洗手临在</h4><p>关注与洗手有关的所有感觉：水的声音与触感、手的运动、肥皂的香味。</p></div>
+          <div class="f"><div class="step">车</div><h4>关门临在</h4><p>上车关车门后，停顿几秒，观察你的呼吸，觉察那个宁静而强有力的临在。</p></div>
+          <div class="f"><div class="step">息</div><h4>思维空白</h4><p>全神贯注于此刻，在思维中创造空白。空白中你高度警惕，却没有在思考——这是冥想的本质。</p></div>
+        </div>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>「全神贯注于当下」= 生产者去「等」荐骨回应、显示者去「做」告知、投射者去「等」邀请。所有正确行动，都只发生在当下这一刻，不活在过去（应该），不活在未来（恐惧）。</p></div>
+        <div class="ex"><b>临在作业 · </b>选一件日常小事，全程把觉知放在身体动作上。体会「一具身体在做这件事」与「我真的在这里」的区别。</div>
+      </section>
+
+      <!-- 04 -->
+      <section class="module" id="m04">
+        <span class="mno">模块 04</span>
+        <h2>内在身体：与你的权威中心扎根</h2>
+        <div class="en">The Inner Body</div>
+        <p>只要你的思维占据着你的注意力，你就会与本体脱离，不在你的身体之内。将注意力从思维中直接转移到身体内，你就能感受到那个内在无形的能量场——它代表你肉身生命力的本体。请闭上眼，从内在感受你的双手、双臂、双腿… 它是活生生的吗？</p>
+        <div class="lead-q">「如果你尽可能多地将注意力集中在身体内部，你就可以安住于当下，而不会在外界或思维中迷失自己。」</div>
+        <h3>内在身体 ＝ 定义中心 ＋ 内在权威</h3>
+        <ul>
+          <li><strong>定义中心</strong>是你稳定、可靠的能量，像「扎根的地」；临在时把觉知放进它，你就安定。</li>
+          <li><strong>荐骨型</strong>：感受腹部「嗯哼 / 嗯嗯」的生命力，让回应自然升起。</li>
+          <li><strong>脾型</strong>：感受身体瞬间的直觉低语——「此刻安全 / 不对」，就在此刻。</li>
+          <li><strong>情绪型</strong>：只是观察情绪的波浪起伏，<strong>不当下做决定</strong>，等波浪落定。</li>
+          <li><strong>G 型</strong>：感受内在方向的安宁——你「是谁、去哪」不在头脑的焦虑里，在身体的定静里。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>「扎根内在身体」= 让真实的<strong>内在权威</strong>重新上岗。你对内在身体投入的意识越多，振动频率越高，消极心态再也无法控制你。</p></div>
+        <div class="ex"><b>临在作业 · </b>连续 3 天，每天静坐 5 分钟，把注意力放在你的权威中心（腹 / 心 / 全身），只做一件事：感受它，回来。记录「今天被带走了几次、回来了几次」。</div>
+      </section>
+
+      <!-- 05 核心 -->
+      <section class="module" id="m05">
+        <span class="mno">模块 05 · 核心</span>
+        <h2>痛苦之身 × 非我主题</h2>
+        <div class="en">Pain-Body × Not-Self Theme</div>
+        <p>托勒说：除非你能拥有当下的力量，否则你体会到的每一个情绪痛苦都会残留一部分，继续在你体内存活，与你过去的痛苦合并——这就是<strong>痛苦之身</strong>。它害怕被你发现，因为它的生存取决于你对它无意识的认同。但当你观察它、感受它的能量场，无意识的认同就被打破了——你成为了它的见证人或观察者。</p>
+        <div class="lead-q">「痛苦之身不希望你直接去观察它。当你观察它，那种无意识的认同就已经被打破了。现在你是观察者。你已获取了当下的力量。」</div>
+        <h3>人类图视角：痛苦之身 ＝ 开放中心被触发 ＋ 非我主题亮起</h3>
+        <ul>
+          <li>你的<strong>开放中心</strong>，正是容易被外界「撞一下」就起反应的条件化区域。</li>
+          <li>被撞后升起的<strong>非我主题</strong>（挫败 / 愤怒 / 苦涩 / 失望），就是痛苦之身被激活的信号灯。</li>
+          <li>核心练习——<strong>临在三步 · 观 · 退 · 回</strong>：</li>
+        </ul>
+        <div class="four two">
+          <div class="f"><div class="step">观</div><h4>认出</h4><p>认出：这是思维 / 痛苦之身在说话，不是「我」。越早越好。</p></div>
+          <div class="f"><div class="step">退</div><h4>成为观察者</h4><p>退后一步，不拒不迎。像研究它一样研究自己，不被带走。</p></div>
+          <div class="f"><div class="step">回</div><h4>回到权威</h4><p>扎根内在身体，回到你的策略与内在权威，与以往相反地做。</p></div>
+        </div>
+        <h3>五大类型 · 非我主题 × 临在三步</h3>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>类型</th><th>非我主题</th><th>签名</th><th>临在三步 · 回到设计</th></tr></thead>
+            <tbody>
+              <tr><td><b>生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>观：看见「没检查荐骨就答应」→ 退：成为观察者，不跟随念头 → 回：听腹部的嗯哼</td></tr>
+              <tr><td><b>显示生产者</b></td><td class="ns">挫败</td><td class="sg">满足</td><td>观：看见「多头并进不落地」→ 退：盯住混乱能量 → 回：一次一件事，过荐骨这关</td></tr>
+              <tr><td><b>显示者</b></td><td class="ns">愤怒</td><td class="sg">平静</td><td>观：看见「我在缩小自己求认可」→ 退：退后，愤怒只是痛苦之身 → 回：行动前告知</td></tr>
+              <tr><td><b>投射者</b></td><td class="ns">苦涩</td><td class="sg">成功</td><td>观：看见「我急于被看见」→ 退：不认同苦涩 → 回：智慧留给懂的邀请</td></tr>
+              <tr><td><b>反映者</b></td><td class="ns">失望</td><td class="sg">喜悦+惊喜</td><td>观：看见「我急着给答案」→ 退：守卫内在空间 → 回：跟月亮周期，先问环境</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>常用辅助方法</h3>
+        <ul>
+          <li><b>守卫内在空间</b>：保持充分的注意力，直接观察痛苦之身——它就无法再控制你的思维。</li>
+          <li><b>不喂养</b>：痛苦只能以痛苦为食。不编故事、不反复回想，它就没有养分。</li>
+          <li><b>转化为意识</b>：持久而有意识的关注，把痛苦变成意识火焰的燃料——将痛苦转化为意识。</li>
+          <li><b>贴条「临在」</b>：桌面、手机壳贴两个字，时时提醒自己回到观察者。</li>
+        </ul>
+        <div class="ex"><b>临在作业 · </b>用 300 字以内，按【观】【退】【回】记录一次非我情绪。模板：痛苦之身起来 → 我认出它不是我【观】→ 退后观察身体感受几秒【退】→ 我没______，换了______做法【回】。</div>
+      </section>
+
+      <!-- 06 -->
+      <section class="module" id="m06">
+        <span class="mno">模块 06</span>
+        <h2>心理时间 vs 当下：小我的时间幻象</h2>
+        <div class="en">Psychological Time vs The Present</div>
+        <p>对于小我来说，当下时刻几乎不存在，只有过去和未来才是重要的——完全颠倒是非。小我尽力使过去复活（「如果没有过去，你将会是谁？」），又不断把自己投射到未来寻求慰藉。当下时刻，就是解脱的关键。</p>
+        <div class="lead-q">「只要你与你的思维认同，你就难以找到当下。」心理时间，正是非我赖以存活的氧气。</div>
+        <h3>人类图视角：非我活在「心理时间」里</h3>
+        <ul>
+          <li><strong>过去（应该）</strong>：用头脑的「我应该更…」「我本可以…」批判此刻，偏离设计。</li>
+          <li><strong>未来（恐惧）</strong>：用「万一…」焦虑，提前消耗能量，迟迟不敢按权威行动。</li>
+          <li><strong>回到当下</strong>：所有正确行动（等待 / 告知 / 回应）都在此刻发生，不靠回忆也不靠预判。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>你的<strong>轮回交叉</strong>是灵魂主线，但它不在过去也不在未来——它在你「当下如实活着」时自然展开。把能量锚定在主线上，那些枝节的时间幻象会自然松动。</p></div>
+        <div class="ex"><b>临在作业 · </b>今天捕捉一次「心理时间」：当我陷入回忆或担忧时，对自己说「此刻，这里，我需要做什么？」把意识拉回身体。</div>
+      </section>
+
+      <!-- 07 -->
+      <section class="module" id="m07">
+        <span class="mno">模块 07</span>
+        <h2>臣服：接纳你的设计</h2>
+        <div class="en">Surrender</div>
+        <p>臣服是内心毫无保留地接纳事实。首先承认你的内心有抗拒，观察思维如何创造抗拒、为生活贴标签。关注思维的过程，感受情绪的能量。<strong>通过观察抗拒，你会明白它毫无用处。</strong>将注意力集中在当下，无意识的抗拒就会变成有意识。</p>
+        <div class="lead-q">「如果你突然感觉到非常轻松、清晰和宁静，那么，这毫无疑问就是你已经真正地臣服了的信号。」</div>
+        <h3>人类图视角：臣服 ＝ 不再抵抗自己的设计</h3>
+        <ul>
+          <li>臣服不是消极、不是「我不在乎」——那只是戴着面具的抗拒。</li>
+          <li>臣服＝<strong>接纳你的类型、策略、权威本就如此</strong>，不再用头脑与之搏斗。</li>
+          <li>接纳之后，你反而更有力量由临在出发去行动（非反应的「不」、高质量的「不」）。</li>
+          <li>「不抗拒并不是说不采取任何行动。它是指你做的所有事情都不是由反应引起的。」</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下</span><p>显示者臣服于「我需要告知」、投射者臣服于「我需要被邀请」、生产者臣服于「我需要等回应」——臣服你的<strong>策略</strong>，就是停止用头脑对抗自己，把能量还给真实的设计。</p></div>
+        <div class="ex"><b>临在作业 · </b>挑一件你一直抗拒的事（比如「我是投射者，等不到邀请」），今天练习对它说一次「是的，这就是此刻的如是」。感受臣服后的轻松。</div>
+      </section>
+
+      <!-- 08 -->
+      <section class="module" id="m08">
+        <span class="mno">模块 08</span>
+        <h2>21 天临在练习 · 人类图临在日记</h2>
+        <div class="en">21-Day Presence Practice</div>
+        <p>临在是「马步冲拳」——一招练二十年，也能成顶尖高手。21 天，把「观·退·回」变成肌肉记忆。</p>
+        <h3>每日结构</h3>
+        <ul>
+          <li><b>晨间 5 分钟</b>：座上修，静心，把注意力放到你的权威中心（内在身体）。</li>
+          <li><b>日间锚点</b>：桌面 / 手机壳贴「临在」；易触发场景（会议、见父母）提前提起观察者。</li>
+          <li><b>晚间 3 分钟</b>：写一篇临在三步日记（≤300 字），对照你的非我主题。</li>
+        </ul>
+        <div class="ex"><b>结营标志 · </b>不是「没情绪了」，而是：痛苦之身一来你能立刻认出，且大部分时候不被带走。那一刻，你已经是自由的。</div>
+        <p class="toc-note">配套《练习手册》含：每日临在打卡表、临在三步情绪卡（按类型）、非我觉察日志、21 天日历。可直接打印使用。</p>
+      </section>
+
+      <!-- 09 -->
+      <section class="module" id="m09">
+        <span class="mno">模块 09</span>
+        <h2>应用篇 · 在等待中修行</h2>
+        <div class="en">Practice in Waiting</div>
+        <p>专为<strong>投射者</strong>（等待邀请）与<strong>反映者</strong>（等待 28 天）定制。托勒说：「等待的奥秘」——这不是否认当下、无聊不安的等待，而是全神贯注于当下，在任何时刻都可能有些事情发生。如果你不能绝对地全神贯注，你就会错失它。</p>
+        <ul>
+          <li><b>投射者</b>：等待邀请 ≠ 什么都不做。是先把光准备好，让对的人来邀请。苦涩升起时，观：我急于被看见 → 退：不认同 → 回：把才华打磨好。</li>
+          <li><b>反映者</b>：重大决策前追踪完整 28 天月亮周期。失望升起时，先问「这个环境对我健康吗？」</li>
+        </ul>
+        <div class="hd-box"><span class="tag">临在练习</span><p>当「怎么没人请我 / 怎么还不来」的怨气起来——<b>观</b>见它，<b>退</b>后成为观察者，<b>回</b>到：把光准备好，信任对的邀请会在全神贯注的等待中到来。</p></div>
+      </section>
+
+      <!-- 10 -->
+      <section class="module" id="m10">
+        <span class="mno">模块 10</span>
+        <h2>应用篇 · 在告知中修行</h2>
+        <div class="en">Practice in Informing</div>
+        <p>给<strong>显示者</strong>。你的策略是「告知」——行动前让人知道你要做什么。愤怒，往往来自「被阻拦」或「压抑自己以适应环境」。</p>
+        <ul>
+          <li>愤怒升起：<b>观</b>见「我又在缩小自己」；<b>退</b>：退后，看见愤怒只是痛苦之身。</li>
+          <li><b>回</b>：一句「我要做 X」就够了，不请求许可，只是告知。</li>
+        </ul>
+        <div class="ex"><b>临在锚点 · </b>「你不是粗鲁——你是需要空间的前瞻者。」把告知做足，平静自然回来。告知，也是你对他者的臣服与尊重。</div>
+      </section>
+
+      <!-- 11 -->
+      <section class="module" id="m11">
+        <span class="mno">模块 11</span>
+        <h2>应用篇 · 在回应中修行</h2>
+        <div class="en">Practice in Responding</div>
+        <p>给<strong>生产者 / 显示生产者</strong>（占 70%+）。策略是「等待回应」——让荐骨的嗯哼 / 嗯嗯在<strong>当下</strong>做主。</p>
+        <ul>
+          <li>挫败升起：多半是「说了 YES 却没检查荐骨」。<b>退</b>：盯住腹部，<b>观</b>：我用头脑答应了。</li>
+          <li><b>回</b>：遇到事，先问身体「嗯哼（是）/ 嗯嗯（否）」，让回应自然发生。</li>
+        </ul>
+        <div class="ex"><b>临在锚点 · </b>「等待回应，是你的力量。」显示生产者天生多元激情，不是分散，是多元设计——但每一次，都要过荐骨这关，在当下回应。</div>
+      </section>
+
+      <!-- 12 -->
+      <section class="module" id="m12">
+        <span class="mno">模块 12</span>
+        <h2>应用篇 · 在关系中修行</h2>
+        <div class="en">Practice in Relationships</div>
+        <p>关系是人类图最容易「撞车」的地方，也是痛苦之身最爱被激活的道场。看清彼此的设计差异，比改造对方有效一万倍。</p>
+        <ul>
+          <li><b>投射者</b>需要「被看见、被邀请」；别追着给建议，等被问再给。</li>
+          <li><b>显示者</b>需要「被理解、被告知」；别拦，先听他说要做什么。</li>
+          <li><b>生产者</b>需要「被回应」；别替他决定，问他身体怎么说。</li>
+          <li><b>反映者</b>需要「健康的空间与环境」；先保障环境，再谈目标。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">临在练习</span><p>关系冲突时，先做「观·退·回」处理自己的痛苦之身，再处理事情。情绪在，智慧不在，事情一定处理不好。把情绪和事情分开——这正是托勒说的「先观察自己内心的抗拒」。</p></div>
+      </section>
+
+      <!-- 13 -->
+      <section class="module" id="m13">
+        <span class="mno">模块 13</span>
+        <h2>应用篇 · 在情绪中修行</h2>
+        <div class="en">Practice in Emotion</div>
+        <p>把每一次负面情绪，变成一次回家的练习。情绪不是敌人，是提醒你「偏离设计」的信号灯——也是痛苦之身在讨食。</p>
+        <ul>
+          <li>痛苦信号（非我）亮起 → 用观·退·回，回到策略与权威，不喂养它。</li>
+          <li>满足信号（签名）亮起 → 认出它，允许自己多待一会儿在设计里。</li>
+          <li>记住：你可以没有财富自由，但可以实现<strong>情绪自由</strong>。</li>
+        </ul>
+        <div class="ex"><b>临在作业 · </b>本周挑一次最强情绪，完整走一遍三步，写进日记。重点：认出它「不是我」，不编故事喂养它。</div>
+      </section>
+
+      <!-- 14 -->
+      <section class="module" id="m14">
+        <span class="mno">模块 14</span>
+        <h2>应用篇 · 在困境中修行</h2>
+        <div class="en">Practice in Hardship</div>
+        <p>病痛、失控、不确定——这些「不确定」，正是练习临在最好的道场。你无法决定生活，但可以决定如何面对生活。托勒说：允许痛苦迫使你进入当下时刻，进入强烈的意识临在状态，利用它来开悟。</p>
+        <ul>
+          <li>身体痛时，把觉知放到疼痛处，像研究它一样，不抗拒。</li>
+          <li>恐惧时，<b>观</b>见恐惧，若不停，就<b>退</b>后盯住身体感受，像研究它一样研究自己。</li>
+          <li>把情绪和事情分开：先让恐惧消失（回到权威），再来处理事情。</li>
+          <li>臣服：接纳此刻如是，然后由临在出发去行动或离开。</li>
+        </ul>
+        <div class="lead-q">「臣服改变的是你。当你被改变了，你的整个世界就改变了，因为世界只是你内在的反映。」</div>
+      </section>
+
+      <!-- 15 -->
+      <section class="module" id="m15">
+        <span class="mno">模块 15</span>
+        <h2>应用篇 · 像临在者一样生活</h2>
+        <div class="en">Live as a Present One</div>
+        <p>终极状态：<strong>修行即生活，生活即修行。</strong>托勒指出的「未显化状态」——通过寂静、空间、当下进入。在你身体下面是无形的内在身体，是你通往本体、进入未显化生命的大门。</p>
+        <ul>
+          <li>你可以看戏，可以演戏，你知道自己在做什么——你是自由的，在任何时候。</li>
+          <li>一切都是游戏。功名利禄，镜花水月；痛苦烦恼，亦是游戏一场。</li>
+          <li>通过内在身体，你与那个未显化的合一生命紧密相连——你本来就是天空。</li>
+        </ul>
+        <div class="hd-box"><span class="tag">人类图 × 当下 · 终</span><p>当你的类型、策略、权威，不再是需要「记起」的知识，而是像呼吸一样的自然反应——那一刻，你活出了图，也醒了过来。图是地图，临在是走路；思维开始活跃的那一刻，你拥有的只是记忆，而临在，才是你真实的自己。</p></div>
+        <div class="ex"><b>结课赠言 · </b>不期待证悟，但要一辈子练习。祝福你。</div>
+      </section>
+
+      <div class="resnav" style="margin-top:34px">
+        <a class="home" href="hd-the-power-of-now-course.html">🏠 课程主页<small>返回课程全貌与报名入口</small></a>
+        <a href="hd-the-power-of-now-courseware.html">📖 完整课件<span class="tag">当前页</span><small>你正在这里</small></a>
+        <a href="hd-the-power-of-now-cheatsheet.html">🃏 临在速查卡<small>类型锚点 · 临在三步 · 痛苦之身识别</small></a>
+        <a href="hd-the-power-of-now-workbook.html">📝 练习手册<small>21 天打卡 · 临在三步情绪卡 · 可打印</small></a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),menuBtn=document.getElementById('menuBtn');
+function openNav(){sidebar.classList.add('open');overlay.classList.add('show');}
+function closeNav(){sidebar.classList.remove('open');overlay.classList.remove('show');}
+menuBtn&&menuBtn.addEventListener('click',openNav);
+overlay.addEventListener('click',closeNav);
+document.querySelectorAll('.lesson').forEach(function(l){
+  l.addEventListener('click',function(){if(window.innerWidth<=900)closeNav();});
+});
+document.querySelectorAll('.level-title').forEach(function(t){
+  t.addEventListener('click',function(){t.classList.toggle('collapsed');});
+});
+var lessons=document.querySelectorAll('.lesson'),sections=document.querySelectorAll('.module');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur='';
+  sections.forEach(function(s){if(s.offsetTop<=pos)cur=s.id;});
+  lessons.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>
