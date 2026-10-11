@@ -91,7 +91,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .sys-block.物{background:#f5f5f5;border-color:#ddd;color:#555;}
 
 /* ===== TYPE CARDS (Article 2) ===== */
-.type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:20px 0;}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
 .type-card{border-radius:18px;padding:24px 20px;text-align:center;transition:transform 0.2s;cursor:default;}
 .type-card:hover{transform:translateY(-4px);}
 .type-card .type-pct{font-size:36px;font-weight:900;margin-bottom:4px;}
@@ -127,7 +127,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .cc-body .cc-tag{font-size:11px;font-weight:600;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:8px;}
 
 /* ===== STRATEGY TABLE (Article 4) ===== */
-.strategy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+.strategy-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0;}
 .strat-card{border-radius:16px;padding:22px;border:2px solid;}
 .strat-card .s-type{font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:8px;}
 .strat-card .s-strategy{font-size:18px;font-weight:800;margin-bottom:6px;}
@@ -189,7 +189,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
 .quick-ref{background:linear-gradient(135deg,#2d1b69,#6c5ce7);border-radius:20px;padding:32px;color:white;margin:30px 0;}
 .qr-title{font-size:20px;font-weight:800;margin-bottom:20px;text-align:center;}
-.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
+.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .qr-item{background:rgba(255,255,255,0.12);border-radius:12px;padding:16px;text-align:center;border:1px solid rgba(255,255,255,0.2);}
 .qr-item .qi-label{font-size:11px;opacity:0.75;margin-bottom:6px;letter-spacing:1px;}
 .qr-item .qi-value{font-size:14px;font-weight:700;}
@@ -223,6 +223,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   .type-grid{grid-template-columns:1fr 1fr;}
   .article-title{font-size:22px;}
   .body-diagram{height:360px;}
+  .strategy-grid{grid-template-columns:1fr;}
+  .qr-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
