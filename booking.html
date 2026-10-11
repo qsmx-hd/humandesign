@@ -350,7 +350,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   "use strict";
 
   /* ========== VERSION & CHANGELOG ==========
-     VERSION: v9.0
+     VERSION: v10.0
+     2026-10-11  v10.0
+       - 新增两位认证解读师（ANALYSTS 数组追加，UI 全自动同步）：
+         · 吴老师（initial: 吴，墨绿→浅翠渐变）30 余年教龄 · 去制约与亲子养育方向
+         · 东乐（initial: 东，墨黑→金棕渐变）非典型程序员 / 自媒体创作者 ·
+           已解读 1000+ 张人类图 · 64 闸门专项 · 更贴近东方人的认知
+       - 【排班差异化】seededBooked 支持可选字段 busy:[最小,最大]：
+         每位解读师的当日「已约满」时段数区间各不相同（默认 [1,3]，保持旧行为），
+         文案与文档同步；仍以 analystId × iso 为种子，会话内稳定不跳变
+       - 【休息日】新增可选字段 offDays:[0..6]：该解读师每周固定休息日不开放时段，
+         时段区显示「当日休息」提示；五位解读师休息日错开，避免撞日
+       - 「更多分析师 · 陆续加入」占位卡保留（现为 5 位 + 1 占位）
      2026-09-20  v9.0
        - 【档期分组】已约时段由「仅按日期」升级为「分析师主体 × 日期」双键种子：
          同一天不同分析师的可约档期各不相同，模拟真实排班差异；同一分析师同天档期会话内稳定
@@ -382,7 +393,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   =========================================== */
 
   /* 单一版本号来源：footer 文案由它注入，改版本只动这一行 */
-  var VERSION = '9.0';
+  var VERSION = '10.0';
 
   /* ---------- 状态 ---------- */
   var state = {
@@ -423,6 +434,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
        例：rates: { focus: 499 }            → 仅「焦点解读咨询」收 499，其余用标准档
            rates: { system:1999, focus:599 } → 多档位一起覆盖
        不写 rates 字段 → 完全沿用标准档
+       可选字段 busy：[最小, 最大] —— 该解读师单日「已约满」时段数区间（可选时段共 7 个）。
+       不写 → 默认 [1,3]。数值越大档期越紧，用于模拟各解读师的排班差异。
+       可选字段 offDays：[0..6] —— 每周固定休息日（0=周日 … 6=周六），当日不开放时段。
+       不写 → 每天均可排班。五位解读师休息日已错开，避免同一天集体不可约。
   ------------------------------------------------ */
   var ANALYSTS = [
     {
@@ -437,7 +452,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
         { t: '满意度', v: '★ 4.9', rating: true }
       ],
       tags: ['类型与权威', '关系动力', '人生角色', '轮回交叉'],
-      rates: { system: 1499, focus: 399, followup: 199 }   // 主理人 · 标准档
+      rates: { system: 1499, focus: 399, followup: 199 },  // 主理人 · 标准档
+      busy: [2, 4],                                        // 主理人档期较紧
+      offDays: [1]                                         // 每周一休息
     },
     {
       id: 'nana',
@@ -452,7 +469,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       ],
       tags: ['亲子养育', '情绪权威', '关系合拍', '职业转型'],
       // 目前与邓勤敏同档；日后单独调价，只需改这里的数字，例如 focus: 499
-      rates: { system: 1499, focus: 399, followup: 199 }
+      rates: { system: 1499, focus: 399, followup: 199 },
+      busy: [1, 3],
+      offDays: [2]                                         // 每周二休息
     },
     {
       id: 'yunning',
@@ -467,7 +486,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       ],
       tags: ['天赋识别', '职业转型', '优势运用', '决策模型'],
       // 与团队标准档一致；单独调价只需改这里的数字
-      rates: { system: 1499, focus: 399, followup: 199 }
+      rates: { system: 1499, focus: 399, followup: 199 },
+      busy: [1, 2],                                        // 新锐解读师，档期相对宽松
+      offDays: [3]                                         // 每周三休息
+    },
+    {
+      id: 'wulaoshi',
+      initial: '吴',
+      name: '吴老师',
+      title: '人类图解读师 · 30 余年教龄 · 去制约与亲子养育方向',
+      grad: ['#1e7a5a', '#6fd6a8'],
+      meta: [
+        { t: '教龄',   v: '30+ 年' },
+        { t: '已解读', v: '800+ 案例' },
+        { t: '满意度', v: '★ 4.9', rating: true }
+      ],
+      tags: ['去制约实践', '亲子养育', '人生角色', '教养方式'],
+      // 与团队标准档一致；单独调价只需改这里的数字
+      rates: { system: 1499, focus: 399, followup: 199 },
+      busy: [2, 4],                                        // 资深讲师，档期偏紧
+      offDays: [4]                                         // 每周四休息
+    },
+    {
+      id: 'dongle',
+      initial: '东',
+      name: '东乐',
+      title: '人类图解读师 · 64 闸门专项 · 非典型程序员 / 自媒体创作者',
+      grad: ['#2d3436', '#c4956a'],
+      meta: [
+        { t: '从业',   v: '6 年' },
+        { t: '已解读', v: '1000+ 张' },
+        { t: '满意度', v: '★ 4.9', rating: true }
+      ],
+      tags: ['64 闸门精解', '易经卦象', '东方视角', '职业转型'],
+      // 与团队标准档一致；单独调价只需改这里的数字
+      rates: { system: 1499, focus: 399, followup: 199 },
+      busy: [3, 5],                                        // 解读量大，档期最紧
+      offDays: [5]                                         // 每周五休息
     }
   ];
 
@@ -560,17 +615,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
   /* 依据「分析师主体 × 日期」确定性地"预占"若干时段，模拟真实档期差异
      —— 同一个日期，不同分析师的已约满时段各不相同（种子含 analystId），
-        且同一分析师同一天的档期在会话内保持稳定（刷新不跳变） */
-  function seededBooked(analystId, iso){
-    var h = hashStr(analystId + '|' + iso);
-    var booked = {};
+        且同一分析师同一天的档期在会话内保持稳定（刷新不跳变）；
+        每位分析师的「已约满」时段数量区间由可选字段 busy:[min,max] 控制（默认 [1,3]）。
+     v10.0 起：① 用「确定性洗牌取前 n 个」代替原来的重复抽签，
+                  保证实际占用数严格等于 n（旧写法可能抽到重复时段导致数量偏少）；
+               ② 新增同日冲突消解：同一天内若两位解读师的占用集合完全相同，
+                  则对后者换一个 salt 重算（最多 40 次），确保同日排班不雷同。 */
+  function seededBookedRaw(analystId, iso, salt){
+    var a = getAnalyst(analystId);
+    var h = hashStr(analystId + '|' + iso + '|' + salt);
     var x = h;
-    var n = 1 + (x % 3);          // 1~3 个已约满
-    for (var i=0;i<n;i++){
-      x = (x*1103515245 + 12345) >>> 0;
-      booked[ ALL_SLOTS[ x % ALL_SLOTS.length ] ] = true;
+    var lo = 1, hi = 3;
+    if (a && a.busy && a.busy.length === 2){
+      lo = Math.max(0, a.busy[0]);
+      hi = Math.max(lo, a.busy[1]);
     }
+    var n = lo + (x % (hi - lo + 1));          // 在 [lo, hi] 区间取「已约满」时段数
+    var pool = ALL_SLOTS.slice();              // 确定性洗牌（Fisher-Yates，种子 = 同上）
+    for (var i=pool.length-1; i>0; i--){
+      x = (x*1103515245 + 12345) >>> 0;
+      var j = x % (i+1);
+      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    var booked = {};
+    for (var k=0; k<n && k<pool.length; k++){ booked[ pool[k] ] = true; }
     return booked;
+  }
+
+  function bookedSignature(booked){
+    var list = [];
+    for (var i=0;i<ALL_SLOTS.length;i++){ if (booked[ALL_SLOTS[i]]) list.push(ALL_SLOTS[i]); }
+    return list.join(',');
+  }
+
+  /* 同一天的全体档期一次性算好（按 iso 记忆化），内部完成「同日互不雷同」消解 */
+  var _dayScheduleCache = {};
+  function buildDaySchedule(iso){
+    var wdNum = new Date(iso + 'T00:00:00').getDay();
+    var used = [], map = {};
+    ANALYSTS.forEach(function(a){
+      if (a.offDays && a.offDays.indexOf(wdNum) >= 0){ map[a.id] = {}; return; }  // 休息日不占名额
+      var picked = null;
+      for (var salt = 0; salt < 40; salt++){
+        var cand = seededBookedRaw(a.id, iso, salt);
+        var sig = bookedSignature(cand);
+        if (used.indexOf(sig) < 0){ picked = cand; used.push(sig); break; }
+      }
+      map[a.id] = picked || seededBookedRaw(a.id, iso, 0);
+    });
+    return map;
+  }
+
+  function seededBooked(analystId, iso){
+    if (!_dayScheduleCache[iso]) _dayScheduleCache[iso] = buildDaySchedule(iso);
+    return _dayScheduleCache[iso][analystId] || {};
   }
 
   /* 用户已存在（本地）的预约，按日期归类 */
@@ -732,7 +830,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
       $('bkSlotHint').textContent = '请先选择上方日期';
       return;
     }
-    $('bkSlotHint').textContent = getAnalyst(state.analystId).name + ' · ' + state.date.label + '（绿色为可约，灰色为已约满或已过）';
+    var ana = getAnalyst(state.analystId);
+    $('bkSlotHint').textContent = ana.name + ' · ' + state.date.label + '（绿色为可约，灰色为已约满或已过）';
+
+    /* 该解读师的每周固定休息日 → 当日不开放时段 */
+    var wdNum = new Date(state.date.y, state.date.m, state.date.d).getDay();
+    if (ana.offDays && ana.offDays.indexOf(wdNum) >= 0){
+      $('bkSlotHint').textContent = ana.name + ' · ' + state.date.label + '（' + WEEK[wdNum] + '固定休息，当日不开放预约）';
+      var rest = document.createElement('div');
+      rest.className = 'bk-lunch';
+      rest.textContent = '😴 ' + ana.name + ' 当日休息，请选择其他日期或其他解读师';
+      box.appendChild(rest);
+      return;
+    }
 
     var now = new Date();
     var todayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
