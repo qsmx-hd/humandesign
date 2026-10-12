@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领读者计划 · 1天体验营</title>
+<style>
+  /* ── 变更记录 ───────────────────────────────────────────
+     V1.4 (2026-10-13) 报名区二维码改为引用根目录图片：
+                       ../wechat-qr.jpg → wechat-qr.png、
+                       ../能量圈专属二维码.png → Aura.png
+     V1.3 (2026-10-13) 文案修正：「内在权威初体验」描述
+                       「政府 vs 心智」→「内在权威 vs 心智」
+     V1.2 (2026-10-12) hero 手绘图换 HD.jpg；飞轮/排序优化
+     V1.1 (2026-10-12) 卡片 2 列化 + 字号收敛至 9 级 + footer 精简
+     V1.0 (2026-10-12) 初版
+     ─────────────────────────────────────────────────────── */
+  /* ═══════════════ V1.2 统一字号体系（9 级）═══════════════
+     30 首页大标题 / 24 图标与移动端大标题 / 22 区块标题
+     18 三日卡头 / 17 卡片标题 / 16 正文强调
+     15 正文 / 14 次要正文 / 13 辅助信息 / 32 价格强调
+     ══════════════════════════════════════════════════════ */
+  :root{
+    --paper:#F5F0E8; --ink:#2D2118; --gold:#C4956A; --terra:#A8553A; --moss:#6B7A5A;
+    --cream:#EFE7D9; --line:#E2D8C7; --white:#FFFDF8; --muted:#7A6A57;
+    --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.8; font-size:16px;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px}
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.94);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px}
+  .brand{font-weight:800;color:var(--terra);margin-right:auto;font-size:15px;letter-spacing:.5px}
+  .nav a{font-size:14px;color:var(--muted);padding:5px 9px;border-radius:8px;white-space:nowrap}
+  .nav a:hover{background:var(--cream);color:var(--ink)}
+  /* HERO */
+  .hero{background:linear-gradient(160deg,#FBF7EF 0%,var(--paper) 60%);padding:46px 0 38px}
+  .hero-grid{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .hero-txt{flex:1 1 360px}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .tag{background:var(--cream);color:var(--terra);font-size:13px;padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid var(--line)}
+  .hero h1{font-size:30px;line-height:1.35;margin-bottom:12px;font-weight:800}
+  .hero h1 span{color:var(--terra)}
+  .hero .sub{font-size:16px;color:var(--muted);margin-bottom:22px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:700;font-size:15px;transition:.2s}
+  .btn-primary{background:var(--terra);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{background:#924634}
+  .btn-ghost{background:transparent;color:var(--terra);border:1.5px solid var(--gold)}
+  .btn-ghost:hover{background:var(--cream)}
+  .hero-figure{flex:1 1 240px;display:flex;justify-content:center}
+  .hero-img{width:100%;max-width:260px;display:block;border-radius:18px;box-shadow:var(--shadow)}
+  /* SECTIONS */
+  section{padding:40px 0}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .sec-head .emo{font-size:24px}
+  .sec-head h2{font-size:22px;font-weight:800}
+  .sec-head .line{flex:1;height:2px;background:var(--line);border-radius:2px}
+  .muted{color:var(--muted)}
+  /* 卡片区：每行 2 个，手机端自动单列 */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .card .ico{font-size:28px;margin-bottom:8px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card p{font-size:15px;color:var(--muted)}
+  /* positioning strip */
+  .ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .step{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative}
+  .step .n{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
+  .step h3{font-size:17px;margin:4px 0 6px}
+  .step p{font-size:14px;color:var(--muted)}
+  .step.here{border:2px solid var(--terra);background:#FBF1EC}
+  .step.here .pill{display:inline-block;background:var(--terra);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px;margin-top:8px;font-weight:700}
+  /* accordion */
+  details.map{border:1px solid var(--line);border-radius:14px;background:var(--white);margin-bottom:12px;overflow:hidden}
+  details.map summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;align-items:center;gap:12px}
+  details.map summary::-webkit-details-marker{display:none}
+  details.map summary .t{background:var(--cream);color:var(--terra);font-size:13px;font-weight:700;padding:3px 10px;border-radius:8px;min-width:58px;text-align:center}
+  details.map summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.map[open] summary .arrow{transform:rotate(90deg)}
+  details.map .body{padding:4px 18px 18px 18px;border-top:1px solid var(--line)}
+  details.map .body ul{list-style:none}
+  details.map .body li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px;display:flex;gap:10px}
+  details.map .body li:last-child{border-bottom:none}
+  details.map .body li b{color:var(--terra);min-width:64px}
+  /* takeaway */
+  .take{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .take .card .ico{color:var(--moss)}
+  /* path */
+  .path{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .path .node{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex:1 1 140px;text-align:center}
+  .path .node b{display:block;color:var(--terra);font-size:15px}
+  .path .node span{font-size:13px;color:var(--muted)}
+  .path .node.cur{background:var(--terra);border-color:var(--terra)}
+  .path .node.cur b,.path .node.cur span{color:#fff}
+  .path .arrow{display:flex;align-items:center;color:var(--gold);font-size:20px;font-weight:800}
+  /* rules：每行 3 个 */
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .rule{background:var(--cream);border-radius:12px;padding:14px}
+  .rule .k{font-size:13px;color:var(--gold);font-weight:700}
+  .rule .v{font-size:15px;font-weight:600;margin-top:3px}
+  .price-big{font-size:32px;color:var(--terra);font-weight:800}
+  /* FAQ */
+  details.faq{border-bottom:1px solid var(--line)}
+  details.faq summary{cursor:pointer;padding:15px 4px;font-weight:600;font-size:16px;list-style:none;display:flex;gap:10px;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary .q{color:var(--terra);font-weight:800}
+  details.faq summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.faq[open] summary .arrow{transform:rotate(90deg)}
+  details.faq .a{padding:0 4px 16px 30px;color:var(--muted);font-size:15px}
+  /* CTA final */
+  .final{background:linear-gradient(160deg,#FBF1EC,var(--cream));border-radius:20px;padding:30px;margin:10px 0 0;text-align:center}
+  .final h2{font-size:22px;margin-bottom:8px}
+  .final p{color:var(--muted);margin-bottom:18px}
+  .qrow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .qbox{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;width:160px}
+  .qbox img{width:120px;height:120px;object-fit:cover;border-radius:8px}
+  .qbox span{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+  .note{font-size:13px;color:var(--muted);margin-top:14px}
+  footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
+  footer .v{color:var(--gold);font-weight:700}
+  footer .by{display:inline-block;margin-top:6px;color:var(--gold);font-weight:600;letter-spacing:.6px}
+  @media (max-width:640px){
+    .rules{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .hero h1{font-size:24px}
+    .hero-figure{display:none}
+    .cards,.take{grid-template-columns:1fr}
+    .qrow .qbox{width:140px}
+  }
+  @media (max-width:400px){
+    .rules{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="wrap">
+    <div class="brand">🜂 人类图领读者计划</div>
+    <a href="#who">适合谁</a>
+    <a href="#why">为什么是1天</a>
+    <a href="#map">半天地图</a>
+    <a href="#take">带走什么</a>
+    <a href="#exp">现场体验</a>
+    <a href="#path">成长路径</a>
+    <a href="#rule">报名须知</a>
+    <a href="#faq">FAQ</a>
+    <a href="#join">报名</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-txt">
+      <div class="tag-row">
+        <span class="tag">线下 · 半天</span>
+        <span class="tag">零预习</span>
+        <span class="tag">含茶歇</span>
+        <span class="tag">体验价 ¥99</span>
+      </div>
+      <h1>人类图领读者计划<br><span>1天体验营</span></h1>
+      <p class="sub">用半天，看见「你是谁」。<br>一场高体验的线下相遇——把「线上听过」变成「当场想继续」。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#join">立即报名 ¥99</a>
+        <a class="btn btn-ghost" href="#map">先看看学什么</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <img class="hero-img" src="HD.jpg" alt="人类图人形轮廓示意图">
+    </div>
+  </div>
+</header>
+
+<!-- WHO -->
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧭</span><h2>这门体验营，适合这样的你</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🌱</div><h3>想认识自己</h3><p>对人类图好奇，却还没系统读过自己的图，想要一次「啊哈」的初体验。</p></div>
+      <div class="card"><div class="ico">📚</div><h3>看过零散资料</h3><p>刷过文章、听过课，但知识点散落，想有人把「类型 / 策略 / 权威」讲通透。</p></div>
+      <div class="card"><div class="ico">⏳</div><h3>时间碎片化</h3><p>抽不出 70 天或 7 天，但半天空得出来——用最低时间成本先尝一口。</p></div>
+      <div class="card"><div class="ico">🔗</div><h3>想融入圈子</h3><p>想知道广州本地有没有同好沙龙，先来现场感受这群人靠不靠谱。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">⚖️</span><h2>为什么是「1 天」，而不是更长</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:18px">领读者计划是一条「线上广度 + 线下深耕」的成长 ladder。1 天体验营站在漏斗口——轻、广、低门槛，把散客变成「到场者」，再向下游转化。</p>
+    <div class="ladder">
+      <div class="step"><div class="n">L1 · 线上</div><h3>7天精华版</h3><p>全国广覆盖、通识入门，低门槛招募。</p></div>
+      <div class="step here"><div class="n">L2 · 线下锚点</div><h3>1天体验营</h3><p>低门槛入口，靠体验感让人想留下。<span class="pill">你在这里</span></p></div>
+      <div class="step"><div class="n">L3 · 身份锚</div><h3>3天强化版</h3><p>读全图 + 认领主理人身份，深度沉浸。</p></div>
+      <div class="step"><div class="n">L4 · 社群</div><h3>本地沙龙</h3><p>月度共读、同伴孵化，长成品牌节点。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🗺️</span><h2>半天学习地图</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:16px">周六 / 日下午场 13:30–18:30，约 5 小时接触 + 收口咨询。<b>深料（闸门 / 36 通道 / 192 交叉 / 关系合图）一律只预告、不展开</b>，保住体验节奏。</p>
+
+    <details class="map" open>
+      <summary><span class="t">13:30</span>签到 + 破冰盲盒<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>形式</b>互动暖场</li>
+        <li><b>动作</b>用「你最想被读懂的一点」互相介绍，瞬间破冰。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">14:00</span>什么是人类图<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>故事</b>起源 + 应用场景，建立信任与好奇。</li>
+        <li><b>对比钩子</b>vs 星座 / MBTI / 九型——讲清人类图的独特价值。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">14:30</span>你的类型与策略（核心获得感）<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>现场查图</b>当场知道自己属于四大类型中的哪一种。</li>
+        <li><b>练策略</b>显示者「告知」/ 生产者「回应」/ 投射者「邀请」/ 反映者「采样」。</li>
+        <li><b>体感</b>非我主题 vs 内在权威的差别第一次被身体记住。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">16:00</span>茶歇 + 自由交流<span class="arrow">▶</span></summary>
+      <div class="body"><ul><li><b>留白</b>社群感就在茶歇的间隙里发酵。</li></ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">16:20</span>非我主题 + 内在权威<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>小实验</b>一个「选餐厅 / 选路线」的微决策，体感权威 vs 心智。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">16:50</span>你的能量中心地图<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>九大中心一句话</b>每人用一句自己的中心状态互相照见。</li>
+        <li><b>彩蛋</b>轻触「定义（几分人）」，为 3 天版埋下钩子。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">17:20</span>现场迷你读盘演示（炸场环节）<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>演示</b>讲师抽 1–2 名志愿者公开读图——全场转化率最高的时刻。</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">17:50</span>领读者计划全景 + 邀请<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>展出路径</b>3天版 / 本地沙龙，开报名通道。</li>
+        <li><b>咨询角</b>结课后 20 分钟一对一答疑 + 报名。</li>
+      </ul></div>
+    </details>
+  </div>
+</section>
+
+<!-- TAKE -->
+<section id="take" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🎁</span><h2>半天结束，你会带走</h2><span class="line"></span></div>
+    <div class="take">
+      <div class="card"><div class="ico">🪪</div><h3>你的类型与策略</h3><p>当场知道自己是哪一型，怎么用对策略做决策。</p></div>
+      <div class="card"><div class="ico">🧭</div><h3>内在权威初体验</h3><p>第一次用身体分清内在权威 vs 心智，不再硬拗。</p></div>
+      <div class="card"><div class="ico">🗺️</div><h3>九大中心快照</h3><p>看清自己「定义 / 未定义」的中心分布。</p></div>
+      <div class="card"><div class="ico">📖</div><h3>7天精华试看</h3><p>离场即赠试看章节 + 本地沙龙排期，热度延续到线上。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXP -->
+<section id="exp">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">✨</span><h2>只有现场才发生的事</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🔥</div><h3>读盘演示炸场</h3><p>隔着屏幕永远学不会的「读图语感」，在房间里对着一个真人被点亮。</p></div>
+      <div class="card"><div class="ico">🤝</div><h3>邻座互读</h3><p>用类型策略卡互相照见，笑点即记忆点，陌生人瞬间变同好。</p></div>
+      <div class="card"><div class="ico">🌿</div><h3>场域能量</h3><p>同样一句话，在场上说出来，落地感天差地别。</p></div>
+      <div class="card"><div class="ico">🎯</div><h3>即时反馈</h3><p>讲师巡场纠偏，把「听过」变成「活过」。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PATH -->
+<section id="path" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🚀</span><h2>领读者成长路径</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:16px">1 天只是入口。真正把人类图活成生活方式，需要一次完整的线下沉浸——然后回到本地社群持续发酵。</p>
+    <div class="path">
+      <div class="node"><b>7天精华</b><span>线上通识</span></div>
+      <div class="arrow">→</div>
+      <div class="node cur"><b>1天体验营</b><span>线下锚点</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>3天强化版</b><span>主理人孵化</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>本地沙龙</b><span>社群裂变</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RULE -->
+<section id="rule">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">📋</span><h2>报名须知</h2><span class="line"></span></div>
+    <div class="rules">
+      <div class="rule"><div class="k">⏰ 时间</div><div class="v">周六/日 13:30–18:30</div></div>
+      <div class="rule"><div class="k">📍 地点</div><div class="v">广州 · 本地沙龙场地</div></div>
+      <div class="rule"><div class="k">🎟️ 形式</div><div class="v">线下 · 半天 · 零预习</div></div>
+      <div class="rule"><div class="k">💰 费用</div><div class="v price-big">¥99</div></div>
+      <div class="rule"><div class="k">🎓 前提</div><div class="v">无需基础</div></div>
+      <div class="rule"><div class="k">🍵 含</div><div class="v">茶歇 + 试看资料</div></div>
+    </div>
+    <p class="note">💡 定价逻辑：1 天体验营是<b>引流品，不是利润品</b>。¥99 小额付费既过滤纯围观、又不成价格门槛；真实价值在 3 天版与本地沙龙。不建议超过 ¥199，以免稀释锚点属性。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">💡</span><h2>常见问题</h2><span class="line"></span></div>
+    <details class="faq" open><summary><span class="q">Q1</span>完全没基础能来吗？<span class="arrow">▶</span></summary>
+      <div class="a">可以。1 天版零预习，从「什么是人类图」讲起，重点在体验而非知识量。</div></details>
+    <details class="faq"><summary><span class="q">Q2</span>需要带自己的出生信息吗？<span class="arrow">▶</span></summary>
+      <div class="a">现场会提供查图工具（小程序 / 网页入口），报出生年月日时分 + 地点即可当场生成你的图。</div></details>
+    <details class="faq"><summary><span class="q">Q3</span>只有半天，能学到什么？<span class="arrow">▶</span></summary>
+      <div class="a">你会带走「类型 + 策略 + 内在权威 + 九大中心快照」四个核心收获，以及一次读盘演示的震撼体验。</div></details>
+    <details class="faq"><summary><span class="q">Q4</span>和 3 天版什么关系？<span class="arrow">▶</span></summary>
+      <div class="a">1 天是漏斗口（轻、广），3 天是身份锚（深、专）。1 天学员报名 3 天前补发预习包即可无缝衔接。</div></details>
+    <details class="faq"><summary><span class="q">Q5</span>不来 3 天还能继续吗？<span class="arrow">▶</span></summary>
+      <div class="a">可以。未报 3 天者进入广州本地月度沙龙，用轻量社群持续保温。</div></details>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="wrap">
+    <div class="final">
+      <h2>现在，给自己一个半天的礼物 🎁</h2>
+      <p>到场成本天然筛掉摇摆客，留下的就是会一起走下去的同好。<br>今天到场的同学，报名 3 天强化版享专属权益；现在加群，下一场沙龙就在不远处。</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="#join">立即报名 · 备注「1天体验营」</a>
+        <a class="btn btn-ghost" href="#map">再看一次学什么</a>
+      </div>
+      <div class="qrow">
+        <div class="qbox"><img src="wechat-qr.png" alt="报名二维码"><span>扫码报名</span></div>
+        <div class="qbox"><img src="Aura.png" alt="能量圈社群"><span>加入能量圈</span></div>
+      </div>
+      <p class="note">本活动为线下现场服务，名额有限，报满即止。售出后不支持退款，请确认档期后报名。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    人类图领读者计划 · 1天体验营 · <span class="v">V1.4</span><br>
+    <span class="by">Powered by Kan Man Tang</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+    function onScroll(){
+      var y = (window.scrollY || window.pageYOffset || 0);
+      var cur = 0;
+      for (var i=0;i<sections.length;i++){
+        if (sections[i] && sections[i].offsetTop - 140 <= y) cur = i;
+      }
+      links.forEach(function(l,i){
+        if(i===cur){ l.style.background='var(--cream)'; l.style.color='var(--ink)'; }
+        else { l.style.background=''; l.style.color=''; }
+      });
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图领读者计划 · 3天强化版</title>
+<style>
+  /* ── 变更记录 ───────────────────────────────────────────
+     V1.4 (2026-10-13) 报名区二维码改为引用根目录图片：
+                       ../wechat-qr.jpg → wechat-qr.png、
+                       ../能量圈专属二维码.png → Aura.png
+     V1.3 (2026-10-13) 飞轮加动画（纯 CSS）：外环自转 + 箭头光点流动
+                       + 节点依次呼吸 + 中心脉动；支持
+                       prefers-reduced-motion 降级
+     V1.2 (2026-10-12) hero 左文右图 + HD.jpg；飞轮重绘解溢出；
+                       报名区第二码改「加入能量圈」
+     V1.1 (2026-10-12) 卡片 2 列化 + 字号收敛至 9 级 + footer 精简
+     V1.0 (2026-10-12) 初版
+     ─────────────────────────────────────────────────────── */
+  /* ═══════════════ V1.2 统一字号体系（9 级）═══════════════
+     30 首页大标题 / 24 移动端大标题 / 22 区块标题
+     18 三日卡头 / 17 卡片标题 / 16 正文强调
+     15 正文 / 14 次要正文 / 13 辅助信息
+     ══════════════════════════════════════════════════════ */
+  :root{
+    --paper:#F5F0E8; --ink:#2D2118; --gold:#C4956A; --terra:#A8553A; --moss:#6B7A5A;
+    --cream:#EFE7D9; --line:#E2D8C7; --white:#FFFDF8; --muted:#7A6A57;
+    --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.8;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px}
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.94);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px}
+  .brand{font-weight:800;color:var(--terra);margin-right:auto;font-size:15px;letter-spacing:.5px}
+  .nav a{font-size:14px;color:var(--muted);padding:5px 9px;border-radius:8px;white-space:nowrap}
+  .nav a:hover{background:var(--cream);color:var(--ink)}
+  /* HERO */
+  .hero{background:linear-gradient(160deg,#FBF7EF 0%,var(--paper) 60%);padding:46px 0 38px}
+  .hero-grid{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .hero-txt{flex:1 1 360px}
+  .hero-figure{flex:1 1 240px;display:flex;justify-content:center}
+  .hero-img{width:100%;max-width:260px;display:block;border-radius:18px;box-shadow:var(--shadow)}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .tag{background:var(--cream);color:var(--terra);font-size:13px;padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid var(--line)}
+  .hero h1{font-size:30px;line-height:1.35;margin-bottom:12px;font-weight:800}
+  .hero h1 span{color:var(--terra)}
+  .hero .sub{font-size:16px;color:var(--muted);margin-bottom:22px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:700;font-size:15px;transition:.2s}
+  .btn-primary{background:var(--terra);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{background:#924634}
+  .btn-ghost{background:transparent;color:var(--terra);border:1.5px solid var(--gold)}
+  .btn-ghost:hover{background:var(--cream)}
+  /* SECTIONS */
+  section{padding:40px 0}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .sec-head .emo{font-size:24px}
+  .sec-head h2{font-size:22px;font-weight:800}
+  .sec-head .line{flex:1;height:2px;background:var(--line);border-radius:2px}
+  .muted{color:var(--muted)}
+  /* 卡片区：每行 2 个，手机端自动单列 */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .card .ico{font-size:28px;margin-bottom:8px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card p{font-size:15px;color:var(--muted)}
+  /* positioning */
+  .ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .step{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .step .n{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
+  .step h3{font-size:17px;margin:4px 0 6px}
+  .step p{font-size:14px;color:var(--muted)}
+  .step.here{border:2px solid var(--terra);background:#FBF1EC}
+  .step.here .pill{display:inline-block;background:var(--terra);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px;margin-top:8px;font-weight:700}
+  /* 3-day rhythm */
+  .rhythm{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .day{background:var(--white);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .day .top{background:var(--terra);color:#fff;padding:16px;font-weight:800;font-size:18px}
+  .day .top small{display:block;font-weight:500;font-size:13px;opacity:.92;margin-top:2px}
+  .day .mid{padding:14px 18px;font-size:15px;border-bottom:1px solid var(--line)}
+  .day .mid b{color:var(--terra)}
+  .day .bot{padding:14px 18px;font-size:15px}
+  .day .bot .lab{font-size:13px;color:var(--gold);font-weight:700}
+  /* accordion */
+  details.map{border:1px solid var(--line);border-radius:14px;background:var(--white);margin-bottom:12px;overflow:hidden}
+  details.map summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;align-items:center;gap:12px}
+  details.map summary::-webkit-details-marker{display:none}
+  details.map summary .t{background:var(--cream);color:var(--terra);font-size:13px;font-weight:700;padding:3px 10px;border-radius:8px;min-width:58px;text-align:center}
+  details.map summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.map[open] summary .arrow{transform:rotate(90deg)}
+  details.map .body{padding:4px 18px 18px 18px;border-top:1px solid var(--line)}
+  details.map .body ul{list-style:none}
+  details.map .body li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px;display:flex;gap:10px}
+  details.map .body li:last-child{border-bottom:none}
+  details.map .body li b{color:var(--terra);min-width:72px}
+  /* flywheel */
+  .wheel-wrap{display:flex;justify-content:center;margin:8px 0 4px}
+  .wheel-cap{text-align:center;color:var(--muted);font-size:15px;margin-top:6px}
+  /* ── 飞轮动画（纯 CSS，无 JS 依赖；禁 JS 亦正常显示）──────
+     ① 外环虚线匀速自转 = 轮盘转动
+     ② 四段箭头「实线底轨 + 流动光点」= 流向（顺时针）
+     ③ 四个节点依次「呼吸」= 循环推进
+     ④ 中心「领读者飞轮」缓慢脉动 = 引擎心跳
+     ────────────────────────────────────────────────────── */
+  @keyframes fwSpin{to{transform:rotate(360deg)}}
+  @keyframes fwFlow{to{stroke-dashoffset:-30}}
+  @keyframes fwPulse{0%,26%,100%{transform:scale(1)}8%{transform:scale(1.05)}}
+  @keyframes fwCore{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
+  .fw-ring{transform-box:fill-box;transform-origin:center;stroke-dasharray:4 12;animation:fwSpin 26s linear infinite}
+  .fw-arc{stroke-dasharray:14 16;animation:fwFlow 1.5s linear infinite}
+  .fw-node{transform-box:fill-box;transform-origin:center;animation:fwPulse 4s ease-in-out infinite}
+  .fw-node.n2{animation-delay:1s}
+  .fw-node.n3{animation-delay:2s}
+  .fw-node.n4{animation-delay:3s}
+  .fw-core{transform-box:fill-box;transform-origin:center;animation:fwCore 4s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){
+    .fw-ring,.fw-arc,.fw-node,.fw-core{animation:none}
+  }
+  /* path */
+  .path{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .path .node{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex:1 1 140px;text-align:center}
+  .path .node b{display:block;color:var(--terra);font-size:15px}
+  .path .node span{font-size:13px;color:var(--muted)}
+  .path .node.cur{background:var(--terra);border-color:var(--terra)}
+  .path .node.cur b,.path .node.cur span{color:#fff}
+  .path .arrow{display:flex;align-items:center;color:var(--gold);font-size:20px;font-weight:800}
+  /* rules：每行 3 个 */
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .rule{background:var(--cream);border-radius:12px;padding:14px}
+  .rule .k{font-size:13px;color:var(--gold);font-weight:700}
+  .rule .v{font-size:15px;font-weight:600;margin-top:3px}
+  .price-big{font-size:32px;color:var(--terra);font-weight:800}
+  /* FAQ */
+  details.faq{border-bottom:1px solid var(--line)}
+  details.faq summary{cursor:pointer;padding:15px 4px;font-weight:600;font-size:16px;list-style:none;display:flex;gap:10px;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary .q{color:var(--terra);font-weight:800}
+  details.faq summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.faq[open] summary .arrow{transform:rotate(90deg)}
+  details.faq .a{padding:0 4px 16px 30px;color:var(--muted);font-size:15px}
+  /* CTA */
+  .final{background:linear-gradient(160deg,#FBF1EC,var(--cream));border-radius:20px;padding:30px;margin:10px 0 0;text-align:center}
+  .final h2{font-size:22px;margin-bottom:8px}
+  .final p{color:var(--muted);margin-bottom:18px}
+  .qrow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .qbox{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;width:160px}
+  .qbox img{width:120px;height:120px;object-fit:cover;border-radius:8px}
+  .qbox span{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+  .note{font-size:13px;color:var(--muted);margin-top:14px}
+  footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
+  footer .v{color:var(--gold);font-weight:700}
+  footer .by{display:inline-block;margin-top:6px;color:var(--gold);font-weight:600;letter-spacing:.6px}
+  @media (max-width:640px){
+    .rules{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .hero h1{font-size:24px}
+    .hero-figure{display:none}
+    .cards{grid-template-columns:1fr}
+    .qrow .qbox{width:140px}
+  }
+  @media (max-width:400px){
+    .rules{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="wrap">
+    <div class="brand">🜂 人类图领读者计划</div>
+    <a href="#who">适合谁</a>
+    <a href="#why">为什么是3天</a>
+    <a href="#rhythm">三日节奏</a>
+    <a href="#map">每日地图</a>
+    <a href="#exp">现场独有</a>
+    <a href="#wheel">结营飞轮</a>
+    <a href="#rule">报名须知</a>
+    <a href="#faq">FAQ</a>
+    <a href="#join">报名</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-txt">
+      <div class="tag-row">
+        <span class="tag">线下 · 周末沉浸</span>
+        <span class="tag">需预习</span>
+        <span class="tag">主理人孵化</span>
+        <span class="tag">身份锚定</span>
+      </div>
+      <h1>人类图领读者计划<br><span>3天强化版</span></h1>
+      <p class="sub">用三天，从「知道自己是谁」走到「能读一张图、认领一座城」。<br>线下只做线上无法发生的事——场域、具身、即时读盘、社群契约。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#join">报名咨询</a>
+        <a class="btn btn-ghost" href="#rhythm">看三日怎么过</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <img class="hero-img" src="HD.jpg" alt="人类图人形轮廓示意图">
+    </div>
+  </div>
+</header>
+
+<!-- WHO -->
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧭</span><h2>这门强化版，适合这样的你</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">📖</div><h3>已完成 7天精华版</h3><p>线上通识已学完，准备好把知识变成「读盘手感」。</p></div>
+      <div class="card"><div class="ico">🌆</div><h3>广州及周边的意向者</h3><p>或由 1 天锚点转化来的到场者，愿意投入一个周末。</p></div>
+      <div class="card"><div class="ico">🤝</div><h3>想成为领读者</h3><p>不止自己懂，还想读别人、带共读、成为本地节点。</p></div>
+      <div class="card"><div class="ico">🌱</div><h3>想要社群归属</h3><p>把一次性学习变成长期同伴关系与身份认同。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">⚖️</span><h2>为什么是「3 天」，而不是 1 天或 7 天</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:18px">1 天只能做体验与招募，培养不出读盘手感与社群身份；7 天线上已证明内容可压缩，但 30% 打卡说明「独自学」走不通。3 天是最小能形成「场域记忆 + 读盘肌肉记忆 + 同伴契约」的单元。</p>
+    <div class="ladder">
+      <div class="step"><div class="n">L1 · 线上</div><h3>7天精华版</h3><p>通识入门，预习包来源。</p></div>
+      <div class="step"><div class="n">L2 · 锚点</div><h3>1天体验营</h3><p>低门槛入口，转化来源。</p></div>
+      <div class="step here"><div class="n">L3 · 身份锚</div><h3>3天强化版</h3><p>读全图 + 主理人孵化。<span class="pill">你在这里</span></p></div>
+      <div class="step"><div class="n">L4 · 社群</div><h3>本地沙龙</h3><p>月度共读，长成品牌节点。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RHYTHM -->
+<section id="rhythm">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🗓️</span><h2>三日总节奏</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:16px">每日约 9:30–17:30，约 6 接触小时。信息前置 / 后置：7天精华版作为预习与复习资料包，<b>现场不讲课、只练与体验</b>。</p>
+    <div class="rhythm">
+      <div class="day">
+        <div class="top">Day 1<small>认识自己 · 地基 + 场域</small></div>
+        <div class="mid">类型 · 策略 · 内在权威<br><b>场域建立 + 具身感受</b></div>
+        <div class="bot"><div class="lab">当日产出</div>同伴互读①（类型 / 策略 / 权威）</div>
+      </div>
+      <div class="day">
+        <div class="top">Day 2<small>读懂一张图 · 结构 + 实战</small></div>
+        <div class="mid">通道 · 回路 · 定义<br><b>结构串讲 + 完整读盘实战</b></div>
+        <div class="bot"><div class="lab">当日产出</div>同伴互读②（全图）+ Hot Seat</div>
+      </div>
+      <div class="day">
+        <div class="top">Day 3<small>成为领读者 · 身份 + 孵化</small></div>
+        <div class="mid">人生角色 · 轮回交叉 · 主理人<br><b>身份锚定 + 孵化仪式</b></div>
+        <div class="bot"><div class="lab">当日产出</div>毕业路演 + 主理人认领</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧭</span><h2>每日学习地图</h2><span class="line"></span></div>
+
+    <details class="map" open>
+      <summary><span class="t">Day1</span>认识自己：类型 · 策略 · 权威<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>09:30</b>开营仪式 + 社群破冰（「我的类型 + 最大卡点」轮圈）</li>
+        <li><b>10:15</b>能量场总览（轻讲框架，已预习者快速过）</li>
+        <li><b>11:00</b>四大类型与策略 · 现场辨别游戏（演「告知/回应/邀请/采样」）</li>
+        <li><b>14:00</b>内在权威 · 具身练习（小决策实验体感权威 vs 心智）</li>
+        <li><b>15:15</b>九大能量中心（定义 / 未定义 / 放大）+ 自图标注</li>
+        <li><b>16:15</b>读盘实验室①（两人一组，读邻座类型+策略+权威）</li>
+        <li><b>17:15</b>当日复盘 + 群内「今天最戳我的一句话」</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">Day2</span>读懂一张图：通道 · 回路 · 定义<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>09:30</b>36 通道 + 三大回路（个体 / 家族 / 集体回路感受）</li>
+        <li><b>10:30</b>定义类型（单 / 双 / 三 / 四分人，理解连接模式）</li>
+        <li><b>14:00</b>轮回交叉入门（活用 192 轮回交叉知识卡）</li>
+        <li><b>15:00</b>读盘实验室②（完整读一张图的结构化模板）</li>
+        <li><b>16:30</b>Hot Seat 全班共读（讲师带读，示范领读者语感）</li>
+        <li><b>17:15</b>复盘</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">Day3</span>成为领读者：角色 · 交叉 · 孵化<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>09:30</b>12 种人生角色（找同角色 / 对照角色伙伴）</li>
+        <li><b>10:30</b>轮回交叉深讲 + 名人图范例</li>
+        <li><b>14:00</b>毕业路演（5 分钟读一张陌生图，同学互评）</li>
+        <li><b>15:30</b>主理人赋能模块（开沙龙 / 带共读 / 做转介绍）</li>
+        <li><b>16:30</b>「领读者启航」仪式（颁身份卡 + 签社群契约）</li>
+        <li><b>17:15</b>飞轮启动（认领首批主理人，建本地运营群）</li>
+      </ul></div>
+    </details>
+  </div>
+</section>
+
+<!-- EXP -->
+<section id="exp">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">✨</span><h2>现场独有 · 线上不可替代的四件事</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🔬</div><h3>读盘实验室</h3><p>① 基础 / ② 全图：结构化模板 + 同伴互读 + 讲师巡场，是「领读者」技能唯一生长地。</p></div>
+      <div class="card"><div class="ico">🧍</div><h3>具身练习</h3><p>权威小决策实验、回路能量感受——把抽象概念变成身体记忆。</p></div>
+      <div class="card"><div class="ico">🎤</div><h3>Hot Seat 共读</h3><p>讲师带全班共读真实图，示范「领读者语感」，比任何录播都值。</p></div>
+      <div class="card"><div class="ico">📜</div><h3>社群契约仪式</h3><p>身份卡 + 月度排期，把一次性学员变成长期社群节点。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHEEL -->
+<section id="wheel" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🔄</span><h2>结营不是结束，是飞轮起点</h2><span class="line"></span></div>
+    <p class="muted" style="text-align:center;margin-bottom:10px">主理人认领 → 月度本地沙龙 → 带朋友（转介绍）→ 社群裂变 → 新人回到 7 天线上漏斗。</p>
+    <div class="wheel-wrap">
+      <svg viewBox="0 0 520 440" width="100%" style="max-width:520px" role="img" aria-label="领读者飞轮">
+        <defs>
+          <marker id="arw" markerWidth="9" markerHeight="9" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#C4956A"/>
+          </marker>
+        </defs>
+        <!-- ring -->
+        <circle class="fw-ring" cx="260" cy="220" r="140" fill="none" stroke="#E2D8C7" stroke-width="2"/>
+        <!-- arrows：实线底轨（保持箭头观感）+ 流动光点叠层（表现流向） -->
+        <path d="M 334.2 101.3 A 140 140 0 0 1 378.7 145.8" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 378.7 294.2 A 140 140 0 0 1 334.2 338.7" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 185.8 338.7 A 140 140 0 0 1 141.3 294.2" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 141.3 145.8 A 140 140 0 0 1 185.8 101.3" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path class="fw-arc" d="M 334.2 101.3 A 140 140 0 0 1 378.7 145.8" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 378.7 294.2 A 140 140 0 0 1 334.2 338.7" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 185.8 338.7 A 140 140 0 0 1 141.3 294.2" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 141.3 145.8 A 140 140 0 0 1 185.8 101.3" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- center -->
+        <g class="fw-core">
+          <circle cx="260" cy="220" r="58" fill="#A8553A"/>
+          <text x="260" y="214" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="800" fill="#fff">领读者</text>
+          <text x="260" y="240" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="20" font-weight="800" fill="#fff">飞轮</text>
+        </g>
+        <!-- nodes（n1→n4 顺时针依次呼吸） -->
+        <g font-family="PingFang SC,Microsoft YaHei,sans-serif" text-anchor="middle">
+          <g class="fw-node n1">
+            <circle cx="260" cy="80" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="260" y="75" font-size="16" font-weight="700" fill="#2D2118">学员到场</text>
+            <text x="260" y="97" font-size="13" fill="#7A6A57">体验 → 沉浸</text>
+          </g>
+
+          <g class="fw-node n2">
+            <circle cx="400" cy="220" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="400" y="215" font-size="16" font-weight="700" fill="#2D2118">主理人认领</text>
+            <text x="400" y="237" font-size="13" fill="#7A6A57">认领城市</text>
+          </g>
+
+          <g class="fw-node n3">
+            <circle cx="260" cy="360" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="260" y="355" font-size="16" font-weight="700" fill="#2D2118">带朋友·转介绍</text>
+            <text x="260" y="377" font-size="13" fill="#7A6A57">口碑裂变</text>
+          </g>
+
+          <g class="fw-node n4">
+            <circle cx="120" cy="220" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="120" y="215" font-size="16" font-weight="700" fill="#2D2118">社群裂变</text>
+            <text x="120" y="237" font-size="13" fill="#7A6A57">回到漏斗</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <p class="wheel-cap">增长引擎是学员自己——把到场者变成带新人的人，是最省力的本地深耕方式。</p>
+  </div>
+</section>
+
+<!-- RULE -->
+<section id="rule">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">📋</span><h2>报名须知</h2><span class="line"></span></div>
+    <div class="rules">
+      <div class="rule"><div class="k">⏰ 时间</div><div class="v">周末 3 天（周五夜 + 六日 / 连休）</div></div>
+      <div class="rule"><div class="k">📍 地点</div><div class="v">广州 · 本地沙龙场地</div></div>
+      <div class="rule"><div class="k">🎓 前提</div><div class="v">建议先完成 7天精华版</div></div>
+      <div class="rule"><div class="k">📦 预习</div><div class="v">开课前 7 天发预习包</div></div>
+      <div class="rule"><div class="k">🍱 含</div><div class="v">午休交流 + 主理人午宴</div></div>
+      <div class="rule"><div class="k">💰 费用</div><div class="v price-big">详询</div></div>
+    </div>
+    <p class="note">💡 3 天版是「身份锚」而非引流品，定价须覆盖场地 + 茶歇 + 讲师资深投入，并体现其作为主理人孵化入口的价值。具体档位待校准后公布。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">💡</span><h2>常见问题</h2><span class="line"></span></div>
+    <details class="faq" open><summary><span class="q">Q1</span>必须先上 1 天体验营吗？<span class="arrow">▶</span></summary>
+      <div class="a">不必。建议先完成 7 天精华版（线上）打好通识基础；1 天体验营可作为低门槛入口，报名 3 天前补发预习包即可无缝衔接。</div></details>
+    <details class="faq"><summary><span class="q">Q2</span>现场真的会让我上台读图吗？<span class="arrow">▶</span></summary>
+      <div class="a">会。Day2 读盘实验室②与 Day3 毕业路演都要求你动手读图，讲师巡场纠偏——这正是「领读者」技能的生长地。</div></details>
+    <details class="faq"><summary><span class="q">Q3</span>「主理人」是什么意思？<span class="arrow">▶</span></summary>
+      <div class="a">结营后你可在自己城市认领主理人身份，开沙龙、带共读、做转介绍，成为本地社群节点，也是飞轮的增长引擎。</div></details>
+    <details class="faq"><summary><span class="q">Q4</span>学完就是认证领读者了吗？<span class="arrow">▶</span></summary>
+      <div class="a">本计划终局是社群 / 品牌孵化，而非付费认证。身份卡代表你启程成为领读者与本地主理人，持续实践与社群贡献才是真正的成长。</div></details>
+    <details class="faq"><summary><span class="q">Q5</span>外地学员能参加吗？<span class="arrow">▶</span></summary>
+      <div class="a">3 天版以广州为标杆城市落地；外地学员可飞抵参加，或等待你所在城市的主理人孵化后就近参与。</div></details>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="wrap">
+    <div class="final">
+      <h2>三天，认领你在广州的主理人身份 🔥</h2>
+      <p>从「知道自己是谁」到「能读一张图、带一群人」。<br>今天报名的同学，结营即颁领读者身份卡、签社群契约、进入本地运营群。</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="#join">报名咨询 · 备注「3天强化版」</a>
+        <a class="btn btn-ghost" href="#rhythm">再看三日节奏</a>
+      </div>
+      <div class="qrow">
+        <div class="qbox"><img src="wechat-qr.png" alt="报名二维码"><span>扫码报名</span></div>
+        <div class="qbox"><img src="Aura.png" alt="能量圈社群"><span>加入能量圈</span></div>
+      </div>
+      <p class="note">本活动为线下现场服务，名额有限，报满即止。售出后不支持退款，请确认档期后报名。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    人类图领读者计划 · 3天强化版 · <span class="v">V1.4</span><br>
+    <span class="by">Powered by Kan Man Tang</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+    function onScroll(){
+      var y = (window.scrollY || window.pageYOffset || 0);
+      var cur = 0;
+      for (var i=0;i<sections.length;i++){
+        if (sections[i] && sections[i].offsetTop - 140 <= y) cur = i;
+      }
+      links.forEach(function(l,i){
+        if(i===cur){ l.style.background='var(--cream)'; l.style.color='var(--ink)'; }
+        else { l.style.background=''; l.style.color=''; }
+      });
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
