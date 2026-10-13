@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图通识营 · 一天建立完整知识骨架｜广州</title>
+<meta name="description" content="人类图通识营（付费通识日）：一天讲透能量层·结构层·身份层，从零到体系，拿到自己的图就知道怎么看。广州线下，零基础可听，含学员手册与课后 30 天答疑。">
+<style>
+  /* ── 变更记录 ───────────────────────────────────────────
+     V1.7 (2026-10-13) 版本号体系对齐兄弟页面（V6 → V1.7，无内容变更）；
+                       本页讲师模块已同步给 1day 体验营 / 3days 强化版，
+                       三页统一为 V1.7
+     V6.0 (2026-10-13) 讲师简介排版微调（内容不变，只拆行）：
+          ① 头衔拆三行：人类图领读者计划发起人 / 真好玩人类图平台创始人 /
+             天赋型人类图解读师、培训导师（原为一句逗号连排）
+          ② 「企业培训师」→「资深企业培训师」
+          ③ 头马资历段与「长期把人类图用于…客户业态」段拆为两行
+     V5.0 (2026-10-13) ① 「一天之后，你能当场做到这 5 件事」→「6 件事」
+             （卡片本来就是 6 张，标题数错了）
+          ② 讲师简介加长：真好玩人类图平台创始人 / 天赋型人类图解读师、
+             培训导师 / 全定义·6/2 爻·显示生产者·大师通道 / 咨询与培训
+             时长 1000+（关键资历做成标签 chips，长句读起来不累）
+          ③ 讲师头像替换为本人形象照：Kan-Man-Tang.jpeg 去水印 + 裁圆
+             → tutor.png（旧插画头像归档为 tutor.v1.png）
+          ④ 讲师区新增本人人类图（chart-kan-man-tang.jpg，已裁掉手机
+             状态栏 / 标题栏 / 底部导航），配小字「一图胜千言 · 以图会友」
+     V4.0 (2026-10-13) ① hero 配图：内联 SVG 三层骨架图 → HD.jpg（人类图人形轮廓示意图）
+          ② 三层骨架 SVG 移入「课程地图：四层骨架」区，作为该区总览图
+             （样式 .map-figure，含图注）
+          ③ 退款口径统一为「售出后不支持退款」（原「开营前 7 天可全额退」作废）
+          ④ 出生时间口径放宽：FAQ Q1 与「请先别来」清单同步 Q4 新口径
+             （不确定时刻 → 取当日中午 12 点出图，边学边校准）
+     V3.0 (2026-10-13) 文件更名：人类图通识营-报名页-V2.html → hd-BaseCamp-1day.html
+          ① 讲师头像：🦐 图标 → 讲师形象图 tutor.png
+             （真人照可用同名 tutor.png 1:1 替换，无需改代码）
+          ② 讲师简介口径更新（头马资历 + 客户业态），去掉「虾哥」称呼
+          ③ FAQ Q4 出生时间答复 →「取当日中午 12 点先出图，边学边校准」
+          ④ 报名区二维码由占位框换成实图 wechat-qr.png / Aura.png，
+             并补「线下现场服务 · 名额有限 · 售出不退」说明
+          ⑤ footer →「人类图领读者计划 · 1天通识营 · 版本号」+ 第二行
+             Powered by Kan Man Tang
+     V2.0 (2026-10-13) M3 口径更正：6 种人格原型改为「爻线六型」
+          （研·隐·殉·机·异·模），12 人生角色命名与网站对齐
+          （1/3 探索型 …… 6/3 永恒学生型）
+     V1.0 (2026-10-13) 初版：方案B 付费通识日落地页
+          hero 用内联 SVG 三层骨架图（无外链依赖）
+          含：学习成果 / 课程地图 / 时间表 / 适合谁 / 讲师 / 价格 / FAQ / CTA
+     ─────────────────────────────────────────────────────── */
+  :root{
+    --paper:#F5F0E8; --ink:#2D2118; --gold:#C4956A; --terra:#A8553A; --moss:#6B7A5A;
+    --cream:#EFE7D9; --line:#E2D8C7; --white:#FFFDF8; --muted:#7A6A57;
+    --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+       background:var(--paper);color:var(--ink);line-height:1.8;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.94);
+       backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:10px 18px}
+  .brand{font-weight:800;color:var(--terra);margin-right:auto;font-size:15px;letter-spacing:.5px}
+  .nav a{font-size:14px;color:var(--muted);padding:5px 9px;border-radius:8px;white-space:nowrap}
+  .nav a:hover{background:var(--cream);color:var(--ink)}
+
+  /* HERO */
+  .hero{background:linear-gradient(160deg,#FBF7EF 0%,var(--paper) 60%);padding:44px 0 36px}
+  .hero-grid{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+  .hero-txt{flex:1 1 380px}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .tag{background:var(--cream);color:var(--terra);font-size:13px;padding:5px 12px;
+       border-radius:20px;font-weight:600;border:1px solid var(--line)}
+  .hero h1{font-size:30px;line-height:1.35;margin-bottom:12px;font-weight:800}
+  .hero h1 span{color:var(--terra)}
+  .hero .sub{font-size:16px;color:var(--muted);margin-bottom:20px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:700;font-size:15px;transition:.2s}
+  .btn-primary{background:var(--terra);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{background:#924634}
+  .btn-ghost{background:transparent;color:var(--terra);border:1.5px solid var(--gold)}
+  .btn-ghost:hover{background:var(--cream)}
+  .hero-figure{flex:1 1 250px;display:flex;justify-content:center}
+  .hero-img{width:100%;max-width:280px;display:block;border-radius:18px;box-shadow:var(--shadow)}
+
+  /* SECTION */
+  section{padding:38px 0}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .sec-head .emo{font-size:24px}
+  .sec-head h2{font-size:22px;font-weight:800}
+  .sec-head .line{flex:1;height:2px;background:var(--line);border-radius:2px}
+  .muted{color:var(--muted)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .card .ico{font-size:26px;margin-bottom:6px}
+  .card h3{font-size:17px;margin-bottom:5px}
+  .card p{font-size:15px;color:var(--muted)}
+
+  /* 为什么通识 */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .vs .col{border-radius:14px;padding:18px;border:1px solid var(--line)}
+  .vs .bad{background:#F3EDE7}
+  .vs .good{background:#F1F3EC;border-color:var(--moss)}
+  .vs h3{font-size:16px;margin-bottom:8px}
+  .vs li{list-style:none;font-size:14px;color:var(--muted);padding:4px 0}
+
+  /* 课程地图 accordion */
+  .map-figure{display:flex;flex-direction:column;align-items:center;gap:12px;
+       background:var(--white);border:1px solid var(--line);border-radius:16px;
+       padding:22px 18px 16px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .map-figure svg{width:100%;max-width:300px;height:auto}
+  .map-figure figcaption{font-size:13.5px;color:var(--muted);text-align:center;line-height:1.75}
+  .map-figure figcaption b{color:var(--terra)}
+  details.map{border:1px solid var(--line);border-radius:14px;background:var(--white);margin-bottom:12px;overflow:hidden}
+  details.map summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:16px;list-style:none;
+       display:flex;align-items:center;gap:12px}
+  details.map summary::-webkit-details-marker{display:none}
+  details.map summary .t{background:var(--cream);color:var(--terra);font-size:13px;font-weight:700;
+       padding:3px 10px;border-radius:8px;min-width:64px;text-align:center}
+  details.map summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.map[open] summary .arrow{transform:rotate(90deg)}
+  details.map .body{padding:6px 18px 18px;border-top:1px solid var(--line)}
+  details.map .body ul{list-style:none}
+  details.map .body li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px;display:flex;gap:10px}
+  details.map .body li:last-child{border-bottom:none}
+  details.map .body li b{color:var(--terra);min-width:66px;flex-shrink:0}
+
+  /* 时间表 */
+  .tl{border-left:2px solid var(--line);margin-left:8px;padding-left:18px}
+  .tl .row{position:relative;padding:8px 0}
+  .tl .row::before{content:"";position:absolute;left:-25px;top:18px;width:10px;height:10px;
+       border-radius:50%;background:var(--gold);border:2px solid var(--paper)}
+  .tl .row.hl::before{background:var(--terra)}
+  .tl .t{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:.5px}
+  .tl .h{font-size:16px;font-weight:700}
+  .tl .d{font-size:14px;color:var(--muted)}
+  .tl .row.rest .h{color:var(--muted);font-weight:600}
+
+  /* 价格 */
+  .price{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .pcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px;position:relative}
+  .pcard.hot{border:2px solid var(--terra);background:#FBF1EC}
+  .pcard .pill{position:absolute;top:-11px;right:16px;background:var(--terra);color:#fff;
+       font-size:12px;padding:3px 10px;border-radius:10px;font-weight:700}
+  .pcard .nm{font-size:15px;font-weight:700;margin-bottom:4px}
+  .pcard .pn{font-size:30px;color:var(--terra);font-weight:800;line-height:1.2}
+  .pcard .pn small{font-size:14px;color:var(--muted);font-weight:600}
+  .pcard .who{font-size:13px;color:var(--muted);margin-top:4px}
+  .inc{background:var(--cream);border-radius:12px;padding:16px;margin-top:14px}
+  .inc h4{font-size:15px;margin-bottom:6px}
+  .inc li{list-style:none;font-size:14px;color:var(--muted);padding:2px 0}
+
+  /* FAQ */
+  details.faq{border-bottom:1px solid var(--line)}
+  details.faq summary{cursor:pointer;padding:15px 4px;font-weight:600;font-size:16px;list-style:none;
+       display:flex;gap:10px;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary .q{color:var(--terra);font-weight:800}
+  details.faq summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.faq[open] summary .arrow{transform:rotate(90deg)}
+  details.faq .a{padding:0 4px 16px 30px;color:var(--muted);font-size:15px}
+
+  /* 讲师 */
+  .tutor{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+  .tutor-main{flex:1 1 380px;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+  .tutor .ava{width:104px;height:104px;border-radius:50%;background:var(--white);
+       border:2px solid var(--gold);overflow:hidden;flex-shrink:0;
+       display:flex;align-items:center;justify-content:center;
+       box-shadow:var(--shadow)}
+  .tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .tutor .txt{flex:1 1 260px}
+  .tutor h3{font-size:18px;margin-bottom:4px}
+  .tutor p{font-size:15px;color:var(--muted)}
+  .tutor p + p{margin-top:8px}
+  /* 讲师资历标签 */
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0 10px}
+  .chips span{background:var(--cream);border:1px solid var(--line);color:var(--terra);
+       font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px;white-space:nowrap}
+  /* 讲师本人人类图 */
+  .hd-figure{flex:0 0 232px;margin:0;text-align:center}
+  .hd-figure img{width:100%;border-radius:14px;border:1px solid var(--line);
+       background:var(--white);box-shadow:var(--shadow);display:block}
+  .hd-figure figcaption{font-size:13px;color:var(--gold);font-weight:700;
+       letter-spacing:.5px;margin-top:9px}
+
+  /* 最终 CTA */
+  .final{background:linear-gradient(160deg,#FBF1EC,var(--cream));border-radius:20px;padding:30px;
+       margin:10px 0 0;text-align:center}
+  .final h2{font-size:22px;margin-bottom:8px}
+  .final p{color:var(--muted);margin-bottom:18px}
+  .qrow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .qbox{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;width:160px}
+  .qbox img{width:120px;height:120px;object-fit:cover;border-radius:8px;display:block;margin:0 auto}
+  .qbox span{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+  .note{font-size:13px;color:var(--muted);margin-top:14px}
+
+  footer{border-top:1px solid var(--line);margin-top:34px;padding:22px 0 34px;text-align:center;
+       font-size:13px;color:var(--muted)}
+  footer .v{color:var(--gold);font-weight:700}
+  footer .by{display:inline-block;margin-top:6px;color:var(--gold);font-weight:600;letter-spacing:.6px}
+
+  @media (max-width:640px){
+    .hero h1{font-size:25px}
+    .hero-img{max-width:240px}
+    .cards,.price,.vs{grid-template-columns:1fr}
+    .nav a{font-size:13px;padding:4px 7px}
+    section{padding:30px 0}
+    .qrow .qbox{width:140px}
+    .tutor{gap:18px}
+    .tutor .ava{width:88px;height:88px}
+    .hd-figure{flex:1 1 100%;max-width:250px;margin:4px auto 0}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">人类图通识营</span>
+    <a href="#gain">你会得到</a>
+    <a href="#map">课程地图</a>
+    <a href="#schedule">一天安排</a>
+    <a href="#price">价格</a>
+    <a href="#faq">常见问题</a>
+    <a href="#join" style="color:var(--terra);font-weight:700">报名</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-txt">
+      <div class="tag-row">
+        <span class="tag">广州 · 线下全天</span>
+        <span class="tag">零基础可听</span>
+        <span class="tag">含学员手册 + 速查卡</span>
+      </div>
+      <h1>一天，建立<span>人类图</span>的<br>完整知识骨架</h1>
+      <p class="sub">从能量层 → 结构层 → 身份层，三层搭完。<br>拿到自己的图，你就知道该看哪里、怎么看、明天怎么用。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#join">立即报名 · 早鸟 ¥499</a>
+        <a class="btn btn-ghost" href="#map">看看一天讲什么</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <img class="hero-img" src="HD.jpg" alt="人类图人形轮廓示意图">
+    </div>
+  </div>
+</header>
+
+<!-- 你会得到 -->
+<section id="gain">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🎯</span><h2>一天之后，你能当场做到这 6 件事</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🧭</div><h3>说得清「人类图是什么」</h3>
+        <p>能讲出它与星座 / MBTI / 九型 / 占星的根本差异，不再被朋友一句「这不就是算命吗」问住。</p></div>
+      <div class="card"><div class="ico">🗺️</div><h3>标得出自己的能量地图</h3>
+        <p>在图上标出九大中心的定义 / 未定义，说出自己是几分人 —— 知道哪里稳定、哪里开放。</p></div>
+      <div class="card"><div class="ico">⚡</div><h3>用得上「策略 + 权威」</h3>
+        <p>说出自己的类型、策略、内在权威，并举出一个明天就能用的决策场景。</p></div>
+      <div class="card"><div class="ico">🔗</div><h3>看得懂闸门与通道</h3>
+        <p>知道自己的天赋装在哪条回路上，能叫出至少 1 条天赋通道的名字。</p></div>
+      <div class="card"><div class="ico">🪪</div><h3>认得出自己的人生角色</h3>
+        <p>说得出自己最浓的人格原型（研 / 隐 / 殉 / 机 / 异 / 模）与它的阴影，并说出自己的人生角色（Profile）与类型名。</p></div>
+      <div class="card"><div class="ico">📦</div><h3>带走一整套可复用的工具</h3>
+        <p>学员手册 + 6 张知识速查卡 + 电子资料包 + 课后 30 天社群答疑，回家就能给家人讲。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 为什么通识 -->
+<section id="why" style="background:linear-gradient(180deg,transparent,#FBF7EF,transparent)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧩</span><h2>为什么「通识」值得花一整天</h2><span class="line"></span></div>
+    <div class="vs">
+      <div class="col bad">
+        <h3>❌ 只有碎片知识时</h3>
+        <ul>
+          <li>· 记不住：没有位置挂靠，三天就忘</li>
+          <li>· 用不上：知道类型，却不知何时该怎么做</li>
+          <li>· 会打架：不同来源说法冲突，无法判断</li>
+          <li>· 越学越焦虑：每个新词都像新的作业</li>
+        </ul>
+      </div>
+      <div class="col good">
+        <h3>✅ 有了骨架之后</h3>
+        <ul>
+          <li>· 记得住：新知识都能挂到正确位置</li>
+          <li>· 用得上：知道哪一层在给你发信号</li>
+          <li>· 能判断：冲突的说法一眼看出层级错误</li>
+          <li>· 越学越松：因为你只需记框架，不必背细节</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 课程地图 -->
+<section id="map">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🗺️</span><h2>课程地图：四层骨架</h2><span class="line"></span></div>
+
+    <figure class="map-figure">
+      <svg viewBox="0 0 240 270" role="img" aria-label="人类图课程四层骨架图">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C4956A"/><stop offset="100%" stop-color="#A8553A"/>
+          </linearGradient>
+        </defs>
+        <rect x="46" y="12" width="148" height="46" rx="12" fill="#FFFDF8" stroke="#C4956A" stroke-width="2"/>
+        <text x="120" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="#A8553A">M4 收口</text>
+        <text x="120" y="50" text-anchor="middle" font-size="11" fill="#7A6A57">五步读图法</text>
+        <path d="M120 58 L120 74" stroke="#C4956A" stroke-width="2"/>
+        <rect x="36" y="76" width="168" height="50" rx="12" fill="#FFFDF8" stroke="#C4956A" stroke-width="2"/>
+        <text x="120" y="99" text-anchor="middle" font-size="14" font-weight="700" fill="#A8553A">M3 身份层</text>
+        <text x="120" y="115" text-anchor="middle" font-size="11" fill="#7A6A57">6 种人格原型 · 12 人生角色</text>
+        <path d="M120 126 L120 142" stroke="#C4956A" stroke-width="2"/>
+        <rect x="26" y="144" width="188" height="52" rx="12" fill="#FFFDF8" stroke="#C4956A" stroke-width="2"/>
+        <text x="120" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#A8553A">M2 结构层</text>
+        <text x="120" y="184" text-anchor="middle" font-size="11" fill="#7A6A57">64 闸门 · 3 回路 · 36 通道 · 192 交叉</text>
+        <path d="M120 196 L120 212" stroke="#C4956A" stroke-width="2"/>
+        <rect x="16" y="214" width="208" height="52" rx="12" fill="url(#g1)"/>
+        <text x="120" y="238" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFDF8">M1 能量层</text>
+        <text x="120" y="254" text-anchor="middle" font-size="11" fill="#F7E9DC">九大中心 · 类型 · 策略 · 权威</text>
+      </svg>
+      <figcaption>四层骨架：<b>从 M1 能量层往上搭</b> —— 每上一层，回答的问题就更靠近「我是谁」。<br>展开下面五条，看每一层具体讲什么。</figcaption>
+    </figure>
+
+    <details class="map" open>
+      <summary><span class="t">M0 · 30′</span>认知层：人类图是什么 / 不是什么<span class="arrow">›</span></summary>
+      <div class="body"><ul>
+        <li><b>讲什么</b>起源（占星 + 易经 + 卡巴拉 + 脉轮）、应用场景、与四款工具对比</li>
+        <li><b>三个前提</b>去头脑化 · 这是实验不是信仰 · 差异不是优劣</li>
+        <li><b>互动</b>开场三问 + 确认出图（图不准，今天全白听）</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">M1 · 150′</span>能量层：我怎么运转<span class="arrow">›</span></summary>
+      <div class="body"><ul>
+        <li><b>九大中心</b>头部 / 逻辑 / 喉 / G 中心 / 意志力 / 情绪 / 荐骨 / 脾 / 根部</li>
+        <li><b>定义与未定义</b>一分人 · 二分人 · 三分人 · 四分人</li>
+        <li><b>五大类型</b>显示者 · 生产者 · 显示生产者 · 投射者 · 反映者</li>
+        <li><b>策略 / 非我</b>告知 · 回应 · 邀请 · 采样；愤怒 · 挫败 · 苦涩 · 失望</li>
+        <li><b>内在权威</b>情绪 · 荐骨 · 脾 · 意志力 · 自我投射 · 环境 · 月循环</li>
+        <li><b>互动</b>自图标注九大中心 + 决策小实验（权威 vs 心智）</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">M2 · 150′</span>结构层：我有什么配备<span class="arrow">›</span></summary>
+      <div class="body"><ul>
+        <li><b>64 闸门</b>从易卦到人图的最小单位；闸门 → 爻 → 细分的精度层级</li>
+        <li><b>三大回路群</b>个体（突变）/ 集体（逻辑 + 抽象）/ 家族（支持）</li>
+        <li><b>36 条通道</b>定义通道 vs 悬挂闸门（开放接口）</li>
+        <li><b>192 交叉</b>四轮位置 + 右角 / 左角 / 并列</li>
+        <li><b>关系合图</b>连接 · 妥协 · 支配 · 同伴 · 电磁（示例演示，了解即可）</li>
+        <li><b>互动</b>找出你的三个闸门 · 一条通道 · 四轮</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">M3 · 75′</span>身份层：我是谁<span class="arrow">›</span></summary>
+      <div class="body"><ul>
+        <li><b>爻线深解</b>6 种人格原型：研 · 隐 · 殉 · 机 · 异 · 模（爻线来自易经六十四卦的六个层次）</li>
+        <li><b>三种坐标</b>闸门给主题、爻线给风格；完整坐标＝「闸门数字 · 爻线数字」</li>
+        <li><b>12 种人生角色</b>1/3 探索型 · 3/5 破坏创新型 · 4/6 影响者型 · 6/3 永恒学生型 全表</li>
+        <li><b>互动</b>全场的 Profile 配对练习（全天最强共鸣点之一）</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">M4 · 30′</span>收口：怎么用<span class="arrow">›</span></summary>
+      <div class="body"><ul>
+        <li><b>五步读图法</b>类型 → 策略 → 权威 → 定义 → 通道与角色（可带走的核心动作）</li>
+        <li><b>现场示范</b>讲师公开读 1–2 张志愿者图</li>
+        <li><b>路径</b>通识营 → 3 天强化版 → 广州本地沙龙</li>
+      </ul></div>
+    </details>
+  </div>
+</section>
+
+<!-- 时间表 -->
+<section id="schedule" style="background:linear-gradient(180deg,transparent,#FBF7EF,transparent)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🕘</span><h2>一天的时间表</h2><span class="line"></span></div>
+    <div class="tl">
+      <div class="row"><div class="t">09:30</div><div class="h">签到 + 出图检查</div><div class="d">图不对的现场补出，误差 &gt; 15 分钟会改变类型与权威</div></div>
+      <div class="row"><div class="t">09:45</div><div class="h">M0 什么是人类图</div><div class="d">起源 · 应用场景 · vs 星座 / MBTI / 九型 / 占星</div></div>
+      <div class="row hl"><div class="t">10:00</div><div class="h">M1 能量层（上）</div><div class="d">九大中心总览 + 三类中心分组 + 中心详解</div></div>
+      <div class="row"><div class="t">10:30</div><div class="h">🖊 互动 1 · 自图标注九大中心</div><div class="d">标注定义 / 未定义，数出自己是几分人</div></div>
+      <div class="row hl"><div class="t">11:00</div><div class="h">M1 能量层（下）</div><div class="d">五大类型 · 四大策略 · 非我主题 · 内在权威</div></div>
+      <div class="row"><div class="t">11:50</div><div class="h">🧪 互动 2 · 决策小实验</div><div class="d">两人一组，体感「权威的答案」与「心智的答案」</div></div>
+      <div class="row rest"><div class="t">12:30</div><div class="h">午休 90 分钟（不可压缩）</div><div class="d">午餐自理；社群感在间隙发酵</div></div>
+      <div class="row hl"><div class="t">14:00</div><div class="h">M2 结构层（上）</div><div class="d">64 闸门 · 三大回路群 · 36 条天赋通道</div></div>
+      <div class="row"><div class="t">14:28</div><div class="h">🖊 互动 3 / 4 · 找出你的闸门与通道</div><div class="d">三个闸门 + 一条通道 + 一处悬挂闸门</div></div>
+      <div class="row hl"><div class="t">15:40</div><div class="h">M2 结构层（下）</div><div class="d">192 种轮回交叉 + 关系合图示例演示</div></div>
+      <div class="row"><div class="t">16:10</div><div class="h">🖊 互动 5 · 读出你的四轮</div><div class="d">黑太阳 / 红太阳 / 黑地球 / 红地球</div></div>
+      <div class="row rest"><div class="t">16:30</div><div class="h">茶歇 15 分钟</div><div class="d">硬切，不许拖堂</div></div>
+      <div class="row hl"><div class="t">16:45</div><div class="h">M3 身份层</div><div class="d">爻线深解 → 6 种人格原型 → 12 种人生角色</div></div>
+      <div class="row"><div class="t">17:50</div><div class="h">🤝 互动 6 · Profile 配对练习</div><div class="d">找到同角色的人，互相采访</div></div>
+      <div class="row hl"><div class="t">18:00</div><div class="h">M4 收口 · 现场读图示范</div><div class="d">五步读图法 + 讲师公开读 1–2 张图</div></div>
+      <div class="row"><div class="t">18:30</div><div class="h">咨询角（一对一答疑 + 报名）</div><div class="d">加群、报名 3 天版、提问</div></div>
+    </div>
+    <p class="muted" style="font-size:14px;margin-top:14px">⏱ 全天接触时长 7.25 小时，每 45 分钟一次动笔 / 动身 —— 这是对抗信息密度的核心设计。</p>
+  </div>
+</section>
+
+<!-- 适合谁 -->
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🙋</span><h2>谁适合来 / 谁不适合</h2><span class="line"></span></div>
+    <div class="vs">
+      <div class="col good">
+        <h3>✅ 欢迎来</h3>
+        <ul>
+          <li>· 听过碎片（"我好像是生产者？"），想要一张完整地图</li>
+          <li>· 学过星座 / MBTI / 九型，想找一个能落到决策与身体的工具</li>
+          <li>· 上过 7 天精华版，知识点散着没成体系</li>
+          <li>· 想成为领读者，先确认自己是否真的喜欢这套体系</li>
+        </ul>
+      </div>
+      <div class="col bad">
+        <h3>⚠️ 请先别来</h3>
+        <ul>
+          <li>· 想当场被"算命"、要一个标准答案的人</li>
+          <li>· 无法连续投入一天的人（信息密度高，缺课即断层）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 讲师 -->
+<section id="tutor" style="background:linear-gradient(180deg,transparent,#FBF7EF,transparent)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🎙️</span><h2>讲师</h2><span class="line"></span></div>
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p>人类图领读者计划发起人</p>
+          <p>真好玩人类图平台创始人</p>
+          <p>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源企业、软件公司、保险公司、互联网公司、电商平台等业态。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 价格 -->
+<section id="price">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">💰</span><h2>价格与权益</h2><span class="line"></span></div>
+    <div class="price">
+      <div class="pcard hot">
+        <span class="pill">主推 · 限时</span>
+        <div class="nm">早鸟价</div>
+        <div class="pn">¥499</div>
+        <div class="who">开营前 14 天报名</div>
+      </div>
+      <div class="pcard">
+        <div class="nm">正价</div>
+        <div class="pn">¥699</div>
+        <div class="who">常规报名</div>
+      </div>
+      <div class="pcard">
+        <div class="nm">老学员价</div>
+        <div class="pn">¥399</div>
+        <div class="who">7 天精华版 / 沙龙成员</div>
+      </div>
+      <div class="pcard">
+        <div class="nm">双人同行</div>
+        <div class="pn">¥899 <small>/ 2 人</small></div>
+        <div class="who">¥449.5 / 人，带朋友一起来</div>
+      </div>
+    </div>
+    <div class="inc">
+      <h4>费用包含</h4>
+      <ul>
+        <li>✅ 全天课程（7.25 接触小时）+ 学员手册（A4 纸质）+ 6 张知识速查卡</li>
+        <li>✅ 茶歇 · 电子资料包（课件 PDF / 64 闸门速查表 / 36 通道清单 / 12 Profile 卡）</li>
+        <li>✅ 课后 30 天社群答疑 · D+7 线上答疑 60 分钟（含回放）</li>
+        <li>❌ 不含午餐（午休 90 分钟，周边自理）；一对一深度解读可现场预约，另计</li>
+      </ul>
+    </div>
+    <p class="muted" style="font-size:14px;margin-top:12px">退改规则：本活动为线下现场服务，名额有限，<b>售出后不支持退款</b>，请确认档期后再报名。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">❓</span><h2>常见问题</h2><span class="line"></span></div>
+
+    <details class="faq" open>
+      <summary><span class="q">Q1</span>完全没基础，能听懂吗？<span class="arrow">›</span></summary>
+      <div class="a">能。通识营的设计前提就是「零基础可听」——体系精讲，不假设任何前置知识。出生时间越准确越好；<b>若不确定具体时刻，先取当日中午 12 点出图即可</b>，学习过程中再逐步校准。</div>
+    </details>
+    <details class="faq">
+      <summary><span class="q">Q2</span>和「1 天体验营」有什么不一样？<span class="arrow">›</span></summary>
+      <div class="a">体验营是半日 5.5 小时的轻量引流场，靠体验与现场读盘建立兴趣；通识营是全天 7.25 小时的内容交付，会把九大中心、64 闸门、36 通道、192 交叉、12 人生角色全部讲透。一个让你"想继续"，一个让你"真搞懂"。</div>
+    </details>
+    <details class="faq">
+      <summary><span class="q">Q3</span>一天讲这么多，我怕记不住。<span class="arrow">›</span></summary>
+      <div class="a">这是设计时就预判到的问题，所以用了三个办法：① 每 45 分钟一次动笔 / 动身；② 每个模块用「三句话收口」，把信息压成可带走的东西；③ 课后发放资料包 + D+1 回顾长图 + D+7 答疑。另外开场就会明说：今天听得懂<b>框架</b>即可，细节留给 3 天版。</div>
+    </details>
+    <details class="faq">
+      <summary><span class="q">Q4</span>出生时间不记得怎么办？<span class="arrow">›</span></summary>
+      <div class="a">若不确定具体出生时刻，可以取当日中午 12 点先出图，然后在学习过程中逐步校准。</div>
+    </details>
+    <details class="faq">
+      <summary><span class="q">Q5</span>我上过 7 天精华版，还有必要来吗？<span class="arrow">›</span></summary>
+      <div class="a">有。7 天版是分天推进、每天一个主题；通识营的价值在于<b>把散落的知识点串成骨架</b>，并补齐 7 天版里被压缩的回路、通道与交叉部分。老学员还可享 ¥399 专属价。</div>
+    </details>
+    <details class="faq">
+      <summary><span class="q">Q6</span>课后还有后续吗？<span class="arrow">›</span></summary>
+      <div class="a">有。路径是：通识营（看懂）→ 3 天强化版（会读 + 身份锚定 + 主理人孵化）→ 广州本地月度沙龙（活出来）。当天报名 3 天版有 30 天限时权益。</div>
+    </details>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="join">
+  <div class="wrap">
+    <div class="final">
+      <h2>下一场通识营 · 广州</h2>
+      <p>名额有限，小班制（建议 20–30 人），报满即止。<br>报名后 24 小时内会收到预习包与出图教程。</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="#join">立即报名 · 早鸟 ¥499</a>
+        <a class="btn btn-ghost" href="#map">再看看课程地图</a>
+      </div>
+      <div class="qrow">
+        <div class="qbox"><img src="wechat-qr.png" alt="报名二维码"><span>扫码报名</span></div>
+        <div class="qbox"><img src="Aura.png" alt="能量圈社群"><span>加入能量圈</span></div>
+      </div>
+      <p class="note">本活动为线下现场服务，名额有限，报满即止。售出后不支持退款，请确认档期后报名。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    人类图领读者计划 · 1天通识营 · <span class="v">V1.7</span><br>
+    <span class="by">Powered by Kan Man Tang</span>
+  </div>
+</footer>
+
+</body>
+</html>

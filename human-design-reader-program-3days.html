@@ -6,6 +6,20 @@
 <title>人类图领读者计划 · 3天强化版</title>
 <style>
   /* ── 变更记录 ───────────────────────────────────────────
+     V1.7 (2026-10-13) 新增讲师模块：从 hd-BaseCamp-1day.html（V6 讲师区）
+                       同步 —— 头像 tutor.png + 头衔三行 + 资历 chips +
+                       本人人类图 chart-kan-man-tang.jpg（配「一图胜千言 ·
+                       以图会友」）；样式 .tutor/.chips/.hd-figure 一并搬入，
+                       640px 断点下人类图换行居中；nav 新增「讲师」锚点。
+                       三页版本统一为 V1.7。
+     V1.6 (2026-10-13) CSS 类名去英文残留：.ladder → .path-grid
+                       （本文件无「成长 ladder」正文文案，仅类名；
+                        注意本页已有 .path（flex，第 130 行成长路径图
+                        在用），故复用 .path-grid 而非 .path）
+     V1.5 (2026-10-13) 移动端 hero 图不再隐藏：原 @media(max-width:560px)
+                       的 .hero-figure{display:none} 取消，改在 640px
+                       断点缩至 240px（换行间距由 flex gap 处理），
+                       与 hd-BaseCamp-1day.html 口径一致（该图有信息量）
      V1.4 (2026-10-13) 报名区二维码改为引用根目录图片：
                        ../wechat-qr.jpg → wechat-qr.png、
                        ../能量圈专属二维码.png → Aura.png
@@ -71,7 +85,7 @@
   .card h3{font-size:17px;margin-bottom:6px}
   .card p{font-size:15px;color:var(--muted)}
   /* positioning */
-  .ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .path-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
   .step{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px}
   .step .n{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
   .step h3{font-size:17px;margin:4px 0 6px}
@@ -156,12 +170,35 @@
   footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
   footer .v{color:var(--gold);font-weight:700}
   footer .by{display:inline-block;margin-top:6px;color:var(--gold);font-weight:600;letter-spacing:.6px}
+  /* ── 讲师（V1.7 从 hd-BaseCamp-1day.html 同步） ────────── */
+  .tutor{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+  .tutor-main{flex:1 1 380px;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+  .tutor .ava{width:104px;height:104px;border-radius:50%;background:var(--white);
+       border:2px solid var(--gold);overflow:hidden;flex-shrink:0;
+       display:flex;align-items:center;justify-content:center;
+       box-shadow:var(--shadow)}
+  .tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .tutor .txt{flex:1 1 260px}
+  .tutor h3{font-size:18px;margin-bottom:4px}
+  .tutor p{font-size:15px;color:var(--muted)}
+  .tutor p + p{margin-top:8px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0 10px}
+  .chips span{background:var(--cream);border:1px solid var(--line);color:var(--terra);
+       font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px;white-space:nowrap}
+  .hd-figure{flex:0 0 232px;margin:0;text-align:center}
+  .hd-figure img{width:100%;border-radius:14px;border:1px solid var(--line);
+       background:var(--white);box-shadow:var(--shadow);display:block}
+  .hd-figure figcaption{font-size:13px;color:var(--gold);font-weight:700;
+       letter-spacing:.5px;margin-top:9px}
   @media (max-width:640px){
     .rules{grid-template-columns:repeat(2,1fr)}
+    .hero-img{max-width:240px}             /* V1.5 移动端保留 hero 图，仅缩尺寸 */
+    .tutor{gap:18px}
+    .tutor .ava{width:88px;height:88px}
+    .hd-figure{flex:1 1 100%;max-width:250px;margin:4px auto 0}
   }
   @media (max-width:560px){
     .hero h1{font-size:24px}
-    .hero-figure{display:none}
     .cards{grid-template-columns:1fr}
     .qrow .qbox{width:140px}
   }
@@ -182,6 +219,7 @@
     <a href="#map">每日地图</a>
     <a href="#exp">现场独有</a>
     <a href="#wheel">结营飞轮</a>
+    <a href="#tutor">讲师</a>
     <a href="#rule">报名须知</a>
     <a href="#faq">FAQ</a>
     <a href="#join">报名</a>
@@ -229,7 +267,7 @@
   <div class="wrap">
     <div class="sec-head"><span class="emo">⚖️</span><h2>为什么是「3 天」，而不是 1 天或 7 天</h2><span class="line"></span></div>
     <p class="muted" style="margin-bottom:18px">1 天只能做体验与招募，培养不出读盘手感与社群身份；7 天线上已证明内容可压缩，但 30% 打卡说明「独自学」走不通。3 天是最小能形成「场域记忆 + 读盘肌肉记忆 + 同伴契约」的单元。</p>
-    <div class="ladder">
+    <div class="path-grid">
       <div class="step"><div class="n">L1 · 线上</div><h3>7天精华版</h3><p>通识入门，预习包来源。</p></div>
       <div class="step"><div class="n">L2 · 锚点</div><h3>1天体验营</h3><p>低门槛入口，转化来源。</p></div>
       <div class="step here"><div class="n">L3 · 身份锚</div><h3>3天强化版</h3><p>读全图 + 主理人孵化。<span class="pill">你在这里</span></p></div>
@@ -381,6 +419,33 @@
   </div>
 </section>
 
+<!-- TUTOR -->
+<section id="tutor" style="background:linear-gradient(180deg,transparent,#FBF7EF,transparent)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🎙️</span><h2>讲师</h2><span class="line"></span></div>
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p>人类图领读者计划发起人</p>
+          <p>真好玩人类图平台创始人</p>
+          <p>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源企业、软件公司、保险公司、互联网公司、电商平台等业态。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- RULE -->
 <section id="rule">
   <div class="wrap">
@@ -435,7 +500,7 @@
 
 <footer>
   <div class="wrap">
-    人类图领读者计划 · 3天强化版 · <span class="v">V1.4</span><br>
+    人类图领读者计划 · 3天强化版 · <span class="v">V1.7</span><br>
     <span class="by">Powered by Kan Man Tang</span>
   </div>
 </footer>
