@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="人类图 1–6 爻觉醒歌集《六爻》——六首主题曲完整歌词与 Suno 生成提示词">
+<title>六爻 · 人类图 1–6 爻觉醒歌集</title>
+<style>
+/* ============================================================
+   变更记录
+   V1  2026-10-15  首版：人类图 1–6 爻觉醒歌集《六爻》
+                   · 上半 01–03（个人层面 · 向内）：挖井的人 / 别人先看见的我 / 第一百次
+                   · 下半 04–06（超个人层面 · 向外）：朋友的朋友 / 别把我当解药 / 屋顶上的人
+                   · 每首：核心一句 + 完整歌词（方括号结构标签，可直接贴 Suno）
+                          + STYLE PROMPT + 爻位要点 + 一键复制
+                   · 爻位结构 SVG 图（viewBox 360×250，手机端最小字号 12.4px）
+   配色沿用暖棕金：#F5F0E8 / #C4956A / #2D2118
+   ============================================================ */
+:root{
+  --bg:#F5F0E8;
+  --paper:#FFFDF9;
+  --ink:#2D2118;
+  --ink-soft:#4A3B2E;
+  --muted:#8A7864;
+  --gold:#C4956A;
+  --gold-deep:#A87B4F;
+  --earth:#B08968;
+  --deep:#7A5A3E;
+  --line:#E8DCCB;
+  --tint:#FBF4E9;
+  --shadow:0 1px 2px rgba(45,33,24,.05), 0 10px 28px rgba(45,33,24,.06);
+  --serif:"KaiTi","Kaiti SC","STKaiti","Songti SC","Noto Serif SC",serif;
+  --sans:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px;margin:0 auto;padding:36px 20px 72px;}
+
+/* ---------- 头部 ---------- */
+header{text-align:center;padding-bottom:26px;}
+.eyebrow{
+  display:inline-block;font-size:12.5px;letter-spacing:.22em;color:var(--gold-deep);
+  border:1px solid var(--line);background:var(--paper);border-radius:999px;
+  padding:5px 16px 5px 18px;margin-bottom:20px;
+}
+h1{
+  font-family:var(--serif);font-size:clamp(40px,11vw,58px);font-weight:400;
+  letter-spacing:.14em;margin:0 0 8px;line-height:1.25;
+}
+.subtitle{font-size:14.5px;color:var(--muted);letter-spacing:.1em;margin:0 0 8px;}
+.lede{
+  font-size:14px;color:var(--ink-soft);max-width:520px;margin:16px auto 0;line-height:1.9;
+}
+.credit{
+  display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);
+  padding-top:14px;margin-top:20px;
+}
+
+/* ---------- 目录 ---------- */
+.toc{
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:26px 0 22px;
+}
+.toc a{
+  font-size:13px;font-weight:600;text-decoration:none;color:var(--ink-soft);
+  background:var(--paper);border:1px solid var(--line);border-radius:999px;
+  padding:8px 14px;transition:background .18s,border-color .18s,color .18s;
+}
+.toc a:hover{background:var(--tint);border-color:var(--gold);color:var(--ink);}
+.toc a b{color:var(--gold-deep);font-family:var(--serif);font-size:15px;margin-right:3px;}
+
+/* ---------- 卡片 ---------- */
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;
+  padding:24px 22px;box-shadow:var(--shadow);margin-bottom:22px;
+}
+.sec-title{
+  display:flex;align-items:baseline;gap:10px;margin:0 0 4px;
+  font-size:15px;font-weight:700;letter-spacing:.06em;
+}
+.sec-title .num{
+  font-family:var(--serif);font-size:22px;color:var(--gold);font-weight:400;line-height:1;
+}
+.sec-desc{font-size:13px;color:var(--muted);margin:0 0 18px;}
+
+/* ---------- 结构图 ---------- */
+.map-svg{display:block;width:100%;max-width:460px;margin:0 auto;}
+
+/* ---------- 歌曲卡片 ---------- */
+.song{
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;
+  padding:24px 22px;box-shadow:var(--shadow);margin-bottom:22px;
+  scroll-margin-top:18px;
+}
+.song-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px;}
+.song-no{
+  flex:0 0 auto;font-family:var(--serif);font-size:26px;color:var(--gold);
+  line-height:1;letter-spacing:.06em;padding-top:4px;
+}
+.song-title{
+  font-family:var(--serif);font-size:25px;font-weight:400;letter-spacing:.05em;
+  margin:0 0 4px;line-height:1.35;
+}
+.song-meta{font-size:12.5px;color:var(--muted);letter-spacing:.04em;margin:0;}
+.core{
+  background:var(--tint);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;
+  padding:11px 15px;margin:16px 0 20px;font-size:14px;color:var(--ink-soft);
+}
+.core b{color:var(--ink);}
+
+/* ---------- 歌词 ---------- */
+.blk-tag{
+  display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.1em;
+  color:var(--paper);background:var(--gold-deep);border-radius:5px;
+  padding:3px 9px;margin-bottom:10px;
+}
+.lyr{
+  white-space:pre-line;font-family:var(--serif);font-size:17px;line-height:2;
+  color:var(--ink-soft);padding-left:14px;border-left:2px solid var(--line);
+}
+
+/* ---------- 提示词 ---------- */
+.prompt-label{
+  font-size:12.5px;font-weight:700;color:var(--gold-deep);
+  letter-spacing:.06em;margin:22px 0 8px;display:block;
+}
+.prompt-box{
+  background:#2D2118;color:#F5F0E8;border-radius:12px;padding:15px 17px;
+  font-family:"Consolas","Menlo","Courier New",monospace;font-size:13px;
+  line-height:1.8;white-space:pre-line;overflow-x:auto;
+}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+button{
+  font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--ink);
+  background:var(--tint);border:1px solid var(--line);border-radius:10px;
+  padding:11px 18px;min-height:44px;cursor:pointer;
+  transition:background .18s,border-color .18s,transform .18s;
+}
+button:hover{background:#F6EADA;border-color:var(--gold);}
+button:active{transform:translateY(1px);}
+
+/* ---------- 要点 ---------- */
+.points{
+  margin:20px 0 0;padding:16px 18px;background:#FBF8F3;
+  border:1px dashed var(--line);border-radius:12px;
+  font-size:14px;line-height:1.9;color:var(--ink-soft);
+}
+.points b{color:var(--ink);}
+.points em{font-style:normal;color:var(--gold-deep);font-weight:700;}
+
+/* ---------- 页脚 ---------- */
+footer{
+  text-align:center;font-size:12.5px;color:var(--muted);line-height:2;
+  border-top:1px solid var(--line);padding-top:22px;margin-top:34px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:480px){
+  .wrap{padding:26px 15px 56px;}
+  .card,.song{padding:20px 17px;border-radius:14px;}
+  .song-title{font-size:22px;}
+  .lyr{font-size:16px;line-height:1.95;padding-left:11px;}
+  .toc a{font-size:12.5px;padding:7px 12px;}
+  button{width:100%;}
+  .btn-row{flex-direction:column;}
+  .prompt-box{font-size:12px;padding:13px 14px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">人类图 · 爻位歌集</div>
+    <h1>六爻</h1>
+    <p class="subtitle">1–6 爻觉醒歌集 · 六首主题曲</p>
+    <p class="lede">前三条爻向内走：研究、天赋、碰撞。后三条爻向外走：影响、实用、榜样。<br>
+       一个人身上的六条爻，就是这六首歌。</p>
+    <div class="credit">
+      <span>词 · Kan Man Tang × AI</span>
+      <span>曲 · Suno（待生成）</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="#l1"><b>01</b>根基</a>
+    <a href="#l2"><b>02</b>天赋</a>
+    <a href="#l3"><b>03</b>发现</a>
+    <a href="#l4"><b>04</b>影响</a>
+    <a href="#l5"><b>05</b>实用</a>
+    <a href="#l6"><b>06</b>榜样</a>
+  </nav>
+
+  <!-- ================= 结构图 ================= -->
+  <section class="card">
+    <h2 class="sec-title"><span class="num">序</span>爻位结构</h2>
+    <p class="sec-desc">1–3 爻是个人层面的功课，4–6 爻是超个人层面的功课。</p>
+
+    <svg class="map-svg" viewBox="0 0 360 250" width="100%" role="img"
+         aria-label="人类图爻位结构图：1到3爻为个人层面向内，4到6爻为超个人层面向外">
+      <defs>
+        <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#C4956A" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#C4956A" stop-opacity="0.07"/>
+        </linearGradient>
+      </defs>
+
+      <text x="180" y="20" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#A87B4F">个人层面 · 向内</text>
+
+      <!-- 上排 1-2-3 -->
+      <line x1="82" y1="62" x2="156" y2="62" stroke="#D9C7AC" stroke-width="1.6"/>
+      <path d="M152,56 L161,62 L152,68 Z" fill="#D9C7AC"/>
+      <line x1="202" y1="62" x2="276" y2="62" stroke="#D9C7AC" stroke-width="1.6"/>
+      <path d="M272,56 L281,62 L272,68 Z" fill="#D9C7AC"/>
+
+      <circle cx="60" cy="62" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="60" y="69" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">1</text>
+      <text x="60" y="103" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">根基</text>
+
+      <circle cx="180" cy="62" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="180" y="69" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">2</text>
+      <text x="180" y="103" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">天赋</text>
+
+      <circle cx="300" cy="62" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="300" y="69" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">3</text>
+      <text x="300" y="103" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">发现</text>
+
+      <!-- 分隔 -->
+      <line x1="16" y1="128" x2="344" y2="128" stroke="#E8DCCB" stroke-width="1" stroke-dasharray="5 6"/>
+      <text x="180" y="150" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#7A5A3E">超个人层面 · 向外</text>
+
+      <!-- 下排 4-5-6 -->
+      <line x1="82" y1="192" x2="156" y2="192" stroke="#D9C7AC" stroke-width="1.6"/>
+      <path d="M152,186 L161,192 L152,198 Z" fill="#D9C7AC"/>
+      <line x1="202" y1="192" x2="276" y2="192" stroke="#D9C7AC" stroke-width="1.6"/>
+      <path d="M272,186 L281,192 L272,198 Z" fill="#D9C7AC"/>
+
+      <circle cx="60" cy="192" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="60" y="199" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">4</text>
+      <text x="60" y="233" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">影响</text>
+
+      <circle cx="180" cy="192" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="180" y="199" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">5</text>
+      <text x="180" y="233" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">实用</text>
+
+      <circle cx="300" cy="192" r="21" fill="url(#nodeGrad)" stroke="#C4956A" stroke-width="1.6"/>
+      <text x="300" y="199" text-anchor="middle" font-size="18" font-family="KaiTi, serif" fill="#A87B4F">6</text>
+      <text x="300" y="233" text-anchor="middle" font-size="14" font-family="Microsoft YaHei, sans-serif"
+            font-weight="700" fill="#4A3B2E">榜样</text>
+    </svg>
+  </section>
+
+  <!-- ================= 01 一爻 ================= -->
+  <article class="song" id="l1">
+    <div class="song-head">
+      <div class="song-no">01</div>
+      <div>
+        <h3 class="song-title">挖井的人</h3>
+        <p class="song-meta">一爻 · 研究者 Investigator · 礼物：根基</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>我怕的不是慢，是我挖错了地方。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly1">[Intro]
+别人在上面盖楼
+我在下面挖一口井
+
+[Verse 1]
+别人都在往上盖 我往下挖一口井
+他们问我什么时候好 我说不知道
+手上的泥干了一层 又沾上一层
+我怕的不是慢 是我挖错了地方
+
+[Pre-Chorus]
+所以我一遍一遍翻 一遍一遍问
+这块地底下有没有水 我拿什么担保
+可心里有个声音 一直没停
+再挖一尺 就看见了
+
+[Chorus]
+我是挖井的人 一辈子往下深
+别人要的是快 我要的是稳
+你别急着问我 到底还有多深
+水出来那天 我会第一个喊你
+我是挖井的人 一个人在底下
+不是我不合群 是这活只能自己来
+等我摸到根 我会上来告诉你
+那口水 甜得值得你等
+
+[Verse 2]
+他们都说我太慢 别人早就喝上了
+我说那口水 本来就从我这儿出来的
+我把每块石头都摸过 才肯再往下
+我不想到最后 有人喝到浑的
+
+[Pre-Chorus]
+所以我一遍一遍翻 一遍一遍问
+万一这里没有水 我拿什么交差
+可心里那个声音 还在一直说
+再挖一尺 就看见了
+
+[Chorus]
+我是挖井的人 一辈子往下深
+别人要的是快 我要的是稳
+你别急着问我 到底还有多深
+水出来那天 我会第一个喊你
+我是挖井的人 一个人在底下
+不是我不合群 是这活只能自己来
+等我摸到根 我会上来告诉你
+那口水 甜得值得你等
+
+[Bridge]
+后来我才明白 不安全感不是敌人
+是它在替所有人 先往下探一段
+我不需要准备好 我只需要还愿意挖
+底下的黑 只是黑 不是错
+
+[Final Chorus]
+我是挖井的人 我不再往上争
+我挖的每一寸 都成了别人的地基
+你现在踩的路 也许是我的井口
+别谢我 你往前走就行
+
+[Outro]
+再挖一尺
+就看见了</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty1">Mandarin indie folk, sparse fingerpicked guitar, deep soft male vocal, low cello drone, patient and grounded, 68 BPM, intimate storytelling</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly1', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty1', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>1 爻的主题是<em>根基</em>。他必须把一件事研究透，才有安全感去行动。1 爻天生怀疑自己"还没准备好"——但这份不安全感，恰恰是他在替所有人打地基。<br>
+      <b>陷阱 ·</b>永远停在准备阶段，把"再研究一下"当成逃避。<br>
+      <b>礼物 ·</b>成为别人可以倚靠的基础——你踩的那条路，是他的井口。
+    </div>
+  </article>
+
+  <!-- ================= 02 二爻 ================= -->
+  <article class="song" id="l2">
+    <div class="song-head">
+      <div class="song-no">02</div>
+      <div>
+        <h3 class="song-title">别人先看见的我</h3>
+        <p class="song-meta">二爻 · 隐士 Hermit · 礼物：天赋</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>我的天赋不在我眼睛里。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly2">[Intro]
+我屋子里的光
+我自己看不见
+
+[Verse 1]
+我屋子里的光 我一直看不见
+它照在墙上 照了二十几年
+我以为那是灯 是窗外透进来的
+直到有人敲门说 你家好亮
+
+[Pre-Chorus]
+我从来没觉得自己特别
+我只是做我天生就会的事
+你们说我隐藏 其实我没藏
+我只是不知道 那也算一种光
+
+[Chorus]
+你要敲我的门 我才知道我在
+你要喊我的名 我才敢走出来
+我的天赋不在我眼睛里
+在你看我的那一刻 才亮起来
+你要敲我的门 我才知道我在
+你要喊我的名 我才敢走出来
+我不是谦虚 我是真的不知道
+原来我身上 有你在找的东西
+
+[Verse 2]
+我坐在最里面 不是我不想给
+是我怕一出去 就发现什么都没有
+所以他们喊我 我装作没听见
+喊到第三次 我才慢慢开门
+
+[Pre-Chorus]
+我从来没觉得自己特别
+我只是做我天生就会的事
+你们说我神秘 其实我只是
+不知道该怎么 把自己说清楚
+
+[Chorus]
+你要敲我的门 我才知道我在
+你要喊我的名 我才敢走出来
+我的天赋不在我眼睛里
+在你看我的那一刻 才亮起来
+你要敲我的门 我才知道我在
+你要喊我的名 我才敢走出来
+我不是谦虚 我是真的不知道
+原来我身上 有你在找的东西
+
+[Bridge]
+后来我懂了 隐士不是躲起来
+是等一个真的懂得要的人来
+我不需要推销 我也不需要证明
+我只需要 你真心敲这一下
+
+[Final Chorus]
+你敲了我的门 我才知道我在
+你喊了我的名 我就敢走出来
+我的天赋不在我眼睛里
+是你们看我的时候 我才是我
+
+[Outro]
+门没锁
+你来就行</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty2">Mandarin indie folk, soft piano and acoustic guitar, breathy warm male vocal, gentle and a little shy, a quiet sense of light, 72 BPM</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly2', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty2', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>2 爻自带<em>天赋</em>，但那是"别人先看见的"——他自己看不见。所以 2 爻需要被<em>召唤</em>：门一直没锁，只是在等一个真正懂得要的人来敲。<br>
+      <b>陷阱 ·</b>缩回屋里不出来，久到连自己都不相信身上有东西。<br>
+      <b>礼物 ·</b>一份不需要努力就存在的自然天赋——只要有人真心敲那一下。
+    </div>
+  </article>
+
+  <!-- ================= 03 三爻 ================= -->
+  <article class="song" id="l3">
+    <div class="song-head">
+      <div class="song-no">03</div>
+      <div>
+        <h3 class="song-title">第一百次</h3>
+        <p class="song-meta">三爻 · 烈士 Martyr · 礼物：发现</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>你走的顺路，可能是我摔出来的。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly3">[Intro]
+第一次 第二次 第三次
+后来我就不数了
+
+[Verse 1]
+我第一次撞墙 以为是墙的错
+第二次撞墙 以为是我太急
+第三次第四次 我数不清了
+后来我才知道 墙也是会说话的
+
+[Pre-Chorus]
+每一次失败 都在教我一点什么
+我不怕难看 我怕的是不敢再试
+别人看我 像在乱撞
+其实我在量 这个世界有多硬
+
+[Chorus]
+第一百次 我还在试
+不是我不服输 是我还没试到底
+你可以笑我 摔得不太体面
+可每一次爬起来 我都多懂了一厘米
+第一百次 我还在试
+我的答案不在书里 在地上
+
+[Verse 2]
+我不是笨 我是用身体在学
+书上写的道理 我得撞一次才真的信
+有人劝我绕路 我说那条路我走过
+你绕过的东西 后来还是要还
+
+[Pre-Chorus]
+每一次失败 都在教我一点什么
+我不怕难看 我怕的是不敢再试
+如果一定要有人先摔
+那就我摔 你们看着就好
+
+[Chorus]
+第一百次 我还在试
+不是我不服输 是我还没试到底
+你可以笑我 摔得不太体面
+可每一次爬起来 我都多懂了一厘米
+第一百次 我还在试
+我的答案不在书里 在地上
+
+[Bridge]
+后来我明白 我不是烈士
+我只是替大家 先走了一遍错的路
+我不需要勋章 也不需要谁同情
+我摔出来的每条道 都成了你们的近路
+
+[Final Chorus]
+第一百次 我还在试
+不是我不服输 是我还没试到底
+你走的顺路 可能是我摔出来的
+别说我惨 我这是在做研究
+
+[Outro]
+第一次到第一百次
+中间那些，都是我的</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty3">Mandarin folk rock, driving acoustic strumming, raspy male vocal, resilient and scrappy, drums enter on the chorus, 88 BPM</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly3', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty3', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>3 爻是"用身体学"的爻，靠<em>碰撞、试错、发现</em>来认识世界。他不是笨，他是在做研究——歌里那句"别说我惨，我这是在做研究"就是给 3 爻的正名。<br>
+      <b>陷阱 ·</b>掉进"烈士"的角色，把失败当成身份，用同一个方式反复撞同一堵墙。<br>
+      <b>礼物 ·</b>他摔出来的每条道，都成了别人的近路。
+    </div>
+  </article>
+
+  <!-- ================= 04 四爻 ================= -->
+  <article class="song" id="l4">
+    <div class="song-head">
+      <div class="song-no">04</div>
+      <div>
+        <h3 class="song-title">朋友的朋友</h3>
+        <p class="song-meta">四爻 · 机会主义者 Opportunist · 礼物：影响</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>我最后要的不是生意，是那句"这个人，你可以放心"。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly4">[Intro]
+我不做广告
+我的话靠人传
+
+[Verse 1]
+我不做广告 我的话靠人传
+一个人认识我 会带三个人来
+我没有店面 我的门开在你们家
+我坐在你们中间 我本来就在
+
+[Pre-Chorus]
+所以我很小心 我说话算话
+我给你的东西 得让你还想再来
+我不图快 我图的是很久以后
+你还愿意 把我介绍给你妈
+
+[Chorus]
+我的机会 藏在朋友的朋友中间
+一句话传出去 走得比我还远
+我不是什么人物 我只是一道门
+你推开我 就看见了别人
+我的机会 藏在朋友的朋友中间
+一句话传出去 走得比我还远
+我最后要的不是生意 是那一句
+这个人 你可以放心
+
+[Verse 2]
+有一次我把朋友 当成了台阶
+那一年 我的门 一扇都没开
+我才懂得 关系不是拿来用的
+是拿来 好好待着的人
+
+[Pre-Chorus]
+所以我很小心 我说话算话
+我给你的东西 得让你还想再来
+我不图快 我图的是很久以后
+你还愿意 把我说给别人听
+
+[Chorus]
+我的机会 藏在朋友的朋友中间
+一句话传出去 走得比我还远
+我不是什么人物 我只是一道门
+你推开我 就看见了别人
+我的机会 藏在朋友的朋友中间
+一句话传出去 走得比我还远
+我最后要的不是生意 是那一句
+这个人 你可以放心
+
+[Bridge]
+后来我懂了 影响不是说服
+是我在你生命里 留下一个真的印记
+我不需要认识很多人
+我只需要 让认识我的人 变好一点
+
+[Final Chorus]
+我的机会 藏在朋友的朋友中间
+一句话传出去 走得比我还远
+我不是什么人物 我只是一道门
+你推开我 就看见了别人
+我最后要的不是生意 是那一句
+这个人 你可以放心
+
+[Outro]
+你把我介绍给谁
+我都不会让你丢脸</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty4">Mandarin warm folk, strummed acoustic guitar, harmonica, male lead with group backing vocals on the chorus, friendly and heartfelt, 80 BPM</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly4', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty4', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>4 爻是第一个<em>超个人</em>的爻。他的一切机会都通过关系网络传递——不是他多能说，而是他是一座桥。他的门开在朋友家里。<br>
+      <b>陷阱 ·</b>把友谊当资源。一旦开始计算，门就全关了（歌里"那一年我的门一扇都没开"）。<br>
+      <b>礼物 ·</b>真实关系里的影响力。4 爻真正在乎的，是他人嘴里那句"这个人，你可以放心"。
+    </div>
+  </article>
+
+  <!-- ================= 05 五爻 ================= -->
+  <article class="song" id="l5">
+    <div class="song-head">
+      <div class="song-no">05</div>
+      <div>
+        <h3 class="song-title">别把我当解药</h3>
+        <p class="song-meta">五爻 · 异端者 Heretic · 礼物：实用</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>你要的不是神，你要的是能走。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly5">[Intro]
+你先别把希望
+放在我身上
+
+[Verse 1]
+你一开口就说 你一定有办法
+我还没答话 你就把希望放我身上
+这种眼神 我见过太多次
+像看一个 什么都能修好的人
+
+[Pre-Chorus]
+可我跟你一样 我也会错
+我给的答案 也得我自己去试
+我不是不想救 我是想救得成
+你别把希望 全押在我身上
+
+[Chorus]
+别把我当解药 我只是一座桥
+我比你早到 我知道哪里绕
+你要的不是神 你要的是能走
+那我就把这条路 摊开给你瞧
+别把我当解药 我也会摔得很惨
+我给你的东西 全都是我试过的
+你别跪着听我 你站起来跟我走
+前面那一段 你得自己走一半
+
+[Verse 2]
+后来我做错过一次 名声掉了一截
+他们说我 不是那个对的人
+我没有辩解 我只是继续做
+我的价值 从来不在他们嘴里
+
+[Pre-Chorus]
+可我跟你一样 我也会错
+我给的答案 也得我自己去试
+我不是不想救 我是想救得成
+别把我当成 一颗万能药
+
+[Chorus]
+别把我当解药 我只是一座桥
+我比你早到 我知道哪里绕
+你要的不是神 你要的是能走
+那我就把这条路 摊开给你瞧
+别把我当解药 我也会摔得很惨
+我给你的东西 全都是我试过的
+你别跪着听我 你站起来跟我走
+前面那一段 你得自己走一半
+
+[Bridge]
+后来我懂了 异端不是造反
+是大家都在走旧路的时候
+我说 那边有一条能走通的
+我负责先走一遍 再回来喊你
+
+[Final Chorus]
+别把我当解药 我只是一座桥
+我比你早到 我知道哪里绕
+你要的不是神 你要的是能走
+那我就把这条路 摊开给你瞧
+我不是你要找的 那个救世主
+我是那个 真的把事办成了的人
+
+[Outro]
+用完你就不用记得我
+路留着，你接着走</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty5">Mandarin folk blues, slide guitar, gritty male vocal, honest and slightly weary, no choir, 76 BPM</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly5', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty5', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>5 爻被投射成<em>救世主</em>，所有人都在等他拿出"能用的办法"。他真正怕的不是失败，是<em>名声</em>——一次失手，投射就反转。<br>
+      <b>陷阱 ·</b>接下那份不属于自己的救世期待，然后被它压垮。<br>
+      <b>礼物 ·</b>不是当神，而是<em>实用</em>：他能带来一条真的走通的方案。所以解法是"我只是一座桥，我比你早到"。
+    </div>
+  </article>
+
+  <!-- ================= 06 六爻 ================= -->
+  <article class="song" id="l6">
+    <div class="song-head">
+      <div class="song-no">06</div>
+      <div>
+        <h3 class="song-title">屋顶上的人</h3>
+        <p class="song-meta">六爻 · 榜样 Role Model · 礼物：榜样</p>
+      </div>
+    </div>
+    <p class="core">核心一句：<b>你要的榜样，从来不是我——是你终于肯接纳全部的自我。</b></p>
+    <div class="blk-tag">LYRICS</div>
+    <div class="lyr" id="ly6">[Intro]
+每一条爻，都有自己的功课
+第六条，在屋顶上
+
+[Verse 1]
+十七岁那年的雨 下得特别长
+我照着别人的样子 怎么都学不像
+撞过千百次墙 才学会不出声响
+把每一道伤口 都缝成自己的勋章
+
+[Pre-Chorus]
+我以为三十岁 就该活成答案
+却发现 我只是 走完了别人的一半
+谁告诉我 为什么 我总站在外面看
+好像我天生 就住在 人群的对面
+
+[Chorus]
+我是屋顶上的人 看过万家灯火
+不说谁对谁错 也不劝谁回头
+我想伸出手 又把手收进袖口
+因为有些路 只能一个人走过
+我是屋顶上的人 你别急着懂我
+我的沉默不是墙 是等你抬头
+
+[Verse 2]
+三十岁以后的我 搬去了屋顶上
+看街上的人 匆匆来来又往往
+伸手帮一把 又悄悄缩回身旁
+懂得太多 就慢慢学会不讲
+
+[Pre-Chorus]
+他们说我冷 说我的心不在场
+可我只是 看得太远 收不回目光
+热闹是他们的 我站在边上
+学着不评判 也学着原谅
+
+[Chorus]
+我是屋顶上的人 看过万家灯火
+不说谁对谁错 也不劝谁回头
+我想伸出手 又把手收进袖口
+因为有些路 只能一个人走过
+我是屋顶上的人 你别急着懂我
+我的沉默不是墙 是等你抬头
+
+[Bridge]
+五十岁那年 我开始下山
+衣角还带着 屋顶上的霜
+不再证明什么 也不再伪装
+你问的那些答案 我早看过一场
+
+[Final Chorus]
+我已经走下屋顶 走进人间灯火
+不再是谁的答案 只是陪你坐着
+你要的榜样 从来不是我
+是你终于肯 接纳全部的自我
+
+[Outro]
+先撞墙，再上房，最后下山
+你若是第六爻，别怕在屋顶上孤单
+那是你在替所有人，先看一眼光</div>
+
+    <span class="prompt-label">STYLE PROMPT</span>
+    <div class="prompt-box" id="sty6">Mandarin indie folk, fingerpicked acoustic guitar, warm room reverb, soft male vocal with gentle rasp, cello enters in bridge, melancholic but hopeful, 74 BPM, intimate storytelling</div>
+
+    <div class="btn-row">
+      <button type="button" onclick="copyEl('ly6', this)">复制歌词</button>
+      <button type="button" onclick="copyEl('sty6', this)">复制提示词</button>
+    </div>
+
+    <div class="points">
+      <b>爻位要点 ·</b>6 爻的三段路：0–30 岁像前三条爻一样碰撞试错；30–50 岁上屋顶观察疗愈；50 岁以后下山，才真正成为 <em>Role Model 榜样</em>。<br>
+      <b>陷阱 ·</b>不下山的 6 爻只是屋顶上的评论家——智慧不落地，就只剩失望。<br>
+      <b>礼物 ·</b>不评判的智慧。他要的不是被崇拜，而是让你相信"原来可以这样活"。
+    </div>
+  </article>
+
+  <footer>
+    人类图 1–6 爻觉醒歌集 · 《六爻》<br>
+    词 · Kan Man Tang × AI　|　曲 · Suno<br>
+    <span id="ver">V1</span>
+  </footer>
+
+</div>
+
+<script>
+var VERSION = '1';
+document.getElementById('ver').textContent = 'V' + VERSION;
+
+function copyEl(id, btn){
+  var el = document.getElementById(id);
+  var text = el.innerText.replace(/\n{3,}/g, '\n\n').trim();
+  var old = btn.textContent;
+  function done(){
+    btn.textContent = '已复制 ✓';
+    setTimeout(function(){ btn.textContent = old; }, 1600);
+  }
+  function fallback(node){
+    var r = document.createRange(); r.selectNodeContents(node);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    try { document.execCommand('copy'); } catch(e){}
+    s.removeAllRanges();
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(el); done(); });
+  } else {
+    fallback(el); done();
+  }
+}
+</script>
+</body>
+</html>
