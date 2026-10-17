@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>楞严咒 · 五会讽诵谱曲（C 大调五声音阶）</title>
+<style>
+  :root{
+    --ink:#2b2118; --paper:#f7f1e3; --paper2:#efe6d2; --gold:#b8860b;
+    --red:#c0392b; --line:#d8c9a8; --sub:#8a6d3b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;
+    line-height:1.7;
+  }
+  header{
+    padding:28px 20px 18px; text-align:center;
+    background:linear-gradient(180deg,#fbf6ea,#f1e7d2);
+    border-bottom:2px solid var(--line);
+  }
+  header h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.15em;}
+  header .meta{font-size:.9rem; color:var(--sub);}
+  .wrap{max-width:920px; margin:0 auto; padding:18px 16px 60px;}
+  .card{
+    background:var(--paper2); border:1px solid var(--line);
+    border-radius:10px; padding:16px 18px; margin:16px 0;
+  }
+  h2{font-size:1.15rem; margin:.2em 0 .6em; color:var(--gold); letter-spacing:.08em;}
+  p,li{font-size:.96rem;}
+  .controls{
+    position:sticky; top:0; z-index:20;
+    background:rgba(247,241,227,.96); backdrop-filter:blur(4px);
+    border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; margin:14px 0;
+    display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center;
+  }
+  .controls .grp{display:flex; flex-direction:column; gap:4px;}
+  .controls label{font-size:.78rem; color:var(--sub);}
+  button{
+    font-family:inherit; font-size:.95rem; cursor:pointer;
+    background:var(--gold); color:#fff; border:none;
+    padding:9px 18px; border-radius:8px; letter-spacing:.05em;
+    transition:.15s;
+  }
+  button:hover{filter:brightness(1.08);}
+  button.ghost{background:#e7dcc2; color:var(--ink);}
+  select, input[type=range]{font-family:inherit; font-size:.9rem;}
+  select{padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:#fff;}
+  .time{font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--sub); min-width:96px;}
+  details{border:1px solid var(--line); border-radius:10px; margin:12px 0; background:#fbf6ea; overflow:hidden;}
+  summary{
+    cursor:pointer; padding:12px 16px; font-size:1.05rem; font-weight:700;
+    background:linear-gradient(180deg,#f3e8cf,#ecdfc0); letter-spacing:.05em;
+    list-style:none;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary .mood{font-weight:400; font-size:.82rem; color:var(--sub); margin-left:10px;}
+  .phrase{
+    display:flex; flex-wrap:wrap; align-items:flex-end; gap:2px 1px;
+    padding:7px 14px; border-top:1px dashed var(--line);
+  }
+  .cell{
+    display:inline-flex; flex-direction:column; align-items:center;
+    min-width:1.05em; padding:1px 1px; border-radius:5px;
+  }
+  .cell .ch{font-size:1.04rem; line-height:1.15;}
+  .cell .jp{
+    font-size:.66rem; color:var(--sub); line-height:1.1; margin-top:1px;
+    font-family:"Trebuchet MS",sans-serif;
+  }
+  .cell.hi .jp{border-top:1.6px dotted var(--gold);}
+  .cell.cur{background:rgba(192,57,43,.14);}
+  .cell.cur .ch{color:var(--red); font-weight:700;}
+  .legend{font-size:.82rem; color:var(--sub);}
+  .legend b{color:var(--ink);}
+  .legend .hi-demo{border-top:1.6px dotted var(--gold); padding:0 2px;}
+  footer{text-align:center; font-size:.8rem; color:var(--sub); padding:24px 12px;}
+  .tag{display:inline-block; background:#e7dcc2; border-radius:5px; padding:1px 7px; font-size:.78rem; color:var(--sub);}
+  audio{display:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>楞严咒 · 五会讽诵谱曲</h1>
+  <div class="meta">《大佛顶首楞严经》卷七 · 全咒 554 句（五会 + 咒心）· 新譜梵呗讽诵调</div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>关于这份谱曲（先读）</h2>
+    <p><b>这是一份"讽诵调"谱，不是某座寺院传承的唱腔。</b>汉传佛教给咒语"谱曲"的传统，从来不是给每个字写独立旋律，而是用一套
+    <b>五声音阶吟唱公式</b>循环套用——这也是为什么同一部楞严咒，天宁寺、金山寺、昭觉寺唱起来味儿不同却都"对"。本谱采用
+    <b>C 大调五声音阶（宫 1 · 商 2 · 角 3 · 徵 5 · 羽 6）</b>，五会各配一种心境色彩与旋律轮廓：</p>
+    <ul>
+      <li><b>第一会（毗卢真法会）</b>· 归命诸佛 —— 虔诚上升，平稳中带上行。</li>
+      <li><b>第二会（释尊应化会）</b>· 降魔护持 —— 沉稳坚定，旋律以下行为主。</li>
+      <li><b>第三会（观音合同会）</b>· 摧伏障难 —— 起伏流转，一波三折。</li>
+      <li><b>第四会（刚藏折摄会）</b>· 解脱缚着 —— 开放舒展，末字落于开放音。</li>
+      <li><b>第五会（文殊弘传会）</b>· 圆满回向 —— 光明高扬；其中 <b>咒心（唵…娑婆诃）</b>单独用明亮上行旋律收束于高音 1。</li>
+    </ul>
+    <p>简谱中<b>无点的数字＝中音，数字上方加虚点＝高八度</b>（见下方图例）。每句末字自动拖长并落于稳定音，句间有气口，会间留长呼吸。
+    点"▶ 播放"即可听合成吟唱（钟磬般柔和的音色 + 余韵混响）。诵持时请以你师父所传为准，此谱仅供理解与自修参考。咒文依《大正藏》本《楞严经》卷七，诸本小异处从常见流通本。</p>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="grp">
+      <label>段落</label>
+      <select id="selHui">
+        <option value="all">全咒（五会 + 咒心）</option>
+        <option value="第一会">第一会</option>
+        <option value="第二会">第二会</option>
+        <option value="第三会">第三会</option>
+        <option value="第四会">第四会</option>
+        <option value="第五会">第五会</option>
+        <option value="xin">仅咒心（唵…娑婆诃）</option>
+      </select>
+    </div>
+    <div class="grp">
+      <label>速度</label>
+      <input type="range" id="speed" min="60" max="160" value="100" style="width:130px;">
+    </div>
+    <div class="grp">
+      <label>音量</label>
+      <input type="range" id="vol" min="0" max="100" value="70" style="width:110px;">
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="playBtn">▶ 播放</button>
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="stopBtn" class="ghost">■ 停止</button>
+    </div>
+    <div class="grp">
+      <label>预计时长</label>
+      <div class="time" id="dur">—</div>
+    </div>
+  </div>
+
+  <div class="card legend">
+    <b>简谱图例：</b>
+    宫 <b>1</b> · 商 <b>2</b> · 角 <b>3</b> · 徵 <b>5</b> · 羽 <b>6</b> ＝ C 大调五声音阶；
+    <span class="hi-demo">5</span> 表示高八度（数字上方虚点）。每字一音，句末字拖长。
+  </div>
+
+  <div id="score"></div>
+
+  <footer>
+    自修参考用，非任何寺院传承唱腔<br>
+    Powered By Kan Man Tang
+  </footer>
+</div>
+
+<script>
+/* ===================== 咒文数据（五会 + 咒心，共 554 句） ===================== */
+const HUI_ORDER = ["第一会","第二会","第三会","第四会","第五会"];
+const HUIS = {
+  "第一会":["南无萨怛他","苏伽多耶","阿啰诃帝","三藐三菩陀写","南无萨怛他","佛陀俱胝瑟尼钐","南无萨婆","勃陀勃地","萨跢鞞弊","南无萨多南","三藐三菩陀","俱知喃","娑舍啰婆迦","僧伽喃","南无卢鸡阿罗汉跢喃","南无苏卢多波那喃","南无娑羯唎陀伽弥喃","南无卢鸡三藐伽跢喃","三藐伽婆啰","底波多那喃","南无提婆离瑟赧","南无悉陀耶","毗地耶","陀啰离瑟赧","舍波奴","揭啰诃","娑诃娑啰摩他喃","南无跋啰诃摩泥","南无因陀啰耶","南无婆伽婆帝","嚧陀啰耶","乌摩般帝","娑酰夜耶","南无婆伽婆帝","那啰野","拏耶","槃遮摩诃三慕陀啰","南无悉羯利多耶","南无婆伽婆帝","摩诃迦罗耶","地唎般剌那","伽啰毗陀啰","波拏迦啰耶","阿地目帝","尸摩舍那泥","婆悉泥","摩怛唎伽拏","南无悉羯唎多耶","南无婆伽婆帝","多他伽跢俱啰耶","南无般头摩俱啰耶","南无跋阇啰俱啰耶","南无摩尼俱啰耶","南无伽阇俱啰耶","南无婆伽婆帝","帝唎茶","输啰西那","波啰诃啰拏啰阇耶","跢他伽多耶","南无婆伽婆帝","南无阿弥多婆耶","跢他伽多耶","阿啰诃帝","三藐三菩陀耶","南无婆伽婆帝","阿刍鞞耶","跢他伽多耶","阿啰诃帝","三藐三菩陀耶","南无婆伽婆帝","鞞沙阇耶","俱卢吠柱唎耶","般啰婆啰阇耶","跢他伽多耶","南无婆伽婆帝","三补师毖多","萨怜捺啰剌阇耶","跢他伽多耶","阿啰诃帝","三藐三菩陀耶","南无婆伽婆帝","舍鸡野母那曳","跢他伽多耶","阿啰诃帝","三藐三菩陀耶","南无婆伽婆帝","剌怛那鸡都啰阇耶","跢他伽多耶","阿啰诃帝","三藐三菩陀耶","帝瓢","南无萨羯唎多","翳昙婆伽婆多","萨怛他伽都瑟尼钐","萨怛多般怛蓝","南无阿婆啰视耽","般啰帝","扬岐啰","萨啰婆","部多羯啰诃","尼羯啰诃","揭迦啰诃尼","跋啰毖地耶","叱陀你","阿迦啰","密唎柱","般唎怛啰耶","儜揭唎","薩啰婆","槃陀那","目叉尼","萨啰婆","突瑟咤","突悉乏","般那你","伐啰尼","赭都啰","失帝南","羯啰诃","娑诃萨啰若阇","毗多崩娑那羯唎","阿瑟咤冰舍帝南","那叉刹怛啰若阇","波啰萨陀那羯唎","阿瑟咤南","摩诃揭啰诃若阇","毘多崩萨那羯唎","萨婆舍都嚧","你婆啰若阇","呼蓝突悉乏","难遮那舍尼","毖沙舍","悉怛啰","阿吉尼","乌陀迦啰若阇","阿般啰视多具啰","摩诃般啰战持","摩诃叠多","摩诃帝阇","摩诃税多阇婆啰","摩诃跋啰槃陀啰","婆悉尼","阿唎耶多啰","毗唎俱知","誓婆毗阇耶","跋阇啰摩礼底","毗舍嚧多","勃腾罔迦","跋阇啰制喝那阿遮","摩啰制婆","般啰质多","跋阇啰擅持","毗舍啰遮","扇多舍","鞞提婆","补视多","苏摩嚧波","摩诃税多","阿唎耶多啰","摩诃婆啰阿般啰","跋阇啰商羯啰制婆","跋阇啰俱摩唎","俱蓝陀唎","跋阇啰喝萨多遮","毗地耶","干遮那","摩唎迦","啒苏母","婆羯啰跢那","鞞嚧遮那","俱唎耶","夜啰菟","瑟尼钐","毗折蓝婆摩尼遮","跋阇啰迦那迦波啰婆","嚧阇那","跋阇啰顿稚遮","税多遮","迦摩啰","刹奢尸","波啰婆","翳帝夷帝","母陀啰","羯拏","娑鞞啰忏","掘梵都","印兔那麽麽写"],
+  "第二会":["乌吽","唎瑟揭拏","般剌舍悉多","萨怛他","伽都瑟尼钐","虎吽都卢雍","瞻婆那","虎吽都卢雍","悉耽婆那","虎吽都卢雍","波啰瑟地耶","三般叉","拏羯啰","虎吽都卢雍","萨婆药叉","喝啰刹娑","揭啰诃若阇","毗腾崩萨那羯啰","虎吽都卢雍","者都啰","尸底南","揭啰诃","娑诃萨啰南","毗腾崩萨那啰","虎吽都卢雍","啰叉","婆伽梵","萨怛他","伽都瑟尼钐","波啰点","阇吉唎","摩诃娑诃萨啰","勃树娑诃萨啰","室唎沙","俱知娑诃萨泥","帝隶阿弊提视婆唎多","咤咤甖迦","摩诃跋阇嚧陀啰","帝唎菩婆那","曼茶啰","乌吽","娑悉帝","薄婆都","麽麽","印兔那麽麽写"],
+  "第三会":["啰阇婆夜","主啰跋夜","阿祇尼婆夜","乌陀迦婆夜","毗沙婆夜","舍萨多啰婆夜","婆啰斫羯啰婆夜","突瑟叉婆夜","阿舍你婆夜","阿迦啰","密唎柱婆夜","陀啰尼部弥剑","波伽波陀婆夜","乌啰迦婆多婆夜","剌阇檀茶婆夜","那伽婆夜","毗条怛婆夜","苏波啰拏婆夜","药叉揭啰诃","啰叉私揭啰诃","毕唎多揭啰诃","毗舍遮揭啰诃","部多揭啰诃","鸠盘茶揭啰诃","补单那揭啰诃","迦咤补单那揭啰诃","悉干度揭啰诃","阿播悉摩啰揭啰诃","乌檀摩陀揭啰诃","车夜揭啰诃","酰唎婆帝揭啰诃","社多诃唎南","揭婆诃唎南","嚧地啰诃唎南","忙娑诃唎南","谜陀诃唎南","摩阇诃唎南","阇多诃唎女","视比多诃唎南","毗多诃唎南","婆多诃唎南","阿输遮诃唎女","质多诃唎女","帝钐萨鞞钐","萨婆揭啰诃南","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","波唎跋啰者迦","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","茶演尼","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","摩诃般输般怛夜","嚧陀啰","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","那啰夜拏","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","怛埵伽啰茶西","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","摩诃迦啰","摩怛唎伽拏","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","迦波唎迦","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","阇夜羯啰","摩度羯啰","萨婆啰他娑逹那","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","赭咄啰","婆耆你","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","毗唎羊讫唎知","难陀鸡沙啰","伽拏般帝","索酰夜","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","那揭那舍啰婆拏","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","阿罗汉","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","毗多啰伽","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","跋阇啰波你","具酰夜具酰夜","迦地般帝","讫唎担","毗陀夜阇","嗔陀夜弥","鸡啰夜弥","啰叉罔","婆伽梵","印兔那麽麽写"],
+  "第四会":["婆伽梵","萨怛多般怛啰","南无粹都帝","阿悉多那啰刺迦","波啰婆","悉普咤","毗迦萨怛多钵帝唎","什佛啰什佛啰","陀啰陀啰","频陀啰频啰","瞋陀瞋陀","虎吽虎吽","泮咤泮咤泮咤泮咤泮咤","娑诃","酰酰泮","阿牟迦耶泮","阿波啰提诃多泮","婆啰波啰陀泮","阿素啰","毗陀啰","波迦泮","萨婆提鞞弊泮","萨婆那伽弊泮","萨婆药叉弊泮","萨婆干闼婆弊泮","萨婆补丹那弊泮","迦咤补丹那弊泮","萨婆突狼枳帝弊泮","萨婆突涩比犁","讫瑟帝弊泮","萨婆什婆犁弊泮","萨婆阿播悉摩犁弊泮","萨婆舍啰婆拏弊泮","萨婆地帝鸡弊泮","萨婆怛摩陀继弊泮","萨婆毗陀耶","啰誓遮犁弊泮","阇夜羯啰","摩度羯啰","萨婆啰他娑陀鸡弊泮","毗地夜","遮唎弊泮","者都啰","缚耆你弊泮","跋阇啰","俱摩唎","毗陀夜","啰誓弊泮","摩诃波啰丁羊","乂耆唎弊泮","跋阇啰商羯啰夜","波啰丈耆啰阇耶泮","摩诃迦啰夜","摩诃末怛唎伽拏","南无娑羯唎多夜泮","毖瑟拏婢曳泮","勃啰诃牟尼曳泮","阿耆尼曳泮","摩诃羯唎曳泮","羯啰檀迟曳泮","蔑怛唎曳泮","唠怛唎曳泮","遮文茶曳泮","羯逻啰怛唎曳泮","迦般唎曳泮","阿地目质多","迦尸摩舍那","婆私你曳泮","演吉质","萨埵婆写","麽麽印兔那麽麽写"],
+  "第五会":["突瑟咤质多","阿末怛唎质多","乌阇诃啰","伽婆诃啰","嚧地啰诃啰","婆娑诃啰","摩阇诃啰","阇多诃啰","视比多诃啰","跋略夜诃啰","干陀诃啰","布史波诃啰","颇啰诃啰","婆写诃啰","般波质多","突瑟咤质多","唠陀啰质多","药叉揭啰诃","啰刹娑揭啰诃","闭隶多揭啰诃","毗舍遮揭啰诃","部多揭啰诃","鸠槃茶揭啰诃","悉干陀揭啰诃","乌怛摩陀揭啰诃","车业揭啰诃","阿播萨摩啰揭啰诃","宅袪革","茶耆尼揭啰诃","唎佛帝揭啰诃","阇弭迦揭啰诃","舍俱尼揭啰诃","姥陀啰","难地迦揭啰诃","阿蓝婆揭啰诃","干度波尼揭啰诃","什伐啰","堙迦酰迦","坠帝药迦","怛隶帝药迦","者突托迦","昵提什伐啰","毖钐摩什伐啰","薄底迦","鼻底迦","室隶瑟密迦","娑你般帝迦","萨婆什伐啰","室嚧吉帝","末陀鞞达嚧制剑","阿绮嚧钳","目佉嚧钳","羯唎突嚧钳","揭啰诃","揭蓝羯拏输蓝","惮多输蓝","迄唎夜输蓝","末么输蓝","跋唎室婆输蓝","毖栗瑟咤输蓝","乌陀啰输蓝","羯知输蓝","跋悉帝输蓝","邬嚧输蓝","常伽输蓝","喝悉多输蓝","跋陀输蓝","娑房盎伽","般啰丈伽输蓝","部多毖跢茶","茶耆尼","什婆啰","陀突嚧迦","建咄嚧吉知","婆路多毗","萨般嚧","诃凌伽","输沙怛啰","娑那羯啰","毗沙喻迦","阿耆尼","乌陀迦","末啰鞞啰","建多啰","阿迦啰","密唎咄","怛敛部迦","地栗剌咤","毖唎瑟质迦","萨婆那俱啰","肆引伽弊","揭啰唎药叉","怛啰刍","末啰视","吠帝钐","娑鞞钐","悉怛多钵怛啰","摩诃跋阇嚧","瑟尼钐","摩诃般啰丈耆蓝","夜波突陀","舍喻阇那","辫怛隶拏","毗陀耶","槃昙迦嚧弥","帝殊","盘昙迦嚧弥","般啰毗陀","槃昙迦嚧弥","跢侄他","唵","阿那隶","毗舍提","鞞啰","跋阇啰","陀唎","槃陀槃陀你","跋阇啰谤尼泮","虎吽都嚧瓮泮","娑婆诃"]
+};
+
+/* 五会旋律轮廓（音阶下标：0=宫1 1=商2 2=角3 3=徵5 4=羽6）；cadence=句末落音下标；reg:0中音 1高八度 */
+const HUI_CONFIG = {
+  "第一会":{motif:[2,3,4,3,2,1,2,1], cadence:0, reg:0},
+  "第二会":{motif:[4,3,2,1,0,1,2,1], cadence:0, reg:0},
+  "第三会":{motif:[1,3,2,4,3,1,2,0], cadence:0, reg:1},
+  "第四会":{motif:[0,1,2,3,4,3,2,1], cadence:4, reg:1},
+  "第五会":{motif:[3,4,2,4,3,2,1,0], cadence:0, reg:1}
+};
+/* 咒心：明亮上行，收束高音 1 */
+const XIN_SET = new Set(["跢侄他","唵","阿那隶","毗舍提","鞞啰","跋阇啰","陀唎","槃陀槃陀你","跋阇啰谤尼泮","虎吽都嚧瓮泮","娑婆诃"]);
+const XIN_MOTIF = [0,2,3,4,3,4,2,1];
+const XIN_CAD = 0;
+
+/* C 大调五声音阶（中音区） */
+const PENTA = [
+  {jp:"1", freq:261.63},
+  {jp:"2", freq:293.66},
+  {jp:"3", freq:329.63},
+  {jp:"5", freq:392.00},
+  {jp:"6", freq:440.00}
+];
+
+/* ===================== 生成音符 ===================== */
+let NOTES = [];
+function genNotes(){
+  NOTES = [];
+  for(const hui of HUI_ORDER){
+    const cfg = HUI_CONFIG[hui];
+    HUIS[hui].forEach((phrase, pi)=>{
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : cfg.motif;
+      const cad = isXin ? XIN_CAD : cfg.cadence;
+      const reg = isXin ? 1 : cfg.reg;
+      chars.forEach((ch, ci)=>{
+        const isLast = (ci === chars.length-1);
+        const deg = isLast ? cad : motif[ci % motif.length];
+        const p = PENTA[deg];
+        const freq = p.freq * (reg===1 ? 2 : 1);
+        NOTES.push({
+          hui, pi, ci, ch, freq, jp:p.jp, hi:(reg===1),
+          dur: isLast ? 0.85 : 0.42,
+          el:null
+        });
+      });
+    });
+  }
+}
+
+/* ===================== 渲染谱面 ===================== */
+function render(){
+  const score = document.getElementById("score");
+  score.innerHTML = "";
+  for(const hui of HUI_ORDER){
+    const det = document.createElement("details");
+    det.open = (hui === "第一会");
+    const sum = document.createElement("summary");
+    const moodMap = {"第一会":"归命诸佛 · 虔诚上升","第二会":"降魔护持 · 沉稳坚定","第三会":"摧伏障难 · 起伏流转","第四会":"解脱缚着 · 开放舒展","第五会":"圆满回向 · 光明高扬"};
+    sum.innerHTML = hui + ' <span class="mood">'+moodMap[hui]+'</span>';
+    det.appendChild(sum);
+    HUIS[hui].forEach((phrase, pi)=>{
+      const pdiv = document.createElement("div");
+      pdiv.className = "phrase";
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : HUI_CONFIG[hui].motif;
+      const cad = isXin ? XIN_CAD : HUI_CONFIG[hui].cadence;
+      const reg = isXin ? 1 : HUI_CONFIG[hui].reg;
+      chars.forEach((ch, ci)=>{
+        const isLast = (ci === chars.length-1);
+        const deg = isLast ? cad : motif[ci % motif.length];
+        const p = PENTA[deg];
+        const cell = document.createElement("span");
+        cell.className = "cell" + ((reg===1) ? " hi" : "");
+        const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
+        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = p.jp;
+        cell.appendChild(c1); cell.appendChild(c2);
+        // 绑定该字对应的 NOTES 元素
+        const idx = NOTES.findIndex(n=>n.hui===hui && n.pi===pi && n.ci===ci);
+        if(idx>=0) NOTES[idx].el = cell;
+        pdiv.appendChild(cell);
+      });
+      det.appendChild(pdiv);
+    });
+    score.appendChild(det);
+  }
+}
+
+/* ===================== 音频引擎 ===================== */
+let audioCtx=null, masterGain=null, reverb=null, wet=null;
+let playing=false, timers=[], startTime=0, rafId=null;
+function ensureAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = document.getElementById("vol").value/100 * 0.9;
+  reverb = makeReverb(audioCtx, 2.4, 2.6);
+  wet = audioCtx.createGain(); wet.gain.value = 0.32;
+  masterGain.connect(audioCtx.destination);
+  masterGain.connect(reverb); reverb.connect(wet); wet.connect(audioCtx.destination);
+}
+function makeReverb(ctx, dur, decay){
+  const rate=ctx.sampleRate, len=Math.floor(rate*dur);
+  const buf=ctx.createBuffer(2,len,rate);
+  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);
+    for(let i=0;i<len;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay); }}
+  const cv=ctx.createConvolver(); cv.buffer=buf; return cv;
+}
+function playNote(freq, start, dur){
+  const o1=audioCtx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
+  const o2=audioCtx.createOscillator(); o2.type="triangle"; o2.frequency.value=freq*2;
+  const g=audioCtx.createGain(); const peak=0.22;
+  g.gain.setValueAtTime(0.0001, start);
+  g.gain.exponentialRampToValueAtTime(peak, start+0.045);
+  g.gain.exponentialRampToValueAtTime(0.0001, start+dur+0.14);
+  const g2=audioCtx.createGain(); g2.gain.value=0.10;
+  o1.connect(g); o2.connect(g2); g2.connect(g);
+  g.connect(masterGain);
+  o1.start(start); o2.start(start);
+  o1.stop(start+dur+0.25); o2.stop(start+dur+0.25);
+}
+
+/* ===================== 播放调度 ===================== */
+function selectedNotes(){
+  const sel = document.getElementById("selHui").value;
+  if(sel==="all") return NOTES;
+  if(sel==="xin") return NOTES.filter(n=>XIN_SET.has(HUIS[n.hui][n.pi]));
+  return NOTES.filter(n=>n.hui===sel);
+}
+function computeDuration(){
+  const notes = selectedNotes();
+  const sf = document.getElementById("speed").value/100;
+  let t=0, prevHui=null, prevPi=null;
+  notes.forEach(n=>{
+    let gap=0.04;
+    if(n.pi!==prevPi){ gap = (n.hui!==prevHui)?1.15:0.34; }
+    t += gap + (n.dur/sf);
+    prevHui=n.hui; prevPi=n.pi;
+  });
+  return t;
+}
+function updateDur(){
+  const d=computeDuration();
+  document.getElementById("dur").textContent = isFinite(d)? (d/60).toFixed(1)+" 分" : "—";
+}
+function clearHighlight(){
+  NOTES.forEach(n=>{ if(n.el) n.el.classList.remove("cur"); });
+}
+function stopAll(){
+  playing=false;
+  if(audioCtx){ audioCtx.close(); audioCtx=null; }
+  timers.forEach(t=>clearTimeout(t)); timers=[];
+  if(rafId) cancelAnimationFrame(rafId);
+  clearHighlight();
+  document.getElementById("playBtn").textContent="▶ 播放";
+}
+function play(){
+  if(playing){ // 暂停
+    stopAll(); return;
+  }
+  ensureAudio();
+  if(audioCtx.state==="suspended") audioCtx.resume();
+  playing=true;
+  document.getElementById("playBtn").textContent="⏸ 暂停";
+  const notes = selectedNotes();
+  const sf = document.getElementById("speed").value/100;
+  const t0 = audioCtx.currentTime + 0.2;
+  let t=t0, prevHui=null, prevPi=null;
+  notes.forEach(n=>{
+    let gap=0.04;
+    if(n.pi!==prevPi){ gap = (n.hui!==prevHui)?1.15:0.34; }
+    t += gap;
+    const dur = n.dur/sf;
+    playNote(n.freq, t, dur);
+    const whenMs = (t - audioCtx.currentTime)*1000;
+    const el = n.el;
+    timers.push(setTimeout(()=>{
+      clearHighlight();
+      if(el){ el.classList.add("cur"); el.scrollIntoView({block:"center", behavior:"smooth"}); }
+    }, whenMs));
+    t += dur;
+    prevHui=n.hui; prevPi=n.pi;
+  });
+  // 结束复位
+  const endMs = (t - audioCtx.currentTime)*1000 + 200;
+  timers.push(setTimeout(()=>{ if(playing) stopAll(); }, endMs));
+}
+
+/* ===================== 事件绑定 ===================== */
+genNotes();
+render();
+document.getElementById("playBtn").addEventListener("click", play);
+document.getElementById("stopBtn").addEventListener("click", stopAll);
+document.getElementById("selHui").addEventListener("change", ()=>{ if(playing) stopAll(); updateDur(); });
+document.getElementById("speed").addEventListener("input", updateDur);
+document.getElementById("vol").addEventListener("input", ()=>{
+  if(masterGain) masterGain.gain.value = document.getElementById("vol").value/100 * 0.9;
+});
+updateDur();
+</script>
+</body>
+</html>
