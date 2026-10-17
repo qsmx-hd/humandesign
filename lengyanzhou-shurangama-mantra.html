@@ -21,6 +21,7 @@
     border-bottom:2px solid var(--line);
   }
   header h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.15em;}
+  header h1 .ver{font-size:.7rem; letter-spacing:.05em; color:var(--sub); font-weight:400; vertical-align:middle; margin-left:.5em;}
   header .meta{font-size:.9rem; color:var(--sub);}
   .wrap{max-width:920px; margin:0 auto; padding:18px 16px 60px;}
   .card{
@@ -83,7 +84,7 @@
 </head>
 <body>
 <header>
-  <h1>楞严咒 · 五会讽诵谱曲</h1>
+  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V1.3</span></h1>
   <div class="meta">《大佛顶首楞严经》卷七 · 全咒 554 句（五会 + 咒心）· 新譜梵呗讽诵调</div>
 </header>
 
@@ -178,13 +179,14 @@ const XIN_SET = new Set(["跢侄他","唵","阿那隶","毗舍提","鞞啰","跋
 const XIN_MOTIF = [0,2,3,4,3,4,2,1];
 const XIN_CAD = 0;
 
-/* C 大调五声音阶（中音区） */
+/* C 大调五声音阶（整体上移八度，落在 C5 区，保证笔记本/手机扬声器可听；
+   reg:0 = 最低音区(第一会)，reg:1 = 高八度(其余四会+咒心)，保留"第一会最低、第五会最高"的对比） */
 const PENTA = [
-  {jp:"1", freq:261.63},
-  {jp:"2", freq:293.66},
-  {jp:"3", freq:329.63},
-  {jp:"5", freq:392.00},
-  {jp:"6", freq:440.00}
+  {jp:"1", freq:523.25},
+  {jp:"2", freq:587.33},
+  {jp:"3", freq:659.25},
+  {jp:"5", freq:784.00},
+  {jp:"6", freq:880.00}
 ];
 
 /* ===================== 生成音符 ===================== */
@@ -262,7 +264,7 @@ function ensureAudio(){
   masterGain = audioCtx.createGain();
   masterGain.gain.value = document.getElementById("vol").value/100 * 0.9;
   reverb = makeReverb(audioCtx, 2.4, 2.6);
-  wet = audioCtx.createGain(); wet.gain.value = 0.32;
+  wet = audioCtx.createGain(); wet.gain.value = 0.18;
   masterGain.connect(audioCtx.destination);
   masterGain.connect(reverb); reverb.connect(wet); wet.connect(audioCtx.destination);
   // 必须在用户手势里 resume，并返回 Promise 供 play() 等待
@@ -272,17 +274,23 @@ function makeReverb(ctx, dur, decay){
   const rate=ctx.sampleRate, len=Math.floor(rate*dur);
   const buf=ctx.createBuffer(2,len,rate);
   for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);
-    for(let i=0;i<len;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay); }}
+    let lp=0;
+    for(let i=0;i<len;i++){
+      const n=Math.random()*2-1;
+      lp += (n-lp)*0.22;                       // 一阶低通，削掉高频白噪嘶声（手机小音箱上的"静电感"主因）
+      d[i]=lp*Math.pow(1-i/len,decay);
+    }
+  }
   const cv=ctx.createConvolver(); cv.buffer=buf; return cv;
 }
 function playNote(freq, start, dur){
   const o1=audioCtx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
-  const o2=audioCtx.createOscillator(); o2.type="triangle"; o2.frequency.value=freq*2;
+  const o2=audioCtx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
   const g=audioCtx.createGain(); const peak=0.22;
   g.gain.setValueAtTime(0.0001, start);
   g.gain.exponentialRampToValueAtTime(peak, start+0.045);
   g.gain.exponentialRampToValueAtTime(0.0001, start+dur+0.14);
-  const g2=audioCtx.createGain(); g2.gain.value=0.10;
+  const g2=audioCtx.createGain(); g2.gain.value=0.06;
   o1.connect(g); o2.connect(g2); g2.connect(g);
   g.connect(masterGain);
   o1.start(start); o2.start(start);
@@ -323,19 +331,33 @@ function stopAll(){
   clearHighlight();
   document.getElementById("playBtn").textContent="▶ 播放";
 }
+async function whenRunning(){
+  // Safari/iOS：resume() 的 Promise 可能在音频硬件真正就绪前就 resolved，
+  // 此时 currentTime 仍是冻结的 0，排进去的音符（尤其首段第一会）会被整段丢弃 → 静音。
+  // 这里轮询直到 state 真正变为 running（最多等 2.5s），确保时钟在走再调度。
+  if(!audioCtx) return;
+  if(audioCtx.state==="running") return;
+  const t0 = performance.now();
+  while(performance.now()-t0 < 2500){
+    try{ await audioCtx.resume(); }catch(e){}
+    if(audioCtx.state==="running") return;
+    await new Promise(r=>setTimeout(r,25));
+  }
+}
 async function play(){
   if(playing){ // 暂停
     stopAll(); return;
   }
-  // 关键修复：先 await resume，确认 AudioContext 进入 running 后再调度音符。
-  // 否则在 Safari（macOS / iOS）上，音符会被排到尚未运行的 context 时间轴上而被丢弃，导致完全静音。
+  // 关键修复：先 await resume 并轮询到 context 真正 running，再调度音符。
+  // 否则在 Safari（macOS / iOS）上，首段（第一会）音符会被排到尚未运行的 context 时间轴上而被丢弃，导致静音。
   await ensureAudio();
-  if(audioCtx.state==="suspended"){ try{ await audioCtx.resume(); }catch(e){} }
+  await whenRunning();
   playing=true;
   document.getElementById("playBtn").textContent="⏸ 暂停";
   const notes = selectedNotes();
   const sf = document.getElementById("speed").value/100;
-  const t0 = audioCtx.currentTime + 0.2;
+  // 时钟已确认运行，重新读取 currentTime 并预留 lead-in，避免首音被吞
+  const t0 = audioCtx.currentTime + 0.35;
   let t=t0, prevHui=null, prevPi=null;
   notes.forEach(n=>{
     let gap=0.04;
