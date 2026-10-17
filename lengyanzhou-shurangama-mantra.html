@@ -104,6 +104,10 @@
     </ul>
     <p>简谱中<b>无点的数字＝中音，数字上方加虚点＝高八度</b>（见下方图例）。每句末字自动拖长并落于稳定音，句间有气口，会间留长呼吸。
     点"▶ 播放"即可听合成吟唱（钟磬般柔和的音色 + 余韵混响）。诵持时请以你师父所传为准，此谱仅供理解与自修参考。咒文依《大正藏》本《楞严经》卷七，诸本小异处从常见流通本。</p>
+    <p><b>各会音乐频率区间（Hz）：</b>本谱采用 C 大调五声音阶、整体上移八度（自 C5 起），实际发声频率如下——<br>
+    · <b>第一会、第二会</b>（reg 最低音区）：C5 组，约 <b>523–880 Hz</b>（宫 523.25 / 商 587.33 / 角 659.25 / 徵 784.00 / 羽 880.00）；<br>
+    · <b>第三会、第四会、第五会、咒心</b>（reg 高八度）：C6 组，约 <b>1046–1760 Hz</b>（上述各音 ×2）。<br>
+    因此全咒<b>最低音区落在第一会（C5）</b>、<b>最高音区落在第五会与咒心（C6）</b>，形成「第一会最低、第五会最高」的层次对比；手机 / 笔记本扬声器在此频段能量充足，可清晰听到。若某会播放时完全无声，请看页面下方「真机自测诊断」提示，把内容截图反馈即可定位。</p>
   </div>
 
   <div class="controls" id="controls">
@@ -147,6 +151,7 @@
     <span class="hi-demo">5</span> 表示高八度（数字上方虚点）。每字一音，句末字拖长。
   </div>
 
+  <div id="diag" style="font-size:.8rem;color:var(--sub);min-height:1.2em;margin:6px 0 0;"></div>
   <div id="score"></div>
 
   <footer>
@@ -349,7 +354,7 @@ async function whenRunning(){
     const c0=audioCtx.currentTime;
     await new Promise(r=>setTimeout(r,40));
     let guard=0;
-    while(audioCtx.currentTime<=c0 && guard<60){
+    while(audioCtx.currentTime<=c0 && guard<150){
       await new Promise(r=>setTimeout(r,40));
       guard++;
     }
@@ -363,12 +368,26 @@ async function play(){
   // 否则在 Safari（macOS / iOS）上，首段（第一会）音符会被排到尚未运行的 context 时间轴上而被丢弃，导致静音。
   await ensureAudio();
   await whenRunning();
+  const diag=document.getElementById("diag");
+  const selNow=document.getElementById("selHui").value;
+  const nCount=selectedNotes().length;
+  diag.innerHTML = '[真机自测] ctx.state=<b>'+audioCtx.state+'</b> · 时钟='+audioCtx.currentTime.toFixed(3)+
+    ' · 待播段=<b>'+selNow+'</b> · 音符数=<b>'+nCount+'</b>'+(nCount===0?' <span style="color:#c0392b">⚠ 该段音符为空</span>':'');
+  if(nCount===0){ playing=false; document.getElementById("playBtn").textContent="▶ 播放"; return; }
   playing=true;
   document.getElementById("playBtn").textContent="⏸ 暂停";
+  // 暖机：先排一个极短无声探针（增益≈0），强制 iOS Safari 真正提交音频图并推进时钟，
+  // 双保险防首段（第一会）被排进冻结时间轴而整段丢弃。
+  try{
+    const probe=audioCtx.createOscillator(); probe.type="sine"; probe.frequency.value=440;
+    const pg=audioCtx.createGain(); pg.gain.value=0.0001;
+    probe.connect(pg); pg.connect(masterGain);
+    probe.start(audioCtx.currentTime+0.02); probe.stop(audioCtx.currentTime+0.06);
+  }catch(e){}
   const notes = selectedNotes();
   const sf = document.getElementById("speed").value/100;
   // 时钟已确认运行且在走动，重新读取 currentTime 并预留 lead-in，避免首音被吞
-  const t0 = audioCtx.currentTime + 0.4;
+  const t0 = audioCtx.currentTime + 0.6;
   let t=t0, prevHui=null, prevPi=null;
   notes.forEach(n=>{
     let gap=0.04;
