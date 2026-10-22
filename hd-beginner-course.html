@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图入门 · 从0读懂你的人生使用说明书</title>
+<meta name="description" content="面向0基础学员的人类图入门课程：五大能量类型、内在权威、九大能量中心、十二种人生角色、行星与闸门，带你读懂自己的图，写下人生使命宣言。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,'Times New Roman',serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--bg);color:var(--text);
+  line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased;
+}
+a{color:var(--primary-d);text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- Top nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:100;background:rgba(45,33,24,.97);
+  backdrop-filter:blur(8px);box-shadow:0 2px 16px rgba(0,0,0,.18);
+}
+.nav-in{max-width:1120px;margin:0 auto;padding:0 24px;height:62px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:#F6EFE1;font-family:var(--serif);
+  font-size:17px;letter-spacing:.06em;font-weight:600}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 4px rgba(212,168,67,.18)}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{color:rgba(246,239,225,.78);font-size:14px;letter-spacing:.04em;transition:.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--primary);color:#fff!important;padding:8px 18px;border-radius:999px;
+  font-size:13.5px;font-weight:600;transition:.2s}
+.nav-cta:hover{background:var(--primary-d)}
+.hamb{display:none;background:none;border:none;cursor:pointer;padding:6px}
+.hamb span{display:block;width:24px;height:2px;background:#F6EFE1;margin:5px 0;border-radius:2px;transition:.25s}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:
+  radial-gradient(circle at 82% 18%,rgba(212,168,67,.16),transparent 42%),
+  radial-gradient(circle at 12% 88%,rgba(196,149,106,.14),transparent 40%),
+  linear-gradient(160deg,#2D2118 0%,#3A2A1D 55%,#241A12 100%);
+  color:#F6EFE1;overflow:hidden}
+.hero-in{max-width:1120px;margin:0 auto;padding:92px 24px 96px;display:grid;
+  grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:9px;color:var(--gold);
+  font-size:13px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:22px}
+.kicker::before{content:"";width:30px;height:1px;background:var(--gold);display:inline-block}
+.hero h1{font-family:var(--serif);font-size:44px;line-height:1.28;font-weight:700;
+  letter-spacing:.02em;margin-bottom:20px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p.lead{font-size:16.5px;color:rgba(246,239,225,.82);max-width:560px;margin-bottom:34px;line-height:1.95}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn{padding:13px 28px;border-radius:999px;font-size:15px;font-weight:600;letter-spacing:.03em;
+  transition:.22s;display:inline-block}
+.btn-fill{background:var(--primary);color:#fff}
+.btn-fill:hover{background:var(--gold);color:var(--deep);transform:translateY(-2px)}
+.btn-line{border:1.5px solid rgba(246,239,225,.4);color:#F6EFE1}
+.btn-line:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:0;margin-top:44px;flex-wrap:wrap}
+.hero-stats div{padding-right:30px;margin-right:30px;border-right:1px solid rgba(246,239,225,.16)}
+.hero-stats div:last-child{border-right:none;margin-right:0;padding-right:0}
+.hero-stats b{display:block;font-family:var(--serif);font-size:28px;color:var(--gold);line-height:1.2}
+.hero-stats span{font-size:12.5px;color:rgba(246,239,225,.62);letter-spacing:.08em}
+
+/* hero figure */
+.art{display:flex;justify-content:center;align-items:center}
+.hero-img{width:100%;max-width:344px;border-radius:22px;display:block;
+  box-shadow:0 26px 64px rgba(0,0,0,.5),0 0 0 1px rgba(212,168,67,.35),
+             0 0 64px rgba(196,149,106,.2)}
+
+/* ---------- Sections ---------- */
+section{padding:88px 0}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 54px}
+.sec-kicker{color:var(--primary);font-size:13px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.sec-head h2{font-family:var(--serif);font-size:33px;color:var(--deep);font-weight:700;
+  line-height:1.4;letter-spacing:.02em;margin-bottom:14px}
+.sec-head p{color:var(--muted);font-size:15.5px}
+
+/* concept cards */
+.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.c-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:30px 26px;box-shadow:0 6px 20px var(--shadow);transition:.25s;position:relative;overflow:hidden}
+.c-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(45,33,24,.13);border-color:var(--primary)}
+.c-card .n{font-family:var(--serif);font-size:14px;color:var(--primary);letter-spacing:.1em;margin-bottom:14px}
+.c-card h3{font-family:var(--serif);font-size:20px;color:var(--deep);margin-bottom:12px;font-weight:600}
+.c-card p{font-size:14.5px;color:var(--muted);line-height:1.85}
+
+/* module map */
+.phase-label{display:flex;align-items:center;gap:14px;margin:38px 0 22px}
+.phase-label span{font-family:var(--serif);font-size:18px;color:var(--deep);font-weight:600;letter-spacing:.06em;white-space:nowrap}
+.phase-label i{flex:1;height:1px;background:var(--border)}
+.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.m-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px 22px;box-shadow:0 4px 16px var(--shadow);transition:.24s;display:flex;flex-direction:column}
+.m-card:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 12px 28px rgba(45,33,24,.12)}
+.m-badge{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;font-family:var(--serif);font-weight:700;display:flex;align-items:center;justify-content:center;
+  font-size:17px;margin-bottom:16px;box-shadow:0 4px 12px rgba(196,149,106,.35)}
+.m-card h3{font-family:var(--serif);font-size:17.5px;color:var(--deep);margin-bottom:9px;font-weight:600;line-height:1.4}
+.m-card p{font-size:13.5px;color:var(--muted);line-height:1.75;flex:1}
+.m-tag{margin-top:14px;font-size:11.5px;color:var(--primary-d);letter-spacing:.06em;
+  background:rgba(196,149,106,.12);padding:4px 10px;border-radius:999px;align-self:flex-start}
+
+/* types */
+.types{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.t-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 16px;
+  text-align:center;transition:.22s}
+.t-card:hover{transform:translateY(-4px);border-color:var(--primary)}
+.t-card .glyph{font-size:22px;margin-bottom:10px}
+.t-card h4{font-family:var(--serif);font-size:16.5px;color:var(--deep);margin-bottom:4px;font-weight:600}
+.t-card .en{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.t-card .st{font-size:13px;color:var(--primary-d);font-weight:600;margin-bottom:6px;line-height:1.5}
+.t-card .pc{font-size:12px;color:var(--muted)}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:0 6px 20px var(--shadow);background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+thead th{background:var(--deep);color:#F6EFE1;padding:14px 16px;text-align:left;font-weight:600;
+  font-size:13.5px;letter-spacing:.05em;white-space:nowrap}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--border-l);color:var(--text);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(196,149,106,.06)}
+td strong{color:var(--deep)}
+.pill{display:inline-block;background:rgba(196,149,106,.14);color:var(--primary-d);
+  padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+
+/* audience */
+.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.a-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:30px 26px;
+  box-shadow:0 6px 20px var(--shadow)}
+.a-card .ico{width:46px;height:46px;border-radius:12px;background:rgba(196,149,106,.14);
+  display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+.a-card h3{font-family:var(--serif);font-size:19px;color:var(--deep);margin-bottom:10px;font-weight:600}
+.a-card p{font-size:14.5px;color:var(--muted);line-height:1.85}
+
+/* path */
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{text-align:center;padding:0 16px;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;top:26px;right:-8px;width:16px;height:1px;
+  background:var(--border);display:none}
+.step .num{width:54px;height:54px;border-radius:50%;background:var(--card);border:2px solid var(--primary);
+  color:var(--primary-d);font-family:var(--serif);font-size:21px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 18px;position:relative;z-index:2;
+  box-shadow:0 5px 16px rgba(196,149,106,.2)}
+.step h4{font-family:var(--serif);font-size:16.5px;color:var(--deep);margin-bottom:8px;font-weight:600}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.7}
+
+/* instructor */
+.tutor{background:var(--bg2);border-radius:20px;padding:52px;border:1px solid var(--border);
+  display:flex;gap:38px;align-items:flex-start;flex-wrap:wrap}
+.tutor-main{flex:1 1 380px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.tutor .ava{width:106px;height:106px;border-radius:50%;background:var(--card);border:2px solid var(--gold);
+  overflow:hidden;flex-shrink:0;box-shadow:0 14px 30px rgba(166,120,72,.3)}
+.tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.tutor .txt{flex:1 1 270px}
+.tutor h3{font-family:var(--serif);font-size:24px;color:var(--deep);margin-bottom:7px}
+.tutor .role{color:var(--text);font-size:14.5px;line-height:2}
+.tutor p{font-size:14.5px;color:var(--muted);line-height:1.95}
+.tutor p+p{margin-top:9px}
+.tutor .chips{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0 12px}
+.tutor .chips span{background:rgba(196,149,106,.13);border:1px solid var(--border);color:var(--primary-d);
+  font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.tutor .quote{margin-top:18px;padding-left:16px;border-left:3px solid var(--primary);
+  font-family:var(--serif);font-style:italic;color:var(--primary-d);font-size:14.5px}
+.hd-figure{flex:0 0 216px;margin:0;text-align:center}
+.hd-figure img{width:100%;border-radius:14px;border:1px solid var(--border);background:var(--card);
+  box-shadow:0 16px 36px rgba(45,33,24,.13)}
+.hd-figure figcaption{font-size:12.5px;color:var(--primary-d);font-weight:700;letter-spacing:.08em;margin-top:10px}
+
+/* cta */
+.cta{background:linear-gradient(150deg,#2D2118,#3A2A1D);color:#F6EFE1;border-radius:22px;
+  padding:64px 48px;text-align:center;box-shadow:0 24px 50px rgba(45,33,24,.25)}
+.cta h2{font-family:var(--serif);font-size:32px;margin-bottom:16px;font-weight:700}
+.cta p{color:rgba(246,239,225,.78);font-size:15.5px;max-width:600px;margin:0 auto 32px}
+.cta .btn-fill{font-size:16px;padding:15px 40px}
+
+/* footer */
+footer{background:var(--deep);color:rgba(246,239,225,.66);padding:40px 24px;text-align:center;
+  font-size:13.5px;line-height:2}
+footer .f-title{font-family:var(--serif);color:#F6EFE1;font-size:16px;margin-bottom:6px;letter-spacing:.06em}
+footer .powered{color:rgba(246,239,225,.42);font-size:12px;margin-top:10px;letter-spacing:.1em}
+
+/* ---------- Responsive ---------- */
+@media(max-width:980px){
+  .hero-in{grid-template-columns:1fr;gap:36px;padding:64px 24px 72px}
+  .art{order:-1}
+  .hero-img{max-width:300px}
+  .hero h1{font-size:36px}
+  .modules{grid-template-columns:repeat(2,1fr)}
+  .types{grid-template-columns:repeat(2,1fr)}
+  .concept,.aud{grid-template-columns:1fr}
+  .path{grid-template-columns:repeat(2,1fr);gap:36px 0}
+  .tutor{padding:38px 30px}
+  .hd-figure{flex:0 1 200px}
+}
+@media(max-width:860px){
+  .nav-links{position:absolute;top:62px;left:0;right:0;background:var(--deep);
+    flex-direction:column;align-items:stretch;gap:0;padding:8px 0;display:none;
+    box-shadow:0 12px 24px rgba(0,0,0,.25)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 26px;font-size:15px;border-bottom:1px solid rgba(246,239,225,.08)}
+  .nav-cta{margin:12px 26px;text-align:center;border-radius:10px}
+  .hamb{display:block}
+}
+@media(max-width:600px){
+  section{padding:60px 0}
+  .hero h1{font-size:29px}
+  .sec-head h2{font-size:25px}
+  .wrap{padding:0 18px}
+  .modules{grid-template-columns:1fr}
+  .hero-stats div{padding-right:18px;margin-right:18px}
+  .hero-stats b{font-size:22px}
+  .cta{padding:44px 24px}
+  .cta h2{font-size:24px}
+  .tutor{padding:30px 20px;gap:24px}
+  .tutor-main{flex-direction:column;gap:14px}
+  .tutor .ava{width:88px;height:88px}
+  .hd-figure{flex:1 1 100%;max-width:240px;margin:4px auto 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="dot"></span>人类图入门</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#concept">核心观念</a>
+      <a href="#map">课程地图</a>
+      <a href="#types">五大类型</a>
+      <a href="#audience">适合谁</a>
+      <a href="#teacher">讲师</a>
+      <a class="nav-cta" href="hd-beginner-courseware.html">开始学习</a>
+    </div>
+    <button class="hamb" id="hamb" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-in">
+    <div>
+      <div class="kicker">Human Design · 零基础入门</div>
+      <h1>读懂你的人生<br><em>使用说明书</em></h1>
+      <p class="lead">人类图是一张用你的出生日期、时间与地点生成的「能量蓝图」。它不预测命运，而是帮你认清：你是谁、你如何做决定、你为何总在某些地方卡住——然后，换一个更顺流的方式生活。</p>
+      <div class="hero-btns">
+        <a class="btn btn-fill" href="hd-beginner-courseware.html">进入完整课件</a>
+        <a class="btn btn-line" href="hd-beginner-workbook.html">下载学员手册</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>8</b><span>大学习模块</span></div>
+        <div><b>5</b><span>大能量类型</span></div>
+        <div><b>9</b><span>大能量中心</span></div>
+        <div><b>0</b><span>基础即可入门</span></div>
+      </div>
+    </div>
+    <div class="art">
+      <img class="hero-img" src="HD.jpg" alt="人类图九大能量中心示意图">
+    </div>
+  </div>
+</header>
+
+<!-- 核心观念 -->
+<section id="concept">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Why Human Design</div>
+      <h2>它不是算命，是一面照见自己的镜子</h2>
+      <p>Karen Curry Parker 在《The Human Design Workbook》里反复强调：图上的每一个元素，都是一个「潜能」——你可以用高表达的方式活出它，也可能在低表达里反复受困。</p>
+    </div>
+    <div class="concept">
+      <div class="c-card">
+        <div class="n">01 / 来 源</div>
+        <h3>五大古老智慧的综合</h3>
+        <p>人类图融合了占星学、中国《易经》、印度脉轮系统、犹太卡巴拉生命之树与量子物理，用一张图把「人如何运作」系统化地呈现出来。</p>
+      </div>
+      <div class="c-card">
+        <div class="n">02 / 视 角</div>
+        <h3>潜能，而非宿命</h3>
+        <p>图上没有「好」与「坏」，只有光谱的两端。同一个「隐士」能量，低表达是逃避人群，高表达则是懂得独处充电、让能量可持续。</p>
+      </div>
+      <div class="c-card">
+        <div class="n">03 / 方 法</div>
+        <h3>从「被制约」到「有意识」</h3>
+        <p>制约来自成长经历、家庭模式与信念。人类图给你一套新的语言，让你看清自己如何被塑造，从而有意识地重新选择回应方式。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 课程地图 -->
+<section id="map" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Course Map</div>
+      <h2>八个模块，从看懂一张图到写出你的使命</h2>
+      <p>课程忠实改编自《The Human Design Workbook》，按「基础篇 → 应用篇」双螺旋展开：先读懂零件，再把它们拼成你自己的故事。</p>
+    </div>
+
+    <div class="phase-label"><span>基础篇 · 读懂自己</span><i></i></div>
+    <div class="modules">
+      <div class="m-card">
+        <div class="m-badge">1</div>
+        <h3>认识人类图</h3>
+        <p>五大智慧如何汇成一张图；什么是潜能与制约；为什么说「你在用故事塑造自己」。</p>
+        <span class="m-tag">观念地基</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">2</div>
+        <h3>读懂你的图</h3>
+        <p>个性（黑）与设计（红）两张生日；九中心、六十四闸门、三十六通道、六爻与行星。</p>
+        <span class="m-tag">读图入门</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">3</div>
+        <h3>五大能量类型</h3>
+        <p>显示者、生产者、显示生产者、投射者、反映者：各自的策略、情绪主题与人生角色。</p>
+        <span class="m-tag">核心中的核心</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">4</div>
+        <h3>内在权威</h3>
+        <p>荐骨、脾、情绪、自我、意志显化——你天生被设计成「怎样做决定」。</p>
+        <span class="m-tag">决策方式</span>
+      </div>
+    </div>
+
+    <div class="phase-label"><span>应用篇 · 活出自己</span><i></i></div>
+    <div class="modules">
+      <div class="m-card">
+        <div class="m-badge">5</div>
+        <h3>九大能量中心</h3>
+        <p>头顶、眉心、喉咙、G中心、意志、荐骨、情绪、脾、根：有定义与未定义如何影响你。</p>
+        <span class="m-tag">能量地图</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">6</div>
+        <h3>十二种人生角色</h3>
+        <p>六条爻（调查者/隐士/体验者/机会主义者/导师/榜样）组合出的十二种 Profile。</p>
+        <span class="m-tag">人生主题</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">7</div>
+        <h3>行星与闸门</h3>
+        <p>64 个闸门来自《易经》六十四卦；行星为每个闸门上色，写出你此生的「课程表」。</p>
+        <span class="m-tag">生命课程</span>
+      </div>
+      <div class="m-card">
+        <div class="m-badge">8</div>
+        <h3>整合与使命宣言</h3>
+        <p>把类型、权威、中心、角色、闸门串成一个故事，并写下属于你的人生使命宣言。</p>
+        <span class="m-tag">毕业作品</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 五大类型 -->
+<section id="types">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Five Energy Types</div>
+      <h2>先找到你的类型，就找到了策略</h2>
+      <p>类型是整张图里最简单、也最重要的入口。它决定了你「如何发起行动、如何被世界看见、如何不耗尽自己」。</p>
+    </div>
+    <div class="types">
+      <div class="t-card">
+        <div class="glyph">◆</div>
+        <h4>显示者</h4>
+        <div class="en">Manifestor</div>
+        <div class="st">先告知，再发起</div>
+        <div class="pc">约占 8%</div>
+      </div>
+      <div class="t-card">
+        <div class="glyph">●</div>
+        <h4>生产者</h4>
+        <div class="en">Generator</div>
+        <div class="st">等待回应</div>
+        <div class="pc">约占 35%</div>
+      </div>
+      <div class="t-card">
+        <div class="glyph">◐</div>
+        <h4>显示生产者</h4>
+        <div class="en">Manifesting Generator</div>
+        <div class="st">回应→想象→告知→行动</div>
+        <div class="pc">约占 35%</div>
+      </div>
+      <div class="t-card">
+        <div class="glyph">◎</div>
+        <h4>投射者</h4>
+        <div class="en">Projector</div>
+        <div class="st">等待被邀请</div>
+        <div class="pc">约占 21%</div>
+      </div>
+      <div class="t-card">
+        <div class="glyph">○</div>
+        <h4>反映者</h4>
+        <div class="en">Reflector</div>
+        <div class="st">等待一个农历周期</div>
+        <div class="pc">不足 1%</div>
+      </div>
+    </div>
+
+    <div style="margin-top:42px" class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>类型</th><th>核心策略</th><th>情绪主题（顺流 / 受阻）</th><th>此生角色</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>显示者</strong><br><span style="font-size:12px;color:var(--muted)">Manifestor</span></td><td>告知将被你影响的人，再行动</td><td><span class="pill">平静 / 愤怒</span></td><td>从灵感与内在创造流中发起行动</td></tr>
+          <tr><td><strong>生产者</strong><br><span style="font-size:12px;color:var(--muted)">Generator</span></td><td>等待回应，再行动</td><td><span class="pill">满足 / 挫败</span></td><td>做世界的工作，并在工作中找到精通</td></tr>
+          <tr><td><strong>显示生产者</strong><br><span style="font-size:12px;color:var(--muted)">Manifesting Generator</span></td><td>回应→想象→告知→行动</td><td><span class="pill">平静满足 / 挫败愤怒</span></td><td>以更快节奏做世界的工作，找到精通</td></tr>
+          <tr><td><strong>投射者</strong><br><span style="font-size:12px;color:var(--muted)">Projector</span></td><td>等待被认出、被邀请</td><td><span class="pill">成功 / 苦涩</span></td><td>管理、引导、指引他人</td></tr>
+          <tr><td><strong>反映者</strong><br><span style="font-size:12px;color:var(--muted)">Reflector</span></td><td>等待一个农历周期（约29天）再决定</td><td><span class="pill">惊喜 / 失望</span></td><td>映照周围人的健康与对齐状态</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 适合人群 -->
+<section id="audience" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Who It's For</div>
+      <h2>这门课，为这样的你而写</h2>
+      <p>不需要任何占星、易经或身心灵基础——你只需要一张自己的图，和一点想更了解自己的好奇心。</p>
+    </div>
+    <div class="aud">
+      <div class="a-card">
+        <div class="ico">🌱</div>
+        <h3>完全零基础</h3>
+        <p>第一次接触人类图，看到满屏数字和线条就头晕？课程从「这张图是什么」讲起，用生活化的比喻把每个零件拆开。</p>
+      </div>
+      <div class="a-card">
+        <div class="ico">🧭</div>
+        <h3>想更懂自己</h3>
+        <p>总在同一个地方反复受挫，或做决定时摇摆不定？人类图会让你看见：你原本被设计成怎样做选择。</p>
+      </div>
+      <div class="a-card">
+        <div class="ico">💬</div>
+        <h3>想用它帮别人</h3>
+        <p>教练、咨询师、团队带领者，希望有一套结构化的语言，帮助他人看见自己的天赋与卡点。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 学习路径 -->
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Learning Path</div>
+      <h2>四周，走完从入门到整合</h2>
+      <p>每周一个主题，配合手册里的觉察练习与读图日志，让知识真正落回生活。</p>
+    </div>
+    <div class="path">
+      <div class="step">
+        <div class="num">1</div>
+        <h4>第一周 · 认识</h4>
+        <p>模块 1–2：观念地基与读图入门，取得并打印你的图。</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h4>第二周 · 类型</h4>
+        <p>模块 3–4：找到你的类型与权威，开始按策略做小决定。</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h4>第三周 · 深入</h4>
+        <p>模块 5–6：逐个中心与人生角色，理解你的能量如何运作。</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h4>第四周 · 整合</h4>
+        <p>模块 7–8：行星与闸门，串成故事，写下使命宣言。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 讲师 -->
+<section id="teacher" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p class="role">人类图领读者计划发起人<br>真好玩人类图平台创始人<br>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源企业、软件公司、保险公司、互联网公司、电商平台等业态。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+          <div class="quote">「人类图不是告诉你该成为谁，而是提醒你——你本来就是谁。」</div>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>准备好读懂你的图了吗？</h2>
+      <p>从第一模块开始，用八节课的时间，把一张看似复杂的图，变成一本属于你的人生使用说明书。</p>
+      <a class="btn btn-fill" href="hd-beginner-courseware.html">进入完整课件 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-title">《人类图入门 · 从0读懂你的人生使用说明书》</div>
+  <div>课程主页</div>
+  <div class="powered">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+(function(){
+  var hamb=document.getElementById('hamb'),links=document.getElementById('navLinks');
+  hamb.addEventListener('click',function(){links.classList.toggle('open');});
+  links.addEventListener('click',function(e){if(e.target.tagName==='A')links.classList.remove('open');});
+})();
+</script>
+</body>
+</html>

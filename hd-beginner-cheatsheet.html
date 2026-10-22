@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图入门 · 速查卡</title>
+<meta name="description" content="人类图速查卡：五大类型、五种权威、九大中心、六爻、十二角色、行星符号与读图五步，一页速查。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:14px;
+  -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:var(--primary-d);text-decoration:none}
+.top{background:var(--deep);color:#F6EFE1;position:sticky;top:0;z-index:20}
+.top-in{max-width:1180px;margin:0 auto;padding:0 26px;height:54px;display:flex;align-items:center;gap:14px}
+.top .t{font-family:var(--serif);font-size:15px;letter-spacing:.05em}
+.top .links{margin-left:auto;display:flex;gap:16px;align-items:center}
+.top .links a{color:rgba(246,239,225,.72);font-size:12.5px}
+.top .links a:hover{color:var(--gold)}
+.top .print{background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:999px;
+  font-size:12px;cursor:pointer;font-family:var(--sans)}
+.top .print:hover{background:var(--primary-d)}
+
+.head{max-width:1180px;margin:0 auto;padding:38px 26px 22px}
+.head .k{color:var(--primary);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.head h1{font-family:var(--serif);font-size:30px;color:var(--deep);font-weight:700}
+.head p{color:var(--muted);font-size:14px;margin-top:8px}
+
+.grid{max-width:1180px;margin:0 auto;padding:0 26px 60px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;align-items:start}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  box-shadow:0 4px 16px var(--shadow)}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--bg2);
+  border-bottom:1px solid var(--border)}
+.card-h .ic{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.card-h h2{font-family:var(--serif);font-size:15.5px;color:var(--deep);font-weight:600}
+.card-h .en{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-left:auto}
+.card-b{padding:14px 18px 16px}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--primary-d);font-weight:600;padding:6px 6px;border-bottom:1px solid var(--border);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px dashed var(--border-l);vertical-align:top;color:var(--text)}
+tr:last-child td{border-bottom:none}
+td strong{color:var(--deep)}
+td .m{color:var(--muted);font-size:11px}
+.tag{display:inline-block;font-size:10.5px;color:var(--primary-d);background:rgba(196,149,106,.14);
+  padding:1px 7px;border-radius:999px;white-space:nowrap}
+
+.li{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border-l);font-size:12.5px}
+.li:last-child{border-bottom:none}
+.li .k{color:var(--primary-d);font-weight:600;min-width:58px;flex:0 0 auto}
+.li .v{color:var(--text)}
+.li .v em{color:var(--muted);font-style:normal;font-size:11.5px}
+
+.prof{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-top:2px}
+.prof .p{font-size:12px;display:flex;gap:6px;align-items:baseline}
+.prof .p b{color:var(--primary-d);font-family:var(--serif);min-width:26px}
+.prof .p span{color:var(--text)}
+
+.steps{counter-reset:s;list-style:none}
+.steps li{position:relative;padding:7px 0 7px 30px;border-bottom:1px dashed var(--border-l);font-size:12.5px}
+.steps li:last-child{border-bottom:none}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:7px;width:20px;height:20px;
+  border-radius:50%;background:var(--primary);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif)}
+.steps b{color:var(--deep)}
+
+.note{background:var(--bg2);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--muted);margin-top:10px}
+.note b{color:var(--primary-d)}
+
+.pl{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.pl span{font-size:11.5px;background:rgba(196,149,106,.12);color:var(--primary-d);padding:3px 9px;border-radius:999px}
+
+.sym{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.sym .s{display:flex;gap:7px;align-items:baseline;font-size:12px;padding:3px 0}
+.sym .s .g{font-size:14px;color:var(--primary-d);min-width:16px;text-align:center}
+.sym .s .n{color:var(--text);min-width:44px}
+.sym .s .d{color:var(--muted);font-size:11px}
+
+.foot{max-width:1180px;margin:0 auto;padding:24px 26px 40px;text-align:center;color:var(--muted);
+  font-size:11.5px;line-height:1.9;border-top:1px solid var(--border)}
+.foot .ft{font-family:var(--serif);color:var(--deep);font-size:13px;margin-bottom:4px}
+.foot .pw{font-size:10px;letter-spacing:.12em;opacity:.7;margin-top:4px}
+
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr;padding:0 16px 44px}
+  .head{padding:28px 16px 18px}
+  .head h1{font-size:24px}
+  .top .links a:not(.keep){display:none}
+  .prof{grid-template-columns:1fr}
+}
+@media print{
+  .top{display:none!important}
+  body{background:#fff;font-size:9.5pt}
+  .grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 0 20px;max-width:none}
+  .card{break-inside:avoid;box-shadow:none}
+  .head{padding:0 0 14px}
+  @page{margin:10mm}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <span class="t">人类图入门 · 速查卡</span>
+    <div class="links">
+      <a class="keep" href="hd-beginner-course.html">主页</a>
+      <a class="keep" href="hd-beginner-courseware.html">完整课件</a>
+      <a class="keep" href="hd-beginner-workbook.html">学员手册</a>
+      <button class="print" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</div>
+
+<div class="head">
+  <div class="k">Quick Reference</div>
+  <h1>人类图速查卡</h1>
+  <p>贴在桌前、存进手机——需要时扫一眼，就能找回你的坐标。</p>
+</div>
+
+<div class="grid">
+
+  <!-- 五大类型 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">◆</div><h2>五大能量类型</h2><span class="en">Types</span></div>
+    <div class="card-b">
+      <table>
+        <tr><th>类型</th><th>策略</th><th>情绪主题</th><th>占比</th></tr>
+        <tr><td><strong>显示者</strong></td><td>告知再发起</td><td>平静 / 愤怒</td><td>8%</td></tr>
+        <tr><td><strong>生产者</strong></td><td>等待回应</td><td>满足 / 挫败</td><td>35%</td></tr>
+        <tr><td><strong>显示生产者</strong></td><td>回应→想象→告知→行动</td><td>平静满足 / 挫败愤怒</td><td>35%</td></tr>
+        <tr><td><strong>投射者</strong></td><td>等待被邀请</td><td>成功 / 苦涩</td><td>21%</td></tr>
+        <tr><td><strong>反映者</strong></td><td>等待农历周期</td><td>惊喜 / 失望</td><td>&lt;1%</td></tr>
+      </table>
+      <div class="note"><b>记住：</b>情绪主题强烈地反复出现，通常是「没活出真实自己」的信号。</div>
+    </div>
+  </div>
+
+  <!-- 五种权威 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">◎</div><h2>五种内在权威</h2><span class="en">Authority</span></div>
+    <div class="card-b">
+      <div class="li"><span class="k">荐骨</span><span class="v">生产者类型；直觉的「嗯哼 / 唔唔」<em>信任本能</em></span></div>
+      <div class="li"><span class="k">脾</span><span class="v">当下就知道；自发、无需推敲<em>事后常恍然大悟</em></span></div>
+      <div class="li"><span class="k">情绪</span><span class="v">需要时间等清晰；决定须随时间一致<em>别说「马上答复」</em></span></div>
+      <div class="li"><span class="k">自我</span><span class="v">把选择说出来才清晰<em>只需倾听的共鸣板</em></span></div>
+      <div class="li"><span class="k">意志显化</span><span class="v">有能量/资源才决定做<em>健康自我价值才能说不</em></span></div>
+    </div>
+  </div>
+
+  <!-- 九大中心 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">❖</div><h2>九大能量中心</h2><span class="en">Centers</span></div>
+    <div class="card-b">
+      <div class="li"><span class="k">头顶</span><span class="v">灵感 / 心智压力 <em>想法、好奇、顿悟</em></span></div>
+      <div class="li"><span class="k">眉心</span><span class="v">概念 / 思考 <em>把洞见变成可行动的念头</em></span></div>
+      <div class="li"><span class="k">喉咙</span><span class="v">表达 / 行动 <em>说出来，才能显化</em></span></div>
+      <div class="li"><span class="k">G中心</span><span class="v">身份 / 爱 / 方向 <em>我是谁、往哪去</em></span></div>
+      <div class="li"><span class="k">意志</span><span class="v">自我价值 / 物质资源 <em>金钱、承诺、休息</em></span></div>
+      <div class="li"><span class="k">荐骨</span><span class="v">生命力 / 工作 <em>可持续的劳动力</em></span></div>
+      <div class="li"><span class="k">情绪</span><span class="v">情绪 / 感受 <em>如波浪起伏，需被允许</em></span></div>
+      <div class="li"><span class="k">脾</span><span class="v">直觉 / 健康 / 生存 <em>本能的战或逃</em></span></div>
+      <div class="li"><span class="k">根</span><span class="v">压力 / 驱动 <em>肾上腺素，脉冲开合</em></span></div>
+      <div class="note"><b>有颜色</b>=稳定属于你；<b>白色</b>=吸收并放大他人能量。</div>
+    </div>
+  </div>
+
+  <!-- 六爻 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">Ⅰ</div><h2>六条爻</h2><span class="en">Lines</span></div>
+    <div class="card-b">
+      <div class="li"><span class="k">1 调查</span><span class="v">需要资讯，有数据才安心</span></div>
+      <div class="li"><span class="k">2 隐士</span><span class="v">需要独处整合、重置能量</span></div>
+      <div class="li"><span class="k">3 体验</span><span class="v">必须实验，允许犯错、不被评判</span></div>
+      <div class="li"><span class="k">4 机会</span><span class="v">靠人脉与分享；需要被接纳</span></div>
+      <div class="li"><span class="k">5 导师</span><span class="v">教导亲历的；常被投射期待</span></div>
+      <div class="li"><span class="k">6 榜样</span><span class="v">三阶段：实验 → 疗愈 → 活出所学</span></div>
+      <div class="note"><b>Profile 读法：</b>第一个数字=你如何分享天赋；第二个=你需要什么才安心。</div>
+    </div>
+  </div>
+
+  <!-- 十二角色 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">◈</div><h2>十二种人生角色</h2><span class="en">Profiles</span></div>
+    <div class="card-b">
+      <div class="prof">
+        <div class="p"><b>1/3</b><span>调查 / 体验</span></div>
+        <div class="p"><b>1/4</b><span>调查 / 机会</span></div>
+        <div class="p"><b>2/4</b><span>隐士 / 机会</span></div>
+        <div class="p"><b>2/5</b><span>隐士 / 导师</span></div>
+        <div class="p"><b>3/5</b><span>体验 / 导师</span></div>
+        <div class="p"><b>3/6</b><span>体验 / 榜样</span></div>
+        <div class="p"><b>4/6</b><span>机会 / 榜样</span></div>
+        <div class="p"><b>4/1</b><span>机会 / 调查</span></div>
+        <div class="p"><b>5/1</b><span>导师 / 调查</span></div>
+        <div class="p"><b>5/2</b><span>导师 / 隐士</span></div>
+        <div class="p"><b>6/2</b><span>榜样 / 隐士</span></div>
+        <div class="p"><b>6/3</b><span>榜样 / 体验</span></div>
+      </div>
+      <div class="note"><b>提醒：</b>两个数字的需要都被满足，你才会对生活感到平静。</div>
+    </div>
+  </div>
+
+  <!-- 行星符号 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">☉</div><h2>行星符号</h2><span class="en">Planets</span></div>
+    <div class="card-b">
+      <div class="sym">
+        <div class="s"><span class="g">☉</span><span class="n">太阳</span><span class="d">核心自我</span></div>
+        <div class="s"><span class="g">⊕</span><span class="n">地球</span><span class="d">根基</span></div>
+        <div class="s"><span class="g">☋</span><span class="n">南交点</span><span class="d">早年课题</span></div>
+        <div class="s"><span class="g">☊</span><span class="n">北交点</span><span class="d">前行方向</span></div>
+        <div class="s"><span class="g">☽</span><span class="n">月亮</span><span class="d">情绪</span></div>
+        <div class="s"><span class="g">☿</span><span class="n">水星</span><span class="d">沟通</span></div>
+        <div class="s"><span class="g">♀</span><span class="n">金星</span><span class="d">价值观</span></div>
+        <div class="s"><span class="g">♂</span><span class="n">火星</span><span class="d">行动</span></div>
+        <div class="s"><span class="g">♃</span><span class="n">木星</span><span class="d">扩张</span></div>
+        <div class="s"><span class="g">♄</span><span class="n">土星</span><span class="d">考验</span></div>
+        <div class="s"><span class="g">⚷</span><span class="n">凯龙</span><span class="d">疗愈</span></div>
+        <div class="s"><span class="g">⛢</span><span class="n">天王</span><span class="d">突变</span></div>
+        <div class="s"><span class="g">♆</span><span class="n">海王</span><span class="d">灵性</span></div>
+        <div class="s"><span class="g">♇</span><span class="n">冥王</span><span class="d">转化</span></div>
+      </div>
+      <div class="note"><b>黑</b>=意识/灵魂目的；<b>红</b>=潜意识/人生目的；方格=两者皆有。</div>
+    </div>
+  </div>
+
+  <!-- 读图五步 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">⑤</div><h2>读图五步</h2><span class="en">How to Read</span></div>
+    <div class="card-b">
+      <ol class="steps">
+        <li><b>类型 + 策略</b>：你是哪种能量类型，策略是什么？</li>
+        <li><b>内在权威</b>：你靠什么做决定？</li>
+        <li><b>有定义 / 未定义中心</b>：哪些能量稳定属于你？</li>
+        <li><b>Profile</b>：你的人生角色与学习方式？</li>
+        <li><b>太阳 / 地球 / 南北交点闸门</b>：核心主题、根基与方向。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 关键数字 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">#</div><h2>关键数字</h2><span class="en">Key Numbers</span></div>
+    <div class="card-b">
+      <div class="pl">
+        <span>5 大类型</span>
+        <span>9 大中心</span>
+        <span>64 个闸门</span>
+        <span>36 条通道</span>
+        <span>6 条爻</span>
+        <span>12 种 Profile</span>
+        <span>13 颗行星</span>
+        <span>2 张生日</span>
+        <span>5 种权威</span>
+      </div>
+      <div class="note"><b>64 闸门</b>来自《易经》六十四卦；<b>9 中心</b>源自印度脉轮系统的细分；<b>2 张生日</b>相隔约 88 个天文度数（约三个月）。</div>
+    </div>
+  </div>
+
+  <!-- 核心口诀 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">✦</div><h2>核心口诀</h2><span class="en">Golden Rule</span></div>
+    <div class="card-b">
+      <div class="li"><span class="k">潜能</span><span class="v">图上的每个元素都是潜能，不是判决。</span></div>
+      <div class="li"><span class="k">光谱</span><span class="v">同一能量，低表达是牢笼，高表达是天赋。</span></div>
+      <div class="li"><span class="k">策略</span><span class="v">减少阻力，而不是限制你。</span></div>
+      <div class="li"><span class="k">权威</span><span class="v">从「想清楚」回到「感受到」。</span></div>
+      <div class="li"><span class="k">故事</span><span class="v">你的图是一个故事，你有权重写它。</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <div class="ft">《人类图入门》｜速查卡</div>
+  <div>内容改编自 Karen Curry Parker《The Human Design Workbook》，仅供学习参考。</div>
+  <div class="pw">Powered By Kan Man Tang</div>
+</div>
+
+</body>
+</html>

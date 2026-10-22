@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图入门 · 完整课件</title>
+<meta name="description" content="人类图零基础完整课件：从认识人类图、读懂身体图，到五大类型、内在权威、九大中心、十二角色、行星与闸门，最终整合并写下人生使命宣言。改编自 Karen Curry Parker《The Human Design Workbook》。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,'Times New Roman',serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.85;font-size:16px;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--primary-d);text-decoration:none}
+
+/* ---------- Sidebar ---------- */
+.side{position:fixed;top:0;left:0;bottom:0;width:292px;background:var(--deep);color:#F6EFE1;
+  display:flex;flex-direction:column;z-index:120;border-right:1px solid rgba(255,255,255,.06)}
+.side-top{padding:26px 24px 20px;border-bottom:1px solid rgba(246,239,225,.1)}
+.side-top .t{font-family:var(--serif);font-size:19px;letter-spacing:.06em;color:#F6EFE1;font-weight:600}
+.side-top .s{font-size:11.5px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-top:6px}
+.side-nav{flex:1;overflow-y:auto;padding:14px 0}
+.side-group{font-size:11px;letter-spacing:.2em;color:rgba(246,239,225,.4);text-transform:uppercase;
+  padding:16px 24px 8px}
+.side-nav a{display:flex;align-items:center;gap:10px;padding:10px 24px;color:rgba(246,239,225,.72);
+  font-size:14px;border-left:3px solid transparent;transition:.18s;line-height:1.4}
+.side-nav a .no{font-family:var(--serif);font-size:12.5px;color:rgba(212,168,67,.7);min-width:16px}
+.side-nav a:hover{background:rgba(196,149,106,.1);color:#F6EFE1}
+.side-nav a.active{background:rgba(196,149,106,.16);color:var(--gold);border-left-color:var(--gold)}
+.side-bottom{padding:16px 24px 22px;border-top:1px solid rgba(246,239,225,.1)}
+.side-bottom a{font-size:12.5px;color:rgba(246,239,225,.6);display:block;margin-bottom:8px}
+.side-bottom a:hover{color:var(--gold)}
+.side-bottom .pw{font-size:10.5px;letter-spacing:.1em;color:rgba(246,239,225,.3);margin-top:10px}
+
+/* ---------- Mobile bar ---------- */
+.mbar{display:none;position:sticky;top:0;z-index:110;background:var(--deep);color:#F6EFE1;
+  height:56px;align-items:center;gap:12px;padding:0 18px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.mbar button{background:none;border:none;color:#F6EFE1;font-size:22px;cursor:pointer;line-height:1}
+.mbar .mt{font-family:var(--serif);font-size:15.5px;letter-spacing:.05em}
+.mbar .back{margin-left:auto;font-size:12px;color:var(--gold)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:115}
+
+/* ---------- Content ---------- */
+.main{margin-left:292px}
+.inner{max-width:860px;margin:0 auto;padding:64px 40px 90px}
+.cover{margin-bottom:56px;padding-bottom:36px;border-bottom:1px solid var(--border)}
+.cover .k{color:var(--primary);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.cover h1{font-family:var(--serif);font-size:38px;color:var(--deep);line-height:1.35;font-weight:700;margin-bottom:14px}
+.cover p{color:var(--muted);font-size:15.5px;max-width:660px}
+
+/* module */
+.mod{padding:54px 0;border-bottom:1px solid var(--border)}
+.mod:last-child{border-bottom:none}
+.mod-num{display:inline-flex;align-items:center;gap:9px;color:var(--primary-d);font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.mod-num::before{content:"";width:26px;height:1px;background:var(--primary)}
+.mod-title{font-family:var(--serif);font-size:30px;color:var(--deep);font-weight:700;line-height:1.35;margin-bottom:6px}
+.mod-en{font-size:12.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:22px}
+.lead{font-size:16.5px;color:var(--text);line-height:1.95;margin-bottom:10px}
+.lead em{color:var(--primary-d);font-style:normal;font-weight:600}
+
+h3{font-family:var(--serif);font-size:21px;color:var(--deep);font-weight:600;margin:34px 0 14px;
+  padding-left:14px;border-left:4px solid var(--primary)}
+h4{font-family:var(--serif);font-size:17px;color:var(--deep);font-weight:600;margin:22px 0 8px}
+p{margin-bottom:14px;color:var(--text)}
+.mod ul,.mod ol{margin:6px 0 18px 4px;padding-left:22px}
+.mod li{margin-bottom:9px;color:var(--text);line-height:1.8}
+.mod strong{color:var(--deep);font-weight:600}
+.hl{background:linear-gradient(transparent 62%,rgba(212,168,67,.35) 0);padding:0 2px}
+
+/* integration box */
+.box{background:linear-gradient(135deg,rgba(196,149,106,.1),rgba(212,168,67,.08));
+  border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;
+  padding:22px 24px;margin:24px 0}
+.box .bh{font-family:var(--serif);font-size:15.5px;color:var(--primary-d);font-weight:600;
+  margin-bottom:8px;letter-spacing:.03em}
+.box p{margin-bottom:6px;font-size:14.5px;color:var(--muted)}
+.box p:last-child{margin-bottom:0}
+
+/* exercise */
+.ex{background:var(--card);border:2px dashed var(--primary);border-radius:16px;padding:24px 26px;margin:30px 0 8px}
+.ex .eh{font-family:var(--serif);font-size:16px;color:var(--deep);font-weight:600;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px}
+.ex .eh::before{content:"✎";color:var(--primary);font-size:18px}
+.ex ol{margin:0;padding-left:20px}
+.ex li{color:var(--muted);font-size:14.5px}
+
+/* type card */
+.type{border:1px solid var(--border);border-radius:14px;background:var(--card);margin:22px 0;
+  box-shadow:0 4px 16px var(--shadow);overflow:hidden}
+.type-h{display:flex;align-items:center;gap:14px;padding:20px 24px;background:var(--bg2);
+  border-bottom:1px solid var(--border)}
+.type-h .g{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px}
+.type-h .nm{font-family:var(--serif);font-size:21px;color:var(--deep);font-weight:700;line-height:1.2}
+.type-h .en{font-size:11.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.type-h .pct{margin-left:auto;font-family:var(--serif);font-size:15px;color:var(--primary-d);font-weight:600;
+  background:rgba(196,149,106,.14);padding:5px 12px;border-radius:999px;white-space:nowrap}
+.type-body{padding:20px 24px}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:8px 14px;font-size:14.5px;margin-bottom:6px}
+.kv dt{color:var(--primary-d);font-weight:600}
+.kv dd{color:var(--text)}
+.type-note{font-size:13.5px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+
+/* center row */
+.center{border:1px solid var(--border);border-radius:12px;background:var(--card);padding:20px 22px;margin:14px 0}
+.center-h{display:flex;align-items:baseline;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.center-h .nm{font-family:var(--serif);font-size:18px;color:var(--deep);font-weight:600}
+.center-h .en{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.center-h .tag{font-size:11.5px;color:var(--primary-d);background:rgba(196,149,106,.12);
+  padding:2px 9px;border-radius:999px;margin-left:auto}
+.center p{font-size:14.5px;margin-bottom:6px;color:var(--text)}
+.center .du{font-size:13.5px;color:var(--muted)}
+.center .du b{color:var(--primary-d);font-weight:600}
+
+/* table */
+.tw{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--card);margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+thead th{background:var(--deep);color:#F6EFE1;padding:12px 14px;text-align:left;font-weight:600;font-size:13px;white-space:nowrap}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--border-l);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(196,149,106,.06)}
+td strong{color:var(--deep)}
+
+/* quote */
+.quote{margin:24px 0;padding:20px 26px;background:var(--bg2);border-left:4px solid var(--gold);
+  border-radius:0 12px 12px 0;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--primary-d);line-height:1.8}
+.quote .by{display:block;margin-top:8px;font-size:12.5px;font-style:normal;color:var(--muted);letter-spacing:.06em}
+
+/* template */
+.tpl{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 30px;margin:22px 0;
+  box-shadow:0 4px 16px var(--shadow)}
+.tpl p{font-size:15px;line-height:2.4;margin-bottom:4px;color:var(--text)}
+.tpl .fill{display:inline-block;min-width:120px;border-bottom:1.5px solid var(--primary);
+  color:var(--primary-d);font-weight:600;padding:0 6px;text-align:center}
+.tpl .lab{font-size:12px;color:var(--muted)}
+
+/* footer */
+.foot{padding:34px 0 10px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+.foot .ft{font-family:var(--serif);color:var(--deep);font-size:14px;letter-spacing:.05em;margin-bottom:4px}
+.foot .pw{font-size:11px;letter-spacing:.12em;color:var(--muted);opacity:.7;margin-top:6px}
+
+@media(max-width:980px){
+  .side{transform:translateX(-100%);transition:transform .28s;width:280px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mbar{display:flex}
+  .scrim.show{display:block}
+  .inner{padding:36px 22px 70px}
+  .cover h1{font-size:30px}
+  .mod-title{font-size:25px}
+  h3{font-size:19px}
+}
+@media(max-width:600px){
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv dt{margin-top:8px}
+  .type-h{flex-wrap:wrap}
+  .type-h .pct{margin-left:0}
+  .inner{padding:28px 18px 60px}
+  .cover h1{font-size:26px}
+}
+
+/* print */
+@media print{
+  .side,.mbar,.scrim{display:none!important}
+  .main{margin-left:0}
+  .inner{max-width:none;padding:0}
+  .mod{page-break-inside:auto;border-bottom:1px solid #ddd}
+  body{background:#fff;font-size:12pt}
+  .box,.ex,.type,.center{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<aside class="side" id="side">
+  <div class="side-top">
+    <div class="t">人类图入门</div>
+    <div class="s">Courseware</div>
+  </div>
+  <nav class="side-nav" id="sideNav">
+    <div class="side-group">基础篇 · 读懂自己</div>
+    <a href="#m1"><span class="no">01</span>认识人类图</a>
+    <a href="#m2"><span class="no">02</span>读懂你的图</a>
+    <a href="#m3"><span class="no">03</span>五大能量类型</a>
+    <a href="#m4"><span class="no">04</span>内在权威</a>
+    <div class="side-group">应用篇 · 活出自己</div>
+    <a href="#m5"><span class="no">05</span>九大能量中心</a>
+    <a href="#m6"><span class="no">06</span>十二种人生角色</a>
+    <a href="#m7"><span class="no">07</span>行星与闸门</a>
+    <a href="#m8"><span class="no">08</span>整合与使命宣言</a>
+  </nav>
+  <div class="side-bottom">
+    <a href="hd-beginner-course.html">← 返回课程主页</a>
+    <a href="hd-beginner-workbook.html">打开学员手册</a>
+    <a href="hd-beginner-cheatsheet.html">查看速查卡</a>
+    <div class="pw">Powered By Kan Man Tang</div>
+  </div>
+</aside>
+
+<div class="mbar">
+  <button id="mhamb" aria-label="打开目录">☰</button>
+  <span class="mt">人类图入门 · 课件</span>
+  <a class="back" href="hd-beginner-course.html">主页</a>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<main class="main">
+<div class="inner">
+
+  <div class="cover">
+    <div class="k">Human Design · 零基础完整课件</div>
+    <h1>从一张图，读懂你自己</h1>
+    <p>本课件忠实改编自 Karen Curry Parker《The Human Design Workbook: A Step-by-Step Guide to Understanding Your Own Chart and How It Can Transform Your Life》（Hierophant Publishing, 2022）。八个模块，带你从零开始，把一张复杂的图，读成一本属于你的人生使用说明书。</p>
+  </div>
+
+  <!-- ================= M1 ================= -->
+  <section class="mod" id="m1">
+    <div class="mod-num">模块一 · 基础篇</div>
+    <h2 class="mod-title">认识人类图</h2>
+    <div class="mod-en">What Is Human Design</div>
+    <p class="lead">在学会读图之前，先弄明白一件事：人类图到底是什么，它想帮你解决什么问题。它<em>不是算命</em>，而是一套让你重新认识自己的语言。</p>
+
+    <h3>一、一张图，五种古老智慧</h3>
+    <p>人类图是一套「人格类型系统」。它把几种古老的智慧综合在一起：<strong>占星学</strong>、中国的<strong>《易经》</strong>、印度的<strong>脉轮系统</strong>、犹太神秘学<strong>卡巴拉</strong>，以及<strong>量子物理</strong>。它诞生于上世纪八十年代，由 Ra Uru Hu 传述整理，如今已发展出丰富的实践体系。</p>
+    <p>你的图（Body Graph，身体图）是用你的<strong>出生日期、出生时间与出生地点</strong>生成的。它像一张个人的「蓝图」，展示你如何最自然地活出此生的目的，也揭示那些塑造了「人之所以为人」的原型主题。</p>
+    <p>用作者的话说，这张图在回答四个问题：<strong>你是谁？你如何体验与处理这个世界？你如何最好地做决定？你需要什么，才能与真实的自己保持和谐？</strong></p>
+
+    <h3>二、灵魂目的 与 人生目的</h3>
+    <p>你的图里同时装着两个层面：</p>
+    <ul>
+      <li><strong>灵魂目的（Soul Purpose）</strong>——关乎成长与扩张。我们的灵魂来到地球，是为了体验它需要体验的，从而为宇宙带来成长。</li>
+      <li><strong>人生目的（Life Purpose）</strong>——是你这一世「你是谁」的故事。它写在你的能量蓝图里，也写在你的基因与表观遗传的血脉中。</li>
+    </ul>
+    <p>出生那一刻，灵魂目的与人生目的整合，创造出你这个「一次性的事件」。我们一生中常感到的内在拉扯，往往就来自这两个层面之间的张力。理解人类图，能让你更清楚地看见这些拉扯，从而活得更通透。</p>
+
+    <h3>三、潜能与制约：没有好坏，只有光谱</h3>
+    <p>这是全书最重要的观念：<strong>图上的每一个元素，都代表一个「潜能」——一个原型、一个主题。而潜能可以被表达在一条光谱上：高表达，或低表达。</strong></p>
+
+    <div class="box">
+      <div class="bh">「潜能 × 阴影」整合举例：隐士能量</div>
+      <p><b>低表达：</b>害怕与人连接，把自己藏起来、否定生活，永远无法活出爱与社群的可能。</p>
+      <p><b>高表达：</b>懂得需要独处来恢复、补充能量，用「隐士」的方式让自己的能量保持可持续。</p>
+      <p>同一个能量，可以是牢笼，也可以是资源。差别不在能量本身，而在你如何表达它。</p>
+    </div>
+
+    <p>那么，是什么决定了你活在高表达还是低表达？答案是<strong>制约（Conditioning）</strong>——你从生活经验、家庭模式与信念中，学会的那套「应该怎样」的行为方式，以及你体验世界能量的方式。</p>
+    <p>比如「创造力」这个主题。你可能从小因为一次在课堂上走神被老师敲桌子，就关掉了爱做白日梦的那部分自己；父母若相信「玩耍是奢侈品、必须先做完正事」，你又会把创造的渴望压到「等以后退休再说」。这些经历层层叠加，最终让你在成年后，一想到追求热爱就下意识地压制它。</p>
+
+    <h3>四、用新的语言，重写你的故事</h3>
+    <p>作者提醒我们：<strong>人类图教会你把你的图，当成一个「故事」来看。</strong>你的个人叙事深深受到制约的影响，而图上的每个主题，都给了你一种新的词汇，去重新诠释「我为什么是这样」。</p>
+    <p>英文里的「abracadabra（咒语）」源自阿拉姆语，意思是<strong>「我说话，我创造」</strong>。语言是有力量的：它能统一人，也能分裂人；它是连接神性与人类故事的桥。你用来描述自己的词，会改变你与金钱、家人、伴侣的关系，帮你找到对的工作，加深灵性连接，甚至疗愈祖先的记忆。</p>
+    <p>这本书（以及这门课）的每一节，都会带你做三件事：<strong>沉思（contemplation）、书写（journaling）、以及逐步搭建你的「人生使命宣言」</strong>。</p>
+
+    <div class="box">
+      <div class="bh">「语言 × 自我叙事」整合</div>
+      <p>你反复对自己说的那句话，就是你人生的剧本。人类图给你的，不是一句新的「判决」，而是一套更温柔、更准确的词汇——让你能把「我怎么这么懒」改写成「我的能量需要按节奏流动」。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>写下从小到大，别人反复贴在你身上的三个标签或信念（例如「你太敏感」「你不切实际」）。</li>
+        <li>挑一个你最想改变、最常让你受困的「低表达」模式。</li>
+        <li>用一句话重写它：把「我就是……」改成「我不是……，我只是需要……」。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M2 ================= -->
+  <section class="mod" id="m2">
+    <div class="mod-num">模块二 · 基础篇</div>
+    <h2 class="mod-title">读懂你的图</h2>
+    <div class="mod-en">Reading Your Human Design Chart</div>
+    <p class="lead">一张图看起来密密麻麻，其实只有几个零件。把它们认全，你就有了读图的「地图」。</p>
+
+    <h3>一、两张出生日期：意识与潜意识</h3>
+    <p>你的图上其实印着<strong>两个生日</strong>。这是人类图最容易被忽略、却最关键的设计。</p>
+    <ul>
+      <li><strong>黑色（右侧，Personality 个性）</strong>：你真正的出生时刻。它代表你<strong>有意识</strong>知道的那部分自己——你的性格、你想成为的样子，以及关于<strong>灵魂目的</strong>的信息。黑色元素是你觉察得到、某种程度上能掌控的部分。</li>
+      <li><strong>红色（左侧，Design 设计）</strong>：大约在你出生前 <strong>88 个天文度数</strong>（约三个月）的位置，也就是母亲可能第一次感觉到你在腹中胎动的时刻。它代表你<strong>无意识</strong>的那部分自己——你的身体智慧、你未必觉察的面向，以及关于<strong>人生目的</strong>的信息。</li>
+    </ul>
+    <p>换句话说：<span class="hl">黑色是你认识的自己，红色是别人眼中的你、也是你身体的智慧。</span></p>
+
+    <h3>二、图的四个零件</h3>
+    <h4>1. 九大能量中心（Centers）</h4>
+    <p>图上九个几何形状，对应印度脉轮系统的七个中心（人类图把它细分为九个）。<strong>有颜色 = 有定义（Defined）</strong>，代表这股能量稳定地在你身上运作；<strong>白色 = 未定义／开放（Undefined / Open）</strong>，代表你会吸收并放大来自他人的能量。</p>
+
+    <h4>2. 六十四个闸门（Gates）</h4>
+    <p>图上那 64 个数字，就是闸门。它们对应<strong>《易经》的六十四卦</strong>，是比类型和中心更细微的人格特质。每个闸门都连着某个能量中心。</p>
+    <ul>
+      <li><strong>黑色闸门</strong>：来自黑色数字，你有意识地知道，提供关于灵魂目的的信息。</li>
+      <li><strong>红色闸门</strong>：来自红色数字，你可能并未觉察，提供关于人生目的的信息。</li>
+      <li><strong>方格（黑红相间）</strong>：同一个闸门在意识和潜意识里都被启动，是很强的主题。</li>
+      <li><strong>白线</strong>：开放的闸门，你总会从环境与他人那里「借」这股能量。</li>
+    </ul>
+
+    <h4>3. 三十六条通道（Channels）</h4>
+    <p>两个闸门相连，就形成一条通道。通道把两个中心连接起来，并让它们「有定义」。整张图共有 36 条通道，是能量在图里流动的「主干道」。</p>
+
+    <h4>4. 六条爻（Lines）</h4>
+    <p>每个闸门旁边都有一个带小数点的小数字，例如 <strong>8.6</strong>、<strong>14.6</strong>、<strong>35.3</strong>——小数点后的数字就是「爻」，共六条。爻为闸门的主题加上一层具体的「味道」，也是构成「人生角色（Profile）」的基本单位。</p>
+
+    <h3>三、十三个行星符号</h3>
+    <p>图的两侧会列出红色与黑色的行星符号。每颗行星都为它所在的闸门「上色」，赋予不同的主题。认识这些符号，你就能读懂图边缘那一列信息：</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>符号</th><th>行星</th><th>主题（简）</th></tr></thead>
+        <tbody>
+          <tr><td>☉</td><td>太阳 Sun</td><td>核心自我、此生的主要表达</td></tr>
+          <tr><td>⊕</td><td>地球 Earth</td><td>扎根、基础、你立足的地方</td></tr>
+          <tr><td>☋</td><td>南交点 South Node</td><td>早年的课题、你熟悉的舒适区</td></tr>
+          <tr><td>☊</td><td>北交点 North Node</td><td>此生前行的方向、要长成的样子</td></tr>
+          <tr><td>☽</td><td>月亮 Moon</td><td>情绪、内在驱动力</td></tr>
+          <tr><td>☿</td><td>水星 Mercury</td><td>沟通、思维方式</td></tr>
+          <tr><td>♀</td><td>金星 Venus</td><td>价值观、关系与美感</td></tr>
+          <tr><td>♂</td><td>火星 Mars</td><td>行动力、能量投放</td></tr>
+          <tr><td>♃</td><td>木星 Jupiter</td><td>扩张、祝福与机会</td></tr>
+          <tr><td>♄</td><td>土星 Saturn</td><td>纪律、考验与成熟</td></tr>
+          <tr><td>⚷</td><td>凯龙 Chiron</td><td>疗愈的伤口与天赋</td></tr>
+          <tr><td>⛢</td><td>天王 Uranus</td><td>突变、独特与革新</td></tr>
+          <tr><td>♆</td><td>海王 Neptune</td><td>灵性、想象与幻象</td></tr>
+          <tr><td>♇</td><td>冥王 Pluto</td><td>转化、深层力量</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>四、怎么拿到你的图</h3>
+    <p>你需要输入三项信息：<strong>出生日期、尽可能精确的出生时间、出生地</strong>。时间越准，图越准（尤其是上升点与月亮的位置）。可以使用可靠的人类图排盘工具生成；作者也在书中推荐了配套网站 humandesignworkbook.com。生成后，把图打印出来，接下来的八个模块都会用到它。</p>
+
+    <div class="box">
+      <div class="bh">「两张生日 × 两个自己」整合</div>
+      <p>黑与红不是「真我」与「假我」，而是同一枚硬币的两面：一个是你清醒时认同的自己，一个是你身体里沉默运作的智慧。真正完整的人，是愿意同时听见这两边声音的人。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>生成并打印你的图，用荧光笔标出三处：你的<strong>类型</strong>、你的<strong>权威</strong>、以及<strong>有颜色的中心</strong>。</li>
+        <li>在图的边缘，找出黑色与红色各一颗「太阳」所在的闸门数字，先记下来，模块七会用到。</li>
+        <li>写下图中最让你意外的三个信息，以及你当下的第一反应。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M3 ================= -->
+  <section class="mod" id="m3">
+    <div class="mod-num">模块三 · 基础篇</div>
+    <h2 class="mod-title">五大能量类型</h2>
+    <div class="mod-en">Energy Types and Strategies</div>
+    <p class="lead">类型是整张图里最简单、也最重要的入口。它不决定你「能做什么」，而决定你「怎样做最不费力」。</p>
+
+    <p>当你打开一张图，最先看到的就是「类型」。人类图把所有人分成五种能量类型，每种类型都有自己<strong>专属的策略（Strategy）</strong>，用来做出有力量的决定。作者说得很直接：<strong>遵循策略，你会更自然地与人生目的对齐，减少阻力，做出让你感觉良好、有意义、充满喜悦的决定。</strong></p>
+    <p>类型由「哪些中心有定义」决定。比如荐骨是否有定义、喉咙是否连到动力中心，都会影响你的类型。不必死记硬背，先找到你的类型，再理解它。</p>
+
+    <div class="box">
+      <div class="bh">「类型 × 情绪主题」怎么读</div>
+      <p>每种类型都带着一个<strong>情绪主题</strong>：顺流时，它是你的「签名」（如满足、成功、平静）；受阻时，它变成「非自己」的情绪（如挫败、苦涩、愤怒）。<b>当你强烈地反复体验后者，通常是一个信号：你没有活出真实的自己。</b></p>
+    </div>
+
+    <!-- Manifestor -->
+    <div class="type">
+      <div class="type-h">
+        <div class="g">◆</div>
+        <div><div class="nm">显示者</div><div class="en">Manifestor</div></div>
+        <div class="pct">约占 8%</div>
+      </div>
+      <div class="type-body">
+        <dl class="kv">
+          <dt>焦点</dt><dd>发起者、创新、赋能、 powerhouse、带点挑衅</dd>
+          <dt>策略</dt><dd><strong>告知将被你影响的人，再行动</strong>（Inform then initiate）</dd>
+          <dt>情绪主题</dt><dd>愤怒 → 平静（Anger / Peace）</dd>
+          <dt>财富主题</dt><dd>启动并杠杆化一项能带来被动收入的事物</dd>
+          <dt>挑战</dt><dd>缺乏可持续能量；行动比他人快；需要找到对的支援</dd>
+          <dt>角色</dt><dd>从灵感与内在创造流中发起行动</dd>
+          <dt>代表人物</dt><dd>Richard Burton、George W. Bush、Al Gore、Jack Nicholson、Vladimir Putin、Susan Sarandon</dd>
+        </dl>
+        <p class="type-note"><b>高表达：</b>先告知，再发起；用你的愿景点燃他人，成为推动事情开始的那个人。<b>低表达：</b>不告知就行动，引来他人的抗拒与自己的愤怒；能量一次性烧完，难以持续。</p>
+      </div>
+    </div>
+
+    <!-- Generator -->
+    <div class="type">
+      <div class="type-h">
+        <div class="g">●</div>
+        <div><div class="nm">生产者</div><div class="en">Generator</div></div>
+        <div class="pct">约占 35%</div>
+      </div>
+      <div class="type-body">
+        <dl class="kv">
+          <dt>焦点</dt><dd>回应、对的工作、家庭、精通、来建造</dd>
+          <dt>策略</dt><dd><strong>等待回应，再行动</strong>（Wait to respond）</dd>
+          <dt>情绪主题</dt><dd>挫败 → 满足（Frustration / Satisfaction）</dd>
+          <dt>财富主题</dt><dd>随时间精通</dd>
+          <dt>挑战</dt><dd>找到对的工作；挫败与放弃；耐心与等待；信任内在回应</dd>
+          <dt>角色</dt><dd>做世界的工作，并在工作中找到精通</dd>
+          <dt>代表人物</dt><dd>Deepak Chopra、Bill Clinton、James Dean、Albert Einstein、Greta Garbo、Jay-Z、Carl Jung、Kim Kardashian、the Dalai Lama、Timothy Leary、John Lennon、Madonna、Elvis Presley、Meg Ryan、Meryl Streep、Margaret Thatcher、Oprah Winfrey</dd>
+        </dl>
+        <p class="type-note"><b>高表达：</b>对世界带来的事物做出回应，一旦投入就沉浸其中，获得满足与精通。<b>低表达：</b>用头脑决定「我该做什么」，硬着头皮「just do it」，最后陷入挫败与半途而废。生产者不是不能行动，而是要先被「回应」点燃。</p>
+      </div>
+    </div>
+
+    <!-- MG -->
+    <div class="type">
+      <div class="type-h">
+        <div class="g">◐</div>
+        <div><div class="nm">显示生产者</div><div class="en">Manifesting Generator</div></div>
+        <div class="pct">约占 35%</div>
+      </div>
+      <div class="type-body">
+        <dl class="kv">
+          <dt>焦点</dt><dd>通往精通的捷径、回应、对的工作、家庭、来建造</dd>
+          <dt>策略</dt><dd><strong>回应 → 想象 → 告知 → 行动</strong></dd>
+          <dt>情绪主题</dt><dd>挫败与愤怒 → 平静与满足</dd>
+          <dt>财富主题</dt><dd>随时间精通</dd>
+          <dt>挑战</dt><dd>找到对的工作；挫败与放弃；耐心与等待；信任内在回应（荐骨）</dd>
+          <dt>角色</dt><dd>做世界的工作，并在工作中找到精通</dd>
+          <dt>代表人物</dt><dd>Marie Antoinette、Frederic Chopin、Hillary Clinton、Marie Curie、Clint Eastwood、Sigmund Freud、Mahatma Gandhi、Steffi Graf、Mikhail Gorbachev、Jimi Hendrix、Pope John Paul II、Janis Joplin、Martin Luther King Jr.、Nicki Minaj、Friedrich Nietzsche、Richard Nixon、Jacqueline Onassis、Yoko Ono、Prince、Vincent van Gogh、Malala Yousafzai</dd>
+        </dl>
+        <p class="type-note"><b>高表达：</b>回应后可以快速行动，边做边修正，一次能并行多条线，是「通往精通的捷径」。<b>低表达：</b>跳过回应与告知直接冲，或因节奏太快而反复放弃，陷入挫败与愤怒。你是显示者与生产者的混合体，建议同时阅读这两节。</p>
+      </div>
+    </div>
+
+    <!-- Projector -->
+    <div class="type">
+      <div class="type-h">
+        <div class="g">◎</div>
+        <div><div class="nm">投射者</div><div class="en">Projector</div></div>
+        <div class="pct">约占 21%</div>
+      </div>
+      <div class="type-body">
+        <dl class="kv">
+          <dt>焦点</dt><dd>引导、智慧、直觉、敏感、分享</dd>
+          <dt>策略</dt><dd><strong>等待被认出、被邀请</strong>（Wait for recognition &amp; invitation）</dd>
+          <dt>情绪主题</dt><dd>苦涩 → 成功（Bitterness / Success）</dd>
+          <dt>财富主题</dt><dd>收到邀请后的自我精通</dd>
+          <dt>挑战</dt><dd>等待对的邀请；把智慧／知识产权轻易给出去</dd>
+          <dt>角色</dt><dd>管理、引导、指引他人</dd>
+          <dt>代表人物</dt><dd>Woody Allen、Lance Armstrong、Chris Brown、Fidel Castro、Leonardo da Vinci、Queen Elizabeth II、Hugh Hefner、Mick Jagger、James Joyce、John F. Kennedy、Abraham Lincoln、Shirley MacLaine、Nelson Mandela、Karl Marx、Marilyn Monroe、Barack Obama、Osho、Brad Pitt、Ringo Starr、Barbra Streisand、Taylor Swift、Elizabeth Taylor、Kanye West</dd>
+        </dl>
+        <p class="type-note"><b>高表达：</b>被认出、被邀请后，你的引导与洞察会真正被接住，带来成功。<b>低表达：</b>不被邀请就急着给建议，或像生产者一样拼命工作，最后感到苦涩、耗尽。投射者不是来「做」的，是来「看见并引导」的。</p>
+      </div>
+    </div>
+
+    <!-- Reflector -->
+    <div class="type">
+      <div class="type-h">
+        <div class="g">○</div>
+        <div><div class="nm">反映者</div><div class="en">Reflector</div></div>
+        <div class="pct">不足 1%</div>
+      </div>
+      <div class="type-body">
+        <dl class="kv">
+          <dt>焦点</dt><dd>镜子、社群、对的节奏、时机、敏感</dd>
+          <dt>策略</dt><dd><strong>等待一个农历周期（约 29 天）再决定，并保持留意</strong></dd>
+          <dt>情绪主题</dt><dd>失望 → 惊喜（Disappointment / Surprise）</dd>
+          <dt>财富主题</dt><dd>生活在让你感到丰盛的社群中</dd>
+          <dt>挑战</dt><dd>信任「确定、真相与解决」比什么都重要</dd>
+          <dt>角色</dt><dd>映照周围人的健康与对齐状态</dd>
+          <dt>代表人物</dt><dd>Sandra Bullock、Rosalynn Carter、Uri Geller</dd>
+        </dl>
+        <p class="type-note"><b>高表达：</b>像一面清澈的镜子，映照出社群的健康与需要，带来惊喜与洞见。<b>低表达：</b>把别人的情绪与期待当成自己的，反复失望。反映者的所有中心几乎都是开放的，图看起来「空空的」——正因如此，你对世界与对他人的能量完全开放。</p>
+      </div>
+    </div>
+
+    <h3>类型速览表</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>类型</th><th>策略</th><th>情绪主题（顺流 / 受阻）</th><th>占比</th></tr></thead>
+        <tbody>
+          <tr><td><strong>显示者</strong></td><td>告知再发起</td><td>平静 / 愤怒</td><td>8%</td></tr>
+          <tr><td><strong>生产者</strong></td><td>等待回应</td><td>满足 / 挫败</td><td>35%</td></tr>
+          <tr><td><strong>显示生产者</strong></td><td>回应→想象→告知→行动</td><td>平静满足 / 挫败愤怒</td><td>35%</td></tr>
+          <tr><td><strong>投射者</strong></td><td>等待被邀请</td><td>成功 / 苦涩</td><td>21%</td></tr>
+          <tr><td><strong>反映者</strong></td><td>等待农历周期</td><td>惊喜 / 失望</td><td>不足 1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box">
+      <div class="bh">「策略 × 日常选择」整合</div>
+      <p>策略不是束缚你的规则，而是「减少阻力」的导航。它是你与世界互动时，最省力、最不容易内耗的那个姿势。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>确认你的类型，并把它写进手册的「我的图」一页。</li>
+        <li>未来七天，只做一件事：在每一个小决定前，先默念一次你的策略。</li>
+        <li>每天记录一次：当我按策略做时，身体的感受是什么？当我违背它时，又是什么？</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M4 ================= -->
+  <section class="mod" id="m4">
+    <div class="mod-num">模块四 · 基础篇</div>
+    <h2 class="mod-title">内在权威</h2>
+    <div class="mod-en">Inner Authority</div>
+    <p class="lead">策略告诉你「何时行动」，权威告诉你「这个行动对不对」。有策略、没权威，你很容易做出「该做、但不该由我做」的选择。</p>
+
+    <p>内在权威是你身体里那套<strong>天生的决策机制</strong>。它不是大脑的逻辑推演，而是一种可以被感知的「确定感」。人类图把权威分成五种，找到你的那一种，你就找到了做决定时最可靠的内部指南针。</p>
+
+    <h3>1. 荐骨权威（Sacral Authority）</h3>
+    <p><strong>所有生产者类型</strong>都有荐骨权威。你的直觉式「嗯哼／唔唔」（是／否）会告诉你某件事对你是否合适。最大的挑战是：<strong>学会信任那个即时的本能反应</strong>，而不是用头脑去说服自己。</p>
+
+    <h3>2. 脾权威（Splenic Authority）</h3>
+    <p>你被设计成<strong>在当下就知道</strong>什么对你合适。你的脾中心反应意味着你可以自发地做决定，不需要时间反复推敲，你会立刻知道什么对你是真的。它和荐骨一样是一种「直觉式的确定」；对非生产者类型来说，脾权威常帮你处理日常小选择。我们往往在事后回望时，才真正掌握脾权威——那种「其实我早就知道」的感觉。随着练习，你能在当下就捕捉到它。</p>
+
+    <h3>3. 情绪权威（Emotional Authority）</h3>
+    <p>如果你有情绪权威，你<strong>不是</strong>为「即时反应」而设计的。你需要时间来让清晰浮现，学会等待，才不会经历失望或后悔。情绪权威会影响你的策略：策略仍然重要，但你还要「过一段时间再看看自己的感受」。</p>
+    <p>有情绪权威的人热情、感受强烈。这份内在的情绪能量，让你必须花时间做决定。作者举了个例子：有人邀请你去一个你并不太喜欢的团体演讲，你因为「终于有人请我讲」而立刻答应，第二天早上就后悔了。若你当时说：<strong>「谢谢你，这听起来是很好的邀请。我看一下日程，再回复你，可以吗？」</strong>——你就为自己争取了真正核对感受的时间。<strong>最重要的一点：决定必须在时间里保持一致的「是」，才是真的「是」。</strong>如果你的感受每天都在变，那就还不是对的决定。</p>
+
+    <h3>4. 自我权威（Self-Authority）</h3>
+    <p>这是一个统称，包含几种较少见的权威：<strong>自我投射权威、心智投射权威、以及「无权威」</strong>。如果你的图显示这些，意味着你需要<strong>把选择「说出来」</strong>才能获得清晰。</p>
+    <p>你不需要别人给建议。你只需要一个<strong>共鸣板</strong>——一个好朋友、一个你信任的人，安静地听你把选项讲一遍。说着说着，答案就浮现了。这在投射者与反映者身上很常见。</p>
+
+    <h3>5. 意志显化权威（Ego-Manifested Authority）</h3>
+    <p>如果你有<strong>有定义的意志中心</strong>，且没有其他权威，就是意志显化权威。意志中心关乎「可持续的能量与资源」——有，或没有。正因为如此，<strong>除非你拥有必要的能量或资源，否则你不会决定去做某件事。</strong></p>
+    <p>你必须拥有健康的自我价值，才能坦然地说「不」。如果你习惯用「讨好别人」来证明自己的价值，你可能需要先强化自我价值感，才能真正跟随意志中心的权威。</p>
+
+    <div class="box">
+      <div class="bh">「权威 × 决定质量」整合</div>
+      <p>大脑擅长分析利弊，却常常听不见身体的答案。权威的作用，是把「做决定」从「想清楚」拉回到「感受到」——那才是你真正不会后悔的地方。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>对照你的图，写下你的权威类型。</li>
+        <li>回想最近一个让你后悔的大决定，用你的权威重新走一遍：当时身体其实给过你什么信号？</li>
+        <li>为下周的一个小决定，刻意「等一等」再回答，体会那种清晰如何浮现。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M5 ================= -->
+  <section class="mod" id="m5">
+    <div class="mod-num">模块五 · 应用篇</div>
+    <h2 class="mod-title">九大能量中心</h2>
+    <div class="mod-en">Your Energy Centers</div>
+    <p class="lead">把中心想成你家里的电路布线：有颜色的插座稳定供电，白色的插座则会从外面「借电」，还会把电压放大。</p>
+
+    <p>你的中心配置，就像一张房屋的电路蓝图。当初建房子时，电工按图布线，决定能量流向哪些房间。人类图就是这张蓝图：<strong>中心是插座与出口</strong>，你能看到能量如何流动，但「你要插进什么、怎么用」，仍由你决定。</p>
+
+    <h3>有定义 与 未定义</h3>
+    <ul>
+      <li><strong>有定义（Defined，有颜色）</strong>：你<strong>一直</strong>携带着、体验着这股能量。它是你个人故事的一部分，是你此生要分享给世界的「课程」。比较稳定、可靠。</li>
+      <li><strong>未定义／开放（Undefined / Open，白色）</strong>：你会从外界与他人那里<strong>吸收</strong>这股能量，而且不只是吸收，还会<strong>放大</strong>它。因为来自外部，它总是不稳定的，你甚至可能误以为它「本来就是我」。开放越多，你越敏感，也越有潜力成为关于人类经验的「智者」——但开放的中心也会制造可预测的行为模式，把你困在自我挫败的循环里。</li>
+    </ul>
+
+    <h3>逐个认识九个中心</h3>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">头顶中心</span><span class="en">Head · Intellectual</span><span class="tag">灵感 / 心智压力</span></div>
+      <p>想法与灵感的中心。它处理那些种子般的点子、好奇的火花，以及促使我们想办法把想法变成现实的顿悟。它的更高目的是：用灵感去生成想法——这些沉思与灵感不是要被立刻执行的，而是让你保持在被启发的状态，带着好奇与临在去探索外在世界。它对应顶轮，连接「人的自我」与「更高的自我」。</p>
+      <p class="du"><b>有定义：</b>稳定的灵感来源；你此生的部分目的就是「启发他人」，你不必刻意做什么，光是携带这股能量就能鼓舞别人。<b>未定义：</b>容易吸收他人的想法而「想太多」，是产生智慧的地方，但要分辨哪些念头真正属于你。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">眉心中心</span><span class="en">Ajna · Conceptual</span><span class="tag">概念 / 思考</span></div>
+      <p>具体思考的中心。我们在眉心处理资讯与灵感，把它们转化为可能性、乃至可行动的念头。信息、信念与记忆也储存在这里。如果说头顶是「接收灵感」，眉心就是「把洞见翻译成行动」的地方。</p>
+      <p class="du"><b>有定义：</b>能坚持固定的想法与信念，记性好，确定感强；挑战是难以从不同角度看事情、难以改变心意。<b>未定义：</b>思维灵活、能看见多种观点，但也容易被他人信念影响、难以形成定见。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">喉咙中心</span><span class="en">Throat · Action</span><span class="tag">表达 / 行动</span></div>
+      <p>承载沟通与显化的能量。要在世界里显化你想要的东西，你必须能把它「说出来」。喉咙协调来自整张图的能量，让你能以符合目的的方式说话、发起行动。话语为行动创造了可能性的模板。它也与甲状腺、副甲状腺相关，关乎成长与发展——若没有按设计使用喉咙能量，你可能会 burnout。</p>
+      <p class="du"><b>有定义：</b>表达方式稳定、有力量；<b>未定义：</b>表达随环境变化，容易抢话或压抑，需要学习在对的时机、对的人面前说对的话。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">G 中心</span><span class="en">G Center · Identity</span><span class="tag">身份 / 爱 / 方向</span></div>
+      <p>图中央的菱形。它关乎身份、爱与人生方向。你与爱的对齐，会调准你生命的方向与自我表达的方式；你也会依 G 中心的能量，吸引来成为你人生方向的机遇与经验。</p>
+      <p class="du"><b>有定义（约 50% 的人）：</b>相对固定的自我感与人生方向，无论和谁在一起、身在何处，核心身份都保持稳定。<b>未定义：</b>身份感随环境流动，像变色龙，需要在关系中慢慢找到「我是谁」。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">意志中心</span><span class="en">Will / Ego</span><span class="tag">自我价值 / 物质资源</span></div>
+      <p>把价值转化为形式的中心。它调节金钱、财产、资源与商业的能量，是一个很「物质」的中心，喜欢用事物与数字衡量价值。它的阴影是：我们用「有多少钱、拥有多少东西」来定义自己的价值。这里也关乎「耐力」——要持续创造资源，就需要可持续的能量；要有可持续的能量，就必须休息；而愿意休息，前提是相信自己「值得」。</p>
+      <p class="du"><b>有定义：</b>能持续兑现承诺、创造资源；<b>未定义：</b>容易用成就证明价值、过度工作。功课是承认「我本身就有价值，可以休息」，休息反而让你能给出更多。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">荐骨中心</span><span class="en">Sacral · Generative</span><span class="tag">生命力 / 工作</span></div>
+      <p>生命力与劳动力的动力源。它涵盖把一个生命带到世上、抚养成人、照顾家庭与社群所需的一切能量：性、照顾与喂养婴儿、为孩子提供资源、工作养家、把家族／社群的价值传递下去。当它「有定义」，它就是一台持续运转的能量发动机。</p>
+      <p class="du"><b>有定义（约 70% 的人）：</b>能量可持续，透过「嗯哼 / 唔唔」回应对的 work 与关系；可能不需要那么多睡眠，但一旦启动就很难停下。<b>未定义：</b>能量不是持续供给的，需要按节奏工作与休息，否则容易过劳。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">情绪太阳神经丛</span><span class="en">Emotional Solar Plexus</span><span class="tag">情绪 / 感受</span></div>
+      <p>一切关于情绪的中心。这里的能量有自然的流动与波动。它是你身上那股「让人成为人」的能量：没有其他动物拥有像人类这样有意图的创造力。它负责我们与浪漫、热情、诗、性、灵性狂喜、亲密、想象、与自然和神圣秩序的关系，以及迎接新经验的能力——阴影面则是战争、混乱与忧郁。</p>
+      <p class="du"><b>有定义（约一半人口）：</b>透过「周期或波浪」体验人生，有沉思、整合、创造的低潮，也有外放、分享、创造的高潮；好坏情绪没有对错，情绪如生理节律，需要被允许。<b>未定义：</b>会吸收并放大他人的情绪，敏感、易被情绪淹没，需要学会分辨「这是我的感受，还是我接住的？」</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">脾中心</span><span class="en">Spleen · Intuition</span><span class="tag">直觉 / 健康 / 生存</span></div>
+      <p>给你直觉脉冲的中心，帮你知道何时该行动，也给你关于健康与福祉的「直觉感」。它可以被理解为「本能」——为了生存而存在的直接、即时的反应（战或逃）。当我们听到不对劲的声音、在夜里避开暗巷、或把冰箱里感觉不对的食物丢掉，我们都在使用这份本能的生存直觉。</p>
+      <p class="du"><b>有定义：</b>稳定、可靠的直觉与健康本能；<b>未定义：</b>对他人的健康与恐惧很敏感，容易把别人的恐惧当成自己的直觉，需要练习区分。</p>
+    </div>
+
+    <div class="center">
+      <div class="center-h"><span class="nm">根中心</span><span class="en">Root · Pressure</span><span class="tag">压力 / 驱动 / 肾上腺素</span></div>
+      <p>肾上腺素的中心，是推动我们把事情做完的「发动机」。它是那股让你自我实现、采取行动、去创造的「冲劲」。它也是一个压力中心（像头顶一样），会带着一定程度的压力能量：肾上腺素高时，你会感到「必须完成」的压力。</p>
+      <p class="du"><b>有定义（约一半人口）：</b>持续地感到「有事情要做」，但能量以「脉冲」的方式开合——不是随时都在「满电」状态。当脉冲打开，你能强力显化；当它关闭，就是该停下、信任时机的时候，而不是拖延。<b>未定义：</b>容易吸收他人的压力、被 deadline 追着跑，需要学会在脉冲关闭时休息。</p>
+    </div>
+
+    <div class="box">
+      <div class="bh">「中心 × 能量管理」整合</div>
+      <p>你的有定义中心，是你能稳定给世界的礼物；你的开放中心，则是你最容易「替别人活」的地方。看见哪些能量本来就不属于你，是能量管理的第一步。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>列出你有定义与未定义的中心，各写一句「它在我生活中的表现」。</li>
+        <li>回想一天中，你在哪个情境里「放大」了别人的能量（焦虑、愤怒、兴奋……）。</li>
+        <li>选一个开放中心，练习在感受到那股能量时说：「这可能不是我的。」</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M6 ================= -->
+  <section class="mod" id="m6">
+    <div class="mod-num">模块六 · 应用篇</div>
+    <h2 class="mod-title">十二种人生角色</h2>
+    <div class="mod-en">Profiles</div>
+    <p class="lead">如果说类型是你在人生这场戏里的「角色」，那么 Profile 就是你的「角色设定」——你会用什么方式学习、需要什么才安心、又如何把天赋给出去。</p>
+
+    <p>类型给你的是关键优势与策略的概览；<strong>Profile（人生角色）</strong>告诉你的，是你在穿行世界时会遇到的<strong>主要人生主题</strong>。它帮你理解：你的学习风格、你在做决定时需要什么才感到安全、你如何与自己及他人相处，以及你如何把自己的天赋分享出去。</p>
+    <p>Profile 在图上看起来像一个分数，例如 <strong>1/3</strong>。这两个数字都是原型主题：<strong>第一个数字</strong>代表你<strong>如何把天赋分享给世界</strong>；<strong>第二个数字</strong>代表你<strong>需要什么才能感到安全、扎根，然后才能把天赋分享出去</strong>。两个数字协同运作。</p>
+
+    <h3>六条爻：六种基本角色</h3>
+    <h4>第一爻 · 调查者（The Investigator）</h4>
+    <p>需要资讯，拥有足够的数据才感到安全。（作者打趣说：互联网就是为第一爻的人发明的。）</p>
+    <h4>第二爻 · 隐士（The Hermit）</h4>
+    <p>需要独处来整合经验、重置能量。隐士需要空间才能感到踏实。第二爻有一种奇妙之处：一旦你独处够了，别人似乎能量上就能感知到你「准备好被邀请了」，朋友与家人总会找到你、把你唤回生活。</p>
+    <h4>第三爻 · 体验学习者（The Experiential Learner）</h4>
+    <p>必须亲自实验自己的想法，并被允许在不受评判的情况下犯错。对第三爻来说，没有「做错」这回事，只有「从行不通的地方，找出什么才行得通」。</p>
+    <h4>第四爻 · 机会主义者（The Opportunist）</h4>
+    <p>透过建立友谊的基础来运作，需要人脉与分享。第四爻需要别人接纳「他本来的样子」；他们需要知道「接下来是什么」，并为此做好准备才感到安全（第四爻不太能忍受「悬而未决」）。</p>
+    <h4>第五爻 · 导师（The Teacher）</h4>
+    <p>来教导他们亲身经历过的东西。第五爻是「业力镜子」，常被他人投射期待。别人往往透过与第五爻的关系，发现自己内在最需要疗愈的部分。第五爻需要信任「你会看见关于他的真相」，才会感到安全；有时初见时，会把真实的自己藏得很深。</p>
+    <h4>第六爻 · 榜样（The Role Model）</h4>
+    <p>为他人示范他们此生要来分享与给予的东西。第六爻需要「说到做到」。他们经历三个不同的人生阶段：<strong>出生到三十岁</strong>是 youthful 的实验与体验学习；<strong>三十到五十岁</strong>是漫长的疗愈、成长与学习周期；<strong>五十岁以后</strong>是活出所学。第六爻需要感觉「自己参与的事值得投入」，才能找到意义与能量。</p>
+
+    <h3>十二种组合</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Profile</th><th>组合名称</th><th>一句读懂</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1/3</strong></td><td>调查者 / 体验学习者</td><td>先研究透彻，再亲自试错，从实践中长出真知。</td></tr>
+          <tr><td><strong>1/4</strong></td><td>调查者 / 机会主义者</td><td>以扎实研究为底，透过人脉把成果分享出去。</td></tr>
+          <tr><td><strong>2/4</strong></td><td>隐士 / 机会主义者</td><td>需要独处充电，但机会常透过朋友网络来到你面前。</td></tr>
+          <tr><td><strong>2/5</strong></td><td>隐士 / 导师</td><td>安静沉淀，却在被需要时成为他人的投射与指引。</td></tr>
+          <tr><td><strong>3/5</strong></td><td>体验学习者 / 导师</td><td>在试错中累积经验，再把经验变成能教别人的智慧。</td></tr>
+          <tr><td><strong>3/6</strong></td><td>体验学习者 / 榜样</td><td>前半生大胆实验，后半生活成别人可参照的样子。</td></tr>
+          <tr><td><strong>4/6</strong></td><td>机会主义者 / 榜样</td><td>靠关系网络推进，并逐渐成为值得信赖的示范者。</td></tr>
+          <tr><td><strong>4/1</strong></td><td>机会主义者 / 调查者</td><td>以稳固的人脉为桥，用扎实研究做决定。</td></tr>
+          <tr><td><strong>5/1</strong></td><td>导师 / 调查者</td><td>先研究清楚，再以「导师」姿态回应他人的期待。</td></tr>
+          <tr><td><strong>5/2</strong></td><td>导师 / 隐士</td><td>独处是你的充电站，被邀请时才出来引导众人。</td></tr>
+          <tr><td><strong>6/2</strong></td><td>榜样 / 隐士</td><td>活成榜样，但需要大量独处来整合与沉淀。</td></tr>
+          <tr><td><strong>6/3</strong></td><td>榜样 / 体验学习者</td><td>在反复实验中成熟，最终成为他人可学习的榜样。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>作者特别提醒：<strong>你 Profile 里两种原型主题的需要，都必须被满足，你才会对自己的生活感到平静。</strong>成长，往往就发生在「掌握挑战、在看似矛盾的两股能量之间找到和谐」的过程里。许多原型主题本身就是一对悖论——两股看似对立的能量。能在生活中同时与两者合作，你的自我掌握、韧性与自我接纳就会加深。当你活出两条爻的<strong>最高表达</strong>，这两个原型就会彼此互补，共同支持你实现人生目的。</p>
+
+    <div class="box">
+      <div class="bh">「角色 × 关系」整合</div>
+      <p>你在关系里反复上演的模式，常常就是两条爻在「打架」。看见它们各自的合理需要，你就不必再逼自己二选一，而是学会让两者轮流上场。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>写下你的 Profile 两个数字，各用一句话说明它的「需要」。</li>
+        <li>回顾一段让你反复受困的关系，看看两个数字如何拉扯、又如何可能互补。</li>
+        <li>为「第二个数字」的需要，安排一件本周就能做的小事（例如独处、找人聊、做研究）。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M7 ================= -->
+  <section class="mod" id="m7">
+    <div class="mod-num">模块七 · 应用篇</div>
+    <h2 class="mod-title">行星与闸门</h2>
+    <div class="mod-en">Planets and Gates</div>
+    <p class="lead">行星与闸门，写的是你此生的「课程表」：你来精通什么、会遇到哪些主题、又要跨越哪些挑战。</p>
+
+    <p>你的图是你人生故事的轮廓：<strong>类型</strong>是主角，<strong>Profile</strong> 是关键性格特质，<strong>中心</strong>告诉你如何与他人互动、带来什么礼物、在关系里被设计成接收什么。而<strong>行星与闸门</strong>，则告诉你此生的「课程」——你来掌握什么、成长与成熟时会遇到的主要主题，以及这些核心特质如何设下你必须跨越、才能走向成熟与智慧表达的挑战。</p>
+
+    <h3>一、闸门：来自《易经》的 64 个原型</h3>
+    <p>闸门代表更细微的人格特质，是「让你成为你」的细节。它们的主题取自<strong>《易经》的六十四卦</strong>——可以把它们想成一套古老原型的现代诠释，已被沉思与研究了两千多年。每个闸门都连着某个能量中心。</p>
+
+    <h3>二、行星：为闸门上色的「主题滤镜」</h3>
+    <p>每个闸门都会被一颗行星「点亮」，而每颗行星都有自己的原型主题（源自传统占星）。行星绕太阳移动时，把它的主题「照」在 64 个闸门的每一个上，组合出代表你人生与灵魂课程的能量。所以，同一个闸门，被不同的行星点亮，味道会不一样。</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>行星</th><th>在闸门上强调的主题</th></tr></thead>
+        <tbody>
+          <tr><td><strong>太阳 ☉</strong></td><td>你核心的自我表达，此生的「主旋律」</td></tr>
+          <tr><td><strong>地球 ⊕</strong></td><td>你的根基与立足点，让你扎根的基础</td></tr>
+          <tr><td><strong>南交点 ☋</strong></td><td>早年的熟悉课题、你容易退回的舒适区</td></tr>
+          <tr><td><strong>北交点 ☊</strong></td><td>此生前行的方向，成熟后要长成的样子</td></tr>
+          <tr><td><strong>月亮 ☽</strong></td><td>情绪驱动与内在需求</td></tr>
+          <tr><td><strong>水星 ☿</strong></td><td>沟通与思考方式</td></tr>
+          <tr><td><strong>金星 ♀</strong></td><td>价值观、关系与美感</td></tr>
+          <tr><td><strong>火星 ♂</strong></td><td>行动力与能量投放</td></tr>
+          <tr><td><strong>木星 ♃</strong></td><td>扩张、祝福与机会</td></tr>
+          <tr><td><strong>土星 ♄</strong></td><td>纪律、考验与成熟</td></tr>
+          <tr><td><strong>凯龙 ⚷</strong></td><td>疗愈的伤口，也是天赋所在</td></tr>
+          <tr><td><strong>天王 ⛢</strong></td><td>突变、独特与革新</td></tr>
+          <tr><td><strong>海王 ♆</strong></td><td>灵性、想象与幻象</td></tr>
+          <tr><td><strong>冥王 ♇</strong></td><td>转化与深层力量</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>三、黑与红：两套课程</h3>
+    <p>出生那一刻，行星的位置（图的意识部分）与它们点亮的闸门被锁定，为你的图加上<strong>黑色定义</strong>；出生前约三个月（约 88 个天文度数），红色行星的位置（图的潜意识部分）与它们点亮的闸门也被锁定，加上<strong>红色定义</strong>。</p>
+    <ul>
+      <li><strong>黑色数字与闸门</strong>：代表你<strong>灵魂目的</strong>此生的课程。</li>
+      <li><strong>红色数字与闸门</strong>：代表你<strong>人生目的</strong>此生的课程。</li>
+      <li>两者的组合，构成了你的<strong>人生课题与挑战</strong>，也构成了「你是谁」这个故事。</li>
+    </ul>
+
+    <h3>四、怎么读这一层</h3>
+    <p>建议按这个顺序：<strong>先看太阳与地球</strong>（核心与根基），<strong>再看南北交点</strong>（方向与早年课题），<strong>最后看其他行星</strong>。作者也建议：读闸门时，要把「行星」与「闸门描述」合在一起看，才能看清这些主题如何在你独特的图里上演。</p>
+    <p>举例来说：如果你的<strong>闸门 11</strong>（理念、想法，从眉心流向喉咙）是黑色太阳，你可能很有意识地知道自己「点子很多」；如果你的<strong>闸门 13</strong>（见证者、守护秘密）是红色，你可能并未察觉，但你的能量场一直在告诉别人「在我这里，你可以安全地说出秘密」——于是总有人莫名地来向你倾诉。</p>
+
+    <div class="box">
+      <div class="bh">「闸门 × 天赋」整合</div>
+      <p>闸门不是标签，而是一道「待你精通」的功课。同一个闸门，低表达是执念与卡点，高表达就是天赋。你这辈子要做的，不是消灭它，而是把它从低处带到高处。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 觉察作业</div>
+      <ol>
+        <li>找出你图中「黑色太阳」与「红色太阳」所在的闸门数字与主题。</li>
+        <li>各写一句：这个主题在你生活里，最近一次是以「高表达」还是「低表达」出现的？</li>
+        <li>再找出你的南交点与北交点闸门，写下一句「我从……走向……」。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= M8 ================= -->
+  <section class="mod" id="m8">
+    <div class="mod-num">模块八 · 应用篇</div>
+    <h2 class="mod-title">整合与人生使命宣言</h2>
+    <div class="mod-en">Putting It All Together</div>
+    <p class="lead">你已经把零件一个个拆开看过了。现在，把它们拼回一个整体——因为图真正的美，在于「综合」。</p>
+
+    <div class="quote">
+      刺激与回应之间，有一个空间。在那个空间里，藏着我们选择回应的力量。我们的成长与自由，就在我们的回应之中。
+      <span class="by">— Viktor E. Frankl</span>
+    </div>
+
+    <h3>一、读图五步法</h3>
+    <p>面对一张图，不必一次看懂全部。按这五步走，你就能读出主线：</p>
+    <ol>
+      <li><strong>类型 + 策略</strong>：先确定你是哪一种能量类型，以及你的策略。</li>
+      <li><strong>内在权威</strong>：你是靠什么做决定的？</li>
+      <li><strong>有定义 / 未定义的中心</strong>：哪些能量稳定属于你，哪些是你从别人那里借来的？</li>
+      <li><strong>Profile</strong>：你的人生角色与学习方式是什么？</li>
+      <li><strong>太阳 / 地球 / 南北交点闸门</strong>：你此生的核心主题、根基与方向。</li>
+    </ol>
+
+    <h3>二、把图读成一个故事</h3>
+    <p>人类图教会你，把你的图当作一个故事来看。你不是被图「决定」的，而是被图「描述」的。当你用这套新的语言重新讲述自己，你就不再是那个被制约推着走的人，而是能选择回应方式的人。</p>
+    <p>作者在结语里写道：你是一个<strong>「一次性」的宇宙事件</strong>，过去没有、未来也不会再有另一个你。你是宇宙计划中不可替代、独特而重要的一部分。人类图给你的，不只是认识自己的工具，更是一份「如何活出人类潜能」的说明书。</p>
+
+    <h3>三、你的人生使命宣言</h3>
+    <p>这是整本书的收束，也是这门课的毕业作品。请对照你的图，把下面的模板填完整——不必一次写完美，先写出初稿，再慢慢改到「有感觉」为止。</p>
+
+    <div class="tpl">
+      <p>我，<span class="fill">姓名</span>，一个 <span class="fill">你的类型</span>，来到这里，透过 <span class="fill">你的人类图目的</span> 为世界服务。</p>
+      <p>我需要、学习、分享，并在 <span class="fill">Profile 的意识爻</span> 中成长，以把我能给予世界的礼物给出去；我需要 <span class="fill">Profile 的潜意识爻</span>，才能做到这一点。</p>
+      <p style="margin-top:14px">我对有定义与开放中心的肯定语：</p>
+      <p style="line-height:2.1;font-size:14px">
+        头顶：<span class="fill" style="min-width:80px"></span>　眉心：<span class="fill" style="min-width:80px"></span><br>
+        喉咙：<span class="fill" style="min-width:80px"></span>　G中心：<span class="fill" style="min-width:80px"></span><br>
+        意志：<span class="fill" style="min-width:80px"></span>　情绪：<span class="fill" style="min-width:80px"></span><br>
+        脾：<span class="fill" style="min-width:80px"></span>　荐骨：<span class="fill" style="min-width:80px"></span>　根：<span class="fill" style="min-width:80px"></span>
+      </p>
+      <p style="margin-top:14px">我充满力量且热情地宣告：我的人生目的是 <span class="fill">意识太阳闸门主题</span> 与 <span class="fill">潜意识太阳闸门主题</span>。</p>
+      <p>为此，我允许、创造并接收 <span class="fill">意识地球主题</span> 与 <span class="fill">潜意识地球主题</span>，作为我内在创造力深井的基础。</p>
+      <p>我早年的经历，带给我学习与拥抱 <span class="fill">南交点·个性</span> 与 <span class="fill">南交点·设计</span> 的机会。</p>
+      <p>我期待带着这些课题与经验，帮助我充分活出 <span class="fill">北交点·个性</span> 与 <span class="fill">北交点·设计</span>，在我约四十四岁成熟于本质与表达之时。我知道宇宙会带来机会，让我学习拥抱并爱自己的所有部分，并在成长、学习与分享中，与我的本质对齐。</p>
+    </div>
+
+    <div class="box">
+      <div class="bh">「读图 × 使命」整合</div>
+      <p>使命宣言不是一张「成功保证书」，而是一面镜子。当你念出它时，身体若感到放松、笃定，那就是你的方向；若感到紧绷、别扭，就回去改词，直到它「像你」为止。</p>
+    </div>
+
+    <div class="ex">
+      <div class="eh">课堂练习 · 毕业作业</div>
+      <ol>
+        <li>用模板写下你的人生使命宣言初稿（可以先用铅笔，允许涂改）。</li>
+        <li>每天早晨朗读一遍，连续七天；每天记录一个身体感受。</li>
+        <li>七天后，把宣言改到「读起来最像自己」的版本，誊写进学员手册的最后一页。</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div class="ft">《人类图入门 · 从0读懂你的人生使用说明书》｜完整课件</div>
+    <div>内容改编自 Karen Curry Parker《The Human Design Workbook》（Hierophant Publishing, 2022），仅供学习参考，不替代专业诊断。</div>
+    <div class="pw">Powered By Kan Man Tang</div>
+  </div>
+
+</div>
+</main>
+
+<script>
+(function(){
+  var side=document.getElementById('side'), scrim=document.getElementById('scrim'),
+      mhamb=document.getElementById('mhamb'), sideNav=document.getElementById('sideNav');
+  function close(){side.classList.remove('open');scrim.classList.remove('show');}
+  mhamb&&mhamb.addEventListener('click',function(){side.classList.add('open');scrim.classList.add('show');});
+  scrim.addEventListener('click',close);
+  sideNav.addEventListener('click',function(e){if(e.target.closest('a'))close();});
+
+  // scrollspy
+  var links=Array.prototype.slice.call(sideNav.querySelectorAll('a[href^="#"]'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  function onScroll(){
+    var pos=window.scrollY+140, idx=0;
+    for(var i=0;i<secs.length;i++){ if(secs[i]&&secs[i].offsetTop<=pos) idx=i; }
+    links.forEach(function(a,i){a.classList.toggle('active',i===idx);});
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

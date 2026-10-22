@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人类图入门 · 学员练习手册</title>
+<meta name="description" content="人类图入门课程配套学员练习手册：我的图记录、每日觉察结构、决策记录、21天打卡日历、读图日志与人生使命宣言模板，可直接打印。">
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.8;font-size:15.5px;
+  -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:var(--primary-d);text-decoration:none}
+.page{max-width:820px;margin:0 auto;padding:0 28px 70px}
+
+/* top bar */
+.top{background:var(--deep);color:#F6EFE1;position:sticky;top:0;z-index:50}
+.top-in{max-width:820px;margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;gap:14px}
+.top .t{font-family:var(--serif);font-size:15px;letter-spacing:.05em}
+.top .links{margin-left:auto;display:flex;gap:18px;align-items:center}
+.top .links a{color:rgba(246,239,225,.72);font-size:12.5px}
+.top .links a:hover{color:var(--gold)}
+.top .print{background:var(--primary);color:#fff;border:none;padding:7px 15px;border-radius:999px;
+  font-size:12.5px;cursor:pointer;font-family:var(--sans)}
+.top .print:hover{background:var(--primary-d)}
+
+/* cover */
+.cover{padding:50px 0 30px;border-bottom:1px solid var(--border);margin-bottom:34px}
+.cover .k{color:var(--primary);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.cover h1{font-family:var(--serif);font-size:34px;color:var(--deep);font-weight:700;line-height:1.35;margin-bottom:12px}
+.cover p{color:var(--muted);font-size:14.5px}
+
+/* section */
+section{margin-bottom:40px}
+.sec-h{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.sec-h .n{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;font-family:var(--serif);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sec-h h2{font-family:var(--serif);font-size:22px;color:var(--deep);font-weight:600}
+.sec-h .sub{font-size:11.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-left:auto}
+.intro{color:var(--muted);font-size:14px;margin-bottom:16px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 26px;
+  box-shadow:0 4px 16px var(--shadow);margin-bottom:18px}
+.card h3{font-family:var(--serif);font-size:17px;color:var(--deep);margin-bottom:12px;font-weight:600}
+.card p{font-size:14px;color:var(--text);margin-bottom:10px}
+.card .hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+/* fill table */
+.ft{width:100%;border-collapse:collapse;font-size:14px}
+.ft th{background:var(--bg2);color:var(--primary-d);text-align:left;padding:10px 14px;font-weight:600;
+  font-size:13.5px;border:1px solid var(--border);width:34%}
+.ft td{border:1px solid var(--border);padding:12px 14px;height:44px;color:var(--muted)}
+.ft td b{color:var(--muted);font-weight:400;font-size:12.5px}
+
+/* lines */
+.lines{margin-top:6px}
+.line{border-bottom:1px dashed var(--border);height:38px}
+.line:last-child{border-bottom:1px solid var(--border)}
+
+/* daily 3-col */
+.daily{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.daily .col{background:var(--card);padding:18px 16px}
+.daily .col .tt{font-family:var(--serif);font-size:14.5px;color:var(--primary-d);font-weight:600;margin-bottom:4px}
+.daily .col .sh{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.daily .col .line{height:30px;border-bottom:1px dashed var(--border-l)}
+.daily .col .line:last-child{border-bottom:none}
+
+/* decision card */
+.dec{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;background:var(--card)}
+.dec .q{font-size:13px;color:var(--primary-d);font-weight:600;margin-bottom:6px}
+.dec .row{display:flex;gap:10px;align-items:baseline;margin-bottom:8px;font-size:13.5px;color:var(--muted)}
+.dec .row span{white-space:nowrap;color:var(--primary-d);font-weight:600}
+.dec .blank{flex:1;border-bottom:1px dashed var(--border);min-height:22px}
+
+/* 21-day grid */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:4px}
+.cal .day{aspect-ratio:1;border:1px solid var(--border);border-radius:9px;background:var(--card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+  transition:.15s;user-select:none;position:relative}
+.cal .day .dnum{font-family:var(--serif);font-size:15px;color:var(--muted)}
+.cal .day .mark{font-size:10px;color:var(--primary);opacity:0;margin-top:2px}
+.cal .day:hover{border-color:var(--primary)}
+.cal .day.done{background:linear-gradient(135deg,var(--primary),var(--gold));border-color:var(--primary)}
+.cal .day.done .dnum{color:#fff}
+.cal .day.done .mark{opacity:1;color:#fff}
+.cal-legend{font-size:12px;color:var(--muted);margin-top:12px}
+.cal-reset{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;
+  padding:5px 12px;font-size:12px;cursor:pointer;margin-top:12px}
+.cal-reset:hover{border-color:var(--primary);color:var(--primary-d)}
+
+/* mantra */
+.mantras{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mantra{background:var(--bg2);border-radius:10px;padding:14px 16px}
+.mantra .mh{font-family:var(--serif);font-size:14.5px;color:var(--deep);font-weight:600;margin-bottom:4px}
+.mantra .mt{font-size:13px;color:var(--muted)}
+
+/* template */
+.tpl{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 28px}
+.tpl p{font-size:14.5px;line-height:2.5;margin-bottom:4px;color:var(--text)}
+.blank-inline{display:inline-block;min-width:110px;border-bottom:1.4px solid var(--primary);
+  color:var(--primary-d);padding:0 6px}
+
+.foot{text-align:center;color:var(--muted);font-size:12px;line-height:1.9;padding-top:24px;border-top:1px solid var(--border)}
+.foot .ft{font-family:var(--serif);color:var(--deep);font-size:13.5px;margin-bottom:4px}
+.foot .pw{font-size:10.5px;letter-spacing:.12em;opacity:.7;margin-top:4px}
+
+@media(max-width:680px){
+  .daily{grid-template-columns:1fr}
+  .mantras{grid-template-columns:1fr}
+  .cover h1{font-size:27px}
+  .top .links a:not(.keep){display:none}
+  .page{padding:0 18px 60px}
+}
+@media print{
+  .top{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .page{max-width:none;padding:0}
+  .card,.tpl,.dec{break-inside:avoid;box-shadow:none}
+  section{margin-bottom:26px}
+  .cover{padding:0 0 22px}
+  a{color:inherit;text-decoration:none}
+  .cal .day{background:#fff!important;border:1px solid #ccc!important}
+  .cal .day .dnum{color:#333!important}
+  .cal .day.done{background:#EFE3D0!important;border-color:#C4956A!important}
+  .cal .day.done .dnum,.cal .day.done .mark{color:#8a5a2b!important}
+  @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <span class="t">人类图入门 · 学员手册</span>
+    <div class="links">
+      <a class="keep" href="hd-beginner-course.html">主页</a>
+      <a class="keep" href="hd-beginner-courseware.html">完整课件</a>
+      <a class="keep" href="hd-beginner-cheatsheet.html">速查卡</a>
+      <button class="print" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="cover">
+    <div class="k">Student Workbook</div>
+    <h1>学员练习手册</h1>
+    <p>这本手册配合《人类图入门》完整课件使用。建议打印出来，边学边写——把抽象的概念，落成你自己的生活记录。</p>
+  </div>
+
+  <!-- 使用说明 -->
+  <section>
+    <div class="sec-h"><span class="n">i</span><h2>使用说明</h2><span class="sub">How to use</span></div>
+    <div class="card">
+      <p><strong>1. 先准备好你的图。</strong>用出生日期、时间与出生地生成人类图，打印或截图保存。</p>
+      <p><strong>2. 每周完成一个模块的练习。</strong>基础篇（模块 1–4）先建立概念，应用篇（模块 5–8）再逐层深入。</p>
+      <p><strong>3. 每天花 5 分钟记录。</strong>用下面的「每日觉察」与「21 天打卡」培养观察自己的习惯。</p>
+      <p class="hint">不必追求「写对」。这本手册没有标准答案，只有你自己的真实经验。</p>
+    </div>
+  </section>
+
+  <!-- 我的图 -->
+  <section>
+    <div class="sec-h"><span class="n">1</span><h2>我的图 · 基础档案</h2><span class="sub">My Chart</span></div>
+    <p class="intro">对照你的图，填写下面这些关键信息。它们是你后续所有练习的「坐标」。</p>
+    <table class="ft">
+      <tr><th>我的能量类型</th><td><b>显示者 / 生产者 / 显示生产者 / 投射者 / 反映者</b></td></tr>
+      <tr><th>我的策略</th><td></td></tr>
+      <tr><th>我的内在权威</th><td></td></tr>
+      <tr><th>我的 Profile（人生角色）</th><td></td></tr>
+      <tr><th>我有定义的中心</th><td></td></tr>
+      <tr><th>我未定义 / 开放的中心</th><td></td></tr>
+      <tr><th>黑色太阳 · 闸门与主题</th><td></td></tr>
+      <tr><th>红色太阳 · 闸门与主题</th><td></td></tr>
+      <tr><th>南交点闸门</th><td></td></tr>
+      <tr><th>北交点闸门</th><td></td></tr>
+    </table>
+  </section>
+
+  <!-- 每日觉察 -->
+  <section>
+    <div class="sec-h"><span class="n">2</span><h2>每日觉察 · 三段式</h2><span class="sub">Daily Check-in</span></div>
+    <p class="intro">每天早、中、晚各一次，用几行字捕捉你与能量的关系。</p>
+    <div class="daily">
+      <div class="col">
+        <div class="tt">早晨 · 设定意图</div>
+        <div class="sh">今天我想带着什么状态开始？</div>
+        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      </div>
+      <div class="col">
+        <div class="tt">白天 · 觉察信号</div>
+        <div class="sh">今天我的策略 / 权威给过什么提示？</div>
+        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      </div>
+      <div class="col">
+        <div class="tt">夜晚 · 回看收获</div>
+        <div class="sh">今天哪一刻，我最像真实的自己？</div>
+        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 决策记录 -->
+  <section>
+    <div class="sec-h"><span class="n">3</span><h2>决策记录 · 按权威选择</h2><span class="sub">Decision Log</span></div>
+    <p class="intro">每次做一个重要决定时，填一张。练久了，你会越来越认得身体给出的「是」与「否」。</p>
+
+    <div class="dec">
+      <div class="q">决策记录 ①</div>
+      <div class="row"><span>我在决定：</span><div class="blank"></div></div>
+      <div class="row"><span>身体的第一反应：</span><div class="blank"></div></div>
+      <div class="row"><span>我用了哪种权威：</span><div class="blank"></div></div>
+      <div class="row"><span>最终选择 / 事后感受：</span><div class="blank"></div></div>
+    </div>
+    <div class="dec">
+      <div class="q">决策记录 ②</div>
+      <div class="row"><span>我在决定：</span><div class="blank"></div></div>
+      <div class="row"><span>身体的第一反应：</span><div class="blank"></div></div>
+      <div class="row"><span>我用了哪种权威：</span><div class="blank"></div></div>
+      <div class="row"><span>最终选择 / 事后感受：</span><div class="blank"></div></div>
+    </div>
+  </section>
+
+  <!-- 21天打卡 -->
+  <section>
+    <div class="sec-h"><span class="n">4</span><h2>21 天觉察打卡</h2><span class="sub">21-Day Tracker</span></div>
+    <p class="intro">每天完成一次「按策略生活」的小练习，就点一下格子。打印后也可以直接手写打勾。</p>
+    <div class="card">
+      <div class="cal" id="cal"></div>
+      <div class="cal-legend">点击方格标记完成 · 完成 21 天，回看自己的变化</div>
+      <button class="cal-reset" id="calReset">重置打卡</button>
+    </div>
+  </section>
+
+  <!-- 读图日志 -->
+  <section>
+    <div class="sec-h"><span class="n">5</span><h2>读图日志</h2><span class="sub">Chart Journal</span></div>
+    <p class="intro">每读懂一个模块，就写下它在你身上的具体表现。越具体，越有用。</p>
+    <div class="card">
+      <h3>模块一 · 我看见了哪个「低表达」模式？</h3>
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="card">
+      <h3>模块三 · 我的类型与策略，在生活里长什么样？</h3>
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="card">
+      <h3>模块五 · 哪个开放中心最容易「吸收别人的能量」？</h3>
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="card">
+      <h3>模块六 · 我的 Profile 两条爻，如何拉扯又如何互补？</h3>
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="card">
+      <h3>模块七 · 我的太阳闸门，高表达与低表达各是什么？</h3>
+      <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    </div>
+  </section>
+
+  <!-- 口诀卡 -->
+  <section>
+    <div class="sec-h"><span class="n">6</span><h2>随身口诀 · 五种类型</h2><span class="sub">Mantras</span></div>
+    <p class="intro">在你最需要提醒自己的时候，读一遍属于你的那句。</p>
+    <div class="mantras">
+      <div class="mantra"><div class="mh">显示者</div><div class="mt">我先告知，再发起。我的平静，来自被看见的行动。</div></div>
+      <div class="mantra"><div class="mh">生产者</div><div class="mt">我等回应，再投入。我的满足，来自真正点燃我的事。</div></div>
+      <div class="mantra"><div class="mh">显示生产者</div><div class="mt">我回应、想象、告知，然后行动。快，但不跳过回应。</div></div>
+      <div class="mantra"><div class="mh">投射者</div><div class="mt">我等被认出、被邀请。我的成功，来自被真正需要的地方。</div></div>
+      <div class="mantra"><div class="mh">反映者</div><div class="mt">我等待一个周期，再决定。我的惊喜，来自不急于下结论。</div></div>
+    </div>
+  </section>
+
+  <!-- 使命宣言 -->
+  <section>
+    <div class="sec-h"><span class="n">7</span><h2>人生使命宣言 · 我的毕业作品</h2><span class="sub">Life Purpose</span></div>
+    <p class="intro">对照你的图，把空白处填上。先写初稿，再慢慢改到「读起来最像自己」。</p>
+    <div class="tpl">
+      <p>我，<span class="blank-inline"></span>，一个 <span class="blank-inline"></span>，来到这里，透过 <span class="blank-inline"></span> 为世界服务。</p>
+      <p>我需要、学习、分享，并在 <span class="blank-inline"></span> 中成长，以把我能给予世界的礼物给出去；我需要 <span class="blank-inline"></span>，才能做到这一点。</p>
+      <p>我充满力量且热情地宣告：我的人生目的是 <span class="blank-inline"></span> 与 <span class="blank-inline"></span>。</p>
+      <p>为此，我允许、创造并接收 <span class="blank-inline"></span> 与 <span class="blank-inline"></span>，作为我内在创造力深井的基础。</p>
+      <p>我早年的经历，带给我学习与拥抱 <span class="blank-inline"></span> 与 <span class="blank-inline"></span> 的机会。</p>
+      <p>我期待带着这些课题与经验，帮助我充分活出 <span class="blank-inline"></span> 与 <span class="blank-inline"></span>，在我约四十四岁成熟于本质与表达之时。</p>
+      <p>我知道宇宙会带来机会，让我学习拥抱并爱自己的所有部分，并在成长、学习与分享中，与我的本质对齐。</p>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div class="ft">《人类图入门》｜学员练习手册</div>
+    <div>内容改编自 Karen Curry Parker《The Human Design Workbook》，仅供学习参考。</div>
+    <div class="pw">Powered By Kan Man Tang</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var cal=document.getElementById('cal'), reset=document.getElementById('calReset');
+  var KEY='hd_beginner_21';
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
+  for(var i=1;i<=21;i++){
+    var d=document.createElement('div');
+    d.className='day'+(state[i]?' done':'');
+    d.innerHTML='<span class="dnum">'+i+'</span><span class="mark">✓</span>';
+    d.setAttribute('data-d',i);
+    cal.appendChild(d);
+  }
+  cal.addEventListener('click',function(e){
+    var el=e.target.closest('.day'); if(!el)return;
+    var n=el.getAttribute('data-d');
+    state[n]=!state[n];
+    el.classList.toggle('done',!!state[n]);
+    try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+  });
+  reset&&reset.addEventListener('click',function(){
+    state={};
+    try{localStorage.removeItem(KEY);}catch(e){}
+    Array.prototype.forEach.call(cal.children,function(el){el.classList.remove('done');});
+  });
+})();
+</script>
+</body>
+</html>
