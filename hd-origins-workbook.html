@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《人类图的最早起源》学员练习手册 · 21 天起源觉察 | Powered By Kan Man Tang</title>
+<!--
+  ============================================================
+  VERSION: V2 · 2026-10-27
+  变更点（V2）：
+  - 新增「套件导航」：课程主页 / 完整课件 / 练习手册 / 速查卡 四件互链，当前页高亮
+  变更点（V1 初版 · 2026-10-26）：
+  变更点（V1 初版）：
+  - 21 天"起源觉察"练习手册：单栏、可打印（@media print 保留底色）
+  - 打卡日历由 JS 生成
+  - 含：使用说明 / 每日结构 / 模板填空 / 三栏思辨模板 / 日志页
+    / 口诀卡（5 张）/ 结业自述
+  ============================================================
+-->
+<style>
+  :root{
+    --bg:#F5F0E8; --dark:#2D2118; --primary:#C4956A; --gold:#D4A843;
+    --cream:#FFFBF4; --line:#E3D8C6; --muted:#7A6A58;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--dark);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.9;font-size:15.5px}
+  h1,h2,h3,h4{font-family:Georgia,"Noto Serif SC","Source Han Serif SC","Songti SC",serif}
+  .page{max-width:760px;margin:0 auto;padding:36px 22px 80px}
+  header.top{text-align:center;padding:34px 0 26px;border-bottom:3px double var(--primary);margin-bottom:30px}
+  header.top .tag{letter-spacing:.3em;color:var(--primary);font-size:.8rem}
+  header.top h1{font-size:1.7rem;margin:10px 0 6px}
+  header.top p{color:var(--muted);font-size:.92rem}
+  section{margin-bottom:44px}
+  h2{font-size:1.25rem;border-left:5px solid var(--primary);padding-left:12px;margin-bottom:14px}
+  h3{font-size:1rem;color:var(--primary);margin:14px 0 6px}
+  p{margin-bottom:8px}
+  .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+  .box.gold{background:#FDF6E8;border-color:var(--gold)}
+  .blank{display:inline-block;min-width:180px;border-bottom:1.5px solid var(--muted);margin:0 4px}
+  .blank.w{min-width:420px}
+  .lines{border-bottom:1.5px dashed var(--line);height:34px;margin-bottom:6px}
+  ol,ul{margin:6px 0 10px 22px}
+  li{margin-bottom:5px}
+  /* 打卡日历 */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+  .day{aspect-ratio:1;background:#fff;border:1.5px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.8rem;cursor:pointer;user-select:none;transition:.15s}
+  .day:hover{border-color:var(--primary)}
+  .day b{font-family:Georgia,serif;font-size:1rem;color:var(--dark)}
+  .day.done{background:var(--dark);border-color:var(--dark);color:var(--gold)}
+  .day.done b{color:var(--gold)}
+  .cal-tip{font-size:.82rem;color:var(--muted);margin-top:8px}
+  /* 口诀卡 */
+  .motto{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .mcard{background:linear-gradient(150deg,#2D2118,#4A3826);color:#F5F0E8;border-radius:12px;padding:18px 20px}
+  .mcard b{color:var(--gold);display:block;margin-bottom:4px;font-size:.92rem}
+  .mcard p{font-size:.9rem;color:#E0D2BC;margin:0}
+  /* 套件导航 */
+  .kitnav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:34px 20px 0}
+  .kitnav a,.kitnav .cur{border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:.85rem;background:#fff;color:var(--dark)}
+  .kitnav a:hover{border-color:var(--primary);color:var(--primary)}
+  .kitnav .cur{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+  footer{background:var(--dark);color:#CBB79B;text-align:center;padding:28px 20px;font-size:.85rem;margin-top:20px}
+  footer b{color:var(--gold)}
+  @media print{
+    body{background:#fff}
+    .box,.box.gold,.day,.mcard{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="top">
+  <div class="tag">WORKBOOK · V1</div>
+  <h1>《人类图的最早起源》学员练习手册</h1>
+  <p>21 天起源觉察 · 单栏可打印 · 配套《完整课件》14 讲使用</p>
+</header>
+
+<section>
+  <h2>〇 · 使用说明</h2>
+  <div class="box">
+    <p>本手册不替你"相信"任何东西——它替你<b>检查</b>。21 天里，你将把课件里的历史材料变成三样东西：<b>觉察</b>（每日一问）、<b>思辨</b>（模板与辩论）、<b>自述</b>（结业作品）。每天投入 15–20 分钟即可。</p>
+    <ol>
+      <li>每天先学/复习一讲课件，再完成当日觉察题；</li>
+      <li>在下方打卡日历中<b>点击</b>对应格子打勾（进度自动保存在本机）；</li>
+      <li>周末用"日志页"做一次每周复盘；</li>
+      <li>第 21 天完成"起源自述"——这是你的结业作品。</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <h2>一 · 21 天打卡日历（点击打卡）</h2>
+  <div class="cal" id="cal"></div>
+  <p class="cal-tip">进度保存在浏览器本地（localStorage）。建议节奏：第 1–7 天过基础篇（源流），第 8–14 天过应用篇（启示），第 15–20 天做思辨与伦理模板，第 21 天结业自述。</p>
+</section>
+
+<section>
+  <h2>二 · 每日结构（15–20 分钟）</h2>
+  <div class="box gold">
+    <ol>
+      <li><b>读</b>（5 分钟）：今日对应讲次的"要点"部分；</li>
+      <li><b>思</b>（7 分钟）：完成当日觉察题（见下表）；</li>
+      <li><b>写</b>（5 分钟）：一段话记入日志页；</li>
+      <li><b>合</b>（3 分钟）：把今天的"传统主张 / 证据边界"各念一遍给自己听。</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h3>21 天觉察题速览</h3>
+    <p><b>D1</b> 我对"人类图从哪来"的第一直觉（三个词内）。<br>
+    <b>D2</b> 我最有感觉的一条闸门：它的"礼物与阴影"。<br>
+    <b>D3</b> 我生命中被"接通"的三处与总被外界带走的两处。<br>
+    <b>D4</b> 我的定义/敞开中心的直觉判断（第 10 讲后复核）。<br>
+    <b>D5</b> 同一颗太阳：占星语言 vs 闸门语言，各像/不像我什么。<br>
+    <b>D6</b> 给"中微子烙印"归类：科学确立 / 结构巧合 / 教义主张？<br>
+    <b>D7</b> 我最早的三个灵性词汇来自哪条"河床"？<br>
+    <b>D8</b> 我最想"消失般重新开始"的一件事，以及除了离开还需要什么。<br>
+    <b>D9</b> "你准备好工作了吗？"——我正在准备的工作是什么？<br>
+    <b>D10</b> 直觉版与机械版定义/敞开的对照：最大的一处意外。<br>
+    <b>D11</b> "乘客并非司机"：一次拼命掌舵却徒劳的事的重述。<br>
+    <b>D12</b> 我介绍人类图时习惯用哪张面孔（预言/工具/科学）？<br>
+    <b>D13</b> 三栏辩论（见模板）：我现在站在哪，comfortable 吗？<br>
+    <b>D14</b> 为一次解读/传播写开场"语域声明"（三句话以内）。<br>
+    <b>D15</b> 找一句网络上被简化的人类图断言，写出它的原始语境。<br>
+    <b>D16</b> 巴纳姆效应自查：一句"感觉很准"的话，换个陌生人是否也准？<br>
+    <b>D17</b> 给 2027 预言写两种读法（字面的 / 象征的）各 50 字。<br>
+    <b>D18</b> 我愿意向谁推荐人类图、不愿意向谁？边界在哪里？<br>
+    <b>D19</b> "七年去条件化"：对我而言是框架还是枷锁？写一条自保条款。<br>
+    <b>D20</b> 通读时间线：选出对我最震撼的三个年份，说明理由。<br>
+    <b>D21</b> 结业自述（见第六节）。</p>
+  </div>
+</section>
+
+<section>
+  <h2>三 · 核心模板（填空即笔记）</h2>
+  <div class="box">
+    <h3>模板 A · 五重起源定位表</h3>
+    <p>深时起源：我渊源最深的一条古流是 <span class="blank"></span>，因为 <span class="blank w"></span></p>
+    <p>传记起源：Ra 故事里最触动我的是 <span class="blank w"></span></p>
+    <p>启示起源：我对"声音"的当前立场是 <span class="blank w"></span></p>
+    <p>制度起源：我认为对体系存续最关键的一环是 <span class="blank w"></span></p>
+    <p>概念起源：我最想再多学一层的主张是 <span class="blank w"></span></p>
+  </div>
+  <div class="box">
+    <h3>模板 B · 三栏思辨（启示 / 综合 / 被体验为启示的综合）</h3>
+    <p><b>假说 A · 启示</b></p>
+    <p>最强论据 ①：<span class="blank w"></span></p>
+    <p>最强论据 ②：<span class="blank w"></span></p>
+    <p>最弱处：<span class="blank w"></span></p>
+    <p><b>假说 B · 综合（有意识或无意识地组装）</b></p>
+    <p>最强论据 ①：<span class="blank w"></span></p>
+    <p>最强论据 ②：<span class="blank w"></span></p>
+    <p>最弱处：<span class="blank w"></span></p>
+    <p><b>假说 C · 被体验为启示的综合</b></p>
+    <p>最强论据 ①：<span class="blank w"></span></p>
+    <p>最强论据 ②：<span class="blank w"></span></p>
+    <p>最弱处：<span class="blank w"></span></p>
+    <p>结论（允许"无法裁决"）：<span class="blank w"></span></p>
+  </div>
+  <div class="box">
+    <h3>模板 C · 语域声明（给解读/传播场合用）</h3>
+    <p>① 这是 <span class="blank"></span>（反思框架/实验/对话工具），不是 <span class="blank"></span>（诊断/测量/预测）。</p>
+    <p>② 其中 <span class="blank"></span> 部分可复现可验证；<span class="blank"></span> 部分属于教义与神话，请自行判断。</p>
+    <p>③ 它不能替代 <span class="blank"></span>（医疗/心理/财务决策），如涉及请转介专业人士。</p>
+  </div>
+</section>
+
+<section>
+  <h2>四 · 每周日志页（×3，复制使用）</h2>
+  <div class="box">
+    <p>第 <span class="blank" style="min-width:40px"></span> 周（D <span class="blank" style="min-width:36px"></span> – D <span class="blank" style="min-width:36px"></span>）</p>
+    <p>本周最有冲击力的一个历史事实：</p><div class="lines"></div><div class="lines"></div>
+    <p>它改变了我对人类图的哪一点：</p><div class="lines"></div><div class="lines"></div>
+    <p>本周"传统主张 / 证据边界"里我最难分清的一处：</p><div class="lines"></div><div class="lines"></div>
+    <p>下周想验证的一件事：</p><div class="lines"></div>
+  </div>
+</section>
+
+<section>
+  <h2>五 · 口诀卡（贴案头 / 存手机）</h2>
+  <div class="motto">
+    <div class="mcard"><b>① 起源五问</b><p>深时从何来？此人是谁？声音说了什么？如何成为制度？主张凭什么？</p></div>
+    <div class="mcard"><b>② 一句话体系</b><p>行星（占星）激活闸门（易经），闸门落在中心（脉轮）上，经由通道（生命之树）相连。</p></div>
+    <div class="mcard"><b>③ 三层证据</b><p>计算是真的（天文）；共振是巧合（64↔64）；机制是主张（中微子烙印）。</p></div>
+    <div class="mcard"><b>④ 三重身份</b><p>工具问效用，科学问实证，神话问融贯——先问语域，再争论。</p></div>
+    <div class="mcard"><b>⑤ 结业心法</b><p>认识你的天性，跟随你的设计，亲自去验证——起源在身后，实验在继续。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>六 · 结业自述（D21 · 200 字）</h2>
+  <div class="box gold">
+    <p>要求：用你自己的话讲述"人类图从哪里来"，须同时说出<b>传统的主张</b>与<b>证据的边界</b>。</p>
+    <div class="lines"></div><div class="lines"></div><div class="lines"></div><div class="lines"></div><div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    <p>署名：<span class="blank" style="min-width:120px"></span>　日期：<span class="blank" style="min-width:100px"></span></p>
+  </div>
+</section>
+
+</div>
+
+<nav class="kitnav">
+  <a href="hd-origins-course.html">🏠 课程主页</a>
+  <a href="hd-origins-courseware.html">📘 完整课件</a>
+  <span class="cur">✍️ 练习手册</span>
+  <a href="hd-origins-cheatsheet.html">🗂️ 速查卡</a>
+</nav>
+
+<footer>
+  《人类图的最早起源》｜学员练习手册<br>
+  Powered By <b>Kan Man Tang</b>
+</footer>
+
+<script>
+// 21 天打卡日历（localStorage 持久化）
+const KEY='hd-origins-wb-v1';
+let done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){done={}}
+const cal=document.getElementById('cal');
+for(let i=1;i<=21;i++){
+  const d=document.createElement('div');
+  d.className='day'+(done[i]?' done':'');
+  d.innerHTML='<b>'+i+'</b><span>'+(done[i]?'✓':'Day')+'</span>';
+  d.onclick=()=>{
+    done[i]=!done[i];
+    if(!done[i])delete done[i];
+    localStorage.setItem(KEY,JSON.stringify(done));
+    d.className='day'+(done[i]?' done':'');
+    d.innerHTML='<b>'+i+'</b><span>'+(done[i]?'✓':'Day')+'</span>';
+  };
+  cal.appendChild(d);
+}
+</script>
+</body>
+</html>

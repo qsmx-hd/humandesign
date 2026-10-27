@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《人类图的最早起源》· 一部四千年的综合史课程 | Powered By Kan Man Tang</title>
+<!--
+  ============================================================
+  VERSION: V3 · 2026-10-27
+  变更点（V3）：
+  - Hero 人体图（HD.jpg）下方移除图注文字
+  - 讲师区排版完全对齐 hd-beginner-course：卡片内「左文字 + 右侧 216px
+    人类图竖图」并排（此前为图置底部全宽，显不协调）；移除区块大标题，
+    姓名简化为「邓勤敏」；≤900px 图缩至 200px，≤620px 图移至文字下方居中
+  变更点（V2 · 2026-10-27）：
+  - 讲师介绍对齐 hd-beginner-course（2026-10-22 项目）：头像 tutor.png、
+    头衔 chips、完整履历、金句、人类图配图 chart-kan-man-tang.jpg
+  - Hero 区右侧加入 HD.jpg 人体图示意图（两栏布局，≤900px 上下堆叠）
+  变更点（V1 初版 · 2026-10-26）：
+  - 基于《The Earliest Origins of Human Design — A Comprehensive History》
+    研究报告开发的课程落地页
+  - 结构：Hero → 新旧悖论 → 五重起源 → 课程地图（基础篇7章+应用篇7章）
+    → 五大源流核心表 → 时间线 → 适合人群 → 学习路径 → 讲师 → 报名 CTA
+  - 品牌色：米白 #F5F0E8 / 深棕 #2D2118 / 金棕 #C4956A / 金 #D4A843
+  - 术语规范：生产者（Generator）、显示生产者（MG）、闸门
+  - 移动端 ≤860px 顶部导航折叠为汉堡菜单
+  ============================================================
+-->
+<style>
+  :root{
+    --bg:#F5F0E8; --dark:#2D2118; --primary:#C4956A; --gold:#D4A843;
+    --cream:#FFFBF4; --line:#E3D8C6; --muted:#7A6A58;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--dark);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.8;font-size:16px}
+  h1,h2,h3,h4,.serif{font-family:Georgia,"Noto Serif SC","Source Han Serif SC","Songti SC",serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* 顶部导航 */
+  nav{position:sticky;top:0;z-index:99;background:rgba(45,33,24,.96);backdrop-filter:blur(6px);color:#F5F0E8}
+  .navin{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{font-family:Georgia,"Noto Serif SC",serif;font-size:1.15rem;color:var(--gold);white-space:nowrap}
+  .logo small{color:#CBB79B;font-size:.72rem;display:block;letter-spacing:.2em}
+  .links{display:flex;gap:20px;font-size:.9rem;flex-wrap:wrap}
+  .links a:hover{color:var(--gold)}
+  #burger{display:none;background:none;border:1px solid var(--gold);color:var(--gold);font-size:1.2rem;border-radius:8px;padding:4px 12px;cursor:pointer}
+
+  /* Hero */
+  header.hero{background:linear-gradient(160deg,#2D2118 0%,#3E2E1F 60%,#55402A 100%);color:#F5F0E8;padding:64px 20px}
+  .hero-grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+  .hero-txt{text-align:left}
+  .kicker{letter-spacing:.35em;color:var(--gold);font-size:.85rem;margin-bottom:18px}
+  .hero h1{font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:16px}
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero p.sub{max-width:560px;margin:0 0 26px;color:#D8C8B0;font-size:1.05rem}
+  .badges{display:flex;gap:10px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:30px}
+  .badge{border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:4px 16px;font-size:.8rem}
+  .cta{display:inline-block;background:var(--gold);color:var(--dark);font-weight:bold;padding:13px 38px;border-radius:999px;font-size:1rem;transition:.2s}
+  .cta:hover{background:#E7BC55;transform:translateY(-2px)}
+  .cta.ghost{background:transparent;color:var(--gold);border:1.5px solid var(--gold);margin-left:12px}
+  .quote{margin:34px 0 0;max-width:640px;color:#CBB79B;font-size:.95rem;font-style:italic}
+  .hero-art{text-align:center}
+  .hero-img{width:100%;max-width:340px;border-radius:22px;display:block;margin:0 auto;
+    box-shadow:0 26px 64px rgba(0,0,0,.5),0 0 0 1px rgba(212,168,67,.35),0 0 64px rgba(196,149,106,.2)}
+
+  /* 区块 */
+  section{padding:64px 0}
+  section.alt{background:var(--cream)}
+  .sec-head{text-align:center;margin-bottom:40px}
+  .sec-head .tag{color:var(--primary);letter-spacing:.3em;font-size:.8rem}
+  .sec-head h2{font-size:clamp(1.4rem,3vw,2rem);margin:8px 0 10px}
+  .sec-head p{color:var(--muted);max-width:640px;margin:0 auto}
+
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .card h3{font-size:1.05rem;margin-bottom:8px}
+  .card p{color:#5C4F40;font-size:.92rem}
+  .card .num{display:inline-block;width:34px;height:34px;line-height:34px;text-align:center;background:var(--primary);color:#fff;border-radius:50%;margin-bottom:12px;font-family:Georgia,serif}
+  .card.gold .num{background:var(--dark)}
+
+  /* 五大源流表 */
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(45,33,24,.05);font-size:.9rem}
+  th{background:var(--dark);color:#F5F0E8;padding:12px 14px;text-align:left;font-weight:normal}
+  td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+  td:first-child{white-space:nowrap;font-weight:bold}
+  .tw{overflow-x:auto}
+
+  /* 时间线 */
+  .tl{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px}
+  .tl .node{min-width:170px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+  .tl .node b{display:block;color:var(--primary);font-family:Georgia,serif;margin-bottom:4px}
+  .tl .node span{font-size:.85rem;color:#5C4F40}
+  .tl .node.hot{background:var(--dark);color:#F5F0E8;border-color:var(--dark)}
+  .tl .node.hot b{color:var(--gold)}
+
+  /* 学习路径 */
+  .path{display:flex;gap:0;flex-wrap:wrap;justify-content:center;counter-reset:step}
+  .path .st{flex:1;min-width:200px;max-width:250px;background:#fff;border:1px solid var(--line);padding:22px 18px;text-align:center;position:relative;margin:0 6px 12px;border-radius:12px}
+  .path .st::before{counter-increment:step;content:counter(step);display:block;width:30px;height:30px;line-height:30px;border-radius:50%;background:var(--gold);color:var(--dark);font-weight:bold;margin:0 auto 10px;font-family:Georgia,serif}
+  .path .st h4{margin-bottom:6px}
+  .path .st p{font-size:.85rem;color:var(--muted)}
+
+  /* 讲师（对齐 hd-beginner-course：左文字 + 右侧人类图竖图并排） */
+  .tutor{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:52px;
+    display:flex;gap:38px;align-items:flex-start;flex-wrap:wrap;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .tutor-main{flex:1 1 380px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;min-width:0}
+  .tutor .ava{width:106px;height:106px;border-radius:50%;background:#fff;border:2px solid var(--gold);
+    overflow:hidden;flex-shrink:0;box-shadow:0 14px 30px rgba(166,120,72,.3)}
+  .tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .tutor .txt{flex:1 1 270px}
+  .tutor h3{font-size:24px;margin-bottom:7px}
+  .tutor .role{font-size:14.5px;line-height:2;color:var(--dark)}
+  .tutor p{font-size:14.5px;color:var(--muted);line-height:1.95}
+  .tutor p+p{margin-top:9px}
+  .tutor .chips{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0 12px}
+  .tutor .chips span{background:rgba(196,149,106,.13);border:1px solid var(--line);color:#8A6540;
+    font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;white-space:nowrap}
+  .tutor .tq{margin-top:18px;padding-left:16px;border-left:3px solid var(--primary);
+    font-style:italic;color:#8A6540;font-size:14.5px}
+  .hd-figure{flex:0 0 216px;margin:0;text-align:center}
+  .hd-figure img{width:100%;border-radius:14px;border:1px solid var(--line);background:#fff;
+    box-shadow:0 16px 36px rgba(45,33,24,.13)}
+  .hd-figure figcaption{font-size:12.5px;color:#8A6540;font-weight:bold;letter-spacing:.08em;margin-top:10px}
+
+  /* CTA */
+  .final{background:linear-gradient(160deg,#3E2E1F,#2D2118);color:#F5F0E8;text-align:center;border-radius:20px;padding:52px 24px}
+  .final h2{color:var(--gold);margin-bottom:12px}
+  .final p{color:#D8C8B0;max-width:560px;margin:0 auto 26px}
+
+  /* 套件导航 */
+  .kit{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+  .kit a{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;font-size:.9rem;transition:.2s}
+  .kit a:hover{border-color:var(--primary);transform:translateY(-3px)}
+  .kit a b{display:block;color:var(--primary);margin-bottom:4px}
+
+  footer{background:var(--dark);color:#CBB79B;text-align:center;padding:34px 20px;font-size:.85rem;margin-top:60px}
+  footer b{color:var(--gold)}
+
+  @media(max-width:900px){
+    .g3{grid-template-columns:repeat(2,1fr)}
+    .kit{grid-template-columns:repeat(2,1fr)}
+    .hero-grid{grid-template-columns:1fr}
+    .hero-txt{text-align:center}
+    .hero p.sub{margin-left:auto;margin-right:auto}
+    .badges{justify-content:center}
+    .tutor{padding:38px 30px}
+    .hd-figure{flex:0 1 200px}
+  }
+  @media(max-width:860px){
+    #burger{display:block}
+    .links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--dark);flex-direction:column;padding:18px 24px;gap:14px;border-top:1px solid rgba(212,168,67,.3)}
+    .links.open{display:flex}
+  }
+  @media(max-width:620px){
+    .g3,.g2{grid-template-columns:1fr}
+    td:first-child{white-space:normal}
+    .cta.ghost{margin-left:0;margin-top:10px}
+    .tutor{padding:30px 20px;gap:24px}
+    .tutor-main{flex-direction:column;gap:14px}
+    .tutor .ava{width:88px;height:88px}
+    .hd-figure{flex:1 1 100%;max-width:240px;margin:4px auto 0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navin">
+    <a class="logo" href="#top">人类图溯源<small>ORIGINS OF HD</small></a>
+    <button id="burger" onclick="document.getElementById('links').classList.toggle('open')">☰</button>
+    <div class="links" id="links">
+      <a href="#paradox" onclick="closeM()">缘起悖论</a>
+      <a href="#five" onclick="closeM()">五重起源</a>
+      <a href="#map" onclick="closeM()">课程地图</a>
+      <a href="#table" onclick="closeM()">五大源流</a>
+      <a href="#path" onclick="closeM()">学习路径</a>
+      <a href="#tutor" onclick="closeM()">讲师</a>
+      <a href="#enroll" onclick="closeM()">开始学习</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-txt">
+      <div class="kicker">A COURSE ON THE EARLIEST ORIGINS OF HUMAN DESIGN</div>
+      <h1>《人类图的<em>最早起源</em>》</h1>
+      <p class="sub">从四千年的古老源流，到 1987 年伊维萨岛上的八天八夜——<br>一部关于人类图从何而来的综合史课程。</p>
+      <div class="badges">
+        <span class="badge">V3 · 2026-10</span>
+        <span class="badge">14 章 · 基础篇 + 应用篇</span>
+        <span class="badge">4 件套：主页 / 课件 / 手册 / 速查卡</span>
+        <span class="badge">忠于研究报告 · 不偏不倚</span>
+      </div>
+      <a class="cta" href="#map">进入课程地图</a>
+      <a class="cta ghost" href="hd-origins-courseware.html">打开完整课件 →</a>
+      <p class="quote">"不要相信我，也不要信任我。亲自去尝试，亲自去验证——这是每个人都可以验证的机械知识。" —— Ra Uru Hu</p>
+    </div>
+    <figure class="hero-art">
+      <img class="hero-img" src="HD.jpg" alt="人类图九大能量中心人体图示意图">
+    </figure>
+  </div>
+</header>
+
+<section id="paradox">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">THE PARADOX</div>
+      <h2>一个"最新也最老"的体系</h2>
+      <p>人类图诞生于 1987 年——比互联网还年轻；但它刻意封存了四千年的古老智慧。理解这个悖论，是理解人类图一切的起点。</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">新</span><h3>一个二十世纪的生命</h3><p>1987 年 1 月 3–11 日，前加拿大广告业高管 Robert Allan Krakower（后名 Ra Uru Hu）在伊维萨岛经历了为期八天八夜的"声音"传输；1991 年《黑皮书》首次出版；2011 年创始人离世。整个体系的"近因"不足四十年。</p></div>
+      <div class="card"><span class="num">老</span><h3>四千年的源头活水</h3><p>它融合四大古流：《易经》六十四卦（约前 2800–1000 年）、西方占星（约前 2000 年起）、卡巴拉生命之树（约 200 年起）、脉轮系统（约前 1500 年起），再以现代科学（中微子、基因、天文）为框架。</p></div>
+      <div class="card"><span class="num">合</span><h3>综合，而非拼凑</h3><p>传统坚持：这不是四种知识的简单叠加。"行星（占星）激活闸门（易经），闸门落在中心（脉轮）上，并通过通道（生命之树）相连。"——新旧一体，正是这门课程要拆解的谜题。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="five">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">FIVE ORIGINS</div>
+      <h2>追问"最早起源"，其实有五个诚实的答案</h2>
+      <p>研究报告给出的方法论骨架：每一个"起源"都是一种不同的历史，本课程逐一展开。</p>
+    </div>
+    <div class="grid g3">
+      <div class="card gold"><span class="num">①</span><h3>深时起源</h3><p>四大源流各自的最早源头与成熟形态——它们如何长成 1987 年被吸收时的样子。</p></div>
+      <div class="card gold"><span class="num">②</span><h3>传记起源</h3><p>Ra Uru Hu 是谁？1948–1983 年的那个"普通人"，如何走到启示发生的状态与地点。</p></div>
+      <div class="card gold"><span class="num">③</span><h3>启示起源</h3><p>1987 年 1 月的事件本身：日期、内容，以及 SN 1987A 超新星与"和谐汇聚"的时代语境。</p></div>
+      <div class="card gold"><span class="num">④</span><h3>制度起源</h3><p>接收到的材料如何变成教学、学校、文献与全球实践——《黑皮书》、Jovian Archive、IHDS。</p></div>
+      <div class="card gold"><span class="num">⑤</span><h3>概念起源</h3><p>体系提出的智识主张——中微子、意识、演化——与它所借用的科学之间，是何种关系。</p></div>
+      <div class="card"><span class="num">＋</span><h3>第六条暗流：文化河床</h3><p>神智学、赫尔墨斯主义、荣格与"新时代"早已融合这些元素逾百年——河床让综合成为可能，也让"启示 vs 综合"的追问有了分寸。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">COURSE MAP</div>
+      <h2>课程地图：基础篇 × 应用篇</h2>
+      <p>历史（知识）× 觉察（实修）双螺旋：每章配「源流 × 人类图」整合框与觉察作业。</p>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>◈ 基础篇 · 源流七讲（深时考古）</h3>
+        <p>第 1 讲　导论：一门"新而最老"的体系<br>第 2 讲　《易经》：最老的源流（64 闸门之源）<br>第 3 讲　卡巴拉生命之树：接线逻辑<br>第 4 讲　脉轮系统：从吠陀到七大中心<br>第 5 讲　西方占星：从巴比伦到出生时刻<br>第 6 讲　现代科学框架：中微子、基因、天文<br>第 7 讲　文化河床：神智学 · 荣格 · 新时代</p>
+      </div>
+      <div class="card">
+        <h3>◈ 应用篇 · 启示七讲（1987 之后）</h3>
+        <p>第 8 讲　那个人：声音之前的 Robert Krakower<br>第 9 讲　声音：1987 年 1 月的八天八夜<br>第 10 讲　体系的机械：曼陀罗 · 人体图 · 类型<br>第 11 讲　宇宙论与演化叙事：水晶 · 磁单极 · 1781 与 2027<br>第 12 讲　从 Rave 到 Human Design：命名 · 制度 · 全球传播<br>第 13 讲　批判性视角：宗教 / 科学 / 工具的三重身份<br>第 14 讲　实践伦理：如何负责任地使用与传播</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="table">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">FIVE STREAMS</div>
+      <h2>核心表：五大源流各贡献了什么</h2>
+      <p>人类图自称"五大成分"的综合——这张表是全课程的钥匙。</p>
+    </div>
+    <div class="tw">
+    <table>
+      <tr><th>成分</th><th>贡献</th><th>在人类图中的呈现</th></tr>
+      <tr><td>中国《易经》</td><td>六十四卦</td><td>64 闸门，每闸六爻</td></tr>
+      <tr><td>西方占星</td><td>行星与黄道轮，精确出生时刻计算</td><td>个性（黑）与设计（红）双行星栏</td></tr>
+      <tr><td>卡巴拉生命之树</td><td>中心之间以通道相连的理念</td><td>36 条通道， wiring 全图</td></tr>
+      <tr><td>印度脉轮系统</td><td>身体能量中心</td><td>9 大中心（由传统 7 个演化而来）</td></tr>
+      <tr><td>现代科学（物理·基因）</td><td>中微子语言；闸门 ↔ DNA 密码子</td><td>"中微子烙印"框架；64 ↔ 64 对应</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">TIMELINE</div>
+      <h2>关键年份一览（横向滑动）</h2>
+    </div>
+    <div class="tl">
+      <div class="node"><b>约前2800–1000</b><span>《易经》最早层：伏羲八卦、西周文本</span></div>
+      <div class="node"><b>约前1150</b><span>文王演六十四卦、作卦辞</span></div>
+      <div class="node"><b>约前500–200</b><span>孔子与"十翼"：占卜之书变为哲学</span></div>
+      <div class="node"><b>约前2000–700</b><span>巴比伦天文学、黄道十二宫起源</span></div>
+      <div class="node"><b>约150 CE</b><span>托勒密《四书》 codify 西方占星</span></div>
+      <div class="node"><b>3–6 世纪</b><span>《创造之书》：卡巴拉结构萌芽</span></div>
+      <div class="node"><b>约1280</b><span>《光明之书》（Zohar）成书</span></div>
+      <div class="node"><b>1577</b><span>《六轮转化释》固定七大脉轮</span></div>
+      <div class="node"><b>1930 / 1956</b><span>中微子假说提出 / 首次探测</span></div>
+      <div class="node"><b>1948.4.9</b><span>Krakower 生于加拿大蒙特利尔</span></div>
+      <div class="node"><b>1983 春</b><span>抛开一切，"消失"，前往伊维萨</span></div>
+      <div class="node hot"><b>1987.1.3–11</b><span>八天八夜：The Voice 传输</span></div>
+      <div class="node hot"><b>1987.2.23</b><span>SN 1987A 超新星（光与中微子抵地球）</span></div>
+      <div class="node"><b>1991</b><span>《黑皮书》：Rave 易经与中微子理论首度公开</span></div>
+      <div class="node"><b>2000</b><span>Jovian Archive 与国际人类图学校（IHDS）</span></div>
+      <div class="node"><b>2011.3.12</b><span>Ra Uru Hu 于伊维萨离世</span></div>
+      <div class="node"><b>2015</b><span>中微子振荡获诺贝尔物理学奖</span></div>
+      <div class="node hot"><b>2027.2 前后</b><span>预言：沉睡凤凰交叉 / 太阳神经丛觉醒</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">WHO IT'S FOR</div>
+      <h2>适合谁来学</h2>
+    </div>
+    <div class="grid g3">
+      <div class="card"><h3>🧭 人类图爱好者</h3><p>已知道自己类型与策略，想弄清"这套东西从哪来、凭什么可信"，补上历史的纵深。</p></div>
+      <div class="card"><h3>🎙 解读者 / 讲师</h3><p>需要在解读与授课中回答学员关于起源、科学性与争议的提问，建立有分寸的表述。</p></div>
+      <div class="card"><h3>🔬 灵性体系的观察者</h3><p>对新兴宗教运动、神秘学综合史、批判性思考感兴趣——不带立场，只想看清楚。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">LEARNING PATH</div>
+      <h2>学习路径：四步走完 4000 年</h2>
+    </div>
+    <div class="path">
+      <div class="st"><h4>① 通读主页</h4><p>用 10 分钟建立全景：悖论、五重起源、五大源流表。</p></div>
+      <div class="st"><h4>② 逐章学课件</h4><p>基础篇 + 应用篇共 14 讲，每讲 15–20 分钟，配觉察作业。</p></div>
+      <div class="st"><h4>③ 手册实修</h4><p>21 天"起源觉察"练习：日志模板、思辨模板、打卡日历。</p></div>
+      <div class="st"><h4>④ 速查卡常备</h4><p>把时间线、源流表、金句贴在案头，随时调用。</p></div>
+    </div>
+    <div class="kit">
+      <a href="hd-origins-courseware.html"><b>📘 完整课件</b>14 讲逐章教学</a>
+      <a href="hd-origins-workbook.html"><b>✍️ 练习手册</b>21 天觉察实修</a>
+      <a href="hd-origins-cheatsheet.html"><b>🗂 速查卡</b>时间线 · 源流 · 金句</a>
+      <a href="#top"><b>🏠 本页 · 课程主页</b>落地与导览</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="tutor">
+  <div class="wrap">
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p class="role">人类图领读者计划发起人<br>真好玩人类图平台创始人<br>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源企业、软件公司、保险公司、互联网公司、电商平台等业态。</p>
+          <p>人类图领域持续开发者：humandesign-V38 出图引擎、64 闸门数据管线、关系合盘、BG5 应用、CTB 四箭头分析系统。本课程以一份中立的综合史研究报告为底本，坚持"报告传统怎么说、也报告批评者怎么说"的原则。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+          <div class="tq">「人类图不是告诉你该成为谁，而是提醒你——你本来就是谁。」</div>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="enroll">
+  <div class="wrap">
+    <div class="final">
+      <h2>起源在我们身后，实验仍在继续</h2>
+      <p>无论那"声音"是超越人类的存在，还是一颗深刻心灵浮现为启示——证据无法裁决，而这门课会教你带着这份不确定，依然清晰地使用这份知识。</p>
+      <a class="cta" href="hd-origins-courseware.html">开工，走起 → 打开课件</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  《人类图的最早起源》课程主页<br>
+  Powered By <b>Kan Man Tang</b>
+</footer>
+
+<script>
+function closeM(){document.getElementById('links').classList.remove('open');}
+document.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',closeM));
+</script>
+</body>
+</html>
