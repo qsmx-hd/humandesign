@@ -64,12 +64,21 @@
   }
   .cell{
     display:inline-flex; flex-direction:column; align-items:center;
-    min-width:1.05em; padding:1px 1px; border-radius:5px;
+    min-width:2.05em; padding:1px 1px; border-radius:5px;
+  }
+  .cell .py{
+    font-size:.62rem; color:var(--sub); line-height:1.15;
+    font-family:"Trebuchet MS",sans-serif; letter-spacing:.01em;
   }
   .cell .ch{font-size:1.04rem; line-height:1.15;}
   .cell .jp{
     font-size:.66rem; color:var(--sub); line-height:1.1; margin-top:1px;
     font-family:"Trebuchet MS",sans-serif;
+  }
+  .ln{
+    min-width:2.3em; text-align:right; padding-right:.6em;
+    font-size:.72rem; color:var(--sub); font-variant-numeric:tabular-nums;
+    align-self:center; user-select:none; font-family:"Trebuchet MS",sans-serif;
   }
   .cell.hi .jp{border-top:1.6px dotted var(--gold);}
   .cell.cur{background:rgba(192,57,43,.14);}
@@ -83,15 +92,36 @@
   #diag b{color:var(--ink);}
   .bar{height:4px; background:#e0d5b8; border-radius:3px; overflow:hidden; margin:8px 0 0;}
   .bar > i{display:block; height:100%; width:0; background:var(--gold); transition:width .25s linear;}
+  /* 注音/简谱 显隐开关 */
+  .chk{display:flex; align-items:center; gap:6px; font-size:.85rem; color:var(--ink); cursor:pointer; user-select:none;}
+  .chk input{accent-color:var(--gold); width:16px; height:16px; cursor:pointer;}
+  body.no-py .py{display:none;}
+  body.no-jp .jp{display:none;}
+  body.no-py .cell, body.no-jp .cell{min-width:1.35em;}
+  body.no-py.no-jp .cell{min-width:1.05em;}
+  /* 插图 */
+  figure{margin:16px 0; text-align:center;}
+  figure img{
+    max-width:100%; border-radius:10px; border:1px solid var(--line);
+    box-shadow:0 2px 12px rgba(43,33,24,.10); background:#fff;
+  }
+  figure.hero img{max-height:560px; object-fit:contain;}
+  figure.inline-fig img{max-height:430px; object-fit:contain;}
+  figcaption{font-size:.78rem; color:var(--sub); margin-top:7px; line-height:1.5;}
 </style>
 </head>
 <body>
 <header>
-  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V3.0</span></h1>
+  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V3.1</span></h1>
   <div class="meta">《大佛顶首楞严经》卷七 · 全咒 554 句（五会 + 咒心）· 新譜梵呗讽诵调</div>
 </header>
 
 <div class="wrap">
+
+  <figure class="hero">
+    <img src="images/lengyanzhou-dunhuang.jpg" alt="敦煌藏经洞出土《大佛顶陀罗尼》版画">
+    <figcaption>敦煌藏经洞出土《大佛顶陀罗尼》版画 · 中央为咒轮与佛顶咒心，四周环以梵汉咒文与佛像（公有领域）</figcaption>
+  </figure>
 
   <div class="card">
     <h2>关于这份谱曲（先读）</h2>
@@ -115,6 +145,13 @@
     <b>lookahead 预调度</b>——定时器每 250ms 醒来一次，只把未来 2 秒内该响的音符挂到音频时钟上，
     由音频硬件时钟精确发声；混响器全程只建一个、常驻复用。内存占用恒定（约几十 KB），
     全咒 23 分钟也不会变慢或卡死。速度、音量、段落切换全部实时生效。</p>
+    <p><b>注音说明（V3.1）：</b>每个字的拼音依<b>汉传通行梵呗读音</b>标注，并对咒中大量异读字做了人工校订
+    （如 南无 nā mó、他 tuō、伽 qié、啰 là、阇 shé、跢 duō、鞞 pí、般 bō、若 rě、刹 chà、么 mó）。
+    咒语古来音译用字，各家读音本有出入，诵持仍请以师承为准。面板右侧可用「注音」「简谱」开关分别显隐。</p>
+    <figure class="inline-fig">
+      <img src="images/lengyanzhou-chanmen-risong.jpg" alt="《禅门日诵》首页 大佛顶首楞严神咒">
+      <figcaption>《禅门日诵》首页——楞严咒为汉传寺院早课第一咒，页上标明「此咒凡四百二十七句二千六百二十字」（CC0）</figcaption>
+    </figure>
   </div>
 
   <div class="controls" id="controls">
@@ -149,6 +186,13 @@
     <div class="grp">
       <label>进度</label>
       <div class="time" id="dur">—</div>
+    </div>
+    <div class="grp">
+      <label>显示</label>
+      <div style="display:flex; gap:14px; padding-bottom:6px;">
+        <label class="chk"><input type="checkbox" id="tglPy" checked> 注音</label>
+        <label class="chk"><input type="checkbox" id="tglJp" checked> 简谱</label>
+      </div>
     </div>
   </div>
 
@@ -192,6 +236,13 @@
           ⑤ 变速 = 重新基准化时间轴（保持音高不变，只改速度与气口），拖动滑块实时生效；
           ⑥ 无任何探测 / 重建 / 守卫 / 自动重播逻辑 —— 越少的自愈越可靠。
         内存恒定，全咒 23 分钟与单会一样轻。归档 lengyanzhou-shurangama-mantra.v8.html（=V2.1）。
+   V3.1（2026.10.31）内容与版面增强（引擎同 V3.0，未动）：
+        ① 每句前加全咒连续行号（001–554），便于学员定位/提问；
+        ② 每个字加拼音注音（pypinyin 打底 + 依汉传通行梵呗读音人工覆盖 80+ 字，
+           如 南无 nā mó / 他 tuō / 伽 qié / 啰 là / 阇 shé / 跢 duō / 鞞 pí / 般 bō / 若 rě），
+           面板新增「注音」「简谱」两个显示开关，可各自显隐；
+        ③ 置两张公有领域/CC0 楞严咒图：敦煌藏经洞《大佛顶陀罗尼》版画（公有领域）、
+           《禅门日诵》首页楞严咒（CC0），并附说明。归档 lengyanzhou-shurangama-mantra.v9.html（=V3.0）。
    ==================================================== */
 
 /* ===================== 咒文数据（五会 + 咒心，共 554 句） ===================== */
@@ -225,6 +276,9 @@ const PENTA = [
   {jp:"5", freq:784.00},
   {jp:"6", freq:880.00}
 ];
+
+/* 单字注音表（pypinyin 打底 + 依汉传通行梵呗读音人工校订异读字） */
+const PINYIN = {"丁":"dīng","丈":"zhàng","三":"sān","业":"yè","严":"yán","丹":"dān","主":"zhǔ","乂":"yì","么":"mó","乌":"wū","乏":"fá","什":"shí","他":"tuō","伐":"fá","伽":"qié","佉":"qū","佛":"fó","你":"nǐ","侄":"zhí","俱":"jù","僧":"sēng","儜":"níng","兔":"tù","具":"jù","写":"xiě","冰":"bīng","凌":"líng","刍":"chú","利":"lì","制":"zhì","刹":"chà","刺":"là","剌":"là","剑":"jiàn","勃":"bó","单":"dān","南":"nā","卢":"lú","印":"yìn","叉":"chā","叠":"dié","叱":"chì","史":"shǐ","吉":"jí","吠":"fèi","吽":"hōng","呼":"hū","咄":"duō","咒":"zhòu","咜":"tuō","咤":"zhà","哆":"duō","唎":"lì","唠":"láo","唵":"ǎn","商":"shāng","啒":"gǔ","啰":"là","喃":"nán","喝":"hē","喻":"yù","嗔":"chēn","噜":"lū","嚧":"lú","因":"yīn","地":"dì","坠":"zhuì","埵":"duǒ","堙":"yīn","多":"duō","夜":"yè","失":"shī","头":"tóu","夷":"yí","奢":"shē","女":"nǚ","奴":"nú","姥":"mǔ","娑":"suō","婆":"pó","婢":"bì","宅":"zhái","室":"shì","密":"mì","尸":"shī","尼":"ní","岐":"qí","崩":"bēng","布":"bù","师":"shī","帝":"dì","常":"cháng","干":"gān","底":"dǐ","度":"dù","建":"jiàn","弊":"bì","引":"yǐn","弥":"mí","弭":"mǐ","忏":"chàn","忙":"máng","怛":"dá","怜":"lián","悉":"xī","惮":"dàn","慕":"mù","战":"zhàn","房":"fáng","扇":"shàn","托":"tuō","扬":"yáng","折":"zhé","担":"dān","拏":"ná","持":"chí","捺":"nà","掘":"jué","提":"tí","揭":"jiē","摩":"mó","播":"bō","擅":"shàn","敛":"liǎn","文":"wén","斫":"zhuó","无":"mó","昙":"tán","昵":"nì","普":"pǔ","曳":"yè","曼":"màn","末":"mò","条":"tiáo","枳":"zhǐ","柱":"zhù","树":"shù","栗":"lì","梵":"fàn","楞":"léng","槃":"pán","檀":"tán","殊":"shū","母":"mǔ","比":"bǐ","毕":"bì","毖":"bì","毗":"pí","毘":"pí","汉":"hàn","沙":"shā","波":"bō","泥":"ní","泮":"pàn","涩":"sè","演":"yǎn","点":"diǎn","牟":"móu","犁":"lí","狼":"láng","瑟":"sè","瓢":"piáo","瓮":"wèng","甖":"yīng","略":"lüè","盎":"àng","盘":"pán","目":"mù","瞋":"chēn","瞻":"zhān","知":"zhī","礼":"lǐ","社":"shè","祇":"qí","离":"lí","私":"sī","税":"shuì","稚":"zhì","突":"tū","粹":"cuì","素":"sù","索":"suǒ","继":"jì","绮":"qǐ","缚":"fù","罔":"wǎng","罗":"luó","羊":"yáng","羯":"jié","翳":"yì","者":"zhě","耆":"qí","耶":"yé","耽":"dān","肆":"sì","胝":"zhī","腾":"téng","舍":"shě","般":"bō","苏":"sū","若":"rě","茶":"chá","药":"yào","菟":"tú","菩":"pú","萨":"sà","蓝":"lán","蔑":"miè","薄":"bó","薩":"sà","藐":"miǎo","虎":"hǔ","补":"bǔ","袪":"qū","西":"xī","视":"shì","誓":"shì","讫":"qì","诃":"hē","谜":"mí","谤":"bàng","质":"zhì","赧":"nǎn","赭":"zhě","跋":"bá","跢":"duō","路":"lù","车":"chē","输":"shū","辫":"biàn","达":"dá","迄":"qì","迟":"chí","迦":"jiā","逹":"dá","逻":"luó","遮":"zhē","那":"nà","邬":"wū","部":"bù","都":"dū","酰":"xī","野":"yě","鉢":"bō","钐":"shān","钳":"qián","钵":"bō","闭":"bì","闼":"tà","阇":"shé","阿":"ā","陀":"tuó","隶":"lì","难":"nán","雍":"yōng","革":"gé","鞞":"pí","顿":"dùn","颇":"pō","频":"pín","鸠":"jiū","鸡":"jī","麽":"mó","鼻":"bí"};
 
 /* ===================== 生成音符 ===================== */
 const NOTES = [];
@@ -260,6 +314,7 @@ function render(){
   const score = document.getElementById("score");
   const frag = document.createDocumentFragment();
   const moodMap = {"第一会":"归命诸佛 · 虔诚上升","第二会":"降魔护持 · 沉稳坚定","第三会":"摧伏障难 · 起伏流转","第四会":"解脱缚着 · 开放舒展","第五会":"圆满回向 · 光明高扬"};
+  let ln = 0;                                    // 全咒连续行号 001–554
   for(const hui of HUI_ORDER){
     const det = document.createElement("details");
     det.open = (hui === "第一会");
@@ -270,6 +325,9 @@ function render(){
     HUIS[hui].forEach((phrase, pi)=>{
       const pdiv = document.createElement("div");
       pdiv.className = "phrase";
+      const lnEl = document.createElement("span");     // 行号
+      lnEl.className = "ln"; lnEl.textContent = String(++ln).padStart(3,"0");
+      pdiv.appendChild(lnEl);
       const chars = Array.from(phrase);
       const isXin = XIN_SET.has(phrase);
       const motif = isXin ? XIN_MOTIF : HUI_CONFIG[hui].motif;
@@ -280,9 +338,10 @@ function render(){
         const deg = isLast ? cad : motif[ci % motif.length];
         const cell = document.createElement("span");
         cell.className = "cell" + ((reg===1) ? " hi" : "");
-        const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
-        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;
-        cell.appendChild(c1); cell.appendChild(c2);
+        const c0 = document.createElement("span"); c0.className="py"; c0.textContent = PINYIN[ch]||"";   // 拼音
+        const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;               // 汉字
+        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;    // 简谱
+        cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
         const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
         if(idx !== undefined) NOTES[idx].el = cell;
         pdiv.appendChild(cell);
@@ -588,6 +647,12 @@ document.getElementById("vol").addEventListener("input", (e)=>{
   vol=e.target.value/100;
   document.getElementById("volTxt").textContent=e.target.value;
   if(master) master.gain.value=vol;
+});
+document.getElementById("tglPy").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-py", !e.target.checked);
+});
+document.getElementById("tglJp").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-jp", !e.target.checked);
 });
 
 /* 从后台切回时确保音频上下文是活的 */
