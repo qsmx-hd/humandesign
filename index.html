@@ -249,7 +249,9 @@
     .m-section-head .caret { font-size: 12px; opacity: .7; transition: transform .25s; }
     .m-section.expanded .m-section-head .caret { transform: rotate(180deg); }
     .m-section-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
-    .m-section.expanded .m-section-body { max-height: 1400px; }
+    /* 展开高度由 JS 按实际内容 scrollHeight 计算（见 buildMenu 下方 setBodyHeight）；
+       此处的 max-height 仅作无 JS 时的兜底，不再作为"真实上限"，否则菜单项一多末尾分组会被裁掉 */
+    .m-section.expanded .m-section-body { max-height: none; }
     .m-section-body a { margin: 0 8px 6px; background: rgba(255,255,255,0.04); }
     .m-sub-title {
       color: #f4a234; font-size: 11px; font-weight: 700; letter-spacing: 1px;
@@ -2266,9 +2268,32 @@ function showTab(tab) {
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
 
     // 手风琴展开/收起
+    // ⚠️ 展开高度必须按内容实测（scrollHeight），不能用固定 max-height：
+    //    教学研究面板已有 5 个分组 28 个链接 ≈1600px，写死 1400px 会把末尾的
+    //    「🏺 人类图·考古系列」整组裁掉（overflow:hidden），表现为"新菜单看不到"。
+    function setBodyHeight(sec, bodyEl) {
+      if (!bodyEl) return;
+      clearTimeout(bodyEl._mhTimer);
+      if (sec.classList.contains('expanded')) {
+        bodyEl.style.maxHeight = bodyEl.scrollHeight + 'px';
+        // 展开动画结束后解除上限：字号/横竖屏变化导致内容变高时不会被截断
+        bodyEl._mhTimer = setTimeout(function () {
+          if (sec.classList.contains('expanded')) bodyEl.style.maxHeight = 'none';
+        }, 320);
+      } else {
+        // 从 none 收回：先钉住当前像素高度并强制回流，再降到 0，过渡才会生效
+        bodyEl.style.maxHeight = bodyEl.scrollHeight + 'px';
+        void bodyEl.offsetHeight;
+        bodyEl.style.maxHeight = '0px';
+      }
+    }
+
     scroll.addEventListener('click', function (e) {
       var head = e.target.closest('.m-section-head');
-      if (head) head.parentElement.classList.toggle('expanded');
+      if (!head) return;
+      var sec = head.parentElement;
+      sec.classList.toggle('expanded');
+      setBodyHeight(sec, sec.querySelector('.m-section-body'));
     });
     // 点击链接后自动关闭菜单（让跳转先行）
     scroll.addEventListener('click', function (e) {
