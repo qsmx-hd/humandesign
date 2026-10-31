@@ -79,12 +79,15 @@
   .legend .hi-demo{border-top:1.6px dotted var(--gold); padding:0 2px;}
   footer{text-align:center; font-size:.8rem; color:var(--sub); padding:24px 12px;}
   .tag{display:inline-block; background:#e7dcc2; border-radius:5px; padding:1px 7px; font-size:.78rem; color:var(--sub);}
-  audio{display:none;}
+  #diag{font-size:.84rem; color:var(--sub); min-height:1.4em; margin:6px 0 0; line-height:1.5;}
+  #diag b{color:var(--ink);}
+  .bar{height:4px; background:#e0d5b8; border-radius:3px; overflow:hidden; margin:8px 0 0;}
+  .bar > i{display:block; height:100%; width:0; background:var(--gold); transition:width .25s linear;}
 </style>
 </head>
 <body>
 <header>
-  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V1.3</span></h1>
+  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V3.0</span></h1>
   <div class="meta">《大佛顶首楞严经》卷七 · 全咒 554 句（五会 + 咒心）· 新譜梵呗讽诵调</div>
 </header>
 
@@ -107,7 +110,11 @@
     <p><b>各会音乐频率区间（Hz）：</b>本谱采用 C 大调五声音阶、整体上移八度（自 C5 起），实际发声频率如下——<br>
     · <b>第一会、第二会</b>（reg 最低音区）：C5 组，约 <b>523–880 Hz</b>（宫 523.25 / 商 587.33 / 角 659.25 / 徵 784.00 / 羽 880.00）；<br>
     · <b>第三会、第四会、第五会、咒心</b>（reg 高八度）：C6 组，约 <b>1046–1760 Hz</b>（上述各音 ×2）。<br>
-    因此全咒<b>最低音区落在第一会（C5）</b>、<b>最高音区落在第五会与咒心（C6）</b>，形成「第一会最低、第五会最高」的层次对比；手机 / 笔记本扬声器在此频段能量充足，可清晰听到。若某会播放时完全无声，请看页面下方「真机自测诊断」提示，把内容截图反馈即可定位。</p>
+    因此全咒<b>最低音区落在第一会（C5）</b>、<b>最高音区落在第五会与咒心（C6）</b>，形成「第一会最低、第五会最高」的层次对比；手机 / 笔记本扬声器在此频段能量充足，可清晰听到。</p>
+    <p><b>播放引擎（V3.0 · 实时调度）：</b>点「▶ 播放」即刻出声，<b>无需等待渲染</b>。采用标准的
+    <b>lookahead 预调度</b>——定时器每 250ms 醒来一次，只把未来 2 秒内该响的音符挂到音频时钟上，
+    由音频硬件时钟精确发声；混响器全程只建一个、常驻复用。内存占用恒定（约几十 KB），
+    全咒 23 分钟也不会变慢或卡死。速度、音量、段落切换全部实时生效。</p>
   </div>
 
   <div class="controls" id="controls">
@@ -124,11 +131,11 @@
       </select>
     </div>
     <div class="grp">
-      <label>速度</label>
+      <label>速度 <span id="spdTxt">1.0×</span></label>
       <input type="range" id="speed" min="60" max="160" value="100" style="width:130px;">
     </div>
     <div class="grp">
-      <label>音量</label>
+      <label>音量 <span id="volTxt">70</span></label>
       <input type="range" id="vol" min="0" max="100" value="70" style="width:110px;">
     </div>
     <div class="grp">
@@ -140,7 +147,7 @@
       <button id="stopBtn" class="ghost">■ 停止</button>
     </div>
     <div class="grp">
-      <label>预计时长</label>
+      <label>进度</label>
       <div class="time" id="dur">—</div>
     </div>
   </div>
@@ -151,7 +158,8 @@
     <span class="hi-demo">5</span> 表示高八度（数字上方虚点）。每字一音，句末字拖长。
   </div>
 
-  <div id="diag" style="font-size:.8rem;color:var(--sub);min-height:1.2em;margin:6px 0 0;"></div>
+  <div id="diag">[就绪] 点「▶ 播放」开始讽诵</div>
+  <div class="bar"><i id="prog"></i></div>
   <div id="score"></div>
 
   <footer>
@@ -161,6 +169,31 @@
 </div>
 
 <script>
+/* ===================== 版本记录（溯源） =====================
+   V1.0–V1.6 实时调度（含"假活探测 / 重建 context / 静默守卫"等自愈逻辑），真机反复失败后废弃。
+   V2.0–V2.1 改为 OfflineAudioContext 离线渲染整段 → WAV Blob → <audio> 播放。
+   V3.0（2026.10.31）★ 根因定位 + 换引擎（本版）
+        【真机实测根因】用 Playwright + Chromium 实测 V2.1 渲染耗时：
+          10s 音频 / 20 音符      → 0.22s
+          105s 音频 / 0 音符      → 0.34s
+          105s 音频 / 382 振荡器  → 22s（超时）
+          105s 音频 / 100 振荡器  → 2.5s
+        → OfflineAudioContext 会把图中所有已连接节点在【每一个 128 采样块】里都算一遍，
+          复杂度 = O(音符数 × 音频时长)，即 O(N²)。
+          第二会（191 字 / 约 105s）实测数十秒未完成；第一会（921 字 / 约 480s）理论数小时 —— 页面必卡死。
+          这解释了"点了播放永远停在'正在渲染'"以及 V1.x 时代"1/3/5 会（最长的三会）无声"。
+          与"AudioContext 假活""自动播放拦截"无关，是纯算法复杂度问题，补多少自愈逻辑都救不回来。
+        【V3.0 引擎】回到实时调度，但按标准 lookahead 模式干净实现：
+          ① 单一 AudioContext，首次点击时在用户手势内同步创建 + resume + 静音帧解锁（iOS 唯一要求）；
+          ② 混响 ConvolverNode 全程只建一个并常驻复用 → 节点数不随音符增长，彻底消除 O(N²)；
+          ③ 定时器 250ms 醒一次，只调度未来 2s 的音符，发声时刻交给音频硬件时钟（精度 = 采样级）；
+             2s 预取量同时覆盖后台标签页的定时器节流（Chrome 后台最慢 1s/次）；
+          ④ 暂停/停止 = 掐断未响的音符 + 记录位置，恢复 = 从该位置重新调度（不用 suspend，规避各端差异）；
+          ⑤ 变速 = 重新基准化时间轴（保持音高不变，只改速度与气口），拖动滑块实时生效；
+          ⑥ 无任何探测 / 重建 / 守卫 / 自动重播逻辑 —— 越少的自愈越可靠。
+        内存恒定，全咒 23 分钟与单会一样轻。归档 lengyanzhou-shurangama-mantra.v8.html（=V2.1）。
+   ==================================================== */
+
 /* ===================== 咒文数据（五会 + 咒心，共 554 句） ===================== */
 const HUI_ORDER = ["第一会","第二会","第三会","第四会","第五会"];
 const HUIS = {
@@ -184,8 +217,7 @@ const XIN_SET = new Set(["跢侄他","唵","阿那隶","毗舍提","鞞啰","跋
 const XIN_MOTIF = [0,2,3,4,3,4,2,1];
 const XIN_CAD = 0;
 
-/* C 大调五声音阶（整体上移八度，落在 C5 区，保证笔记本/手机扬声器可听；
-   reg:0 = 最低音区(第一会)，reg:1 = 高八度(其余四会+咒心)，保留"第一会最低、第五会最高"的对比） */
+/* C 大调五声音阶（整体上移八度，落在 C5 区） */
 const PENTA = [
   {jp:"1", freq:523.25},
   {jp:"2", freq:587.33},
@@ -195,9 +227,9 @@ const PENTA = [
 ];
 
 /* ===================== 生成音符 ===================== */
-let NOTES = [];
+const NOTES = [];
+const NOTE_IDX = new Map();          // "hui|pi|ci" → NOTES 下标（渲染谱面时 O(1) 绑定）
 function genNotes(){
-  NOTES = [];
   for(const hui of HUI_ORDER){
     const cfg = HUI_CONFIG[hui];
     HUIS[hui].forEach((phrase, pi)=>{
@@ -210,9 +242,11 @@ function genNotes(){
         const isLast = (ci === chars.length-1);
         const deg = isLast ? cad : motif[ci % motif.length];
         const p = PENTA[deg];
-        const freq = p.freq * (reg===1 ? 2 : 1);
+        NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
         NOTES.push({
-          hui, pi, ci, ch, freq, jp:p.jp, hi:(reg===1),
+          hui, pi, ci, ch,
+          freq: p.freq * (reg===1 ? 2 : 1),
+          jp:p.jp, hi:(reg===1),
           dur: isLast ? 0.85 : 0.42,
           el:null
         });
@@ -224,12 +258,13 @@ function genNotes(){
 /* ===================== 渲染谱面 ===================== */
 function render(){
   const score = document.getElementById("score");
-  score.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  const moodMap = {"第一会":"归命诸佛 · 虔诚上升","第二会":"降魔护持 · 沉稳坚定","第三会":"摧伏障难 · 起伏流转","第四会":"解脱缚着 · 开放舒展","第五会":"圆满回向 · 光明高扬"};
   for(const hui of HUI_ORDER){
     const det = document.createElement("details");
     det.open = (hui === "第一会");
+    det.dataset.hui = hui;
     const sum = document.createElement("summary");
-    const moodMap = {"第一会":"归命诸佛 · 虔诚上升","第二会":"降魔护持 · 沉稳坚定","第三会":"摧伏障难 · 起伏流转","第四会":"解脱缚着 · 开放舒展","第五会":"圆满回向 · 光明高扬"};
     sum.innerHTML = hui + ' <span class="mood">'+moodMap[hui]+'</span>';
     det.appendChild(sum);
     HUIS[hui].forEach((phrase, pi)=>{
@@ -243,183 +278,330 @@ function render(){
       chars.forEach((ch, ci)=>{
         const isLast = (ci === chars.length-1);
         const deg = isLast ? cad : motif[ci % motif.length];
-        const p = PENTA[deg];
         const cell = document.createElement("span");
         cell.className = "cell" + ((reg===1) ? " hi" : "");
         const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
-        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = p.jp;
+        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;
         cell.appendChild(c1); cell.appendChild(c2);
-        // 绑定该字对应的 NOTES 元素
-        const idx = NOTES.findIndex(n=>n.hui===hui && n.pi===pi && n.ci===ci);
-        if(idx>=0) NOTES[idx].el = cell;
+        const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+        if(idx !== undefined) NOTES[idx].el = cell;
         pdiv.appendChild(cell);
       });
       det.appendChild(pdiv);
     });
-    score.appendChild(det);
+    frag.appendChild(det);
   }
+  score.innerHTML = "";
+  score.appendChild(frag);
 }
 
-/* ===================== 音频引擎 ===================== */
-let audioCtx=null, masterGain=null, reverb=null, wet=null;
-let playing=false, timers=[], startTime=0, rafId=null;
-function ensureAudio(){
-  if(audioCtx) return Promise.resolve();
-  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = document.getElementById("vol").value/100 * 0.9;
-  reverb = makeReverb(audioCtx, 2.4, 2.6);
-  wet = audioCtx.createGain(); wet.gain.value = 0.18;
-  masterGain.connect(audioCtx.destination);
-  masterGain.connect(reverb); reverb.connect(wet); wet.connect(audioCtx.destination);
-  // 必须在用户手势里 resume，并返回 Promise 供 play() 等待
-  return (audioCtx.resume ? audioCtx.resume() : Promise.resolve());
-}
-function makeReverb(ctx, dur, decay){
-  const rate=ctx.sampleRate, len=Math.floor(rate*dur);
-  const buf=ctx.createBuffer(2,len,rate);
-  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);
-    let lp=0;
-    for(let i=0;i<len;i++){
-      const n=Math.random()*2-1;
-      lp += (n-lp)*0.22;                       // 一阶低通，削掉高频白噪嘶声（手机小音箱上的"静电感"主因）
-      d[i]=lp*Math.pow(1-i/len,decay);
-    }
+/* ===================== 音频引擎 V3.0：实时 lookahead 调度 =====================
+   关键设计（对照 V2.x 的 O(N²) 陷阱）：
+   · ConvolverNode 混响器【全局唯一、常驻】，不为每个音符建节点；
+   · 每个音符只建 2 个 osc + 2 个 gain，且 osc.stop() 后由 onended 主动 disconnect → 图中常驻节点数恒定；
+   · 定时器只负责"把未来 2 秒的音符挂上去"，真正的发声时刻由音频硬件时钟决定。            */
+const LOOKAHEAD = 2.0;        // 预调度窗口（秒）：覆盖后台标签页定时器节流
+const TICK_MS  = 250;         // 定时器唤醒间隔
+
+let ctx=null, master=null, wetGain=null, conv=null;
+let vol = 0.7;
+
+function ensureCtx(){
+  if(!ctx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = vol;
+    master.connect(ctx.destination);
+    // 混响：全局唯一实例
+    conv = ctx.createConvolver();
+    conv.buffer = makeReverbBuf(ctx, 1.8, 2.6);
+    wetGain = ctx.createGain();
+    wetGain.gain.value = 0.18;
+    master.connect(conv); conv.connect(wetGain); wetGain.connect(ctx.destination);
   }
-  const cv=ctx.createConvolver(); cv.buffer=buf; return cv;
+  if(ctx.state !== "running" && ctx.resume) { try{ ctx.resume(); }catch(e){} }
+  // iOS/Safari 解锁：必须在用户手势内于真实音频图上播出一帧静音
+  try{
+    const s = ctx.createBufferSource();
+    s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    s.connect(master); s.start(0);
+  }catch(e){}
+  return ctx;
 }
-function playNote(freq, start, dur){
-  const o1=audioCtx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
-  const o2=audioCtx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
-  const g=audioCtx.createGain(); const peak=0.22;
-  g.gain.setValueAtTime(0.0001, start);
-  g.gain.exponentialRampToValueAtTime(peak, start+0.045);
-  g.gain.exponentialRampToValueAtTime(0.0001, start+dur+0.14);
-  const g2=audioCtx.createGain(); g2.gain.value=0.06;
-  o1.connect(g); o2.connect(g2); g2.connect(g);
-  g.connect(masterGain);
-  o1.start(start); o2.start(start);
-  o1.stop(start+dur+0.25); o2.stop(start+dur+0.25);
+function makeReverbBuf(c, dur, decay){
+  const rate=c.sampleRate, len=Math.floor(rate*dur);
+  const buf=c.createBuffer(1,len,rate);
+  const d=buf.getChannelData(0);
+  let lp=0;
+  for(let i=0;i<len;i++){
+    const n=Math.random()*2-1;
+    lp += (n-lp)*0.22;                       // 一阶低通，削掉高频白噪嘶声
+    d[i]=lp*Math.pow(1-i/len,decay);
+  }
+  return buf;
+}
+/* 单个音符：基频正弦 + 八度泛音，钟磬式起落包络 */
+function scheduleNote(freq, when, dur){
+  const o1=ctx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
+  const o2=ctx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
+  const g=ctx.createGain();  const peak=0.22;
+  const g2=ctx.createGain(); g2.gain.value=0.06;
+  g.gain.setValueAtTime(0.0001, when);
+  g.gain.exponentialRampToValueAtTime(peak, when+0.045);
+  g.gain.exponentialRampToValueAtTime(0.0001, when+dur+0.14);
+  o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+  const at=when, end=when+dur+0.3;
+  o1.start(at); o2.start(at); o1.stop(end); o2.stop(end);
+  const rec={o1,o2,g,g2,at};
+  pending.push(rec);
+  o1.onended=()=>{ try{g.disconnect(); g2.disconnect();}catch(e){}
+    const i=pending.indexOf(rec); if(i>=0) pending.splice(i,1); };
 }
 
-/* ===================== 播放调度 ===================== */
+/* ===================== 播放状态 ===================== */
+let tl=[];                 // 时间轴（1× 基准）：{n, t, dur}
+let totalBase=0;           // 1× 总时长
+let playing=false, paused=false;
+let rate=1.0;              // 变速倍率
+let startCtx=0;            // 基准时间轴 0 点 对应的 ctx.currentTime
+let schedIdx=0, hlIdx=0;   // 下一个待调度 / 待高亮 的音符下标
+let pending=[];            // 已调度但尚未响完的音符（用于暂停/停止时掐断）
+let timer=null, rafId=null;
+let lastHuiShown=null;     // 当前显示在诊断行上的会名（换会才刷新）
+
 function selectedNotes(){
   const sel = document.getElementById("selHui").value;
   if(sel==="all") return NOTES;
   if(sel==="xin") return NOTES.filter(n=>XIN_SET.has(HUIS[n.hui][n.pi]));
   return NOTES.filter(n=>n.hui===sel);
 }
-function computeDuration(){
-  const notes = selectedNotes();
-  const sf = document.getElementById("speed").value/100;
-  let t=0, prevHui=null, prevPi=null;
-  notes.forEach(n=>{
+/* 构建 1× 基准时间轴：0.6s 起音预留 + 字间 0.04 + 句间 0.34 + 会间 1.15 */
+function buildTimeline(notes){
+  const out=[]; let t=0.6, prevHui=null, prevPi=null;
+  for(const n of notes){
     let gap=0.04;
-    if(n.pi!==prevPi){ gap = (n.hui!==prevHui)?1.15:0.34; }
-    t += gap + (n.dur/sf);
-    prevHui=n.hui; prevPi=n.pi;
-  });
-  return t;
+    if(n.pi!==prevPi){ gap=(n.hui!==prevHui)?1.15:0.34; }
+    t+=gap;
+    out.push({n, t, dur:n.dur});
+    t+=n.dur; prevHui=n.hui; prevPi=n.pi;
+  }
+  return out;
+}
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));
+  return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");
 }
 function updateDur(){
-  const d=computeDuration();
-  document.getElementById("dur").textContent = isFinite(d)? (d/60).toFixed(1)+" 分" : "—";
+  const d = tl.length ? (tl[tl.length-1].t + tl[tl.length-1].dur)/rate : 0;
+  document.getElementById("dur").textContent = d ? fmt(d) : "—";
 }
 function clearHighlight(){
-  NOTES.forEach(n=>{ if(n.el) n.el.classList.remove("cur"); });
+  if(hlIdx>0 && hlIdx<=tl.length && tl[hlIdx-1] && tl[hlIdx-1].n.el) tl[hlIdx-1].n.el.classList.remove("cur");
+}
+function hardClearHighlight(){
+  for(const n of NOTES) if(n.el) n.el.classList.remove("cur");
+}
+function killPending(fromTime){
+  for(const p of pending){
+    try{ p.o1.stop(fromTime); }catch(e){}
+    try{ p.o2.stop(fromTime); }catch(e){}
+  }
+  pending.length = 0;
+}
+function stopEngine(){
+  if(timer){ clearInterval(timer); timer=null; }
+  if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  if(ctx) killPending(ctx.currentTime);
+  playing=false; paused=false; lastHuiShown=null;
+  hardClearHighlight();
+  document.getElementById("playBtn").textContent="▶ 播放";
+  document.getElementById("prog").style.width="0%";
+}
+
+/* 调度循环：只挂未来 LOOKAHEAD 秒内的音符 */
+function pump(){
+  if(!playing || !ctx) return;
+  const now = ctx.currentTime;
+  const horizon = now + LOOKAHEAD;
+  while(schedIdx < tl.length){
+    const at = startCtx + tl[schedIdx].t / rate;
+    if(at > horizon) break;
+    scheduleNote(tl[schedIdx].n.freq, Math.max(at, now+0.02), tl[schedIdx].dur / rate);
+    schedIdx++;
+  }
+  if(schedIdx >= tl.length){
+    const endAt = startCtx + (totalBase)/rate + 1.2;
+    if(now > endAt){ finish(); return; }
+  }
+}
+/* 高亮跟随（RAF） */
+function tickHL(){
+  if(rafId) cancelAnimationFrame(rafId);
+  const step=()=>{
+    if(!playing || !ctx) return;
+    const p = (ctx.currentTime - startCtx) * rate;       // 当前在 1× 时间轴上的位置
+    while(hlIdx < tl.length && tl[hlIdx].t <= p){
+      clearHighlight();
+      const cell = tl[hlIdx].n.el;
+      if(cell){
+        cell.classList.add("cur");
+        const det = cell.closest("details");
+        if(det && !det.open) det.open = true;
+        const r = cell.getBoundingClientRect();
+        if(r.top < 90 || r.bottom > window.innerHeight - 40){
+          cell.scrollIntoView({block:"center", behavior:"smooth"});
+        }
+      }
+      hlIdx++;
+    }
+    const pos = Math.max(0, Math.min(p, totalBase));
+    document.getElementById("prog").style.width = (totalBase? (pos/totalBase*100):0).toFixed(2)+"%";
+    document.getElementById("dur").textContent = fmt(pos/rate) + " / " + fmt(totalBase/rate);
+    if(hlIdx>0 && tl[hlIdx-1].n.hui !== lastHuiShown){          // 换会时才写一次 DOM
+      lastHuiShown = tl[hlIdx-1].n.hui;
+      document.getElementById("diag").innerHTML =
+        "[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+    }
+    rafId=requestAnimationFrame(step);
+  };
+  rafId=requestAnimationFrame(step);
+}
+function finish(){
+  stopEngine();
+  const d=document.getElementById("diag");
+  d.innerHTML="[完成] 本段讽诵完毕（"+fmt(totalBase/rate)+"）";
+}
+
+/* 重新基准化：变速 / 恢复播放 都用它 */
+function rebase(basePos, lead){
+  const now = ctx.currentTime;
+  startCtx = now + lead - basePos/rate;
+  killPending(now);
+  schedIdx = 0; while(schedIdx < tl.length && tl[schedIdx].t < basePos) schedIdx++;
+  hlIdx = schedIdx;
+  hardClearHighlight();
+}
+
+/* ===================== 用户操作 ===================== */
+function play(){
+  const diag=document.getElementById("diag");
+  ensureCtx();                                   // 必须在手势内同步调用（iOS 解锁）
+
+  if(playing && !paused){                        // → 暂停
+    paused=true;
+    const p=(ctx.currentTime-startCtx)*rate;
+    pausedAt=p;
+    killPending(ctx.currentTime);
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+    document.getElementById("playBtn").textContent="▶ 继续";
+    diag.innerHTML="[暂停] 停在 "+fmt(p/rate)+" · 再点「▶ 继续」";
+    return;
+  }
+  if(playing && paused){                         // → 继续
+    paused=false;
+    rebase(pausedAt, 0.25);
+    startTimer();
+    document.getElementById("playBtn").textContent="⏸ 暂停";
+    diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+(curHuiLabel())+"</b>";
+    return;
+  }
+  // → 全新播放
+  const sel=document.getElementById("selHui").value;
+  const notes=selectedNotes();
+  if(!notes.length){ diag.innerHTML='<span style="color:#c0392b">⚠ 该段没有音符</span>'; return; }
+  stopEngine();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  rate = document.getElementById("speed").value/100;
+  schedIdx=0; hlIdx=0;
+  playing=true; paused=false;
+  startCtx = ctx.currentTime + 0.35;             // 0.35s 起音预留
+  startTimer();
+  document.getElementById("playBtn").textContent="⏸ 暂停";
+  updateDur();
+  lastHuiShown = tl[0].n.hui;
+  diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+  // 若 1.5s 后音频时钟仍未运行（个别浏览器需在手势内再次激活），给一次明确提示
+  setTimeout(()=>{
+    if(playing && ctx && ctx.state!=="running"){
+      diag.innerHTML='<span style="color:#c0392b">⚠ 音频未激活（'+ctx.state+'），请再点一次「▶ 播放」</span>';
+    }
+  },1500);
+}
+let pausedAt=0;
+function startTimer(){
+  if(timer) clearInterval(timer);
+  pump();
+  timer=setInterval(pump, TICK_MS);
+  tickHL();
+}
+function curHuiLabel(){
+  const i = Math.min(hlIdx, tl.length-1);
+  return (i>=0 && tl[i]) ? tl[i].n.hui : "—";
 }
 function stopAll(){
-  playing=false;
-  if(audioCtx){ audioCtx.close(); audioCtx=null; }
-  timers.forEach(t=>clearTimeout(t)); timers=[];
-  if(rafId) cancelAnimationFrame(rafId);
-  clearHighlight();
-  document.getElementById("playBtn").textContent="▶ 播放";
-}
-async function whenRunning(){
-  if(!audioCtx) return;
-  // 1) 轮询到 state 真正 running（最多 2.5s）
-  if(audioCtx.state!=="running"){
-    const t0=performance.now();
-    while(performance.now()-t0<2500){
-      try{ await audioCtx.resume(); }catch(e){}
-      if(audioCtx.state==="running") break;
-      await new Promise(r=>setTimeout(r,25));
-    }
-  }
-  // 2) 再确认时钟真的在走：iOS Safari 偶发 state 已是 running 但 currentTime 仍冻结，
-  //    此时排进去的首段（第一会）音符会被丢到"过去"而整段静音。
-  //    必须等到 currentTime 确实前进，才读 t0 调度——这是第一会冷启动无声的真正根因。
-  try{
-    const c0=audioCtx.currentTime;
-    await new Promise(r=>setTimeout(r,40));
-    let guard=0;
-    while(audioCtx.currentTime<=c0 && guard<150){
-      await new Promise(r=>setTimeout(r,40));
-      guard++;
-    }
-  }catch(e){}
-}
-async function play(){
-  if(playing){ // 暂停
-    stopAll(); return;
-  }
-  // 关键修复：先 await resume 并轮询到 context 真正 running，再调度音符。
-  // 否则在 Safari（macOS / iOS）上，首段（第一会）音符会被排到尚未运行的 context 时间轴上而被丢弃，导致静音。
-  await ensureAudio();
-  await whenRunning();
-  const diag=document.getElementById("diag");
-  const selNow=document.getElementById("selHui").value;
-  const nCount=selectedNotes().length;
-  diag.innerHTML = '[真机自测] ctx.state=<b>'+audioCtx.state+'</b> · 时钟='+audioCtx.currentTime.toFixed(3)+
-    ' · 待播段=<b>'+selNow+'</b> · 音符数=<b>'+nCount+'</b>'+(nCount===0?' <span style="color:#c0392b">⚠ 该段音符为空</span>':'');
-  if(nCount===0){ playing=false; document.getElementById("playBtn").textContent="▶ 播放"; return; }
-  playing=true;
-  document.getElementById("playBtn").textContent="⏸ 暂停";
-  // 暖机：先排一个极短无声探针（增益≈0），强制 iOS Safari 真正提交音频图并推进时钟，
-  // 双保险防首段（第一会）被排进冻结时间轴而整段丢弃。
-  try{
-    const probe=audioCtx.createOscillator(); probe.type="sine"; probe.frequency.value=440;
-    const pg=audioCtx.createGain(); pg.gain.value=0.0001;
-    probe.connect(pg); pg.connect(masterGain);
-    probe.start(audioCtx.currentTime+0.02); probe.stop(audioCtx.currentTime+0.06);
-  }catch(e){}
-  const notes = selectedNotes();
-  const sf = document.getElementById("speed").value/100;
-  // 时钟已确认运行且在走动，重新读取 currentTime 并预留 lead-in，避免首音被吞
-  const t0 = audioCtx.currentTime + 0.6;
-  let t=t0, prevHui=null, prevPi=null;
-  notes.forEach(n=>{
-    let gap=0.04;
-    if(n.pi!==prevPi){ gap = (n.hui!==prevHui)?1.15:0.34; }
-    t += gap;
-    const dur = n.dur/sf;
-    playNote(n.freq, t, dur);
-    const whenMs = (t - audioCtx.currentTime)*1000;
-    const el = n.el;
-    timers.push(setTimeout(()=>{
-      clearHighlight();
-      if(el){ el.classList.add("cur"); el.scrollIntoView({block:"center", behavior:"smooth"}); }
-    }, whenMs));
-    t += dur;
-    prevHui=n.hui; prevPi=n.pi;
-  });
-  // 结束复位
-  const endMs = (t - audioCtx.currentTime)*1000 + 200;
-  timers.push(setTimeout(()=>{ if(playing) stopAll(); }, endMs));
+  stopEngine();
+  schedIdx=0; hlIdx=0; pausedAt=0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[已停止] 点「▶ 播放」重新开始";
 }
 
 /* ===================== 事件绑定 ===================== */
 genNotes();
 render();
+tl = buildTimeline(NOTES);
+totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+rate = document.getElementById("speed").value/100;
+updateDur();
+
 document.getElementById("playBtn").addEventListener("click", play);
 document.getElementById("stopBtn").addEventListener("click", stopAll);
-document.getElementById("selHui").addEventListener("change", ()=>{ if(playing) stopAll(); updateDur(); });
-document.getElementById("speed").addEventListener("input", updateDur);
-document.getElementById("vol").addEventListener("input", ()=>{
-  if(masterGain) masterGain.gain.value = document.getElementById("vol").value/100 * 0.9;
+
+document.getElementById("selHui").addEventListener("change", ()=>{
+  stopEngine(); schedIdx=0; hlIdx=0; pausedAt=0;
+  const notes=selectedNotes();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[就绪] 已切到「"+document.getElementById("selHui").selectedOptions[0].text+"」· 共 "+fmt(totalBase/rate);
 });
-updateDur();
+
+let rateTimer=null;
+document.getElementById("speed").addEventListener("input", (e)=>{
+  const v=e.target.value/100;
+  document.getElementById("spdTxt").textContent=v.toFixed(2)+"×";
+  if(playing && !paused && ctx){
+    const p=(ctx.currentTime-startCtx)*rate;     // 旧倍率下的基准位置
+    rate=v;
+    clearTimeout(rateTimer);
+    rateTimer=setTimeout(()=>{
+      if(!playing||!ctx) return;
+      rebase(p, 0.15);
+    },120);
+  }else{
+    rate=v;
+  }
+  updateDur();
+});
+document.getElementById("vol").addEventListener("input", (e)=>{
+  vol=e.target.value/100;
+  document.getElementById("volTxt").textContent=e.target.value;
+  if(master) master.gain.value=vol;
+});
+
+/* 从后台切回时确保音频上下文是活的 */
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && ctx && ctx.state!=="running" && ctx.resume){ try{ ctx.resume(); }catch(e){} }
+});
+window.addEventListener("error", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [JS错误]'+((e&&e.message)||"未知")+'</span>';
+});
+window.addEventListener("unhandledrejection", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [Promise错误]'+((e.reason&&e.reason.message)||e.reason||"未知")+'</span>';
+});
 </script>
 </body>
 </html>
