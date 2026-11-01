@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  经咒讽诵谱曲 · 单文件模板（scripture-jianpu-composer 配套）
+  ----------------------------------------------------------------------------
+  用法：把下面 <script> 顶部「配置区」里的示例数据替换成你的经文即可。
+        音频引擎（实时 lookahead 调度）经楞严咒 2621 字 / 23 分钟实测：
+        内存恒定、点击即出声、无 O(N²) 卡死。无需改动。
+  必须替换的占位（搜索 ★REPLACE★）：
+    1) <title> / <h1> / 副标题
+    2) 顶部插图 + 内文插图（公有领域/CC0，放 images/ 目录）
+    3) 关于卡片里的「梵呗介绍」段落
+    4) HUI_ORDER / HUIS / HUI_CONFIG / XIN_SET / PINYIN
+  ============================================================================
+-->
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ★REPLACE★ 经文标题 -->
+<title>佛说四十二章经 · 讽诵谱曲（C 大调五声音阶）</title>
+<style>
+  :root{
+    --ink:#2b2118; --paper:#f7f1e3; --paper2:#efe6d2; --gold:#b8860b;
+    --red:#c0392b; --line:#d8c9a8; --sub:#8a6d3b;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif; line-height:1.7; }
+  header{ padding:28px 20px 18px; text-align:center;
+    background:linear-gradient(180deg,#fbf6ea,#f1e7d2); border-bottom:2px solid var(--line); }
+  header h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.15em;}
+  header h1 .ver{font-size:.7rem; letter-spacing:.05em; color:var(--sub); font-weight:400; vertical-align:middle; margin-left:.5em;}
+  header .meta{font-size:.9rem; color:var(--sub);}
+  .wrap{max-width:920px; margin:0 auto; padding:18px 16px 60px;}
+  .card{ background:var(--paper2); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:16px 0; }
+  h2{font-size:1.15rem; margin:.2em 0 .6em; color:var(--gold); letter-spacing:.08em;}
+  p,li{font-size:.96rem;}
+  .controls{ position:sticky; top:0; z-index:20; background:rgba(247,241,227,.96); backdrop-filter:blur(4px);
+    border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:14px 0;
+    display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; }
+  .controls .grp{display:flex; flex-direction:column; gap:4px;}
+  .controls label{font-size:.78rem; color:var(--sub);}
+  button{ font-family:inherit; font-size:.95rem; cursor:pointer; background:var(--gold); color:#fff; border:none;
+    padding:9px 18px; border-radius:8px; letter-spacing:.05em; transition:.15s; }
+  button:hover{filter:brightness(1.08);}
+  button.ghost{background:#e7dcc2; color:var(--ink);}
+  select, input[type=range]{font-family:inherit; font-size:.9rem;}
+  select{padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:#fff;}
+  .time{font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--sub); min-width:96px;}
+  details{border:1px solid var(--line); border-radius:10px; margin:12px 0; background:#fbf6ea; overflow:hidden;}
+  summary{ cursor:pointer; padding:12px 16px; font-size:1.05rem; font-weight:700;
+    background:linear-gradient(180deg,#f3e8cf,#ecdfc0); letter-spacing:.05em; list-style:none; }
+  summary::-webkit-details-marker{display:none;}
+  summary .mood{font-weight:400; font-size:.82rem; color:var(--sub); margin-left:10px;}
+  .phrase{ display:flex; flex-wrap:wrap; align-items:center; padding:6px 14px; border-bottom:1px dashed #e6dabd; }
+  .phrase:last-child{border-bottom:none;}
+  .cell{ display:inline-flex; flex-direction:column; align-items:center; min-width:2.05em; padding:1px 1px; border-radius:5px; }
+  .cell .py{ font-size:.62rem; color:var(--sub); line-height:1.15; font-family:"Trebuchet MS",sans-serif; letter-spacing:.01em; }
+  .cell .ch{font-size:1.04rem; line-height:1.15;}
+  .cell.rest{ min-width:1.15em; opacity:.6; }
+  .cell.rest .ch{ font-size:.92rem; }
+  .cell.rest .jp{ color:var(--gold); }
+  .cell .jp{ font-size:.66rem; color:var(--sub); line-height:1.1; margin-top:1px; font-family:"Trebuchet MS",sans-serif; }
+  .cell.hi .ch{ color:var(--red); }
+  .cell.cur{ background:#fff3d6; outline:1px solid var(--gold); }
+  .ln{ min-width:2.3em; text-align:right; padding-right:.6em; font-size:.72rem; color:var(--sub);
+    font-variant-numeric:tabular-nums; align-self:center; user-select:none; font-family:"Trebuchet MS",sans-serif; }
+  .bar{height:4px; background:#e0d5b8; border-radius:3px; overflow:hidden; margin:8px 0 0; cursor:pointer;}
+  .bar > i{display:block; height:100%; width:0; background:var(--gold); transition:width .25s linear;}
+  .chk{display:flex; align-items:center; gap:6px; font-size:.85rem; color:var(--ink); cursor:pointer; user-select:none;}
+  .chk input{accent-color:var(--gold); width:16px; height:16px; cursor:pointer;}
+  body.no-py .py{display:none;}
+  body.no-jp .jp{display:none;}
+  body.no-py .cell, body.no-jp .cell{min-width:1.35em;}
+  body.no-py.no-jp .cell{min-width:1.05em;}
+  figure{margin:16px 0; text-align:center;}
+  figure img{ max-width:100%; border-radius:10px; border:1px solid var(--line); box-shadow:0 2px 12px rgba(43,33,24,.10); background:#fff; }
+  figure.hero img{max-height:560px; object-fit:contain;}
+  figure.inline-fig img{max-height:430px; object-fit:contain;}
+  figcaption{font-size:.78rem; color:var(--sub); margin-top:7px; line-height:1.5;}
+  .legend{font-size:.84rem; color:var(--sub);}
+  .hi-demo{color:var(--red); font-weight:700;}
+  #diag{font-size:.82rem; color:var(--sub); margin:6px 2px; min-height:1.2em;}
+  footer{text-align:center; font-size:.8rem; color:var(--sub); margin-top:30px;}
+</style>
+</head>
+<body>
+<header>
+  <!-- ★REPLACE★ 经文标题 + 版本号 -->
+  <h1>佛说四十二章经 · 讽诵谱曲<span class="ver">V2.0</span></h1>
+  <div class="meta">后汉·迦叶摩腾、竺法兰译 · 汉传梵呗五声音阶</div>
+</header>
+<div class="wrap">
+
+  <!-- ★REPLACE★ 顶部插图（公有领域 / CC0，置于 images/ 目录，随站点提交） -->
+  <figure class="hero">
+    <img src="images/sishier-hero.jpg" alt="佛说四十二章经">
+    <figcaption>敦煌写本经卷（图源 Wikimedia Commons，公有领域）</figcaption>
+  </figure>
+
+  <div class="card">
+    <h2>关于这份谱曲（先读）</h2>
+    <!-- ★REPLACE★ 梵呗介绍：用 <p> 段落填写，说明什么是梵呗、本谱用什么音阶、怎么唱 -->
+    <p>本谱以《佛说四十二章经》（后汉迦叶摩腾、竺法兰共译，汉地第一部汉译佛典）为蓝本，依四十二章分章讽诵。经文短峻切要，旋律取平实下行，句末落宫音，末后两章转高八度，显质朴恳切。</p>
+    <p>简谱中无点数字＝中音，数字上方虚点＝高八度。每字一音，句末字拖长。注音依通行读音，诵持请以师承为准。</p>
+    <!-- ★REPLACE★ 内文插图（可选） -->
+    <figure class="inline-fig">
+      <img src="images/sishier-inline.jpg" alt="佛说四十二章经">
+      <figcaption>僧人手捧写本经卷（图源 Wikimedia Commons，CC BY-SA 4.0）</figcaption>
+    </figure>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="grp">
+      <label>段落</label>
+      <select id="selHui"><!-- 选项由 JS 按 HUI_ORDER 自动生成 --></select>
+    </div>
+    <div class="grp">
+      <label>速度 <span id="spdTxt">1.0×</span></label>
+      <input type="range" id="speed" min="60" max="160" value="100" style="width:130px;">
+    </div>
+    <div class="grp">
+      <label>音量 <span id="volTxt">70</span></label>
+      <input type="range" id="vol" min="0" max="100" value="70" style="width:110px;">
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="playBtn">▶ 播放</button>
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="stopBtn" class="ghost">■ 停止</button>
+    </div>
+    <div class="grp">
+      <label>进度（点击进度条可跳转）</label>
+      <div class="time" id="dur">—</div>
+    </div>
+    <div class="grp">
+      <label>显示</label>
+      <div style="display:flex; gap:14px; padding-bottom:6px;">
+        <label class="chk"><input type="checkbox" id="tglPy" checked> 注音</label>
+        <label class="chk"><input type="checkbox" id="tglJp" checked> 简谱</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card legend">
+    <b>简谱图例：</b>
+    宫 <b>1</b> · 商 <b>2</b> · 角 <b>3</b> · 徵 <b>5</b> · 羽 <b>6</b> ＝ C 大调五声音阶；
+    <span class="hi-demo">5</span> 表示高八度（数字上方虚点）。每字一音，句末字拖长。
+  </div>
+
+  <div id="diag">[就绪] 点「▶ 播放」开始讽诵（进度条可点击跳转）</div>
+  <div class="bar"><i id="prog"></i></div>
+  <div id="score"></div>
+
+  <footer>
+    自修参考用，非任何寺院传承唱腔<br>
+    Powered By Kan Man Tang
+  </footer>
+</div>
+
+<script>
+/* =====================================================================
+   配置区（★REPLACE★ 为新经文只需改这里；以下为示例数据，可直接运行）
+   ===================================================================== */
+const VERSION = "V2.0";
+
+/* 段落顺序（会 / 品 / 章……按你的经文结构定） */
+const HUI_ORDER = ["第一章","第二章","第三章","第四章","第五章","第六章","第七章","第八章","第九章","第十章","第十一章","第十二章","第十三章","第十四章","第十五章","第十六章","第十七章","第十八章","第十九章","第二十章","第二十一章","第二十二章","第二十三章","第二十四章","第二十五章","第二十六章","第二十七章","第二十八章","第二十九章","第三十章","第三十一章","第三十二章","第三十三章","第三十四章","第三十五章","第三十六章","第三十七章","第三十八章","第三十九章","第四十章","第四十一章","第四十二章"];
+
+/* 各段咒文：每一段是一个"句"数组；每"句"是一个字符串（按字拆） */
+const HUIS = {"第一章":["佛言辞亲出家识心达本解无为法名曰沙门","常行二百五十戒进止清净为四真道行成阿罗汉","阿罗汉者能飞行变化旷劫寿命住动天地","次为阿那含阿那含者寿终灵神上十九天证阿罗汉","次为斯陀含斯陀含者一上一还即得阿罗汉","次为须陀洹须陀洹者七死七生便证阿罗汉","爱欲断者如四肢断不复用之"],"第二章":["佛言出家沙门者断欲去爱识自心源达佛深理悟无为法内无所得外无所求心不系道亦不结业无念无作非修非证不历诸位而自崇最名之为道"],"第三章":["佛言剃除须发而为沙门","受道法者去世资财乞求取足日中一食树下一宿慎勿再矣!使人愚蔽者爱与欲也"],"第四章":["佛言众生以十事为善亦以十事为恶","何等为十?身三口四意三","身三者杀盗淫","口四者两舌恶口妄言绮语","意三者嫉恚痴","如是十事不顺圣道名十恶行;是恶若止名十善行耳"],"第五章":["佛言人有众过而不自悔顿息其心罪来赴身如水归海渐成深广","若人有过自解知非改恶行善罪自消灭;如病得汗渐有痊损耳"],"第六章":["佛言恶人闻善故来挠乱者汝自禁息当无嗔责;彼来恶者而自恶之"],"第七章":["佛言有人闻吾守道行大仁慈故致骂佛佛默不对","骂止问曰子以礼从人其人不纳礼归子乎?对曰归矣","佛言今子骂我我今不纳子自持祸归子身矣!犹响应声影之随形终无免离慎勿为恶!"],"第八章":["佛言恶人害贤者,如仰天而唾唾不至天还从己堕","逆风扬尘尘不至彼还坌己身","贤不可毁祸必灭己"],"第九章":["佛言博文爱道道必难会;守志奉道其道甚大"],"第十章":["佛言睹人施道助之欢喜得福甚大","沙门问曰此福尽乎?佛言譬如一炬之火数千百人各以炬来分取熟食除冥此炬如故福亦如之","图片来源摄图网"],"第十一章":["佛言饭恶人百不如饭一善人饭善人千不如饭一持五戒者饭五戒者万不如饭一须陀洹饭百万须陀洹不如饭一斯陀含饭千万斯陀含不如饭一阿那含饭一亿阿那含不如饭一阿罗汉饭十亿阿罗汉不如饭一辟支佛饭百亿辟支佛不如饭一三世诸佛饭千亿三世诸佛不如饭一无念无住无修无证之者"],"第十二章":["佛言人有二十难贫穷布施难豪贵学道难弃命必死难得睹佛经难生值佛世难忍色忍欲难见好不求难被辱不嗔难有势不临难触事无心难广学博究难除灭我慢难不轻未学难心行平等难不说是非难会善知识难见性学道难随化度人难睹境不动难善解方便难"],"第十三章":["沙门问佛以何因缘得知宿命?会其至道?佛言净心守志可会至道","譬如磨镜垢去明存","断欲无求当得宿命"],"第十四章":["沙门问佛何者为善?何者最大?佛言行道守真者善;志与道合者大"],"第十五章":["沙门问佛何者多力?何者最明?佛言忍辱多力不怀恶故兼加安健;忍者无恶必为人尊","心垢灭尽净无瑕秽是为最明","未有天地逮于今日十方所有无有不见无有不知无有不闻得一切智可谓明矣"],"第十六章":["佛言人怀爱欲不见道者譬如澄水致手搅之众人共临无有睹其影者;人以爱欲交错心中浊兴故不见道","汝等沙门当舍爱欲爱欲垢尽道可见矣"],"第十七章":["佛言夫见道者譬如持炬入冥室中其冥即灭而明独存学道见谛无明即灭而明常存矣"],"第十八章":["佛言吾法念无念念行无行行言无言言修无修修;会者近尔迷者远乎!言语道断非物所拘;差之毫厘失之须臾"],"第十九章":["佛言观天地念非常观世界念非常观灵觉即菩提如是知识得道疾矣"],"第二十章":["佛言当念身中四大各自有名都无我者;我既都无其如幻耳"],"第二十一章":["佛言人随情欲求于声名声名显著身已故矣!贪世常名而不学道枉功劳形!譬如烧香虽人闻香香之烬矣危身之火而在其后"],"第二十二章":["佛言财色于人人之不舍;譬如刀刃有蜜不足一餐之美小儿舐之则有割舌之患"],"第二十三章":["佛言人系于妻子舍宅甚于牢狱牢狱有散释之期妻子无远离之念","情爱于色岂惮驱驰!虽有虎口之患心存甘伏!投泥自溺故曰凡夫;透得此门出尘罗汉"],"第二十四章":["佛言爱欲莫甚于色色之为欲其大无外","赖有一矣若使二同普天之人无能为道者矣!"],"第二十五章":["佛言爱欲之人犹如执炬逆风而行必有烧手之患"],"第二十六章":["天神献玉女于佛欲坏佛意","佛言革囊众秽尔来何为?去!吾不用","天神愈敬因问道意;佛为解说即得须陀洹果"],"第二十七章":["佛言夫为道者犹木在水寻流而行不触两岸不为人取不为鬼神所遮不为洄流所住亦不腐败吾保此木决定入海","学道之人不为情欲所惑不为众邪所娆精进无为吾保此人必得道矣"],"第二十八章":["佛言慎勿信汝意汝意不可信;慎勿与色会色会即祸生;得阿罗汉已乃可信汝意"],"第二十九章":["佛言慎勿视女色亦莫共言语","若与语者正心思念我为沙门处于浊世当如莲华不为泥污","想其老者如母长者如姊少者如妹稚者如子;生度脱心息灭恶念"],"第三十章":["佛言夫为道者如被干草火来须避;道人见欲必当远之"],"第三十一章":["佛言有人患淫不止欲自断阴佛谓之曰若断其阴不如断心","心如功曹功曹若止从者都息;邪心不止断阴何益?佛为说偈欲生于汝意意以思想生二心各寂静非色亦非行","佛言此偈是迦叶佛说"],"第三十二章":["佛言人从爱欲生忧从忧生怖;若离于爱何忧何怖?"],"第三十三章":["佛言夫为道者譬如一人与万人战挂铠出门意或怯弱或半路而退或格斗而死或得胜而还;沙门学道应当坚持其心精进勇锐不畏前境破灭众魔而得道果"],"第三十四章":["沙门夜诵迦叶佛遗教经其声悲紧思悔欲退","佛问之曰汝昔在家曾为何业?曰爱弹琴","佛言弦缓如何?对曰不鸣矣","弦急如何?对曰声绝矣","急缓得中如何?对曰诸音普矣","佛言沙门学道亦然心若调适道可得矣","于道若暴暴即身疲;其身若疲意即生恼;意若生恼行即退矣;其行既退罪必加矣","但清净安乐道不失矣"],"第三十五章":["佛言如人锻铁去滓成器器即精好;学道之人去心垢染行即清净矣"],"第三十六章":["佛言人离恶道得为人难;既得为人去女即男难;既得为男六根完具难;六根既具生中国难;既生中国值佛世难;既值佛世遇道者难;既得遇道兴信心难;既兴信心发菩提心难;既发菩提心无修无证难"],"第三十七章":["佛言佛子离吾数千里忆念吾戒必得道果在吾左右虽常见吾不顺吾戒终不得道"],"第三十八章":["佛问沙门人命在几间?对曰数日间","佛言子未知道!复问一沙门人命在几间?对曰饭食间","佛言子未知道!复问一沙门人命在几间?对曰呼吸间","佛曰善哉!子知道矣"],"第三十九章":["佛言学佛道者佛所言说皆应信顺;譬如食蜜中边皆甜吾经亦尔"],"第四十章":["佛言沙门行道无如磨牛身虽行道心道不行;心道若行何用行道!"],"第四十一章":["佛言;夫为道者如牛负重行深泥中疲极不敢左右顾视出离淤泥乃可苏息;沙门当观情欲甚淤泥直心念道可免苦矣"],"第四十二章":["佛言吾视侯王之位如过隙尘视金玉之宝如瓦砾视纨素之服如敝帛视大千界如一诃子视阿耨池水如涂足油;视方便门如化宝聚视无上乘如梦金帛视佛道如眼前华视禅定如须弥柱视涅盘如昼夕寤视倒正如六龙舞视平等如一真地视兴化如四时木","四十二章全文相关推荐圣严法师四十二章经"]};
+
+/* 每段旋律轮廓：
+     motif  = 音阶下标数组（0=宫1 1=商2 2=角3 3=徵5 4=羽6），按字循环取用；
+     cadence = 句末落音下标；reg: 0=中音区 1=高八度；
+     mood = 该段的意境说明（显示在折叠标题后）。 */
+const HUI_CONFIG = {"第一章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第四章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第五章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第六章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第七章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第八章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第九章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十一章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十二章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十三章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十四章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十五章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十六章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十七章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十八章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第十九章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十一章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十二章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十三章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十四章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十五章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十六章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十七章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十八章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第二十九章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十一章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十二章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十三章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十四章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十五章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十六章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十七章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十八章":{"motif":[1,2,3,2,1,0,2,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第三十九章":{"motif":[0,2,4,3,4,2,3,1],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第四十章":{"motif":[0,1,2,3,2,1,0,2],"cadence":0,"reg":0,"mood":"佛言·修行要旨"},"第四十一章":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":1,"mood":"佛言·修行要旨"},"第四十二章":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":1,"mood":"佛言·修行要旨"}};
+
+/* 咒心 / 种子字句（可选）：命中这些整句时用明亮上行旋律。无则填 new Set([]) */
+const XIN_SET = new Set([]);
+const XIN_MOTIF = [0,2,3,4,3,4,2,1];
+const XIN_CAD = 0;
+
+/* 逐字注音表（pypinyin 打底 + 依梵呗读音人工校订；不会的字留空 "" 也可） */
+const PINYIN = {"!":"!",",":",",";":";","?":"?","一":"yī","七":"qī","万":"wàn","三":"sān","上":"shàng","下":"xià","不":"bù","与":"yǔ","世":"shì","业":"yè","两":"liǎng","严":"yán","中":"zhōng","临":"lín","为":"wéi","乃":"nǎi","之":"zhī","乎":"hū","乐":"lè","乘":"chéng","九":"jiǔ","乞":"qǐ","也":"yě","乱":"luàn","事":"shì","二":"èr","于":"yú","五":"wǔ","交":"jiāo","亦":"yì","亲":"qīn","人":"rén","亿":"yì","仁":"rén","今":"jīn","从":"cóng","以":"yǐ","仰":"yǎng","伏":"fú","众":"zhòng","会":"huì","但":"dàn","位":"wèi","住":"zhù","何":"hé","佛":"fó","作":"zuò","使":"shǐ","侯":"hóu","便":"biàn","保":"bǎo","信":"xìn","修":"xiū","倒":"dào","值":"zhí","偈":"jì","健":"jiàn","儿":"ér","免":"miǎn","入":"rù","全":"quán","六":"liù","共":"gòng","关":"guān","兴":"xīng","其":"qí","具":"jù","兼":"jiān","内":"nèi","再":"zài","冥":"míng","决":"jué","净":"jìng","几":"jǐ","凡":"fán","出":"chū","刀":"dāo","刃":"rèn","分":"fēn","切":"qiè","则":"zé","剃":"tì","前":"qián","割":"gē","力":"lì","功":"gōng","加":"jiā","动":"dòng","助":"zhù","劫":"jié","劳":"láo","势":"shì","勇":"yǒng","勿":"wù","化":"huà","十":"shí","千":"qiān","半":"bàn","华":"huā","博":"bó","危":"wēi","即":"jí","历":"lì","厘":"lí","去":"qù","发":"fā","取":"qǔ","受":"shòu","变":"biàn","口":"kǒu","可":"kě","右":"yòu","叶":"yè","各":"gè","合":"hé","同":"tóng","名":"míng","后":"hòu","含":"hán","吸":"xī","吾":"wú","呼":"hū","命":"mìng","哉":"zāi","响":"xiǎng","唾":"tuò","善":"shàn","喜":"xǐ","嗔":"chēn","器":"qì","囊":"náng","四":"sì","因":"yīn","国":"guó","图":"tú","圣":"shèng","在":"zài","地":"dì","坌":"bèn","坏":"huài","坚":"jiān","垢":"gòu","堕":"duò","境":"jìng","声":"shēng","处":"chù","复":"fù","夕":"xī","外":"wài","多":"duō","夜":"yè","大":"dà","天":"tiān","夫":"fū","失":"shī","奉":"fèng","女":"nǚ","好":"hǎo","如":"rú","妄":"wàng","妹":"mèi","妻":"qī","姊":"zǐ","娆":"ráo","嫉":"jí","子":"zi","存":"cún","学":"xué","宅":"zhái","守":"shǒu","安":"ān","完":"wán","定":"dìng","宝":"bǎo","室":"shì","害":"hài","家":"jiā","宿":"sù","寂":"jì","寤":"wù","对":"duì","寻":"xún","寿":"shòu","尊":"zūn","小":"xiǎo","少":"shǎo","尔":"ěr","尘":"chén","尽":"jìn","岂":"qǐ","岸":"àn","崇":"chóng","左":"zuǒ","差":"chā","己":"jǐ","已":"yǐ","布":"bù","师":"shī","帛":"bó","常":"cháng","干":"gān","平":"píng","幻":"huàn","广":"guǎng","应":"yīng","度":"dù","弃":"qì","弥":"mí","弦":"xián","弱":"ruò","弹":"dàn","归":"guī","当":"dāng","形":"xíng","影":"yǐng","彼":"bǐ","得":"dé","心":"xīn","必":"bì","忆":"yì","忍":"rěn","志":"zhì","忧":"yōu","念":"niàn","怀":"huái","怖":"bù","思":"sī","急":"jí","性":"xìng","怯":"qiè","恚":"huì","息":"xī","恶":"è","恼":"nǎo","悔":"huǐ","悟":"wù","患":"huàn","悲":"bēi","情":"qíng","惑":"huò","惮":"dàn","想":"xiǎng","愈":"yù","意":"yì","愚":"yú","慈":"cí","慎":"shèn","慢":"màn","成":"chéng","我":"wǒ","戒":"jiè","或":"huò","战":"zhàn","所":"suǒ","手":"shǒu","执":"zhí","扬":"yáng","投":"tóu","拘":"jū","持":"chí","挂":"guà","挠":"náo","损":"sǔn","推":"tuī","提":"tí","搅":"jiǎo","摄":"shè","支":"zhī","改":"gǎi","故":"gù","教":"jiào","敝":"bì","敢":"gǎn","散":"sàn","敬":"jìng","数":"shù","文":"wén","斗":"dòu","断":"duàn","斯":"sī","方":"fāng","施":"shī","无":"wú","既":"jì","日":"rì","时":"shí","旷":"kuàng","明":"míng","昔":"xī","是":"shì","昼":"zhòu","显":"xiǎn","普":"pǔ","智":"zhì","暴":"bào","曰":"yuē","曹":"cáo","曾":"céng","最":"zuì","有":"yǒu","服":"fú","期":"qī","木":"mù","未":"wèi","本":"běn","杀":"shā","来":"lái","极":"jí","枉":"wǎng","果":"guǒ","染":"rǎn","柱":"zhù","树":"shù","根":"gēn","格":"gé","梦":"mèng","次":"cì","欢":"huān","欲":"yù","止":"zhǐ","正":"zhèng","此":"cǐ","死":"sǐ","毁":"huǐ","母":"mǔ","毫":"háo","水":"shuǐ","求":"qiú","汉":"hàn","汗":"hàn","汝":"rǔ","池":"chí","污":"wū","沙":"shā","油":"yóu","法":"fǎ","泥":"ní","洄":"huí","洹":"huán","流":"liú","浊":"zhuó","海":"hǎi","涂":"tú","涅":"niè","消":"xiāo","淤":"yū","淫":"yín","深":"shēn","清":"qīng","渐":"jiàn","源":"yuán","溺":"nì","滓":"zǐ","澄":"chéng","火":"huǒ","灭":"miè","灵":"líng","炬":"jù","烧":"shāo","烬":"jìn","然":"rán","熟":"shú","爱":"ài","片":"piàn","牛":"niú","牢":"láo","物":"wù","犹":"yóu","独":"dú","狱":"yù","献":"xiàn","玉":"yù","王":"wáng","理":"lǐ","琴":"qín","瑕":"xiá","瓦":"wǎ","甘":"gān","甚":"shèn","甜":"tián","生":"shēng","用":"yòng","男":"nán","界":"jiè","畏":"wèi","疲":"pí","疾":"jí","病":"bìng","痊":"quán","痴":"chī","百":"bǎi","皆":"jiē","益":"yì","盗":"dào","盘":"pán","直":"zhí","相":"xiāng","真":"zhēn","眼":"yǎn","睹":"dǔ","矣":"yǐ","知":"zhī","破":"pò","砾":"lì","磨":"mó","礼":"lǐ","神":"shén","祸":"huò","禁":"jìn","禅":"chán","福":"fú","离":"lí","秽":"huì","稚":"zhì","究":"jiū","穷":"qióng","章":"zhāng","等":"děng","精":"jīng","系":"xì","素":"sù","紧":"jǐn","纨":"wán","纳":"nà","终":"zhōng","经":"jīng","结":"jié","绝":"jué","绮":"qǐ","缓":"huǎn","缘":"yuán","网":"wǎng","罗":"luó","罪":"zuì","美":"měi","老":"lǎo","者":"zhě","而":"ér","耨":"nòu","耳":"ěr","聚":"jù","肢":"zhī","胜":"shèng","能":"néng","脱":"tuō","腐":"fǔ","自":"zì","至":"zhì","致":"zhì","臾":"yú","舌":"shé","舍":"shě","舐":"shì","舞":"wǔ","色":"sè","苏":"sū","若":"ruò","苦":"kǔ","草":"cǎo","荐":"jiàn","莫":"mò","莲":"lián","菩":"pú","著":"zhuó","蔽":"bì","虎":"hǔ","虽":"suī","蜜":"mì","行":"xíng","被":"bèi","见":"jiàn","观":"guān","视":"shì","觉":"jué","解":"jiě","触":"chù","言":"yán","譬":"pì","证":"zhèng","诃":"hē","识":"shí","语":"yǔ","说":"shuō","诵":"sòng","诸":"zhū","调":"diào","谓":"wèi","谛":"dì","豪":"háo","负":"fù","财":"cái","责":"zé","贤":"xián","败":"bài","贪":"tān","贫":"pín","贵":"guì","资":"zī","赖":"lài","赴":"fù","足":"zú","路":"lù","身":"shēn","轻":"qīng","辞":"cí","辟":"pì","辱":"rǔ","边":"biān","达":"dá","过":"guò","近":"jìn","还":"hái","进":"jìn","远":"yuǎn","迦":"jiā","迷":"mí","退":"tuì","适":"shì","逆":"nì","透":"tòu","逮":"dǎi","遇":"yù","道":"dào","遗":"yí","遮":"zhē","避":"bì","那":"nà","邪":"xié","都":"dū","释":"shì","里":"lǐ","重":"chóng","金":"jīn","铁":"tiě","铠":"kǎi","锐":"ruì","错":"cuò","锻":"duàn","镜":"jìng","长":"zhǎng","门":"mén","问":"wèn","间":"jiān","闻":"wén","阴":"yīn","阿":"ā","陀":"tuó","除":"chú","随":"suí","隙":"xì","难":"nán","静":"jìng","非":"fēi","革":"gé","音":"yīn","顺":"shùn","须":"xū","顾":"gù","顿":"dùn","风":"fēng","飞":"fēi","食":"shí","餐":"cān","饭":"fàn","香":"xiāng","驰":"chí","驱":"qū","骂":"mà","鬼":"guǐ","魔":"mó","鸣":"míng","默":"mò","龙":"lóng"};
+
+/* C 大调五声音阶（整体上移八度，落在 C5 区；如需更低可整体减半） */
+const PENTA = [
+  {jp:"1", freq:523.25},
+  {jp:"2", freq:587.33},
+  {jp:"3", freq:659.25},
+  {jp:"5", freq:784.00},
+  {jp:"6", freq:880.00}
+];
+
+/* 标点气口表：标点一律不发声，只占"气口"时长，形成句读。
+   数值 = 时间轴上占据的静默长度（秒）；听感静默还要减去前一字的 0.14s 余韵，
+   故「，」约停 0.16s、「。」约停 0.48s。 */
+const PUNCT = {
+  "。":0.62, "！":0.62, "？":0.62,
+  "；":0.50,
+  "，":0.30, "、":0.24, "：":0.28,
+  "“":0.08, "”":0.08, "‘":0.08, "’":0.08,
+  "「":0.08, "」":0.08, "（":0.08, "）":0.08,
+  "《":0.08, "》":0.08, "—":0.10, "…":0.30
+};
+const IS_MANTRA = false;                 /* 咒语页：保留梵呗异读；散文页：修正破读字 */
+const isPunct = ch => Object.prototype.hasOwnProperty.call(PUNCT, ch);
+const isSpace = ch => /^\s+$/.test(ch);
+/* 取 ci 之后的第一个非空白字符（没有则返回 null） */
+function nextRealChar(chars, ci){
+  for(let i=ci+1;i<chars.length;i++){ if(!isSpace(chars[i])) return chars[i]; }
+  return null;
+}
+/* 逐字注音的上下文修正（破读字 / 梵呗异读） */
+function pyOf(ch, prev, next){
+  if(ch === "无") return (prev === "南") ? "mó" : "wú";    /* 南无 nā mó；其余读 wú */
+  if(ch === "若") return (prev === "般") ? "rě" : "ruò";    /* 般若 bō rě；其余读 ruò */
+  if(ch === "种") return (next === "善") ? "zhòng" : "zhǒng";
+  if(ch === "重") return ((prev === "尊" || next === "宝") ? "zhòng" : "chóng");
+  if(ch === "长") return ((next === "舌" || next === "行") ? "cháng" : "zhǎng");
+  return PINYIN[ch] || "";
+}
+
+/* =====================================================================
+   以下为通用引擎（经实测，无需改动）
+   ===================================================================== */
+/* ===================== 生成音符 ===================== */
+const NOTES = [];
+const NOTE_IDX = new Map();          // "hui|pi|ci" → NOTES 下标（渲染谱面时 O(1) 绑定）
+function genNotes(){
+  for(const hui of HUI_ORDER){
+    const cfg = HUI_CONFIG[hui];
+    HUIS[hui].forEach((phrase, pi)=>{
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : cfg.motif;
+      const cad = isXin ? XIN_CAD : cfg.cadence;
+      const reg = isXin ? 1 : cfg.reg;
+      let mi = 0;                                   /* 实字序号（标点不占音阶位置） */
+      chars.forEach((ch, ci)=>{
+        if(isSpace(ch)) return;                     /* 空白：整格跳过 */
+        if(isPunct(ch)){                            /* 标点：休止（气口），不发声 */
+          NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
+          NOTES.push({ hui, pi, ci, ch, freq:0, jp:"0", hi:false,
+                       rest:true, dur:PUNCT[ch], el:null });
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const isHalf = (!isLast && isPunct(nxt) && PUNCT[nxt] >= 0.50);
+        const deg = isLast ? cad : motif[mi % motif.length];
+        const p = PENTA[deg];
+        NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
+        NOTES.push({
+          hui, pi, ci, ch,
+          freq: p.freq * (reg===1 ? 2 : 1),
+          jp:p.jp, hi:(reg===1),
+          dur: isLast ? 0.85 : (isHalf ? 0.66 : 0.42),
+          el:null
+        });
+        mi++;
+      });
+    });
+  }
+}
+
+/* ===================== 渲染谱面 ===================== */
+function render(){
+  const score = document.getElementById("score");
+  const frag = document.createDocumentFragment();
+  let ln = 0;                                    // 全咒连续行号
+  for(const hui of HUI_ORDER){
+    const det = document.createElement("details");
+    det.open = (hui === HUI_ORDER[0]);
+    det.dataset.hui = hui;
+    const sum = document.createElement("summary");
+    const mood = (HUI_CONFIG[hui] && HUI_CONFIG[hui].mood) || "";
+    sum.innerHTML = hui + (mood ? ' <span class="mood">'+mood+'</span>' : '');
+    det.appendChild(sum);
+    HUIS[hui].forEach((phrase, pi)=>{
+      const pdiv = document.createElement("div");
+      pdiv.className = "phrase";
+      const lnEl = document.createElement("span");     // 行号
+      lnEl.className = "ln"; lnEl.textContent = String(++ln).padStart(3,"0");
+      pdiv.appendChild(lnEl);
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : HUI_CONFIG[hui].motif;
+      const cad = isXin ? XIN_CAD : HUI_CONFIG[hui].cadence;
+      const reg = isXin ? 1 : HUI_CONFIG[hui].reg;
+      let mi = 0, prevCh = null;
+      chars.forEach((ch, ci)=>{
+        if(isSpace(ch)) return;
+        if(isPunct(ch)){                                   /* 标点：气口格，简谱记 0 */
+          const cell = document.createElement("span");
+          cell.className = "cell rest" + ((reg===1) ? " hi" : "");
+          const c0 = document.createElement("span"); c0.className="py"; c0.textContent = "";
+          const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
+          const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = "0";
+          cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
+          const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+          if(idx !== undefined) NOTES[idx].el = cell;
+          pdiv.appendChild(cell);
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const deg = isLast ? cad : motif[mi % motif.length];
+        const cell = document.createElement("span");
+        cell.className = "cell" + ((reg===1) ? " hi" : "");
+        const c0 = document.createElement("span"); c0.className="py"; c0.textContent = pyOf(ch, prevCh, nxt);
+        const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;               // 汉字
+        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;    // 简谱
+        cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
+        const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+        if(idx !== undefined) NOTES[idx].el = cell;
+        pdiv.appendChild(cell);
+        mi++; prevCh = ch;
+      });
+      det.appendChild(pdiv);
+    });
+    frag.appendChild(det);
+  }
+  score.innerHTML = "";
+  score.appendChild(frag);
+}
+
+/* ===================== 音频引擎：实时 lookahead 调度 =====================
+   关键设计（对照 OfflineAudioContext 的 O(N²) 陷阱）：
+   · ConvolverNode 混响器【全局唯一、常驻】，不为每个音符建节点；
+   · 每个音符只建 2 个 osc + 2 个 gain，osc.stop() 后由 onended 主动 disconnect → 常驻节点数恒定；
+   · 定时器只负责"把未来 2 秒的音符挂上去"，真正的发声时刻由音频硬件时钟决定。
+   复杂度 = O(音符数)，与音频总时长无关 —— 2621 字 / 23 分钟也秒开。            */
+const LOOKAHEAD = 2.0;        // 预调度窗口（秒）：覆盖后台标签页定时器节流
+const TICK_MS  = 250;         // 定时器唤醒间隔
+
+let ctx=null, master=null, wetGain=null, conv=null;
+let vol = 0.7;
+
+function ensureCtx(){
+  if(!ctx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = vol;
+    master.connect(ctx.destination);
+    // 混响：全局唯一实例
+    conv = ctx.createConvolver();
+    conv.buffer = makeReverbBuf(ctx, 1.8, 2.6);
+    wetGain = ctx.createGain();
+    wetGain.gain.value = 0.18;
+    master.connect(conv); conv.connect(wetGain); wetGain.connect(ctx.destination);
+  }
+  if(ctx.state !== "running" && ctx.resume) { try{ ctx.resume(); }catch(e){} }
+  // iOS/Safari 解锁：必须在用户手势内于真实音频图上播出一帧静音
+  try{
+    const s = ctx.createBufferSource();
+    s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    s.connect(master); s.start(0);
+  }catch(e){}
+  return ctx;
+}
+function makeReverbBuf(c, dur, decay){
+  const rate=c.sampleRate, len=Math.floor(rate*dur);
+  const buf=c.createBuffer(1,len,rate);
+  const d=buf.getChannelData(0);
+  let lp=0;
+  for(let i=0;i<len;i++){
+    const n=Math.random()*2-1;
+    lp += (n-lp)*0.22;                       // 一阶低通，削掉高频白噪嘶声
+    d[i]=lp*Math.pow(1-i/len,decay);
+  }
+  return buf;
+}
+/* 单个音符：基频正弦 + 八度泛音，钟磬式起落包络 */
+function scheduleNote(freq, when, dur){
+  const o1=ctx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
+  const o2=ctx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
+  const g=ctx.createGain();  const peak=0.22;
+  const g2=ctx.createGain(); g2.gain.value=0.06;
+  g.gain.setValueAtTime(0.0001, when);
+  g.gain.exponentialRampToValueAtTime(peak, when+0.045);
+  g.gain.exponentialRampToValueAtTime(0.0001, when+dur+0.14);
+  o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+  const at=when, end=when+dur+0.3;
+  o1.start(at); o2.start(at); o1.stop(end); o2.stop(end);
+  const rec={o1,o2,g,g2,at};
+  pending.push(rec);
+  o1.onended=()=>{ try{g.disconnect(); g2.disconnect();}catch(e){}
+    const i=pending.indexOf(rec); if(i>=0) pending.splice(i,1); };
+}
+
+/* ===================== 播放状态 ===================== */
+let tl=[];                 // 时间轴（1× 基准）：{n, t, dur}
+let totalBase=0;           // 1× 总时长
+let playing=false, paused=false;
+let rate=1.0;              // 变速倍率
+let startCtx=0;            // 基准时间轴 0 点 对应的 ctx.currentTime
+let schedIdx=0, hlIdx=0;   // 下一个待调度 / 待高亮 的音符下标
+let pending=[];            // 已调度但尚未响完的音符（用于暂停/停止时掐断）
+let timer=null, rafId=null;
+let lastHuiShown=null;     // 当前显示在诊断行上的段名（换段才刷新）
+
+function selectedNotes(){
+  const sel = document.getElementById("selHui").value;
+  if(sel==="all") return NOTES;
+  if(sel==="xin") return NOTES.filter(n=>XIN_SET.has(HUIS[n.hui][n.pi]));
+  return NOTES.filter(n=>n.hui===sel);
+}
+/* 构建 1× 基准时间轴：0.6s 起音预留 + 字间 0.04 + 句间 0.34 + 段间 1.15 */
+function buildTimeline(notes){
+  const out=[]; let t=0.6, prevHui=null, prevPi=null, prevRest=false;
+  for(const n of notes){
+    let gap;
+    if(n.pi!==prevPi){ gap=(n.hui!==prevHui)?1.15:0.34; }   /* 换句 / 换段 */
+    else { gap = (n.rest || prevRest) ? 0 : 0.04; }         /* 气口前后不再额外加间隔 */
+    t+=gap;
+    out.push({n, t, dur:n.dur});
+    t+=n.dur; prevHui=n.hui; prevPi=n.pi; prevRest=!!n.rest;
+  }
+  return out;
+}
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));
+  return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");
+}
+function updateDur(){
+  const d = tl.length ? (tl[tl.length-1].t + tl[tl.length-1].dur)/rate : 0;
+  document.getElementById("dur").textContent = d ? fmt(d) : "—";
+}
+function clearHighlight(){
+  if(hlIdx>0 && hlIdx<=tl.length && tl[hlIdx-1] && tl[hlIdx-1].n.el) tl[hlIdx-1].n.el.classList.remove("cur");
+}
+function hardClearHighlight(){
+  for(const n of NOTES) if(n.el) n.el.classList.remove("cur");
+}
+function killPending(fromTime){
+  for(const p of pending){
+    try{ p.o1.stop(fromTime); }catch(e){}
+    try{ p.o2.stop(fromTime); }catch(e){}
+  }
+  pending.length = 0;
+}
+function stopEngine(){
+  if(timer){ clearInterval(timer); timer=null; }
+  if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  if(ctx) killPending(ctx.currentTime);
+  playing=false; paused=false; lastHuiShown=null;
+  hardClearHighlight();
+  document.getElementById("playBtn").textContent="▶ 播放";
+  document.getElementById("prog").style.width="0%";
+}
+
+/* 调度循环：只挂未来 LOOKAHEAD 秒内的音符 */
+function pump(){
+  if(!playing || !ctx) return;
+  const now = ctx.currentTime;
+  const horizon = now + LOOKAHEAD;
+  while(schedIdx < tl.length){
+    const at = startCtx + tl[schedIdx].t / rate;
+    if(at > horizon) break;
+    if(!tl[schedIdx].n.rest)                                /* 休止（标点气口）：不发声 */
+      scheduleNote(tl[schedIdx].n.freq, Math.max(at, now+0.02), tl[schedIdx].dur / rate);
+    schedIdx++;
+  }
+  if(schedIdx >= tl.length){
+    const endAt = startCtx + (totalBase)/rate + 1.2;
+    if(now > endAt){ finish(); return; }
+  }
+}
+/* 高亮跟随（RAF） */
+function tickHL(){
+  if(rafId) cancelAnimationFrame(rafId);
+  const step=()=>{
+    if(!playing || !ctx) return;
+    const p = (ctx.currentTime - startCtx) * rate;       // 当前在 1× 时间轴上的位置
+    while(hlIdx < tl.length && tl[hlIdx].t <= p){
+      clearHighlight();
+      const cell = tl[hlIdx].n.el;
+      if(cell){
+        cell.classList.add("cur");
+        const det = cell.closest("details");
+        if(det && !det.open) det.open = true;
+        const r = cell.getBoundingClientRect();
+        if(r.top < 90 || r.bottom > window.innerHeight - 40){
+          cell.scrollIntoView({block:"center", behavior:"smooth"});
+        }
+      }
+      hlIdx++;
+    }
+    const pos = Math.max(0, Math.min(p, totalBase));
+    document.getElementById("prog").style.width = (totalBase? (pos/totalBase*100):0).toFixed(2)+"%";
+    document.getElementById("dur").textContent = fmt(pos/rate) + " / " + fmt(totalBase/rate);
+    if(hlIdx>0 && tl[hlIdx-1].n.hui !== lastHuiShown){          // 换段时才写一次 DOM
+      lastHuiShown = tl[hlIdx-1].n.hui;
+      document.getElementById("diag").innerHTML =
+        "[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+    }
+    rafId=requestAnimationFrame(step);
+  };
+  rafId=requestAnimationFrame(step);
+}
+function finish(){
+  stopEngine();
+  const d=document.getElementById("diag");
+  d.innerHTML="[完成] 本段讽诵完毕（"+fmt(totalBase/rate)+"）";
+}
+
+/* 重新基准化：变速 / 跳转 / 恢复播放 都用它 */
+function rebase(basePos, lead){
+  const now = ctx.currentTime;
+  startCtx = now + lead - basePos/rate;
+  killPending(now);
+  schedIdx = 0; while(schedIdx < tl.length && tl[schedIdx].t < basePos) schedIdx++;
+  hlIdx = schedIdx;
+  hardClearHighlight();
+}
+
+/* ===================== 用户操作 ===================== */
+function play(){
+  const diag=document.getElementById("diag");
+  ensureCtx();                                   // 必须在手势内同步调用（iOS 解锁）
+
+  if(playing && !paused){                        // → 暂停
+    paused=true;
+    const p=(ctx.currentTime-startCtx)*rate;
+    pausedAt=p;
+    killPending(ctx.currentTime);
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+    document.getElementById("playBtn").textContent="▶ 继续";
+    diag.innerHTML="[暂停] 停在 "+fmt(p/rate)+" · 再点「▶ 继续」";
+    return;
+  }
+  if(playing && paused){                         // → 继续
+    paused=false;
+    rebase(pausedAt, 0.25);
+    startTimer();
+    document.getElementById("playBtn").textContent="⏸ 暂停";
+    diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+(curHuiLabel())+"</b>";
+    return;
+  }
+  // → 全新播放
+  const sel=document.getElementById("selHui").value;
+  const notes=selectedNotes();
+  if(!notes.length){ diag.innerHTML='<span style="color:#c0392b">⚠ 该段没有音符</span>'; return; }
+  stopEngine();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  rate = document.getElementById("speed").value/100;
+  schedIdx=0; hlIdx=0;
+  playing=true; paused=false;
+  startCtx = ctx.currentTime + 0.35;             // 0.35s 起音预留
+  startTimer();
+  document.getElementById("playBtn").textContent="⏸ 暂停";
+  updateDur();
+  lastHuiShown = tl[0].n.hui;
+  diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+  setTimeout(()=>{
+    if(playing && ctx && ctx.state!=="running"){
+      diag.innerHTML='<span style="color:#c0392b">⚠ 音频未激活（'+ctx.state+'），请再点一次「▶ 播放」</span>';
+    }
+  },1500);
+}
+let pausedAt=0;
+function startTimer(){
+  if(timer) clearInterval(timer);
+  pump();
+  timer=setInterval(pump, TICK_MS);
+  tickHL();
+}
+function curHuiLabel(){
+  const i = Math.min(hlIdx, tl.length-1);
+  return (i>=0 && tl[i]) ? tl[i].n.hui : "—";
+}
+function stopAll(){
+  stopEngine();
+  schedIdx=0; hlIdx=0; pausedAt=0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[已停止] 点「▶ 播放」重新开始";
+}
+/* 跳转：点击进度条定位到任意位置（"播放进度可以自己定义"） */
+function seekTo(ratio){
+  if(!playing || !tl.length || !ctx) return;
+  const basePos = Math.max(0, Math.min(1, ratio)) * totalBase;
+  rebase(basePos, 0.05);
+  document.getElementById("diag").innerHTML="[跳转] 已定位到 "+fmt(basePos/rate);
+}
+
+/* ===================== 事件绑定 ===================== */
+genNotes();
+render();
+tl = buildTimeline(NOTES);
+totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+rate = document.getElementById("speed").value/100;
+updateDur();
+
+/* 段落下拉：按 HUI_ORDER 自动生成；有咒心则追加"仅咒心" */
+(function buildSelect(){
+  const sel=document.getElementById("selHui");
+  const opts=['<option value="all">全咒（全部段落 + 咒心）</option>'];
+  for(const h of HUI_ORDER) opts.push('<option value="'+h+'">'+h+'</option>');
+  if(XIN_SET.size) opts.push('<option value="xin">仅咒心</option>');
+  sel.innerHTML=opts.join("");
+})();
+
+document.getElementById("playBtn").addEventListener("click", play);
+document.getElementById("stopBtn").addEventListener("click", stopAll);
+
+document.getElementById("selHui").addEventListener("change", ()=>{
+  stopEngine(); schedIdx=0; hlIdx=0; pausedAt=0;
+  const notes=selectedNotes();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[就绪] 已切到「"+document.getElementById("selHui").selectedOptions[0].text+"」· 共 "+fmt(totalBase/rate);
+});
+
+let rateTimer=null;
+document.getElementById("speed").addEventListener("input", (e)=>{
+  const v=e.target.value/100;
+  document.getElementById("spdTxt").textContent=v.toFixed(2)+"×";
+  if(playing && !paused && ctx){
+    const p=(ctx.currentTime-startCtx)*rate;     // 旧倍率下的基准位置
+    rate=v;
+    clearTimeout(rateTimer);
+    rateTimer=setTimeout(()=>{
+      if(!playing||!ctx) return;
+      rebase(p, 0.15);
+    },120);
+  }else{
+    rate=v;
+  }
+  updateDur();
+});
+document.getElementById("vol").addEventListener("input", (e)=>{
+  vol=e.target.value/100;
+  document.getElementById("volTxt").textContent=e.target.value;
+  if(master) master.gain.value=vol;
+});
+document.getElementById("tglPy").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-py", !e.target.checked);
+});
+document.getElementById("tglJp").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-jp", !e.target.checked);
+});
+document.querySelector(".bar").addEventListener("click", (e)=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  seekTo((e.clientX-r.left)/r.width);
+});
+
+/* 从后台切回时确保音频上下文是活的 */
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && ctx && ctx.state!=="running" && ctx.resume){ try{ ctx.resume(); }catch(e){} }
+});
+window.addEventListener("error", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [JS错误]'+((e&&e.message)||"未知")+'</span>';
+});
+window.addEventListener("unhandledrejection", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [Promise错误]'+((e.reason&&e.reason.message)||e.reason||"未知")+'</span>';
+});
+</script>
+</body>
+</html>

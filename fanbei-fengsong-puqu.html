@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  梵呗 · 讽诵谱曲 —— 总导航页
+  ----------------------------------------------------------------------------
+  变更记录：
+    V1.0  2026-11-01  新建。汇总 7 部经咒讽诵谱曲（楞严咒/心经/金刚经/
+          吉祥经/四十二章经/大悲咒/十小咒），增设 1 张预留扩展卡位；
+          新增「梵呗艺术」科普区（名义/鱼山梵呗/讽诵与赞呗/音律法器/
+          流布与今日），配图 6 张均取自 Wikimedia Commons（PD/CC0/CC BY-SA）。
+    V1.2  2026-11-01  13 部全部升级至「标点气口」引擎：标点不再发声，改记休止 0，
+          按句读分级停顿（。！？0.62s／；0.50s／，：0.30s、0.24s／引号括号0.08s）；
+          音阶推进改按实字计数；句末标点前的字拖长半终止；并修正梵呗异读表误伤
+          散文经的破读字（无wú/若ruò/为wéi/著zhuó/华huā/尽jìn/给jǐ/塞sè/藏zàng/
+          重chóng，唯「南无」「般若」保留梵呗读音）。总时长 155 → 151 分钟。
+    V1.1  2026-11-01  新增第二批 6 部：阿弥陀经/药师咒/往生咒/准提咒/
+          普门品/大势至念佛圆通章，目录扩为 13 部（18048 字 / 155 分钟）；
+          更新统计条与待排候选；旧版归档为 fanbei-fengsong-puqu.v1.html。
+  ============================================================================
+-->
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>梵呗 · 讽诵谱曲 —— 经咒讽诵谱曲总集</title>
+<style>
+  :root{
+    --ink:#2b2118; --paper:#f7f1e3; --paper2:#efe6d2; --gold:#b8860b;
+    --red:#c0392b; --line:#d8c9a8; --sub:#8a6d3b;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif; line-height:1.75; }
+  header{ padding:28px 20px 18px; text-align:center;
+    background:linear-gradient(180deg,#fbf6ea,#f1e7d2); border-bottom:2px solid var(--line); }
+  header h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.18em;}
+  header h1 .ver{font-size:.7rem; letter-spacing:.05em; color:var(--sub); font-weight:400; vertical-align:middle; margin-left:.5em;}
+  header .meta{font-size:.9rem; color:var(--sub);}
+  .wrap{max-width:960px; margin:0 auto; padding:18px 16px 60px;}
+  .card{ background:var(--paper2); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:16px 0; }
+  h2{font-size:1.15rem; margin:.2em 0 .6em; color:var(--gold); letter-spacing:.08em;}
+  h3{font-size:1.02rem; margin:1.1em 0 .35em; color:var(--ink); letter-spacing:.05em;}
+  p,li{font-size:.96rem;}
+  .lead{font-size:1rem;}
+
+  /* 统计条 */
+  .stats{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px 30px; margin:12px 0 4px;
+    font-size:.85rem; color:var(--sub); }
+  .stats b{display:block; font-size:1.5rem; color:var(--gold); font-variant-numeric:tabular-nums; line-height:1.25;}
+
+  /* 快速跳转 */
+  .toc{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:14px 0 4px;}
+  .toc a{ font-size:.85rem; text-decoration:none; color:var(--ink); background:#fbf6ea;
+    border:1px solid var(--line); border-radius:999px; padding:5px 14px; }
+  .toc a:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* 谱曲卡片网格 */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(248px,1fr)); gap:14px; margin:14px 0 8px; }
+  .sc{ display:flex; flex-direction:column; text-decoration:none; color:inherit;
+    background:linear-gradient(180deg,#fbf6ea,#f0e4cb); border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px 12px; transition:.18s; }
+  .sc:hover{ transform:translateY(-3px); box-shadow:0 6px 18px rgba(43,33,24,.16); border-color:var(--gold); }
+  .sc-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px;}
+  .sc-name{font-size:1.22rem; font-weight:700; letter-spacing:.06em;}
+  .sc-ver{font-size:.68rem; color:var(--sub);}
+  .sc-sub{font-size:.8rem; color:var(--sub); margin-top:2px;}
+  .sc-stat{ display:flex; flex-wrap:wrap; gap:4px 10px; margin-top:9px;
+    font-size:.76rem; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .sc-stat span{background:#f6ecd6; border:1px solid #e2d3b0; border-radius:5px; padding:1px 7px;}
+  .sc-desc{font-size:.87rem; margin-top:9px; flex:1;}
+  .sc-go{ margin-top:10px; font-size:.82rem; color:var(--gold); letter-spacing:.05em; }
+  .sc-new{ background:transparent; border:2px dashed #cdb68d; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; min-height:172px;
+    cursor:pointer; color:var(--sub); }
+  .sc-new:hover{border-color:var(--gold); color:var(--gold); box-shadow:none;}
+  .sc-new .plus{font-size:2.1rem; line-height:1; color:#cdb68d;}
+  .sc-new:hover .plus{color:var(--gold);}
+  .sc-new .t{font-size:1rem; letter-spacing:.1em; margin-top:4px;}
+  .sc-new .s{font-size:.78rem; margin-top:4px;}
+  #moreHint{ display:none; font-size:.86rem; color:var(--sub); background:#fbf6ea;
+    border:1px dashed var(--line); border-radius:8px; padding:10px 14px; margin:6px 0 14px; }
+  #moreHint code{background:#efe4cc; padding:1px 5px; border-radius:4px; font-size:.82rem;}
+
+  /* 科普区 */
+  .sec{ background:#fbf6ea; border:1px solid var(--line); border-radius:10px; padding:16px 20px; margin:16px 0; }
+  .sec > h2{border-bottom:1px solid var(--line); padding-bottom:.4em;}
+  .quote{ border-left:3px solid var(--gold); margin:10px 0 10px; padding:6px 0 6px 14px;
+    color:var(--sub); font-size:.92rem; }
+  .quote cite{display:block; margin-top:4px; font-size:.8rem; font-style:normal;}
+  .two{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start;}
+  .two > figure{flex:1 1 240px; margin:0;}
+  .two > div{flex:2 1 320px; min-width:260px;}
+  kbd{background:#efe4cc; border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:.85em;}
+  .srcs{font-size:.82rem; color:var(--sub);}
+  .srcs a{color:var(--sub);}
+  .tagline{text-align:center; font-size:.92rem; color:var(--sub); letter-spacing:.08em; margin:6px 0 0;}
+
+  figure{margin:16px 0; text-align:center;}
+  figure img{ max-width:100%; border-radius:10px; border:1px solid var(--line);
+    box-shadow:0 2px 12px rgba(43,33,24,.10); background:#fff; }
+  figure.hero img{max-height:420px; object-fit:contain;}
+  figure.inline-fig img{max-height:400px; object-fit:contain;}
+  figure.side img{max-height:330px; object-fit:contain;}
+  figcaption{font-size:.78rem; color:var(--sub); margin-top:7px; line-height:1.5;}
+  footer{text-align:center; font-size:.8rem; color:var(--sub); margin-top:30px; line-height:1.8;}
+
+  @media (max-width:640px){
+    header h1{font-size:1.45rem; letter-spacing:.1em;}
+    .wrap{padding:14px 12px 44px;}
+    .grid{grid-template-columns:1fr;}
+    .two{flex-direction:column;}
+    .two > figure, .two > div{flex:1 1 auto; width:100%;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>梵呗 · 讽诵谱曲<span class="ver">V1.2</span></h1>
+  <div class="meta">汉传梵呗 · 五声音阶讽诵 · 经咒谱曲总集</div>
+  <div class="toc">
+    <a href="#index">谱曲目录</a>
+    <a href="#what">何谓梵呗</a>
+    <a href="#yushan">鱼山梵呗</a>
+    <a href="#fengsong">讽诵与赞呗</a>
+    <a href="#music">音律与法器</a>
+    <a href="#today">流布与今日</a>
+    <a href="#how">如何诵持</a>
+  </div>
+</header>
+<div class="wrap">
+
+  <figure class="hero">
+    <img src="images/fanbei-hero.jpg" alt="敦煌壁画">
+    <figcaption>敦煌莫高窟壁画（公有领域）——佛教的「音声供养」传统：以伎乐、歌赞供养三宝，是梵呗东传的图像见证</figcaption>
+  </figure>
+
+  <div class="card">
+    <h2 id="index">谱曲目录 · 十三部</h2>
+    <p class="lead">本页汇集已完成的经咒讽诵谱曲。每一部都可独立打开：逐字注音、五声音阶简谱、段落选择、进度跳转、变速播放。点卡片即入。</p>
+    <div class="stats">
+      <div><b>13</b>部经咒</div>
+      <div><b>17872</b>字</div>
+      <div><b>151</b>分钟（1.0× 速）</div>
+      <div><b>五声</b>音阶 · 宫商角徵羽</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <a class="sc" href="lengyanzhou-shurangama-mantra.html">
+      <div class="sc-top"><span class="sc-name">楞严咒</span><span class="sc-ver">V3.3</span></div>
+      <div class="sc-sub">大佛顶首楞严经卷七 · 五会 + 咒心</div>
+      <div class="sc-stat"><span>2621 字</span><span>5 会</span><span>26:54</span></div>
+      <div class="sc-desc">咒中之王。五会结构最完整，末会回向移高八度，全咒一气贯到底。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="xinjing-prajnaparamita.html">
+      <div class="sc-top"><span class="sc-name">心经</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">般若波罗蜜多心经 · 唐玄奘译</div>
+      <div class="sc-stat"><span>260 字</span><span>9 段</span><span>2:45</span></div>
+      <div class="sc-desc">最短的般若，最广的流传。平和处下行回旋，咒心处移高八度，显圆满明亮。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="jingang-jing.html">
+      <div class="sc-top"><span class="sc-name">金刚经</span><span class="sc-ver">V2.1</span></div>
+      <div class="sc-sub">金刚般若波罗蜜经 · 姚秦鸠摩罗什译</div>
+      <div class="sc-stat"><span>6626 字</span><span>33 段</span><span>50:38</span></div>
+      <div class="sc-desc">三十二分全帙。「应无所住」破相显性，旋律多用下行回旋，末二分转高八度。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="jixiang-jing.html">
+      <div class="sc-top"><span class="sc-name">吉祥经</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">南传大藏经 · 李荣熙译</div>
+      <div class="sc-stat"><span>292 字</span><span>2 段</span><span>2:26</span></div>
+      <div class="sc-desc">汉传丛林里流通最广的南传经典。全中音平缓，末句「无往而不胜」抬升收束。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="sishier-zhang-jing.html">
+      <div class="sc-top"><span class="sc-name">四十二章经</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">后汉迦叶摩腾、竺法兰译 · 汉地首译</div>
+      <div class="sc-stat"><span>2338 字</span><span>42 章</span><span>19:07</span></div>
+      <div class="sc-desc">第一部汉译佛典。四十二章短峻切要，取平实下行，末二章略升。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="dabei-zhou.html">
+      <div class="sc-top"><span class="sc-name">大悲咒</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">千手千眼无碍大悲心陀罗尼</div>
+      <div class="sc-stat"><span>410 字</span><span>84 句</span><span>4:11</span></div>
+      <div class="sc-desc">八十四句全咒，全中音一气贯通。梵音汉译，注音依通行梵呗。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="shixiao-zhou.html">
+      <div class="sc-top"><span class="sc-name">十小咒</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">汉传丛林早课十咒合集</div>
+      <div class="sc-stat"><span>625 字</span><span>10 咒</span><span>6:33</span></div>
+      <div class="sc-desc">早课日诵。十咒各成一段，末二咒移高八度，如课诵将毕的收板。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="amituo-jing.html">
+      <div class="sc-top"><span class="sc-name">阿弥陀经</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">佛说阿弥陀经 · 姚秦鸠摩罗什译</div>
+      <div class="sc-stat"><span>2131 字</span><span>6 段</span><span>17:34</span></div>
+      <div class="sc-desc">净土三经之一。序分、庄严、正因、六方赞叹、劝信、流通六段，末后两段移高八度。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="yaoshi-zhou.html">
+      <div class="sc-top"><span class="sc-name">药师咒</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">药师灌顶真言 · 琉璃光明</div>
+      <div class="sc-stat"><span>55 字</span><span>2 段</span><span>0:36</span></div>
+      <div class="sc-desc">归敬药师如来一段平缓下行，咒心「鞞刹逝」段移高八度，显除病延寿。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="wangsheng-zhou.html">
+      <div class="sc-top"><span class="sc-name">往生咒</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">拔一切业障根本得生净土神咒</div>
+      <div class="sc-stat"><span>59 字</span><span>2 段</span><span>0:39</span></div>
+      <div class="sc-desc">全咒十四句。前三句归敬启咒沉稳，其后咒心移高八度，显莲华化生。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="zhunti-zhou.html">
+      <div class="sc-top"><span class="sc-name">准提咒</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">准提神咒 · 七俱胝佛母</div>
+      <div class="sc-stat"><span>54 字</span><span>2 段</span><span>0:36</span></div>
+      <div class="sc-desc">含开咒赞「稽首皈依苏悉帝」与咒文两段，赞偈舒展、咒语抬升。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="pumen-pin.html">
+      <div class="sc-top"><span class="sc-name">普门品</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">观世音菩萨普门品 · 妙法莲华经</div>
+      <div class="sc-stat"><span>2153 字</span><span>4 段</span><span>17:24</span></div>
+      <div class="sc-desc">长行叙事、三十二应身、五言偈颂重宣、流通赞叹，末两段移高八度。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <a class="sc" href="dashizhi-zhang.html">
+      <div class="sc-top"><span class="sc-name">大势至章</span><span class="sc-ver">V2.0</span></div>
+      <div class="sc-sub">大势至菩萨念佛圆通章 · 楞严经</div>
+      <div class="sc-stat"><span>248 字</span><span>4 段</span><span>2:04</span></div>
+      <div class="sc-desc">净土五经之一，仅二百余字。末「都摄六根、净念相继」两段移高八度。</div>
+      <div class="sc-go">进入讽诵 →</div>
+    </a>
+
+    <!-- 预留扩展卡位 -->
+    <div class="sc sc-new" id="newCard" role="button" tabindex="0" title="点击看扩展说明">
+      <div class="plus">＋</div>
+      <div class="t">新增谱曲</div>
+      <div class="s">虚位以待 · 点击看扩展方式</div>
+    </div>
+  </div>
+
+  <div id="moreHint">
+    <b>扩展方法</b>：本页是纯静态导航，新增一部只需两步——
+    ① 复制任一谱曲页（如 <code>dabei-zhou.html</code>），改其配置区的 <code>HUI_ORDER / HUIS / HUI_CONFIG / PINYIN</code>；
+    ② 在本页 <code>.grid</code> 里于预留卡位<strong>之前</strong>插入一张 <code>&lt;a class="sc" href="新页.html"&gt;…&lt;/a&gt;</code>，
+    并把预留卡留在最后一位即可。<br>
+    待排候选：《无量寿经》《观无量寿经》《药师琉璃光如来本愿功德经》《地藏经》《八大人觉经》《佛遗教经》《普贤行愿品》《六字大明咒》。
+  </div>
+
+  <!-- ============ 梵呗艺术 ============ -->
+  <div class="sec">
+    <h2 id="what">一、何谓梵呗</h2>
+    <p><b>「梵」</b>是梵语「梵那摩」（Brahma）的略称，意为<b>清净、离欲</b>；<b>「呗」</b>是梵语「呗匿」「婆陟」（bhaṣā）的略称，意为<b>赞颂、歌咏</b>。合称「梵呗」，即以清净的言语赞叹诸佛菩萨的功德。丁福保《佛学大辞典》释：「音韵屈曲升降，能契于曲，为讽咏之声，是梵土之法曲，故名梵呗。」</p>
+    <div class="quote">
+      「如此郁鞞国语，翻为<strong>止断</strong>也，又云止息。由是外缘已止、已断，尔时寂静，任为法事也。」
+      <cite>——《行事钞》引《出要律仪》</cite>
+    </div>
+    <p>也就是说，梵呗兼具<b>「赞叹」</b>与<b>「止断」</b>二义：一方面歌咏赞叹佛德，一方面借讽咏止断外缘、息却妄心，令身心寂静，方能成办一切法事。它源出印度五明之一的<b>「声明」</b>——天竺方俗，凡是歌咏法言，皆称为「呗」。</p>
+    <p>佛陀曾禁止以婆罗门法的声调吟咏经文，但许可「以清净梵音赞叹佛德、歌咏说法」。《十诵律》载：「为诸天闻呗心喜，故开呗声也。」《毗尼母经》则听许比丘从十二部经中取其「要言妙辞」，以讽诵方式「直显其义」。</p>
+  </div>
+
+  <div class="sec">
+    <h2 id="yushan">二、改梵为秦：鱼山梵呗与曹植</h2>
+    <div class="two">
+      <div>
+        <p>佛教初传中土时有一个根本困难：<b>「梵音重复，汉语单奇」</b>——梵语偈颂音节繁复，汉语一字一音，两者难以相合，以致「金言有译，梵响无授」。</p>
+        <p>相传魏明帝太和年间（约 229—230），陈思王<b>曹植</b>游<b>鱼山</b>（今山东东阿县境），闻空中梵响，清扬哀婉，其声动心，独听良久。乃摹其音节，依《太子瑞应本起经》<b>「撰文制音，传为后式」</b>，创制六章汉语梵呗，一举解决了用汉语咏唱梵音的矛盾。《高僧传》称其所传「<b>传声则三千有余，在契则四十有二</b>」。</p>
+        <p>后世省称「梵呗」；因曹植登鱼山闻梵声而制呗，又称<b>「鱼山梵呗」</b>，曹植被尊为汉传佛教音乐（梵呗）的始祖。唐代传至日本，谓之<b>「鱼山声明」</b>；传至韩国，称<b>「鱼山」</b>。2008 年，「佛教音乐（鱼山梵呗）」被列入<b>第二批国家级非物质文化遗产</b>（项目编号 Ⅱ-138，山东省东阿县）。</p>
+      </div>
+      <figure class="side">
+        <img src="images/fanbei-caozhi.jpg" alt="曹植像">
+        <figcaption>曹植像（传顾恺之绘，公有领域）——被尊为汉传梵呗始祖的陈思王</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2 id="fengsong">三、讽诵与赞呗：两条脉络</h2>
+    <div class="quote">
+      「天竺方俗，凡是歌咏法言，皆称为呗。至于此土，<strong>咏经则称为转读，歌赞则号为梵呗</strong>。」
+      <cite>——慧皎《高僧传 · 经师篇》</cite>
+    </div>
+    <p>印度的「呗」传入汉地后一分为二：</p>
+    <ul>
+      <li><b>转读（后世多称讽诵）</b>——依曲调回旋吟咏<b>经文长行</b>（散文部分），一字一音，句末拖长落稳；</li>
+      <li><b>梵呗 / 赞呗</b>——依音韵歌唱<b>偈赞</b>与名号，旋律性更强。</li>
+    </ul>
+    <p><b>本系列谱曲属前一系</b>：为经文与陀罗尼立讽诵调，五声音阶循环套用，句末自然落于稳定音（宫或徵），句与句之间留「气口」，段与段之间留一长呼吸。按传统，梵呗文本可归为<b>赞、偈、咒、文、名号</b>五类；其应用不出三方面——<b>讲经仪式、六时行道（后世朝暮课诵）、道场忏法</b>，而行仪通常分为<b>初呗、中呗、后呗</b>三节。</p>
+    <figure class="inline-fig">
+      <img src="images/fanbei-fengsong.jpg" alt="僧众讽诵唱念">
+      <figcaption>僧众讽诵唱念（图源 Wikimedia Commons，CC BY-SA 4.0，摄影 Uriel1022）</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec">
+    <h2 id="music">四、音律与法器</h2>
+    <p>梵呗讲究<b>「协谐律吕，符靡宫商」</b>——以中国传统七声（宫、商、角、变徵、徵、羽、变宫）配合汉字四声（平、上、去、入）的起伏。《高僧传》形容理想的讽诵为：「<b>三位七声，次而无乱；五言四句，契而莫爽</b>。」风格上则求<b>「清净、和雅、直声、吐纳抑扬」</b>的自然真声。</p>
+    <p><b>本系列谱曲取其主干，用五声音阶</b>：宫、商、角、徵、羽，即简谱的 <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>5</kbd> <kbd>6</kbd>。避去半音（变徵、变宫），好处是任何字都能安稳落音、久诵不累，也不会因字调拗口而失了庄重——这正是「改梵为秦」以来汉传讽诵的核心经验。</p>
+    <div class="two">
+      <figure>
+        <img src="images/fanbei-muyu.jpg" alt="北京广济寺木鱼">
+        <figcaption>木鱼（北京广济寺，图源 Wikimedia Commons，CC0）——梵呗主要的节奏法器</figcaption>
+      </figure>
+      <figure>
+        <img src="images/fanbei-zhong.jpg" alt="寺院梵钟">
+        <figcaption>寺院梵钟（图源 Wikimedia Commons，CC BY-SA 4.0，摄影 Siyuwj）</figcaption>
+      </figure>
+    </div>
+    <p>伴奏的<b>法器以打击乐为主</b>：磬（大磬、引磬）、木鱼（大、小）、钟、鼓（中鼓、扁鼓）、铪、铛、钹、云板等。它们的作用不是旋律伴奏，而是<b>「警醒合拍」</b>——统一步伐、提醒板眼、庄严节奏，令大众讽诵齐整不乱。</p>
+  </div>
+
+  <div class="sec">
+    <h2 id="today">五、流布与今日</h2>
+    <p>梵呗自魏晋创始，<b>普及齐梁，兴盛隋唐，传承宋元</b>。唐代译场把梵呗列为九种职位之一；盛唐宫廷的七部乐、九部乐、十部乐中都有大量佛曲，寺院俗讲更使佛教音声深入民间。</p>
+    <figure class="inline-fig">
+      <img src="images/fanbei-yueji.jpg" alt="莫高窟第159窟中唐乐伎图">
+      <figcaption>莫高窟第 159 窟 中唐乐伎图（公有领域）——唐代佛教音乐的珍贵图像实证</figcaption>
+    </figure>
+    <p><b>东传</b>：日本僧空海入唐，抄录《鱼山声明谱》（今藏京都东寺），将「变徵」对应日本「变角」、「变宫」对应「变羽」，梵呗遂在日本传唱；圆仁携归《梵呗次第》，成为日本天台宗「声明」的基础文本。</p>
+    <p><b>近代</b>：1930 年代，弘一法师历时三年，往来泉州、厦门诸寺，把口传梵呗逐字标注音韵、凝固为乐谱，成《清凉歌集》；其中的《三宝歌》至今仍是汉传寺院必唱的赞歌。</p>
+    <p class="srcs">主要参考：中国非物质文化遗产网「佛教音乐（鱼山梵呗）」条目 · 聊城市档案馆「鱼山梵呗」 · 中国新闻网释永悟访谈 · 慧皎《高僧传·经师篇》 · 佛教导航《梵呗略考》。</p>
+  </div>
+
+  <div class="sec">
+    <h2 id="how">六、如何诵持</h2>
+    <ul>
+      <li><b>先听后跟</b>：点开任一谱曲页，按 <kbd>▶ 播放</kbd>，先听一遍旋律走向，再跟着哼。</li>
+      <li><b>逐字对位</b>：每个字下方是注音（可关），上方是简谱；<b>无点数字＝中音，上方加点＝高八度</b>。</li>
+      <li><b>气口在句末</b>：句末字自然拖长，不要抢拍；段与段之间留一长呼吸。</li>
+      <li><b>速度可调</b>：初学调到 0.7×—0.8×，熟练后回到 1.0×；页内进度条可点击跳转，方便分段练习。</li>
+      <li><b>以师承为准</b>：这里的谱是<b>自修用的讽诵公式</b>，不是某座寺院的传承唱腔；注音依汉传通行读法，若你的师父另有传授，从师说。</li>
+    </ul>
+  </div>
+
+  <footer>
+    梵呗 · 讽诵谱曲 总导航 <span style="color:#b8860b;">V1.1</span> · 2026-11-01<br>
+    讽诵谱为自修参考，非寺院传承唱腔；注音依汉传通行梵呗，异读字各家不一，请以师承为准。<br>
+    配图取自 Wikimedia Commons（PD / CC0 / CC BY-SA），署名见各图注。
+  </footer>
+</div>
+
+<script>
+  // 预留卡位：点击展开扩展说明
+  var card = document.getElementById('newCard');
+  var hint = document.getElementById('moreHint');
+  function toggle() {
+    hint.style.display = (hint.style.display === 'block') ? 'none' : 'block';
+    if (hint.style.display === 'block') {
+      hint.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+  card.addEventListener('click', toggle);
+  card.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  });
+</script>
+</body>
+</html>

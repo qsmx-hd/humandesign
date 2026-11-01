@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  经咒讽诵谱曲 · 单文件模板（scripture-jianpu-composer 配套）
+  ----------------------------------------------------------------------------
+  用法：把下面 <script> 顶部「配置区」里的示例数据替换成你的经文即可。
+        音频引擎（实时 lookahead 调度）经楞严咒 2621 字 / 23 分钟实测：
+        内存恒定、点击即出声、无 O(N²) 卡死。无需改动。
+  必须替换的占位（搜索 ★REPLACE★）：
+    1) <title> / <h1> / 副标题
+    2) 顶部插图 + 内文插图（公有领域/CC0，放 images/ 目录）
+    3) 关于卡片里的「梵呗介绍」段落
+    4) HUI_ORDER / HUIS / HUI_CONFIG / XIN_SET / PINYIN
+  ============================================================================
+-->
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ★REPLACE★ 经文标题 -->
+<title>往生咒（拔一切业障根本得生净土神咒） · 讽诵谱曲（C 大调五声音阶）</title>
+<style>
+  :root{
+    --ink:#2b2118; --paper:#f7f1e3; --paper2:#efe6d2; --gold:#b8860b;
+    --red:#c0392b; --line:#d8c9a8; --sub:#8a6d3b;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif; line-height:1.7; }
+  header{ padding:28px 20px 18px; text-align:center;
+    background:linear-gradient(180deg,#fbf6ea,#f1e7d2); border-bottom:2px solid var(--line); }
+  header h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.15em;}
+  header h1 .ver{font-size:.7rem; letter-spacing:.05em; color:var(--sub); font-weight:400; vertical-align:middle; margin-left:.5em;}
+  header .meta{font-size:.9rem; color:var(--sub);}
+  .wrap{max-width:920px; margin:0 auto; padding:18px 16px 60px;}
+  .card{ background:var(--paper2); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:16px 0; }
+  h2{font-size:1.15rem; margin:.2em 0 .6em; color:var(--gold); letter-spacing:.08em;}
+  p,li{font-size:.96rem;}
+  .controls{ position:sticky; top:0; z-index:20; background:rgba(247,241,227,.96); backdrop-filter:blur(4px);
+    border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:14px 0;
+    display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; }
+  .controls .grp{display:flex; flex-direction:column; gap:4px;}
+  .controls label{font-size:.78rem; color:var(--sub);}
+  button{ font-family:inherit; font-size:.95rem; cursor:pointer; background:var(--gold); color:#fff; border:none;
+    padding:9px 18px; border-radius:8px; letter-spacing:.05em; transition:.15s; }
+  button:hover{filter:brightness(1.08);}
+  button.ghost{background:#e7dcc2; color:var(--ink);}
+  select, input[type=range]{font-family:inherit; font-size:.9rem;}
+  select{padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:#fff;}
+  .time{font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--sub); min-width:96px;}
+  details{border:1px solid var(--line); border-radius:10px; margin:12px 0; background:#fbf6ea; overflow:hidden;}
+  summary{ cursor:pointer; padding:12px 16px; font-size:1.05rem; font-weight:700;
+    background:linear-gradient(180deg,#f3e8cf,#ecdfc0); letter-spacing:.05em; list-style:none; }
+  summary::-webkit-details-marker{display:none;}
+  summary .mood{font-weight:400; font-size:.82rem; color:var(--sub); margin-left:10px;}
+  .phrase{ display:flex; flex-wrap:wrap; align-items:center; padding:6px 14px; border-bottom:1px dashed #e6dabd; }
+  .phrase:last-child{border-bottom:none;}
+  .cell{ display:inline-flex; flex-direction:column; align-items:center; min-width:2.05em; padding:1px 1px; border-radius:5px; }
+  .cell .py{ font-size:.62rem; color:var(--sub); line-height:1.15; font-family:"Trebuchet MS",sans-serif; letter-spacing:.01em; }
+  .cell .ch{font-size:1.04rem; line-height:1.15;}
+  .cell.rest{ min-width:1.15em; opacity:.6; }
+  .cell.rest .ch{ font-size:.92rem; }
+  .cell.rest .jp{ color:var(--gold); }
+  .cell .jp{ font-size:.66rem; color:var(--sub); line-height:1.1; margin-top:1px; font-family:"Trebuchet MS",sans-serif; }
+  .cell.hi .ch{ color:var(--red); }
+  .cell.cur{ background:#fff3d6; outline:1px solid var(--gold); }
+  .ln{ min-width:2.3em; text-align:right; padding-right:.6em; font-size:.72rem; color:var(--sub);
+    font-variant-numeric:tabular-nums; align-self:center; user-select:none; font-family:"Trebuchet MS",sans-serif; }
+  .bar{height:4px; background:#e0d5b8; border-radius:3px; overflow:hidden; margin:8px 0 0; cursor:pointer;}
+  .bar > i{display:block; height:100%; width:0; background:var(--gold); transition:width .25s linear;}
+  .chk{display:flex; align-items:center; gap:6px; font-size:.85rem; color:var(--ink); cursor:pointer; user-select:none;}
+  .chk input{accent-color:var(--gold); width:16px; height:16px; cursor:pointer;}
+  body.no-py .py{display:none;}
+  body.no-jp .jp{display:none;}
+  body.no-py .cell, body.no-jp .cell{min-width:1.35em;}
+  body.no-py.no-jp .cell{min-width:1.05em;}
+  figure{margin:16px 0; text-align:center;}
+  figure img{ max-width:100%; border-radius:10px; border:1px solid var(--line); box-shadow:0 2px 12px rgba(43,33,24,.10); background:#fff; }
+  figure.hero img{max-height:560px; object-fit:contain;}
+  figure.inline-fig img{max-height:430px; object-fit:contain;}
+  figcaption{font-size:.78rem; color:var(--sub); margin-top:7px; line-height:1.5;}
+  .legend{font-size:.84rem; color:var(--sub);}
+  .hi-demo{color:var(--red); font-weight:700;}
+  #diag{font-size:.82rem; color:var(--sub); margin:6px 2px; min-height:1.2em;}
+  footer{text-align:center; font-size:.8rem; color:var(--sub); margin-top:30px;}
+</style>
+</head>
+<body>
+<header>
+  <!-- ★REPLACE★ 经文标题 + 版本号 -->
+  <h1>往生咒（拔一切业障根本得生净土神咒） · 讽诵谱曲<span class="ver">V2.0</span></h1>
+  <div class="meta">汉传梵呗 · 五声音阶吟唱 · 自修参考</div>
+</header>
+<div class="wrap">
+
+  <!-- ★REPLACE★ 顶部插图（公有领域 / CC0，置于 images/ 目录，随站点提交） -->
+  <figure class="hero">
+    <img src="images/wangsheng-hero.jpg" alt="往生咒（拔一切业障根本得生净土神咒）">
+    <figcaption>《阿弥陀佛来迎图》（日本平安—镰仓，沃尔特斯美术馆藏</figcaption>
+  </figure>
+
+  <div class="card">
+    <h2>关于这份谱曲（先读）</h2>
+    <!-- ★REPLACE★ 梵呗介绍：用 <p> 段落填写，说明什么是梵呗、本谱用什么音阶、怎么唱 -->
+    <p>本谱以汉传丛林常诵《拔一切业障根本得生净土神咒》（通称往生咒，全十四句）为蓝本。前三句为归敬与启咒（南无阿弥多婆夜、哆他伽哆夜、哆地夜他），其后为咒心。归敬段沉稳，咒心段移高八度，显"业障消除、莲华化生"。</p>
+    <p>简谱中无点数字＝中音，数字上方虚点＝高八度。每字一音，句末字拖长。注音依汉传梵呗读音，咒语历来各家读法不一，诵持请以师承为准。</p>
+    <!-- ★REPLACE★ 内文插图（可选） -->
+    <figure class="inline-fig">
+      <img src="images/wangsheng-inline.jpg" alt="往生咒（拔一切业障根本得生净土神咒）">
+      <figcaption>图源 Wikimedia Commons，公有领域）</figcaption>
+    </figure>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="grp">
+      <label>段落</label>
+      <select id="selHui"><!-- 选项由 JS 按 HUI_ORDER 自动生成 --></select>
+    </div>
+    <div class="grp">
+      <label>速度 <span id="spdTxt">1.0×</span></label>
+      <input type="range" id="speed" min="60" max="160" value="100" style="width:130px;">
+    </div>
+    <div class="grp">
+      <label>音量 <span id="volTxt">70</span></label>
+      <input type="range" id="vol" min="0" max="100" value="70" style="width:110px;">
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="playBtn">▶ 播放</button>
+    </div>
+    <div class="grp">
+      <label>&nbsp;</label>
+      <button id="stopBtn" class="ghost">■ 停止</button>
+    </div>
+    <div class="grp">
+      <label>进度（点击进度条可跳转）</label>
+      <div class="time" id="dur">—</div>
+    </div>
+    <div class="grp">
+      <label>显示</label>
+      <div style="display:flex; gap:14px; padding-bottom:6px;">
+        <label class="chk"><input type="checkbox" id="tglPy" checked> 注音</label>
+        <label class="chk"><input type="checkbox" id="tglJp" checked> 简谱</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card legend">
+    <b>简谱图例：</b>
+    宫 <b>1</b> · 商 <b>2</b> · 角 <b>3</b> · 徵 <b>5</b> · 羽 <b>6</b> ＝ C 大调五声音阶；
+    <span class="hi-demo">5</span> 表示高八度（数字上方虚点）。每字一音，句末字拖长。
+  </div>
+
+  <div id="diag">[就绪] 点「▶ 播放」开始讽诵（进度条可点击跳转）</div>
+  <div class="bar"><i id="prog"></i></div>
+  <div id="score"></div>
+
+  <footer>
+    自修参考用，非任何寺院传承唱腔<br>
+    Powered By Kan Man Tang
+  </footer>
+</div>
+
+<script>
+/* =====================================================================
+   配置区（★REPLACE★ 为新经文只需改这里；以下为示例数据，可直接运行）
+   ===================================================================== */
+const VERSION = "V2.0";
+
+/* 段落顺序（会 / 品 / 章……按你的经文结构定） */
+const HUI_ORDER = ["归敬·阿弥陀","咒心·往生"];
+
+/* 各段咒文：每一段是一个"句"数组；每"句"是一个字符串（按字拆） */
+const HUIS = {"归敬·阿弥陀":["南无阿弥多婆夜","哆他伽哆夜","哆地夜他"],"咒心·往生":["阿弥唎都婆毘","阿弥唎哆","悉耽婆毘","阿弥唎哆","毘迦兰帝","阿弥唎哆","毘迦兰多","伽弥腻","伽伽那","枳多迦利","娑婆诃"]};
+
+/* 每段旋律轮廓：
+     motif  = 音阶下标数组（0=宫1 1=商2 2=角3 3=徵5 4=羽6），按字循环取用；
+     cadence = 句末落音下标；reg: 0=中音区 1=高八度；
+     mood = 该段的意境说明（显示在折叠标题后）。 */
+const HUI_CONFIG = {"归敬·阿弥陀":{"motif":[0,2,3,4,3,2,1,0],"cadence":0,"reg":0,"mood":"拔一切业障根本得生净土神咒"},"咒心·往生":{"motif":[0,3,2,3,4,3,2,1],"cadence":0,"reg":1,"mood":"拔一切业障根本得生净土神咒"}};
+
+/* 咒心 / 种子字句（可选）：命中这些整句时用明亮上行旋律。无则填 new Set([]) */
+const XIN_SET = new Set([]);
+const XIN_MOTIF = [0,2,3,4,3,4,2,1];
+const XIN_CAD = 0;
+
+/* 逐字注音表（pypinyin 打底 + 依梵呗读音人工校订；不会的字留空 "" 也可） */
+const PINYIN = {"他":"tuō","伽":"qié","兰":"lán","利":"lì","南":"nā","哆":"duō","唎":"lì","地":"dì","多":"duō","夜":"yè","娑":"suō","婆":"pó","帝":"dì","弥":"mí","悉":"xī","无":"mó","枳":"zhǐ","毘":"pí","耽":"dān","腻":"nì","诃":"hē","迦":"jiā","那":"nà","都":"dū","阿":"ā"};
+
+/* C 大调五声音阶（整体上移八度，落在 C5 区；如需更低可整体减半） */
+const PENTA = [
+  {jp:"1", freq:523.25},
+  {jp:"2", freq:587.33},
+  {jp:"3", freq:659.25},
+  {jp:"5", freq:784.00},
+  {jp:"6", freq:880.00}
+];
+
+/* 标点气口表：标点一律不发声，只占"气口"时长，形成句读。
+   数值 = 时间轴上占据的静默长度（秒）；听感静默还要减去前一字的 0.14s 余韵，
+   故「，」约停 0.16s、「。」约停 0.48s。 */
+const PUNCT = {
+  "。":0.62, "！":0.62, "？":0.62,
+  "；":0.50,
+  "，":0.30, "、":0.24, "：":0.28,
+  "“":0.08, "”":0.08, "‘":0.08, "’":0.08,
+  "「":0.08, "」":0.08, "（":0.08, "）":0.08,
+  "《":0.08, "》":0.08, "—":0.10, "…":0.30
+};
+const IS_MANTRA = true;                 /* 咒语页：保留梵呗异读；散文页：修正破读字 */
+const isPunct = ch => Object.prototype.hasOwnProperty.call(PUNCT, ch);
+const isSpace = ch => /^\s+$/.test(ch);
+/* 取 ci 之后的第一个非空白字符（没有则返回 null） */
+function nextRealChar(chars, ci){
+  for(let i=ci+1;i<chars.length;i++){ if(!isSpace(chars[i])) return chars[i]; }
+  return null;
+}
+/* 逐字注音的上下文修正（破读字 / 梵呗异读） */
+function pyOf(ch, prev, next){
+  if(ch === "无") return (prev === "南") ? "mó" : "wú";    /* 南无 nā mó；其余读 wú */
+  if(IS_MANTRA) return PINYIN[ch] || "";                    /* 咒语页：其余保留梵呗读音 */
+  if(ch === "若") return (prev === "般") ? "rě" : "ruò";    /* 般若 bō rě；其余读 ruò */
+  if(ch === "种") return (next === "善") ? "zhòng" : "zhǒng";
+  if(ch === "重") return ((prev === "尊" || next === "宝") ? "zhòng" : "chóng");
+  if(ch === "长") return ((next === "舌" || next === "行") ? "cháng" : "zhǎng");
+  return PINYIN[ch] || "";
+}
+
+/* =====================================================================
+   以下为通用引擎（经实测，无需改动）
+   ===================================================================== */
+/* ===================== 生成音符 ===================== */
+const NOTES = [];
+const NOTE_IDX = new Map();          // "hui|pi|ci" → NOTES 下标（渲染谱面时 O(1) 绑定）
+function genNotes(){
+  for(const hui of HUI_ORDER){
+    const cfg = HUI_CONFIG[hui];
+    HUIS[hui].forEach((phrase, pi)=>{
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : cfg.motif;
+      const cad = isXin ? XIN_CAD : cfg.cadence;
+      const reg = isXin ? 1 : cfg.reg;
+      let mi = 0;                                   /* 实字序号（标点不占音阶位置） */
+      chars.forEach((ch, ci)=>{
+        if(isSpace(ch)) return;                     /* 空白：整格跳过 */
+        if(isPunct(ch)){                            /* 标点：休止（气口），不发声 */
+          NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
+          NOTES.push({ hui, pi, ci, ch, freq:0, jp:"0", hi:false,
+                       rest:true, dur:PUNCT[ch], el:null });
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const isHalf = (!isLast && isPunct(nxt) && PUNCT[nxt] >= 0.50);
+        const deg = isLast ? cad : motif[mi % motif.length];
+        const p = PENTA[deg];
+        NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
+        NOTES.push({
+          hui, pi, ci, ch,
+          freq: p.freq * (reg===1 ? 2 : 1),
+          jp:p.jp, hi:(reg===1),
+          dur: isLast ? 0.85 : (isHalf ? 0.66 : 0.42),
+          el:null
+        });
+        mi++;
+      });
+    });
+  }
+}
+
+/* ===================== 渲染谱面 ===================== */
+function render(){
+  const score = document.getElementById("score");
+  const frag = document.createDocumentFragment();
+  let ln = 0;                                    // 全咒连续行号
+  for(const hui of HUI_ORDER){
+    const det = document.createElement("details");
+    det.open = (hui === HUI_ORDER[0]);
+    det.dataset.hui = hui;
+    const sum = document.createElement("summary");
+    const mood = (HUI_CONFIG[hui] && HUI_CONFIG[hui].mood) || "";
+    sum.innerHTML = hui + (mood ? ' <span class="mood">'+mood+'</span>' : '');
+    det.appendChild(sum);
+    HUIS[hui].forEach((phrase, pi)=>{
+      const pdiv = document.createElement("div");
+      pdiv.className = "phrase";
+      const lnEl = document.createElement("span");     // 行号
+      lnEl.className = "ln"; lnEl.textContent = String(++ln).padStart(3,"0");
+      pdiv.appendChild(lnEl);
+      const chars = Array.from(phrase);
+      const isXin = XIN_SET.has(phrase);
+      const motif = isXin ? XIN_MOTIF : HUI_CONFIG[hui].motif;
+      const cad = isXin ? XIN_CAD : HUI_CONFIG[hui].cadence;
+      const reg = isXin ? 1 : HUI_CONFIG[hui].reg;
+      let mi = 0, prevCh = null;
+      chars.forEach((ch, ci)=>{
+        if(isSpace(ch)) return;
+        if(isPunct(ch)){                                   /* 标点：气口格，简谱记 0 */
+          const cell = document.createElement("span");
+          cell.className = "cell rest" + ((reg===1) ? " hi" : "");
+          const c0 = document.createElement("span"); c0.className="py"; c0.textContent = "";
+          const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
+          const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = "0";
+          cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
+          const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+          if(idx !== undefined) NOTES[idx].el = cell;
+          pdiv.appendChild(cell);
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const deg = isLast ? cad : motif[mi % motif.length];
+        const cell = document.createElement("span");
+        cell.className = "cell" + ((reg===1) ? " hi" : "");
+        const c0 = document.createElement("span"); c0.className="py"; c0.textContent = pyOf(ch, prevCh, nxt);
+        const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;               // 汉字
+        const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;    // 简谱
+        cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
+        const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+        if(idx !== undefined) NOTES[idx].el = cell;
+        pdiv.appendChild(cell);
+        mi++; prevCh = ch;
+      });
+      det.appendChild(pdiv);
+    });
+    frag.appendChild(det);
+  }
+  score.innerHTML = "";
+  score.appendChild(frag);
+}
+
+/* ===================== 音频引擎：实时 lookahead 调度 =====================
+   关键设计（对照 OfflineAudioContext 的 O(N²) 陷阱）：
+   · ConvolverNode 混响器【全局唯一、常驻】，不为每个音符建节点；
+   · 每个音符只建 2 个 osc + 2 个 gain，osc.stop() 后由 onended 主动 disconnect → 常驻节点数恒定；
+   · 定时器只负责"把未来 2 秒的音符挂上去"，真正的发声时刻由音频硬件时钟决定。
+   复杂度 = O(音符数)，与音频总时长无关 —— 2621 字 / 23 分钟也秒开。            */
+const LOOKAHEAD = 2.0;        // 预调度窗口（秒）：覆盖后台标签页定时器节流
+const TICK_MS  = 250;         // 定时器唤醒间隔
+
+let ctx=null, master=null, wetGain=null, conv=null;
+let vol = 0.7;
+
+function ensureCtx(){
+  if(!ctx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = vol;
+    master.connect(ctx.destination);
+    // 混响：全局唯一实例
+    conv = ctx.createConvolver();
+    conv.buffer = makeReverbBuf(ctx, 1.8, 2.6);
+    wetGain = ctx.createGain();
+    wetGain.gain.value = 0.18;
+    master.connect(conv); conv.connect(wetGain); wetGain.connect(ctx.destination);
+  }
+  if(ctx.state !== "running" && ctx.resume) { try{ ctx.resume(); }catch(e){} }
+  // iOS/Safari 解锁：必须在用户手势内于真实音频图上播出一帧静音
+  try{
+    const s = ctx.createBufferSource();
+    s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    s.connect(master); s.start(0);
+  }catch(e){}
+  return ctx;
+}
+function makeReverbBuf(c, dur, decay){
+  const rate=c.sampleRate, len=Math.floor(rate*dur);
+  const buf=c.createBuffer(1,len,rate);
+  const d=buf.getChannelData(0);
+  let lp=0;
+  for(let i=0;i<len;i++){
+    const n=Math.random()*2-1;
+    lp += (n-lp)*0.22;                       // 一阶低通，削掉高频白噪嘶声
+    d[i]=lp*Math.pow(1-i/len,decay);
+  }
+  return buf;
+}
+/* 单个音符：基频正弦 + 八度泛音，钟磬式起落包络 */
+function scheduleNote(freq, when, dur){
+  const o1=ctx.createOscillator(); o1.type="sine"; o1.frequency.value=freq;
+  const o2=ctx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*2;
+  const g=ctx.createGain();  const peak=0.22;
+  const g2=ctx.createGain(); g2.gain.value=0.06;
+  g.gain.setValueAtTime(0.0001, when);
+  g.gain.exponentialRampToValueAtTime(peak, when+0.045);
+  g.gain.exponentialRampToValueAtTime(0.0001, when+dur+0.14);
+  o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+  const at=when, end=when+dur+0.3;
+  o1.start(at); o2.start(at); o1.stop(end); o2.stop(end);
+  const rec={o1,o2,g,g2,at};
+  pending.push(rec);
+  o1.onended=()=>{ try{g.disconnect(); g2.disconnect();}catch(e){}
+    const i=pending.indexOf(rec); if(i>=0) pending.splice(i,1); };
+}
+
+/* ===================== 播放状态 ===================== */
+let tl=[];                 // 时间轴（1× 基准）：{n, t, dur}
+let totalBase=0;           // 1× 总时长
+let playing=false, paused=false;
+let rate=1.0;              // 变速倍率
+let startCtx=0;            // 基准时间轴 0 点 对应的 ctx.currentTime
+let schedIdx=0, hlIdx=0;   // 下一个待调度 / 待高亮 的音符下标
+let pending=[];            // 已调度但尚未响完的音符（用于暂停/停止时掐断）
+let timer=null, rafId=null;
+let lastHuiShown=null;     // 当前显示在诊断行上的段名（换段才刷新）
+
+function selectedNotes(){
+  const sel = document.getElementById("selHui").value;
+  if(sel==="all") return NOTES;
+  if(sel==="xin") return NOTES.filter(n=>XIN_SET.has(HUIS[n.hui][n.pi]));
+  return NOTES.filter(n=>n.hui===sel);
+}
+/* 构建 1× 基准时间轴：0.6s 起音预留 + 字间 0.04 + 句间 0.34 + 段间 1.15 */
+function buildTimeline(notes){
+  const out=[]; let t=0.6, prevHui=null, prevPi=null, prevRest=false;
+  for(const n of notes){
+    let gap;
+    if(n.pi!==prevPi){ gap=(n.hui!==prevHui)?1.15:0.34; }   /* 换句 / 换段 */
+    else { gap = (n.rest || prevRest) ? 0 : 0.04; }         /* 气口前后不再额外加间隔 */
+    t+=gap;
+    out.push({n, t, dur:n.dur});
+    t+=n.dur; prevHui=n.hui; prevPi=n.pi; prevRest=!!n.rest;
+  }
+  return out;
+}
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));
+  return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");
+}
+function updateDur(){
+  const d = tl.length ? (tl[tl.length-1].t + tl[tl.length-1].dur)/rate : 0;
+  document.getElementById("dur").textContent = d ? fmt(d) : "—";
+}
+function clearHighlight(){
+  if(hlIdx>0 && hlIdx<=tl.length && tl[hlIdx-1] && tl[hlIdx-1].n.el) tl[hlIdx-1].n.el.classList.remove("cur");
+}
+function hardClearHighlight(){
+  for(const n of NOTES) if(n.el) n.el.classList.remove("cur");
+}
+function killPending(fromTime){
+  for(const p of pending){
+    try{ p.o1.stop(fromTime); }catch(e){}
+    try{ p.o2.stop(fromTime); }catch(e){}
+  }
+  pending.length = 0;
+}
+function stopEngine(){
+  if(timer){ clearInterval(timer); timer=null; }
+  if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  if(ctx) killPending(ctx.currentTime);
+  playing=false; paused=false; lastHuiShown=null;
+  hardClearHighlight();
+  document.getElementById("playBtn").textContent="▶ 播放";
+  document.getElementById("prog").style.width="0%";
+}
+
+/* 调度循环：只挂未来 LOOKAHEAD 秒内的音符 */
+function pump(){
+  if(!playing || !ctx) return;
+  const now = ctx.currentTime;
+  const horizon = now + LOOKAHEAD;
+  while(schedIdx < tl.length){
+    const at = startCtx + tl[schedIdx].t / rate;
+    if(at > horizon) break;
+    if(!tl[schedIdx].n.rest)                                /* 休止（标点气口）：不发声 */
+      scheduleNote(tl[schedIdx].n.freq, Math.max(at, now+0.02), tl[schedIdx].dur / rate);
+    schedIdx++;
+  }
+  if(schedIdx >= tl.length){
+    const endAt = startCtx + (totalBase)/rate + 1.2;
+    if(now > endAt){ finish(); return; }
+  }
+}
+/* 高亮跟随（RAF） */
+function tickHL(){
+  if(rafId) cancelAnimationFrame(rafId);
+  const step=()=>{
+    if(!playing || !ctx) return;
+    const p = (ctx.currentTime - startCtx) * rate;       // 当前在 1× 时间轴上的位置
+    while(hlIdx < tl.length && tl[hlIdx].t <= p){
+      clearHighlight();
+      const cell = tl[hlIdx].n.el;
+      if(cell){
+        cell.classList.add("cur");
+        const det = cell.closest("details");
+        if(det && !det.open) det.open = true;
+        const r = cell.getBoundingClientRect();
+        if(r.top < 90 || r.bottom > window.innerHeight - 40){
+          cell.scrollIntoView({block:"center", behavior:"smooth"});
+        }
+      }
+      hlIdx++;
+    }
+    const pos = Math.max(0, Math.min(p, totalBase));
+    document.getElementById("prog").style.width = (totalBase? (pos/totalBase*100):0).toFixed(2)+"%";
+    document.getElementById("dur").textContent = fmt(pos/rate) + " / " + fmt(totalBase/rate);
+    if(hlIdx>0 && tl[hlIdx-1].n.hui !== lastHuiShown){          // 换段时才写一次 DOM
+      lastHuiShown = tl[hlIdx-1].n.hui;
+      document.getElementById("diag").innerHTML =
+        "[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+    }
+    rafId=requestAnimationFrame(step);
+  };
+  rafId=requestAnimationFrame(step);
+}
+function finish(){
+  stopEngine();
+  const d=document.getElementById("diag");
+  d.innerHTML="[完成] 本段讽诵完毕（"+fmt(totalBase/rate)+"）";
+}
+
+/* 重新基准化：变速 / 跳转 / 恢复播放 都用它 */
+function rebase(basePos, lead){
+  const now = ctx.currentTime;
+  startCtx = now + lead - basePos/rate;
+  killPending(now);
+  schedIdx = 0; while(schedIdx < tl.length && tl[schedIdx].t < basePos) schedIdx++;
+  hlIdx = schedIdx;
+  hardClearHighlight();
+}
+
+/* ===================== 用户操作 ===================== */
+function play(){
+  const diag=document.getElementById("diag");
+  ensureCtx();                                   // 必须在手势内同步调用（iOS 解锁）
+
+  if(playing && !paused){                        // → 暂停
+    paused=true;
+    const p=(ctx.currentTime-startCtx)*rate;
+    pausedAt=p;
+    killPending(ctx.currentTime);
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+    document.getElementById("playBtn").textContent="▶ 继续";
+    diag.innerHTML="[暂停] 停在 "+fmt(p/rate)+" · 再点「▶ 继续」";
+    return;
+  }
+  if(playing && paused){                         // → 继续
+    paused=false;
+    rebase(pausedAt, 0.25);
+    startTimer();
+    document.getElementById("playBtn").textContent="⏸ 暂停";
+    diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+(curHuiLabel())+"</b>";
+    return;
+  }
+  // → 全新播放
+  const sel=document.getElementById("selHui").value;
+  const notes=selectedNotes();
+  if(!notes.length){ diag.innerHTML='<span style="color:#c0392b">⚠ 该段没有音符</span>'; return; }
+  stopEngine();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  rate = document.getElementById("speed").value/100;
+  schedIdx=0; hlIdx=0;
+  playing=true; paused=false;
+  startCtx = ctx.currentTime + 0.35;             // 0.35s 起音预留
+  startTimer();
+  document.getElementById("playBtn").textContent="⏸ 暂停";
+  updateDur();
+  lastHuiShown = tl[0].n.hui;
+  diag.innerHTML="[讽诵中] 引擎=实时调度 · 第 <b>"+lastHuiShown+"</b> · 共 "+fmt(totalBase/rate);
+  setTimeout(()=>{
+    if(playing && ctx && ctx.state!=="running"){
+      diag.innerHTML='<span style="color:#c0392b">⚠ 音频未激活（'+ctx.state+'），请再点一次「▶ 播放」</span>';
+    }
+  },1500);
+}
+let pausedAt=0;
+function startTimer(){
+  if(timer) clearInterval(timer);
+  pump();
+  timer=setInterval(pump, TICK_MS);
+  tickHL();
+}
+function curHuiLabel(){
+  const i = Math.min(hlIdx, tl.length-1);
+  return (i>=0 && tl[i]) ? tl[i].n.hui : "—";
+}
+function stopAll(){
+  stopEngine();
+  schedIdx=0; hlIdx=0; pausedAt=0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[已停止] 点「▶ 播放」重新开始";
+}
+/* 跳转：点击进度条定位到任意位置（"播放进度可以自己定义"） */
+function seekTo(ratio){
+  if(!playing || !tl.length || !ctx) return;
+  const basePos = Math.max(0, Math.min(1, ratio)) * totalBase;
+  rebase(basePos, 0.05);
+  document.getElementById("diag").innerHTML="[跳转] 已定位到 "+fmt(basePos/rate);
+}
+
+/* ===================== 事件绑定 ===================== */
+genNotes();
+render();
+tl = buildTimeline(NOTES);
+totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+rate = document.getElementById("speed").value/100;
+updateDur();
+
+/* 段落下拉：按 HUI_ORDER 自动生成；有咒心则追加"仅咒心" */
+(function buildSelect(){
+  const sel=document.getElementById("selHui");
+  const opts=['<option value="all">全咒（全部段落 + 咒心）</option>'];
+  for(const h of HUI_ORDER) opts.push('<option value="'+h+'">'+h+'</option>');
+  if(XIN_SET.size) opts.push('<option value="xin">仅咒心</option>');
+  sel.innerHTML=opts.join("");
+})();
+
+document.getElementById("playBtn").addEventListener("click", play);
+document.getElementById("stopBtn").addEventListener("click", stopAll);
+
+document.getElementById("selHui").addEventListener("change", ()=>{
+  stopEngine(); schedIdx=0; hlIdx=0; pausedAt=0;
+  const notes=selectedNotes();
+  tl=buildTimeline(notes);
+  totalBase = tl.length ? tl[tl.length-1].t + tl[tl.length-1].dur : 0;
+  updateDur();
+  document.getElementById("diag").innerHTML="[就绪] 已切到「"+document.getElementById("selHui").selectedOptions[0].text+"」· 共 "+fmt(totalBase/rate);
+});
+
+let rateTimer=null;
+document.getElementById("speed").addEventListener("input", (e)=>{
+  const v=e.target.value/100;
+  document.getElementById("spdTxt").textContent=v.toFixed(2)+"×";
+  if(playing && !paused && ctx){
+    const p=(ctx.currentTime-startCtx)*rate;     // 旧倍率下的基准位置
+    rate=v;
+    clearTimeout(rateTimer);
+    rateTimer=setTimeout(()=>{
+      if(!playing||!ctx) return;
+      rebase(p, 0.15);
+    },120);
+  }else{
+    rate=v;
+  }
+  updateDur();
+});
+document.getElementById("vol").addEventListener("input", (e)=>{
+  vol=e.target.value/100;
+  document.getElementById("volTxt").textContent=e.target.value;
+  if(master) master.gain.value=vol;
+});
+document.getElementById("tglPy").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-py", !e.target.checked);
+});
+document.getElementById("tglJp").addEventListener("change", (e)=>{
+  document.body.classList.toggle("no-jp", !e.target.checked);
+});
+document.querySelector(".bar").addEventListener("click", (e)=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  seekTo((e.clientX-r.left)/r.width);
+});
+
+/* 从后台切回时确保音频上下文是活的 */
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && ctx && ctx.state!=="running" && ctx.resume){ try{ ctx.resume(); }catch(e){} }
+});
+window.addEventListener("error", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [JS错误]'+((e&&e.message)||"未知")+'</span>';
+});
+window.addEventListener("unhandledrejection", e=>{
+  const d=document.getElementById("diag");
+  if(d) d.innerHTML+='<span style="color:#c0392b"> [Promise错误]'+((e.reason&&e.reason.message)||e.reason||"未知")+'</span>';
+});
+</script>
+</body>
+</html>

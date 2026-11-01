@@ -71,6 +71,9 @@
     font-family:"Trebuchet MS",sans-serif; letter-spacing:.01em;
   }
   .cell .ch{font-size:1.04rem; line-height:1.15;}
+  .cell.rest{ min-width:1.15em; opacity:.6; }
+  .cell.rest .ch{ font-size:.92rem; }
+  .cell.rest .jp{ color:var(--gold); }
   .cell .jp{
     font-size:.66rem; color:var(--sub); line-height:1.1; margin-top:1px;
     font-family:"Trebuchet MS",sans-serif;
@@ -112,7 +115,7 @@
 </head>
 <body>
 <header>
-  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V3.2</span></h1>
+  <h1>楞严咒 · 五会讽诵谱曲<span class="ver">V3.3</span></h1>
   <div class="meta">《大佛顶首楞严经》卷七 · 全咒 554 句（五会 + 咒心）· 新譜梵呗讽诵调</div>
 </header>
 
@@ -243,7 +246,7 @@
            面板新增「注音」「简谱」两个显示开关，可各自显隐；
         ③ 置两张公有领域/CC0 楞严咒图：敦煌藏经洞《大佛顶陀罗尼》版画（公有领域）、
            《禅门日诵》首页楞严咒（CC0），并附说明。归档 lengyanzhou-shurangama-mantra.v9.html（=V3.0）。
-   V3.2（2026.11.01）依通行梵呗校订字形与标注：
+   V3.3（2026.11.01）依通行梵呗校订字形与标注：
         ① 经中全部「吽」依流通本改为「𤙖」，注音 xìn（第4声），PINYIN 表同步；
         ② 删除两处图片版权标注「（公有领域）」「（CC0）」（图注只保留内容说明）。
    ==================================================== */
@@ -280,6 +283,36 @@ const PENTA = [
   {jp:"6", freq:880.00}
 ];
 
+/* 标点气口表：标点一律不发声，只占"气口"时长，形成句读。
+   数值 = 时间轴上占据的静默长度（秒）；听感静默还要减去前一字的 0.14s 余韵，
+   故「，」约停 0.16s、「。」约停 0.48s。 */
+const PUNCT = {
+  "。":0.62, "！":0.62, "？":0.62,
+  "；":0.50,
+  "，":0.30, "、":0.24, "：":0.28,
+  "“":0.08, "”":0.08, "‘":0.08, "’":0.08,
+  "「":0.08, "」":0.08, "（":0.08, "）":0.08,
+  "《":0.08, "》":0.08, "—":0.10, "…":0.30
+};
+const IS_MANTRA = true;                 /* 咒语页：保留梵呗异读；散文页：修正破读字 */
+const isPunct = ch => Object.prototype.hasOwnProperty.call(PUNCT, ch);
+const isSpace = ch => /^\s+$/.test(ch);
+/* 取 ci 之后的第一个非空白字符（没有则返回 null） */
+function nextRealChar(chars, ci){
+  for(let i=ci+1;i<chars.length;i++){ if(!isSpace(chars[i])) return chars[i]; }
+  return null;
+}
+/* 逐字注音的上下文修正（破读字 / 梵呗异读） */
+function pyOf(ch, prev, next){
+  if(ch === "无") return (prev === "南") ? "mó" : "wú";    /* 南无 nā mó；其余读 wú */
+  if(IS_MANTRA) return PINYIN[ch] || "";                    /* 咒语页：其余保留梵呗读音 */
+  if(ch === "若") return (prev === "般") ? "rě" : "ruò";    /* 般若 bō rě；其余读 ruò */
+  if(ch === "种") return (next === "善") ? "zhòng" : "zhǒng";
+  if(ch === "重") return ((prev === "尊" || next === "宝") ? "zhòng" : "chóng");
+  if(ch === "长") return ((next === "舌" || next === "行") ? "cháng" : "zhǎng");
+  return PINYIN[ch] || "";
+}
+
 /* 单字注音表（pypinyin 打底 + 依汉传通行梵呗读音人工校订异读字） */
 const PINYIN = {"丁":"dīng","丈":"zhàng","三":"sān","业":"yè","严":"yán","丹":"dān","主":"zhǔ","乂":"yì","么":"mó","乌":"wū","乏":"fá","什":"shí","他":"tuō","伐":"fá","伽":"qié","佉":"qū","佛":"fó","你":"nǐ","侄":"zhí","俱":"jù","僧":"sēng","儜":"níng","兔":"tù","具":"jù","写":"xiě","冰":"bīng","凌":"líng","刍":"chú","利":"lì","制":"zhì","刹":"chà","刺":"là","剌":"là","剑":"jiàn","勃":"bó","单":"dān","南":"nā","卢":"lú","印":"yìn","叉":"chā","叠":"dié","叱":"chì","史":"shǐ","吉":"jí","吠":"fèi","𤙖":"xìn","呼":"hū","咄":"duō","咒":"zhòu","咜":"tuō","咤":"zhà","哆":"duō","唎":"lì","唠":"láo","唵":"ǎn","商":"shāng","啒":"gǔ","啰":"là","喃":"nán","喝":"hē","喻":"yù","嗔":"chēn","噜":"lū","嚧":"lú","因":"yīn","地":"dì","坠":"zhuì","埵":"duǒ","堙":"yīn","多":"duō","夜":"yè","失":"shī","头":"tóu","夷":"yí","奢":"shē","女":"nǚ","奴":"nú","姥":"mǔ","娑":"suō","婆":"pó","婢":"bì","宅":"zhái","室":"shì","密":"mì","尸":"shī","尼":"ní","岐":"qí","崩":"bēng","布":"bù","师":"shī","帝":"dì","常":"cháng","干":"gān","底":"dǐ","度":"dù","建":"jiàn","弊":"bì","引":"yǐn","弥":"mí","弭":"mǐ","忏":"chàn","忙":"máng","怛":"dá","怜":"lián","悉":"xī","惮":"dàn","慕":"mù","战":"zhàn","房":"fáng","扇":"shàn","托":"tuō","扬":"yáng","折":"zhé","担":"dān","拏":"ná","持":"chí","捺":"nà","掘":"jué","提":"tí","揭":"jiē","摩":"mó","播":"bō","擅":"shàn","敛":"liǎn","文":"wén","斫":"zhuó","无":"mó","昙":"tán","昵":"nì","普":"pǔ","曳":"yè","曼":"màn","末":"mò","条":"tiáo","枳":"zhǐ","柱":"zhù","树":"shù","栗":"lì","梵":"fàn","楞":"léng","槃":"pán","檀":"tán","殊":"shū","母":"mǔ","比":"bǐ","毕":"bì","毖":"bì","毗":"pí","毘":"pí","汉":"hàn","沙":"shā","波":"bō","泥":"ní","泮":"pàn","涩":"sè","演":"yǎn","点":"diǎn","牟":"móu","犁":"lí","狼":"láng","瑟":"sè","瓢":"piáo","瓮":"wèng","甖":"yīng","略":"lüè","盎":"àng","盘":"pán","目":"mù","瞋":"chēn","瞻":"zhān","知":"zhī","礼":"lǐ","社":"shè","祇":"qí","离":"lí","私":"sī","税":"shuì","稚":"zhì","突":"tū","粹":"cuì","素":"sù","索":"suǒ","继":"jì","绮":"qǐ","缚":"fù","罔":"wǎng","罗":"luó","羊":"yáng","羯":"jié","翳":"yì","者":"zhě","耆":"qí","耶":"yé","耽":"dān","肆":"sì","胝":"zhī","腾":"téng","舍":"shě","般":"bō","苏":"sū","若":"rě","茶":"chá","药":"yào","菟":"tú","菩":"pú","萨":"sà","蓝":"lán","蔑":"miè","薄":"bó","薩":"sà","藐":"miǎo","虎":"hǔ","补":"bǔ","袪":"qū","西":"xī","视":"shì","誓":"shì","讫":"qì","诃":"hē","谜":"mí","谤":"bàng","质":"zhì","赧":"nǎn","赭":"zhě","跋":"bá","跢":"duō","路":"lù","车":"chē","输":"shū","辫":"biàn","达":"dá","迄":"qì","迟":"chí","迦":"jiā","逹":"dá","逻":"luó","遮":"zhē","那":"nà","邬":"wū","部":"bù","都":"dū","酰":"xī","野":"yě","鉢":"bō","钐":"shān","钳":"qián","钵":"bō","闭":"bì","闼":"tà","阇":"shé","阿":"ā","陀":"tuó","隶":"lì","难":"nán","雍":"yōng","革":"gé","鞞":"pí","顿":"dùn","颇":"pō","频":"pín","鸠":"jiū","鸡":"jī","麽":"mó","鼻":"bí"};
 
@@ -295,18 +328,29 @@ function genNotes(){
       const motif = isXin ? XIN_MOTIF : cfg.motif;
       const cad = isXin ? XIN_CAD : cfg.cadence;
       const reg = isXin ? 1 : cfg.reg;
+      let mi = 0;                                   /* 实字序号（标点不占音阶位置） */
       chars.forEach((ch, ci)=>{
-        const isLast = (ci === chars.length-1);
-        const deg = isLast ? cad : motif[ci % motif.length];
+        if(isSpace(ch)) return;                     /* 空白：整格跳过 */
+        if(isPunct(ch)){                            /* 标点：休止（气口），不发声 */
+          NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
+          NOTES.push({ hui, pi, ci, ch, freq:0, jp:"0", hi:false,
+                       rest:true, dur:PUNCT[ch], el:null });
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const isHalf = (!isLast && isPunct(nxt) && PUNCT[nxt] >= 0.50);
+        const deg = isLast ? cad : motif[mi % motif.length];
         const p = PENTA[deg];
         NOTE_IDX.set(hui+"|"+pi+"|"+ci, NOTES.length);
         NOTES.push({
           hui, pi, ci, ch,
           freq: p.freq * (reg===1 ? 2 : 1),
           jp:p.jp, hi:(reg===1),
-          dur: isLast ? 0.85 : 0.42,
+          dur: isLast ? 0.85 : (isHalf ? 0.66 : 0.42),
           el:null
         });
+        mi++;
       });
     });
   }
@@ -336,18 +380,34 @@ function render(){
       const motif = isXin ? XIN_MOTIF : HUI_CONFIG[hui].motif;
       const cad = isXin ? XIN_CAD : HUI_CONFIG[hui].cadence;
       const reg = isXin ? 1 : HUI_CONFIG[hui].reg;
+      let mi = 0, prevCh = null;
       chars.forEach((ch, ci)=>{
-        const isLast = (ci === chars.length-1);
-        const deg = isLast ? cad : motif[ci % motif.length];
+        if(isSpace(ch)) return;
+        if(isPunct(ch)){                                   /* 标点：气口格，简谱记 0 */
+          const cell = document.createElement("span");
+          cell.className = "cell rest" + ((reg===1) ? " hi" : "");
+          const c0 = document.createElement("span"); c0.className="py"; c0.textContent = "";
+          const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;
+          const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = "0";
+          cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
+          const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
+          if(idx !== undefined) NOTES[idx].el = cell;
+          pdiv.appendChild(cell);
+          return;
+        }
+        const nxt = nextRealChar(chars, ci);
+        const isLast = (nxt === null);
+        const deg = isLast ? cad : motif[mi % motif.length];
         const cell = document.createElement("span");
         cell.className = "cell" + ((reg===1) ? " hi" : "");
-        const c0 = document.createElement("span"); c0.className="py"; c0.textContent = PINYIN[ch]||"";   // 拼音
+        const c0 = document.createElement("span"); c0.className="py"; c0.textContent = pyOf(ch, prevCh, nxt);
         const c1 = document.createElement("span"); c1.className="ch"; c1.textContent = ch;               // 汉字
         const c2 = document.createElement("span"); c2.className="jp"; c2.textContent = PENTA[deg].jp;    // 简谱
         cell.appendChild(c0); cell.appendChild(c1); cell.appendChild(c2);
         const idx = NOTE_IDX.get(hui+"|"+pi+"|"+ci);
         if(idx !== undefined) NOTES[idx].el = cell;
         pdiv.appendChild(cell);
+        mi++; prevCh = ch;
       });
       det.appendChild(pdiv);
     });
@@ -440,13 +500,14 @@ function selectedNotes(){
 }
 /* 构建 1× 基准时间轴：0.6s 起音预留 + 字间 0.04 + 句间 0.34 + 会间 1.15 */
 function buildTimeline(notes){
-  const out=[]; let t=0.6, prevHui=null, prevPi=null;
+  const out=[]; let t=0.6, prevHui=null, prevPi=null, prevRest=false;
   for(const n of notes){
-    let gap=0.04;
-    if(n.pi!==prevPi){ gap=(n.hui!==prevHui)?1.15:0.34; }
+    let gap;
+    if(n.pi!==prevPi){ gap=(n.hui!==prevHui)?1.15:0.34; }   /* 换句 / 换段 */
+    else { gap = (n.rest || prevRest) ? 0 : 0.04; }         /* 气口前后不再额外加间隔 */
     t+=gap;
     out.push({n, t, dur:n.dur});
-    t+=n.dur; prevHui=n.hui; prevPi=n.pi;
+    t+=n.dur; prevHui=n.hui; prevPi=n.pi; prevRest=!!n.rest;
   }
   return out;
 }
@@ -489,7 +550,8 @@ function pump(){
   while(schedIdx < tl.length){
     const at = startCtx + tl[schedIdx].t / rate;
     if(at > horizon) break;
-    scheduleNote(tl[schedIdx].n.freq, Math.max(at, now+0.02), tl[schedIdx].dur / rate);
+    if(!tl[schedIdx].n.rest)                                /* 休止（标点气口）：不发声 */
+      scheduleNote(tl[schedIdx].n.freq, Math.max(at, now+0.02), tl[schedIdx].dur / rate);
     schedIdx++;
   }
   if(schedIdx >= tl.length){
