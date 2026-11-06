@@ -171,7 +171,7 @@ tr.sel:hover td{background:#F5DFC0}
 .hex{display:inline-block;vertical-align:middle;width:34px}
 .hex svg{display:block}
 
-/* ——— V7：伏羲序圆图（曼陀罗轮盘） ——— */
+/* ——— V7/V8：曼陀罗轮盘（连续环=标准 Rave 环序 / 折返=伏羲圆图） ——— */
 .wheel-wrap{background:var(--card);border:1px solid var(--line);border-radius:10px;
   padding:16px;margin-bottom:14px}
 .wheel-stage{position:relative;max-width:760px;margin:0 auto}
@@ -261,7 +261,7 @@ footer .pwr{display:block;margin-top:8px;color:var(--accent);font-weight:500;let
 <div class="wrap">
 <header>
   <h1>64 闸门 · 易经卦象语义距离分级表<span class="badge" id="vBadge"></span></h1>
-  <div class="sub">判准：<b>卦名 → Ra 主题名</b> 的语义距离（非卦辞注解层）。编号沿用文王卦序，轮盘排列为伏羲（二进制）序。底本：Wilhelm-Baynes 英译。</div>
+  <div class="sub">判准：<b>卦名 → Ra 主题名</b> 的语义距离（非卦辞注解层）。编号沿用文王卦序，轮盘排列为人类图曼陀罗环序（41 起宝瓶 2°，V8 纠错）。底本：Wilhelm-Baynes 英译。</div>
 </header>
 
 <h2>分级判准</h2>
@@ -297,11 +297,11 @@ footer .pwr{display:block;margin-top:8px;color:var(--accent);font-weight:500;let
   <div class="scatter-legend" id="legend"></div>
 </div>
 
-<h2>伏羲序圆图 · 曼陀罗轮盘</h2>
+<h2>曼陀罗轮盘 · 标准 Rave 环序</h2>
 <div class="wheel-wrap">
   <div class="sortbar" style="justify-content:center">
     <span class="sortbar-lb">排布方式</span>
-    <button id="wSeq" class="sbtn" onclick="setWheel('seq')">连续环（顺时针 1→64）</button>
+    <button id="wSeq" class="sbtn" onclick="setWheel('seq')">连续环（曼陀罗轮盘序）</button>
     <button id="wFold" class="sbtn" onclick="setWheel('fold')">八宫折返（伏羲圆图）</button>
     <span class="sortbar-note" id="wheelNote"></span>
   </div>
@@ -320,12 +320,12 @@ footer .pwr{display:block;margin-top:8px;color:var(--accent);font-weight:500;let
   <div class="wheel-legend" id="wheelLegend"></div>
 
   <div class="mstrip">
-    <div class="ms-t" id="msTitle">曼陀罗轮盘序（＝伏羲序 1→64 对应的闸门编号）</div>
+    <div class="ms-t" id="msTitle">曼陀罗轮盘序（标准 Rave 环序，41 起宝瓶 2°）</div>
     <div id="msBody"></div>
   </div>
 
   <div class="hint" style="margin-top:10px">
-    <b>怎么读：</b>外圈 64 格＝64 个闸门，格内大字是<b>闸门编号（文王序）</b>，小字是中文卦名；顺时针依次读下去，得到的编号序列 <b>1 → 43 → 14 → 34 → 9 → 5 → 26 → 11 → …</b> 正是曼陀罗轮盘的顺序。右侧序列条里<b>红底</b>的是「最容易翻车的 6 卦」，<b>金底</b>的是当前选中。
+    <b>怎么读：</b>外圈 64 格＝64 个闸门，格内大字是<b>闸门编号（文王序）</b>，小字是中文卦名；沿黄道逆时针依次读下去（0° 白羊在 9 点方向），得到的编号序列 <b>1 → 43 → 14 → 34 → 9 → 5 → 26 → 11 → … → 24 → 2 → 23 → 8 → 20 → 16 → …</b> 正是曼陀罗轮盘的标准环序（V8 纠错：24复 之后接 2坤，与伏羲圆图的折返排法不同）。右侧序列条里<b>红底</b>的是「最容易翻车的 6 卦」，<b>金底</b>的是当前选中。
   </div>
 </div>
 
@@ -813,8 +813,46 @@ footer .pwr{display:block;margin-top:8px;color:var(--accent);font-weight:500;let
                  * 四种：CSV 全部 / JSON 全部 / CSV 当前筛选 / JSON 当前筛选 + 复制 JSON 到剪贴板
                  * 14 字段，CSV 带 UTF-8 BOM（Excel 不乱码），桥接说明已去 HTML 标签
                  * 伏羲序由六爻实时计算（非硬编码），导出给其他工具可直接用
+
+   V8  2026-11-06  曼陀罗环序纠错版（重大修正）
+       - 【修】★核心纠错：V7 把「伏羲先天六十四卦圆图」的排法当成了人类图曼陀罗轮盘序。
+                 * 伏羲圆图 = 镜像对称排法：前半（乾兑离震四宫，闸门 1→24）与曼陀罗一致，
+                   但底部 24复 之后折到 44姤，后半（巽坎艮坤四宫）整体反向——这不是曼陀罗！
+                 * 标准 Rave Mandala：沿黄道递增方向连续排满 360°（41 起于宝瓶 2°00′，每格 5°37′30″），
+                   自 1 号起顺时针应为：1,43,14,34,9,5,26,11 | 10,58,38,54,61,60,41,19 |
+                   13,49,30,55,37,63,22,36 | 25,17,21,51,42,3,27,24 | 2,23,8,20,16,35,45,12 |
+                   15,52,39,53,62,56,31,33 | 7,4,29,59,40,64,47,6 | 46,18,48,57,32,50,28,44（回 1）
+                 * 已核权威源（2026-11-06）：definedself.com / thehumandesignsystem.com /
+                   gethumandesign.com 三家序列一致；33=狮子7°37′30″（2026-09-27 刘欢案例实锤）。
+       - 【修】连续环模式（seq）改用标准曼陀罗环序 RAVE_ORDER 定位（此前误用伏羲序 fuXiOrder）：
+                 * 受影响相邻对全部纠正：24→2（不再跳 44）、20→16、59→40、64→47、4→29、
+                   31→33、52→15、12→45、35→16、8→23、46→18、6→47、40→64、29→59、7→4、33→7、
+                   56→31、15→52、45→12、16→35、23→8、2→23 等后半圈方向全部反转归正
+                 * 判别锚点：1号与2号是对卦/编程伙伴，标准曼陀罗中正好相隔 180°
+                   （1=天蝎13°15′ ↔ 2=金牛13°15′）；V7 排法中 1、2 却相邻（错误特征）
+       - 【修】外圈每 8 格刻度标注：伏1/伏9/…改为八宫标注（☰乾 ☱兑 ☲离 ☳震 ☷坤 ☶艮 ☵坎 ☴巽）
+                 —— 曼陀罗环序中每 8 格恰为一个内卦宫：乾宫起 1、兑宫起 10、离宫起 13、
+                    震宫起 25、坤宫起 2、艮宫起 15、坎宫起 7、巽宫起 46
+       - 【修】「曼陀罗轮盘序」序列条改按 RAVE_ORDER 输出；导出字段新增 mp（曼陀罗环位 1..64）
+       - 【修】文案纠错：排序说明中「人类图轮盘正是用伏羲序排布」为错误说法，已改为
+                 「伏羲序与曼陀罗环序仅前半圈（1→24）一致，后半圈呈镜像关系，不可混用」
+       - 【留】「八宫折返（伏羲圆图）」模式保留不动——它是 legitimate 的易学排法，仅不再是曼陀罗
+       - 自检脚本 _selfcheck.js [18] 的 MANDALA 期望序列同步纠正（并新增 1/2 对望锚点断言）
+   ------------------------------------------------------------
+   V9（2026-11-06）：方向与锚点纠正——对齐标准曼陀罗画法（App 实拍核验）
+       - 【修】用户反馈「改后仍与 App 不同」。放大切图复核 App：♏ 天蝎符号在 1~2 点方向，
+                 且 43→1→44→28→50→32 沿顺时针排列 ⇒ 环序沿黄道【逆时针】递进，
+                 0° 白羊在 9 点钟方向，摩羯 0°（冬至点）在正上方，1 号（天蝎 13°15′）居 1 点半方向。
+                 V8 只纠正了环序、仍误排为「1 号居顶＋顺时针」，整圈呈镜像。
+       - 【修】wheelCW seq 分支：屏幕顺时针角 = 270° − 黄经中心
+                 （闸门起点黄经 L = 302° + 环位差×5.625°，41 号=宝瓶 2°=302°、环位 15）
+       - 【修】外圈标注：V8 的「每 8 格一宫」随黄道锚定不再成立（64/12 非整数，
+                 每座 30° 含 5～6 闸），改标十二星座 ♈..♓（各居星座中央 15° 处）；移除 RAVE_PALACE_TRI
+       - 【修】文案：怎么读/模式说明/序列条标题/中心面板，全部改述「沿黄道逆时针」
+       - 几何校验（_selfcheck.js [19e-g]）：1↔2 仍相隔 180°；24→2 相邻 5.625°；
+                 1 号=43.94°（1 点半）、41 号=325.19°（11 点方向）、55 号=297.06°（10 点方向）
    ============================================================ */
-var VERSION = 'V7';
+var VERSION = 'V9';
 
 var GATES = [
 {n:1,hz:'乾',en:'The Creative',ra:'Self Expression',razh:'自我表达',c:'G 中心',cir:'个体',g:'A',g2:'A',lines:'111111',b:'乾＝纯粹创造力、健行不息 → 个体的创造性自我表达。Ra 只把「宇宙之健」收窄为「个人的表达」。<b>卦名层几乎无位移。</b>'},
@@ -951,6 +989,20 @@ function fuXiOrder(lines){
   var p = fuXiParts(lines);
   return (p.lo - 1) * 8 + p.up;   // 1..64
 }
+
+/* ——— V8/V9：标准 Rave Mandala 环序（人类图曼陀罗轮盘） ———
+   定义：41 号闸门起于宝瓶 2°00′（黄经 302°），沿黄道递增方向每格 5°37′30″ 连续排满 360°。
+   下面序列自 1 号闸门（天蝎 13°15′）起沿黄道递增书写，绕一圈 64 格后回到 1。
+   注意：这不是伏羲先天圆图！前半（1→24）恰与伏羲序一致，后半为连续环（24复 之后接 2坤，
+   不折返到 44姤）。判别锚点：1 与 2 是对卦/编程伙伴，在本环序中正好相隔 180°。
+   V9 补：标准画法为 0° 白羊在 9 点钟方向、环序沿黄道【逆时针】——1 号居 1 点半方向
+   （天蝎 13°15′），摩羯 0°（冬至）在正上方；V8 曾误排为「1 号居顶＋顺时针」而镜像。 */
+var RAVE_ORDER = [1,43,14,34,9,5,26,11,10,58,38,54,61,60,41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24,
+                  2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44];
+var RAVE_POS = {};   // 闸门编号 → 曼陀罗环位（1..64）
+RAVE_ORDER.forEach(function(n, i){ RAVE_POS[n] = i + 1; });
+/* V9：环序中「每 8 格一宫」的说法已随黄道锚定移除——
+   曼陀罗按黄道排布，每座 30° 含 5～6 个闸门（64/12 非整数），与伏羲宫位无关 */
 
 /* 六爻卦画 SVG：line1=底（底部），line6=顶（顶部）
    V3 修：linecap 默认 butt + gap=4 + stroke-width=1.5，阴／阳爻视觉上区分
@@ -1118,7 +1170,7 @@ function render(){
   document.getElementById('thNo').textContent = state.sort==='fu' ? '伏羲序' : '文王序';
   document.getElementById('thHz').textContent = state.sort==='fu' ? '卦（文王序见下）' : '卦（伏羲序见下）';
   document.getElementById('sortNote').innerHTML = state.sort==='fu'
-    ? '当前按<b>伏羲（先天／二进制）序</b>排列。算法：先天八卦序号 = 8 − 三爻二进制值（乾111=1 … 坤000=8）；卦序号 = (内卦序号−1)×8 + 外卦序号。<b>人类图轮盘正是用这一序排布的</b>——闸门编号沿用文王序，轮盘排布用伏羲序，两者不可混。'
+    ? '当前按<b>伏羲（先天／二进制）序</b>排列。算法：先天八卦序号 = 8 − 三爻二进制值（乾111=1 … 坤000=8）；卦序号 = (内卦序号−1)×8 + 外卦序号。<b>注意（V8 纠错）：伏羲序不是人类图轮盘的排布</b>——它与曼陀罗环序仅前半圈（1→24）一致，后半圈呈镜像关系（24复 之后曼陀罗接 2坤，伏羲圆图折到 44姤），不可混用。轮盘区已按标准曼陀罗环序排布。'
     : '当前按<b>文王（后天／义理）序</b>排列，即通行本《周易》卦序：按卦义演进（乾坤→屯蒙→需讼→…→既济未济），是<b>叙事／义理序</b>，与二进制无关。人类图闸门编号沿用此序。';
 }
 
@@ -1232,8 +1284,12 @@ function renderScatter(){
 }
 
 /* ============================================================
-   V7：伏羲序圆图（曼陀罗轮盘）
+   V7/V8：曼陀罗轮盘（V8 纠错：连续环改用标准 Rave 环序）
    ------------------------------------------------------------
+   【连续环 seq】标准人类图曼陀罗轮盘序（RAVE_ORDER，见 fuXiOrder 下方定义）：
+       41 起宝瓶 2°00′、每格 5°37′30″ 沿黄道递增排满 360°；本图令 1 号居正上方。
+       V7 曾误用伏羲序 fuXiOrder 排连续环 → 后半圈（24 之后）整体镜像错排，V8 已改。
+   【八宫折返 fold】传统伏羲六十四卦圆图（易学排法，非曼陀罗，保留作对照）：
    先天八卦圆图方位（0..7，自正上方起【逆时针】）：
        乾 0 · 兑 1 · 离 2 · 震 3 · 坤 4 · 艮 5 · 坎 6 · 巽 7
    对宫相差 4（乾↔坤、兑↔艮、离↔坎、震↔巽），即「天地定位、山泽通气…」之序。
@@ -1246,10 +1302,20 @@ var WHEEL_ROT = 19.6875;   // 令伏羲第 1 卦（乾为天）落在正上方
 var WHEEL = {cx:380, cy:380, rIn:198, rOut:318, rT0:324, rT1:330, rT2:341, rLbl:356};
 var SPECIAL6 = [15,10,22,26,37,61];   // 最容易翻车的 6 卦
 
-/* 顺时针角度（度），0 = 正上方 */
+/* 顺时针角度（度），0 = 正上方
+   V8 修：seq（连续环）改按标准曼陀罗环序 RAVE_POS 定位——
+   V7 误用伏羲序 fuXiOrder，导致后半圈（24 之后）整体镜像错排。
+   V9 修：对齐标准曼陀罗画法的方向与锚点（App 实拍核验）——
+   环序沿黄道【逆时针】递进，0° 白羊座在 9 点钟方向（正上方 = 摩羯 0° / 冬至点）。
+   闸门起点黄经 L = 302° + 环位差×5.625°（41 号 = 宝瓶 2° = 302°，其环位 = 15），
+   屏幕顺时针角 = 270° − 黄经中心（可为负，polar/segPath 对负角均成立）。 */
 function wheelCW(g){
   var p = fuXiParts(g.lines), fx = fuXiOrder(g.lines);
-  if(state.wheel === 'seq') return (fx - 1) * (360/64);
+  if(state.wheel === 'seq'){
+    var off = ((RAVE_POS[Number(g.n)] - 15) % 64 + 64) % 64;
+    var L = (302 + off * 5.625) % 360;
+    return 270 - L - 2.8125;
+  }
   return -(TRI_POS[p.lo]*45 + (TRI_POS[p.up] - 3.5) * (45/8) + WHEEL_ROT);
 }
 function polar(r, cw){
@@ -1276,19 +1342,22 @@ function renderWheel(){
   var half = (360/64)/2 - 0.18;
   var byFx = {}; GATES.forEach(function(x){ byFx[fuXiOrder(x.lines)] = x; });
 
-  /* 外圈：连续环 = 64 刻度 + 每 8 一个序号；折返式 = 8 宫（内卦） */
+  /* 外圈：连续环 = 64 刻度 + 十二星座标注（黄道锚定）；折返式 = 8 宫（内卦） */
   var th='';
   if(state.wheel === 'seq'){
+    var ZOD = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
     for(var k=0;k<64;k++){
-      var a=k*(360/64), isEight=(k%8===0);
-      var q0=polar(WHEEL.rT0,a), q1=polar(isEight?WHEEL.rT2:WHEEL.rT1,a);
+      var a=k*(360/64);
+      var q0=polar(WHEEL.rT0,a), q1=polar(WHEEL.rT1,a);
       th += '<line x1="'+q0[0].toFixed(1)+'" y1="'+q0[1].toFixed(1)+'" x2="'+q1[0].toFixed(1)+'" y2="'+q1[1].toFixed(1)+'" '
-          + 'stroke="'+(isEight?'#C4956A':'#DCCDB6')+'" stroke-width="'+(isEight?1.6:0.8)+'"/>';
+          + 'stroke="#DCCDB6" stroke-width="0.8"/>';
     }
-    for(var m=0;m<8;m++){
-      var la=m*8*(360/64), lp=polar(WHEEL.rLbl, la);
+    /* V9 修：标注十二星座（每座 30°，5～6 个闸门），0° 白羊在 9 点钟方向；
+       V8 的「每 8 格一宫」标注随黄道锚定不再成立，已移除 */
+    for(var s=0;s<12;s++){
+      var la = 270 - (s*30 + 15), lp = polar(WHEEL.rLbl, la);
       th += '<text x="'+lp[0].toFixed(1)+'" y="'+lp[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="central" '
-          + 'font-size="11" fill="#8A7355" font-family="inherit">伏'+(m*8+1)+'</text>';
+          + 'font-size="13" fill="#8A7355" font-family="inherit">'+ZOD[s]+'</text>';
     }
   } else {
     for(var t=1;t<=8;t++){
@@ -1348,7 +1417,7 @@ function renderWheel(){
       + '卦名层 '+selGate.g+' → 注解层 '+selGate.g2+'</div>';
   } else {
     center.innerHTML = '<div class="wc-idle">点击任一格<br>查看闸门详情<br><br>'
-      + '<span style="font-size:11px">外圈 64 格的顺时针顺序<br>＝ 曼陀罗轮盘序</span></div>';
+      + '<span style="font-size:11px">外圈 64 格沿黄道逆时针<br>（0° 白羊在 9 点方向）<br>＝ 曼陀罗轮盘序</span></div>';
   }
 
   /* 图例 */
@@ -1386,25 +1455,25 @@ function renderWheel(){
   document.getElementById('wSeq').className  = 'sbtn' + (state.wheel==='seq'  ? ' on' : '');
   document.getElementById('wFold').className = 'sbtn' + (state.wheel==='fold' ? ' on' : '');
   document.getElementById('wheelNote').innerHTML = (state.wheel==='seq')
-    ? '伏羲序 1→64 <b>顺时针</b>依次排满一圈，乾（伏羲 1／闸门 1）在正上方。<b>这就是人类图曼陀罗轮盘的读法</b>——轮盘上的相邻闸门，在文王序里往往相隔很远（如 1→43→14→34），因为两套序的依据完全不同。'
-    : '传统<b>伏羲六十四卦圆图</b>画法：按<b>内卦（下卦）</b>分八宫，宫位依先天八卦方位（乾上·坤下）；宫内 8 卦按<b>外卦（上卦）</b>的先天方位序排列，因此每宫到第 4 卦后<b>回折</b>——这就是圆图特有的 S 形折返（如乾宫自上方起：乾→夬→大有→大壮→<b>折</b>→泰→大畜→需→小畜）。已令伏羲第 1 卦（乾为天）居正上方；坤（第 64）因此落在正下方偏逆 22.5° 的坤宫中段。';
+    ? '<b>标准人类图曼陀罗轮盘序（Rave Mandala）</b>：沿黄道递增方向每格 5°37′30″ 连续排满 360°（41 号起于宝瓶 2°00′）。标准画法：<b>0° 白羊座在 9 点钟方向、环序沿黄道逆时针</b>——1 号（天蝎 13°15′）居 1 点半方向，摩羯 0°（冬至点）在正上方，与主流 App 画法一致。<b>24复 之后接 2坤、不折返</b>——这是它与伏羲先天圆图的本质区别（V7 误用伏羲序致后半圈反向，V8 已纠正环序，V9 再纠正方向与锚点）。判别锚点：1 与 2 为对卦，在轮盘上正好相隔 180°。'
+    : '传统<b>伏羲六十四卦圆图</b>画法：按<b>内卦（下卦）</b>分八宫，宫位依先天八卦方位（乾上·坤下）；宫内 8 卦按<b>外卦（上卦）</b>的先天方位序排列，因此每宫到第 4 卦后<b>回折</b>——这就是圆图特有的 S 形折返（如乾宫自上方起：乾→夬→大有→大壮→<b>折</b>→泰→大畜→需→小畜）。已令伏羲第 1 卦（乾为天）居正上方；坤（第 64）因此落在正下方偏逆 22.5° 的坤宫中段。<b>注意：此为易学排法，不是人类图曼陀罗环序。</b>';
 }
 
-/* 曼陀罗轮盘序 = 伏羲序 1..64 对应的闸门编号 */
+/* 曼陀罗轮盘序 = 标准 Rave Mandala 环序（V8 修：V7 误用伏羲序，后半圈镜像错排） */
 function renderMandalaStrip(){
   var el = document.getElementById('msBody');
   if(!el) return;
-  var byFx = {}; GATES.forEach(function(x){ byFx[fuXiOrder(x.lines)] = x; });
+  var byN = {}; GATES.forEach(function(x){ byN[Number(x.n)] = x; });
   var h='';
-  for(var i=1;i<=64;i++){
-    var g = byFx[i]; if(!g) continue;
+  for(var i=0;i<64;i++){
+    var g = byN[RAVE_ORDER[i]]; if(!g) continue;
     var cls = 'mn' + (String(state.sel)===String(g.n) ? ' hi' : (SPECIAL6.indexOf(g.n)>=0 ? ' wr' : ''));
-    h += '<span class="'+cls+'" data-fx="'+i+'" title="伏羲序 '+i+' · '+g.hz+' · '+g.razh+'" '
+    h += '<span class="'+cls+'" data-fx="'+(i+1)+'" title="环位 '+(i+1)+' · '+g.hz+' · '+g.razh+'" '
        + 'style="cursor:pointer" onclick="pickRow('+g.n+')">'+g.n+'</span>';
   }
   el.innerHTML = h;
   document.getElementById('msTitle').innerHTML =
-    '曼陀罗轮盘序（伏羲序 1→64 对应的闸门编号，共 '+document.querySelectorAll('#msBody .mn').length+' 个）　'
+    '曼陀罗轮盘序（标准 Rave 环序：41 起宝瓶 2°，沿黄道逆时针，此处自 1 号起书写，共 '+document.querySelectorAll('#msBody .mn').length+' 个）　'
     + '<span style="color:#9E4A3C">红底＝最容易翻车的 6 卦</span>　<span style="color:var(--accent)">金底＝当前选中</span>　点击可高亮';
 }
 
@@ -1418,7 +1487,7 @@ function exportRows(scope){
     return {
       n:x.n, hz:x.hz, en:x.en, ra:x.ra, razh:x.razh,
       c:x.c, cir:x.cir, g:x.g, g2:x.g2,
-      lines:x.lines, fx:fuXiOrder(x.lines),
+      lines:x.lines, fx:fuXiOrder(x.lines), mp:RAVE_POS[Number(x.n)],
       trigUp:TRI_NAME[parseInt(x.lines.substring(3,6),2)],
       trigLo:TRI_NAME[parseInt(x.lines.substring(0,3),2)],
       b:stripTags(x.b)
