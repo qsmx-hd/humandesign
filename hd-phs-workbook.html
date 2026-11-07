@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHS 完整课件 · 让身体按设计进食</title>
+<meta name="description" content="人类图 PHS 完整课件：PHS 在人类图的什么位置、消化条件六类、环境品质六地、14 天单变量实验与边界。含在线观察记录工具。">
+<!-- ── 变更记录 ───────────────────────────────────────────
+     V1 (2026-11-07) 初版课件。内容口径 = phs-course/01 学员读本 + 02 讲师手册
+     + 03 观察记录表（本页把记录表做成可交互工具，localStorage 存本地）。
+     版式沿用 hd-beginner-courseware.html（入门课课件）家族风格：左侧固定目录 + 单栏长文。
+   ─────────────────────────────────────────────────────── -->
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843; --terra:#A8553A; --moss:#6B7A5A;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,'Times New Roman',serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.85;font-size:16px;
+  -webkit-font-smoothing:antialiased}
+a{color:var(--primary-d);text-decoration:none}
+
+/* ---------- Sidebar ---------- */
+.side{position:fixed;top:0;left:0;bottom:0;width:292px;background:var(--deep);color:#F6EFE1;
+  display:flex;flex-direction:column;z-index:120;border-right:1px solid rgba(255,255,255,.06)}
+.side-top{padding:26px 24px 20px;border-bottom:1px solid rgba(246,239,225,.1)}
+.side-top .t{font-family:var(--serif);font-size:19px;letter-spacing:.06em;color:#F6EFE1;font-weight:600}
+.side-top .s{font-size:11.5px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-top:6px}
+.side-nav{flex:1;overflow-y:auto;padding:14px 0}
+.side-group{font-size:11px;letter-spacing:.2em;color:rgba(246,239,225,.4);text-transform:uppercase;
+  padding:16px 24px 8px}
+.side-nav a{display:flex;align-items:center;gap:10px;padding:10px 24px;color:rgba(246,239,225,.72);
+  font-size:14px;border-left:3px solid transparent;transition:.18s;line-height:1.4}
+.side-nav a .no{font-family:var(--serif);font-size:12.5px;color:rgba(212,168,67,.7);min-width:16px}
+.side-nav a:hover{background:rgba(196,149,106,.1);color:#F6EFE1}
+.side-nav a.active{background:rgba(196,149,106,.16);color:var(--gold);border-left-color:var(--gold)}
+.side-bottom{padding:16px 24px 22px;border-top:1px solid rgba(246,239,225,.1)}
+.side-bottom a{font-size:12.5px;color:rgba(246,239,225,.6);display:block;margin-bottom:8px}
+.side-bottom a:hover{color:var(--gold)}
+.side-bottom .pw{font-size:10.5px;letter-spacing:.1em;color:rgba(246,239,225,.3);margin-top:10px}
+
+/* ---------- Mobile bar ---------- */
+.mbar{display:none;position:sticky;top:0;z-index:110;background:var(--deep);color:#F6EFE1;
+  height:56px;align-items:center;gap:12px;padding:0 18px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.mbar button{background:none;border:none;color:#F6EFE1;font-size:22px;cursor:pointer;line-height:1}
+.mbar .mt{font-family:var(--serif);font-size:15.5px;letter-spacing:.05em}
+.mbar .back{margin-left:auto;font-size:12px;color:var(--gold)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:115}
+
+/* ---------- Content ---------- */
+.main{margin-left:292px}
+.inner{max-width:860px;margin:0 auto;padding:64px 40px 90px}
+.cover{margin-bottom:56px;padding-bottom:36px;border-bottom:1px solid var(--border)}
+.cover .k{color:var(--primary);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.cover h1{font-family:var(--serif);font-size:38px;color:var(--deep);line-height:1.35;font-weight:700;margin-bottom:14px}
+.cover p{color:var(--muted);font-size:15.5px;max-width:680px}
+
+.mod{padding:54px 0;border-bottom:1px solid var(--border)}
+.mod:last-child{border-bottom:none}
+.mod-num{display:inline-flex;align-items:center;gap:9px;color:var(--primary-d);font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.mod-num::before{content:"";width:26px;height:1px;background:var(--primary)}
+.mod-title{font-family:var(--serif);font-size:30px;color:var(--deep);font-weight:700;line-height:1.35;margin-bottom:6px}
+.mod-en{font-size:12.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:22px}
+.lead{font-size:16.5px;color:var(--text);line-height:1.95;margin-bottom:10px}
+.lead em{color:var(--primary-d);font-style:normal;font-weight:600}
+
+h3{font-family:var(--serif);font-size:21px;color:var(--deep);font-weight:600;margin:34px 0 14px;
+  padding-left:14px;border-left:4px solid var(--primary)}
+h4{font-family:var(--serif);font-size:17px;color:var(--deep);font-weight:600;margin:22px 0 8px}
+p{margin-bottom:14px;color:var(--text)}
+.mod ul,.mod ol{margin:6px 0 18px 4px;padding-left:22px}
+.mod li{margin-bottom:9px;color:var(--text);line-height:1.8}
+.mod strong{color:var(--deep);font-weight:600}
+.hl{background:linear-gradient(transparent 62%,rgba(212,168,67,.35) 0);padding:0 2px}
+
+/* 四箭头 */
+.arrow-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.ac{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative}
+.ac::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px}
+.ac.b::before{background:var(--terra)}
+.ac.m::before{background:#3D3A36}
+.ac .t{font-size:11.5px;letter-spacing:.14em;color:var(--muted);margin-bottom:5px}
+.ac h4{margin:0 0 8px;font-size:17px}
+.ac.b h4{color:var(--terra)}
+.ac p{font-size:13.5px;color:var(--muted);margin:0}
+.badge-phs{display:inline-block;font-size:10.5px;font-weight:700;color:#fff;background:var(--terra);
+  padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:2px}
+
+.box{background:linear-gradient(135deg,rgba(196,149,106,.1),rgba(212,168,67,.08));
+  border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;
+  padding:22px 24px;margin:24px 0}
+.box .bh{font-family:var(--serif);font-size:15.5px;color:var(--primary-d);font-weight:600;
+  margin-bottom:8px;letter-spacing:.03em}
+.box p{margin-bottom:6px;font-size:14.5px;color:var(--muted)}
+.box p:last-child{margin-bottom:0}
+
+.ex{background:var(--card);border:2px dashed var(--primary);border-radius:16px;padding:24px 26px;margin:30px 0 8px}
+.ex .eh{font-family:var(--serif);font-size:16px;color:var(--deep);font-weight:600;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px}
+.ex .eh::before{content:"✎";color:var(--primary);font-size:18px}
+.ex ol{margin:0;padding-left:20px}
+.ex li{color:var(--muted);font-size:14.5px}
+
+/* 六类卡 */
+.kind{border:1px solid var(--border);border-radius:14px;background:var(--card);margin:18px 0;
+  box-shadow:0 4px 16px var(--shadow);overflow:hidden}
+.kind-h{display:flex;align-items:center;gap:14px;padding:16px 22px;background:var(--bg2);
+  border-bottom:1px solid var(--border)}
+.kind-h .g{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 40px}
+.kind-h .nm{font-family:var(--serif);font-size:19.5px;color:var(--deep);font-weight:700;line-height:1.25}
+.kind-h .en{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.kind-h .color{margin-left:auto;font-family:var(--serif);font-size:13px;color:var(--primary-d);
+  background:rgba(196,149,106,.14);padding:4px 11px;border-radius:999px;white-space:nowrap}
+.kind-b{padding:16px 22px 18px}
+.kv{display:grid;grid-template-columns:86px 1fr;gap:7px 14px;font-size:14.5px}
+.kv dt{color:var(--primary-d);font-weight:600}
+.kv dd{color:var(--text)}
+
+.tw{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--card);margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+thead th{background:var(--deep);color:#F6EFE1;padding:12px 14px;text-align:left;font-weight:600;font-size:13px;white-space:nowrap}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--border-l);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(196,149,106,.06)}
+td strong{color:var(--deep)}
+
+.quote{margin:24px 0;padding:20px 26px;background:var(--bg2);border-left:4px solid var(--gold);
+  border-radius:0 12px 12px 0;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--primary-d);line-height:1.8}
+.quote .by{display:block;margin-top:8px;font-size:12.5px;font-style:normal;color:var(--muted);letter-spacing:.06em}
+
+/* 在线记录工具 */
+.tool{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px 28px;margin:26px 0;
+  box-shadow:0 8px 24px var(--shadow)}
+.tool-h{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.tool-h h4{margin:0;font-size:18px}
+.tool-h .tag{font-size:11.5px;color:var(--primary-d);background:rgba(196,149,106,.14);
+  padding:2px 9px;border-radius:999px}
+.tool p.hint{font-size:13px;color:var(--muted);margin-bottom:16px}
+.fld{display:grid;grid-template-columns:110px 1fr;gap:10px 14px;align-items:center;margin-bottom:14px}
+.fld label{font-size:13.5px;color:var(--primary-d);font-weight:600}
+.fld input[type=text],.fld select,.fld input[type=date]{
+  width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--border);border-radius:10px;
+  background:var(--bg);font-family:var(--sans);font-size:14.5px;color:var(--text)}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(196,149,106,.16)}
+.score{display:flex;gap:8px;flex-wrap:wrap}
+.score button{flex:1 1 auto;min-width:52px;min-height:46px;border:1.5px solid var(--border);border-radius:11px;
+  background:var(--bg);font-family:var(--serif);font-size:17px;font-weight:700;color:var(--muted);cursor:pointer;transition:.16s}
+.score button:hover{border-color:var(--primary);color:var(--primary-d)}
+.score button.on{background:linear-gradient(135deg,var(--primary),var(--gold));border-color:transparent;color:#fff;
+  box-shadow:0 5px 14px rgba(196,149,106,.35)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.btn2{padding:12px 24px;border-radius:999px;border:none;cursor:pointer;font-family:var(--sans);
+  font-size:14.5px;font-weight:600;transition:.2s}
+.btn2.main{background:var(--primary);color:#fff}
+.btn2.main:hover{background:var(--primary-d)}
+.btn2.ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn2.ghost:hover{border-color:var(--terra);color:var(--terra)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 14px}
+.stat div{background:var(--bg2);border-radius:12px;padding:13px 14px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:24px;color:var(--primary-d);line-height:1.2}
+.stat span{font-size:11.5px;color:var(--muted);letter-spacing:.06em}
+.chart{height:120px;display:flex;align-items:flex-end;gap:5px;padding:10px 0 0;border-bottom:1px solid var(--border)}
+.chart i{flex:1;background:linear-gradient(180deg,var(--gold),var(--primary));border-radius:4px 4px 0 0;
+  min-height:3px;position:relative;transition:.3s}
+.chart i.base{background:linear-gradient(180deg,var(--moss),#55654A)}
+.chart-x{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+
+/* footer */
+.foot{padding:34px 0 10px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+.foot .ft{font-family:var(--serif);color:var(--deep);font-size:14px;letter-spacing:.05em;margin-bottom:4px}
+.foot .pw{font-size:11px;letter-spacing:.12em;color:var(--muted);opacity:.7;margin-top:6px}
+.foot .dis{max-width:660px;margin:10px auto 0;font-size:11.5px;line-height:1.9}
+
+@media(max-width:980px){
+  .side{transform:translateX(-100%);transition:transform .28s;width:280px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mbar{display:flex}
+  .scrim.show{display:block}
+  .inner{padding:36px 22px 70px}
+  .cover h1{font-size:30px}
+  .mod-title{font-size:25px}
+  h3{font-size:19px}
+}
+@media(max-width:600px){
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv dt{margin-top:8px}
+  .arrow-grid{grid-template-columns:1fr}
+  .fld{grid-template-columns:1fr;gap:6px}
+  .kind-h{flex-wrap:wrap}
+  .kind-h .color{margin-left:0}
+  .inner{padding:28px 18px 60px}
+  .cover h1{font-size:26px}
+  .stat{grid-template-columns:1fr 1fr}
+  .tool{padding:20px 18px}
+}
+@media print{
+  .side,.mbar,.scrim{display:none!important}
+  .main{margin-left:0}
+  .inner{max-width:none;padding:0}
+  body{background:#fff;font-size:12pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .box,.ex,.kind,.tool{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<aside class="side" id="side">
+  <div class="side-top">
+    <div class="t">PHS 初阶健康系统</div>
+    <div class="s">Courseware</div>
+  </div>
+  <nav class="side-nav" id="sideNav">
+    <div class="side-group">模块一 · 定位</div>
+    <a href="#m1"><span class="no">01</span>PHS 在图的哪一层</a>
+    <a href="#m1b"><span class="no">02</span>依据：色·音调·基底</a>
+    <div class="side-group">模块二 · 消化</div>
+    <a href="#m2"><span class="no">03</span>条件是条件，不是食物</a>
+    <a href="#m2b"><span class="no">04</span>六类逐一</a>
+    <a href="#m2c"><span class="no">05</span>两个方向与误配</a>
+    <div class="side-group">模块三 · 环境</div>
+    <a href="#m3"><span class="no">06</span>品质而非地址</a>
+    <a href="#m3b"><span class="no">07</span>六地逐一</a>
+    <a href="#m3c"><span class="no">08</span>慢变量纪律</a>
+    <div class="side-group">模块四 · 实验</div>
+    <a href="#m4"><span class="no">09</span>单变量实验协议</a>
+    <a href="#m4b"><span class="no">10</span>在线记录工具</a>
+    <a href="#m4c"><span class="no">11</span>失败模式与边界</a>
+    <div class="side-group">附录</div>
+    <a href="#apx"><span class="no">A</span>术语表</a>
+    <a href="#apx2"><span class="no">B</span>资料一致性警告</a>
+  </nav>
+  <div class="side-bottom">
+    <a href="hd-phs-course.html">← 返回课程主页</a>
+    <a href="hd-phs-cheatsheet.html">打开速查卡</a>
+    <div class="pw">Powered By Kan Man Tang</div>
+  </div>
+</aside>
+
+<div class="mbar">
+  <button id="mhamb" aria-label="打开目录">☰</button>
+  <span class="mt">PHS · 课件</span>
+  <a class="back" href="hd-phs-course.html">主页</a>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<main class="main">
+<div class="inner">
+
+  <div class="cover">
+    <div class="k">Human Design · PHS 完整课件</div>
+    <h1>让身体按设计进食</h1>
+    <p>本课件是「PHS 人类图初阶健康系统」的讲义正文，覆盖四个 90 分钟模块的全部内容：PHS 的位置与依据、消化条件六类、环境品质六地、14 天单变量实验与边界。所有内容属于理论性学习材料，<strong>不构成医学、营养学或心理学建议</strong>。</p>
+  </div>
+
+  <!-- ============ 模块一 ============ -->
+  <section class="mod" id="m1">
+    <div class="mod-num">模块一 · 定位</div>
+    <h2 class="mod-title">PHS 在人类图的哪一层</h2>
+    <div class="mod-en">Where PHS Sits</div>
+    <p class="lead">多数人学人类图的路径是：类型与策略 → 内在权威 → 人生角色与通道。这三层讲的是<em>「你这个人」</em>。PHS 不在这三层，它往下走了一层，讲的是<em>载具</em>——你坐的这台身体机器，需要什么样的运行条件。</p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>层次</th><th>关心的问题</th><th>关心对象</th></tr></thead>
+        <tbody>
+          <tr><td>类型 / 策略 / 权威</td><td>我该怎么做决定</td><td>人格与能量场</td></tr>
+          <tr><td>人生角色 / 通道 / 闸门</td><td>我是什么样的人</td><td>性格与天赋</td></tr>
+          <tr><td><strong>变量（含 PHS）</strong></td><td><strong>我的身体怎么运转最省力</strong></td><td><strong>载具与条件</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>打个比方：<strong>类型与权威是驾驶方式，PHS 是机油和路况。</strong>你开得再对，机油不对、路全是烂路，车一样跑不动。</p>
+
+    <h3>一、四个箭头，两侧分工</h3>
+    <p>人类图的图上方（或旁侧）有四组箭头，合称<strong>变量（Variable）</strong>。四个箭头分属两侧：</p>
+
+    <div class="arrow-grid">
+      <div class="ac b">
+        <div class="t">身体侧 · 设计侧 · 图上红色</div>
+        <h4>身体侧 <span class="badge-phs">PHS</span></h4>
+        <p><strong>消化 Determination</strong>——身体怎么处理进来的东西<br>
+           <strong>环境 Environment</strong>——身体在什么空间里阻力最小</p>
+      </div>
+      <div class="ac m">
+        <div class="t">头脑侧 · 人格侧 · 图上黑色</div>
+        <h4>头脑侧</h4>
+        <p><strong>视角 Perspective</strong>——注意力停在哪个位置<br>
+           <strong>动机 Motivation</strong>——大脑被什么驱动</p>
+      </div>
+    </div>
+
+    <p>PHS 覆盖的，正是第一、第二项——<strong>身体侧的两个箭头</strong>。</p>
+
+    <div class="box">
+      <div class="bh">顺序不可颠倒：身体侧在前，头脑侧在后</div>
+      <p>这不是随意的排列，逻辑一句话就够——<strong>大脑靠身体喂养</strong>。身体处理进来的东西处理得不对，送上去的燃料就是失真的；在失真的地基上谈"看清世界"，是空中楼阁。</p>
+      <p>所以本课程只做前两项。视角与动机，必须等身体侧跑通再碰。</p>
+    </div>
+
+    <h3>二、它为什么不显示在图上</h3>
+    <p>消化和环境，<strong>读的不是类型、不是闸门、不是中心</strong>。它们读的是图上更深的层级——<strong>色、音调、基底</strong>（Color / Tone / Base）。这一层的信息，多数免费出图工具不显示在图上，需要打开「变量」或「四箭头」面板才看得到。</p>
+    <p>这带来一个非常实际的课前风险：<strong>学员压根看不到自己的参数。</strong>所以开课前一定要先确认一句：你能看到图上的四个箭头吗？</p>
+
+    <h3 id="m1b">三、依据层：读自哪里，必须统一</h3>
+    <p>这是本课程最较真的一处，因为它决定整套结论有没有效。</p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>参数</th><th>读自</th><th>层级</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><strong>消化</strong> Determination</td><td>设计日（Design Sun）的<strong>色</strong></td><td>Color</td><td>太阳所落闸门中的第几色，决定六类与方向</td></tr>
+          <tr><td><strong>环境</strong> Environment</td><td>设计交点（Design Nodes）的<strong>色</strong></td><td>Color</td><td>南北交所在闸门中的色，决定六地</td></tr>
+          <tr><td><strong>视角</strong> Perspective</td><td>人格交点（Personality Nodes）</td><td>Color</td><td>本课程不展开</td></tr>
+          <tr><td><strong>动机</strong> Motivation</td><td>人格日（Personality Sun）</td><td>Color</td><td>本课程不展开</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>为什么要专门强调？因为市面上存在大量说法不一：有说消化读设计日，有说读设计交点，有说"由节点位置决定"。<strong>拿错参数，整套结论无效。</strong>本课程统一采用上表口径，学员也以此为准去核对自己的出图工具。</p>
+
+    <div class="quote">
+      反直觉的地方在这里：你的口味来自后天——家乡、父母、工作；你的消化条件来自出生前——设计侧。两者不一致，太正常了。所以「PHS 跟我的口味完全相反」不是问题，而是常态。
+    </div>
+
+    <div class="ex">
+      <div class="eh">模块一作业：三天基线观察</div>
+      <ol>
+        <li>在自己的图上标出四个箭头，写下消化与环境分别读自哪里</li>
+        <li>连续三天照常吃饭，<strong>什么都不改</strong>，只记录餐后一小时的清晰度</li>
+        <li>三天结束后问自己一句：我原本以为的"正常状态"，到底是什么水平？</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 模块二 ============ -->
+  <section class="mod" id="m2">
+    <div class="mod-num">模块二 · 消化条件</div>
+    <h2 class="mod-title">你被设计成怎样进食</h2>
+    <div class="mod-en">Determination</div>
+    <p class="lead">这是课程的主体。先立一条铁律，后面的全部内容都建立在它上面：<em>六大类是「条件」，不是「食物」。</em></p>
+
+    <h3>一、PHS 不管吃什么</h3>
+    <p>它回答的不是"我该吃什么"，而是"在什么条件下，我的身体才能把食物处理好"。这两句话看着像，实际隔着一整个学科。</p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>PHS 管</th><th>PHS 不管</th></tr></thead>
+        <tbody>
+          <tr><td>进食的节奏与份量由什么决定</td><td>卡路里与营养素配比</td></tr>
+          <tr><td>进食时的温度、声音、光线条件</td><td>食材选择与忌口</td></tr>
+          <tr><td>进食时身体处在什么状态</td><td>任何疾病、用药与营养缺乏的处置</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box">
+      <div class="bh">课堂标准回答</div>
+      <p>任何学员问「我该吃什么」，讲师的标准回答是：<strong>「PHS 不回答这个问题，它回答你怎么吃。」</strong>然后立即把话题拉回条件。</p>
+      <p>这不是话术，是边界。一旦开始给食物建议，这套东西就跨进了营养学的地盘，而讲师没有那个资质。</p>
+    </div>
+
+    <h3 id="m2b">二、六类逐一</h3>
+    <p>下面六类，是消化条件的六个入口。每一类都属于"你在什么条件下吃"的范畴，各自有一个核心条件。</p>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">1</div><div><div class="nm">食欲</div><div class="en">Appetite</div></div><div class="color">色 1</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>吃多少、吃的节奏，由真实饥饿决定——不是时间表，不是份量建议</dd>
+          <dt>两个方向</dt><dd>一侧偏向「连续」：一次一样，简单到底；另一侧偏向「交替」：一餐之内多样轮换</dd>
+          <dt>典型误配</dt><dd>按闹钟吃饭、按别人给的份量吃饭，长期听不见饥饿信号</dd>
+          <dt>生活化做法</dt><dd>先问一句"我真的饿了吗"，再决定动筷子；吃到不饿就停，不必吃到"吃完"</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">2</div><div><div class="nm">味觉</div><div class="en">Taste</div></div><div class="color">色 2</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>由当下的味觉吸引引导，而不是由"应该吃"引导</dd>
+          <dt>两个方向</dt><dd>一侧偏「开放」：广泛尝鲜；另一侧偏「封闭」：固定熟悉</dd>
+          <dt>典型误配</dt><dd>靠健康知识下筷子，吃完了却没满足感；或反过来，只吃熟悉的东西却抱怨没胃口</dd>
+          <dt>生活化做法</dt><dd>点菜前先停三秒，问"现在我最想吃什么味道"，如实回答</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">3</div><div><div class="nm">口渴</div><div class="en">Thirst</div></div><div class="color">色 3</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>温度与水分是这一类的两个主变量</dd>
+          <dt>两个方向</dt><dd>一侧偏「热」：温热熟食；另一侧偏「冷」：新鲜生凉</dd>
+          <dt>典型误配</dt><dd>常年冰饮或常年烫食，温度曲线单一；或不渴也灌，渴了又忍着</dd>
+          <dt>生活化做法</dt><dd>留意自己吃完之后是"暖"还是"清"，把温度当成一个可调旋钮，而不是习惯</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">4</div><div><div class="nm">触觉</div><div class="en">Touch</div></div><div class="color">色 4</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>进食时的刺激量，以及身体处在什么状态</dd>
+          <dt>两个方向</dt><dd>一侧偏「平静」：安静专注地吃；另一侧偏「活跃」：有动静陪伴着吃</dd>
+          <dt>典型误配</dt><dd>边刷手机边吃、边开会边吃，身体始终在应激态，处理效率自然打折</dd>
+          <dt>生活化做法</dt><dd>至少一天里有一餐是"只有吃饭这一件事"</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">5</div><div><div class="nm">声音</div><div class="en">Sound</div></div><div class="color">色 5</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>进食时的声学环境</dd>
+          <dt>两个方向</dt><dd>一侧偏「高」：有声音、有人声、热闹；另一侧偏「低」：安静、独处</dd>
+          <dt>典型误配</dt><dd>长期被放在自己不舒服的那一侧——明明需要安静，却天天在食堂人声里吃饭</dd>
+          <dt>生活化做法</dt><dd><strong>注意：这一类的左右方向命名在各来源间存在相反说法</strong>，务必以自己出图工具的参数为准，不要照抄别人的结论</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="kind">
+      <div class="kind-h"><div class="g">6</div><div><div class="nm">光线</div><div class="en">Light</div></div><div class="color">色 6</div></div>
+      <div class="kind-b">
+        <dl class="kv">
+          <dt>核心条件</dt><dd>光线条件，以及进食的时机</dd>
+          <dt>两个方向</dt><dd>一侧偏「直射」：明亮的自然光；另一侧偏「间接」：柔和、偏暗</dd>
+          <dt>典型误配</dt><dd>深夜冷光灯下进食，或一年四季都在同一个亮度里吃饭</dd>
+          <dt>生活化做法</dt><dd>把"在哪吃、几点吃"和"吃什么"分开看，光线是一个独立变量</dd>
+        </dl>
+      </div>
+    </div>
+
+    <h3 id="m2c">三、两个方向：为什么不能替你定名</h3>
+    <p>每一类都分两个方向，这是结构层面确定的。但<strong>方向的具体命名，本课程刻意不写死</strong>，原因很实在：</p>
+    <ul>
+      <li>不同来源对左右方向的命名<strong>存在相反的说法</strong>，尤其"声音"这一类</li>
+      <li>如果把方向说反了，学员的 14 天实验就整个做反，白做</li>
+      <li>你自己的出图工具给出的参数，才是你这次实验的依据</li>
+    </ul>
+    <p>所以规则是：<strong>结构用本课程统一的六类 + 两方向；具体哪一边，用你自己工具的结果。</strong>当两者冲突时，不要投票选"看起来专业"的那个——去做实验。</p>
+
+    <div class="ex">
+      <div class="eh">模块二作业：写出实验假设</div>
+      <ol>
+        <li>勾出自己的类型（六类中的哪一类）与方向</li>
+        <li>写一句假设：「如果我改成 ______，餐后一小时清晰度会从 ___ 分升到 ___ 分」</li>
+        <li>只写一个条件。写两个就作废——同时改多项，等于什么都没验</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 模块三 ============ -->
+  <section class="mod" id="m3">
+    <div class="mod-num">模块三 · 环境品质</div>
+    <h2 class="mod-title">身体在哪里阻力最小</h2>
+    <div class="mod-en">Environment</div>
+    <p class="lead">环境是变量的第二项，读自<em>设计交点的色</em>。它和消化是两个独立参数——<strong>可以不一致，也应该不一致</strong>。</p>
+
+    <h3 id="m3b">一、环境是品质，不是地址</h3>
+    <p>这是最容易破的一个误解。PHS 说的环境<strong>不是"你该住在哪个城市、哪个区"</strong>，而是一种空间品质：被包裹、有流动、有高度、被环抱、在交界……</p>
+    <p>品质的好处是：<strong>它在任何一个城市里都能找到。</strong>一个背墙的座位、一个带门的小房间、一扇屏风，就能给你"被包裹 + 入口可见"。</p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>环境</th><th>核心品质</th><th>城市对应</th><th>错配信号</th></tr></thead>
+        <tbody>
+          <tr><td><strong>洞穴</strong> Caves</td><td>被包裹 + 入口可见</td><td>背墙座位、带门小间、屏风</td><td>在家也睡不沉，总想背对墙</td></tr>
+          <tr><td><strong>市场</strong> Markets</td><td>流动与交换</td><td>商圈、开放办公、换乘站</td><td>独处久了发闷</td></tr>
+          <tr><td><strong>厨房</strong> Kitchens</td><td>进行中、有制作发生</td><td>工坊、后厨、工作台</td><td>在纯展示空间不自在</td></tr>
+          <tr><td><strong>山</strong> Mountains</td><td>高度与俯瞰距离</td><td>高层、远景窗、顾问位</td><td>泡在细节人情里窒息</td></tr>
+          <tr><td><strong>谷</strong> Valleys</td><td>被环抱的连接带</td><td>内街、下沉广场、社区公园</td><td>空旷高处觉得荒凉</td></tr>
+          <tr><td><strong>岸</strong> Shores</td><td>交界与边缘</td><td>水边、窗边、阳台、桥</td><td>被按在正中央就难受</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>二、六地逐一：怎么认</h3>
+    <p><strong>洞穴</strong>——关键词是"退可守"。你坐下来，背后有东西，前方能看见入口。在地铁上会本能挑靠墙的位子，在咖啡馆会避开正中间的大桌，就是它的样子。</p>
+    <p><strong>市场</strong>——关键词是"流动"。人在走动、东西在交换、信息在穿过。这类人待在纯静态的空间里会闷，去一趟菜市场反而精神。</p>
+    <p><strong>厨房</strong>——关键词是"正在发生"。不是成品陈列，而是制作进行中：面案上有面粉，桌上有半成品，有人在处理事情。</p>
+    <p><strong>山</strong>——关键词是"距离"。你要能俯视，能退后一步看全局。泡在细节与人情里会窒息，站高一点才呼吸得过来。</p>
+    <p><strong>谷</strong>——关键词是"被围住"。四周有环抱，中间是连接带。放到空旷的高处会觉得荒凉，哪怕风景很好。</p>
+    <p><strong>岸</strong>——关键词是"交界"。水与陆、内与外、明与暗的那条线。被按在正中央会难受，靠边反而稳。</p>
+
+    <h3 id="m3c">三、慢变量纪律</h3>
+    <div class="box">
+      <div class="bh">环境以年计，消化以周计</div>
+      <p>消化条件改一下，一两周就能看到反馈；环境是<strong>慢变量</strong>，它的效果压在更长的时间尺度上。所以纪律是：</p>
+      <p><strong>① 只观察，不着急动。</strong>先花两周，走三个不同品质的空间，各待 40 分钟，记录身体状态。<br>
+         <strong>② 先动小半径。</strong>换座位 → 换房间 → 换通勤路线 → 换城市。一次只动一级。<br>
+         <strong>③ 土星回归之前，不做为环境的大搬迁。</strong>这个年纪阶段的生活结构还没定型，搬了也读不出信号。</p>
+    </div>
+
+    <p>另外两条边界要说清：<strong>与风水的边界</strong>——风水讲的是空间与气的关系，PHS 讲的是身体对空间品质的偏好，两者不是一回事，不要混着卖；<strong>与经济现实的边界</strong>——品质在城市里可以低成本获得，不必为了一个"洞穴"去买一套房。</p>
+
+    <div class="ex">
+      <div class="eh">模块三作业：空间观察</div>
+      <ol>
+        <li>两周内去三个不同品质的空间（例如：带门小间 / 开放商圈 / 水边或阳台）</li>
+        <li>每个各待 40 分钟，记录三件事：身体松紧、想待多久、离开时的感觉</li>
+        <li>写一条"最小可执行的调整"——不是搬家，是把你的日常座位挪一挪也算</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 模块四 ============ -->
+  <section class="mod" id="m4">
+    <div class="mod-num">模块四 · 实验与整合</div>
+    <h2 class="mod-title">怎么验证一个不属于你的说法</h2>
+    <div class="mod-en">Experiment &amp; Boundaries</div>
+    <p class="lead">前三个模块给的是"说法"。这个模块处理的是：<em>怎么验证说法。</em>整门课的灵魂在这里。</p>
+
+    <h3 id="m4b">一、单变量实验协议</h3>
+    <p><strong>只改一个条件，连续 14 天，用统一量表记录。</strong>三个要素缺一不可。</p>
+    <ul>
+      <li><strong>一个条件</strong>：从六类里挑一项，只调它。调两项，结果就归因不了</li>
+      <li><strong>14 天</strong>：短于这个数，看到的多半是波动；太长，人会忘记在记录什么</li>
+      <li><strong>一个指标</strong>：餐后 1 小时的头脑清晰度，1–5 分。简单到不会记错</li>
+    </ul>
+
+    <div class="quote">
+      评估原则：不奖励"感觉有效"，只奖励"诚实实验"。<strong>实验失败也是合格产出。</strong>
+      <span class="by">——本课程考核标准</span>
+    </div>
+
+    <h4>清晰度锚定表（1–5 分）</h4>
+    <div class="tw">
+      <table>
+        <thead><tr><th>分数</th><th>状态描述</th><th>身体信号</th></tr></thead>
+        <tbody>
+          <tr><td><strong>5</strong></td><td>非常清晰</td><td>思路顺畅，能立刻进入需要专注的事</td></tr>
+          <tr><td><strong>4</strong></td><td>比较清晰</td><td>有点困但不影响做事，能集中</td></tr>
+          <tr><td><strong>3</strong></td><td>一般</td><td>能做简单的事，需要动脑就想拖</td></tr>
+          <tr><td><strong>2</strong></td><td>有点昏沉</td><td>明显发钝，想躺，注意力容易跑</td></tr>
+          <tr><td><strong>1</strong></td><td>明显发懵</td><td>脑袋像糊住，说话都嫌费劲</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>锚定表的作用是<strong>防止量表漂移</strong>：第 1 天的"3 分"和第 14 天的"3 分"必须是同一个状态，否则前后数据没法比。</p>
+
+    <h3 id="m4c">二、常见失败模式</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>失败模式</th><th>表现</th><th>后果</th><th>怎么防</th></tr></thead>
+        <tbody>
+          <tr><td><strong>同时改多项</strong></td><td>"我既调了温度又换了吃饭地点"</td><td>归因不了，等于没做</td><td>实验期内其他一切都冻结</td></tr>
+          <tr><td><strong>量表不一致</strong></td><td>前一周凭感觉，后一周按标准</td><td>前后数据不可比</td><td>第一天先抄一遍锚定表</td></tr>
+          <tr><td><strong>安慰剂当证据</strong></td><td>"因为我知道这是对的，所以觉得好了"</td><td>把期待当成了效果</td><td>承认它，写进结论，别当证据</td></tr>
+          <tr><td><strong>单日定结论</strong></td><td>某天清晰度 5 分就宣布有效</td><td>被随机波动骗了</td><td>只看 14 天的趋势线</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 在线工具 -->
+    <div class="tool">
+      <div class="tool-h"><h4>在线观察记录工具</h4><span class="tag">数据只存在本机</span></div>
+      <p class="hint">记录保存在你自己的浏览器（localStorage），不上传任何地方。清浏览器数据会丢失，重要记录请截图或抄到纸质表上。</p>
+
+      <div class="fld">
+        <label for="expKind">实验条件</label>
+        <select id="expKind">
+          <option value="食欲">食欲 · 吃多少由真实饥饿决定</option>
+          <option value="味觉">味觉 · 由当下味觉吸引引导</option>
+          <option value="口渴">口渴 · 温度与水分</option>
+          <option value="触觉">触觉 · 刺激量与身体状态</option>
+          <option value="声音">声音 · 声学环境</option>
+          <option value="光线">光线 · 光线条件与时机</option>
+          <option value="环境">环境 · 空间品质</option>
+        </select>
+      </div>
+
+      <div class="fld">
+        <label for="expChange">本次改动</label>
+        <input type="text" id="expChange" placeholder="例：晚餐改成温热熟食，其余不变">
+      </div>
+
+      <div class="fld">
+        <label for="expDate">日期</label>
+        <input type="date" id="expDate">
+      </div>
+
+      <div class="fld">
+        <label>清晰度评分</label>
+        <div class="score" id="expScore">
+          <button type="button" data-v="1">1 发懵</button>
+          <button type="button" data-v="2">2 昏沉</button>
+          <button type="button" data-v="3">3 一般</button>
+          <button type="button" data-v="4">4 清晰</button>
+          <button type="button" data-v="5">5 很清晰</button>
+        </div>
+      </div>
+
+      <div class="fld">
+        <label for="expNote">备注</label>
+        <input type="text" id="expNote" placeholder="睡眠、压力、运动、外食……任何可能干扰的因素">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn2 main" id="expAdd">记录这一条</button>
+        <button class="btn2 ghost" id="expUndo">撤销上一条</button>
+        <button class="btn2 ghost" id="expClear">清空全部</button>
+      </div>
+
+      <div class="stat">
+        <div><b id="statN">0</b><span>已记录天数</span></div>
+        <div><b id="statAvg">—</b><span>平均清晰度</span></div>
+        <div><b id="statTrend">—</b><span>前 3 天 vs 后 3 天</span></div>
+      </div>
+      <div class="chart" id="expChart"></div>
+      <div class="chart-x"><span>最早</span><span>最近</span></div>
+      <p class="hint" id="expMsg" style="margin-top:12px;margin-bottom:0">还没有记录。先做 3 天基线：什么都不改，只记录。</p>
+    </div>
+
+    <h3>三、消化 × 环境的组合</h3>
+    <p>两个参数可以不一致，而且经常不一致。比如消化偏"需要安静专注"，环境却偏"市场（流动热闹）"——怎么办？</p>
+    <ul>
+      <li><strong>不要让它们互相妥协。</strong>吃饭这 20 分钟归消化管，坐在哪里办公归环境管。时间上可以分开</li>
+      <li><strong>先解决反馈快的那个。</strong>消化一两周就有数据，环境以年计。先把消化调顺</li>
+      <li><strong>冲突时以身体短期反应为准。</strong>图上说的与身体反应冲突，先信身体，同时保留观察记录</li>
+    </ul>
+
+    <h3>四、边界与转介</h3>
+    <div class="box">
+      <div class="bh">四种情况，一律转介</div>
+      <p><strong>① 疾病与用药</strong>——任何需要医生介入的状况，PHS 不参与，也不许"配合着试试"。</p>
+      <p><strong>② 孕期与哺乳</strong>——营养需求有明确的医学标准，不拿变量开玩笑。</p>
+      <p><strong>③ 儿童与青少年营养</strong>——生长发育期的营养问题，找儿科或注册营养师。</p>
+      <p><strong>④ 进食障碍</strong>——任何涉及限制、暴食、体重焦虑的情况，先找专业心理或医疗支持。</p>
+    </div>
+    <p>除此之外还有三条日常纪律：<strong>不做健康承诺</strong>（出现"治好了"的表述立即拉回"这是你的主观观察"）；<strong>不评价学员的饮食好坏</strong>；<strong>不制造焦虑</strong>——不讲"吃错会毁掉你"，只讲"条件对了会更省力"。</p>
+
+    <h3>五、下一步</h3>
+    <p>身体侧跑通之后，才谈头脑侧——<strong>视角与动机</strong>。顺序反了，就是拿失真的燃料去校准世界观。</p>
+    <p>身体侧的两个参数里，<strong>消化反馈最快，先做它</strong>；<strong>环境是慢变量，只观察别着急</strong>；等这两项都稳定了，再去碰那两个"看不见摸不着"的头脑侧参数。</p>
+  </section>
+
+  <!-- ============ 附录 ============ -->
+  <section class="mod" id="apx">
+    <div class="mod-num">附录 A</div>
+    <h2 class="mod-title">术语表</h2>
+    <div class="mod-en">Glossary</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>术语</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PHS</strong></td><td>Primary Health System，初阶健康系统。人类图体系中处理身体运行条件的分支</td></tr>
+          <tr><td><strong>变量 Variable</strong></td><td>图上方的四组箭头，含消化、环境、视角、动机</td></tr>
+          <tr><td><strong>消化 Determination</strong></td><td>身体处理摄入物的条件，读自设计日的色</td></tr>
+          <tr><td><strong>环境 Environment</strong></td><td>身体在什么空间品质里阻力最小，读自设计交点的色</td></tr>
+          <tr><td><strong>设计日 Design Sun</strong></td><td>出生前约 88 天那一侧太阳的位置，属无意识设计</td></tr>
+          <tr><td><strong>设计交点 Design Nodes</strong></td><td>设计侧的南北交点，环境参数的读点</td></tr>
+          <tr><td><strong>色 / 音调 / 基底</strong></td><td>Color / Tone / Base，闸门之下的三层细分参数</td></tr>
+          <tr><td><strong>条件 Condition</strong></td><td>进食时的环境配置，与"食物"相对</td></tr>
+          <tr><td><strong>误配 Misalignment</strong></td><td>长期在自己不匹配的那一侧运行，形成代偿动作</td></tr>
+          <tr><td><strong>单变量实验</strong></td><td>只改一个条件、固定其他一切、用统一量表的自我验证法</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mod" id="apx2">
+    <div class="mod-num">附录 B</div>
+    <h2 class="mod-title">资料一致性警告</h2>
+    <div class="mod-en">A Warning Before You Read Anything Else</div>
+    <p class="lead">编写本课件时，我交叉比对了多份公开资料，发现<em>同一套 PHS 概念在不同来源之间存在系统性矛盾</em>。这不奇怪——二手转述必然走形——但对学习者很危险。</p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>矛盾类型</th><th>具体表现</th><th>后果</th></tr></thead>
+        <tbody>
+          <tr><td><strong>类别归属混乱</strong></td><td>有的资料把"连续 / 交替 / 开放 / 封闭 / 热 / 冷"都叫"消化类型"，等于把方向当类别；有的把触觉 / 声音 / 光线归到环境里去</td><td>学员无法建立层级，背了一堆名字却不知道谁属于谁</td></tr>
+          <tr><td><strong>左右方向命名相反</strong></td><td>以"声音"为例：一处写"左 = 高频（音乐/人声）"，另一处写"高 = 热闹"</td><td>直接导致实验方向做反，14 天白做</td></tr>
+          <tr><td><strong>判定依据说法不一</strong></td><td>有说读设计日的色，有说读设计交点，有说"由节点位置决定"</td><td>拿错参数，整套结论无效</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>本课程的三条处理方式：</p>
+    <ol>
+      <li>只写<strong>六类 + 两方向</strong>的结构，<strong>不写变体总数</strong>（市面上"6 种""12 种""16 种"三种说法都存在）</li>
+      <li>方向的具体命名<strong>交还给学员自己的出图工具</strong>，本课程不替你定名</li>
+      <li>判定依据统一采用：<strong>消化读设计日，环境读设计交点</strong>，并在模块一写明</li>
+    </ol>
+
+    <div class="quote">
+      当你发现两个来源说法相反时，不要投票选"看起来专业"的那个。回到你自己的实验——14 天，一个变量，一个指标。<strong>身体不参与争论，它只给结果。</strong>
+    </div>
+
+    <div class="box">
+      <div class="bh">顺便说一句原典</div>
+      <p>PHS 的原始资料（Ra 的原典、IHDS 三年制转录）<strong>全部在售</strong>，版权在 Jovian Archive 与 IHDS，没有官方免费电子版。本课件不提供也不推荐任何盗版资源。</p>
+      <p>不是因为形式主义，而是因为<strong>盗版直接导致版本混乱</strong>——今天你在网上能找到的 PHS 资料，六类的命名与左右方向已经互相矛盾，这就是上面那张表的来源。</p>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div class="ft">《PHS 人类图初阶健康系统 · 让身体按设计进食》完整课件</div>
+    <div>讲师 邓勤敏 · 课件 V1</div>
+    <div class="dis">本材料为人类图变量理论的学习材料，不构成医学、营养学或心理学建议，不用于诊断、治疗或替代任何专业医疗意见。涉及疾病、用药、孕期哺乳、儿童与青少年营养、进食障碍等情况，请咨询执业医师或注册营养师。</div>
+    <div class="pw">Powered By Kan Man Tang</div>
+  </div>
+
+</div>
+</main>
+
+<script>
+(function(){
+  /* ---- 侧栏 ---- */
+  var side=document.getElementById('side'),scrim=document.getElementById('scrim'),
+      mhamb=document.getElementById('mhamb');
+  function closeSide(){side.classList.remove('open');scrim.classList.remove('show');}
+  if(mhamb){mhamb.addEventListener('click',function(){side.classList.toggle('open');scrim.classList.toggle('show');});}
+  if(scrim){scrim.addEventListener('click',closeSide);}
+  var navLinks=side.querySelectorAll('.side-nav a');
+  for(var i=0;i<navLinks.length;i++){
+    navLinks[i].addEventListener('click',function(e){
+      if(window.innerWidth<=980){
+        /* 先跳转再收起 */
+        setTimeout(closeSide,60);
+      }
+      for(var j=0;j<navLinks.length;j++)navLinks[j].classList.remove('active');
+      this.classList.add('active');
+    });
+  }
+  /* 滚动高亮 */
+  var secs=[];
+  for(var k=0;k<navLinks.length;k++){
+    var id=navLinks[k].getAttribute('href').slice(1);
+    var el=document.getElementById(id);
+    if(el)secs.push({el:el,a:navLinks[k]});
+  }
+  function onScroll(){
+    var y=window.scrollY+140,best=null;
+    for(var m=0;m<secs.length;m++){if(secs[m].el.offsetTop<=y)best=secs[m];}
+    if(best){for(var j=0;j<navLinks.length;j++)navLinks[j].classList.remove('active');best.a.classList.add('active');}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  /* ---- 观察记录工具 ---- */
+  var KEY='phs_exp_log_v1';
+  var rows=[];
+  try{rows=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){rows=[];}
+  var score=0;
+  var $score=document.getElementById('expScore'),
+      $kind=document.getElementById('expKind'),
+      $change=document.getElementById('expChange'),
+      $date=document.getElementById('expDate'),
+      $note=document.getElementById('expNote'),
+      $msg=document.getElementById('expMsg');
+
+  /* 默认今天 */
+  var d=new Date();
+  $date.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+  var sBtns=$score.querySelectorAll('button');
+  for(var s=0;s<sBtns.length;s++){
+    sBtns[s].addEventListener('click',function(){
+      for(var t=0;t<sBtns.length;t++)sBtns[t].classList.remove('on');
+      this.classList.add('on');score=parseInt(this.getAttribute('data-v'),10);
+    });
+  }
+
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(rows));}catch(e){}}
+
+  function render(){
+    var n=rows.length,avg='—',trend='—';
+    if(n){
+      var sum=0;for(var i=0;i<n;i++)sum+=rows[i].score;
+      avg=(sum/n).toFixed(1);
+      if(n>=6){
+        var a=0,b=0;
+        for(var i2=0;i2<3;i2++){a+=rows[i2].score;b+=rows[n-1-i2].score;}
+        var diff=((b/3)-(a/3));
+        trend=(diff>0?'+':'')+diff.toFixed(1);
+      }
+    }
+    document.getElementById('statN').textContent=n;
+    document.getElementById('statAvg').textContent=avg;
+    document.getElementById('statTrend').textContent=trend;
+
+    var $c=document.getElementById('expChart');
+    $c.innerHTML='';
+    var max=5;
+    for(var j=0;j<n;j++){
+      var bar=document.createElement('i');
+      bar.style.height=Math.max(4,(rows[j].score/max)*100)+'%';
+      if(rows[j].kind==='环境')bar.className='base';
+      bar.title=rows[j].date+' · '+rows[j].kind+' · '+rows[j].score+' 分'+(rows[j].note?' · '+rows[j].note:'');
+      $c.appendChild(bar);
+    }
+
+    if(!n){
+      $msg.textContent='还没有记录。先做 3 天基线：什么都不改，只记录。';
+    }else if(n<3){
+      $msg.textContent='已记 '+n+' 天。基线建议做满 3 天，再开始改动条件。';
+    }else if(n<6){
+      $msg.textContent='已记 '+n+' 天，可以开始你的单变量实验了。累计 6 天以上才会显示趋势对比。';
+    }else{
+      $msg.textContent='已记 '+n+' 天。趋势看"前 3 天 vs 后 3 天"，不要用单日下结论。';
+    }
+  }
+
+  document.getElementById('expAdd').addEventListener('click',function(){
+    if(!score){alert('请先给这一餐打个分（1–5）');return;}
+    rows.push({
+      date:$date.value||'',
+      kind:$kind.value,
+      change:$change.value.trim(),
+      score:score,
+      note:$note.value.trim()
+    });
+    save();render();
+    $note.value='';score=0;
+    for(var t=0;t<sBtns.length;t++)sBtns[t].classList.remove('on');
+  });
+
+  document.getElementById('expUndo').addEventListener('click',function(){
+    if(!rows.length){alert('还没有记录可撤销');return;}
+    rows.pop();save();render();
+  });
+
+  document.getElementById('expClear').addEventListener('click',function(){
+    if(!rows.length)return;
+    if(confirm('清空全部 '+rows.length+' 条记录？此操作不可恢复。')){
+      rows=[];save();render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

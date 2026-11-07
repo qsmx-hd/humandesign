@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHS 人类图初阶健康系统 · 让身体按设计进食</title>
+<meta name="description" content="人类图 PHS（初阶健康系统）课程：消化六类十二式、环境六地、14 天单变量实验。不讲吃什么，只讲怎么吃。">
+<!-- ── 变更记录 ───────────────────────────────────────────
+     V1 (2026-11-07) 初版。课程主页。内容口径 = phs-course/ 课程包六件套
+     + 公众号推文《PHS 初阶健康系统｜4 周身体实验课》。
+     版式沿用 hd-beginner-course.html（入门课主页）家族风格：
+     深棕 HERO + 米白正文 + 金棕强调 + 卡片/表格/讲师/CTA。
+     三件套：主页（本文件）+ hd-phs-workbook.html + hd-phs-cheatsheet.html
+   ─────────────────────────────────────────────────────── -->
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843; --terra:#A8553A; --moss:#6B7A5A;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,'Times New Roman',serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);
+  line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--primary-d);text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:100;background:rgba(45,33,24,.97);
+  backdrop-filter:blur(8px);box-shadow:0 2px 16px rgba(0,0,0,.18)}
+.nav-in{max-width:1120px;margin:0 auto;padding:0 24px;height:62px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:#F6EFE1;font-family:var(--serif);
+  font-size:17px;letter-spacing:.06em;font-weight:600}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 4px rgba(212,168,67,.18)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{color:rgba(246,239,225,.78);font-size:14px;letter-spacing:.04em;transition:.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--primary);color:#fff!important;padding:8px 18px;border-radius:999px;
+  font-size:13.5px;font-weight:600;transition:.2s}
+.nav-cta:hover{background:var(--primary-d)}
+.hamb{display:none;background:none;border:none;cursor:pointer;padding:6px}
+.hamb span{display:block;width:24px;height:2px;background:#F6EFE1;margin:5px 0;border-radius:2px;transition:.25s}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:
+  radial-gradient(circle at 82% 18%,rgba(212,168,67,.16),transparent 42%),
+  radial-gradient(circle at 12% 88%,rgba(196,149,106,.14),transparent 40%),
+  linear-gradient(160deg,#2D2118 0%,#3A2A1D 55%,#241A12 100%);
+  color:#F6EFE1;overflow:hidden}
+.hero-in{max-width:1120px;margin:0 auto;padding:88px 24px 90px;display:grid;
+  grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:9px;color:var(--gold);
+  font-size:13px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:22px}
+.kicker::before{content:"";width:30px;height:1px;background:var(--gold);display:inline-block}
+.hero h1{font-family:var(--serif);font-size:43px;line-height:1.3;font-weight:700;
+  letter-spacing:.02em;margin-bottom:20px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p.lead{font-size:16.5px;color:rgba(246,239,225,.82);max-width:560px;margin-bottom:32px;line-height:1.95}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn{padding:13px 28px;border-radius:999px;font-size:15px;font-weight:600;letter-spacing:.03em;
+  transition:.22s;display:inline-block}
+.btn-fill{background:var(--primary);color:#fff}
+.btn-fill:hover{background:var(--gold);color:var(--deep);transform:translateY(-2px)}
+.btn-line{border:1.5px solid rgba(246,239,225,.4);color:#F6EFE1}
+.btn-line:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:0;margin-top:42px;flex-wrap:wrap}
+.hero-stats div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(246,239,225,.16)}
+.hero-stats div:last-child{border-right:none;margin-right:0;padding-right:0}
+.hero-stats b{display:block;font-family:var(--serif);font-size:27px;color:var(--gold);line-height:1.2}
+.hero-stats span{font-size:12.5px;color:rgba(246,239,225,.62);letter-spacing:.08em}
+.art{display:flex;justify-content:center;align-items:center}
+.hero-img{width:100%;max-width:330px;border-radius:22px;display:block;
+  box-shadow:0 26px 64px rgba(0,0,0,.5),0 0 0 1px rgba(212,168,67,.35),0 0 64px rgba(196,149,106,.2)}
+
+/* ---------- sections ---------- */
+section{padding:84px 0}
+.sec-head{text-align:center;max-width:760px;margin:0 auto 50px}
+.sec-kicker{color:var(--primary);font-size:13px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}
+.sec-head h2{font-family:var(--serif);font-size:32px;color:var(--deep);font-weight:700;
+  line-height:1.4;letter-spacing:.02em;margin-bottom:14px}
+.sec-head p{color:var(--muted);font-size:15.5px}
+
+/* ---------- 四箭头 ---------- */
+.arrows{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:26px}
+.arrow-col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 26px 22px;box-shadow:0 6px 20px var(--shadow);position:relative;overflow:hidden}
+.arrow-col::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.arrow-col.body::before{background:var(--terra)}
+.arrow-col.mind::before{background:#3D3A36}
+.arrow-col .tag-line{font-size:12px;letter-spacing:.16em;color:var(--muted);margin-bottom:6px}
+.arrow-col h3{font-family:var(--serif);font-size:20px;color:var(--deep);margin-bottom:14px}
+.arrow-col.body h3{color:var(--terra)}
+.arrow-col ul{list-style:none}
+.arrow-col li{padding:10px 0;border-bottom:1px dashed var(--border-l);font-size:14.5px;color:var(--muted)}
+.arrow-col li:last-child{border-bottom:none}
+.arrow-col li b{color:var(--deep);font-size:15.5px;display:block;margin-bottom:2px}
+.arrow-col .phs{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:#fff;
+  background:var(--terra);padding:1px 8px;border-radius:999px;letter-spacing:.04em;vertical-align:2px}
+.arrow-col .pin{position:absolute;right:20px;bottom:14px;font-family:var(--serif);font-size:64px;
+  color:rgba(196,149,106,.14);line-height:1;font-weight:700}
+
+/* ---------- 概念卡 ---------- */
+.concept{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.c-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:30px 26px;box-shadow:0 6px 20px var(--shadow);transition:.25s;position:relative;overflow:hidden}
+.c-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(45,33,24,.13);border-color:var(--primary)}
+.c-card .n{font-family:var(--serif);font-size:14px;color:var(--primary);letter-spacing:.1em;margin-bottom:14px}
+.c-card h3{font-family:var(--serif);font-size:19px;color:var(--deep);margin-bottom:12px;font-weight:600}
+.c-card p{font-size:14.5px;color:var(--muted);line-height:1.85}
+
+/* ---------- 模块 ---------- */
+.modules{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.m-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 26px 22px;box-shadow:0 4px 16px var(--shadow);transition:.24s;position:relative}
+.m-card:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 12px 28px rgba(45,33,24,.12)}
+.m-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.m-badge{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;font-family:var(--serif);font-weight:700;display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex:0 0 42px;box-shadow:0 4px 12px rgba(196,149,106,.35)}
+.m-card h3{font-family:var(--serif);font-size:18px;color:var(--deep);font-weight:600;line-height:1.35}
+.m-card .tm{font-size:12px;color:var(--primary-d);letter-spacing:.06em;margin-top:3px}
+.m-card p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:12px}
+.m-card ul{list-style:none;margin-bottom:14px}
+.m-card li{font-size:13.5px;color:var(--muted);padding:5px 0 5px 16px;position:relative;line-height:1.7}
+.m-card li::before{content:"";position:absolute;left:3px;top:15px;width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.m-out{font-size:12.5px;color:var(--primary-d);background:rgba(196,149,106,.12);
+  padding:8px 12px;border-radius:10px;line-height:1.6}
+.m-out b{color:var(--terra)}
+
+/* ---------- 表格 ---------- */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);
+  box-shadow:0 6px 20px var(--shadow);background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:620px}
+thead th{background:var(--deep);color:#F6EFE1;padding:14px 16px;text-align:left;font-weight:600;
+  font-size:13.5px;letter-spacing:.05em;white-space:nowrap}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--border-l);color:var(--text);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(196,149,106,.06)}
+td strong{color:var(--deep)}
+.pill{display:inline-block;background:rgba(196,149,106,.14);color:var(--primary-d);
+  padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+.pill.t{background:rgba(168,85,58,.12);color:var(--terra)}
+
+/* ---------- 试验/量表 ---------- */
+.exp{background:var(--deep);color:#F6EFE1;border-radius:20px;padding:46px 44px;
+  box-shadow:0 20px 44px rgba(45,33,24,.22)}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.exp h2{font-family:var(--serif);font-size:27px;margin-bottom:14px;line-height:1.4}
+.exp h2 em{color:var(--gold);font-style:normal}
+.exp p{font-size:14.5px;color:rgba(246,239,225,.78);line-height:1.95;margin-bottom:16px}
+.exp .steps{list-style:none;counter-reset:s}
+.exp .steps li{counter-increment:s;position:relative;padding:9px 0 9px 34px;
+  font-size:14px;color:rgba(246,239,225,.86);border-bottom:1px solid rgba(246,239,225,.1)}
+.exp .steps li:last-child{border-bottom:none}
+.exp .steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:22px;height:22px;
+  border-radius:50%;background:var(--gold);color:var(--deep);font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif)}
+.scale{background:rgba(246,239,225,.06);border:1px solid rgba(212,168,67,.3);border-radius:14px;padding:20px 22px}
+.scale h4{font-size:14px;color:var(--gold);letter-spacing:.1em;margin-bottom:12px}
+.scale .row{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px dashed rgba(246,239,225,.12);font-size:13px}
+.scale .row:last-child{border-bottom:none}
+.scale .bar{flex:1;height:6px;border-radius:99px;background:rgba(246,239,225,.14)}
+.scale .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--terra),var(--gold))}
+.scale .lb{flex:0 0 92px;color:rgba(246,239,225,.72)}
+.scale .row b{color:#fff;min-width:12px;text-align:right}
+
+/* ---------- 边界 ---------- */
+.bounds{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.b-card{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--terra);
+  border-radius:12px;padding:20px 22px;box-shadow:0 4px 14px var(--shadow)}
+.b-card h4{font-family:var(--serif);font-size:16px;color:var(--deep);margin-bottom:7px;display:flex;gap:8px;align-items:center}
+.b-card p{font-size:13.5px;color:var(--muted);line-height:1.8}
+.warn{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;
+  margin-top:18px;font-size:14px;color:var(--text);line-height:1.9}
+.warn b{color:var(--terra)}
+
+/* ---------- 产出 ---------- */
+.outs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.o-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 24px;box-shadow:0 6px 20px var(--shadow);text-align:center}
+.o-card .ic{width:56px;height:56px;border-radius:16px;background:rgba(196,149,106,.14);
+  display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px}
+.o-card h3{font-family:var(--serif);font-size:17.5px;color:var(--deep);margin-bottom:9px}
+.o-card p{font-size:13.5px;color:var(--muted);line-height:1.8}
+
+/* ---------- 教材 ---------- */
+.mats{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.mat{display:flex;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px 22px;box-shadow:0 4px 16px var(--shadow);transition:.22s}
+.mat:hover{border-color:var(--primary);transform:translateY(-3px)}
+.mat .no{flex:0 0 46px;width:46px;height:46px;border-radius:12px;background:var(--deep);color:var(--gold);
+  font-family:var(--serif);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.mat h4{font-size:15.5px;color:var(--deep);font-family:var(--serif);margin-bottom:4px}
+.mat p{font-size:13px;color:var(--muted);line-height:1.7}
+.mat .pg{font-size:11.5px;color:var(--primary-d);margin-top:5px;letter-spacing:.04em}
+
+/* ---------- 路径 ---------- */
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.step{text-align:center;padding:0 10px}
+.step .num{width:54px;height:54px;border-radius:50%;background:var(--card);border:2px solid var(--primary);
+  color:var(--primary-d);font-family:var(--serif);font-size:21px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  box-shadow:0 5px 16px rgba(196,149,106,.2)}
+.step h4{font-family:var(--serif);font-size:16px;color:var(--deep);margin-bottom:8px;font-weight:600}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.75}
+
+/* ---------- 讲师 ---------- */
+.tutor{background:var(--bg2);border-radius:20px;padding:50px;border:1px solid var(--border);
+  display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap}
+.tutor-main{flex:1 1 380px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.tutor .ava{width:104px;height:104px;border-radius:50%;background:var(--card);border:2px solid var(--gold);
+  overflow:hidden;flex-shrink:0;box-shadow:0 14px 30px rgba(166,120,72,.3)}
+.tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.tutor .txt{flex:1 1 270px}
+.tutor h3{font-family:var(--serif);font-size:23px;color:var(--deep);margin-bottom:7px}
+.tutor .role{color:var(--text);font-size:14.5px;line-height:2}
+.tutor p{font-size:14.5px;color:var(--muted);line-height:1.95}
+.tutor p+p{margin-top:9px}
+.tutor .chips{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0 12px}
+.tutor .chips span{background:rgba(196,149,106,.13);border:1px solid var(--border);color:var(--primary-d);
+  font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.tutor .quote{margin-top:18px;padding-left:16px;border-left:3px solid var(--primary);
+  font-family:var(--serif);font-style:italic;color:var(--primary-d);font-size:14.5px}
+.hd-figure{flex:0 0 210px;margin:0;text-align:center}
+.hd-figure img{width:100%;border-radius:14px;border:1px solid var(--border);background:var(--card);
+  box-shadow:0 16px 36px rgba(45,33,24,.13)}
+.hd-figure figcaption{font-size:12.5px;color:var(--primary-d);font-weight:700;letter-spacing:.08em;margin-top:10px}
+
+/* ---------- CTA ---------- */
+.cta{background:linear-gradient(150deg,#2D2118,#3A2A1D);color:#F6EFE1;border-radius:22px;
+  padding:60px 46px;text-align:center;box-shadow:0 24px 50px rgba(45,33,24,.25)}
+.cta h2{font-family:var(--serif);font-size:31px;margin-bottom:16px;font-weight:700}
+.cta p{color:rgba(246,239,225,.78);font-size:15.5px;max-width:620px;margin:0 auto 30px}
+.cta .btn-fill{font-size:16px;padding:15px 38px}
+.cta .price-note{margin-top:20px;font-size:13px;color:rgba(246,239,225,.6);letter-spacing:.06em}
+
+/* ---------- footer ---------- */
+footer{background:var(--deep);color:rgba(246,239,225,.66);padding:40px 24px;text-align:center;
+  font-size:13.5px;line-height:2}
+footer .f-title{font-family:var(--serif);color:#F6EFE1;font-size:16px;margin-bottom:6px;letter-spacing:.06em}
+footer .powered{color:rgba(246,239,225,.42);font-size:12px;margin-top:10px;letter-spacing:.1em}
+footer .dis{max-width:720px;margin:12px auto 0;font-size:12px;color:rgba(246,239,225,.5);line-height:1.9}
+
+/* ---------- responsive ---------- */
+@media(max-width:980px){
+  .hero-in{grid-template-columns:1fr;gap:36px;padding:60px 24px 68px}
+  .art{order:-1}
+  .hero-img{max-width:280px}
+  .hero h1{font-size:35px}
+  .concept,.outs{grid-template-columns:1fr}
+  .modules{grid-template-columns:1fr}
+  .arrows{grid-template-columns:1fr}
+  .mats,.bounds{grid-template-columns:1fr}
+  .exp-grid{grid-template-columns:1fr;gap:24px}
+  .path{grid-template-columns:repeat(2,1fr);gap:32px 18px}
+  .tutor{padding:36px 28px}
+}
+@media(max-width:860px){
+  .nav-links{position:absolute;top:62px;left:0;right:0;background:var(--deep);
+    flex-direction:column;align-items:stretch;gap:0;padding:8px 0;display:none;
+    box-shadow:0 12px 24px rgba(0,0,0,.25)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 26px;font-size:15px;border-bottom:1px solid rgba(246,239,225,.08)}
+  .nav-cta{margin:12px 26px;text-align:center;border-radius:10px}
+  .hamb{display:block}
+}
+@media(max-width:600px){
+  section{padding:56px 0}
+  .hero h1{font-size:28px}
+  .sec-head h2{font-size:24px}
+  .wrap{padding:0 18px}
+  .exp{padding:32px 22px}
+  .exp h2{font-size:23px}
+  .hero-stats div{padding-right:18px;margin-right:18px}
+  .hero-stats b{font-size:21px}
+  .cta{padding:42px 22px}
+  .cta h2{font-size:23px}
+  .tutor{padding:28px 20px;gap:22px}
+  .tutor-main{flex-direction:column;gap:14px}
+  .tutor .ava{width:86px;height:86px}
+  .hd-figure{flex:1 1 100%;max-width:230px;margin:4px auto 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="dot"></span>PHS 初阶健康系统</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#position">它在图的哪一层</a>
+      <a href="#map">课程地图</a>
+      <a href="#determination">消化六类</a>
+      <a href="#environment">环境六地</a>
+      <a href="#experiment">实验</a>
+      <a href="#bounds">边界</a>
+      <a class="nav-cta" href="hd-phs-workbook.html">进入课件</a>
+    </div>
+    <button class="hamb" id="hamb" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-in">
+    <div>
+      <div class="kicker">Human Design · PHS 初阶健康系统</div>
+      <h1>怎么吃饭，<br>你出生时就<em>设计好了</em></h1>
+      <p class="lead">PHS（Primary Health System，初阶健康系统）讲的不是"该吃什么"，而是"在什么条件下，你的身体才能把食物处理好"。它读自你出生图上更深的层级——大多数免费出图工具根本不显示。四周，用一次实验验证你的身体设计。</p>
+      <div class="hero-btns">
+        <a class="btn btn-fill" href="hd-phs-workbook.html">进入完整课件</a>
+        <a class="btn btn-line" href="hd-phs-cheatsheet.html">打开速查卡</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>4</b><span>个 90 分钟模块</span></div>
+        <div><b>6</b><span>类消化条件</span></div>
+        <div><b>6</b><span>种环境品质</span></div>
+        <div><b>14</b><span>天单变量实验</span></div>
+      </div>
+    </div>
+    <div class="art">
+      <img class="hero-img" src="HD.jpg" alt="人类图九大能量中心示意图">
+    </div>
+  </div>
+</header>
+
+<!-- 位置 -->
+<section id="position">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Where PHS Sits</div>
+      <h2>PHS 不在讲"你是什么人"，讲的是"你坐的这台身体"</h2>
+      <p>多数人学人类图，停在类型、权威、角色、通道——这三层讲的都是"你这个人"。PHS 往下走了一层，讲载具：这台身体机器需要什么样的运行条件。</p>
+    </div>
+
+    <div class="arrows">
+      <div class="arrow-col body">
+        <div class="tag-line">身体侧 · 设计侧 · 图上红色</div>
+        <h3>身体侧（出生前已在运转）</h3>
+        <ul>
+          <li><b>消化 Determination <span class="phs">PHS</span></b>身体怎么处理进来的东西 · 读自设计日的色</li>
+          <li><b>环境 Environment <span class="phs">PHS</span></b>身体在什么空间里阻力最小 · 读自设计交点</li>
+        </ul>
+        <div class="pin">◤</div>
+      </div>
+      <div class="arrow-col mind">
+        <div class="tag-line">头脑侧 · 人格侧 · 图上黑色</div>
+        <h3>头脑侧（有意识的部分）</h3>
+        <ul>
+          <li><b>视角 Perspective</b>注意力默认停在哪个位置 · 瞭望塔建在哪</li>
+          <li><b>动机 Motivation</b>大脑被什么驱动 · 引擎烧什么燃料</li>
+        </ul>
+        <div class="pin">◥</div>
+      </div>
+    </div>
+
+    <div class="warn">
+      <b>顺序不可颠倒：</b>身体侧在前，头脑侧在后。逻辑一句话就够——<b>大脑靠身体喂养</b>。身体处理进来的东西处理得不对，送上去的燃料就是失真的，在失真的地基上谈"看清世界"，是空中楼阁。所以本课程只做前两项。
+    </div>
+
+    <div class="concept" style="margin-top:40px">
+      <div class="c-card">
+        <div class="n">01 / 反 直 觉</div>
+        <h3>为什么它跟我的口味相反</h3>
+        <p>消化条件读的是设计侧——图上红色那一半，出生前就在运转的无意识部分。你的口味来自后天（家乡、父母、工作），你的消化条件来自出生前。两者不一致，太正常了。</p>
+      </div>
+      <div class="c-card">
+        <div class="n">02 / 为 什 么 深</div>
+        <h3>读的是色 / 音调 / 基底</h3>
+        <p>消化与环境不读类型、不读闸门、不读中心，读的是图上更深的 Color / Tone / Base 层。这一层多数免费出图工具不显示，要打开"变量"或"四箭头"面板才看得到。</p>
+      </div>
+      <div class="c-card">
+        <div class="n">03 / 为 什 么 叫 健 康</div>
+        <h3>健康是副产品，目标是认知</h3>
+        <p>处理条件对了，吸收就顺，大脑收到清亮的燃料，表现为头脑清晰、反应快、情绪稳。PHS 真正瞄准的是认知，健康只是顺带的结果。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 课程地图 -->
+<section id="map" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Course Map</div>
+      <h2>四个 90 分钟，从"这是什么"到"我验过了"</h2>
+      <p>每次直播 90 分钟（有回放），中间穿插 4 周实验陪伴。小班 6–20 人，因为每个人的图要单独看。</p>
+    </div>
+
+    <div class="modules">
+      <div class="m-card">
+        <div class="m-top"><div class="m-badge">1</div><div><h3>PHS 在人类图的什么位置</h3><div class="tm">90 分钟 · 观念地基</div></div></div>
+        <p>把 PHS 从"又一套养生说法"里拎出来，放回人类图的结构中去。</p>
+        <ul>
+          <li>变量四箭头全景：身体侧（红）与头脑侧（黑）</li>
+          <li>两个来源：设计日定消化，设计交点定环境</li>
+          <li>"喂养大脑"的逻辑链：处理 → 吸收 → 燃料 → 认知</li>
+          <li>三个边界：不是营养学、不是医学、不替代策略与权威</li>
+        </ul>
+        <div class="m-out">带走：<b>在自己的图上准确标出四个箭头</b> + 三天基线观察（只观察，不改变任何事）</div>
+      </div>
+
+      <div class="m-card">
+        <div class="m-top"><div class="m-badge">2</div><div><h3>消化条件 · 六类十二式</h3><div class="tm">90 分钟 · 课程主体</div></div></div>
+        <p>关键区分：<b>六大类是"条件"，不是"食物"</b>。PHS 不管吃什么。</p>
+        <ul>
+          <li>六类逐一讲透：核心条件 / 两方向 / 典型误配 / 生活化做法</li>
+          <li>3 人一组互述，别人帮你找"误配痕迹"</li>
+          <li>每人写出自己的实验假设</li>
+        </ul>
+        <div class="m-out">带走：<b>自己的类型与方向</b> + 一个只改一个条件的实验假设</div>
+      </div>
+
+      <div class="m-card">
+        <div class="m-top"><div class="m-badge">3</div><div><h3>环境品质 · 六地</h3><div class="tm">90 分钟 · 空间</div></div></div>
+        <p>破误解：<b>环境是品质，不是地址</b>。六种品质，在任何一个城市里都能找到。</p>
+        <ul>
+          <li>洞穴 / 市场 / 厨房 / 山 / 谷 / 岸 逐一辨认</li>
+          <li>慢变量纪律：以年计，土星回归前不做大搬迁</li>
+          <li>与风水、与经济现实的边界</li>
+        </ul>
+        <div class="m-out">带走：<b>自己的环境品质</b> + 一条"最小可执行的调整"</div>
+      </div>
+
+      <div class="m-card">
+        <div class="m-top"><div class="m-badge">4</div><div><h3>实验 · 整合 · 边界</h3><div class="tm">90 分钟 · 验证</div></div></div>
+        <p>前三个模块给的是"说法"，这个模块处理"怎么验证说法"。</p>
+        <ul>
+          <li>回看 14 天数据：看趋势，不看单日</li>
+          <li>常见失败模式：同时改多项 / 量表不一 / 把安慰剂当证据</li>
+          <li>消化 × 环境的组合逻辑：两个参数不一致怎么办</li>
+          <li>必须转介的三种情境，现场演练</li>
+        </ul>
+        <div class="m-out">带走：<b>一句实验结论</b> + 定稿的条件卡 + 90 天复看日期</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 消化 -->
+<section id="determination">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Determination</div>
+      <h2>消化：六类条件，各有两个方向</h2>
+      <p>下表是六类的核心条件（一句话版）。每一类再分两个方向——方向的具体命名以你自己的出图工具为准，本课程只统一"六类 + 两方向"的结构。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>类别</th><th>English</th><th>核心条件</th><th>常见误配</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>食欲</strong></td><td><span class="pill">Appetite</span></td><td>吃多少、什么节奏，由真实饥饿决定</td><td>按时间表吃、按份量吃，听不见饥饿信号</td></tr>
+          <tr><td><strong>味觉</strong></td><td><span class="pill">Taste</span></td><td>由当下的味觉吸引引导</td><td>靠"应该吃"而不是"想吃"下筷子</td></tr>
+          <tr><td><strong>口渴</strong></td><td><span class="pill">Thirst</span></td><td>温度与水分是主变量</td><td>常年冰饮或常年烫食，温度曲线单一</td></tr>
+          <tr><td><strong>触觉</strong></td><td><span class="pill">Touch</span></td><td>进食时的刺激量与身体状态</td><td>边刷手机边吃，身体始终处在应激态</td></tr>
+          <tr><td><strong>声音</strong></td><td><span class="pill">Sound</span></td><td>进食时的声学环境</td><td>长期在嘈杂或完全静默的一侧吃饭</td></tr>
+          <tr><td><strong>光线</strong></td><td><span class="pill">Light</span></td><td>光线条件与进食时机</td><td>深夜冷光灯下进食，或永远在同一个亮度</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn">
+      <b>教学纪律：</b>课上只讲"条件"，不讲"食物清单"。任何学员问"我该吃什么"，标准回答是——<b>PHS 不回答这个问题，它回答你怎么吃。</b>
+    </div>
+  </div>
+</section>
+
+<!-- 环境 -->
+<section id="environment" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Environment</div>
+      <h2>环境：六种品质，城市里都能找得到</h2>
+      <p>不是"你必须住在山里"，而是"你需要一种被包裹、入口可见的空间感"。这个品质，一个背墙座位就能给你。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>环境</th><th>English</th><th>核心品质</th><th>城市对应</th><th>错配信号</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>洞穴</strong></td><td><span class="pill">Caves</span></td><td>被包裹 + 入口可见</td><td>背墙座位、带门小间、屏风</td><td>在家也睡不沉，总想背对墙</td></tr>
+          <tr><td><strong>市场</strong></td><td><span class="pill">Markets</span></td><td>流动与交换</td><td>商圈、开放办公、换乘站</td><td>独处久了发闷</td></tr>
+          <tr><td><strong>厨房</strong></td><td><span class="pill">Kitchens</span></td><td>进行中、有制作发生</td><td>工坊、后厨、工作台</td><td>在纯展示空间不自在</td></tr>
+          <tr><td><strong>山</strong></td><td><span class="pill">Mountains</span></td><td>高度与俯瞰距离</td><td>高层、远景窗、顾问位</td><td>泡在细节人情里窒息</td></tr>
+          <tr><td><strong>谷</strong></td><td><span class="pill">Valleys</span></td><td>被环抱的连接带</td><td>内街、下沉广场、社区公园</td><td>空旷高处觉得荒凉</td></tr>
+          <tr><td><strong>岸</strong></td><td><span class="pill">Shores</span></td><td>交界与边缘</td><td>水边、窗边、阳台、桥</td><td>被按在正中央就难受</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn">
+      <b>慢变量纪律：</b>环境是以年计的参数。<b>只观察，先动小半径，别急着搬家</b>——先换座位，再换房间，最后才谈城市。土星回归之前，不建议为环境做大搬迁。
+    </div>
+  </div>
+</section>
+
+<!-- 实验 -->
+<section id="experiment">
+  <div class="wrap">
+    <div class="exp">
+      <div class="exp-grid">
+        <div>
+          <h2>14 天，一个变量，一个指标<br><em>身体不参与争论，它只给结果</em></h2>
+          <p>课上给的所有说法，都不要求你相信。只要求你做一次实验——只改一个条件，连续 14 天，用统一量表记录餐后一小时的头脑清晰度。</p>
+          <ol class="steps">
+            <li><b>先做 3 天基线</b>：什么都不改，只记录。这是你的参照系</li>
+            <li><b>选一个条件</b>：从六类里挑一项，只调它，别动其他</li>
+            <li><b>每天打一个分</b>：餐后 1 小时头脑清晰度，1–5 分</li>
+            <li><b>看趋势不看单日</b>：14 天结束再回看，单日波动不算证据</li>
+            <li><b>写下结论</b>：有效、无效、不确定——三种都算合格产出</li>
+          </ol>
+        </div>
+        <div class="scale">
+          <h4>清晰度锚定表 · 1–5 分</h4>
+          <div class="row"><span class="lb">5 非常清晰</span><span class="bar"><i style="width:100%"></i></span><b>5</b></div>
+          <div class="row"><span class="lb">4 比较清晰</span><span class="bar"><i style="width:80%"></i></span><b>4</b></div>
+          <div class="row"><span class="lb">3 一般</span><span class="bar"><i style="width:60%"></i></span><b>3</b></div>
+          <div class="row"><span class="lb">2 有点昏沉</span><span class="bar"><i style="width:40%"></i></span><b>2</b></div>
+          <div class="row"><span class="lb">1 明显发懵</span><span class="bar"><i style="width:20%"></i></span><b>1</b></div>
+          <p style="margin-top:16px;margin-bottom:0;font-size:13px;color:rgba(246,239,225,.6)">评估原则：<b style="color:var(--gold)">不奖励"感觉有效"，只奖励"诚实实验"</b>。实验失败也是合格产出。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 边界 -->
+<section id="bounds" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Boundaries</div>
+      <h2>这门课不做什么</h2>
+      <p>边界放在卖点前面，是因为它决定这套东西能不能长期用下去。四条硬边界，课程全程遵守。</p>
+    </div>
+    <div class="bounds">
+      <div class="b-card">
+        <h4>🚫 不给食物清单</h4>
+        <p>不告诉学员该吃什么、该忌口什么。PHS 只回答"在什么条件下吃"，卡路里与营养素是营养学的领地。</p>
+      </div>
+      <div class="b-card">
+        <h4>🚫 不做健康承诺</h4>
+        <p>出现任何"治好了"的表述，立即拉回"这是你的主观观察"。不评价学员的饮食好坏，不制造焦虑。</p>
+      </div>
+      <div class="b-card">
+        <h4>🚫 不做性格标签</h4>
+        <p>六大类描述条件，不描述你是谁。它不能当性格测试用，也不能用来给别人贴标签。</p>
+      </div>
+      <div class="b-card">
+        <h4>🚫 不替代类型与权威</h4>
+        <p>人生决定回到类型与内在权威。PHS 是精细化调优，不是方向盘。图上说的与身体反应冲突时，以身体短期反应为准。</p>
+      </div>
+    </div>
+    <div class="warn">
+      <b>一律转介：</b>疾病与用药、孕期哺乳、儿童与青少年营养、进食障碍——这四种情况请先找执业医师或注册营养师，PHS 帮不上忙，课程里也会明确劝退。
+    </div>
+  </div>
+</section>
+
+<!-- 产出 -->
+<section id="outputs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">What You Take Away</div>
+      <h2>四周之后，你手上有的三样东西</h2>
+      <p>不是"听完觉得很有道理"，是可以拿在手上、可以复看、可以给别人看的东西。</p>
+    </div>
+    <div class="outs">
+      <div class="o-card">
+        <div class="ic">🏹</div>
+        <h3>自己的四箭头档案</h3>
+        <p>每个参数读自哪一层、为什么，你自己能说清——包括两个方向到底该往哪边调。</p>
+      </div>
+      <div class="o-card">
+        <div class="ic">📊</div>
+        <h3>一份 30 天进食日志</h3>
+        <p>3 天基线 + 14 天实验 + 判定栏。数据是你的，不是我给你的结论。</p>
+      </div>
+      <div class="o-card">
+        <div class="ic">🧊</div>
+        <h3>一张饮食条件卡</h3>
+        <p>一页纸，贴冰箱。上面是你自己的条件、三条铁律，和一句边界声明。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 教材 -->
+<section id="materials" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Materials</div>
+      <h2>课前发放的五份 PDF 教材</h2>
+      <p>不是 PPT 截图，是可以自己读、自己打印的材料。学员里也有在线版本：课件与速查卡。</p>
+    </div>
+    <div class="mats">
+      <div class="mat"><div class="no">00</div><div><h4>课程大纲</h4><p>四模块时间轴、行为化学习目标、考核权重与教学纪律。</p><div class="pg">6 页</div></div></div>
+      <div class="mat"><div class="no">01</div><div><h4>PHS 学员读本</h4><p>主讲义：六章 + 四附录，含免责声明、六类速查表与实验协议。</p><div class="pg">11 页</div></div></div>
+      <div class="mat"><div class="no">02</div><div><h4>讲师手册</h4><p>只给讲师：时间轴、关键讲法、板书、答疑预案、讲师陷阱。</p><div class="pg">8 页</div></div></div>
+      <div class="mat"><div class="no">03</div><div><h4>观察记录表</h4><p>3 天基线 + 14 天实验 + 判定栏 + 清晰度锚定 + 空间观察。</p><div class="pg">4 页</div></div></div>
+      <div class="mat"><div class="no">04</div><div><h4>饮食条件卡</h4><p>一页纸贴冰箱：你的条件、三条铁律、边界声明。</p><div class="pg">3 页</div></div></div>
+      <div class="mat"><div class="no">05</div><div><h4>延伸读物清单</h4><p>正版原典渠道 + 中文资料评估 + 资料一致性警告（重要）。</p><div class="pg">5 页</div></div></div>
+    </div>
+    <div class="warn">
+      <b>关于原典：</b>PHS 的原始资料（Ra 的原典、IHDS 三年制转录）<b>全部在售</b>，版权在 Jovian Archive 与 IHDS，没有官方免费电子版。本课程不提供也不推荐任何盗版资源——盗版泛滥的直接后果是<b>版本混乱、术语走形</b>，方向做反，14 天白做。
+    </div>
+  </div>
+</section>
+
+<!-- 路径 -->
+<section id="path">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-kicker">Learning Path</div>
+      <h2>四周节奏</h2>
+      <p>每周一课，课后立刻进入实验。课上讲的是"说法"，课下做的才是"验证"。</p>
+    </div>
+    <div class="path">
+      <div class="step"><div class="num">1</div><h4>第一周 · 定位</h4><p>模块一：变量四箭头与依据层，标出自己的图，做 3 天基线观察。</p></div>
+      <div class="step"><div class="num">2</div><h4>第二周 · 消化</h4><p>模块二：找到自己的六类与方向，写出实验假设，开始 14 天实验。</p></div>
+      <div class="step"><div class="num">3</div><h4>第三周 · 环境</h4><p>模块三：辨认环境品质，先动小半径，走三个不同品质的空间。</p></div>
+      <div class="step"><div class="num">4</div><h4>第四周 · 整合</h4><p>模块四：读数据、下结论、定稿条件卡、写下 90 天复看日期。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 讲师 -->
+<section id="teacher" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p class="role">人类图领读者计划发起人<br>真好玩人类图平台创始人<br>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span><span>3 次 DTM</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+          <div class="quote">「别再拿别人的地图，走自己的路。」</div>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>准备好做这一次实验了吗？</h2>
+      <p>四周，一个变量，一个指标。不要求你相信任何说法，只要求你把结果记下来。</p>
+      <a class="btn btn-fill" href="hd-phs-workbook.html">进入完整课件 →</a>
+      <div class="price-note">4 × 90 分钟直播（有回放）· 4 周实验陪伴 · 小班 6–20 人 · 报名请私信</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-title">《PHS 人类图初阶健康系统 · 让身体按设计进食》</div>
+  <div>课程主页 · V1</div>
+  <div class="dis">本课程为人类图变量理论的学习材料，不构成医学、营养学或心理学建议，不用于诊断、治疗或替代任何专业医疗意见。涉及疾病、用药、孕期哺乳、儿童与青少年营养、进食障碍等情况，请咨询执业医师或注册营养师。</div>
+  <div class="powered">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+(function(){
+  var hamb=document.getElementById('hamb'),links=document.getElementById('navLinks');
+  hamb.addEventListener('click',function(){links.classList.toggle('open');});
+  links.addEventListener('click',function(e){if(e.target.tagName==='A')links.classList.remove('open');});
+})();
+</script>
+</body>
+</html>

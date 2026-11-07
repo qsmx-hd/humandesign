@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHS 速查卡 · 六类消化 × 六地环境</title>
+<meta name="description" content="人类图 PHS 速查卡：四箭头位置、判定依据、消化六类、环境六地、清晰度量表与实验五步，一页速查可打印。">
+<!-- ── 变更记录 ───────────────────────────────────────────
+     V1 (2026-11-07) 初版速查卡。内容口径 = phs-course/04 饮食条件卡 + 01 读本速查表。
+     版式沿用 hd-beginner-cheatsheet.html（入门课速查卡）家族风格：多卡网格 + 打印优化。
+   ─────────────────────────────────────────────────────── -->
+<style>
+:root{
+  --bg:#F5F0E8; --bg2:#EDE7D9; --card:#FFFDF8;
+  --primary:#C4956A; --primary-d:#A67848; --gold:#D4A843; --terra:#A8553A; --moss:#6B7A5A;
+  --deep:#2D2118; --text:#3D2E1E; --muted:#7A6552;
+  --border:#E8DCC8; --border-l:#F0E8D8;
+  --shadow:rgba(45,33,24,.08);
+  --serif:'Noto Serif SC','Songti SC','STSong',Georgia,serif;
+  --sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:14px;
+  -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+a{color:var(--primary-d);text-decoration:none}
+
+.top{background:var(--deep);color:#F6EFE1;position:sticky;top:0;z-index:20}
+.top-in{max-width:1180px;margin:0 auto;padding:0 26px;height:54px;display:flex;align-items:center;gap:14px}
+.top .t{font-family:var(--serif);font-size:15px;letter-spacing:.05em}
+.top .links{margin-left:auto;display:flex;gap:16px;align-items:center}
+.top .links a{color:rgba(246,239,225,.72);font-size:12.5px}
+.top .links a:hover{color:var(--gold)}
+.top .print{background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:999px;
+  font-size:12px;cursor:pointer;font-family:var(--sans)}
+.top .print:hover{background:var(--primary-d)}
+
+.head{max-width:1180px;margin:0 auto;padding:38px 26px 22px}
+.head .k{color:var(--primary);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.head h1{font-family:var(--serif);font-size:30px;color:var(--deep);font-weight:700}
+.head p{color:var(--muted);font-size:14px;margin-top:8px}
+
+.grid{max-width:1180px;margin:0 auto;padding:0 26px 60px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;align-items:start}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  box-shadow:0 4px 16px var(--shadow)}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--bg2);
+  border-bottom:1px solid var(--border)}
+.card-h .ic{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto}
+.card-h h2{font-family:var(--serif);font-size:15.5px;color:var(--deep);font-weight:600}
+.card-h .en{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-left:auto}
+.card-b{padding:14px 18px 16px}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--primary-d);font-weight:600;padding:6px 6px;border-bottom:1px solid var(--border);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px dashed var(--border-l);vertical-align:top;color:var(--text)}
+tr:last-child td{border-bottom:none}
+td strong{color:var(--deep)}
+td .m{color:var(--muted);font-size:11px}
+.tag{display:inline-block;font-size:10.5px;color:var(--primary-d);background:rgba(196,149,106,.14);
+  padding:1px 7px;border-radius:999px;white-space:nowrap}
+
+.li{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border-l);font-size:12.5px}
+.li:last-child{border-bottom:none}
+.li .k{color:var(--primary-d);font-weight:600;min-width:58px;flex:0 0 auto}
+.li .v{color:var(--text)}
+.li .v em{display:block;color:var(--muted);font-style:normal;font-size:11px;margin-top:3px;line-height:1.55}
+
+.steps{counter-reset:s;list-style:none}
+.steps li{position:relative;padding:7px 0 7px 30px;border-bottom:1px dashed var(--border-l);font-size:12.5px}
+.steps li:last-child{border-bottom:none}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:7px;width:20px;height:20px;
+  border-radius:50%;background:var(--primary);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-family:var(--serif)}
+.steps b{color:var(--deep)}
+
+.note{background:var(--bg2);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--muted);margin-top:10px}
+.note b{color:var(--primary-d)}
+.note.warn{background:rgba(168,85,58,.08);border-left:3px solid var(--terra)}
+.note.warn b{color:var(--terra)}
+
+.pl{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.pl span{font-size:11.5px;background:rgba(196,149,106,.12);color:var(--primary-d);padding:3px 9px;border-radius:999px}
+
+/* 卡片：可填写的条件卡 */
+.fillbox{border:1.5px dashed var(--primary);border-radius:12px;padding:14px 16px;background:rgba(255,253,248,.6)}
+.fillbox .row{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border-l);font-size:13px}
+.fillbox .row:last-child{border-bottom:none}
+.fillbox .lb{color:var(--primary-d);font-weight:600;min-width:74px;flex:0 0 auto}
+.fillbox .ln{flex:1;border-bottom:1px solid var(--border);min-height:20px}
+
+/* 量表条 */
+.ladder .r{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12px;border-bottom:1px dashed var(--border-l)}
+.ladder .r:last-child{border-bottom:none}
+.ladder .n{width:18px;height:18px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 18px;font-family:var(--serif)}
+.ladder .t{color:var(--text);min-width:64px;font-weight:600}
+.ladder .d{color:var(--muted);font-size:11.5px}
+
+.foot{max-width:1180px;margin:0 auto;padding:24px 26px 40px;text-align:center;color:var(--muted);
+  font-size:11.5px;line-height:1.9;border-top:1px solid var(--border)}
+.foot .ft{font-family:var(--serif);color:var(--deep);font-size:13px;margin-bottom:4px}
+.foot .pw{font-size:10px;letter-spacing:.12em;opacity:.7;margin-top:4px}
+
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr;padding:0 16px 44px}
+  .head{padding:28px 16px 18px}
+  .head h1{font-size:24px}
+  .top .links a:not(.keep){display:none}
+}
+@media print{
+  .top{display:none!important}
+  body{background:#fff;font-size:9.5pt}
+  .grid{grid-template-columns:1fr 1fr;gap:10px;padding:0 0 20px;max-width:none}
+  .card{break-inside:avoid;box-shadow:none}
+  .head{padding:0 0 14px}
+  @page{margin:10mm}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <span class="t">PHS 速查卡</span>
+    <div class="links">
+      <a class="keep" href="hd-phs-course.html">主页</a>
+      <a class="keep" href="hd-phs-workbook.html">完整课件</a>
+      <button class="print" onclick="window.print()">打印</button>
+    </div>
+  </div>
+</div>
+
+<div class="head">
+  <div class="k">Quick Reference</div>
+  <h1>PHS 速查卡</h1>
+  <p>贴在桌前、存进手机，或者打印下来夹在笔记本里。需要时扫一眼，就能找回你的条件。</p>
+</div>
+
+<div class="grid">
+
+  <!-- 四箭头 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">◈</div><h2>四个箭头 · 两侧分工</h2><span class="en">Arrows</span></div>
+    <div class="card-b">
+      <table>
+        <tr><th>参数</th><th>读自</th><th>管什么</th></tr>
+        <tr><td><strong>消化</strong><span class="tag">PHS</span></td><td>设计日的<strong>色</strong></td><td>怎么处理摄入物</td></tr>
+        <tr><td><strong>环境</strong><span class="tag">PHS</span></td><td>设计交点的<strong>色</strong></td><td>在哪阻力最小</td></tr>
+        <tr><td>视角</td><td>人格交点</td><td>注意力停哪</td></tr>
+        <tr><td>动机</td><td>人格日</td><td>大脑被什么驱动</td></tr>
+      </table>
+      <div class="note"><b>顺序：</b>身体侧（红）在前，头脑侧（黑）在后。大脑靠身体喂养——先跑通身体侧，才谈头脑侧。</div>
+    </div>
+  </div>
+
+  <!-- 消化六类 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">🍽</div><h2>消化六类 · 条件是条件</h2><span class="en">Determination</span></div>
+    <div class="card-b">
+      <table>
+        <tr><th>类</th><th>核心条件</th><th>色</th></tr>
+        <tr><td><strong>食欲</strong></td><td>吃多少、节奏由真实饥饿决定</td><td>1</td></tr>
+        <tr><td><strong>味觉</strong></td><td>由当下味觉吸引引导</td><td>2</td></tr>
+        <tr><td><strong>口渴</strong></td><td>温度与水分是主变量</td><td>3</td></tr>
+        <tr><td><strong>触觉</strong></td><td>进食时的刺激量与身体状态</td><td>4</td></tr>
+        <tr><td><strong>声音</strong></td><td>进食时的声学环境</td><td>5</td></tr>
+        <tr><td><strong>光线</strong></td><td>光线条件与进食时机</td><td>6</td></tr>
+      </table>
+      <div class="note warn"><b>铁律：</b>六类是「条件」不是「食物」。PHS 不管吃什么，只管怎么吃。每类再分两个方向——<b>具体哪一边以你自己的出图工具为准</b>。</div>
+    </div>
+  </div>
+
+  <!-- 环境六地 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">⛰</div><h2>环境六地 · 品质非地址</h2><span class="en">Environment</span></div>
+    <div class="card-b">
+      <table>
+        <tr><th>地</th><th>核心品质</th><th>城市对应</th></tr>
+        <tr><td><strong>洞穴</strong></td><td>被包裹 + 入口可见</td><td>背墙座位、小间、屏风</td></tr>
+        <tr><td><strong>市场</strong></td><td>流动与交换</td><td>商圈、开放办公、换乘站</td></tr>
+        <tr><td><strong>厨房</strong></td><td>进行中、有制作发生</td><td>工坊、后厨、工作台</td></tr>
+        <tr><td><strong>山</strong></td><td>高度与俯瞰距离</td><td>高层、远景窗、顾问位</td></tr>
+        <tr><td><strong>谷</strong></td><td>被环抱的连接带</td><td>内街、下沉广场、社区公园</td></tr>
+        <tr><td><strong>岸</strong></td><td>交界与边缘</td><td>水边、窗边、阳台、桥</td></tr>
+      </table>
+      <div class="note"><b>慢变量：</b>环境以年计。只观察、先动小半径：换座位 → 换房间 → 换通勤 → 换城市。</div>
+    </div>
+  </div>
+
+  <!-- 实验五步 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">🧪</div><h2>实验五步</h2><span class="en">Protocol</span></div>
+    <div class="card-b">
+      <ol class="steps">
+        <li><b>3 天基线</b>：什么都不改，只记录，建立参照系</li>
+        <li><b>选一个条件</b>：从六类里挑一项，其他一切冻结</li>
+        <li><b>每天打一个分</b>：餐后 1 小时清晰度，1–5 分</li>
+        <li><b>14 天后回看</b>：看趋势线，不看单日波动</li>
+        <li><b>写下结论</b>：有效 / 无效 / 不确定，三种都算合格</li>
+      </ol>
+      <div class="note"><b>评估原则：</b>不奖励"感觉有效"，只奖励"诚实实验"。实验失败也是合格产出。</div>
+    </div>
+  </div>
+
+  <!-- 清晰度量表 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">📊</div><h2>清晰度锚定表 1–5</h2><span class="en">Clarity Scale</span></div>
+    <div class="card-b">
+      <div class="ladder">
+        <div class="r"><span class="n">5</span><span class="t">非常清晰</span><span class="d">思路顺畅，能立刻进入专注的事</span></div>
+        <div class="r"><span class="n">4</span><span class="t">比较清晰</span><span class="d">有点困但不影响做事，能集中</span></div>
+        <div class="r"><span class="n">3</span><span class="t">一般</span><span class="d">能做简单的事，要动脑就想拖</span></div>
+        <div class="r"><span class="n">2</span><span class="t">有点昏沉</span><span class="d">明显发钝，想躺，注意力易跑</span></div>
+        <div class="r"><span class="n">1</span><span class="t">明显发懵</span><span class="d">脑袋像糊住，说话都嫌费劲</span></div>
+      </div>
+      <div class="note"><b>防漂移：</b>第 1 天的 3 分和第 14 天的 3 分必须是同一个状态，否则前后不可比。</div>
+    </div>
+  </div>
+
+  <!-- 失败模式 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">⚠</div><h2>四种失败模式</h2><span class="en">Pitfalls</span></div>
+    <div class="card-b">
+      <table>
+        <tr><th>模式</th><th>怎么防</th></tr>
+        <tr><td><strong>同时改多项</strong></td><td>实验期内其他一切冻结</td></tr>
+        <tr><td><strong>量表不一致</strong></td><td>第一天先抄一遍锚定表</td></tr>
+        <tr><td><strong>安慰剂当证据</strong></td><td>承认它、写进备注，别当证据</td></tr>
+        <tr><td><strong>单日定结论</strong></td><td>只看 14 天的趋势线</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 条件卡（可填写） -->
+  <div class="card">
+    <div class="card-h"><div class="ic">🧊</div><h2>我的饮食条件卡</h2><span class="en">My Card</span></div>
+    <div class="card-b">
+      <div class="fillbox">
+        <div class="row"><span class="lb">我的消化</span><span class="ln"></span></div>
+        <div class="row"><span class="lb">方向</span><span class="ln"></span></div>
+        <div class="row"><span class="lb">我的环境</span><span class="ln"></span></div>
+        <div class="row"><span class="lb">方向</span><span class="ln"></span></div>
+        <div class="row"><span class="lb">要改的一条</span><span class="ln"></span></div>
+        <div class="row"><span class="lb">复看日期</span><span class="ln"></span></div>
+      </div>
+      <div class="note warn"><b>三条铁律：</b>① 不讲食物清单 ② 不做健康承诺 ③ 疾病·孕期·儿童营养·进食障碍一律转介。</div>
+    </div>
+  </div>
+
+  <!-- 边界 -->
+  <div class="card">
+    <div class="card-h"><div class="ic">🚫</div><h2>四条硬边界</h2><span class="en">Boundaries</span></div>
+    <div class="card-b">
+      <div class="li"><span class="k">不给清单</span><span class="v">只回答"在什么条件下吃"，不回答"吃什么"</span></div>
+      <div class="li"><span class="k">不承诺</span><span class="v">不治病、不说"治好了"，只谈主观观察</span></div>
+      <div class="li"><span class="k">不贴标签</span><span class="v">六类描述条件，不描述你是谁</span></div>
+      <div class="li"><span class="k">不替代权威</span><span class="v">人生决定回到类型与内在权威</span></div>
+      <div class="note"><b>冲突时：</b>图上说的与身体短期反应冲突，先信身体，同时保留观察记录。</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <div class="ft">《PHS 人类图初阶健康系统》速查卡 · V1</div>
+  <div>讲师 邓勤敏 · 人类图咨询师、培训师、应用开发者</div>
+  <div>本卡片为学习辅助材料，不构成医学或营养学建议。</div>
+  <div class="pw">Powered By Kan Man Tang</div>
+</div>
+
+</body>
+</html>
