@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活出你的设计 · 人类图静心营</title>
+<style>
+  /* ── 变更记录 ───────────────────────────────────────────
+     V1.1 (2026-11-19) 删除飞轮区块下方「臣服的副产品」结语。
+     V1.0 (2026-11-19) 初版。基于《人类图静心营落地手册》与
+                       领读者计划网页（human-design-reader-program-3days
+                       V1.7）设计语言构建：同一套禅意配色变量、卡片 /
+                       路径 / 手风琴 / 飞轮 / 讲师 / 双二维码报名组件。
+                       图片资源随页复制，相对路径引用，无外链依赖。
+     ─────────────────────────────────────────────────────── */
+  /* ═══════════════ 统一字号体系（9 级）═══════════════
+     30 首页大标题 / 24 移动端大标题 / 22 区块标题
+     18 三日卡头 / 17 卡片标题 / 16 正文强调
+     15 正文 / 14 次要正文 / 13 辅助信息
+     ══════════════════════════════════════════════════════ */
+  :root{
+    --paper:#F5F0E8; --ink:#2D2118; --gold:#C4956A; --terra:#A8553A; --moss:#6B7A5A;
+    --cream:#EFE7D9; --line:#E2D8C7; --white:#FFFDF8; --muted:#7A6A57;
+    --shadow:0 6px 22px rgba(45,33,24,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.8;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px}
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.94);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px}
+  .brand{font-weight:800;color:var(--terra);margin-right:auto;font-size:15px;letter-spacing:.5px}
+  .nav a{font-size:14px;color:var(--muted);padding:5px 9px;border-radius:8px;white-space:nowrap}
+  .nav a:hover{background:var(--cream);color:var(--ink)}
+  /* HERO */
+  .hero{background:linear-gradient(160deg,#FBF7EF 0%,var(--paper) 60%);padding:46px 0 38px}
+  .hero-grid{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .hero-txt{flex:1 1 360px}
+  .hero-figure{flex:1 1 240px;display:flex;justify-content:center}
+  .hero-img{width:100%;max-width:260px;display:block;border-radius:18px;box-shadow:var(--shadow)}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .tag{background:var(--cream);color:var(--terra);font-size:13px;padding:5px 12px;border-radius:20px;font-weight:600;border:1px solid var(--line)}
+  .hero h1{font-size:30px;line-height:1.35;margin-bottom:12px;font-weight:800}
+  .hero h1 span{color:var(--terra)}
+  .hero .sub{font-size:16px;color:var(--muted);margin-bottom:22px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 26px;border-radius:12px;font-weight:700;font-size:15px;transition:.2s}
+  .btn-primary{background:var(--terra);color:#fff;box-shadow:var(--shadow)}
+  .btn-primary:hover{background:#924634}
+  .btn-ghost{background:transparent;color:var(--terra);border:1.5px solid var(--gold)}
+  .btn-ghost:hover{background:var(--cream)}
+  /* SECTIONS */
+  section{padding:40px 0}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .sec-head .emo{font-size:24px}
+  .sec-head h2{font-size:22px;font-weight:800}
+  .sec-head .line{flex:1;height:2px;background:var(--line);border-radius:2px}
+  .muted{color:var(--muted)}
+  /* 卡片区：每行 2 个，手机端自动单列 */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .card .ico{font-size:28px;margin-bottom:8px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card p{font-size:15px;color:var(--muted)}
+  /* positioning */
+  .path-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .step{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .step .n{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
+  .step h3{font-size:17px;margin:4px 0 6px}
+  .step p{font-size:14px;color:var(--muted)}
+  .step.here{border:2px solid var(--terra);background:#FBF1EC}
+  .step.here .pill{display:inline-block;background:var(--terra);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px;margin-top:8px;font-weight:700}
+  /* 3-day rhythm */
+  .rhythm{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .day{background:var(--white);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .day .top{background:var(--terra);color:#fff;padding:16px;font-weight:800;font-size:18px}
+  .day .top small{display:block;font-weight:500;font-size:13px;opacity:.92;margin-top:2px}
+  .day .mid{padding:14px 18px;font-size:15px;border-bottom:1px solid var(--line)}
+  .day .mid b{color:var(--terra)}
+  .day .bot{padding:14px 18px;font-size:15px}
+  .day .bot .lab{font-size:13px;color:var(--gold);font-weight:700}
+  /* accordion */
+  details.map{border:1px solid var(--line);border-radius:14px;background:var(--white);margin-bottom:12px;overflow:hidden}
+  details.map summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;align-items:center;gap:12px}
+  details.map summary::-webkit-details-marker{display:none}
+  details.map summary .t{background:var(--cream);color:var(--terra);font-size:13px;font-weight:700;padding:3px 10px;border-radius:8px;min-width:58px;text-align:center}
+  details.map summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.map[open] summary .arrow{transform:rotate(90deg)}
+  details.map .body{padding:4px 18px 18px 18px;border-top:1px solid var(--line)}
+  details.map .body ul{list-style:none}
+  details.map .body li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px;display:flex;gap:10px}
+  details.map .body li:last-child{border-bottom:none}
+  details.map .body li b{color:var(--terra);min-width:72px}
+  /* flywheel */
+  .wheel-wrap{display:flex;justify-content:center;margin:8px 0 4px}
+  .wheel-cap{text-align:center;color:var(--muted);font-size:15px;margin-top:6px}
+  @keyframes fwSpin{to{transform:rotate(360deg)}}
+  @keyframes fwFlow{to{stroke-dashoffset:-30}}
+  @keyframes fwPulse{0%,26%,100%{transform:scale(1)}8%{transform:scale(1.05)}}
+  @keyframes fwCore{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
+  .fw-ring{transform-box:fill-box;transform-origin:center;stroke-dasharray:4 12;animation:fwSpin 26s linear infinite}
+  .fw-arc{stroke-dasharray:14 16;animation:fwFlow 1.5s linear infinite}
+  .fw-node{transform-box:fill-box;transform-origin:center;animation:fwPulse 4s ease-in-out infinite}
+  .fw-node.n2{animation-delay:1s}
+  .fw-node.n3{animation-delay:2s}
+  .fw-node.n4{animation-delay:3s}
+  .fw-core{transform-box:fill-box;transform-origin:center;animation:fwCore 4s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){
+    .fw-ring,.fw-arc,.fw-node,.fw-core{animation:none}
+  }
+  /* path */
+  .path{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .path .node{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex:1 1 140px;text-align:center}
+  .path .node b{display:block;color:var(--terra);font-size:15px}
+  .path .node span{font-size:13px;color:var(--muted)}
+  .path .node.cur{background:var(--terra);border-color:var(--terra)}
+  .path .node.cur b,.path .node.cur span{color:#fff}
+  .path .arrow{display:flex;align-items:center;color:var(--gold);font-size:20px;font-weight:800}
+  /* rules：每行 3 个 */
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .rule{background:var(--cream);border-radius:12px;padding:14px}
+  .rule .k{font-size:13px;color:var(--gold);font-weight:700}
+  .rule .v{font-size:15px;font-weight:600;margin-top:3px}
+  .price-big{font-size:26px;color:var(--terra);font-weight:800}
+  /* FAQ */
+  details.faq{border-bottom:1px solid var(--line)}
+  details.faq summary{cursor:pointer;padding:15px 4px;font-weight:600;font-size:16px;list-style:none;display:flex;gap:10px;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary .q{color:var(--terra);font-weight:800}
+  details.faq summary .arrow{margin-left:auto;color:var(--gold);transition:.2s}
+  details.faq[open] summary .arrow{transform:rotate(90deg)}
+  details.faq .a{padding:0 4px 16px 30px;color:var(--muted);font-size:15px}
+  /* CTA */
+  .final{background:linear-gradient(160deg,#FBF1EC,var(--cream));border-radius:20px;padding:30px;margin:10px 0 0;text-align:center}
+  .final h2{font-size:22px;margin-bottom:8px}
+  .final p{color:var(--muted);margin-bottom:18px}
+  .qrow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .qbox{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;width:160px}
+  .qbox img{width:120px;height:120px;object-fit:cover;border-radius:8px}
+  .qbox span{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+  .note{font-size:13px;color:var(--muted);margin-top:14px}
+  footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
+  footer .v{color:var(--gold);font-weight:700}
+  footer .by{display:inline-block;margin-top:6px;color:var(--gold);font-weight:600;letter-spacing:.6px}
+  /* 讲师 */
+  .tutor{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+  .tutor-main{flex:1 1 380px;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+  .tutor .ava{width:104px;height:104px;border-radius:50%;background:var(--white);
+       border:2px solid var(--gold);overflow:hidden;flex-shrink:0;
+       display:flex;align-items:center;justify-content:center;
+       box-shadow:var(--shadow)}
+  .tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .tutor .txt{flex:1 1 260px}
+  .tutor h3{font-size:18px;margin-bottom:4px}
+  .tutor p{font-size:15px;color:var(--muted)}
+  .tutor p + p{margin-top:8px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0 10px}
+  .chips span{background:var(--cream);border:1px solid var(--line);color:var(--terra);
+       font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px;white-space:nowrap}
+  .hd-figure{flex:0 0 232px;margin:0;text-align:center}
+  .hd-figure img{width:100%;border-radius:14px;border:1px solid var(--line);
+       background:var(--white);box-shadow:var(--shadow);display:block}
+  .hd-figure figcaption{font-size:13px;color:var(--gold);font-weight:700;
+       letter-spacing:.5px;margin-top:9px}
+  /* 空间场域表 */
+  .space-tbl{width:100%;border-collapse:collapse;background:var(--white);
+       border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  .space-tbl th{background:var(--terra);color:#fff;font-size:14px;text-align:left;padding:11px 14px;font-weight:700}
+  .space-tbl td{font-size:14px;padding:11px 14px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}
+  .space-tbl td b{color:var(--ink)}
+  @media (max-width:640px){
+    .rules{grid-template-columns:repeat(2,1fr)}
+    .hero-img{max-width:240px}
+    .tutor{gap:18px}
+    .tutor .ava{width:88px;height:88px}
+    .hd-figure{flex:1 1 100%;max-width:250px;margin:4px auto 0}
+  }
+  @media (max-width:560px){
+    .hero h1{font-size:24px}
+    .cards{grid-template-columns:1fr}
+    .qrow .qbox{width:140px}
+  }
+  @media (max-width:400px){
+    .rules{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="wrap">
+    <div class="brand">🜂 人类图静心营</div>
+    <a href="#who">适合谁</a>
+    <a href="#why">为什么住下来</a>
+    <a href="#rhythm">三日节奏</a>
+    <a href="#map">每日地图</a>
+    <a href="#exp">现场独有</a>
+    <a href="#space">空间场域</a>
+    <a href="#matrix">服务包</a>
+    <a href="#wheel">结营飞轮</a>
+    <a href="#tutor">讲师</a>
+    <a href="#rule">报名须知</a>
+    <a href="#faq">FAQ</a>
+    <a href="#join">报名</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-txt">
+      <div class="tag-row">
+        <span class="tag">线下 · 3天2夜</span>
+        <span class="tag">十间房民宿场域</span>
+        <span class="tag">一对一解读</span>
+        <span class="tag">12人封顶</span>
+      </div>
+      <h1>活出你的设计<br><span>人类图静心营</span></h1>
+      <p class="sub">不是来学人类图，是来认出自己。<br>住进一处场域，慢下来、被看见，带着一个能落地的生命决策回家。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#join">报名咨询</a>
+        <a class="btn btn-ghost" href="#rhythm">看三日怎么过</a>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <img class="hero-img" src="HD.jpg" alt="人类图人形轮廓示意图">
+    </div>
+  </div>
+</header>
+
+<!-- WHO -->
+<section id="who">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧭</span><h2>这场静心营，适合这样的你</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🌀</div><h3>用力很久，却总在原地</h3><p>想停下来看清自己到底该如何运作、如何做决定。</p></div>
+      <div class="card"><div class="ico">🤔</div><h3>选择困难、内耗纠结</h3><p>渴望一套属于自己的决策系统，而不是永远听别人的。</p></div>
+      <div class="card"><div class="ico">🌿</div><h3>想住进一场沉浸体验</h3><p>厌够了碎片化网课，愿意用一个周末把自己交付给场域。</p></div>
+      <div class="card"><div class="ico">✨</div><h3>准备活出天赋与使命</h3><p>不满足于"知道"，想要一个能带回生活、下周就能做的动作。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">⚖️</span><h2>为什么要"住下来"，而不是再听一次课</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:18px">知识可以线上讲，但"被点醒"无法线上发生。住下来，是为了让身体、情绪与场域一起参与——让认知从头脑落到生命。这是从"知道"到"活出"之间，最短的一段路。</p>
+    <div class="path-grid">
+      <div class="step"><div class="n">L1 · 线上</div><h3>听知识</h3><p>碎片化输入，知道概念。</p></div>
+      <div class="step"><div class="n">L2 · 工作坊</div><h3>做练习</h3><p>几小时体验，短暂触动。</p></div>
+      <div class="step here"><div class="n">L3 · 沉浸式</div><h3>住下来</h3><p>3天2夜，场域+陪伴+整合。<span class="pill">你在这里</span></p></div>
+      <div class="step"><div class="n">L4 · 陪跑</div><h3>带回生活</h3><p>30天社群陪跑，持续落地。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RHYTHM -->
+<section id="rhythm">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🗓️</span><h2>三日总节奏</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:16px">第一天放下身份、第二天解码设计、第三天带回生活。每天都有静坐、共修与整合，信息不贪多，只求真正触动。</p>
+    <div class="rhythm">
+      <div class="day">
+        <div class="top">Day 1<small>进入场域 · 放下与信任</small></div>
+        <div class="mid">入住净场 · 开场圆圈<br><b>夜课：你不是你的想法</b></div>
+        <div class="bot"><div class="lab">当日产出</div>放下日常身份，建立信任与好奇</div>
+      </div>
+      <div class="day">
+        <div class="top">Day 2<small>解码设计 · 结构与实战</small></div>
+        <div class="mid">类型 · 内在权威 · Profile<br><b>一对一解读 + 通道闸门</b></div>
+        <div class="bot"><div class="lab">当日产出</div>看懂自己的设计，被一对一看见</div>
+      </div>
+      <div class="day">
+        <div class="top">Day 3<small>带回生活 · 整合与承诺</small></div>
+        <div class="mid">人生策略实验 · 使命宣言<br><b>结营圆圈 + 返程</b></div>
+        <div class="bot"><div class="lab">当日产出</div>一个具体、下周就能做的行动承诺</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🧭</span><h2>每日学习地图</h2><span class="line"></span></div>
+
+    <details class="map" open>
+      <summary><span class="t">Day1</span>进入场域：放下 · 信任 · 好奇<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>下午</b>入住与净场仪式（换鞋、静心铃、止语贴），切换出游客模式</li>
+        <li><b>黄昏</b>开场圆圈「我为什么来」——彼此初见，说出期待</li>
+        <li><b>晚餐</b>长桌共餐，营养素食，边吃边连接</li>
+        <li><b>夜间</b>夜课「你不是你的想法」——松动固有身份认同</li>
+        <li><b>全天</b>止语约定，把注意力收回自己身上</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">Day2</span>解码设计：类型 · 权威 · 通道闸门<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>清晨</b>静坐与晨间步行，唤醒身体</li>
+        <li><b>上午</b>工作坊①：你的类型与内在权威——做决策的底层系统</li>
+        <li><b>午后</b>一对一人类图解读（每人 45 分钟，专属深度看见）</li>
+        <li><b>傍晚</b>工作坊②③：人生角色 Profile 与天赋通道、闸门</li>
+        <li><b>夜间</b>篝火或静心夜话，沉淀一天的触动</li>
+      </ul></div>
+    </details>
+
+    <details class="map">
+      <summary><span class="t">Day3</span>带回生活：策略 · 使命 · 承诺<span class="arrow">▶</span></summary>
+      <div class="body"><ul>
+        <li><b>清晨</b>晨练与能量觉察</li>
+        <li><b>上午</b>工作坊④：人生策略实验——把"回应 / 等待邀请"练成身体记忆</li>
+        <li><b>午后</b>书写《我的使命宣言》，把洞见写成一个具体动作</li>
+        <li><b>傍晚</b>结营圆圈：每人一句"回到生活里，我要开始……"，返程</li>
+        <li><b>后续</b>进入 30 天微信群陪跑，持续打卡与答疑</li>
+      </ul></div>
+    </details>
+  </div>
+</section>
+
+<!-- EXP -->
+<section id="exp">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">✨</span><h2>现场独有 · 线上不可替代的四件事</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🔍</div><h3>一对一人类图解读</h3><p>每人 45 分钟专属解读，不是泛讲，是针对你这张图的深度看见。</p></div>
+      <div class="card"><div class="ico">🕯️</div><h3>净场与共修圆圈</h3><p>止语、静坐、圆圈座席——让身体移动本身成为一场转化仪式。</p></div>
+      <div class="card"><div class="ico">🍲</div><h3>长桌共餐</h3><p>营养素食、药膳与围桌共餐，连接发生在饭桌，而不只在课堂。</p></div>
+      <div class="card"><div class="ico">📜</div><h3>使命宣言仪式</h3><p>亲手写下《我的使命宣言》，把三天的洞见落成一个可带走的承诺。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPACE -->
+<section id="space" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🏡</span><h2>空间场域 · 十间房，各司其职</h2><span class="line"></span></div>
+    <p class="muted" style="margin-bottom:16px">空间本身就是课程。每一处都在传递信息，支撑你从"游客模式"切换到"学员模式"。</p>
+    <table class="space-tbl">
+      <thead><tr><th>空间</th><th>功能</th></tr></thead>
+      <tbody>
+        <tr><td><b>六至七间客房</b></td><td>禅意暖棕金配色，无电视，配解读手册与静心坐垫</td></tr>
+        <tr><td><b>共修主厅</b></td><td>圆圈座席、可移动座椅，白天授课、夜间静坐</td></tr>
+        <tr><td><b>一对一解读室</b></td><td>隔音、私密、柔和灯光，专属深度解读</td></tr>
+        <tr><td><b>静心茶室</b></td><td>止语区，书写《使命宣言》与个人独处</td></tr>
+        <tr><td><b>厨房与长餐桌</b></td><td>长桌共餐，营养素食与药膳，群体连接的场</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🪜</span><h2>四层服务包 · 找到你的入口</h2><span class="line"></span></div>
+    <div class="cards">
+      <div class="card"><div class="ico">🌱</div><h3>周末微静修 · 2天1夜</h3><p>980–1680 元 · 12–16 人。低门槛体验，先来感受场域。</p></div>
+      <div class="card" style="border:2px solid var(--terra);background:#FBF1EC"><div class="ico">🔥</div><h3>主题深度营 · 3天2夜</h3><p>3980 元（早鸟 2980）· 10–12 人。本次招生主场，口碑与转化主力。</p></div>
+      <div class="card"><div class="ico">💎</div><h3>私董教练 Retreat · 3-4天</h3><p>9800–19800 元 · 6–8 人。高净值深度陪伴，含生时校准。</p></div>
+      <div class="card"><div class="ico">🏢</div><h3>企业定制包场 · 2天1夜</h3><p>3–8 万元 · 整栋 10 间。团队建设 + 领导力工作坊定制。</p></div>
+    </div>
+    <p class="note">💡 C 端营长口碑、B 端包场托现金流。先从这场 3 天深度营开始，其余形态随社区自然生长。</p>
+  </div>
+</section>
+
+<!-- WHEEL -->
+<section id="wheel" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🔄</span><h2>结营不是结束，是飞轮起点</h2><span class="line"></span></div>
+    <p class="muted" style="text-align:center;margin-bottom:10px">住进场域 → 被看见 → 带走决策 → 带回生活、带朋友回来 → 社区自己长出来。</p>
+    <div class="wheel-wrap">
+      <svg viewBox="0 0 520 440" width="100%" style="max-width:520px" role="img" aria-label="静心营飞轮">
+        <defs>
+          <marker id="arw" markerWidth="9" markerHeight="9" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#C4956A"/>
+          </marker>
+        </defs>
+        <circle class="fw-ring" cx="260" cy="220" r="140" fill="none" stroke="#E2D8C7" stroke-width="2"/>
+        <path d="M 334.2 101.3 A 140 140 0 0 1 378.7 145.8" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 378.7 294.2 A 140 140 0 0 1 334.2 338.7" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 185.8 338.7 A 140 140 0 0 1 141.3 294.2" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path d="M 141.3 145.8 A 140 140 0 0 1 185.8 101.3" fill="none" stroke="#C4956A" stroke-width="2.4" marker-end="url(#arw)"/>
+        <path class="fw-arc" d="M 334.2 101.3 A 140 140 0 0 1 378.7 145.8" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 378.7 294.2 A 140 140 0 0 1 334.2 338.7" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 185.8 338.7 A 140 140 0 0 1 141.3 294.2" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <path class="fw-arc" d="M 141.3 145.8 A 140 140 0 0 1 185.8 101.3" fill="none" stroke="#A8553A" stroke-width="2.4" stroke-linecap="round"/>
+        <g class="fw-core">
+          <circle cx="260" cy="220" r="58" fill="#A8553A"/>
+          <text x="260" y="214" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="19" font-weight="800" fill="#fff">静心营</text>
+          <text x="260" y="240" text-anchor="middle" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-size="19" font-weight="800" fill="#fff">飞轮</text>
+        </g>
+        <g font-family="PingFang SC,Microsoft YaHei,sans-serif" text-anchor="middle">
+          <g class="fw-node n1">
+            <circle cx="260" cy="80" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="260" y="75" font-size="16" font-weight="700" fill="#2D2118">住进场域</text>
+            <text x="260" y="97" font-size="13" fill="#7A6A57">慢下来</text>
+          </g>
+          <g class="fw-node n2">
+            <circle cx="400" cy="220" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="400" y="215" font-size="16" font-weight="700" fill="#2D2118">被看见</text>
+            <text x="400" y="237" font-size="13" fill="#7A6A57">一对一解读</text>
+          </g>
+          <g class="fw-node n3">
+            <circle cx="260" cy="360" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="260" y="355" font-size="16" font-weight="700" fill="#2D2118">带走决策</text>
+            <text x="260" y="377" font-size="13" fill="#7A6A57">使命宣言</text>
+          </g>
+          <g class="fw-node n4">
+            <circle cx="120" cy="220" r="66" fill="#FFFDF8" stroke="#C4956A" stroke-width="2.4"/>
+            <text x="120" y="215" font-size="16" font-weight="700" fill="#2D2118">带朋友回来</text>
+            <text x="120" y="237" font-size="13" fill="#7A6A57">社区生长</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- TUTOR -->
+<section id="tutor" style="background:linear-gradient(180deg,transparent,#FBF7EF,transparent)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">🎙️</span><h2>带你的人</h2><span class="line"></span></div>
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p>量子人类图分析师 · 能量圈主理人</p>
+          <p>真好玩人类图平台创始人</p>
+          <p>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>大师通道</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源、软件、保险、互联网、电商平台等业态。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- RULE -->
+<section id="rule">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">📋</span><h2>报名须知</h2><span class="line"></span></div>
+    <div class="rules">
+      <div class="rule"><div class="k">⏰ 时间</div><div class="v">3 天 2 夜（周末 / 连休）</div></div>
+      <div class="rule"><div class="k">📍 地点</div><div class="v">十间房民宿 · 静修场域</div></div>
+      <div class="rule"><div class="k">👥 人数</div><div class="v">10 人开营 · 12 人封顶</div></div>
+      <div class="rule"><div class="k">💰 费用</div><div class="v price-big">¥3,980</div></div>
+      <div class="rule"><div class="k">🎁 含</div><div class="v">住宿·素食·课程·物料·30天陪跑</div></div>
+      <div class="rule"><div class="k">🎓 交付</div><div class="v">解读手册·专属图谱·使命宣言</div></div>
+    </div>
+    <p class="note">💡 早鸟价 ¥2,980（开营前 30 天），不含往返交通与个人消费。本活动为沉浸式线下服务，定位身心成长，非宗教活动、非医疗疗愈，不承诺任何疗效。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="sec-head"><span class="emo">💡</span><h2>常见问题</h2><span class="line"></span></div>
+    <details class="faq" open><summary><span class="q">Q1</span>完全不懂人类图，能参加吗？<span class="arrow">▶</span></summary>
+      <div class="a">可以。这场营从"你是谁"讲起，不要求任何基础。你不需要提前背概念，带着好奇来即可，现场会把核心讲透并做一对一解读。</div></details>
+    <details class="faq"><summary><span class="q">Q2</span>一对一解读包含在我的费用里吗？<span class="arrow">▶</span></summary>
+      <div class="a">包含。每位参与者都有 45 分钟专属解读，这是本营的核心环节之一，不是额外收费项目。</div></details>
+    <details class="faq"><summary><span class="q">Q3</span>止语是全程不能说话吗？<span class="arrow">▶</span></summary>
+      <div class="a">不是。止语主要集中在净场、静坐与个人整合时段，帮助你把注意力收回自己；圆圈分享、工作坊讨论、共餐交流都正常进行。行前须知会提前说明。</div></details>
+    <details class="faq"><summary><span class="q">Q4</span>住宿和餐食是什么标准？<span class="arrow">▶</span></summary>
+      <div class="a">住十间房民宿，禅意布置、无电视；餐食为营养素食与药膳。开营前会收集饮食禁忌，尽量照顾每位参与者。</div></details>
+    <details class="faq"><summary><span class="q">Q5</span>结营之后还有支持吗？<span class="arrow">▶</span></summary>
+      <div class="a">有。结营后进入 30 天微信群陪跑，每周一次主题打卡与答疑，帮助你把三天的洞见真正带回生活。这也是后续主题营与私董营的入口。</div></details>
+    <details class="faq"><summary><span class="q">Q6</span>这是宗教或灵疗活动吗？<span class="arrow">▶</span></summary>
+      <div class="a">不是。这是身心成长类的自我认知工作坊，人类图是认知与决策工具。收费签服务合同，不涉宗教活动、不承诺疗效，请安心参与。</div></details>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="wrap">
+    <div class="final">
+      <h2>住进自己的设计里，先办第一场 🔥</h2>
+      <p>从"知道自己是谁"到"带着一个决策回家"。<br>本期 12 人封顶，早鸟价 ¥2,980，报满即止。</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="#join">报名咨询 · 备注「静心营」</a>
+        <a class="btn btn-ghost" href="#rhythm">再看三日节奏</a>
+      </div>
+      <div class="qrow">
+        <div class="qbox"><img src="wechat-qr.png" alt="报名二维码"><span>扫码报名</span></div>
+        <div class="qbox"><img src="Aura.png" alt="能量圈社群"><span>加入能量圈</span></div>
+      </div>
+      <p class="note">本活动为线下沉浸式服务，名额有限，报满即止。售出后不支持退款，请确认档期后报名。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    人类图静心营 · 活出你的设计 · <span class="v">V1.1</span><br>
+    <span class="by">Powered by Kan Man Tang</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+    var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+    function onScroll(){
+      var y = (window.scrollY || window.pageYOffset || 0);
+      var cur = 0;
+      for (var i=0;i<sections.length;i++){
+        if (sections[i] && sections[i].offsetTop - 140 <= y) cur = i;
+      }
+      links.forEach(function(l,i){
+        if(i===cur){ l.style.background='var(--cream)'; l.style.color='var(--ink)'; }
+        else { l.style.background=''; l.style.color=''; }
+      });
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
