@@ -6,7 +6,17 @@
 <title>我的能量使用说明书 · 可晒图卡生成器</title>
 <!--
   ============================================================
-  VERSION: V3 · 2026-11-20
+  VERSION: V5 · 2026-11-20
+  变更点（V5）：
+  - 【填写信息】区域：「我的天赋通道」移到「我的超能力」前面
+  - 版本管理调整：主文件名始终为最新版（超链接无需改动），历史版备份为 .v[N].html
+  变更点（V4）：
+  - 内在权威下拉对齐 beginner.html 的 7 种权威（含英文原名）
+  - 「我的超能力」上方新增人生角色（12 种）、定义类型（5 种）两个下拉
+  - 「我的超能力」下方新增天赋通道多选（36 条，按 hd-talent-channels.html 命名）
+  - 图卡「我的能量使用说明书」改为三行布局：权威+策略 / 角色+定义 / 天赋通道（按回路统计）
+  - 图卡高度改为随内容自适应（最多支持 8 条通道）
+  - 「能量配置卡」文案改为「署名」
   变更点（V3）：
   - 文件名改为英文 hd-energy-card-generator.html（配套页面超链接已同步更新）
   变更点（V2 · 2026-11-20）：
@@ -103,6 +113,33 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
 .quick button:hover{background:var(--gold);color:#fff}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .qr-note{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}
+/* ===== 天赋通道多选下拉 ===== */
+.ms{position:relative}
+.ms-toggle{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+  background:#fff;font-family:inherit;font-size:13px;color:var(--ink);
+  text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.ms-toggle:hover{border-color:var(--gold)}
+.ms-toggle .ms-val{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.ms-toggle .ms-val.has{color:var(--ink)}
+.ms-toggle .ms-arrow{font-size:10px;color:var(--muted);flex:none}
+.ms-panel{
+  display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:20;
+  max-height:280px;overflow:auto;background:#fff;border:1px solid var(--gold);
+  border-radius:8px;box-shadow:0 8px 24px rgba(45,33,24,.16);padding:8px;
+}
+.ms.open .ms-panel{display:block}
+.ms-tools{display:flex;gap:8px;margin-bottom:6px;position:sticky;top:-8px;background:#fff;padding:2px 0 6px;border-bottom:1px solid var(--line)}
+.ms-tools button{font-size:11px;padding:3px 10px;border:1px solid var(--line);border-radius:12px;background:var(--cream);color:var(--brown-mid);cursor:pointer;font-family:inherit}
+.ms-tools button:hover{border-color:var(--gold);background:var(--gold-light)}
+.ms-grp-label{font-size:11px;font-weight:700;color:var(--brown-deep);margin:8px 4px 3px;display:flex;align-items:center;gap:6px}
+.ms-grp-label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ms-opt{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink);padding:3px 6px;border-radius:5px;cursor:pointer}
+.ms-opt:hover{background:var(--cream)}
+.ms-opt input{accent-color:var(--brown-mid);width:14px;height:14px;flex:none}
+.ms-opt .ms-id{font-size:10px;color:var(--muted);min-width:34px}
+.ms-hint{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5}
 .themes{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:2px}
 .theme-dot{width:30px;height:30px;border-radius:50%;border:2px solid #fff;
   box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0;transition:.18s;flex:none}
@@ -119,9 +156,9 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
 .preview-col{display:flex;flex-direction:column;align-items:center;gap:12px}
 .tip{font-size:12px;color:var(--muted);text-align:center;line-height:1.7}
 
-/* ===== 图卡本体：竖版 9:16 ===== */
+/* ===== 图卡本体：竖版（高度随内容自适应） ===== */
 .card{
-  width:340px;height:604px;flex:none;
+  width:340px;min-height:604px;height:auto;flex:none;
   background:linear-gradient(165deg,var(--cream-light) 0%,var(--cbg2) 100%);
   border:2px solid var(--gold);
   border-radius:18px;
@@ -154,6 +191,17 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
 .cf .k{font-size:10px;color:var(--muted);letter-spacing:2px}
 .cf .v{font-size:15px;color:var(--brown-deep);font-weight:700;margin-top:3px;line-height:1.5}
 .cf.quote .v{font-size:13px;line-height:1.7;color:var(--brown-mid);font-weight:400;font-style:italic}
+/* 说明书三行布局 */
+.cf.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf.duo .cell{min-width:0}
+.cf .v.sm{font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+/* 天赋通道回路统计 */
+.ch-stats{margin-top:3px;display:flex;flex-direction:column;gap:5px}
+.ch-loop{font-size:10px;line-height:1.5;color:var(--brown-mid)}
+.ch-loop .lb{font-weight:700;letter-spacing:.5px;margin-right:5px}
+.ch-loop .cnt{color:var(--muted);font-size:9px;margin-left:3px}
+.ch-loop .items{color:var(--ink);font-size:10px;overflow-wrap:anywhere}
+.ch-empty{font-size:11px;color:var(--muted);font-style:italic}
 .card-bottom{
   display:flex;align-items:flex-end;justify-content:space-between;
   margin-top:10px;padding-top:12px;border-top:1px solid var(--line);
@@ -194,12 +242,13 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
         <div class="field">
           <label>内在权威</label>
           <select id="in-authority">
-            <option>荐骨权威</option>
-            <option>情绪权威</option>
-            <option>直觉权威</option>
-            <option>头脑权威</option>
-            <option>意志权威</option>
-            <option>自权权威</option>
+            <option value="情绪权威（Solar Plexus）">情绪权威（Solar Plexus）</option>
+            <option value="荐骨权威（Sacral）" selected>荐骨权威（Sacral）</option>
+            <option value="直觉权威（Splenic）">直觉权威（Splenic）</option>
+            <option value="意志力中心权威（Ego Manifested）">意志力中心权威（Ego Manifested）</option>
+            <option value="G中心权威（Self-Projected）">G中心权威（Self-Projected）</option>
+            <option value="无内在权威（Mental Projector）">无内在权威（Mental Projector）</option>
+            <option value="月亮循环权威（Lunar）">月亮循环权威（Lunar）</option>
           </select>
         </div>
         <div class="field">
@@ -212,6 +261,46 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
             <option value="采样">采样</option>
           </select>
         </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>人生角色（Profile）</label>
+          <select id="in-profile">
+            <option value="1/3 研究者/殉道者">1/3 研究者/殉道者</option>
+            <option value="1/4 研究者/机会主义">1/4 研究者/机会主义</option>
+            <option value="2/4 隐士/机会主义">2/4 隐士/机会主义</option>
+            <option value="2/5 隐士/异端">2/5 隐士/异端</option>
+            <option value="3/5 殉道者/异端">3/5 殉道者/异端</option>
+            <option value="3/6 殉道者/角色模型">3/6 殉道者/角色模型</option>
+            <option value="4/6 机会主义/角色模型">4/6 机会主义/角色模型</option>
+            <option value="4/1 机会主义/研究者">4/1 机会主义/研究者</option>
+            <option value="5/1 异端/研究者">5/1 异端/研究者</option>
+            <option value="5/2 异端/隐士">5/2 异端/隐士</option>
+            <option value="6/2 角色模型/隐士">6/2 角色模型/隐士</option>
+            <option value="6/3 角色模型/殉道者">6/3 角色模型/殉道者</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>定义类型（Definition）</label>
+          <select id="in-definition">
+            <option value="单一定义">单一定义</option>
+            <option value="分裂定义" selected>分裂定义</option>
+            <option value="三分定义">三分定义</option>
+            <option value="四分定义">四分定义</option>
+            <option value="无定义">无定义</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>我的天赋通道（36 条 · 可多选）</label>
+        <div class="ms" id="chMs">
+          <button type="button" class="ms-toggle" id="chToggle">
+            <span class="ms-val" id="chVal">点击选择天赋通道…</span>
+            <span class="ms-arrow">▼</span>
+          </button>
+          <div class="ms-panel" id="chPanel"></div>
+        </div>
+        <div class="ms-hint">按三大回路分组 · 可多选 · 图卡按回路自动统计</div>
       </div>
       <div class="field">
         <label>我的超能力（一句话）</label>
@@ -253,17 +342,27 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
         </div>
         <div class="card-type" id="c-type">生产者 GENERATOR</div>
         <div class="card-fields">
-          <div class="cf"><div class="k">内 在 权 威</div><div class="v" id="c-authority">荐骨权威</div></div>
-          <div class="cf"><div class="k">人 生 策 略</div><div class="v" id="c-strategy">回应</div></div>
+          <div class="cf duo">
+            <div class="cell"><div class="k">内 在 权 威</div><div class="v sm" id="c-authority">荐骨权威（Sacral）</div></div>
+            <div class="cell"><div class="k">人 生 策 略</div><div class="v sm" id="c-strategy">回应</div></div>
+          </div>
+          <div class="cf duo">
+            <div class="cell"><div class="k">人 生 角 色</div><div class="v sm" id="c-profile">1/3 研究者/殉道者</div></div>
+            <div class="cell"><div class="k">定 义 类 型</div><div class="v sm" id="c-definition">分裂定义</div></div>
+          </div>
+          <div class="cf">
+            <div class="k">天 赋 通 道</div>
+            <div class="ch-stats" id="c-channels"><div class="ch-empty">尚未选择天赋通道</div></div>
+          </div>
           <div class="cf quote"><div class="k">我 的 超 能 力</div><div class="v" id="c-power">把想法变成现实，带着热爱把事做成</div></div>
         </div>
         <div class="card-bottom">
-          <div class="sign">能量配置卡<br><b id="c-sign">邓勤敏 · 能量圈</b></div>
+          <div class="sign">署名<br><b id="c-sign">邓勤敏 · 能量圈</b></div>
           <div class="qr-box" id="c-qr"><div class="ph">扫码<br>连接</div></div>
         </div>
         <div class="tagline">遇见自己 · 活出自己</div>
       </div>
-      <p class="tip">图卡为竖版 9:16，适合发朋友圈 / 小红书<br>生成后可直接保存分享</p>
+      <p class="tip">图卡为竖版，高度随天赋通道数量自适应<br>适合发朋友圈 / 小红书，生成后可直接保存分享</p>
     </div>
   </div>
 </div>
@@ -271,6 +370,40 @@ header p{font-size:13px;color:var(--muted);margin-top:6px}
 <div class="toast" id="toast"></div>
 
 <script>
+/* ===== 36 条天赋通道数据 =====
+   回路归属与子回路：intermediate.html（集体14 / 个人15 / 部落7）
+   通道名称：hd-talent-channels.html（如「灵感的通道」）
+*/
+const CH_GROUPS = [
+  {loop:"集体回路", sub:"逻辑子回路", items:[
+    ["4-63","逻辑的通道"],["17-62","接受的通道"],["9-52","专心的通道"]
+  ]},
+  {loop:"集体回路", sub:"抽象子回路", items:[
+    ["11-56","好奇的通道"],["13-33","浪漫主义者的通道"],["16-48","才华的通道"],
+    ["18-58","挑战的通道"],["35-36","过渡的通道"],["30-41","幻想的通道"],
+    ["42-53","成熟的通道"],["47-64","抽象的通道"],["5-15","韵律的通道"],
+    ["29-46","发现的通道"],["7-31","创始者的通道"]
+  ]},
+  {loop:"个人回路", sub:"整合子回路", items:[
+    ["10-20","觉醒的通道"],["10-34","探索的通道"],["10-57","完美的形式"],
+    ["20-34","魅力的通道"],["34-57","力量的通道"]
+  ]},
+  {loop:"个人回路", sub:"其余个人通道", items:[
+    ["1-8","灵感的通道"],["2-14","脉动的通道"],["3-60","突变的通道"],
+    ["12-22","开放的通道"],["20-57","脑波的通道"],["23-43","结构化的通道"],
+    ["24-61","觉察的通道"],["25-51","发起的通道"],["28-38","挣扎的通道"],
+    ["39-55","情绪化的通道"]
+  ]},
+  {loop:"部落回路", sub:"防御子回路", items:[
+    ["6-59","亲密的通道"],["19-49","综合的通道"],["37-40","社群的通道"],["27-50","保存的通道"]
+  ]},
+  {loop:"部落回路", sub:"Ego/资源子回路", items:[
+    ["21-45","金钱线的通道"],["26-44","降服的通道"],["32-54","转变的通道"]
+  ]}
+];
+const CH_NAME = {};
+CH_GROUPS.forEach(g=>g.items.forEach(([id,name])=>CH_NAME[id]=name));
+
 const POWER_PRESETS = [
   "把灵感变成现实，让想法落地生根",
   "用回应找到热爱，用热爱点燃生命",
@@ -298,7 +431,68 @@ document.querySelectorAll(".theme-dot").forEach(b=>{
   };
 });
 
+/* ===== 天赋通道多选下拉 ===== */
 const $=id=>document.getElementById(id);
+(function buildChannelPicker(){
+  const panel=$("chPanel"), toggle=$("chToggle"), box=$("chMs");
+  let lastLoop="";
+  const tools=document.createElement("div");tools.className="ms-tools";
+  const btnAll=document.createElement("button");btnAll.type="button";btnAll.textContent="全选";
+  const btnNone=document.createElement("button");btnNone.type="button";btnNone.textContent="清空";
+  btnAll.onclick=e=>{e.stopPropagation();panel.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=true);syncChannels();};
+  btnNone.onclick=e=>{e.stopPropagation();panel.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);syncChannels();};
+  tools.appendChild(btnAll);tools.appendChild(btnNone);panel.appendChild(tools);
+  CH_GROUPS.forEach(g=>{
+    if(g.loop!==lastLoop){
+      const lab=document.createElement("div");lab.className="ms-grp-label";lab.textContent=g.loop;
+      panel.appendChild(lab);lastLoop=g.loop;
+    }
+    const sub=document.createElement("div");sub.className="ms-hint";sub.style.margin="2px 4px";sub.textContent="└ "+g.sub;
+    panel.appendChild(sub);
+    g.items.forEach(([id,name])=>{
+      const label=document.createElement("label");label.className="ms-opt";
+      const cb=document.createElement("input");cb.type="checkbox";cb.value=id;cb.dataset.ch="1";
+      const idSpan=document.createElement("span");idSpan.className="ms-id";idSpan.textContent=id;
+      const nmSpan=document.createElement("span");nmSpan.textContent=name;
+      cb.addEventListener("change",syncChannels);
+      label.appendChild(cb);label.appendChild(idSpan);label.appendChild(nmSpan);
+      panel.appendChild(label);
+    });
+  });
+  panel.addEventListener("click",e=>e.stopPropagation());
+  toggle.onclick=e=>{e.stopPropagation();box.classList.toggle("open");};
+  document.addEventListener("click",()=>box.classList.remove("open"));
+})();
+function selectedChannels(){
+  return Array.from(document.querySelectorAll('input[data-ch="1"]:checked')).map(c=>c.value);
+}
+function syncChannels(){
+  const sel=selectedChannels(), val=$("chVal");
+  if(sel.length===0){val.textContent="点击选择天赋通道…";val.classList.remove("has");}
+  else if(sel.length<=3){val.textContent=sel.map(id=>id+" "+CH_NAME[id]).join("、");val.classList.add("has");}
+  else {val.textContent="已选 "+sel.length+" 条："+sel.slice(0,2).map(id=>id).join("、")+"…";val.classList.add("has");}
+  render();
+}
+function renderChannelStats(){
+  const box=$("c-channels"), sel=selectedChannels();
+  if(sel.length===0){box.innerHTML='<div class="ch-empty">尚未选择天赋通道</div>';return;}
+  const byLoop={};
+  CH_GROUPS.forEach(g=>g.items.forEach(([id])=>{
+    if(sel.indexOf(id)>=0){
+      if(!byLoop[g.loop])byLoop[g.loop]=[];
+      byLoop[g.loop].push(id+" "+CH_NAME[id]);
+    }
+  }));
+  let html="";
+  ["集体回路","个人回路","部落回路"].forEach(loop=>{
+    if(byLoop[loop]&&byLoop[loop].length){
+      const n=byLoop[loop].length;
+      html+='<div class="ch-loop"><span class="lb">'+loop+'</span><span class="cnt">'+n+' 条</span>'
+          +'<div class="items">'+byLoop[loop].join(" · ")+'</div></div>';
+    }
+  });
+  box.innerHTML=html;
+}
 function render(){
   let type=$("in-type").value;
   const typeMap={
@@ -311,10 +505,13 @@ function render(){
   $("c-type").textContent=typeMap[type]||type;
   $("c-authority").textContent=$("in-authority").value;
   $("c-strategy").textContent=$("in-strategy").value;
+  $("c-profile").textContent=$("in-profile").value;
+  $("c-definition").textContent=$("in-definition").value;
+  renderChannelStats();
   $("c-power").textContent=$("in-power").value||"——";
   $("c-sign").textContent=$("in-sign").value||"";
 }
-["in-type","in-authority","in-strategy","in-power","in-sign"].forEach(id=>{
+["in-type","in-authority","in-strategy","in-profile","in-definition","in-power","in-sign"].forEach(id=>{
   $(id).addEventListener("input",render);
   $(id).addEventListener("change",render);
 });
