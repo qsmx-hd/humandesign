@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人类图 64 闸门寻宝卡牌 · 可打印版</title>
+<style>
+:root{
+  --brown-deep:#2D2118;
+  --brown-mid:#5A4632;
+  --cream:#F5F0E8;
+  --cream-light:#FBF8F2;
+  --gold:#C4956A;
+  --gold-light:#E8D5BC;
+  --ink:#2D2118;
+  --muted:#7A6A58;
+  --line:#C9B79E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+  background:#EDE7DC;
+  color:var(--ink);
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+.toolbar{
+  position:sticky;top:0;z-index:10;
+  background:var(--brown-deep);color:var(--cream);
+  padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  box-shadow:0 2px 10px rgba(45,33,24,.25);
+}
+.toolbar h1{font-size:17px;font-weight:500;letter-spacing:1px}
+.toolbar .sub{font-size:12px;color:var(--gold-light)}
+.toolbar .spacer{flex:1}
+.toolbar button{
+  background:var(--gold);color:var(--brown-deep);border:none;
+  padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+}
+.toolbar button:hover{background:var(--gold-light)}
+.toolbar label{font-size:12px;color:var(--gold-light);display:flex;align-items:center;gap:6px;cursor:pointer}
+.toolbar select{padding:6px 10px;border-radius:5px;border:1px solid var(--gold);background:var(--cream);font-family:inherit;font-size:12px}
+
+.intro{
+  max-width:1180px;margin:22px auto;padding:0 20px;
+  background:var(--cream-light);border:1px solid var(--line);border-radius:10px;
+  padding:20px 24px;line-height:1.85;font-size:14px;
+}
+.intro h2{font-size:16px;color:var(--brown-deep);margin-bottom:10px;font-weight:700}
+.intro ul{padding-left:20px;color:var(--muted)}
+.intro li{margin:3px 0}
+.intro strong{color:var(--gold);font-weight:700}
+
+.pages{max-width:1180px;margin:24px auto;padding:0 20px 60px}
+.page{
+  width:210mm;min-height:297mm;margin:0 auto 28px;
+  background:#fff;padding:10mm 9mm;
+  box-shadow:0 3px 16px rgba(45,33,24,.18);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  grid-auto-rows:88mm;gap:5mm;
+  position:relative;
+}
+.page-head{
+  position:absolute;top:3mm;left:9mm;right:9mm;
+  font-size:9px;color:var(--muted);letter-spacing:2px;
+  display:flex;justify-content:space-between;
+}
+.card{
+  border:1.5px solid var(--gold);
+  border-radius:8px;
+  background:linear-gradient(160deg,var(--cream-light) 0%,var(--cream) 100%);
+  padding:5mm 4mm;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  break-inside:avoid;page-break-inside:avoid;
+}
+.card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3mm;
+  background:var(--gold);
+}
+.card .num{
+  font-size:30px;font-weight:700;color:var(--brown-deep);
+  line-height:1.1;font-family:Georgia,serif;
+}
+.card .num small{font-size:9px;color:var(--muted);font-family:"Microsoft YaHei";font-weight:400;margin-left:3px}
+.card .name{
+  font-size:13px;font-weight:700;color:var(--brown-mid);
+  margin-top:1mm;line-height:1.4;min-height:8mm;
+}
+.card .kw{
+  display:flex;flex-wrap:wrap;gap:1.5mm;margin-top:2mm;
+}
+.card .kw span{
+  font-size:9px;background:var(--gold-light);color:var(--brown-deep);
+  padding:1.5px 6px;border-radius:10px;font-weight:700;
+}
+.card .center{
+  font-size:9.5px;color:var(--muted);margin-top:auto;
+  border-top:1px dashed var(--line);padding-top:2mm;line-height:1.6;
+}
+.card .channel{font-size:8.5px;color:var(--gold);font-weight:700;margin-top:1mm}
+.card .hint{
+  position:absolute;bottom:2mm;right:3mm;font-size:7.5px;color:var(--muted);opacity:.7;
+}
+.cut{display:none}
+
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .toolbar,.intro,.page-head{display:none!important}
+  .pages{padding:0;margin:0;max-width:none}
+  .page{margin:0;box-shadow:none;page-break-after:always;break-after:page;padding:10mm 9mm}
+  .page:last-child{page-break-after:auto}
+  .card{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div><h1>人类图 64 闸门寻宝卡牌</h1><div class="sub">体验式教学配套教具 · 可打印版</div></div>
+  <div class="spacer"></div>
+  <label>每页卡牌
+    <select id="perPage">
+      <option value="9">9 张（3×3，推荐）</option>
+      <option value="6">6 张（3×2，大字版）</option>
+      <option value="4">4 张（2×2，超大字）</option>
+    </select>
+  </label>
+  <button onclick="window.print()">🖨 打印 / 存为 PDF</button>
+</div>
+
+<div class="intro">
+  <h2>使用说明</h2>
+  <ul>
+    <li><strong>玩法</strong>：每人抽 1 张卡，看清号码后全场走动，找到持有同一号码的人抱团（约 1 分钟）。</li>
+    <li><strong>回收</strong>：找到同伴后，请学员看卡上的关键词——"它说的是不是你身上真实存在的某种特质？"</li>
+    <li><strong>打印</strong>：点右上角"打印/存为 PDF"，纸张选 A4、缩放 100%、关闭页眉页脚；建议 200g 卡纸并塑封。</li>
+    <li><strong>配色</strong>：暖棕金禅意主题（深棕 #2D2118 / 米白 #F5F0E8 / 金棕 #C4956A），与工作坊手册一致。</li>
+    <li>卡牌数据来源于项目 <strong>gates-data.js（V10）</strong>，编号、名称、关键词、中心、通道均与网站一致。</li>
+  </ul>
+</div>
+
+<div class="pages" id="pages"></div>
+
+<script>
+const GATES = [{"id": 1, "name": "自我表达的创意力量", "keywords": ["创意", "独特性", "自我表达", "突变", "灵感"], "center": "G中心", "channel": "1-8 灵感通道"}, {"id": 2, "name": "接收与方向的内在导航", "keywords": ["接收性", "方向感", "内在导航", "司机", "磁单极"], "center": "G中心", "channel": "2-14 脉动通道"}, {"id": 3, "name": "在混乱中建立新秩序", "keywords": ["突变", "秩序", "混乱", "创新", "脉冲"], "center": "荐骨中心", "channel": "3-60 突变通道"}, {"id": 4, "name": "公式化的逻辑心智", "keywords": ["逻辑", "公式", "解答", "智识", "可能性"], "center": "逻辑头脑", "channel": "4-63 逻辑通道"}, {"id": 5, "name": "固定节奏的等待力量", "keywords": ["节奏", "等待", "习惯", "规律", "流动"], "center": "荐骨中心", "channel": "5-15 韵律通道"}, {"id": 6, "name": "冲突与亲密的情绪守门员", "keywords": ["冲突", "亲密", "情绪", "摩擦", "守门"], "center": "情绪中心", "channel": "6-59 亲密通道"}, {"id": 7, "name": "自我引导的逻辑力量", "keywords": ["领导", "方向", "未来", "影响力", "民主"], "center": "G中心", "channel": "7-31 领袖通道"}, {"id": 8, "name": "以身作则的贡献力量", "keywords": ["贡献", "以身作则", "独特性", "表达", "真实"], "center": "喉轮中心", "channel": "1-8 灵感通道"}, {"id": 9, "name": "专注细节的驯服力量", "keywords": ["专注", "细节", "积累", "耐心", "聚焦"], "center": "荐骨中心", "channel": "9-52 专注通道"}, {"id": 10, "name": "自我行为的觉醒力量", "keywords": ["自我行为", "真实性", "爱自己", "觉醒", "原则"], "center": "G中心", "channel": "10-20 觉醒通道 / 10-34 探索通道 / 10-57 完美形式通道"}, {"id": 11, "name": "想法与概念化的和平力量", "keywords": ["想法", "和平", "理念", "概念", "创意"], "center": "逻辑头脑", "channel": "11-56 好奇通道"}, {"id": 12, "name": "慎重表达的情绪力量", "keywords": ["慎重", "表达", "情绪", "时机", "艺术"], "center": "喉轮中心", "channel": "12-22 开放通道"}, {"id": 13, "name": "倾听者的秘密力量", "keywords": ["倾听", "秘密", "故事", "记忆", "同理心"], "center": "G中心", "channel": "13-33 浪子通道"}, {"id": 14, "name": "驱动人生方向的动力燃料", "keywords": ["动力", "财富", "资源", "繁荣", "引擎"], "center": "荐骨中心", "channel": "2-14 脉动通道"}, {"id": 15, "name": "极端中的谦逊与人类之爱", "keywords": ["极端", "人类之爱", "节奏", "多样性", "包容"], "center": "G中心", "channel": "5-15 韵律通道"}, {"id": 16, "name": "技能与热忱的精通之路", "keywords": ["技能", "热忱", "精通", "实验", "才能"], "center": "喉轮中心", "channel": "16-48 波长通道"}, {"id": 17, "name": "逻辑意见的组织力量", "keywords": ["意见", "逻辑", "组织", "未来", "预测"], "center": "逻辑头脑", "channel": "17-62 接纳通道"}, {"id": 18, "name": "纠正与改善的品味力量", "keywords": ["纠正", "品味", "批判", "改善", "完美"], "center": "直觉中心", "channel": "18-58 批判通道"}, {"id": 19, "name": "靠近与想要的敏感力量", "keywords": ["需求", "敏感", "靠近", "资源", "情感"], "center": "根部中心", "channel": "19-49 综合通道"}, {"id": 20, "name": "活在当下的存在力量", "keywords": ["当下", "存在", "表达", "觉知", "冥想"], "center": "喉轮中心", "channel": "20-34 魅力通道 / 20-57 脑波通道 / 10-20 觉醒通道"}, {"id": 21, "name": "掌控资源的意志力量", "keywords": ["掌控", "意志力", "资源", "权力", "责任"], "center": "意志力中心", "channel": "21-45 金钱通道"}, {"id": 22, "name": "恩典与情绪开放的力量", "keywords": ["恩典", "开放", "情绪", "聆听", "优雅"], "center": "情绪中心", "channel": "12-22 开放通道"}, {"id": 23, "name": "从天才到疯子的表达艺术", "keywords": ["天才", "疯狂", "突变", "分裂", "独特"], "center": "喉轮中心", "channel": "23-43 架构通道"}, {"id": 24, "name": "回归与合理化的心智力量", "keywords": ["回归", "合理化", "冥想", "洞见", "反思"], "center": "逻辑头脑", "channel": "24-61 觉察通道"}, {"id": 25, "name": "天真的宇宙之爱", "keywords": ["天真", "宇宙之爱", "无条件", "精神", "疗愈"], "center": "G中心", "channel": "25-51 启蒙通道"}, {"id": 26, "name": "意志力的销售大师", "keywords": ["意志力", "销售", "说服", "夸张", "积累"], "center": "意志力中心", "channel": "26-44 臣服通道"}, {"id": 27, "name": "滋养与关怀的生命力量", "keywords": ["滋养", "关怀", "照顾", "本能", "慷慨"], "center": "荐骨中心", "channel": "27-50 保存通道"}, {"id": 28, "name": "冒险与生命意义的游戏玩家", "keywords": ["冒险", "生命意义", "挣扎", "赌注", "游戏"], "center": "直觉中心", "channel": "28-38 挣扎通道"}, {"id": 29, "name": "对生命说是的承诺力量", "keywords": ["承诺", "坚持", "体验", "深渊", "是"], "center": "荐骨中心", "channel": "29-46 发现通道"}, {"id": 30, "name": "命运之火的渴望力量", "keywords": ["渴望", "命运", "感受", "火焰", "体验"], "center": "情绪中心", "channel": "30-41 识别通道"}, {"id": 31, "name": "民主领导的影响力量", "keywords": ["影响力", "领导", "民主", "声音", "未来"], "center": "喉轮中心", "channel": "7-31 领袖通道"}, {"id": 32, "name": "持续与延续的本能智慧", "keywords": ["持续", "延续", "本能", "评估", "生存"], "center": "直觉中心", "channel": "32-54 蜕变通道"}, {"id": 33, "name": "退隐与记忆的智慧力量", "keywords": ["退隐", "记忆", "历史", "休息", "沉淀"], "center": "喉轮中心", "channel": "13-33 浪子通道"}, {"id": 34, "name": "纯粹力量的独立展现", "keywords": ["力量", "独立", "忙碌", "本能", "行动"], "center": "荐骨中心", "channel": "20-34 魅力通道 / 10-34 探索通道 / 34-57 力量通道"}, {"id": 35, "name": "体验与改变的进展力量", "keywords": ["改变", "体验", "进展", "多样", "故事"], "center": "喉轮中心", "channel": "35-36 无常通道"}, {"id": 36, "name": "危机中的成长力量", "keywords": ["危机", "黑暗", "成长", "情绪", "体验"], "center": "情绪中心", "channel": "35-36 无常通道"}, {"id": 37, "name": "家庭与友谊的情感连结", "keywords": ["家庭", "友谊", "情感", "忠诚", "温暖"], "center": "情绪中心", "channel": "37-40 社群通道"}, {"id": 38, "name": "为生命意义而战的战士能量", "keywords": ["战士", "意义", "斗争", "坚持", "对立"], "center": "根部中心", "channel": "28-38 挣扎通道"}, {"id": 39, "name": "挑衅者的精神探索", "keywords": ["挑衅", "精神", "情绪", "探索", "刺激"], "center": "根部中心", "channel": "39-55 情绪通道"}, {"id": 40, "name": "独处与解脱的意志力量", "keywords": ["独处", "解脱", "意志力", "劳动", "休息"], "center": "意志力中心", "channel": "37-40 社群通道"}, {"id": 41, "name": "收缩的力量与体验的起点", "keywords": ["体验", "幻想", "收缩", "起点", "渴望"], "center": "根部中心", "channel": "30-41 识别通道"}, {"id": 42, "name": "完成周期的成长力量", "keywords": ["完成", "周期", "成长", "总结", "圆满"], "center": "荐骨中心", "channel": "42-53 成熟通道"}, {"id": 43, "name": "突破与洞见的力量", "keywords": ["突破", "洞见", "内在知晓", "天才", "革新"], "center": "逻辑头脑", "channel": "23-43 架构通道"}, {"id": 44, "name": "本能记忆的警觉力量", "keywords": ["本能", "记忆", "警觉", "过去", "模式"], "center": "直觉中心", "channel": "26-44 臣服通道"}, {"id": 45, "name": "聚集的统治力量", "keywords": ["统治", "聚集", "教育", "资源", "分配"], "center": "喉轮中心", "channel": "21-45 金钱通道"}, {"id": 46, "name": "机缘与身体之爱的力量", "keywords": ["机缘", "身体之爱", "运气", "存在", "喜悦"], "center": "G中心", "channel": "29-46 发现通道"}, {"id": 47, "name": "压抑与领悟的智慧力量", "keywords": ["压抑", "领悟", "回顾", "意义", "混乱"], "center": "逻辑头脑", "channel": "47-64 抽象通道"}, {"id": 48, "name": "井的深度与智慧", "keywords": ["深度", "智慧", "不足感", "技能", "资源"], "center": "直觉中心", "channel": "16-48 波长通道"}, {"id": 49, "name": "原则与革命的力量", "keywords": ["革命", "原则", "拒绝", "改变", "正义"], "center": "情绪中心", "channel": "19-49 综合通道"}, {"id": 50, "name": "价值守护的责任力量", "keywords": ["价值观", "责任", "法律", "守护", "传统"], "center": "直觉中心", "channel": "27-50 保存通道"}, {"id": 51, "name": "震撼与发起的勇气力量", "keywords": ["震撼", "勇气", "竞争", "发起", "中心"], "center": "意志力中心", "channel": "25-51 启蒙通道"}, {"id": 52, "name": "静止的力量", "keywords": ["静止", "专注", "安静", "沉思", "压力"], "center": "根部中心", "channel": "9-52 专注通道"}, {"id": 53, "name": "开始新周期的发展力量", "keywords": ["开始", "新周期", "发展", "压力", "渐进"], "center": "根部中心", "channel": "42-53 成熟通道"}, {"id": 54, "name": "野心与转化的驱动力量", "keywords": ["野心", "转化", "蜕变", "向上", "梦想"], "center": "根部中心", "channel": "32-54 蜕变通道"}, {"id": 55, "name": "精神与丰盛的情绪力量", "keywords": ["精神", "丰盛", "情绪波浪", "信念", "灵魂"], "center": "情绪中心", "channel": "39-55 情绪通道"}, {"id": 56, "name": "漫游者的说故事力量", "keywords": ["故事", "旅行", "好奇", "刺激", "启发"], "center": "喉轮中心", "channel": "11-56 好奇通道"}, {"id": 57, "name": "直觉清晰的力量", "keywords": ["直觉", "清晰", "当下", "生存", "洞察"], "center": "直觉中心", "channel": "34-57 力量通道 / 20-57 脑波通道 / 10-57 完美形式通道"}, {"id": 58, "name": "喜悦的活力", "keywords": ["喜悦", "活力", "热爱", "完美", "生命力"], "center": "根部中心", "channel": "18-58 批判通道"}, {"id": 59, "name": "亲密与分散的力量", "keywords": ["亲密", "分散", "生育", "突破界限", "连结"], "center": "荐骨中心", "channel": "6-59 亲密通道"}, {"id": 60, "name": "接受限制的超越力量", "keywords": ["限制", "超越", "接受", "突变", "保守"], "center": "根部中心", "channel": "3-60 突变通道"}, {"id": 61, "name": "内在真理的神秘力量", "keywords": ["内在真理", "神秘", "灵感", "宇宙", "知晓"], "center": "逻辑头脑", "channel": "24-61 觉察通道"}, {"id": 62, "name": "细节的准备力量", "keywords": ["细节", "准备", "谨慎", "事实", "逻辑"], "center": "喉轮中心", "channel": "17-62 接纳通道"}, {"id": 63, "name": "怀疑与好奇的智慧力量", "keywords": ["怀疑", "好奇", "逻辑", "质疑", "已完成"], "center": "逻辑头脑", "channel": "4-63 逻辑通道"}, {"id": 64, "name": "困惑中的灵感之源", "keywords": ["困惑", "灵感", "压力", "未完成", "可能性"], "center": "逻辑头脑", "channel": "47-64 抽象通道"}];
+
+const HINTS = {
+  "G中心":"你是团队的导航仪——先找到自己的方向，再谈带路",
+  "荐骨中心":"你的力量藏在身体反应里——那个脱口而出的「嗯」最可信",
+  "直觉中心":"你的直觉是安静而确定的——别让它被恐惧盖住",
+  "情绪中心":"你的情绪不是敌人——等浪过去，答案自己会浮现",
+  "逻辑头脑":"你天生会找规律——但答案要被问到，才说得出来",
+  "意志中心":"你有一口「非做不可」的气——有意志就撑到底",
+  "脾中心":"你嗅觉敏锐——第一时间的安全感，值得相信",
+  "根中心":"你在压力里反而清醒——把压力变成燃料是你的天赋",
+  "喉中心":"你生来要发声——把内在的知道，说成外在的话"
+};
+const HINT_KEYS = Object.keys(HINTS);
+
+function normCenter(c){
+  if(!c) return "喉中心";
+  const s = String(c);
+  if(s.includes("G")) return "G中心";
+  if(s.includes("荐骨")||s.includes(" Sacral")) return "荐骨中心";
+  if(s.includes("直觉")||s.includes("脾")) return "直觉中心";
+  if(s.includes("情绪")||s.includes("太阳神经")) return "情绪中心";
+  if(s.includes("逻辑")||s.includes("头脑")||s.includes("Ajna")) return "逻辑头脑";
+  if(s.includes("意志")||s.includes("心")) return "意志中心";
+  if(s.includes("根")||s.includes("Root")) return "根中心";
+  if(s.includes("喉")||s.includes("Throat")) return "喉中心";
+  return s;
+}
+
+function cardHTML(g){
+  const center = normCenter(g.center);
+  const kw = (g.keywords||[]).slice(0,5).map(k=>`<span>${k}</span>`).join("");
+  const channel = g.channel && g.channel!=="undefined" ? g.channel : "";
+  let hint = HINTS[center] || "找到同闸门的人，聊聊你们像在哪里";
+  hint = hint.replace(/\"/g,"「").replace(/\"$/,"」");
+  return `<div class="card">
+    <div class="num">${g.id}<small>号闸门</small></div>
+    <div class="name">${g.name}</div>
+    <div class="kw">${kw}</div>
+    <div class="hint">寻宝提示</div>
+    <div class="center">所属中心：${center}</div>
+    <div class="channel">${channel}</div>
+  </div>`;
+}
+
+function build(perPage){
+  const cols = perPage===9?3:perPage===6?3:2;
+  let html="";
+  for(let i=0;i<GATES.length;i+=perPage){
+    const slice=GATES.slice(i,i+perPage);
+    html+=`<section class="page">
+      <div class="page-head"><span>人类图 64 闸门寻宝卡牌</span><span>HUMAN DESIGN · GATE CARDS</span><span>PAGE ${Math.floor(i/perPage)+1}</span></div>`;
+    slice.forEach(g=>html+=cardHTML(g));
+    html+=`</section>`;
+  }
+  document.getElementById("pages").innerHTML=html;
+  // 同步网格列数
+  const style=document.createElement("style");
+  style.textContent=`.page{grid-template-columns:repeat(${cols},1fr);grid-auto-rows:${perPage===9?'88mm':perPage===6?'132mm':'198mm'}}`;
+  document.head.appendChild(style);
+}
+build(9);
+document.getElementById("perPage").addEventListener("change",e=>{
+  const old=document.querySelectorAll('style[data-dyn]');old.forEach(s=>s.remove());
+  build(parseInt(e.target.value));
+});
+</script>
+</body>
+</html>

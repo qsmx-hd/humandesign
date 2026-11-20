@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《让学员遇见自己》· 人类图教学工作坊 | Powered By Kan Man Tang</title>
+<!--
+  ============================================================
+  VERSION: V4 · 2026-11-20
+  变更点（V4）：
+  - 寻宝卡牌文件名改为英文 hd-gate-treasure-cards.html，本页教具链接同步更新
+  - 讲师介绍精简一段，去掉持续开发者技术罗列
+  - header 移除过期版本 badge，footer 去掉日期信息
+  变更点（V3）：
+  - 图卡生成器文件名改为英文 hd-energy-card-generator.html，本页教具链接同步更新
+  变更点（V2 · 2026-11-20）：
+  - 新增明暗主题切换（导航栏 🌙/☀️ 按钮），暗色禅意配色，localStorage 记忆偏好
+  - 配套教具 / 执行手册等外链改为新标签页打开（target=_blank + rel=noopener）
+  - 图卡生成器新增 4 套禅意模板配色
+  变更点（V1 初版 · 2026-11-20）：
+  变更点（V1 初版）：
+  - 视觉骨架 1:1 对齐 hd-origins-course（2026-10-26 起源课主页）：
+    深棕 sticky 导航 + Hero 两栏（HD.jpg 人体图）+ 区块卡片 +
+    时间线 + 讲师区（左文字 + 右侧人类图竖图）+ 报名 CTA + footer
+  - 品牌色：米白 #F5F0E8 / 深棕 #2D2118 / 金棕 #C4956A / 金 #D4A843
+  - 内容：体验三跃迁 / 峰终节奏曲线 / 90 分钟时间轴 / 六环节可切换教学卡 /
+    五大游戏（带计时器）/ 配套教具 / 传播设计 / 讲师
+  - 交互：导航滚动高亮、环节 Tab 切换、游戏倒数计时器、移动端汉堡菜单
+  - 术语规范：生产者（Generator）、显示生产者（MG）、闸门
+  - 复用素材：assets/HD.jpg、assets/tutor.png、assets/chart-kan-man-tang.jpg
+  ============================================================
+-->
+<style>
+  :root{
+    --bg:#F5F0E8; --dark:#2D2118; --primary:#C4956A; --gold:#D4A843;
+    --cream:#FFFBF4; --line:#E3D8C6; --muted:#7A6A58;
+    --surface:#FFFFFF; --text:#2D2118; --text-soft:#5C4F40; --accent-text:#8A6540;
+  }
+  [data-theme="dark"]{
+    --bg:#1C1510; --cream:#241B14; --surface:#2B2118;
+    --line:#4A3A2A; --muted:#B29A7E; --gold:#E0B45A;
+    --text:#F0E4D0; --text-soft:#D0BCA0; --accent-text:#DFB98A;
+  }
+  [data-theme="dark"] .curve svg text{fill:var(--text)}
+  [data-theme="dark"] .curve svg line{stroke:var(--line)}
+  [data-theme="dark"] #fill stop:first-child{stop-color:#C4956A;stop-opacity:.18}
+  .theme-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);
+    border-radius:999px;width:34px;height:34px;line-height:1;font-size:1rem;
+    cursor:pointer;flex-shrink:0;transition:.2s}
+  .theme-btn:hover{background:rgba(212,168,67,.16)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.8;font-size:16px}
+  h1,h2,h3,h4,.serif{font-family:Georgia,"Noto Serif SC","Source Han Serif SC","Songti SC",serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* 顶部导航 */
+  nav{position:sticky;top:0;z-index:99;background:rgba(45,33,24,.96);backdrop-filter:blur(6px);color:#F5F0E8}
+  .navin{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{font-family:Georgia,"Noto Serif SC",serif;font-size:1.15rem;color:var(--gold);white-space:nowrap}
+  .logo small{color:#CBB79B;font-size:.72rem;display:block;letter-spacing:.2em}
+  .links{display:flex;gap:20px;font-size:.9rem;flex-wrap:wrap}
+  .links a:hover,.links a.active{color:var(--gold)}
+  #burger{display:none;background:none;border:1px solid var(--gold);color:var(--gold);font-size:1.2rem;border-radius:8px;padding:4px 12px;cursor:pointer}
+
+  /* Hero */
+  header.hero{background:linear-gradient(160deg,#2D2118 0%,#3E2E1F 60%,#55402A 100%);color:#F5F0E8;padding:64px 20px}
+  .hero-grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+  .hero-txt{text-align:left}
+  .kicker{letter-spacing:.35em;color:var(--gold);font-size:.85rem;margin-bottom:18px}
+  .hero h1{font-size:clamp(1.8rem,4.5vw,3rem);margin-bottom:16px}
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero p.sub{max-width:560px;margin:0 0 26px;color:#D8C8B0;font-size:1.05rem}
+  .badges{display:flex;gap:10px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:30px}
+  .badge{border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:4px 16px;font-size:.8rem}
+  .cta{display:inline-block;background:var(--gold);color:var(--dark);font-weight:bold;padding:13px 38px;border-radius:999px;font-size:1rem;transition:.2s}
+  .cta:hover{background:#E7BC55;transform:translateY(-2px)}
+  .cta.ghost{background:transparent;color:var(--gold);border:1.5px solid var(--gold);margin-left:12px}
+  .quote{margin:34px 0 0;max-width:640px;color:#CBB79B;font-size:.95rem;font-style:italic}
+  .hero-art{text-align:center}
+  .hero-img{width:100%;max-width:340px;border-radius:22px;display:block;margin:0 auto;
+    box-shadow:0 26px 64px rgba(0,0,0,.5),0 0 0 1px rgba(212,168,67,.35),0 0 64px rgba(196,149,106,.2)}
+
+  /* 区块 */
+  section{padding:64px 0}
+  section.alt{background:var(--cream)}
+  .sec-head{text-align:center;margin-bottom:40px}
+  .sec-head .tag{color:var(--primary);letter-spacing:.3em;font-size:.8rem}
+  .sec-head h2{font-size:clamp(1.4rem,3vw,2rem);margin:8px 0 10px}
+  .sec-head p{color:var(--muted);max-width:660px;margin:0 auto}
+
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .card h3{font-size:1.05rem;margin-bottom:8px}
+  .card p{color:var(--text-soft);font-size:.92rem}
+  .card .num{display:inline-block;width:34px;height:34px;line-height:34px;text-align:center;background:var(--primary);color:#fff;border-radius:50%;margin-bottom:12px;font-family:Georgia,serif}
+  .card.gold .num{background:var(--dark)}
+  .card .why{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);color:var(--accent-text);font-size:.85rem}
+
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(45,33,24,.05);font-size:.9rem}
+  th{background:var(--dark);color:#F5F0E8;padding:12px 14px;text-align:left;font-weight:normal}
+  td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+  td:first-child{white-space:nowrap;font-weight:bold}
+  .tw{overflow-x:auto}
+
+  /* 时间线 */
+  .tl{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px}
+  .tl .node{min-width:170px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .tl .node b{display:block;color:var(--primary);font-family:Georgia,serif;margin-bottom:4px}
+  .tl .node span{font-size:.85rem;color:var(--text-soft)}
+  .tl .node.hot{background:var(--dark);color:#F5F0E8;border-color:var(--dark)}
+  .tl .node.hot b{color:var(--gold)}
+
+  /* 峰终曲线 */
+  .curve{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .curve svg{width:100%;height:auto;display:block}
+  .curve-note{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .curve-note span{flex:1 1 200px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.85rem;color:var(--text-soft)}
+  .curve-note b{color:var(--primary)}
+
+  /* 教学环节 Tab */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:26px}
+  .mod-tab{background:var(--surface);border:1px solid var(--line);color:var(--dark);border-radius:999px;padding:9px 18px;font-size:.9rem;cursor:pointer;transition:.2s;font-family:inherit}
+  .mod-tab:hover{border-color:var(--primary)}
+  .mod-tab.on{background:var(--dark);color:var(--gold);border-color:var(--dark)}
+  .mod-panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .mod-panel h3{font-size:1.35rem;margin-bottom:6px;color:var(--text)}
+  .mod-panel .meta{color:var(--primary);font-size:.85rem;letter-spacing:.08em;margin-bottom:18px}
+  .say{background:var(--cream);border-left:3px solid var(--primary);padding:14px 18px;border-radius:0 10px 10px 0;color:var(--text-soft);font-size:.94rem;margin:14px 0;line-height:2}
+  .say b{color:var(--text)}
+  .drill{background:rgba(212,168,67,.08);border:1.5px dashed var(--gold);border-radius:12px;padding:16px 18px;margin:14px 0;font-size:.92rem;color:var(--text-soft)}
+  .fuse{background:linear-gradient(135deg,#2D2118,#55402A);color:#F5F0E8;border-radius:12px;padding:18px 20px;margin:14px 0;font-size:.92rem}
+  .fuse b{color:var(--gold)}
+  .mini-h{font-size:.8rem;letter-spacing:.2em;color:var(--muted);margin:18px 0 2px}
+
+  /* 游戏卡 + 计时器 */
+  .game{display:flex;flex-direction:column}
+  .game .gh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .game .gh .num{background:var(--gold);color:var(--dark);margin:0}
+  .game p{flex:1}
+  .timer-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+  .timer-disp{font-family:Georgia,serif;font-size:1.25rem;color:var(--text);min-width:66px}
+  .timer-btn{margin-left:auto;background:var(--dark);color:var(--gold);border:none;border-radius:999px;padding:7px 16px;font-size:.82rem;cursor:pointer;font-family:inherit;transition:.2s}
+  .timer-btn:hover{background:#55402A}
+
+  /* 学习路径 / 套件 */
+  .path{display:flex;gap:0;flex-wrap:wrap;justify-content:center;counter-reset:step}
+  .path .st{flex:1;min-width:200px;max-width:250px;background:var(--surface);border:1px solid var(--line);padding:22px 18px;text-align:center;position:relative;margin:0 6px 12px;border-radius:12px}
+  .path .st::before{counter-increment:step;content:counter(step);display:block;width:30px;height:30px;line-height:30px;border-radius:50%;background:var(--gold);color:var(--dark);font-weight:bold;margin:0 auto 10px;font-family:Georgia,serif}
+  .path .st h4{margin-bottom:6px}
+  .path .st p{font-size:.85rem;color:var(--muted)}
+  .kit{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+  .kit a{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;font-size:.9rem;transition:.2s}
+  .kit a:hover{border-color:var(--primary);transform:translateY(-3px)}
+  .kit a b{display:block;color:var(--primary);margin-bottom:4px}
+
+  /* 讲师（对齐起源课） */
+  .tutor{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:52px;
+    display:flex;gap:38px;align-items:flex-start;flex-wrap:wrap;box-shadow:0 2px 10px rgba(45,33,24,.05)}
+  .tutor-main{flex:1 1 380px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;min-width:0}
+  .tutor .ava{width:106px;height:106px;border-radius:50%;background:var(--surface);border:2px solid var(--gold);
+    overflow:hidden;flex-shrink:0;box-shadow:0 14px 30px rgba(166,120,72,.3)}
+  .tutor .ava img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .tutor .txt{flex:1 1 270px}
+  .tutor h3{font-size:24px;margin-bottom:7px}
+  .tutor .role{font-size:14.5px;line-height:2;color:var(--dark)}
+  .tutor p{font-size:14.5px;color:var(--muted);line-height:1.95}
+  .tutor p+p{margin-top:9px}
+  .tutor .chips{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0 12px}
+  .tutor .chips span{background:rgba(196,149,106,.13);border:1px solid var(--line);color:var(--accent-text);
+    font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;white-space:nowrap}
+  .tutor .tq{margin-top:18px;padding-left:16px;border-left:3px solid var(--primary);
+    font-style:italic;color:var(--accent-text);font-size:14.5px}
+  .hd-figure{flex:0 0 216px;margin:0;text-align:center}
+  .hd-figure img{width:100%;border-radius:14px;border:1px solid var(--line);background:var(--surface);
+    box-shadow:0 16px 36px rgba(45,33,24,.13)}
+  .hd-figure figcaption{font-size:12.5px;color:var(--accent-text);font-weight:bold;letter-spacing:.08em;margin-top:10px}
+
+  /* CTA / footer */
+  .final{background:linear-gradient(160deg,#3E2E1F,#2D2118);color:#F5F0E8;text-align:center;border-radius:20px;padding:52px 24px}
+  .final h2{color:var(--gold);margin-bottom:12px}
+  .final p{color:#D8C8B0;max-width:560px;margin:0 auto 26px}
+  footer{background:var(--dark);color:#CBB79B;text-align:center;padding:34px 20px;font-size:.85rem;margin-top:60px}
+  footer b{color:var(--gold)}
+
+  @media(max-width:900px){
+    .g3{grid-template-columns:repeat(2,1fr)}
+    .kit{grid-template-columns:repeat(2,1fr)}
+    .hero-grid{grid-template-columns:1fr}
+    .hero-txt{text-align:center}
+    .hero p.sub{margin-left:auto;margin-right:auto}
+    .badges{justify-content:center}
+    .tutor{padding:38px 30px}
+    .hd-figure{flex:0 1 200px}
+  }
+  @media(max-width:860px){
+    #burger{display:block}
+    .links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--dark);flex-direction:column;padding:18px 24px;gap:14px;border-top:1px solid rgba(212,168,67,.3)}
+    .links.open{display:flex}
+  }
+  @media(max-width:620px){
+    .g3,.g2{grid-template-columns:1fr}
+    td:first-child{white-space:normal}
+    .cta.ghost{margin-left:0;margin-top:10px}
+    .tutor{padding:30px 20px;gap:24px}
+    .tutor-main{flex-direction:column;gap:14px}
+    .tutor .ava{width:88px;height:88px}
+    .hd-figure{flex:1 1 100%;max-width:240px;margin:4px auto 0}
+    .mod-panel{padding:22px 18px}
+    .curve-note span{flex:1 1 100%}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navin">
+    <a class="logo" href="#top">教学工作坊<small>TEACHING DESIGN</small></a>
+    <button id="themeBtn" class="theme-btn" onclick="toggleTheme()" title="切换明暗主题" aria-label="切换明暗主题">🌙</button>
+    <button id="burger" onclick="document.getElementById('links').classList.toggle('open')">☰</button>
+    <div class="links" id="links">
+      <a href="#why" onclick="closeM()">三跃迁</a>
+      <a href="#rhythm" onclick="closeM()">峰终节奏</a>
+      <a href="#timeline" onclick="closeM()">时间轴</a>
+      <a href="#modules" onclick="closeM()">六环节</a>
+      <a href="#games" onclick="closeM()">闯关游戏</a>
+      <a href="#kit" onclick="closeM()">配套教具</a>
+      <a href="#tutor" onclick="closeM()">讲师</a>
+      <a href="#enroll" onclick="closeM()">开始教学</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-txt">
+      <div class="kicker">A TEACHING DESIGN FOR HUMAN DESIGN WORKSHOP</div>
+      <h1>《让学员<em>遇见自己</em>》</h1>
+      <p class="sub">人类图教学的最大资产，是每个学员都带着一张独一无二的图走进教室。<br>这套设计，让他们在课堂上看见自己，然后忍不住把这份看见晒出去。</p>
+      <div class="badges">
+        <span class="badge">90 分钟 · 6 大教学环节</span>
+        <span class="badge">4 件套：主页 / 手册 / 卡牌 / 图卡</span>
+        <span class="badge">体验 · 好玩 · 可传播</span>
+      </div>
+      <a class="cta" href="#modules">进入教学环节</a>
+      <a class="cta ghost" href="人类图教学工作坊执行手册.docx" target="_blank" rel="noopener">打开执行手册 →</a>
+      <p class="quote">"别让学员带走知识，要让他带走一个身份标签、一张能晒的图、一句能引用的话。"</p>
+    </div>
+    <figure class="hero-art">
+      <img class="hero-img" src="assets/HD.jpg" alt="人类图九大能量中心人体图示意图">
+    </figure>
+  </div>
+</header>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">THE THREE LEAPS</div>
+      <h2>体验三跃迁：从"上了一堂课"到"经历一次发现"</h2>
+      <p>教学设计的本质不是把 64 闸门讲清楚，而是设计一条递进的体验路径——遇见自己 → 玩中学 → 晒出去。</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">1</span><h3>体验感 · 把"听讲"改成"遇见自己"</h3><p>开场即出图、身体化演示四大类型、权威小实验、安全场约定。让学员先在自己的图上"看见我"，再听理论。</p><span class="why">底层逻辑：自我参照效应——跟"我"相关的信息，记忆留存率比抽象理论高 3–5 倍；具身认知多开一条记忆通道。</span></div>
+      <div class="card gold"><span class="num">2</span><h3>好玩 · 把知识点包成关卡</h3><p>闸门寻宝、猜猜我是谁、通道连连看、现场合盘、能量抽卡。每个游戏玩完必须回收一句"所以这说明了什么"。</p><span class="why">底层逻辑：目标—反馈—进度三要素齐了自然进入心流；可变奖励（间歇强化）让人持续期待。</span></div>
+      <div class="card"><span class="num">3</span><h3>传播性 · 设计"社交货币"</h3><p>一张能晒的图卡、一句能说的话、一个能参与的仪式、一条关系链裂变机制。分享的动机是"显得更懂自己"。</p><span class="why">底层逻辑：传播不是内容好，而是分享者能借它塑造身份——给他可晒、可说、可参与的素材。</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="rhythm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">PEAK–END RULE</div>
+      <h2>一节课的节奏：峰值与结尾，决定全部记忆</h2>
+      <p>体验感的高下，往往不取决于内容多好，而取决于峰值与结尾设计得够不够狠（峰终定律）。</p>
+    </div>
+    <div class="curve">
+      <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="90分钟课堂体验曲线，三个峰值分别位于出图、闯关游戏与晒图收尾">
+        <defs>
+          <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C4956A" stop-opacity=".38"/>
+            <stop offset="100%" stop-color="#C4956A" stop-opacity=".02"/>
+          </linearGradient>
+        </defs>
+        <!-- 网格 -->
+        <line x1="60" y1="40" x2="870" y2="40" stroke="#E3D8C6" stroke-dasharray="4 5"/>
+        <line x1="60" y1="120" x2="870" y2="120" stroke="#E3D8C6" stroke-dasharray="4 5"/>
+        <line x1="60" y1="200" x2="870" y2="200" stroke="#E3D8C6" stroke-dasharray="4 5"/>
+        <line x1="60" y1="230" x2="870" y2="230" stroke="#2D2118" stroke-width="1.5"/>
+        <text x="20" y="45" font-size="12" fill="#7A6A58">高</text>
+        <text x="20" y="124" font-size="12" fill="#7A6A58">中</text>
+        <text x="20" y="204" font-size="12" fill="#7A6A58">低</text>
+        <!-- 曲线（体验强度） -->
+        <path d="M60,175 C110,70 150,55 200,60 C250,65 280,150 330,165 C380,178 400,180 430,175 C470,168 490,70 540,58 C590,46 620,70 660,90 C700,110 720,120 750,115 C790,108 810,50 850,48"
+              fill="none" stroke="#C4956A" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M60,175 C110,70 150,55 200,60 C250,65 280,150 330,165 C380,178 400,180 430,175 C470,168 490,70 540,58 C590,46 620,70 660,90 C700,110 720,120 750,115 C790,108 810,50 850,48 L850,230 L60,230 Z"
+              fill="url(#fill)"/>
+        <!-- 峰值点 -->
+        <circle cx="200" cy="60" r="7" fill="#D4A843" stroke="#2D2118" stroke-width="1.5"/>
+        <circle cx="540" cy="58" r="7" fill="#D4A843" stroke="#2D2118" stroke-width="1.5"/>
+        <circle cx="850" cy="48" r="8" fill="#D4A843" stroke="#2D2118" stroke-width="1.5"/>
+        <!-- 标注 -->
+        <text x="200" y="35" font-size="13" fill="#2D2118" text-anchor="middle" font-weight="bold">① 开场出图</text>
+        <text x="540" y="33" font-size="13" fill="#2D2118" text-anchor="middle" font-weight="bold">② 闯关游戏</text>
+        <text x="830" y="23" font-size="13" fill="#2D2118" text-anchor="middle" font-weight="bold">③ 晒图收尾</text>
+        <text x="60" y="255" font-size="12" fill="#7A6A58">0 min</text>
+        <text x="450" y="255" font-size="12" fill="#7A6A58">45 min</text>
+        <text x="850" y="255" font-size="12" fill="#7A6A58">90 min</text>
+      </svg>
+      <div class="curve-note">
+        <span><b>峰值 1 · 0–10 min</b><br>进场出图 + 安全场约定，学员第一眼看见自己。</span>
+        <span><b>谷底 · 25–40 min</b><br>理论精讲控制在 15 分钟内，讲透一个点就够——低谷是给峰值蓄力。</span>
+        <span><b>峰值 2 · 40–70 min</b><br>闸门寻宝 → 猜图 → 现场合盘，推理、社交与"啊哈时刻"叠加。</span>
+        <span><b>峰值 3 · 85–90 min</b><br>分类型合照 + 互赠一句话，强收尾让学员当场发圈。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">90-MINUTE TIMELINE</div>
+      <h2>90 分钟总控时间轴</h2>
+      <p>深色节点为三个体验峰值。讲师照此控场，宁可少讲一个知识点，也不要压缩峰值环节。</p>
+    </div>
+    <div class="tl">
+      <div class="node hot"><b>0–10 min</b><span>进场出图 + 安全场约定（峰值①）</span></div>
+      <div class="node"><b>10–25 min</b><span>身体化演示四大类型</span></div>
+      <div class="node"><b>25–40 min</b><span>理论精讲：只讲透一个点</span></div>
+      <div class="node hot"><b>40–70 min</b><span>闯关游戏：寻宝 → 猜图 → 合盘（峰值②）</span></div>
+      <div class="node"><b>70–85 min</b><span>产出"能量说明书"图卡 + 金句</span></div>
+      <div class="node hot"><b>85–90 min</b><span>分类型合照 + 互赠一句话（峰值③）</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="modules">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">SIX MODULES</div>
+      <h2>六大教学环节 · 逐环节拆解</h2>
+      <p>点击环节标签切换。每个环节含讲师动作、逐字稿要点与底层逻辑，可直接照着执行。</p>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="mod-tab on" onclick="switchMod(0,this)">① 开场出图</button>
+      <button class="mod-tab" onclick="switchMod(1,this)">② 身体化演示</button>
+      <button class="mod-tab" onclick="switchMod(2,this)">③ 理论精讲</button>
+      <button class="mod-tab" onclick="switchMod(3,this)">④ 闯关游戏</button>
+      <button class="mod-tab" onclick="switchMod(4,this)">⑤ 产出作品</button>
+      <button class="mod-tab" onclick="switchMod(5,this)">⑥ 晒图收尾</button>
+    </div>
+
+    <div class="mod-panel">
+      <h3>① 开场出图 · 先看见自己</h3>
+      <div class="meta">0–10 MIN · 峰值① · 自我参照效应</div>
+      <div class="mini-h">讲师动作</div>
+      <p>学员一进场先扫码出图，先不看解读，盯着图问自己"我看到什么"。随后立安全场约定：不评判、不贴标签、为彼此保密。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>先别急着看答案。</b>看着你自己的这张图，告诉我——你第一眼注意到的是什么？那个吸引你的地方，往往就是你今天最想被看见的部分。"</div>
+      <div class="drill">✍️ 安全场约定（全场齐读）：不评判、不贴标签、为彼此保密。人类图碰的是深层自我，心理安全是体验感的前提——没有它，就只剩防御。</div>
+      <div class="fuse"><b>底层逻辑：</b>自我参照效应让"跟我有关"的信息记忆留存率提升 3–5 倍。先出图、后讲理，把整堂课挂到学员自己的图上。</div>
+    </div>
+
+    <div class="mod-panel" style="display:none">
+      <h3>② 身体化演示 · 让四种能量被"感受"到</h3>
+      <div class="meta">10–25 MIN · 具身认知</div>
+      <div class="mini-h">讲师动作</div>
+      <p>四大类型用身体演出来：显示者推门、生产者回应"嗯"、投射者等邀请、反映者采样。学员跟着做一遍，动作与情绪一起编码。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>显示者，去推那扇门——不需要许可，你就是启动者。<br>生产者，别人问你问题时，先别用脑子答，听身体那一声'嗯'。<br>投射者，站在原地等——对的邀请来了，你再动。<br>反映者，先别急着定性，过几天再看，你像月亮一样在采样。"</b></div>
+      <div class="drill">🔬 权威小实验：情绪权威者现场做"睡一觉再定"的模拟决策；荐骨权威做"嗯/呃"回应测试。把术语变成可感知的身体证据，让学员自己验证而非被说服。</div>
+      <div class="fuse"><b>底层逻辑：</b>具身认知——动作和情绪一起编码，比纯听讲多一条记忆通道。身体做过一遍的术语，学员终身难忘。</div>
+    </div>
+
+    <div class="mod-panel" style="display:none">
+      <h3>③ 理论精讲 · 15 分钟讲透一个点</h3>
+      <div class="meta">25–40 MIN · 认知负荷控制</div>
+      <div class="mini-h">讲师动作</div>
+      <p>只讲透一个核心概念（如"类型 → 策略 → 权威"三者关系），用学员自己图上的例子反复印证。控制在 15 分钟内，为后面的峰值蓄力。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>类型是你的能量怎么运作，策略是你该怎么用这股能量，权威是你做决定的最终裁判。</b>三者不是三个知识点，是你每天都会用到的一个动作。拿你自己的图，我们一起走一遍。"</div>
+      <div class="drill">⚠️ 纪律：理论只讲一个点。贪多会让体验曲线一路走低——低谷是必要的，但过长就再也拉不回来。</div>
+      <div class="fuse"><b>底层逻辑：</b>认知负荷理论——工作记忆一次只能处理有限信息。聚焦一个概念并即时联系学员自身，才能形成可迁移的理解。</div>
+    </div>
+
+    <div class="mod-panel" style="display:none">
+      <h3>④ 闯关游戏 · 把知识点做成关卡</h3>
+      <div class="meta">40–70 MIN · 峰值② · 心流 + 间歇强化</div>
+      <div class="mini-h">讲师动作</div>
+      <p>依次进行闸门寻宝 → 猜猜我是谁 → 现场合盘。每关结束必须有一句回收："所以这说明了什么？"否则学员只记得笑，不记得你教了啥。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>拿到你抽到的闸门，全场去找跟你同一个闸门的人——找到就抱一下，你们今天是一对'同频'。</b>……好，现在看这张匿名图，全场猜：这是什么类型？什么权威？依据是什么？"</div>
+      <div class="drill">🎲 能量抽卡贯穿全程：每个环节抽一张肯定语或 OH 卡，对应当下闸门能量。可变奖励最让人上瘾——学员会一直期待下一次抽卡。</div>
+      <div class="fuse"><b>底层逻辑：</b>目标—反馈—进度三要素齐了自然进入心流；推理游戏激活主动加工，比被动听讲记得牢；真实关系 + 悬念让"啊哈时刻"双高。</div>
+    </div>
+
+    <div class="mod-panel" style="display:none">
+      <h3>⑤ 产出作品 · 带走一张能晒的图</h3>
+      <div class="meta">70–85 MIN · 生成效应</div>
+      <div class="mini-h">讲师动作</div>
+      <p>每人产出一张"我的能量使用说明书"图卡（类型 + 策略 + 权威 + 一句金句，自带讲师二维码），并生成一句话："我是显示生产者，我的超能力是____"。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>把你今天看见的自己，写成一句能带走的话。</b>不是我告诉你你是谁，是你自己说——我是____类型，我的超能力是____。写完保存成图，这就是你今天的作品。"</div>
+      <div class="drill">🖼 用配套的「图卡生成器」现场填写导出 PNG，手机竖版 9:16，可直接发朋友圈 / 小红书。</div>
+      <div class="fuse"><b>底层逻辑：</b>生成效应——自己产出的内容比被动接收的内容记忆更深；作品本身又是天然传播素材，学习成果与分享动机合一。</div>
+    </div>
+
+    <div class="mod-panel" style="display:none">
+      <h3>⑥ 晒图收尾 · 强结尾引发自发分享</h3>
+      <div class="meta">85–90 MIN · 峰值③ · 仪式感</div>
+      <div class="mini-h">讲师动作</div>
+      <p>全体按类型站队拍合照；互赠一句"我看到你的____"。统一仪式天然引发拍照分享，把课堂情绪定格在最高点。</p>
+      <div class="mini-h">逐字稿要点</div>
+      <div class="say">"<b>最后，请你面对一位伙伴，认真说一句：'我今天看到你的____。'</b>然后我们按类型站队，拍一张大合照——把你今天的图卡举起来，让世界看见你。"</div>
+      <div class="drill">📣 裂变钩子：两人同行价、"带一个同闸门的人来"、结课后拉同类群——用关系链扩散，让一位学员带来下一位。</div>
+      <div class="fuse"><b>底层逻辑：</b>峰终定律——结尾决定整段体验被记住的样子。仪式感 + 社交货币，让分享成为学员的自发动作而非请求。</div>
+    </div>
+  </div>
+</section>
+
+<section id="games">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">FIVE GAMES</div>
+      <h2>五大闯关游戏 · 现场计时器</h2>
+      <p>点击"开始计时"即可为对应环节倒数。好玩不等于热闹——每关都要回收到知识点。</p>
+    </div>
+    <div class="grid g2">
+      <div class="card game"><div class="gh"><span class="num">01</span><h3>闸门寻宝</h3></div><p>64 闸门做成卡牌，学员抽到自己的闸门后全场找"同闸门的人"抱团。抽象的闸门变成看得见的人。</p><div class="timer-row"><span class="timer-disp">10:00</span><button class="timer-btn" onclick="startTimer(600,this)">▶ 开始计时</button></div></div>
+      <div class="card game"><div class="gh"><span class="num">02</span><h3>猜猜我是谁</h3></div><p>只展示匿名的人类图，全场猜类型 / 权威 / 通道。推理游戏激活主动加工，比被动听讲记得牢。</p><div class="timer-row"><span class="timer-disp">08:00</span><button class="timer-btn" onclick="startTimer(480,this)">▶ 开始计时</button></div></div>
+      <div class="card game"><div class="gh"><span class="num">03</span><h3>通道连连看</h3></div><p>根据学员的图拼通道，凑成一条完整通道就得分。目标—反馈—进度三要素齐了，自然进入心流。</p><div class="timer-row"><span class="timer-disp">08:00</span><button class="timer-btn" onclick="startTimer(480,this)">▶ 开始计时</button></div></div>
+      <div class="card game"><div class="gh"><span class="num">04</span><h3>现场合盘</h3></div><p>抽两组志愿者，用合盘工具现场做能量化学反应解读。悬念 + 真实关系 = 娱乐性和"啊哈时刻"双高。</p><div class="timer-row"><span class="timer-disp">12:00</span><button class="timer-btn" onclick="startTimer(720,this)">▶ 开始计时</button></div></div>
+      <div class="card game"><div class="gh"><span class="num">05</span><h3>能量抽卡</h3></div><p>每环节抽一张肯定语或 OH 卡，对应当下闸门能量。可变奖励（间歇强化）最让人上瘾，形成期待感。</p><div class="timer-row"><span class="timer-disp">03:00</span><button class="timer-btn" onclick="startTimer(180,this)">▶ 开始计时</button></div></div>
+      <div class="card game" style="background:linear-gradient(135deg,#2D2118,#55402A);color:#F5F0E8;border-color:#2D2118"><div class="gh"><span class="num" style="background:var(--gold);color:var(--dark)">✓</span><h3>回收一句话</h3></div><p style="color:#D8C8B0">每关结束问一句："所以这说明了什么？"没有这一步，学员只记得笑，不记得你教了啥。</p><div class="timer-row" style="border-color:rgba(212,168,67,.3)"><span style="color:var(--gold);font-size:.9rem">玩 → 回收 → 内化</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="kit">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">THE KIT</div>
+      <h2>配套教具 · 四件套</h2>
+      <p>一份手册负责"照着讲"，一份卡牌负责"玩起来"，一份图卡生成器负责"晒出去"，本页负责"串起来"。</p>
+    </div>
+    <div class="path">
+      <div class="st"><h4>① 通读本页</h4><p>用 10 分钟建立全景：三跃迁、峰终曲线、时间轴、六环节。</p></div>
+      <div class="st"><h4>② 精读手册</h4><p>逐字稿、物料清单、风险预案、传播话术，照着执行即可。</p></div>
+      <div class="st"><h4>③ 打印卡牌</h4><p>64 闸门 A4 寻宝卡，3×3 每页 9 张，裁切即用。</p></div>
+      <div class="st"><h4>④ 现场出图</h4><p>学员填类型 / 权威 / 金句，一键导出竖版图卡发圈。</p></div>
+    </div>
+    <div class="kit">
+      <a href="hd-workshop-teaching.html" target="_blank" rel="noopener"><b>🏠 本页 · 教学主页</b>全景导览</a>
+      <a href="人类图教学工作坊执行手册.docx" target="_blank" rel="noopener"><b>📘 执行手册</b>逐字稿 · 时间轴</a>
+      <a href="hd-gate-treasure-cards.html" target="_blank" rel="noopener"><b>🃏 寻宝卡牌</b>64 张 · A4 可打印</a>
+      <a href="hd-energy-card-generator.html" target="_blank" rel="noopener"><b>🖼 图卡生成器</b>填写即出 PNG</a>
+    </div>
+  </div>
+</section>
+
+<section id="spread">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">SPREAD BY DESIGN</div>
+      <h2>传播设计：给学员"可晒、可说、可参与"的东西</h2>
+      <p>传播的本质不是内容好，而是学员分享它能让自己显得更有趣、更懂自己、更有洞察。</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="num">晒</span><h3>可晒 · 一张图卡</h3><p>设计感强的"我的能量使用说明书"：类型 + 策略 + 权威 + 一句金句，手机竖版、自带讲师二维码。</p></div>
+      <div class="card"><span class="num">说</span><h3>可说 · 一句话金句</h3><p>"我是显示生产者，我的超能力是____"——金句自动生成，复制即发，降低分享的表达成本。</p></div>
+      <div class="card"><span class="num">玩</span><h3>可参与 · 一个仪式</h3><p>分类型站队合照 / 互赠一句"我看到你的____"。仪式感天然引发拍照分享。</p></div>
+      <div class="card"><span class="num">裂</span><h3>可裂变 · 一条关系链</h3><p>两人同行价、"带一个同闸门的人来"、结课后拉同类群——用关系链扩散。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="tutor">
+  <div class="wrap">
+    <div class="tutor">
+      <div class="tutor-main">
+        <div class="ava"><img src="assets/tutor.png" alt="讲师 邓勤敏"></div>
+        <div class="txt">
+          <h3>邓勤敏</h3>
+          <p class="role">人类图领读者计划发起人<br>真好玩人类图平台创始人<br>天赋型人类图解读师、培训导师</p>
+          <div class="chips"><span>九大能量中心全定义</span><span>6/2 爻</span><span>显示生产者</span><span>游戏化教学</span></div>
+          <p>擅长用通俗易懂的语言解说人类图，用游戏化思维交付培训内容，咨询时长 1000+，培训时长 1000+。</p>
+          <p>国际演讲会杰出会员（2014 年 8 月加入头马，曾任区域总监，至今完成 3 次 Distinguished Toastmaster-DTM），资深企业培训师。</p>
+          <p>长期把人类图用于识人用人、亲密关系与领导力场景，服务的客户涵盖房地产、能源企业、软件公司、保险公司、互联网公司、电商平台等业态。</p>
+          <p>讲课风格：不讲玄的，只给能带走、能验证、明天就能用的动作。</p>
+          <div class="tq">「人类图不是告诉你该成为谁，而是提醒你——你本来就是谁。」</div>
+        </div>
+      </div>
+      <figure class="hd-figure">
+        <img src="assets/chart-kan-man-tang.jpg" alt="邓勤敏的人类图：九大能量中心全定义 · 6/2 爻 · 显示生产者">
+        <figcaption>一图胜千言 · 以图会友</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="enroll">
+  <div class="wrap">
+    <div class="final">
+      <h2>让每个学员，带着一张图走出教室</h2>
+      <p>体验感靠"先出图、后讲理"，好玩靠"把知识点做成关卡"，传播靠"给他一张能晒的图、一句能说的话、一个能参与的仪式"。三者串成一条线，学员就从"上了一堂课"变成"经历了一次自我发现，并把它分享出去"。</p>
+      <a class="cta" href="人类图教学工作坊执行手册.docx" target="_blank" rel="noopener">开工，走起 → 打开执行手册</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  《让学员遇见自己》· 人类图教学工作坊 · V4<br>
+  Powered By <b>Kan Man Tang</b>
+</footer>
+
+<script>
+function closeM(){document.getElementById('links').classList.remove('open');}
+document.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',closeM));
+
+/* 教学环节 Tab 切换 */
+function switchMod(i,btn){
+  document.querySelectorAll('.mod-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#modules .mod-panel').forEach((p,j)=>{p.style.display=(j===i?'block':'none');});
+}
+
+/* 游戏倒数计时器 */
+var timerId=null;
+function startTimer(sec,btn){
+  if(timerId){clearInterval(timerId);timerId=null;document.querySelectorAll('.timer-btn').forEach(b=>b.textContent='▶ 开始计时');}
+  var remain=sec, disp=btn.parentElement.querySelector('.timer-disp');
+  btn.textContent='⏸ 计时中…';
+  timerId=setInterval(function(){
+    remain--;
+    var m=String(Math.floor(remain/60)).padStart(2,'0'), s=String(remain%60).padStart(2,'0');
+    disp.textContent=m+':'+s;
+    if(remain<=0){clearInterval(timerId);timerId=null;btn.textContent='✅ 完成';disp.textContent='00:00';}
+  },1000);
+}
+
+/* 明暗主题切换（localStorage 记忆） */
+function setTheme(t){
+  try{document.documentElement.setAttribute('data-theme',t);localStorage.setItem('hd-workshop-theme',t);}catch(e){document.documentElement.setAttribute('data-theme',t);}
+  var b=document.getElementById('themeBtn');if(b)b.textContent=(t==='dark'?'☀️':'🌙');
+}
+function toggleTheme(){
+  setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+}
+(function(){
+  var t=null;try{t=localStorage.getItem('hd-workshop-theme');}catch(e){}
+  if(t==='dark'||t==='light')setTheme(t);
+})();
+
+/* 导航滚动高亮 */
+var secs=[].slice.call(document.querySelectorAll('section[id]'));
+var navAs=[].slice.call(document.querySelectorAll('.links a'));
+if('IntersectionObserver' in window){
+  var obs=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){
+        navAs.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id);});
+      }
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  secs.forEach(function(s){obs.observe(s);});
+}
+</script>
+</body>
+</html>
