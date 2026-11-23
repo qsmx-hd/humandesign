@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内经时间 · 顺时而养日历 V3.0</title>
+<!--
+/*
+ * 内经时间 · 顺时而养日历 — changelog（便于溯源）
+ * V3.0  2026-11-23  月历字号放大 + 页脚信息分行：
+ *   - 月历：公历日 15→20px、农历 9→12px、节气 8.5→11px、星期 11→12.5px、说明 10→12px；移动端不再隐藏节气，改为等比缩小显示
+ *   - 页脚拆为四行：免责说明 / 资料来源 / 就医提示 / Powered By Kan Man Tang（最后一行）
+ * V2.0  2026-11-23  修正两处显示问题：
+ *   - 时间环 viewBox 由 344 扩为 400、圆心 172→200，最外环半径 190 完整显示，不再上下左右被截断
+ *   - 节气改为“落在某一天”：月历/时钟条/环心仅在交节当天显示节气名；非交节日不再整段重复同一节气
+ *   - 内容面板节气标签元数据改为该节气的真实交节日（不再显示“第N日/X日后X”的时段说法）
+ * V1.0  2026-11-23  首版复刻
+ *   - 复刻自 luthepath/Inner-Time（innertime.tcmsageguide.com），无 LICENSE（个人学习使用）
+ *   - 复用其历法引擎（干支/节气/农历/月相天文算法）与《内经》原文数据库（24节气/12时辰/四季/阴阳/四时/月相）
+ *   - 重做 UI：暖棕金禅意配色、2D 同心时间环（替代原 3D orrery）、实时时钟、月历、7 维内容面板
+ *   - 术语与设计遵循用户规范：Powered By Kan Man Tang、VERSION 常量统一驱动、移动端响应式
+ */
+-->
+<style>
+:root{
+  --brown:#2D2118; --cream:#F5F0E8; --gold:#C4956A; --gold-l:#E0C9A6;
+  --bg:#FBF8F2; --card:#FFFDF9; --ink:#33281E; --sub:#7A6A58; --line:#E5DACB;
+  --accent:#8C6239; --tag:#F0E4D2; --shadow:0 3px 16px rgba(45,33,24,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+header{background:linear-gradient(135deg,var(--brown),#4A3826);color:var(--cream);padding:26px 0 22px;text-align:center;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(196,149,106,.18),transparent 60%);pointer-events:none}
+header .wrap{position:relative;z-index:1}
+header h1{font-size:26px;letter-spacing:2px;font-weight:600}
+header h1 .ver{font-size:12px;color:var(--gold-l);font-weight:400;margin-left:8px;vertical-align:middle;letter-spacing:0}
+header .sub{font-size:13px;color:var(--gold-l);margin-top:6px;letter-spacing:.5px}
+.hd-badge{display:inline-block;margin-top:12px;font-size:11px;color:var(--gold-l);border:1px solid rgba(224,201,166,.35);border-radius:12px;padding:3px 12px}
+
+/* 时钟条 */
+.clockbar{background:var(--brown);color:var(--cream);text-align:center;padding:16px 0 18px}
+.clockbar .t{font-size:34px;font-weight:300;letter-spacing:3px;font-variant-numeric:tabular-nums}
+.clockbar .d{font-size:13px;color:var(--gold-l);margin-top:4px}
+.clockbar .d b{color:var(--cream);font-weight:600}
+.clockbar .gz{font-size:12px;color:var(--gold-l);margin-top:3px}
+
+main{padding:22px 0 40px}
+/* 时间环 + 内容 两栏 */
+.stage{display:grid;grid-template-columns:380px 1fr;gap:22px;align-items:start}
+@media(max-width:820px){.stage{grid-template-columns:1fr}}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.ring-wrap{padding:18px;text-align:center}
+.ring-wrap h2,.content h2{font-size:15px;color:var(--accent);margin-bottom:4px;letter-spacing:1px}
+.ring-hint{font-size:11px;color:var(--sub);margin-bottom:10px}
+#ring{width:100%;max-width:344px;aspect-ratio:1;margin:0 auto;display:block;cursor:pointer}
+.ring-layer{transition:opacity .2s}
+.ring-layer:hover{opacity:.82}
+.ring-lbl{font-size:10px;fill:var(--sub);pointer-events:none}
+.ring-center{fill:var(--brown)}
+.ring-center-t{fill:var(--cream);font-size:14px;font-weight:600;text-anchor:middle}
+.ring-center-s{fill:var(--gold-l);font-size:10px;text-anchor:middle}
+.legend{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px}
+.legend span{font-size:10px;color:var(--sub);background:var(--tag);border-radius:8px;padding:2px 7px}
+
+/* 内容区 */
+.content{padding:20px 22px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.tab{font-size:12px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:5px 12px;cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--gold);color:var(--accent)}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.q-name{font-size:24px;color:var(--brown);font-weight:600}
+.q-meta{font-size:12px;color:var(--sub)}
+.q-meta span{display:inline-block;background:var(--tag);border-radius:8px;padding:2px 8px;margin-right:5px}
+.q-book{border-left:3px solid var(--gold);padding-left:14px;margin:14px 0}
+.q-book .vtxt{font-size:14px;color:var(--ink);line-height:1.9}
+.q-book .vfull{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.8}
+.q-book cite{display:block;font-size:11px;color:var(--accent);margin-top:8px;font-style:normal}
+.q-sec{margin-top:14px}
+.q-sec h3{font-size:12px;color:var(--accent);letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.q-sec h3:before{content:"";width:14px;height:1px;background:var(--gold)}
+.q-plain{font-size:13px;color:var(--ink);line-height:1.85}
+.q-tip{background:var(--tag);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--brown);line-height:1.8;margin-top:12px}
+.q-tip b{color:var(--accent);margin-right:6px}
+.q-note{font-size:11px;color:var(--sub);margin-top:10px;line-height:1.7;padding-top:8px;border-top:1px dashed var(--line)}
+.src-note{font-size:10.5px;color:#9A8B78;margin-top:8px;line-height:1.6}
+
+/* 月历 */
+.cal{padding:18px 22px;margin-top:22px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.cal-head h2{font-size:15px;color:var(--accent)}
+.cal-nav{display:flex;gap:6px;align-items:center}
+.cal-nav button{background:var(--bg);border:1px solid var(--line);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:16px}
+.cal-nav button:hover{border-color:var(--gold)}
+.cal-nav select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;color:var(--ink);font-size:12px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-grid .wd{text-align:center;font-size:12.5px;color:var(--sub);padding:6px 0}
+.cal-cell{aspect-ratio:1;border-radius:8px;padding:7px 4px;text-align:center;cursor:pointer;border:1px solid transparent;transition:.12s;display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.cal-cell:hover{background:var(--tag)}
+.cal-cell .gd{font-size:20px;color:var(--ink)}
+.cal-cell .lm{font-size:12px;color:var(--sub)}
+.cal-cell .tm{font-size:11px;color:var(--gold);white-space:nowrap;overflow:hidden}
+.cal-cell.jiao .tm{color:var(--accent);font-weight:700}
+.cal-cell.out{opacity:.32}
+.cal-cell.today{border-color:var(--gold);background:var(--tag)}
+.cal-cell.today .gd{color:var(--accent);font-weight:700}
+.cal-cell.sel{background:var(--accent);border-color:var(--accent)}
+.cal-cell.sel .gd,.cal-cell.sel .lm,.cal-cell.sel .tm{color:#fff}
+.cal-term-legend{font-size:12px;color:var(--sub);margin-top:12px;text-align:center}
+
+footer{background:var(--brown);color:var(--gold-l);text-align:center;padding:18px 16px;font-size:12px}
+footer .disc{font-size:11.5px;color:#A8977F;margin-top:6px;line-height:1.7}
+footer .credit{margin-top:12px;color:var(--gold-l);font-size:12px;letter-spacing:.5px}
+
+.nojs{padding:30px;text-align:center;color:var(--sub)}
+@media(max-width:600px){
+  header h1{font-size:21px}
+  .clockbar .t{font-size:28px}
+  .content{padding:16px}
+  .q-name{font-size:20px}
+  .cal{padding:14px}
+  .cal-grid .wd{font-size:11px;padding:4px 0}
+  .cal-cell{padding:5px 2px}
+  .cal-cell .gd{font-size:16px}
+  .cal-cell .lm{font-size:10px}
+  .cal-cell .tm{font-size:9.5px}
+  .cal-term-legend{font-size:11px}
+}
+</style>
+</head>
+<body>
+<noscript><p class="nojs">请启用 JavaScript 后打开本页面。</p></noscript>
+<header><div class="wrap">
+  <h1>🌿 内经时间 <span class="ver" id="headVer">V3.0</span></h1>
+  <div class="sub">顺四时 · 调阴阳 · 应节气 —— 来自《黄帝内经》的时令养生指引</div>
+  <div class="hd-badge">干支历 · 二十四节气 · 农历 · 子午流注 · 五运四时</div>
+</div></header>
+
+<div class="clockbar"><div class="wrap">
+  <div class="t" id="clockTime">--:--:--</div>
+  <div class="d" id="clockDate">加载中…</div>
+  <div class="gz" id="clockGz"></div>
+</div></div>
+
+<main class="wrap">
+<div class="stage">
+  <!-- 时间环 -->
+  <section class="panel ring-wrap">
+    <h2>⭕ 内经时间环</h2>
+    <div class="ring-hint">由内到外：时辰 · 四时 · 阴阳 · 月相 · 节气 · 干支月 · 四季　（点击圆环切换解读）</div>
+    <svg id="ring" viewBox="0 0 400 400" role="img" aria-label="内经时间环"></svg>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <!-- 内容面板 -->
+  <section class="panel content">
+    <div class="tabs" id="tabs" role="tablist">
+      <button class="tab on" data-k="s" role="tab">四季</button>
+      <button class="tab" data-k="mo" role="tab">干支月</button>
+      <button class="tab" data-k="t" role="tab">节气</button>
+      <button class="tab" data-k="m" role="tab">月相</button>
+      <button class="tab" data-k="yy" role="tab">阴阳</button>
+      <button class="tab" data-k="q" role="tab">四时</button>
+      <button class="tab" data-k="sc" role="tab">时辰</button>
+    </div>
+    <div class="q-head">
+      <div class="q-name" id="qName">—</div>
+      <div class="q-meta" id="qMeta"></div>
+    </div>
+    <div class="q-book">
+      <div class="vtxt" id="qVerse"></div>
+      <div class="vfull" id="qFull"></div>
+      <cite id="qCite"></cite>
+    </div>
+    <div class="q-sec"><h3>白话</h3><div class="q-plain" id="qPlain"></div></div>
+    <div class="q-tip" id="qTip"></div>
+    <div class="q-note" id="qNote" hidden></div>
+    <div class="src-note" id="qSrc"></div>
+  </section>
+</div>
+
+<!-- 月历 -->
+<section class="panel cal">
+  <div class="cal-head">
+    <h2>📅 内经月历</h2>
+    <div class="cal-nav">
+      <button id="calPrev" aria-label="上个月">‹</button>
+      <select id="calY"></select><select id="calM"></select>
+      <button id="calNext" aria-label="下个月">›</button>
+      <button id="calToday" style="width:auto;padding:0 10px;font-size:12px">今日</button>
+    </div>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-term-legend">点击日期查看当天内经提示 · 小字为农历；节气只在交节当天标注</div>
+</section>
+</main>
+
+<footer>
+  <div class="disc">⚠️ 本页为《黄帝内经》时间养生文化的整理与探索，仅供学习参考，不构成医疗诊断或治疗建议。</div>
+  <div class="disc">原文与白话引自公开课程资料整理；养生提示含后世通行说法，已标注来源。</div>
+  <div class="disc">真实健康问题请就医。</div>
+  <div class="credit">Powered By Kan Man Tang</div>
+</footer>
+
+<script>
+const VER = "V3.0";
+document.getElementById("headVer").textContent = VER;
+
+/* ============ 引擎层：历法算法 + 内经原文数据库（复刻自 Inner-Time，未改动）============ */
+var TERMS=['冬至','小寒','大寒','立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种','夏至','小暑','大暑','立秋','处暑','白露','秋分','寒露','霜降','立冬','小雪','大雪'];
+var TERM_TEXT={
+  '立春':{q:{t:'东方青色，入通于肝，开窍于目，藏精于肝',s:'金匮真言论'},p:'东方属青色，和肝相通。肝开窍于眼睛，精气藏在肝里。'},
+  '雨水':{q:{t:'春者，天气始开，地气始泄，冻解冰释，水行经通，故人气在脉。',s:'四时刺逆从论'},p:'春天，天气开始舒展，地气开始发散，冰冻化开，水流起来，经脉也通畅，所以人的气在经脉。'},
+  '惊蛰':{q:{t:"天地俱生，万物以荣",full:"春三月，此谓发陈，天地俱生，万物以荣。",s:'四气调神大论'},p:"春天的三个月，叫做发陈，天地一起生发，万物繁荣。",tip:"惊蛰一到，春雷始动，万物真正开始“生”了，比立春更明显。多到户外走走，早睡早起，让阳气舒展开来。"},
+  '春分':{q:{t:'凡阴阳之要，阳密乃固，两者不和，若春无秋，若冬无夏，因而和之，是谓圣度。',s:'生气通天论'},p:'阴阳的关键，在于阳气固密，阴气才守得住。两者不调和，就像只有春没有秋，只有冬没有夏。让它们调和，是最高的法度。'},
+  '清明':{q:{t:"夜卧早起，广步于庭，被发缓形，以使志生",full:"春三月，此谓发陈，天地俱生，万物以荣，夜卧早起，广步于庭，被发缓形，以使志生。",s:'四气调神大论'},p:"春天的三个月，叫做发陈，天地一起生发，万物繁荣。晚睡早起，在庭院里大步走，披散头发、放松形体，让心志生发。",tip:"清明时节，天清地明，适合踏青，让心情舒展开。起居上晚睡早起，形体放松，不要约束自己。"},
+  '谷雨':{q:{t:'春伤于风，夏生飧泄',s:'阴阳应象大论'},p:'春天被风所伤，到了夏天容易腹泻。'},
+  '立夏':{q:{t:'南方赤色，入通于心，开窍于耳，藏精于心',s:'金匮真言论'},p:'南方属赤色，和心相通。心开窍于耳，精气藏在心里。'},
+  '小满':{q:{t:'夏者，经满气溢，入孙络受血，皮肤充实。',s:'四时刺逆从论'},p:'夏天，经脉充满，气往外溢，流进细小的孙络，皮肤也跟着充实起来。'},
+  '芒种':{q:{t:"天地气交，万物华实",full:"夏三月，此谓蕃秀，天地气交，万物华实。",s:'四气调神大论'},p:"夏天的三个月，叫做蕃秀，天地之气交合，万物开花结果。",tip:"芒种天热容易困倦，保证睡眠，多喝水。此时万物盛长，人也应该让阳气舒展。"},
+  '夏至':{q:{t:'夏至四十五日，阴气微上，阳气微下。',s:'脉要精微论'},p:'夏至之后的四十五天，阴气慢慢上升，阳气慢慢下降。'},
+  '小暑':{q:{t:"使志无怒，使华英成秀，使气得泄，若所爱在外",full:"夏三月，此谓蕃秀，天地气交，万物华实，夜卧早起，无厌于日，使志无怒，使华英成秀，使气得泄，若所爱在外。",s:'四气调神大论'},p:"夏天的三个月，叫做蕃秀，天地之气交合，万物开花结果。晚睡早起，不要嫌白天太长。让心志不要发怒，让精华开花结果，让阳气得以宣泄，好像所爱之物在外面。",tip:"小暑暑气渐盛，别贪凉，少喝冰的。情志上不要发怒，让阳气自然宣泄，适度出汗。"},
+  '大暑':{q:{t:'夏伤于暑，秋必痎疟',s:'阴阳应象大论'},p:'夏天被暑热所伤，到了秋天容易发疟疾。'},
+  '立秋':{q:{t:'西方白色，入通于肺，开窍于鼻，藏精于肺',s:'金匮真言论'},p:'西方属白色，和肺相通。肺开窍于鼻，精气藏在肺里。'},
+  '处暑':{q:{t:'秋者，天气始收，腠理闭塞，皮肤引急。',s:'四时刺逆从论'},p:'秋天，天气开始收敛，皮肤的纹理闭合，皮肤收紧。'},
+  '白露':{q:{t:"天气以急，地气以明",full:"秋三月，此谓容平，天气以急，地气以明。",s:'四气调神大论'},p:"秋天的三个月，叫做容平，天气劲急，地气清明。",tip:"白露早晚转凉，别再赤脚露腹。此时天气劲急、地气清明，人也应收敛神气。"},
+  '秋分':{q:{t:'阴平阳秘，精神乃治，阴阳离决，精气乃绝。',s:'生气通天论'},p:'阴气平和，阳气固密，精神就安定。阴阳分离，精气也就断绝了。'},
+  '寒露':{q:{t:"早卧早起，与鸡俱兴，使志安宁，以缓秋刑",full:"秋三月，此谓容平，天气以急，地气以明，早卧早起，与鸡俱兴，使志安宁，以缓秋刑。",s:'四气调神大论'},p:"秋天的三个月，叫做容平，天气劲急，地气清明。早睡早起，和鸡一起作息，让心志安宁，以缓和秋天的肃杀之气。",tip:"寒露天气转寒，脚要保暖；秋燥，多喝水。起居上早睡早起，收敛神气，让心志安宁。"},
+  '霜降':{q:{t:'秋伤于湿，冬生咳嗽',s:'阴阳应象大论'},p:'秋天被湿气所伤，到了冬天容易咳嗽。'},
+  '立冬':{q:{t:'北方黑色，入通于肾，开窍于二阴，藏精于肾',s:'金匮真言论'},p:'北方属黑色，和肾相通。肾开窍于前后二阴，精气藏在肾里。'},
+  '小雪':{q:{t:'冬者盖藏，血气在中，内著骨髓，通于五藏。',s:'四时刺逆从论'},p:'冬天万物闭藏，血气收在身体里面，向内附着在骨髓，和五脏相通。'},
+  '大雪':{q:{t:"水冰地坼，无扰乎阳",full:"冬三月，此谓闭藏，水冰地坼，无扰乎阳。",s:'四气调神大论'},p:"冬天的三个月，叫做闭藏，水结冰、地冻裂，不要扰动阳气。",tip:"大雪寒气更盛，护好头颈和腰腹。此时水冰地坼，不要扰动阳气，早睡晚起。"},
+  '冬至':{q:{t:'冬至四十五日，阳气微上，阴气微下',s:'脉要精微论'},p:'冬至之后的四十五天，阳气慢慢上升，阴气慢慢下降。'},
+  '小寒':{q:{t:"去寒就温，无泄皮肤，使气亟夺",full:"冬三月，此谓闭藏，水冰地坼，无扰乎阳，早卧晚起，必待日光，使志若伏若匿，若有私意，若已有得，去寒就温，无泄皮肤，使气亟夺。",s:'四气调神大论'},p:"冬天的三个月，叫做闭藏，水结冰、地冻裂，不要扰动阳气。早睡晚起，一定等太阳出来再起床；让心志像伏着、藏着一样，好像有自己的心事，又好像已经有所得。要避寒就温，不要让皮肤开泄，使阳气被频繁夺走。",tip:"小寒是一年里很冷的时候，避寒保暖，适量活动别出大汗，不要让阳气外泄。"},
+  '大寒':{q:{t:'冬伤于寒，春必温病',s:'阴阳应象大论'},p:'冬天被寒气所伤，到了春天容易得温病。'}
+};
+/* 节气养生：后世通行的说法（顺序同 TERMS，0 为冬至） */
+var TERM_TIPS=['阴气最盛、阳气初生，宜静养，早点睡。','一年里很冷的时候，避寒保暖，适量活动别出大汗。','岁末最冷，以“藏”为主，给来年春天攒精神。',
+  '天气还冷，别急着减衣；早上起来舒展一下。','湿气渐重，少吃生冷，照顾脾胃。','万物复苏，多到户外走走，早睡早起。',
+  '昼夜平分，作息规律，饮食不偏寒也不偏热。','适合踏青，让心情舒展开。','雨水多，注意防湿，饮食清淡。',
+  '天渐热，心情要平和，中午可以小憩。','湿热交加，少吃油腻，饮食清淡。','天热容易困倦，保证睡眠，多喝水。',
+  '白天最长，中午小睡补一补，避开正午暴晒。','暑气渐盛，别贪凉，少喝冰的。','一年最热，防暑降温，出汗后别马上吹冷风。',
+  '开始早睡早起，逐渐收敛，少吃辛辣。','暑气渐退，早晚温差大，注意添衣。','早晚转凉，别再赤脚露腹。',
+  '昼夜又平分，起居有常，保持平静。','天气转寒，脚要保暖；秋燥，多喝水。','深秋寒气重，早晚添衣，饮食温润。',
+  '开始闭藏，早睡晚起，不要大汗。','天冷了，保暖为先，少熬夜。','寒气更盛，护好头颈和腰腹。'];
+
+var SEASONS=[
+  {ch:'春',name:'春三月',span:'立春-立夏',hl:'春三月，此谓发陈，天地俱生，万物以荣',
+   t:'春三月，此谓发陈，天地俱生，万物以荣，夜卧早起，广步于庭，被发缓形，以使志生，生而勿杀，予而勿夺，赏而勿罚，此春气之应，养生之道也。',
+   p:'春天的三个月，叫做发陈，万物推陈出新。天地都有了生气，万物欣欣向荣。',tip:'晚睡早起，在院子里大步走走，披开头发、放松身体，让心志生发；多给少夺，少发脾气。'},
+  {ch:'夏',name:'夏三月',span:'立夏-立秋',hl:'夏三月，此谓蕃秀，天地气交，万物华实',
+   t:'夏三月，此谓蕃秀，天地气交，万物华实，夜卧早起，无厌于日，使志无怒，使华英成秀，使气得泄，若所爱在外，此夏气之应，养长之道也。',
+   p:'夏天的三个月，叫做蕃秀，万物繁茂秀美。天地之气相交，万物开花结果。',tip:'晚睡早起，不要嫌白天长；不要发怒，让气能向外舒展，适度出汗。'},
+  {ch:'秋',name:'秋三月',span:'立秋-立冬',hl:'秋三月，此谓容平，天气以急，地气以明',
+   t:'秋三月，此谓容平，天气以急，地气以明，早卧早起，与鸡俱兴，使志安宁，以缓秋刑，收敛神气，使秋气平，无外其志，使肺气清，此秋气之应，养收之道也。',
+   p:'秋天的三个月，叫做容平，万物成熟平定。天上风气劲急，地上景物清明。',tip:'早睡早起，跟着鸡鸣起床；让心志安宁，收敛神气，不让心思外散。'},
+  {ch:'冬',name:'冬三月',span:'立冬-立春',hl:'冬三月，此谓闭藏，水冰地坼，无扰乎阳',
+   t:'冬三月，此谓闭藏，水冰地坼，无扰乎阳，早卧晚起，必待日光，使志若伏若匿，若有私意，若已有得，去寒就温，无泄皮肤，使气亟夺，此冬气之应，养藏之道也。',
+   p:'冬天的三个月，叫做闭藏，万物关闭收藏。水结冰，地冻裂，不要扰动阳气。',tip:'早睡晚起，等太阳出来再起床；避开寒冷、靠近温暖，不要大汗。'}
+];
+
+/* 时辰：按后世“子午流注”每个时辰当令的脏腑，取《内经》讲这一脏腑的原话（0 为子时） */
+var SHICHEN=[{"t": "凡十一藏，取决于胆也", "s": "六节藏象论", "p": "五脏六腑这十一个脏器，都取决于胆气的生发。", "tip": "子时胆经当令，是阴气最盛、阳气初生的转折点。此时入睡，胆气才能顺利升发，第二天头脑清醒。"},
+  {"t": "肝者，将军之官，谋虑出焉", "s": "灵兰秘典论", "p": "肝是将军一样的器官，人的谋虑从这里产生。", "tip": "丑时肝经当令。肝藏血、舍魂的功能在深度睡眠中才能发挥。此时熬夜，最伤肝血。"},
+  {"t": "脉气流经，经气归于肺，肺朝百脉，输精于皮毛", "s": "经脉别论", "p": "脉气在经络中流动，最终归于肺；肺朝向百脉，将精微输送到皮毛。", "tip": "寅时肺经当令。人体气血从静转为动，需要在深度睡眠中完成重新分配。素有呼吸系统疾病者此时易醒，注意保暖。"},
+  {"t": "大肠者，传道之官，变化出焉", "s": "灵兰秘典论", "p": "大肠是负责传导的器官，食物的残渣在这里变化成形并排出。", "tip": "卯时大肠经当令，此时起床、喝温水、按时排便是顺应大肠传导功能的最佳方式。"},
+  {"t": "脾胃者，仓廪之官，五味出焉", "s": "灵兰秘典论", "p": "脾胃是管理粮仓的器官，五味（营养）从这里化生出来。", "tip": "辰时胃经当令，胃气最旺，是吃早饭的最佳时间。此时进食，食物最容易被消化吸收，转化为一天所需的能量。"},
+  {"t": "脾者土也，治中央，常以四时长四藏，各十八日寄治，不得独主于时也", "s": "太阴阳明论", "p": "脾属土，位于中央，在四季中分别滋养四脏，每季末十八天由它主管，不能单独主一个时令。", "tip": "巳时脾经当令，脾主运化，将早餐的水谷精微输送到全身。此时头脑清楚，适合专心工作，但不宜过度思虑伤脾。"},
+  {"t": "心者，君主之官也，神明出焉", "s": "灵兰秘典论", "p": "心是君主一样的器官，人的精神意识从这里产生。", "tip": "午时心经当令。阳气最盛，但阳极生阴。此时小憩片刻，有助于心经气血休养，让阴阳顺利交接。"},
+  {"t": "小肠者，受盛之官，化物出焉", "s": "灵兰秘典论", "p": "小肠是接受盛纳的器官，食物在这里被进一步消化，精华被吸收。", "tip": "未时小肠经当令，小肠在此时对午餐进行分清泌浊。此时适量喝水，有助于营养的吸收和废物的排出。"},
+  {"t": "膀胱者，州都之官，津液藏焉，气化则能出矣", "s": "灵兰秘典论", "p": "膀胱是管理水液的器官，津液贮存在这里，经过气化作用才能排出。", "tip": "申时膀胱经当令，膀胱的气化功能最强。此时多喝水、多排尿，有助于排出体内的代谢废物。"},
+  {"t": "肾者，作强之官，伎巧出焉", "s": "灵兰秘典论", "p": "肾是负责“作强”的器官，人的智力和技巧都从这里产生。", "tip": "酉时肾经当令，肾主藏精。此时不宜过度劳累，晚饭宜清淡，以利于肾精的贮藏。"},
+  {"t": "膻中者，臣使之官，喜乐出焉", "s": "灵兰秘典论", "p": "膻中（心包）是臣使的器官，喜乐的情绪从这里产生。", "tip": "戌时心包经当令，心包是心的外围。此时应放松心情，可以散步或与家人聊天，让情绪保持愉悦。"},
+  {"t": "三焦者，决渎之官，水道出焉", "s": "灵兰秘典论", "p": "三焦是负责疏通水道的器官，水液代谢从这里而出。", "tip": "亥时三焦经当令，是气血运行到三焦、准备进入休养的时段。此时应放下手机，让身心安静，为子时入睡做准备。"}];
+
+/* 四时（一日之四时）：金匮真言论 */
+var QUARTER_TEXT='平旦至日中，天之阳，阳中之阳也；日中至黄昏，天之阳，阳中之阴也；合夜至鸡鸣，天之阴，阴中之阴也；鸡鸣至平旦，天之阴，阴中之阳也。故人亦应之。';
+/* 阴阳：素问把一日分成不等长的四段（时：鸡鸣、平旦、日中、黄昏/合夜） */
+var YY_SPAN=[[2,4],[4,12],[12,20],[20,26]];   /* 鸡鸣丑、平旦寅、日中午、黄昏戌，各取时辰中点 */
+function yyOf(h){h=(h+24)%24;if(h<2)h+=24;for(var i=0;i<4;i++)if(h>=YY_SPAN[i][0]&&h<YY_SPAN[i][1])return i;return 3;}
+/* 四时：灵枢“以一日分为四时”，朝、日中、日入、夜半各前后一个时辰 */
+var LQ_TEXT='春生，夏长，秋收，冬藏，是气之常也，人亦应之，以一日分为四时，朝则为春，日中为夏，日入为秋，夜半为冬。朝则人气始生，病气衰，故旦慧；日中人气长，长则胜邪，故安；夕则人气始衰，邪气始生，故加；夜半人气入藏，邪气独居于身，故甚也。';
+var LQ=[
+  {name:'朝',ch:'春',span:'寅时至辰时',hl:'朝则人气始生，病气衰，故旦慧',p:'一天也能分出四季，早上就是一天的春。早上人的阳气开始生发，病气减退，所以早晨人最清爽。',tip:'一天的“春”，阳气刚生：起床后舒展身体，晒晒太阳，把要紧的事放在上午。'},
+  {name:'日中',ch:'夏',span:'巳时至未时',hl:'日中人气长，长则胜邪，故安',p:'中午是一天的夏。中午人的阳气最足，压得住病邪，所以最安稳。',tip:'一天的“夏”，阳气最旺：精力最好，适合做费力的事；饭后小睡一会儿。'},
+  {name:'日入',ch:'秋',span:'申时至戌时',hl:'夕则人气始衰，邪气始生，故加',p:'傍晚是一天的秋。傍晚阳气开始弱，病气抬头，所以病到晚上会加重。',tip:'一天的“秋”，阳气渐收：放慢节奏，少做剧烈运动，晚饭清淡些。'},
+  {name:'夜半',ch:'冬',span:'亥时至丑时',hl:'夜半人气入藏，邪气独居于身，故甚也',p:'半夜是一天的冬。半夜阳气藏进身体里面，只剩病邪在身上，所以病在半夜最重。',tip:'一天的“冬”，阳气入藏：该睡了，别熬夜，给身体修复的时间。'}
+];
+function lqOf(h){return Math.floor((((h-3)%24)+24)%24/6)%4;}
+var QUARTERS=[
+  {name:'鸡鸣至平旦',yy:'阴中之阳',hl:'鸡鸣至平旦，天之阴，阴中之阳也',p:'从鸡鸣到清晨，是夜晚的阴，阴里面的阳。人也跟着天的阴阳变化。',tip:'阳气在暗中萌动，安睡到天亮，不必太早起来受寒。',src:'据原文引申'},
+  {name:'平旦至日中',yy:'阳中之阳',hl:'平旦至日中，天之阳，阳中之阳也',p:'从清晨到正午，是白天的阳，阳里面的阳。人也跟着天的阴阳变化。',tip:'阳气生发最旺，适合做最费神的事，多到户外。',src:'据原文引申'},
+  {name:'日中至黄昏',yy:'阳中之阴',hl:'日中至黄昏，天之阳，阳中之阴也',p:'从正午到黄昏，是白天的阳，阳里面的阴。人也跟着天的阴阳变化。',tip:'阳气慢慢往回收，做事可以放缓一些。',src:'据原文引申'},
+  {name:'合夜至鸡鸣',yy:'阴中之阴',hl:'合夜至鸡鸣，天之阴，阴中之阴也',p:'从入夜到鸡鸣，是夜晚的阴，阴里面的阴。人也跟着天的阴阳变化。',tip:'《生气通天论》说“暮而收拒，无扰筋骨，无见雾露”：晚上少做剧烈运动，避开夜里的寒湿，早点休息。',src:'据原文'}
+];
+
+/* 月相：八正神明论 */
+var MOON_TEXT='月始生，则血气始精，卫气始行；月郭满，则血气实，肌肉坚；月郭空，则肌肉减，经络虚，卫气去，形独居。是以因天时而调血气也。';
+var MOON={
+  wax:{name:'月始生',hl:'月始生，则血气始精，卫气始行',p:'月亮刚开始生长的时候，人的血气开始清爽流畅，卫气开始运行。',tip:'血气渐渐充起来，作息规律，活动量可以慢慢加。'},
+  full:{name:'月郭满',hl:'月郭满，则血气实，肌肉坚',p:'月亮圆满的时候，人的血气充实，肌肉坚实。',tip:'血气正足，饮食清淡些，不必再额外进补。'},
+  dark:{name:'月郭空',hl:'月郭空，则肌肉减，经络虚，卫气去，形独居',p:'月亮看不见的时候，人的肌肉消减，经络空虚，卫气离去，只剩形体独自留着。',tip:'身体偏虚，多休息、注意保暖，别太劳累。'},
+  wane:{name:'月满之后',hl:'是以因天时而调血气也',p:'所以要顺着天时来调养血气。',tip:'月亮由圆转缺，跟着慢慢收一收，少熬夜、少应酬。',note:'原文只讲了月初生、月圆、月隐没三个时候。月亮由圆转缺这一段，在后两者之间。'}
+};
+/* 《灵枢》原文：逐字取自稿子 */
+var LS={"t":{"冬至":{"t":"太一常以冬至之日，居叶蛰之宫四十六日","s":"九宫八风","p":"古人说天上的“太一”一年里轮流住在八个方位。冬至这天，它住进正北的叶蛰宫，一住四十六天，新的一轮从这里开始。"},"小寒":{"t":"冬藏","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"大寒":{"t":"冬伤于寒，春生瘅热","full":"冬伤于寒，春生瘅热；春伤于风，夏生飧泄肠澼，夏伤于暑，秋生痎疟；秋伤于湿，冬生咳嗽。","s":"论疾诊尺","p":"冬天被寒气伤了，到春天容易发热病。"},"立春":{"t":"至其立春，阳气大发，腠理开","s":"岁露论","p":"到了立春，阳气大大地生发，皮肤的纹理也跟着打开。"},"雨水":{"t":"故行水者，必待天温，冰释冻解，而水可行，地可穿也。人脉犹是也。","s":"刺节真邪","p":"要等天暖了，冰化开、冻土松开，水才流得动，地才挖得开。人的经脉也是这样。"},"惊蛰":{"t":"春生","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"春分":{"t":"左胁应春分，其日乙卯","s":"九针论","p":"人身对应天上八个节气的方位，左胁对应春分。乙卯日是这一方的忌日，古人这天不在左胁动针。"},"清明":{"t":"春生","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"谷雨":{"t":"春伤于风，夏生飧泄肠澼","full":"冬伤于寒，春生瘅热；春伤于风，夏生飧泄肠澼，夏伤于暑，秋生痎疟；秋伤于湿，冬生咳嗽。","s":"论疾诊尺","p":"春天被风伤了，到夏天容易拉肚子。"},"立夏":{"t":"左手应立夏，其日戊辰己巳","s":"九针论","p":"人身对应天上八个节气的方位，左手对应立夏。戊辰、己巳日是这一方的忌日。"},"小满":{"t":"热则滋雨而在上，根荄少汁。人气在外，皮肤缓，腠理开，血气减，汗大泄，皮淖泽。","s":"刺节真邪","p":"天热时雨水都在上面，草木的根反而缺水。人的气也往外走：皮肤松，纹理开，血气减少，出汗多，皮肤湿润。"},"芒种":{"t":"夏长","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"夏至":{"t":"膺喉首头应夏至，其日丙午","s":"九针论","p":"人身对应天上八个节气的方位，胸、喉咙和头对应夏至。丙午日是这一方的忌日。"},"小暑":{"t":"夏长","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"大暑":{"t":"夏伤于暑，秋生痎疟","full":"冬伤于寒，春生瘅热；春伤于风，夏生飧泄肠澼，夏伤于暑，秋生痎疟；秋伤于湿，冬生咳嗽。","s":"论疾诊尺","p":"夏天被暑热伤了，到秋天容易发疟疾。"},"立秋":{"t":"寒则皮肤急而腠理闭；暑则皮肤缓而腠理开","s":"岁露论","p":"冷的时候皮肤收紧，纹理闭合；热的时候皮肤松弛，纹理张开。暑去寒来，身体也跟着由开转合。"},"处暑":{"t":"天暑衣厚则腠理开，故汗出","s":"五癃津液别","p":"天热又穿得厚，纹理就打开，所以出汗。"},"白露":{"t":"秋收","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"秋分":{"t":"右胁应秋分，其日辛酉","s":"九针论","p":"人身对应天上八个节气的方位，右胁对应秋分。辛酉日是这一方的忌日。"},"寒露":{"t":"秋收","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},"霜降":{"t":"秋伤于湿，冬生咳嗽","full":"冬伤于寒，春生瘅热；春伤于风，夏生飧泄肠澼，夏伤于暑，秋生痎疟；秋伤于湿，冬生咳嗽。","s":"论疾诊尺","p":"秋天被湿气伤了，到冬天容易咳嗽。"},"立冬":{"t":"右足应立冬，其日戊戌己亥","s":"九针论","p":"人身对应天上八个节气的方位，右脚对应立冬。戊戌、己亥日是这一方的忌日。"},"小雪":{"t":"天寒则腠理闭，气湿不行，水下留于膀胱，则为溺与气","s":"五癃津液别","p":"天冷时纹理闭合，水气不从汗走，往下到膀胱变成小便。所以冬天汗少、尿多。"},"大雪":{"t":"冬藏","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之。","s": "顺气一日分为四时", "p": "春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"}},"s":[[{"t":"春生","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之","s":"顺气一日分为四时","p":"春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},{"t":"故智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔","s":"本神","p":"会养生的人，一定顺着四季、适应冷热，不大喜大怒，住得安稳，阴阳刚柔都调和好。"}],[{"t":"夏长","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之","s":"顺气一日分为四时","p":"春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},{"t":"故智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔","s":"本神","p":"会养生的人，一定顺着四季、适应冷热，不大喜大怒，住得安稳，阴阳刚柔都调和好。"}],[{"t":"秋收","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之","s":"顺气一日分为四时","p":"春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},{"t":"故智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔","s":"本神","p":"会养生的人，一定顺着四季、适应冷热，不大喜大怒，住得安稳，阴阳刚柔都调和好。"}],[{"t":"冬藏","full":"春生，夏长，秋收，冬藏，是气之常也，人亦应之","s":"顺气一日分为四时","p":"春天生发，夏天生长，秋天收敛，冬天闭藏，这是气的常态，人也跟着这样。"},{"t":"故智者之养生也，必顺四时而适寒暑，和喜怒而安居处，节阴阳而调刚柔","s":"本神","p":"会养生的人，一定顺着四季、适应冷热，不大喜大怒，住得安稳，阴阳刚柔都调和好。"}]],"mo":[{"t":"寅者，正月之生阳也，主左足之少阳","s":"阴阳系日月","p":"寅月就是正月，是阳气开始生的月份，对应左脚的少阳经。原文还说，正月到三月人气在左边。"},{"t":"卯者，二月，主左足之太阳","s":"阴阳系日月","p":"卯月就是二月，对应左脚的太阳经。原文还说，正月到三月人气在左边。"},{"t":"辰者，三月，主左足之阳明","s":"阴阳系日月","p":"辰月就是三月，对应左脚的阳明经。原文还说，正月到三月人气在左边。"},{"t":"巳者，四月，主右足之阳明","s":"阴阳系日月","p":"巳月就是四月，对应右脚的阳明经。原文还说，四月到六月人气在右边。"},{"t":"午者，五月，主右足之太阳","s":"阴阳系日月","p":"午月就是五月，对应右脚的太阳经。原文还说，四月到六月人气在右边。"},{"t":"未者，六月，主右足之少阳","s":"阴阳系日月","p":"未月就是六月，对应右脚的少阳经。原文还说，四月到六月人气在右边。"},{"t":"申者，七月之生阴也，主右足之少阴","s":"阴阳系日月","p":"申月就是七月，是阴气开始生的月份，对应右脚的少阴经。原文还说，七月到九月人气在右边。"},{"t":"酉者，八月，主右足之太阴","s":"阴阳系日月","p":"酉月就是八月，对应右脚的太阴经。原文还说，七月到九月人气在右边。"},{"t":"戌者，九月，主右足之厥阴","s":"阴阳系日月","p":"戌月就是九月，对应右脚的厥阴经。原文还说，七月到九月人气在右边。"},{"t":"亥者，十月，主左足之厥阴","s":"阴阳系日月","p":"亥月就是十月，对应左脚的厥阴经。原文还说，十月到十二月人气在左边。"},{"t":"子者，十一月，主左足之太阴","s":"阴阳系日月","p":"子月就是十一月，对应左脚的太阴经。原文还说，十月到十二月人气在左边。"},{"t":"丑者，十二月，主左足之少阴","s":"阴阳系日月","p":"丑月就是十二月，对应左脚的少阴经。原文还说，十月到十二月人气在左边。"}],"m":{"wax":{"t":"人与天地相参也，与日月相应也","s":"岁露论","p":"人和天地相配，和日月相应。月亮的圆缺，身体也跟着变。"},"full":{"t":"故月满则海水西盛，人血气积，肌肉充，皮肤致，毛发坚，腠理郄，烟垢著","s":"岁露论","p":"月圆的时候，海水往西涨，人的血气充足，肌肉饱满，皮肤致密，毛发结实，纹理闭合。"},"dark":{"t":"至其月郭空，则海水东盛，人气血虚，其卫气去，形独居，肌肉减，皮肤纵，腠理开","s":"岁露论","p":"月亮看不见的时候，海水往东涨，人的气血虚，卫气离开，只剩形体，肌肉消减，皮肤松弛，纹理张开。"},"wane":{"t":"人与天地相参也，与日月相应也","s":"岁露论","p":"人和天地相配，和日月相应。月亮的圆缺，身体也跟着变。"}},"q":[{"t":"阴气尽而阳气盛，则寤矣","s":"口问","p":"阴气走完、阳气盛起来，人就醒了。"},{"t":"朝则人气始生，病气衰，故旦慧","full":"以一日分为四时，朝则为春，日中为夏，日入为秋，夜半为冬。朝则人气始生，病气衰，故旦慧；日中人气长，长则胜邪，故安；夕则人气始衰，邪气始生，故加；夜半人气入藏，邪气独居于身，故甚也。","s":"顺气一日分为四时","p":"一天也能分出四季：早上是春，中午是夏，傍晚是秋，半夜是冬。早上人的阳气开始生发，病气减退，所以早晨最清爽。"},{"t":"日中人气长，长则胜邪，故安","full":"以一日分为四时，朝则为春，日中为夏，日入为秋，夜半为冬。朝则人气始生，病气衰，故旦慧；日中人气长，长则胜邪，故安；夕则人气始衰，邪气始生，故加；夜半人气入藏，邪气独居于身，故甚也。","s":"顺气一日分为四时","p":"中午人的阳气最足，压得住病邪，所以最安稳。"},{"t":"夕则人气始衰，邪气始生，故加；夜半人气入藏，邪气独居于身，故甚也","full":"以一日分为四时，朝则为春，日中为夏，日入为秋，夜半为冬。朝则人气始生，病气衰，故旦慧；日中人气长，长则胜邪，故安；夕则人气始衰，邪气始生，故加；夜半人气入藏，邪气独居于身，故甚也。","s":"顺气一日分为四时","p":"傍晚阳气开始弱，病气抬头，所以病到晚上会加重；半夜阳气藏进里面，只剩病邪在身上，所以最重。"}],"sc":[{"t": "阳气尽，阴气盛，则目瞑", "s": "口问", "p": "阳气消退、阴气旺盛的时候，人就会闭上眼睛想睡觉。"}, {"t": "肝藏血，血舍魂", "s": "本神", "p": "肝贮藏血液，血是魂的居所。"}, {"t": "肺藏气，气舍魄", "s": "本神", "p": "肺贮藏气，气是魄的居所。"}, {"t": "大肠者，传道之府", "s": "本输", "p": "大肠是传导糟粕的腑。"}, {"t": "胃者，水谷气血之海也", "s": "玉版", "p": "胃是容纳水谷、化生气血的大海。"}, {"t": "脾藏营，营舍意", "s": "本神", "p": "脾贮藏营气，营气是“意”的居所。"}, {"t": "心藏脉，脉舍神", "s": "本神", "p": "心贮藏血脉，脉是神的居所。"}, {"t": "中焦如沤", "s": "营卫生会", "p": "中焦（脾胃一带）的功能就像浸泡发酵一样，负责腐熟水谷。"}, {"t": "膀胱者，津液之府也", "s": "本输", "p": "膀胱是贮藏和排泄津液的腑。"}, {"t": "肾藏精，精舍志", "s": "本神", "p": "肾贮藏精气，精气是“志”的居所。"}, {"t": "心者，五藏六府之大主也，精神之所舍也", "s": "邪客", "p": "心是五脏六腑的主宰，是精神居住的地方。"}, {"t": "卫气昼日行于阳，夜半则行于阴。阴者主夜，夜者卧", "s": "口问", "p": "卫气白天行于阳分，夜半行于阴分。阴主管夜间，夜里就该睡觉。"}]};
+var PHASES=['朔月','蛾眉月','上弦月','盈凸月','望月','亏凸月','下弦月','残月'];
+
+/* 月：诊要经终论 */
+var MONTH_TEXT='正月二月，天气始方，地气始发，人气在肝。三月四月，天气正方，地气定发，人气在脾。五月六月，天气盛，地气高，人气在头。七月八月，阴气始杀，人气在肺。九月十月，阴气始冰，地气始闭，人气在心。十一月十二月，冰复，地气合，人气在肾。';
+var MONTH_PAIRS=[
+  {hl:'正月二月，天气始方，地气始发，人气在肝',p:'正月二月，天气开始舒展，地气开始发动，人的气在肝。',tip:'人气在肝：春天宜舒展，少发怒，多到户外走走。'},
+  {hl:'三月四月，天气正方，地气定发，人气在脾',p:'三月四月，天气正当舒展，地气稳稳地生发，人的气在脾。',tip:'人气在脾：饮食有节，别吃得太撑。'},
+  {hl:'五月六月，天气盛，地气高，人气在头',p:'五月六月，天气旺盛，地气升高，人的气在头部。',tip:'人气在头：暑热往上走，注意防晒，让头脑清凉。'},
+  {hl:'七月八月，阴气始杀，人气在肺',p:'七月八月，阴气开始肃杀，人的气在肺。',tip:'人气在肺：天气转燥，多喝水，护好呼吸。'},
+  {hl:'九月十月，阴气始冰，地气始闭，人气在心',p:'九月十月，阴气开始结冰，地气开始闭藏，人的气在心。',tip:'人气在心：心情平和，少大喜大悲。'},
+  {hl:'十一月十二月，冰复，地气合，人气在肾',p:'十一月十二月，冰冻严实，地气闭合，人的气在肾。',tip:'人气在肾：早睡晚起，腰腹保暖。'}
+];
+var MONTH_NAMES=['正月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+var BRANCH='子丑寅卯辰巳午未申酉戌亥', STEM='甲乙丙丁戊己庚辛壬癸', ZODIAC='鼠牛虎兔龙蛇马羊猴鸡狗猪';
+
+var HOLIDAYS_BUILTIN={2026:[["01-01","元旦",1],["01-02","元旦",1],["01-03","元旦",1],["01-04","元旦",0],["02-14","春节",0],["02-15","春节",1],["02-16","春节",1],["02-17","春节",1],["02-18","春节",1],["02-19","春节",1],["02-20","春节",1],["02-21","春节",1],["02-22","春节",1],["02-23","春节",1],["02-28","春节",0],["04-04","清明节",1],["04-05","清明节",1],["04-06","清明节",1],["05-01","劳动节",1],["05-02","劳动节",1],["05-03","劳动节",1],["05-04","劳动节",1],["05-05","劳动节",1],["05-09","劳动节",0],["06-19","端午节",1],["06-20","端午节",1],["06-21","端午节",1],["09-20","国庆节",0],["09-25","中秋节",1],["09-26","中秋节",1],["09-27","中秋节",1],["10-01","国庆节",1],["10-02","国庆节",1],["10-03","国庆节",1],["10-04","国庆节",1],["10-05","国庆节",1],["10-06","国庆节",1],["10-07","国庆节",1],["10-10","国庆节",0]]};
+var HOLIDAY_URLS=['https://fastly.jsdelivr.net/gh/NateScarlet/holiday-cn@master/{y}.json','https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/{y}.json','https://raw.githubusercontent.com/NateScarlet/holiday-cn/master/{y}.json'];
+
+
+var D2R=Math.PI/180, DAY=86400000, DT=69.2/86400, BJ=8*3600000;
+function norm(a){return ((a%360)+360)%360;}
+function sind(d){return Math.sin(d*D2R);} function cosd(d){return Math.cos(d*D2R);}
+function cent(ms){return (ms/DAY+2440587.5+DT-2451545)/36525;}
+function sunLon(ms){
+  var t=cent(ms), L0=280.46646+36000.76983*t+0.0003032*t*t, M=357.52911+35999.05029*t-0.0001537*t*t;
+  var C=(1.914602-0.004817*t-0.000014*t*t)*sind(M)+(0.019993-0.000101*t)*sind(2*M)+0.000289*sind(3*M);
+  return norm(L0+C-0.00569-0.00478*sind(125.04-1934.136*t));
+}
+function moonLon(ms){
+  var t=cent(ms), L=218.3164477+481267.88123421*t, D=297.8501921+445267.1114034*t, M=357.5291092+35999.0502909*t,
+      Mp=134.9633964+477198.8675055*t, F=93.2720950+483202.0175233*t;
+  return norm(L+6.288774*sind(Mp)+1.274027*sind(2*D-Mp)+0.658314*sind(2*D)+0.213618*sind(2*Mp)-0.185116*sind(M)
+    -0.114332*sind(2*F)+0.058793*sind(2*D-2*Mp)+0.057066*sind(2*D-M-Mp)+0.053322*sind(2*D+Mp)+0.045758*sind(2*D-M)
+    -0.040923*sind(M-Mp)-0.034720*sind(D)-0.030383*sind(M+Mp));
+}
+function elong(ms){return norm(moonLon(ms)-sunLon(ms));}
+function termInstant(k,guess){var target=(270+15*k)%360,t=guess;for(var n=0;n<8;n++){var d=norm(sunLon(t)-target);if(d>180)d-=360;t-=d/360*365.2422*DAY;}return t;}
+function newMoonNear(t){for(var n=0;n<8;n++){var d=elong(t);if(d>180)d-=360;t-=d/12.1907*DAY;}return t;}
+function newMoonOnOrBefore(ms){var t=newMoonNear(ms-elong(ms)/12.1907*DAY);if(t>ms)t=newMoonNear(t-29.5306*DAY);return t;}
+function bjDay(ms){return Math.floor((ms+BJ)/DAY);}
+function civDay(y,m,d){return Math.round(Date.UTC(y,m,d)/DAY);}
+function dayOf(ms){var d=new Date(ms);return civDay(d.getFullYear(),d.getMonth(),d.getDate());}
+function dateOfDay(n){var d=new Date(n*DAY);return {y:d.getUTCFullYear(),m:d.getUTCMonth(),d:d.getUTCDate(),w:d.getUTCDay()};}
+
+/* 某公历年的 24 节气交节日：从上年冬至起连续推 25 个节气，覆盖本年全年。
+   key = 北京时区日序号，value = {k:节气索引, ms:交节精确时刻}。
+   节气是一个“时刻/那一天”，不是从它到下一节气的一整段——界面只在此日显示节气名。 */
+var termDayCache={};
+function termDaysOfYear(y){
+  if(termDayCache[y])return termDayCache[y];
+  var map={}, t=termInstant(0,Date.UTC(y-1,11,21));
+  for(var k=0;k<=24;k++){
+    map[bjDay(t)]={k:k%24,ms:t};
+    t=termInstant((k+1)%24,t+15.2184*DAY);
+  }
+  return (termDayCache[y]=map);
+}
+function termOnDay(dn){return termDaysOfYear(dateOfDay(dn).y)[dn]||null;}
+function noonOf(dn){return dn*DAY-BJ+12*3600000;}
+var suiCache={};
+function wsDay(y){return bjDay(termInstant(0,Date.UTC(y,11,21)));}
+function monthStartFor(dn){return bjDay(newMoonOnOrBefore((dn+1)*DAY-BJ-1000));}
+function sui(y){
+  if(suiCache[y])return suiCache[y];
+  var a=monthStartFor(wsDay(y-1)), b=monthStartFor(wsDay(y)), s=[a];
+  while(s[s.length-1]<b)s.push(bjDay(newMoonNear((s[s.length-1]+29.53)*DAY-BJ+12*3600000)));
+  var zq=[], t=termInstant(0,Date.UTC(y-1,11,21)), i, j;
+  for(var k=0;k<=12;k++){zq.push(bjDay(t)); t=termInstant((2*k+2)%24,t+30.44*DAY);}
+  var leap=-1;
+  if(s.length-1===13){for(i=0;i<13;i++){var has=false;for(j=0;j<zq.length;j++){if(zq[j]>=s[i]&&zq[j]<s[i+1]){has=true;break;}}if(!has){leap=i;break;}}}
+  var months=[], num=11, firstZheng=-1;
+  for(i=0;i<s.length-1;i++){
+    if(i===leap){months.push({start:s[i],len:s[i+1]-s[i],num:months[months.length-1].num,leap:true});continue;}
+    if(i>0)num=num%12+1;
+    if(num===1&&firstZheng<0)firstZheng=i;
+    months.push({start:s[i],len:s[i+1]-s[i],num:num,leap:false});
+  }
+  return (suiCache[y]={y:y,months:months,end:b,firstZheng:firstZheng});
+}
+function lunarOf(dn){
+  var y=dateOfDay(dn).y, S=sui(y);
+  if(dn>=S.end)S=sui(y+1); else if(dn<S.months[0].start)S=sui(y-1);
+  for(var i=S.months.length-1;i>=0;i--)if(dn>=S.months[i].start){var M=S.months[i];
+    return {num:M.num,leap:M.leap,day:dn-M.start+1,start:M.start,len:M.len,year:i<S.firstZheng?S.y-1:S.y};}
+}
+var LM=['','正月','二月','三月','四月','五月','六月','七月','八月','九月','十月','冬月','腊月'];
+function lunarDayName(d){if(d===10)return '初十';if(d===20)return '二十';if(d===30)return '三十';return ['初','十','廿','三'][Math.floor(d/10)]+'一二三四五六七八九十'[(d-1)%10];}
+function lunarMonthName(l){return (l.leap?'闰':'')+LM[l.num];}
+function gz(i){i=((i%60)+60)%60;return STEM[i%10]+BRANCH[i%12];}
+function ganzhiDay(dn){return gz(dn+17);}
+function jieYear(ms){var y=new Date(ms).getFullYear();return ms<termInstant(3,Date.UTC(y,1,4))?y-1:y;}
+function ganzhiMonth(ms,m){var ys=(((jieYear(ms)-4)%10)+10)%10, st=((ys%5)*2+2)%10;return STEM[(st+m)%10]+BRANCH[(2+m)%12];}
+function moonState(e){var p=phaseOf(e);return p===0?'dark':p===4?'full':p<4?'wax':'wane';}
+function phaseOf(e){return Math.floor(norm(e+22.5)/45)%8;}
+
+/* ======================= 格式 ======================= */
+var CN='零一二三四五六七八九';
+function cn(n){if(n<10)return CN[n];if(n<20)return '十'+(n%10?CN[n%10]:'');return CN[Math.floor(n/10)]+'十'+(n%10?CN[n%10]:'');}
+function cnYear(y){return String(y).split('').map(function(c){return c==='0'?'〇':CN[+c];}).join('');}
+function pad(n){return (n<10?'0':'')+n;}
+function hm(d){return pad(d.getHours())+':'+pad(d.getMinutes());}
+function md(ms){var d=new Date(ms);return (d.getMonth()+1)+'月'+d.getDate()+'日';}
+var WEEK='日一二三四五六';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+/* ======================= 所选时刻 ======================= */
+function stateAt(ms){
+  /* 节气名只落在交节当天（termToday）；i 为所处节气段，仅用于四季/干支月等“以节为界”的换算 */
+  var d0=new Date(ms), de=new Date(d0.getFullYear(),d0.getMonth(),d0.getDate(),23,59,59).getTime();
+  var ya=norm(sunLon(ms)-270), yaE=norm(sunLon(de)-270), i=Math.floor(yaE/15)%24;
+  if(Math.floor(ya/15)%24!==i)ya=15*i+.3;
+  var start=termInstant(i,de-(yaE-15*i)/360*365.2422*DAY), next=termInstant((i+1)%24,start+15.2184*DAY);
+  var d=new Date(ms), hours=d.getHours()+d.getMinutes()/60+d.getSeconds()/3600, e=elong(ms), dn=dayOf(ms);
+  var td=termOnDay(dn);
+  return {ms:ms,de:de,date:d,ya:ya,i:i,start:start,next:next,dn:dn,termToday:td?td.k:null,termMs:td?td.ms:null,dayN:dn-dayOf(start)+1,hours:hours,
+    q:lqOf(hours), yy:yyOf(hours), sc:Math.floor(((hours+1)%24)/2), e:e, moon:moonState(e), phase:phaseOf(e),
+    season:(i>=3&&i<=8)?0:(i>=9&&i<=14)?1:(i>=15&&i<=20)?2:3, month:Math.floor(norm(yaE-45)/30)%12, lunar:lunarOf(dn)};
+}
+function termRange(k,s){var d=((k-s.i+36)%24)-12, st=termInstant(k,s.start+d*15.2184*DAY), en=termInstant((k+1)%24,st+15.2184*DAY);return md(st)+'～'+md(en-DAY);}
+
+/* ======================= 三维小工具 ======================= */
+
+/* ============ UI 层：暖棕金禅意复刻 ============ */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+let tab='s', sel=null, viewMs=null, calY, calM;
+const TBLS={s:4,mo:12,t:24,m:4,yy:4,q:4,sc:12};
+const DIM={s:'四季',mo:'干支月',t:'节气',m:'月相',yy:'阴阳',q:'四时',sc:'时辰'};
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fullHTML(full,hl){if(!full||!hl)return esc(full||'');const i=full.indexOf(hl);return i<0?esc(full):esc(full.slice(0,i))+'<b>'+esc(hl)+'</b>'+esc(full.slice(i+hl.length))}
+function lsHTML(e){if(!e)return '';const t=e.full&&e.t&&e.full.indexOf(e.t)>=0?fullHTML(e.full,e.t):esc(e.t||'');return '<p>'+t+'</p>'}
+
+/* 当前状态（查看某时刻） */
+function cur(){return stateAt(viewMs==null?Date.now():viewMs)}
+function nowIndex(k,s){
+  if(k==='s')return s.season; if(k==='mo')return s.month; if(k==='t')return s.i;
+  if(k==='m')return s.phase>=4?0:s.phase; if(k==='yy')return s.yy; if(k==='q')return s.q; if(k==='sc')return s.sc;
+  return 0;
+}
+
+/* 内容组装（对齐原站 insightFor） */
+function insight(k,i,s){
+  if(k==='t'){const e=TERM_TEXT[TERMS[i]];return {scale:'节气',val:TERMS[i],v:e.q.t,src:e.q.s,p:e.p,full:e.q.full,hl:e.q.full&&e.q.t,tip:e.tip||TERM_TIPS[i],tipSrc:'后世节气养生的通行说法，非《内经》原文。',ls:[LS.t[TERMS[i]]]};}
+  if(k==='s'){const se=SEASONS[i];return {scale:'四季',val:se.name,v:se.t,src:'四气调神大论',p:se.p,full:se.t,hl:se.hl,tip:se.tip,tipSrc:'据原文。',ls:[LS.s[i][0]]};}
+  if(k==='mo'){const mp=MONTH_PAIRS[Math.floor(i/2)];return {scale:'干支月',val:BRANCH[(2+i)%12]+'月（'+ganzhiMonth(s.de,i)+'月）',v:mp.hl,src:'诊要经终论',p:mp.p,full:MONTH_TEXT,hl:mp.hl,tip:mp.tip,tipSrc:'据原文“人气在某处”引申。',ls:[LS.mo[i]],note:'干支月以节为界。《素问》按正月、二月记月，《灵枢》直接用寅、卯来称：“寅者，正月之生阳也”。所以'+BRANCH[(2+i)%12]+'月就是'+MONTH_NAMES[i]+'。'};}
+  if(k==='m'){const l=s.lunar,e2=elong(noonOf(l.start+i)),mo=MOON[moonState(e2)];return {scale:'月相',val:'农历'+lunarMonthName(l)+lunarDayName(i+1)+'　'+PHASES[phaseOf(e2)],v:mo.hl,src:'八正神明论',p:mo.p,full:MOON_TEXT,hl:mo.hl,tip:mo.tip,tipSrc:'据原文引申。原文讲针刺要看月相，这里转成日常起居的说法。',note:mo.note||'',ls:[LS.m[moonState(e2)]]};}
+  if(k==='yy'){const qq=QUARTERS[i];return {scale:'阴阳',val:qq.name,v:qq.hl,src:'金匮真言论',p:qq.p,full:QUARTER_TEXT,hl:qq.hl,tip:qq.tip,tipSrc:qq.src+'。'};}
+  if(k==='q'){const lq=LQ[i];return {scale:'四时',val:lq.name,book:'灵枢',v:lq.hl,src:'顺气一日分为四时',p:lq.p,full:LQ_TEXT,hl:lq.hl,tip:lq.tip,tipSrc:'据原文引申。'};}
+  const sh=SHICHEN[i];return {scale:'时辰',val:BRANCH[i]+'时（'+pad((2*i+23)%24)+':00-'+pad((2*i+1)%24)+':00）',v:sh.t,src:sh.s,p:sh.p,tip:sh.tip,tipSrc:'后世“子午流注”的说法（金元以后医家整理），非《内经》原文。',ls:[LS.sc[i]]};
+}
+function headFor(k,i,s){
+  if(k==='t'){
+    const tm=(i===s.termToday&&s.termMs)?s.termMs:termStartMs(i,s), dt=new Date(tm);
+    const meta=(i===s.termToday)
+      ? ['今日交节',cn(dt.getHours())+'时'+cn(dt.getMinutes())+'分']
+      : (i===s.i ? ['今日非交节日','该节气交节于'+cnMD(tm)] : [cnMD(tm)+'交节']);
+    return {name:TERMS[i],meta:meta};
+  }
+  if(k==='s')return {name:SEASONS[i].name,meta:[SEASONS[i].span.replace('-','至')]};
+  if(k==='mo')return {name:BRANCH[(2+i)%12]+'月',meta:[ganzhiMonth(s.de,i)+'月',TERMS[(3+2*i)%24]+'至'+TERMS[(5+2*i)%24]]};
+  if(k==='m'){const l=s.lunar;return {name:PHASES[phaseOf(elong(noonOf(l.start+i)))],meta:['农历'+lunarMonthName(l)+lunarDayName(i+1)]};}
+  if(k==='yy'){const sp=YY_SPAN[i];return {name:QUARTERS[i].name,meta:[QUARTERS[i].yy,'约'+cn(sp[0]%24)+'时至'+cn(sp[1]%24)+'时']};}
+  if(k==='q')return {name:LQ[i].name,meta:['一日之'+LQ[i].ch,LQ[i].span,'约'+cn((3+6*i)%24)+'时至'+cn((9+6*i)%24)+'时']};
+  return {name:BRANCH[i]+'时',meta:[pad((2*i+23)%24)+':00-'+pad((2*i+1)%24)+':00']};
+}
+function termStartMs(k,s){
+  /* 精确取该节气在本公历年的交节时刻（而非用间隔近似推算） */
+  const map=termDaysOfYear(s.date.getFullYear());
+  let best=null;
+  for(const dn in map)if(map[dn].k===k)best=map[dn].ms;
+  return best!=null?best:termInstant(k,s.start+((k-s.i+36)%24-12)*15.2184*DAY);
+}
+function cnMD(ms){const d=new Date(ms);return cn(d.getMonth()+1)+'月'+cn(d.getDate())+'日'}
+
+/* 渲染内容 */
+function renderContent(){
+  const s=cur(), k=tab, i=sel&&sel.k===k?sel.i:nowIndex(k,s), x=insight(k,i,s), h=headFor(k,i,s), e=x.ls&&x.ls[0];
+  $('qName').textContent=h.name;
+  $('qMeta').innerHTML=h.meta.map(m=>'<span>'+m+'</span>').join('');
+  $('qVerse').innerHTML=(x.full&&x.hl&&x.full.length<=130?fullHTML(x.full,x.hl):esc(x.v))+'<cite>《'+(x.book||'素问')+'·'+esc(x.src)+'》</cite>';
+  $('qFull').innerHTML=x.full&&x.full.length>130?fullHTML(x.full,x.hl||''):'';
+  $('qCite').textContent=e?'《灵枢·'+e.s+'》':'';
+  if(e)$('qVerse').insertAdjacentHTML('beforeend','<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)">'+lsHTML(e)+'<cite>《灵枢·'+esc(e.s)+'》</cite></div>');
+  $('qPlain').innerHTML=e?'<p>'+esc(x.p)+'</p><p style="margin-top:6px;color:var(--sub)">'+esc(e.p)+'</p>':'<p>'+esc(x.p)+'</p>';
+  $('qTip').innerHTML='<b>养生</b>'+esc(x.tip);
+  const note=x.note?('<div>'+esc(x.note)+'</div>'):'';
+  const tnote=(k==='t'&&i!==s.termToday)?'<div>节气只落在交节当天；此处为该节气的原文资料，不代表今日交节。</div>':'';
+  const src=tnote+'<div>来源说明：'+esc(x.tipSrc)+'。</div>'+(e?'<div>《灵枢》引文为课程资料整理，供学习参考。</div>':'');
+  $('qNote').innerHTML=note; $('qNote').hidden=!note;
+  $('qSrc').innerHTML=src;
+  document.querySelectorAll('#tabs .tab').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  renderRing(s,i);
+}
+
+/* 2D 同心时间环 */
+const RINGS=[
+  {k:'sc',n:12,label:'时辰',r0:38,r1:64},
+  {k:'q', n:4, label:'四时',r0:66,r1:86},
+  {k:'yy',n:4, label:'阴阳',r0:88,r1:106},
+  {k:'m', n:4, label:'月相',r0:108,r1:126},
+  {k:'t', n:24,label:'节气',r0:128,r1:150},
+  {k:'mo',n:12,label:'干支月',r0:152,r1:170},
+  {k:'s', n:4, label:'四季',r0:172,r1:190}
+];
+const CLR={木:'#5C7A3F',火:'#A64B3A',土:'#A87B3C',金:'#7E7B72',水:'#3E6285'};
+const SEA_CLR=['#6D8B4A','#C0712E','#B08A3E','#4E6E90'];
+function pt(cx,cy,r,deg){const a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function arc(cx,cy,r0,r1,a0,a1){
+  const large=(a1-a0)>180?1:0;
+  const [x0,y0]=pt(cx,cy,r1,a0),[x1,y1]=pt(cx,cy,r1,a1),[x2,y2]=pt(cx,cy,r0,a1),[x3,y3]=pt(cx,cy,r0,a0);
+  return `M${x0} ${y0} A${r1} ${r1} 0 ${large} 1 ${x1} ${y1} L${x2} ${y2} A${r0} ${r0} 0 ${large} 0 ${x3} ${y3} Z`;
+}
+function ringLabels(k,i){
+  if(k==='sc')return BRANCH;
+  if(k==='q')return LQ.map(x=>x.name);
+  if(k==='yy')return QUARTERS.map(x=>x.name);
+  if(k==='m')return ['朔','弦','望','弦'];
+  if(k==='t')return TERMS.map(x=>x.slice(0,2));
+  if(k==='mo')return Array.from({length:12},(_,j)=>BRANCH[(2+j)%12]);
+  if(k==='s')return SEASONS.map(x=>x.ch);
+  return [];
+}
+function renderRing(s,activeI){
+  const cx=200,cy=200,svg=$('ring');  /* viewBox 400×400：最外环 r=190，四周各留 10px */
+  let h='';
+  RINGS.forEach(R=>{
+    const step=360/R.n, labels=ringLabels(R.k), nowI=nowIndex(R.k,s), isActive=(R.k===tab);
+    for(let i=0;i<R.n;i++){
+      const a0=i*step+.7,a1=(i+1)*step-.7,mid=(a0+a1)/2;
+      let fill;
+      if(R.k==='s')fill=SEA_CLR[i];
+      else if(R.k==='t'){const el=SEASONS[Math.floor(i/6)%4];fill=SEA_CLR[Math.floor(i/6)%4];}
+      else if(R.k==='mo'){const el=['木','火','土','金','水','火','土','金','水','木','火','土'][i];fill=CLR[el];}
+      else if(R.k==='m')fill=['#4E6E90','#7E9BB5','#C9B26A','#8E95A8'][i];
+      else if(R.k==='yy')fill=['#77936B','#B8925A','#A86A52','#6A7FA0'][i];
+      else if(R.k==='q')fill=['#7E9E5E','#C5883F','#B08A3E','#5A7796'][i];
+      else fill=i%2?'#8A6A48':'#A9825C';
+      const op=(isActive&&i===activeI)?'1':(i===nowI?'.95':'.42');
+      h+=`<path class="ring-layer" d="${arc(cx,cy,R.r0,R.r1,a0,a1)}" fill="${fill}" opacity="${op}" stroke="var(--card)" stroke-width=".6" onclick="window.__ringPick('${R.k}',${i})"><title>${DIM[R.k]}·${labels[i]||''}${i===nowI?'（当前）':''}</title></path>`;
+      if(R.n<=24&&labels[i]){
+        const [tx,ty]=pt(cx,cy,(R.r0+R.r1)/2,mid);
+        const fs=R.n>=24?8:10;
+        h+=`<text class="ring-lbl" x="${tx}" y="${ty+3}" font-size="${fs}" text-anchor="middle" fill="${(isActive&&i===activeI)?'#fff':'rgba(255,255,255,.85)'}">${esc(labels[i])}</text>`;
+      }
+    }
+  });
+  const s0=cur();
+  h+=`<circle cx="${cx}" cy="${cy}" r="35" class="ring-center"/>`;
+  h+=`<text x="${cx}" y="${cy-2}" class="ring-center-t">${s0.termToday!=null?TERMS[s0.termToday]:(BRANCH[s0.sc]+'时')}</text>`;
+  h+=`<text x="${cx}" y="${cy+14}" class="ring-center-s">${ganzhiDay(s0.dn)}日</text>`;
+  svg.innerHTML=h;
+  $('legend').innerHTML=RINGS.map(R=>`<span style="opacity:${R.k===tab?1:.55}">${R.label}</span>`).join('');
+}
+window.__ringPick=(k,i)=>{tab=k;sel={k,i};renderContent()};
+
+/* 时钟 */
+function renderClock(){
+  const d=new Date(),s=cur();
+  $('clockTime').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  $('clockDate').innerHTML=`<b>${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日</b>　星期${WEEK[d.getDay()]}　农历${lunarMonthName(s.lunar)}${lunarDayName(s.lunar.day)}`;
+  $('clockGz').textContent=`${gz((((jieYear(d.getTime())-4)%60)+60)%60)}年 · ${ganzhiMonth(s.de,s.month)}月 · ${ganzhiDay(s.dn)}日${s.termToday!=null?' · 今日交节 '+TERMS[s.termToday]:''} · ${SHICHEN[s.sc]?BRANCH[s.sc]+'时':''}`;
+}
+
+/* 月历 */
+function renderCal(){
+  const y=calY,m=calM,s=cur(),today=dayOf(Date.now());
+  const first=civDay(y,m,1),last=civDay(y,m+1,1);
+  const startDow=new Date(first*DAY).getUTCDay();
+  $('calY').value=y; $('calM').value=m;
+  let h=['日','一','二','三','四','五','六'].map(w=>`<div class="wd">${w}</div>`).join('');
+  const lead=(startDow+6)%7; // 周一开头
+  h=['一','二','三','四','五','六','日'].map(w=>`<div class="wd">${w}</div>`).join('');
+  for(let i=0;i<lead;i++)h+='<div></div>';
+  for(let dn=first;dn<last;dn++){
+    const d=new Date(dn*DAY),st=stateAt(noonOf(dn)),l=st.lunar,td=termOnDay(dn);
+    const cls=['cal-cell',dn===today?'today':'',selDay===dn?'sel':'',td?'jiao':'',(d.getUTCMonth()!==m)?'out':''].join(' ');
+    h+=`<div class="${cls}" onclick="window.__pickDay(${dn})"${td?' title="'+TERMS[td.k]+'交节日"':''}><div class="gd">${d.getUTCDate()}</div><div class="lm">${l.day===1?lunarMonthName(l):lunarDayName(l.day)}</div><div class="tm">${td?TERMS[td.k]:''}</div></div>`;
+  }
+  $('calGrid').innerHTML=h;
+}
+let selDay=null;
+window.__pickDay=dn=>{selDay=dn;const c=new Date(),dt=dateOfDay(dn);viewMs=new Date(dt.y,dt.m,dt.d,c.getHours(),c.getMinutes()).getTime();sel=null;renderAll()};
+
+/* 初始化 */
+function renderAll(){renderClock();renderContent();renderCal()}
+function initPickers(){
+  const cy=new Date().getFullYear();
+  let h='';for(let y=cy-3;y<=cy+3;y++)h+=`<option value="${y}">${y}年</option>`;
+  $('calY').innerHTML=h;
+  h='';for(let m=0;m<12;m++)h+=`<option value="${m}">${m+1}月</option>`;
+  $('calM').innerHTML=h;
+  const d=new Date();calY=d.getFullYear();calM=d.getMonth();
+}
+document.querySelectorAll('#tabs .tab').forEach(b=>b.onclick=()=>{tab=b.dataset.k;sel=null;renderContent()});
+$('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--}renderCal()};
+$('calNext').onclick=()=>{calM++;if(calM>11){calM=0;calY++}renderCal()};
+$('calToday').onclick=()=>{viewMs=null;selDay=null;const d=new Date();calY=d.getFullYear();calM=d.getMonth();sel=null;renderAll()};
+$('calY').onchange=e=>{calY=+e.target.value;renderCal()};
+$('calM').onchange=e=>{calM=+e.target.value;renderCal()};
+
+initPickers();renderAll();
+setInterval(()=>{if(viewMs==null)renderClock()},1000);
+})();
+</script>
+</body>
+</html>
