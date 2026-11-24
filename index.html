@@ -144,6 +144,8 @@
     border-bottom: 1px solid rgba(255,255,255,0.10);
     padding-bottom: 6px;
   }
+  /* 中英双语分组标题不换行（如「健康养生 HEALTH REGIMEN」） */
+  .mega-group-title.nowrap { white-space: nowrap; }
   .mega-group a {
     color: rgba(255,255,255,0.78); text-decoration: none;
     font-size: 13px; padding: 6px 10px; border-radius: 10px;
@@ -151,6 +153,12 @@
   }
   .mega-group a:hover { background: rgba(255,255,255,0.12); color: #fff; }
   .mega-group a.nav-digital { color: #fff; }
+  /* 导航内嵌 SVG 图标：桌面/手机共用，避免 emoji 在部分系统显示为方块或心脏 */
+  .nav-ico {
+    width: 15px; height: 15px; flex: 0 0 15px; margin-right: 4px;
+    vertical-align: -3px; fill: none; stroke: #E0C9A6;
+    stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+  }
   /* 第2、3个下拉面板右对齐，防止右侧溢出视口 */
   .mega-right { left: auto !important; right: 0; }
   .nav-dropdown:last-child .mega-panel { left: auto; right: 0; }
@@ -253,6 +261,7 @@
        此处的 max-height 仅作无 JS 时的兜底，不再作为"真实上限"，否则菜单项一多末尾分组会被裁掉 */
     .m-section.expanded .m-section-body { max-height: none; }
     .m-section-body a { margin: 0 8px 6px; background: rgba(255,255,255,0.04); }
+    .m-section-body a .nav-ico { width: 17px; height: 17px; flex-basis: 17px; margin-right: 7px; }
     .m-sub-title {
       color: #f4a234; font-size: 11px; font-weight: 700; letter-spacing: 1px;
       padding: 8px 14px 2px; opacity: .85;
@@ -750,6 +759,7 @@
     bottom: -40px; left: 20px;
   }
   .tool-card-emoji { font-size: 64px; position: relative; z-index: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+  .tool-card-banner .nav-ico { width: 64px; height: 64px; flex-basis: 64px; margin: 0; stroke: #F5F0E8; stroke-width: 1.4; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
   .tool-card-level {
     position: absolute; top: 16px; right: 16px;
     background: rgba(255,255,255,0.18);
@@ -942,10 +952,6 @@
           <a href="hd-wealth.html" target="_blank" data-page-node-id="cIFDkMmUb8QVnXEWs8t5YD">💰 财运之道</a>
           <a href="bg5-maps.html" target="_blank" data-page-node-id="HHLUGW7VRsLLwlarsqgFfd">👥 BG5商业应用</a>
           <a href="hd-affirmation-cards.html" target="_blank" data-page-node-id="b2EHnlwwFPQGcPSSOw9h5e">🃏 抽卡中心</a>
-          <a href="hd-tcm-body-map.html" target="_blank">🫀 身体地图</a>
-          <a href="hd-jingfang-phs.html" target="_blank">🌿 倪海厦经方</a>
-          <a href="neijing-time.html" target="_blank">🌿 内经时间</a>
-          <a href="ctb-analysis.html" target="_blank" data-page-node-id="AG6U91Uxhqc7mehP8vK5k4">🌈 CTB变量分析</a>
           <a href="hd_birth_time_calibration.html" target="_blank" data-page-node-id="fF0JaxKkUyIEQ85lCfF3Q7">⏱️ 生时校准</a>
           <a href="hd-death-chart.html" target="_blank" data-page-node-id="dC7hK2pQ9rS1tU5vW8xYz">🌑 人类图死亡时刻出图</a>
         </div>
@@ -953,6 +959,15 @@
           <div class="mega-group-title" data-page-node-id="V7aFAA3OuSyLbeqrhCmB64">基因天命 GENE KEYS</div>
           <a href="genekeys.html" target="_blank" data-page-node-id="5Sh7qImBxdK9qqOEVd2FdC">🧬 基因天命·标准曼陀罗</a>
           <a href="genekeys-profile.html" target="_blank" data-page-node-id="YrqXqGPUqVU865GLLmwY0R">🧬 中文全息基因图生成器</a>
+        </div>
+        <!-- 健康养生：2026-11-24 新增，位置在基因天命之后 -->
+        <div class="mega-group">
+          <div class="mega-group-title nowrap">健康养生 HEALTH REGIMEN</div>
+          <a href="ctb-analysis.html" target="_blank">🌈 CTB变量分析</a>
+          <a href="hd-tcm-body-map.html" target="_blank"><svg class="nav-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.2 6.2c1.6 1.4 2.2 3.5 2.2 5.8s-.6 4.4-2.2 5.8M16.8 6.2c-1.6 1.4-2.2 3.5-2.2 5.8s.6 4.4 2.2 5.8"/><circle cx="12" cy="6" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="12" cy="18" r="1.15"/></svg>身体地图</a>
+          <a href="hd-jingfang-phs.html" target="_blank">🌿 倪海厦经方</a>
+          <a href="herb-lookup.html" target="_blank">🌱 中药材查询系统</a>
+          <a href="neijing-time.html" target="_blank"><svg class="nav-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.6"/><circle cx="12" cy="12" r="2.2"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>黄帝内经时间</a>
         </div>
         <div class="mega-group" data-page-node-id="AjOhsWXukLxJuoZgcW6UlJ">
           <div class="mega-group-title" data-page-node-id="XxSFFRuWVEB2A2eIQIW7AQ">数字命理 NUMEROLOGY</div>
@@ -1948,7 +1963,7 @@
 
     <a href="hd-tcm-body-map.html" target="_blank" class="tool-card" style="border-color:#6B8E5A;">
       <div class="tool-card-banner" style="background:linear-gradient(135deg,#2D2118,#4F6B3C,#8FAE7B);">
-        <span class="tool-card-emoji">🫀</span>
+        <svg class="nav-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.2 6.2c1.6 1.4 2.2 3.5 2.2 5.8s-.6 4.4-2.2 5.8M16.8 6.2c-1.6 1.4-2.2 3.5-2.2 5.8s.6 4.4 2.2 5.8"/><circle cx="12" cy="6" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="12" cy="18" r="1.15"/></svg>
         <span class="tool-card-level">身心养生</span>
       </div>
       <div class="tool-card-body">
@@ -2180,6 +2195,18 @@
 <!-- 📌 右侧悬浮跳转按钮组（.jump-bar）已于 2026-09-22 按需求移除 -->
 
 <script>
+/*
+ * 勤思妙享 · 勤敏人类图 首页 — changelog（便于溯源）
+ * V7  2026-11-24  版式修复：「健康养生 HEALTH REGIMEN」分组标题加 nowrap，桌面端不再折行；
+ *                  首页「身体地图」工具卡的 🫀 占位符同步换成同款 SVG 经络图
+ * V6  2026-11-24  导航结构升级：
+ *   - 【应用研发】新增「健康养生 HEALTH REGIMEN」分组，置于基因天命之后
+ *     含 CTB变量分析 / 身体地图 / 倪海厦经方 / 中药材查询系统 / 黄帝内经时间
+ *   - 原【人类图】分组中的上述 4 个旧链接（身体地图/倪海厦经方/内经时间/CTB变量分析）已移除
+ *   - 身体地图图标改为内嵌 SVG 经络图（原 🫀 心脏 emoji 手机端吓人、桌面端显示占位符）
+ *   - 黄帝内经时间图标改为内嵌 SVG 时间环（原 🌿 与倪海厦经方重复）
+ *   - 移动端抽屉菜单由桌面导航自动生成，以上变更自动同步
+ */
 function showTab(tab) {
   document.querySelectorAll('.toc-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.toc-panel').forEach(p => p.classList.remove('active'));

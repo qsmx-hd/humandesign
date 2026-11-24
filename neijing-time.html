@@ -3,10 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>内经时间 · 顺时而养日历 V3.0</title>
+<title>内经时间 · 顺时而养日历 V4.0</title>
 <!--
 /*
  * 内经时间 · 顺时而养日历 — changelog（便于溯源）
+ * V4.0  2026-11-24  移动端月历修复 + 提示语归入页脚：
+ *   - 月历网格改为 repeat(7,minmax(0,1fr))，格子/表头 min-width:0 且超长文本省略，
+ *     修正手机端最右侧「周日」列被内容撑破、溢出面板的问题
+ *   - 手机端取消 aspect-ratio:1 强制正方形，改 min-height:58px，避免三行文字竖向溢出
+ *   - 「点击日期查看当天内经提示 · 小字为农历；节气只在交节当天标注。」移至 footer
  * V3.0  2026-11-23  月历字号放大 + 页脚信息分行：
  *   - 月历：公历日 15→20px、农历 9→12px、节气 8.5→11px、星期 11→12.5px、说明 10→12px；移动端不再隐藏节气，改为等比缩小显示
  *   - 页脚拆为四行：免责说明 / 资料来源 / 就医提示 / Powered By Kan Man Tang（最后一行）
@@ -95,13 +100,14 @@ main{padding:22px 0 40px}
 .cal-nav button{background:var(--bg);border:1px solid var(--line);color:var(--accent);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:16px}
 .cal-nav button:hover{border-color:var(--gold)}
 .cal-nav select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;color:var(--ink);font-size:12px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-grid .wd{text-align:center;font-size:12.5px;color:var(--sub);padding:6px 0}
-.cal-cell{aspect-ratio:1;border-radius:8px;padding:7px 4px;text-align:center;cursor:pointer;border:1px solid transparent;transition:.12s;display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-grid .wd{text-align:center;font-size:12.5px;color:var(--sub);padding:6px 0;min-width:0;overflow:hidden}
+.cal-cell{aspect-ratio:1;min-width:0;min-height:58px;overflow:hidden;border-radius:8px;padding:7px 4px;text-align:center;cursor:pointer;border:1px solid transparent;transition:.12s;display:flex;flex-direction:column;justify-content:center;line-height:1.3}
 .cal-cell:hover{background:var(--tag)}
 .cal-cell .gd{font-size:20px;color:var(--ink)}
 .cal-cell .lm{font-size:12px;color:var(--sub)}
 .cal-cell .tm{font-size:11px;color:var(--gold);white-space:nowrap;overflow:hidden}
+.cal-cell .lm,.cal-cell .tm{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cal-cell.jiao .tm{color:var(--accent);font-weight:700}
 .cal-cell.out{opacity:.32}
 .cal-cell.today{border-color:var(--gold);background:var(--tag)}
@@ -111,6 +117,7 @@ main{padding:22px 0 40px}
 .cal-term-legend{font-size:12px;color:var(--sub);margin-top:12px;text-align:center}
 
 footer{background:var(--brown);color:var(--gold-l);text-align:center;padding:18px 16px;font-size:12px}
+footer .cal-term-legend{margin:0 0 10px;color:var(--gold-l);font-size:11.5px;opacity:.9;line-height:1.7}
 footer .disc{font-size:11.5px;color:#A8977F;margin-top:6px;line-height:1.7}
 footer .credit{margin-top:12px;color:var(--gold-l);font-size:12px;letter-spacing:.5px}
 
@@ -120,20 +127,22 @@ footer .credit{margin-top:12px;color:var(--gold-l);font-size:12px;letter-spacing
   .clockbar .t{font-size:28px}
   .content{padding:16px}
   .q-name{font-size:20px}
-  .cal{padding:14px}
+  .wrap{padding:0 12px}
+  .cal{padding:12px 10px}
+  .cal-grid{gap:3px}
   .cal-grid .wd{font-size:11px;padding:4px 0}
-  .cal-cell{padding:5px 2px}
-  .cal-cell .gd{font-size:16px}
-  .cal-cell .lm{font-size:10px}
-  .cal-cell .tm{font-size:9.5px}
-  .cal-term-legend{font-size:11px}
+  .cal-cell{aspect-ratio:auto;min-height:58px;padding:6px 1px}
+  .cal-cell .gd{font-size:15px}
+  .cal-cell .lm{font-size:9.5px}
+  .cal-cell .tm{font-size:9px}
+  .cal-term-legend,footer .cal-term-legend{font-size:10.5px}
 }
 </style>
 </head>
 <body>
 <noscript><p class="nojs">请启用 JavaScript 后打开本页面。</p></noscript>
 <header><div class="wrap">
-  <h1>🌿 内经时间 <span class="ver" id="headVer">V3.0</span></h1>
+  <h1>🌿 内经时间 <span class="ver" id="headVer">V4.0</span></h1>
   <div class="sub">顺四时 · 调阴阳 · 应节气 —— 来自《黄帝内经》的时令养生指引</div>
   <div class="hd-badge">干支历 · 二十四节气 · 农历 · 子午流注 · 五运四时</div>
 </div></header>
@@ -193,11 +202,11 @@ footer .credit{margin-top:12px;color:var(--gold-l);font-size:12px;letter-spacing
     </div>
   </div>
   <div class="cal-grid" id="calGrid"></div>
-  <div class="cal-term-legend">点击日期查看当天内经提示 · 小字为农历；节气只在交节当天标注</div>
 </section>
 </main>
 
 <footer>
+  <div class="cal-term-legend">点击日期查看当天内经提示 · 小字为农历；节气只在交节当天标注。</div>
   <div class="disc">⚠️ 本页为《黄帝内经》时间养生文化的整理与探索，仅供学习参考，不构成医疗诊断或治疗建议。</div>
   <div class="disc">原文与白话引自公开课程资料整理；养生提示含后世通行说法，已标注来源。</div>
   <div class="disc">真实健康问题请就医。</div>
@@ -205,7 +214,7 @@ footer .credit{margin-top:12px;color:var(--gold-l);font-size:12px;letter-spacing
 </footer>
 
 <script>
-const VER = "V3.0";
+const VER = "V4.0";
 document.getElementById("headVer").textContent = VER;
 
 /* ============ 引擎层：历法算法 + 内经原文数据库（复刻自 Inner-Time，未改动）============ */

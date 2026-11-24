@@ -19,6 +19,8 @@
   header{background:linear-gradient(160deg,#FFFDF8,#F7EFE2);border-bottom:3px double var(--gold);padding:20px 14px 16px;margin-bottom:8px;}
   .hd-in{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;}
   h1{font-size:1.5rem;letter-spacing:.04em;}
+  /* V3：标题图标改为内嵌 SVG 经络图，替代 🫀（桌面端字体缺字显示占位符） */
+  h1 .hd-ico{width:26px;height:26px;vertical-align:-5px;margin-right:6px;fill:none;stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
   h1 .ver{margin-left:10px;vertical-align:middle;position:relative;top:-2px;}
   h1 small{font-size:.72rem;font-weight:400;color:var(--brown2);letter-spacing:.1em;display:block;margin-top:4px;}
   .ver{display:inline-block;background:var(--gold);color:#fff;border-radius:4px;padding:1px 9px;font-size:.76rem;}
@@ -151,7 +153,7 @@
   footer{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;color:var(--brown2);font-size:.82rem;text-align:center;line-height:2;}
   footer .pbt{display:block;margin-top:4px;letter-spacing:.14em;font-size:.76rem;color:var(--gold);}
   @media(max-width:720px){
-    h1{font-size:1.2rem;} th,td{padding:5px 6px;} table{font-size:.76rem;}
+    h1{font-size:1.2rem;} h1 .hd-ico{width:22px;height:22px;vertical-align:-4px;} th,td{padding:5px 6px;} table{font-size:.76rem;}
     .hide-m{display:none;} .gsym{font-size:1.6rem;}
     .nav-in{grid-template-columns:repeat(3,1fr);}
     .sum-grid{grid-template-columns:1fr;}
@@ -166,7 +168,7 @@
 
 <header>
   <div class="hd-in">
-    <h1>🫀 身体地图<span class="ver" id="ver"></span><small>人类图 × 中医五行 · 传统养生文化视角</small></h1>
+    <h1><svg class="hd-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v17M7.2 6.2c1.6 1.4 2.2 3.5 2.2 5.8s-.6 4.4-2.2 5.8M16.8 6.2c-1.6 1.4-2.2 3.5-2.2 5.8s.6 4.4 2.2 5.8"/><circle cx="12" cy="6" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="12" cy="18" r="1.15"/></svg>身体地图<span class="ver" id="ver"></span><small>人类图 × 中医五行 · 传统养生文化视角</small></h1>
   </div>
 </header>
 
@@ -343,6 +345,9 @@
 
 <script>
 /* hd-tcm-body-map.html —— 渲染脚本 · 内嵌 changelog
+ * V3 (2026-11-24) 标题图标修复：
+ *   - h1 前缀 🫀 emoji 在部分桌面端字体缺字，显示为方框占位符；改为内嵌 SVG 经络图
+ *     （与首页导航「身体地图」图标同款），桌面/手机一致，PAGE_VERSION 同步升 V3
  * V2 (2026-09-28) 版式改版（用户截图标注三项）+ 移动端自检优化：
  *   - header：标题组（h1+版本徽章+副题）整体居中，删除右侧「hd-tcm / humandesign-V38 生态 / 日期」注释
  *   - nav：6 按钮改 grid 均分整页宽度（桌面 6 等分，≤920px 缩字号，≤720px 3×2 两行）
@@ -375,7 +380,7 @@
   /* ---------- 顶栏 / 免责 ---------- */
   /* V2 起页面版本独立于数据版本（TCM_META.version 只描述 tcm-data.js），
      页面 h1 徽章与 footer 统一由 PAGE_VERSION 管理 */
-  const PAGE_VERSION = 'V2';
+  const PAGE_VERSION = 'V3';
   $('#ver').textContent = PAGE_VERSION;
   $('#disclaimer').textContent = TCM_META.disclaimer;
   $('#disclaimer2').textContent = TCM_META.disclaimer;

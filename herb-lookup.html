@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中药材查询系统 · 按中文名检索辨药</title>
+<style>
+:root{
+  --brown-900:#2D2118; --brown-800:#3E2E21; --brown-700:#5A4430;
+  --gold:#C4956A; --gold-light:#E3C39B; --gold-pale:#F5E9D8;
+  --cream:#F5F0E8; --cream-2:#EFE7DA; --ink:#3B2F24; --muted:#8A7968;
+  --line:#DCCDB8; --white:#FFFCF7; --red:#9E4B3E;
+  --shadow:0 4px 20px rgba(45,33,24,.09); --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.65;min-height:100vh}
+a{color:inherit}
+
+/* 顶栏 */
+.topbar{background:linear-gradient(135deg,var(--brown-900),var(--brown-700));color:var(--cream);padding:26px 20px 30px;position:relative;overflow:hidden}
+.topbar::after{content:"";position:absolute;right:-70px;top:-80px;width:280px;height:280px;border:1px solid rgba(196,149,106,.25);border-radius:50%;box-shadow:0 0 0 30px rgba(196,149,106,.06),0 0 0 70px rgba(196,149,106,.04)}
+.wrap{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.brand-mark{width:44px;height:44px;border:1.5px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold-light);font-size:20px;flex-shrink:0}
+h1{font-size:23px;letter-spacing:2px;font-weight:600}
+.sub{font-size:12.5px;color:var(--gold-light);letter-spacing:1px;margin-top:2px}
+.ver{margin-left:auto;font-size:11px;color:var(--gold-light);border:1px solid rgba(196,149,106,.45);padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+.top-stats{display:flex;gap:22px;margin-top:18px;flex-wrap:wrap;font-size:12px;color:#D9C8B4}
+.top-stats b{color:var(--gold-light);font-size:17px;font-weight:600;margin-right:4px}
+
+/* 搜索区 */
+.panel{background:var(--white);margin:-16px auto 0;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;position:relative;z-index:2}
+.search-row{display:flex;gap:10px;align-items:center}
+.search-box{flex:1;position:relative}
+.search-box input{width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--cream);padding:0 42px 0 16px;font-size:15px;color:var(--ink);outline:none;transition:.2s}
+.search-box input:focus{border-color:var(--gold);background:var(--white);box-shadow:0 0 0 3px rgba(196,149,106,.13)}
+.search-box input::placeholder{color:#AC9A87}
+.clear-btn{position:absolute;right:10px;top:9px;width:28px;height:28px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;border-radius:50%}
+.clear-btn:hover{background:var(--gold-pale);color:var(--brown-900)}
+.btn{height:46px;padding:0 15px;border:1px solid var(--gold);background:var(--gold-pale);color:var(--brown-900);border-radius:10px;cursor:pointer;font-size:13px;white-space:nowrap;transition:.18s;font-family:inherit}
+.btn:hover{background:var(--gold);color:#fff}
+.btn.primary{background:var(--brown-800);color:var(--cream);border-color:var(--brown-800)}
+.btn.primary:hover{background:var(--brown-900)}
+
+/* 筛选 */
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{border:1px solid var(--line);background:var(--cream);color:var(--brown-700);padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;transition:.16s;user-select:none}
+.chip:hover{border-color:var(--gold);background:var(--gold-pale)}
+.chip.on{background:var(--brown-800);border-color:var(--brown-800);color:#fff}
+.hint{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.7}
+.hint b{color:var(--brown-700)}
+
+/* 结果 */
+.main{padding:24px 20px 50px}
+.result-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.result-head h2{font-size:16px;font-weight:600;color:var(--brown-900)}
+.result-head span{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:.2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(45,33,24,.13);border-color:var(--gold)}
+.card-img{height:132px;background:linear-gradient(135deg,var(--gold-pale),var(--cream-2));position:relative;overflow:hidden;display:grid;place-items:center}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{font-size:38px;color:var(--gold);opacity:.55;font-weight:600}
+.badge-img{position:absolute;left:8px;top:8px;background:rgba(45,33,24,.78);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;letter-spacing:.5px}
+.fav-btn{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:var(--muted);font-size:15px;cursor:pointer;display:grid;place-items:center;line-height:1}
+.fav-btn.on{color:var(--red)}
+.card-body{padding:12px 14px 14px;flex:1;display:flex;flex-direction:column}
+.card-title{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.card-title h3{font-size:17px;color:var(--brown-900);font-weight:600;letter-spacing:1px}
+.card-title small{font-size:11px;color:var(--muted)}
+.cat-tag{display:inline-block;font-size:10.5px;color:var(--brown-700);background:var(--gold-pale);border:1px solid #E8D6BC;padding:1px 7px;border-radius:8px;margin-top:5px;align-self:flex-start}
+.effect{font-size:12.5px;color:var(--brown-700);margin-top:8px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-alias{font-size:10.5px;color:var(--muted);margin-top:auto;padding-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty{text-align:center;padding:70px 20px;color:var(--muted);display:none}
+.empty .big{font-size:42px;color:var(--gold);margin-bottom:10px}
+
+/* 详情弹层 */
+.mask{position:fixed;inset:0;background:rgba(45,33,24,.55);z-index:50;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)}
+.mask.show{display:flex}
+.modal{background:var(--cream);border-radius:16px;width:min(860px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative}
+.close{position:absolute;right:14px;top:12px;z-index:3;width:32px;height:32px;border:0;border-radius:50%;background:rgba(45,33,24,.7);color:#fff;font-size:20px;cursor:pointer;line-height:1}
+.modal-grid{display:grid;grid-template-columns:330px 1fr;gap:0}
+.gallery{background:var(--brown-900);padding:18px;display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:340px}
+.gallery-main{width:100%;aspect-ratio:1;background:var(--brown-800);border-radius:10px;overflow:hidden;display:grid;place-items:center}
+.gallery-main img{width:100%;height:100%;object-fit:contain}
+.gallery-thumbs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.gallery-thumbs img{width:52px;height:52px;object-fit:cover;border:2px solid transparent;border-radius:7px;cursor:pointer;opacity:.65}
+.gallery-thumbs img.on{border-color:var(--gold);opacity:1}
+.no-img{color:var(--gold-light);text-align:center;font-size:13px;padding:30px 10px}
+.no-img .big{font-size:54px;display:block;margin-bottom:12px;opacity:.5}
+.detail{padding:26px 26px 28px}
+.detail h2{font-size:26px;color:var(--brown-900);letter-spacing:3px;font-weight:600}
+.detail .py{color:var(--muted);font-size:12px;letter-spacing:1px;margin-top:2px}
+.detail .en{font-size:11.5px;color:var(--muted);margin-top:2px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+.meta span{font-size:11px;background:var(--gold-pale);border:1px solid #E8D6BC;color:var(--brown-700);padding:3px 10px;border-radius:12px}
+.row{border-top:1px dashed var(--line);padding:11px 0}
+.row .k{font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:3px}
+.row .v{font-size:13.5px;color:var(--ink);line-height:1.75}
+.row.identify{background:var(--gold-pale);border:1px solid #E8D6BC;border-radius:10px;padding:12px 14px;margin-top:8px;border-top:1px solid #E8D6BC}
+.row.caution .v{color:var(--red)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.actions .btn{height:38px;font-size:12px;padding:0 13px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;border-top:1px solid var(--line);background:var(--white)}
+.disclaimer{background:#FBF4E9;border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-size:11.5px;color:var(--brown-700);margin-top:12px}
+.copyright{color:var(--gold);font-size:11px;letter-spacing:2px;font-weight:600;margin-top:8px}
+
+/* 数据源面板 */
+.src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.src-card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:15px 16px;display:flex;flex-direction:column;gap:8px}
+.src-card h3{font-size:15px;color:var(--brown-900);font-weight:600;line-height:1.4}
+.src-card .d{font-size:12px;color:var(--brown-700);line-height:1.75}
+.badge{align-self:flex-start;font-size:10.5px;padding:2px 9px;border-radius:10px;border:1px solid var(--line);background:var(--cream);color:var(--brown-700)}
+.badge.ok{background:#EAF3E8;border-color:#BFD8B8;color:#3F6B39}
+.badge.link{background:#FBF0E2;border-color:#E6CFAA;color:#8A5A20}
+.src-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.src-link{font-size:11px;color:var(--brown-700);text-decoration:none;border:1px solid var(--line);background:var(--gold-pale);padding:3px 9px;border-radius:8px}
+.src-link:hover{border-color:var(--gold);background:var(--gold);color:#fff}
+.src-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 14px}
+.src-tabs .chip{font-size:12px}
+.src-tabs .chip b{font-weight:600;color:var(--red);margin-left:3px}
+.src-wrap{padding:26px 26px 30px}
+.src-wrap h2{font-size:21px;color:var(--brown-900);letter-spacing:1px}
+.src-note{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.7}
+.ds-search{width:100%;height:38px;border:1px solid var(--line);border-radius:9px;background:var(--cream);padding:0 12px;font-size:13px;outline:none;margin-bottom:12px;color:var(--ink);font-family:inherit}
+.ds-search:focus{border-color:var(--gold);background:var(--white)}
+.ds-list,.lat-list{display:flex;flex-direction:column;gap:8px;max-height:56vh;overflow:auto;padding-right:4px}
+.ds-item{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.ds-item .t{font-size:13.5px;color:var(--brown-900);font-weight:600}
+.ds-item .tag{font-size:10px;color:var(--gold);margin-left:6px}
+.ds-item .x{font-size:11.5px;color:var(--brown-700);line-height:1.7;margin-top:3px}
+.ds-item .src-links{margin-top:7px}
+.lat-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:6px;align-content:start}
+.lat-item{background:var(--white);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:11.5px;color:var(--brown-700);line-height:1.45}
+.src-empty{font-size:12px;color:var(--muted);padding:20px 0;text-align:center}
+@media(max-width:720px){
+  .topbar{padding:20px 15px 26px}h1{font-size:19px}.ver{margin-left:0;width:100%;text-align:center;margin-top:6px}
+  .panel{margin:-12px 12px 0;padding:14px}.search-row{flex-wrap:wrap}.search-box{min-width:100%}
+  .search-row .btn{flex:1;height:40px}.main{padding:18px 12px 40px}
+  .grid{grid-template-columns:1fr}
+  .mask{padding:0;align-items:flex-end}.modal{max-height:95vh;border-radius:16px 16px 0 0}
+  .modal-grid{grid-template-columns:1fr}.gallery{min-height:0;padding:14px}.gallery-main{max-height:290px;aspect-ratio:auto;height:270px}
+  .detail{padding:20px 18px 24px}.detail h2{font-size:23px}
+  .src-wrap{padding:22px 16px 24px}.src-grid{grid-template-columns:1fr}.lat-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-mark">药</div>
+      <div><h1>中药材查询系统</h1><div class="sub">按中文名检索 · 图文对照辨药</div></div>
+      <div class="ver">版本 <span id="verTag"></span></div>
+    </div>
+    <div class="top-stats">
+      <span><b id="statTotal">0</b>味收录</span>
+      <span><b id="statImg">0</b>味实拍图</span>
+      <span><b id="statCat">0</b>个类别</span>
+      <span><b id="statFav">0</b>味收藏</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="search-row">
+      <div class="search-box">
+        <input id="q" type="search" autocomplete="off" placeholder="输入中文名 / 拼音 / 英文名 / 别名，如：甘草、gancao、liquorice">
+        <button class="clear-btn" id="clearBtn" title="清空" aria-label="清空">×</button>
+      </div>
+      <button class="btn" id="sourceBtn">🌐 数据源</button>
+      <button class="btn" id="importBtn">＋ 导入本地图片</button>
+      <input type="file" id="fileInput" multiple accept="image/*" hidden>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="hint">💡 <b>辨认提示：</b>先按中文名或别名检索 → 对照「辨认要点」与实拍图 → 点击「在线查图」看更多角度。支持拼音首字母（如 <b>gc</b> 查甘草）。收藏与导入图片仅保存在本机浏览器。</div>
+  </div>
+</div>
+
+<main class="main wrap">
+  <div class="result-head"><h2 id="resultTitle">全部药材</h2><span id="resultCount"></span></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty"><div class="big">✧</div><div>没有匹配的药材，换个关键词试试</div></div>
+</main>
+
+<div class="mask" id="srcMask">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="外部数据源">
+    <button class="close" id="srcCloseBtn" aria-label="关闭">×</button>
+    <div class="src-wrap">
+      <h2>外部数据源接入</h2>
+      <div class="src-note">六个数据源逐个核验：能直接抓取的已内置索引，需登录 / 人机验证 / 会话令牌的提供官方入口。索引仅供检索与溯源，原始图片版权归各数据源所有。</div>
+      <div class="src-tabs" id="srcTabs">
+        <span class="chip on" data-tab="sources">六大数据源</span>
+        <span class="chip" data-tab="datasets">图像数据集索引 <b id="dsCount">0</b></span>
+        <span class="chip" data-tab="latin">TCMP-300 学名 <b id="latCount">0</b></span>
+      </div>
+      <div id="srcContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="药材详情">
+    <button class="close" id="closeBtn" aria-label="关闭">×</button>
+    <div class="modal-grid">
+      <div class="gallery" id="gallery"></div>
+      <div class="detail" id="detail"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>中药材查询系统 · <span id="verFoot"></span> · 数据供学习辨认参考</div>
+  <div class="copyright">Powered By Kan Man Tang</div>
+  <div class="disclaimer">⚠️ 药材品种受产地、炮制、采收影响差异很大，图片与文字仅供辨认参考，<b>不作用药依据</b>。附子、半夏、川乌等有毒药材请务必经专业人员鉴定。</div>
+</footer>
+
+<script>
+/*
+ * CHANGELOG
+ * v3.1 (2026-11-24) 版权信息
+ *   - Footer 新增版权信息 Powered By Kan Man Tang
+ *   - VERSION 由 3.0 升至 3.1（小迭代，其余功能不变）
+ * v3.0 (2026-11-24) 外部数据源接入
+ *   - 新增「数据源」面板：六大数据源状态、外链入口逐个标注可达性
+ *   - 实际载入 Awesome-TCM-LLM Datasets wiki 中的 20 条图像/视觉数据集索引（可检索）
+ *   - 实际载入 TCMP-300 的 300 个药用植物拉丁学名（可检索，图片需另行下载）
+ *   - 标注 CHM-100 / ChineseMed-dataset 百度网盘需登录、港浸大有人机验证、MPDB 需会话令牌
+ *   - 药材主库仍为 266 味、20 味带本地实拍图，未改动
+ * v2.0 (2026-11-24) 数据库扩充
+ *   - 药材由 128 味扩充至 266 味，新增 138 味常用中药
+ *   - 新增 5 个分类：泻下药、驱虫药、攻毒杀虫止痒药等
+ *   - 补充大量毒性药材的使用禁忌与辨认要点（附子、川乌、朱砂、雄黄等）
+ *   - 图片仍为 CNH-98 的 20 味实拍图（GitHub API 限流，待后续扩充）
+ * v1.0 (2026-11-24) 初始版本
+ *   - 收录 100+ 味常用中药材，含性味归经、功效、主治、用量、注意、辨认要点
+ *   - 中文名 / 拼音 / 拼音首字母 / 英文名 / 别名 模糊检索
+ *   - 分类筛选、有图筛选、收藏筛选
+ *   - 20 味 CNH-98 真实实拍图（每味 2 张，本地离线可用）
+ *   - 详情弹层、图片切换、在线查图、本地图片导入、localStorage 收藏
+ *   - 响应式布局，禅意暖棕金配色
+ */
+const VERSION = '3.1';
+const SOURCES = [{"n": "CHM-100（MPM-Net）", "k": "外链 · 需登录下载", "c": "link", "d": "100 类常用中药材饮片图像，首个完全公开的高质量饮片数据集。GitHub 仓库只放说明文档，全量数据在百度网盘（提取码 6666），需百度账号登录，本环境无法免登录抓取。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/KevinYang95/MPM-Net"}, {"t": "百度网盘（码 6666）", "u": "https://pan.baidu.com/s/1xC83Gq6nULQXfeUTiNrYVw?pwd=6666"}, {"t": "类别说明表", "u": "https://github.com/KevinYang95/MPM-Net/blob/main/CHM-100_Data_Description.xlsx"}]}, {"n": "TCMP-300", "k": "元数据已载入", "c": "ok", "d": "52,089 张药用植物图像 / 300 类，含根、叶、花等细粒度部位。仓库的 name.txt 已抓取，300 个拉丁学名内置在第三个标签可检索；图像需运行仓库爬虫从 Bing 下载，本环境不能直接批量抓取。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/winycg/TCMP-300"}, {"t": "论文 DOI", "u": "https://doi.org/10.1038/s41597-025-05522-7"}]}, {"n": "ChineseMed-dataset", "k": "外链 · 需登录下载", "c": "link", "d": "18,000 张 / 100+ 类中药材图像，COCO 格式标注（适合目标检测训练）。仓库仅 README 与预览图，数据走百度网盘（提取码 rkft），需登录。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/shaojiwan/ChineseMed-dataset"}, {"t": "百度网盘（码 rkft）", "u": "https://pan.baidu.com/s/18mcia4KaKQfOci-duvIdOQ?pwd=rkft"}]}, {"n": "香港浸会大学中药材图像数据库", "k": "在线入口 · 人机验证", "c": "link", "d": "收录常用中药材 420 余种，含来源、产地、性状、性味功效和高清图像，支持中文名 / 拉丁名 / 英文名检索。站点启用 Cloudflare Turnstile 人机验证，需在浏览器中人工验证后使用；不能批量下载。", "l": [{"t": "图书馆介绍页", "u": "https://library.hkbu.edu.hk/electronic/libdbs/mmd/"}, {"t": "图像库入口", "u": "https://sys01.lib.hkbu.edu.hk/cmed/mmid/index.php?lang=cht"}]}, {"n": "药用植物综合数据库 MPDB（日本）", "k": "在线入口 · 会话令牌", "c": "link", "d": "医薬基盤・健康・栄養研究所的汉方与生药综合图鉴：药用植物、生药、成分基因、栽培及内部形态图，附日本药局方收载生药列表。检索表单带会话 token，需在网页内操作。", "l": [{"t": "MPDB 首页", "u": "https://mpdb.nibn.go.jp/"}, {"t": "生药检索入口", "u": "https://mpdb.nibn.go.jp/mpdb-bin/search.cgi?category=crudedrug&mode=menu&lang=en"}, {"t": "药局方生药列表", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=jplist&lang=ja"}]}, {"n": "Awesome-TCM-LLM 数据集清单", "k": "清单已载入", "c": "ok", "d": "已完整抓取该项目的 Datasets wiki（39KB），从中提取图像 / 视觉相关数据集条目，内置在第二个标签可检索。清单只做索引，原始下载请走各条目的官方链接。", "l": [{"t": "Datasets wiki", "u": "https://github.com/tyang816/Awesome-TCM-LLM/wiki/Datasets"}, {"t": "GitHub 仓库", "u": "https://github.com/tyang816/Awesome-TCM-LLM"}]}];
+const DATASETS = [{"n": "CHM-315", "d": "中药材细粒度图像集，DataCite 说明包含 315 类常用中药、共 126000 张图像，每类 400 张", "s": "中药组方 / 提取物", "l": [{"t": "数据集", "u": "https://doi.org/10.6084/m9.figshare.32745123"}]}, {"n": "Baize TCM Botanical Origin Images", "d": "药用植物基原鉴定图像数据，DataCite 标题写明用于 Baize Traditional Chinese Medicine，包含生境、原植物和药用部位图像，以及依据中国药典、中国植物志和恩格勒系统的中文与拉丁文鉴定信息", "s": "中药组方 / 提取物", "l": [{"t": "数据集", "u": "https://doi.org/10.57760/sciencedb.41638"}]}, {"n": "古代经典名方关键信息表", "d": "官方公布的经典名方关键信息，不是患者病历。三份通知分别是 2020 年 7 首、2023 年「竹叶石膏汤」等 25 首、2025 年「旋覆代赭汤」等 43 首。2025 年附表逐味给出基原、炮制规格和折算剂量。旋覆代赭汤中甘草为炒甘草 41.40 克、半夏为清半夏 34.50 克；全方以水 2000 毫升煮取 1200 毫升，去渣再煎至 600 毫升，每次温", "s": "中药组方 / 提取物", "l": [{"t": "2020通知", "u": "http://www.natcm.gov.cn/kejisi/zhengcewenjian/2020-11-10/18132.html"}, {"t": "2023通知", "u": "http://www.natcm.gov.cn/kejisi/gongzuodongtai/2023-07-28/31404.html"}, {"t": "2025通知", "u": "http://www.natcm.gov.cn/kejisi/gongzuodongtai/2025-02-12/35831.html"}]}, {"n": "TCMP-300", "d": "用于中药材植物识别的综合图像数据集", "s": "中药组方 / 提取物", "l": [{"t": "论文", "u": "https://doi.org/10.1038/s41597-025-05522-7"}, {"t": "代码", "u": "https://github.com/winycg/TCMP-300"}]}, {"n": "香港浸会大学中药方剂图像数据库", "d": "香港浸会大学中医药学院的方剂图像库，公开浏览方剂组成、功用、主治和图像。浏览页显示约182首，访问计数自2017年11月起。在线查阅，不是方剂表批量下载", "s": "中药组方 / 提取物", "l": [{"t": "网站", "u": "https://library.hkbu.edu.hk/electronic/libdbs/cmfid/"}]}, {"n": "香港浸会大学中药材图像数据库", "d": "香港浸会大学中医药学院的中药材图像库。图书馆页面写明收录常用中药材420余种，包括来源、产地、性状、性味功效和高清图像，可按中文名、拉丁名和英文名检索。2013年上线，可公开在线浏览，不是批量下载包", "s": "中药组方 / 提取物", "l": [{"t": "网站", "u": "https://library.hkbu.edu.hk/electronic/libdbs/mmd/"}]}, {"n": "东亚医学协会针灸经络图版库", "d": "既有资源补录（首发年份未确认）。按经脉并列展示十四经发挥、针灸资生经、类经图翼、经穴汇解和经络研究图版，可用于版本比较和针灸图文资料检索。是历史图版入口，非已标注视觉问答集；未确认统一批量下载及训练许可", "s": "东亚传统医学", "l": [{"t": "网站", "u": "https://aeam.jp/keiraku/"}]}, {"n": "药用植物综合信息数据库 (MPDB)", "d": "医薬基盤·健康·营养研究所药用植物资源研究中心的汉方与生药综合图鉴。首页写明收录药用植物、生药、成分与基因、栽培和内部形态，并对国内流通的模型生药做了实测；页脚版权为2012–2025，资助来自厚生劳动科学研究费。另有可打开的汉方处方列表和日本药局方收载生药列表", "s": "东亚传统医学", "l": [{"t": "网站", "u": "https://mpdb.nibn.go.jp/"}, {"t": "汉方列表", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=syohou&lang="}, {"t": "药局方生药", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=jplist&lang=ja"}]}, {"n": "中医笈成", "d": "中医药古籍整理项目，按医经、诊法、本草、医方、医案等分类，提供全文检索、公开GitLab版本库与原始文件下载入口。公有领域文本的筛选、标点等编辑成果声明CC0，自创介绍页面CC BY 4.0；图片与个别页面另查", "s": "原始书籍 / 预训练语料", "l": [{"t": "网站", "u": "https://jicheng.tw/tcm/book/"}, {"t": "下载", "u": "https://jicheng.tw/tcm/download.html"}, {"t": "许可", "u": "https://jicheng.tw/tcm/copyright.html"}]}, {"n": "病理标注舌象数据集", "d": "带病理标注的中医舌象图像集，用于降低人工舌诊的主观性", "s": "评测基准", "l": [{"t": "论文", "u": "https://doi.org/10.62762/bish.2026.303296"}]}, {"n": "病机思维链证候识别数据", "d": "在病机推理思维链监督下构建的证候表现识别数据，含结构化病案、金标准证候标签和模型预测", "s": "评测基准", "l": [{"t": "数据集", "u": "https://doi.org/10.57760/sciencedb.35044"}]}, {"n": "TongueBench", "d": "2,694 张舌象、22 个标签；比较 9 个多模态模型、3 种提示策略及重复输出稳定性，配有图像数据和推理/评分示例", "s": "评测基准", "l": [{"t": "DOI", "u": "https://doi.org/10.3389/frai.2026.1943004"}, {"t": "代码", "u": "https://github.com/mengyiha/TongueBench-Open"}, {"t": "数据集", "u": "https://zenodo.org/records/20701288"}]}, {"n": "TongueProjectTCM Color Classification", "d": "TongueProjectTCM 舌图像颜色分类数据，数据卡列出图像和整数标签，训练集 807 条、验证集 121 条", "s": "评测基准", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/TongueProjectTCM/color-classification-opensource"}]}, {"n": "TongueDx 远程舌诊多标签数据集", "d": "面向远程舌诊的公开图像集：5109 张、4650 名受试者，8 个二分类舌象属性（淡、边尖红、红点、瘀斑、裂纹、齿痕、厚苔、黄苔），并带年龄和性别。仓库可下。与后续消融论文 TongueDx2 不是同一篇", "s": "评测基准", "l": [{"t": "数据集", "u": "https://github.com/tonguedx/tonguedx"}, {"t": "论文", "u": "https://arxiv.org/abs/2501.03053"}]}, {"n": "TCM-Ladder 中医多模态问答评测基准 (NeurIPS 2025)", "d": "中医多模态问答基准，含 52,169 个问答对，并包含图像、音频和视频数据（NeurIPS 2025）", "s": "评测基准", "l": [{"t": "数据集", "u": "https://github.com/orangeshushu/TCM-Ladder"}, {"t": "HF", "u": "https://huggingface.co/datasets/timzzyus/TCM-Ladder"}, {"t": "榜单", "u": "https://tcmladder.com"}]}, {"n": "MetaAcuPoint", "d": "用 Unreal Engine 的 MetaHuman 生成 900 张手部图像，按骨骼插槽标注 5 个手部穴位，供韩医穴位定位使用", "s": "评测基准", "l": [{"t": "论文", "u": "https://doi.org/10.3390/healthcare13233093"}]}, {"n": "TriCM-DF Acupuncture Corpus", "d": "面向中医大模型的专家审核指令语料，在针灸子领域按共识、专家经验和感知三个维度发布；仓库公开文本表，图像和视频文件不随包提供", "s": "指令/对话数据集", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/Shutcm-TCME/TriCMDF"}]}, {"n": "Fu_TCM", "d": "已核验Fu_bianzheng.json、Fu_text.json、Fu_vision.json和图像文件；仓库共505个文件，标注Apache-2.0，但数据卡没有来源、样本统计或标注说明。图像文件名包含现代诊断图谱书名，底层素材授权尚待核对", "s": "指令/对话数据集", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/fudanxai/Fu_TCM"}]}, {"n": "TCM-NER 中药说明书实体识别（OpenKG / CHIP）", "d": "中药说明书的实体识别数据，用来做用药知识图谱。许可是 CC BY-NC 2.0", "s": "知识图谱", "l": [{"t": "数据", "u": "https://tianchi.aliyun.com/dataset/dataDetail?dataId=86819"}, {"t": "资料", "u": "http://openkg.cn/dataset/tcm-ner"}]}, {"n": "TCM-Vision-Benchmark 中医视觉评测", "d": "中医视觉评测集，含药材识别/望诊等约 7k 题", "s": "评测基准", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/FreedomIntelligence/TCM-Vision-Benchmark"}]}];
+const LATIN300 = ["Abutilon theophrasti Medikus", "Acalypha australis L.", "Achyranthes bidentata Blume", "Aconitum carmichaelii Debeaux", "Acorus calamus L.", "Actaea cimicifuga L.", "Adenophora tetraphylla (Thunb.) Fisch.", "Adenophora trachelioides Maxim.", "Agastache rugosa (Fisch. & C. A. Mey.) Kuntze", "Agrimonia pilosa Ledeb.", "Ajuga decumbens Thunb.", "Alangium chinense (Lour.) Harms", "Albizia julibrissin Durazz.", "Alisma plantago-aquatica L.", "Alkekengi officinarum var. franchetii (Mast.) R. J. Wang", "Allium macrostemon Bunge", "Amana edulis (Miq.) Honda", "Ampelopsis japonica (Thunb.) Makino", "Andrographis paniculata (Burm. f.) Wall. ex Nees in Wallich", "Androsace umbellata (Lour.) Merr.", "Anemarrhena asphodeloides Bunge", "Angelica dahurica (Fisch. ex Hoffm.) Benth. & Hook. f. ex Franch. & Sav.", "Angelica decursiva (Miq.) Franch. & Sav.", "Angelica sinensis (Oliv.) Diels", "Apocynum venetum L.", "Aralia elata (Miq.) Seem.", "Arctium lappa L.", "Areca catechu L.", "Arisaema heterophyllum Blume", "Aristolochia debilis Siebold & Zucc.", "Artemisia capillaris Thunb.", "Asarum forbesii Maxim.", "Asarum heterotropoides F. Schmidt", "Asparagus cochinchinensis (Lour.) Merr.", "Aster tataricus L. f.", "Astilbe chinensis (Maxim.) Franch. & Sav.", "Atractylodes lancea (Thunb.) DC.", "Atropa belladonna L.", "Baphicacanthus cusia(Nees)Bremek.", "Belamcanda chinensis (L.) Redout", "Berberis amurensis Rupr.", "Bidens pilosa L.", "Bletilla striata (Thunb. ex A. Murray) Rchb. f.", "Bothriospermum chinense Bunge", "Broussonetia papyrifera (L.) L'Hr. ex Vent.", "Bupleurum scorzonerifolium Willd.", "Callicarpa bodinieri H. Lv.", "Capsella bursa-pastoris (L.) Medik.", "Cardiocrinum cathayanum (E. H. Wilson) Stearn", "Carpesium abrotanoides L.", "Carthamus tinctorius L.", "Catharanthus roseus (L.) G. Don", "Centipeda minima (L.) A. Braun & Asch.", "Chelidonium majus L.", "Chenopodium album L.", "Chloranthus serratus (Thunb.) Roem. & Schult.", "Chrysanthemum morifolium Ramat.", "Cirsium arvense var. integrifolium Wimm. & Grab.", "Cirsium japonicum Fisch. ex DC.", "Clematis florida Thunb.", "Clerodendrum bungei Steud.", "Clerodendrum trichotomum Thunb.", "Clinopodium chinense (Benth.) Kuntze", "Cocculus orbiculatus (L.) DC.", "Codonopsis lanceolata (Siebold & Zucc.) Trautv.", "Codonopsis pilosula (Franch.) Nannf.", "Coix lacryma-jobi L.", "Commelina communis L.", "Coniogramme japonica (Thunb.) Diels", "Convolvulus arvensis L.", "Coptis deltoidea C. Y. Cheng & P. G. Xiao", "Cornus officinalis Sieb. & Zucc.", "Corydalis incisa (Thunb.) Pers.", "Corydalis ophiocarpa Hook. f. & Thomson", "Corydalis yanhusuo (Y. H. Chou & C. C. Hsu) W. T. Wang ex Z. Y. Su & C. Y. Wu", "Crepidiastrum sonchifolium (Bunge) Pak & Kawano", "Crocus sativus L.", "Curculigo orchioides Gaertn.", "Cuscuta chinensis Lam.", "Cuscuta japonica Choisy in Zoll.", "Cyathula officinalis K. C. Kuan", "Cycas revoluta Thunb.", "Cynanchum bungei Decne.", "Cynanchum rostellatum (Turcz.) Liede & Khanum", "Cyperus rotundus L.", "Cyrtomium fortunei J. Sm.", "Daphne genkwa Siebold & Zucc.", "Datura metel L.", "Daucus carota L.", "Descurainia sophia (L.) Webb ex Prantl", "Dianthus chinensis L.", "Dianthus superbus L.", "Dioscorea polystachya Turcz.", "Draba nemorosa L.", "Drynaria roosii Nakaike", "Eclipta prostrata (L.) L.", "Eleutherococcus nodiflorus (Dunn) S. Y. Hu", "Epimedium brevicornu Maxim.", "Equisetum arvense L.", "Equisetum hyemale L.", "Erigeron annuus (L.) Pers.", "Eriobotrya japonica (Thunb.) Lindl.", "Eriocaulon buergerianum Krn.", "Eucommia ulmoides Oliv.", "Euonymus alatus (Thunb.) Siebold", "Eupatorium fortunei Turcz.", "Euphorbia esula L.", "Euphorbia helioscopia L.", "Euphorbia hirta L.", "Euphorbia maculata L.", "Euphorbia pekinensis Rupr.", "Euryale ferox Salisb. ex K. D. Koenig & Sims", "Fagopyrum esculentum Moench", "Forsythia suspensa (Thunb.) Vahl", "Fraxinus chinensis Roxb.", "Fritillaria thunbergii Miq.", "Gardenia  jasminoides J. Ellis", "Gastrodia elata Bl.", "Geranium wilfordii Maxim.", "Geranium wilfordii Maxim.", "Ginkgo biloba L.", "Glechoma longituba (Nakai) Kupr.", "Gleditsia sinensis Lam.", "Glehnia littoralis F. Schmidt ex Miq.", "Gynostemma pentaphyllum (Thunb.) Makino", "Gynura japonica (Thunb.) Juel", "Hedera nepalensis var. sinensis (Tobler) Rehder", "Hemerocallis citrina Baroni", "Hibiscus syriacus L.", "Houttuynia cordata Thunb.", "Humulus scandens (Lour.) Merr.", "Hyoscyamus niger L.", "Hypericum japonicum Thunb. in Murr.", "Hypericum perforatum L.", "Hypericum sampsonii Hance", "Ilex cornuta Lindl. & Paxton", "Impatiens balsamina L.", "Inula japonica Thunb.", "Ipomoea nil (L.) Roth", "Iris tectorum Maxim.", "Isatis tinctoria L.", "Isodon rubescens (Hemsl.) H. Hara", "Ixeris chinensis (Thunb.) Nakai", "Juncus effusus L.", "Justicia procumbens L.", "Lapsanastrum apogonoides (Maxim.) Pak & K.Bremer", "Leonurus japonicus Houtt.", "Lepisorus thunbergianus (Kaulf.) Ching", "Ligusticum chuanxiong Hort.", "Ligustrum lucidum W. T. Aiton", "Lilium brownii F. E. Brown ex Miellez var. viridulum Baker", "Lithospermum zollingeri A. DC.", "Lobelia chinensis Lour.", "Lonicera japonica Thunb.", "Lycium chinense Mill.", "Lycopus lucidus Turcz. ex Benth.", "Lycoris aurea (L'Hr.) Herb.", "Lycoris radiata (L'Hr.) Herb.", "Lygodium japonicum (Thunb.) Sw.", "Lysimachia christinae Hance", "Lysimachia clethroides Duby", "Lysimachia congestiflora Hemsl.", "Lysimachia grammica Hance", "Macleaya cordata (Willd.) R. Br.", "Mahonia fortunei (Lindl.) Fedde", "Mazus pumilus (Burm. f.) Steenis", "Mazus stachydifolius (Turcz.) Maxim.", "Menispermum dauricum DC.", "Mentha canadensis L.", "Mimosa pudica L.", "Momordica cochinchinensis (Lour.) Spreng.", "Morus alba L.", "Nandina domestica Thunb.", "Nepeta cataria L.", "Nerium oleander L.", "Ophiopogon japonicus (L. f.) Ker Gawl.", "Origanum vulgare L.", "Orostachys fimbriata (Turcz.) A. Berger", "Oroxylum indicum (L.) Kurz", "Orychophragmus violaceus (L.) O. E. Schulz", "Osmunda japonica Thunb.", "Oxalis corymbosa DC.", "P.bistorta L.", "Paederia  foetida L.", "Paeonia lactiflora Pall.", "Panax ginseng C. A. Mey.", "Panax notoginseng (Burkill) F. H. Chen ex C. H. Chow", "Papaver somniferum L.", "Paris polyphylla Sm.", "Patrinia scabiosaefolia Fisch.ex Trev.", "Penthorum chinense Pursh", "Perilla frutescens (L.) Britton", "Periploca sepium Bunge", "Persicaria hydropiper (L.) Spach", "Persicaria perfoliata (L.) H. Gross", "Peucedanum praeruptorum Dunn", "Phedimus aizoon (L.) 't Hart", "Phytolacca acinosa Roxb.", "Pilea pumila (L.) A. Gray", "Pinellia ternata (Thunb.) Ten. ex Breitenb.", "Pittosporum tobira (Thunb.) W. T. Aiton", "Plantago asiatica L.", "Platycladus orientalis (L.) Franco", "Platycodon grandiflorus (Jacq.) A. DC.", "Pleuropterus multiflorus (Thunb.) Nakai", "Polygala japonica Houtt.", "Polygala tenuifolia Willd.", "Polygonatum odoratum (Mill.) Druce", "Polygonatum sibiricum Redout", "Polygonum aviculare L.", "Portulaca oleracea L.", "Potentilla discolor Bunge", "Prunella vulgaris L.", "Pseudognaphalium affine (D. Don) Anderb.", "Pteroxygonum giraldii Damm. & Diels", "Pueraria montana var. lobata (Ohwi) Maesen & S. M. Almeida", "Pulsatilla chinensis (Bunge) Regel", "Pyrrosia lingua (Thunb.) Farw.", "Ranunculus chinensis Bunge", "Ranunculus japonicus Thunb.", "Ranunculus sceleratus L.", "Ranunculus ternatus Thunb.", "Raphanus sativus L.", "Rehmannia glutinosa (Gaertn.) Libosch. ex Fisch. & C. A. Mey.", "Reynoutria japonica Houtt.", "Rhodiola cretinii subsp. sinoalpina (Frd.) H. Ohba", "Rhodotypos scandens (Thunb.) Makino", "Rhus chinensis Mill.", "Rorippa indica (L.) Hiern", "Rosa laevigata Michx.", "Rubia  cordifolia L.", "Rubus idaeus L", "Rumex crispus L.", "Sagittaria trifolia subsp. leucopetala (Miquel) Q. F. Wang", "Salvia miltiorrhiza Bunge", "Salvia plebeia R. Br.", "Sambucus javanica Reinw. ex Blume", "Sambucus williamsii Hance", "Sanguisorba officinalis L.", "Saposhnikovia divaricata (Turcz.) Schischk.", "Sargentodoxa cuneata (Oliv.) Rehd. & E. H. Wilson in C. S. Sargent", "Sauromatum giganteum (Engl.) Cusimano & Hett.", "Saururus chinensis (Lour.) Baill.", "Saxifraga stolonifera Curtis", "Sceptridium ternatum (Thunb.) Lyon", "Schisandra chinensis (Turcz.) Baill.", "Scrophularia ningpoensis Hemsl.", "Scutellaria baicalensis Georgi", "Scutellaria barbata D. Don", "Scutellaria indica L.", "Sedum sarmentosum Bunge", "Selaginella tamariscina (P. Beauv.) Spring", "Semiaquilegia adoxoides (DC.) Makino", "Senecio scandens Buch.-Ham. ex D. Don", "Senna tora (L.) Roxb.", "Siegesbeckia orientalis L", "Sinosenecio oldhamianus (Maxim.) B. Nord.", "Siphonostegia chinensis Benth.", "Smilax china L.", "Solanum lyratum Thunb.", "Solanum nigrum L.", "Solanum pseudocapsicum L.", "Sophora flavescens Aiton", "Spatholobus suberectus Dunn", "Stachys sieboldii Miq.", "Staphylea bumalda DC.", "Stellaria media (L.) Vill.", "Stephania cephalantha Hayata", "Stephania tetrandra S. Moore", "Styphnolobium japonicum (L.) Schott", "Syneilesis aconitifolia (Bunge) Maxim.", "Talinum paniculatum (Jacq.) Gaertn.", "Taraxacum mongolicum Hand.-Mazz.", "Taxus wallichiana var. chinensis (Pilg.) Florin", "Tetrapanax papyrifer (Hook.) K. Koch", "Thladiantha dubia Bunge", "Thlaspi arvense L.", "Torilis scabra (Thunb.) DC.", "Trachelospermum jasminoides (Lindl.) Lem.", "Triadica sebifera (L.) Small", "Trichosanthes kirilowii Maxim.", "Trigonotis peduncularis (Trevis.) Benth. ex Baker & S. Moore", "Vaccaria segetalis(Neck.)Garcke", "Veratrum nigrum L.", "Verbena officinalis L.", "Veronica persica Poir.", "Vicia cracca L.", "Vicia hirsuta (L.) Gray", "Vicia sativa L.", "Vincetoxicum pycnostelma Kitag.", "Viola acuminata Ledeb.", "Viola diffusa Ging. in DC.", "Viola japonica Langsd. ex DC.", "Viola philippica Cav.", "Vitex negundo L.", "Vitex negundo var. cannabifolia (Siebold & Zucc.) Hand.-Mazz.", "Xanthium strumarium L.", "Youngia japonica (L.) DC.", "Yulania denudata (Desr.) D. L. Fu", "Zehneria indica (Lour.)Keraudren"];
+document.getElementById('verTag').textContent = 'V' + VERSION;
+document.getElementById('verFoot').textContent = 'V' + VERSION;
+
+// 字段顺序：中文名,拼音,英文名,别名,分类,性味归经,功效,主治,用量,注意,辨认要点,图片slug
+const RAW = [
+['麻黄','ma huang','Ephedra','草麻黄','解表药','辛、微苦，温；肺、膀胱经','发汗解表，宣肺平喘，利水消肿','风寒感冒，胸闷喘咳，风水浮肿','2~10g','表虚自汗、阴虚盗汗及高血压者慎用','茎细长圆柱形，淡黄绿色，节明显，断面髓部红棕色，味涩微苦',''],
+['桂枝','gui zhi','Cinnamon Twig','桂尖','解表药','辛、甘，温；心、肺、膀胱经','发汗解肌，温通经脉，助阳化气','风寒感冒，寒热往来，胸痹，经闭痛经','3~10g','温热病、阴虚火旺、血热妄行者忌用','枝梗状，红棕色至棕褐色，断面皮部红棕色、木部黄白色，有特异香气',''],
+['紫苏叶','zi su ye','Perilla Leaf','苏叶','解表药','辛，温；肺、脾经','解表散寒，行气和胃','风寒感冒，咳嗽呕恶，妊娠呕吐','5~10g','温病及气弱表虚者忌服','叶片皱缩卷曲，紫色或紫绿色，边缘有锯齿，气芳香，味微辛',''],
+['生姜','sheng jiang','Fresh Ginger','鲜姜','解表药','辛，微温；肺、脾、胃经','解表散寒，温中止呕，化痰止咳','风寒感冒，胃寒呕吐，寒痰咳嗽','3~10g','阴虚内热、热盛者忌服','不规则块状，黄褐色，断面黄白色纤维状，气特异，味辛辣',''],
+['荆芥','jing jie','Schizonepeta','香荆芥','解表药','辛，微温；肺、肝经','解表散风，透疹，消疮','感冒，头痛，麻疹，风疹，疮疡初起','5~10g','表虚自汗、阴虚头痛者忌服','茎方形，淡黄绿色，被短柔毛，穗状花序，气芳香，味微涩辛',''],
+['防风','fang feng','Saposhnikovia Root','关防风','解表药','辛、甘，微温；膀胱、肝、脾经','祛风解表，胜湿止痛，止痉','感冒头痛，风湿痹痛，风疹瘙痒，破伤风','5~10g','血虚痉急或头痛不因风邪者忌服','根圆锥形，表面灰棕色有皱纹及须根痕，质轻，断面黄白色，气微香',''],
+['白芷','bai zhi','Angelica Dahurica Root','芷草','解表药','辛，温；胃、大肠、肺经','解表散寒，祛风止痛，宣通鼻窍，燥湿止带','感冒头痛，眉棱骨痛，鼻塞鼻渊，带下','3~10g','阴虚血热者忌服','根圆锥形，灰黄色至黄棕色，顶端有凹陷茎痕，断面白色粉性，气芳香','radix-angelicae-dahuricae'],
+['薄荷','bo he','Peppermint','水薄荷','解表药','辛，凉；肺、肝经','疏散风热，清利头目，利咽，透疹，疏肝行气','风热感冒，头痛目赤，咽喉肿痛，麻疹不透','3~6g','体虚多汗者不宜使用','茎方形，叶对生皱缩，深绿色，边缘锯齿，气芳香，味辛凉',''],
+['牛蒡子','niu bang zi','Burdock Fruit','大力子','解表药','辛、苦，寒；肺、胃经','疏散风热，宣肺透疹，解毒利咽','风热感冒，咳嗽痰多，麻疹，咽喉肿痛','6~12g','气虚便溏者慎用','瘦果长卵形，灰褐色有斑点，边缘有棱，气微，味微苦后微甜',''],
+['蝉蜕','chan tui','Cicada Slough','蝉衣','解表药','甘，寒；肺、肝经','疏散风热，利咽开音，透疹，明目退翳，息风止痉','风热感冒，咽痛音哑，麻疹不透，目赤翳障，惊风','3~10g','孕妇慎用','形似蝉而中空，黄棕色半透明有光泽，头部有一对突出复眼，体轻',''],
+['桑叶','sang ye','Mulberry Leaf','冬桑叶','解表药','甘、苦，寒；肺、肝经','疏散风热，清肺润燥，清肝明目','风热感冒，肺热燥咳，头晕头痛，目赤昏花','5~10g','肺寒咳嗽者慎用','叶皱缩，黄绿色或棕黄色，边缘锯齿，叶脉突起，气微，味微苦涩',''],
+['菊花','ju hua','Chrysanthemum','杭菊花','解表药','甘、苦，微寒；肺、肝经','疏散风热，平肝明目，清热解毒','风热感冒，头痛眩晕，目赤肿痛，眼目昏花','5~10g','气虚胃寒、食少泄泻者慎用','头状花序，舌状花白色或黄色，管状花黄色，气清香，味甘微苦',''],
+['柴胡','chai hu','Bupleurum Root','北柴胡','解表药','辛、苦，微寒；肝、胆、肺经','疏散退热，疏肝解郁，升举阳气','感冒发热，寒热往来，胸胁胀痛，月经不调，脱肛','3~10g','肝阳上亢、肝风内动者忌用','根圆锥形，棕褐色有纵皱纹，质硬，断面黄白色纤维性，气微香，味微苦',''],
+['葛根','ge gen','Kudzu Root','粉葛','解表药','甘、辛，凉；脾、胃、肺经','解肌退热，生津止渴，透疹，升阳止泻','外感发热头痛，项背强痛，口渴，麻疹，热痢','10~15g','表虚汗多者慎用','块根圆柱形，黄白色，断面纤维性富粉性，气微，味微甜',''],
+['石膏','shi gao','Gypsum','生石膏','清热药','甘、辛，大寒；肺、胃经','清热泻火，除烦止渴','温热病壮热烦渴，肺热咳喘，胃火牙痛','15~60g','脾胃虚寒、阴虚内热者忌服','白色或灰白色块状，纤维状纹理，质松，气微，味淡',''],
+['知母','zhi mu','Anemarrhena Rhizome','肥知母','清热药','苦、甘，寒；肺、胃、肾经','清热泻火，滋阴润燥','热病壮热烦渴，肺热燥咳，骨蒸潮热，内热消渴','6~12g','脾虚便溏者慎用','根茎扁圆柱形，黄棕色有环节，断面黄白色，气微，味微苦回甜',''],
+['芦根','lu gen','Reed Rhizome','芦苇根','清热药','甘，寒；肺、胃经','清热泻火，生津止渴，除烦，止呕，利尿','热病烦渴，胃热呕逆，肺热咳嗽，小便短赤','15~30g','脾胃虚寒者忌服','根茎长圆柱形，黄白色有节，节间中空，气微，味微甜',''],
+['栀子','zhi zi','Gardenia Fruit','山栀','清热药','苦，寒；心、肺、三焦经','泻火除烦，清热利湿，凉血解毒','热病心烦，黄疸，淋证，血热吐衄，疮疡','6~10g','脾虚便溏者不宜','果实椭圆形，红黄色至棕红色，有翅状纵棱5~8条，气微，味微酸苦',''],
+['夏枯草','xia ku cao','Prunella Spike','夏枯球','清热药','辛、苦，寒；肝、胆经','清肝明目，散结消肿','目赤肿痛，目珠夜痛，瘰疬，瘿瘤，乳痈','9~15g','脾胃虚弱者慎用','果穗圆柱形，棕褐色，由多数轮伞花序组成，宿存萼片，气微香，味淡',''],
+['龙胆','long dan','Gentian Root','龙胆草','清热药','苦，寒；肝、胆经','清热燥湿，泻肝胆火','湿热黄疸，阴肿阴痒，带下，肝火上炎，惊风抽搐','3~6g','脾胃虚弱者不宜多用','根簇生细长圆柱形，淡黄色至黄棕色，断面黄白色，气微，味极苦',''],
+['黄芩','huang qin','Scutellaria Root','条芩','清热药','苦，寒；肺、胆、脾、大肠、小肠经','清热燥湿，泻火解毒，止血，安胎','湿温胸闷呕恶，湿热黄疸，肺热咳嗽，胎动不安','3~10g','苦寒伤胃，脾胃虚寒者不宜','根圆锥形，棕黄色或深黄色，断面黄色中心红棕色，老根中空，味苦',''],
+['黄连','huang lian','Coptis Rhizome','川连','清热药','苦，寒；心、脾、胃、肝、胆、大肠经','清热燥湿，泻火解毒','湿热痞满，呕吐吞酸，泻痢，黄疸，心烦不眠，胃火牙痛','2~5g','脾胃虚寒者忌用','根茎多分枝形如鸡爪，表面灰黄色，断面皮部橙红色、木部金黄色，味极苦',''],
+['黄柏','huang bai','Phellodendron Bark','川黄柏','清热药','苦，寒；肾、膀胱、大肠经','清热燥湿，泻火解毒，除骨蒸','湿热痢疾，黄疸，带下，骨蒸劳热，盗汗，疮疡','3~12g','脾虚便溏者忌用','树皮板状，黄棕色内面黄色，断面纤维性，气微，味极苦',''],
+['金银花','jin yin hua','Honeysuckle Flower','银花','清热药','甘，寒；肺、心、胃经','清热解毒，疏散风热','痈肿疔疮，喉痹，丹毒，热毒血痢，风热感冒','6~15g','脾胃虚寒及气虚疮疡脓清者忌用','花蕾棒状弯曲，黄白色至黄棕色，密被短柔毛，气清香，味微苦',''],
+['连翘','lian qiao','Forsythia Fruit','连召','清热药','苦，微寒；肺、心、小肠经','清热解毒，消肿散结，疏散风热','痈肿疮毒，瘰疬，风热感冒，温病初起','6~15g','脾胃虚寒、气虚发热者不宜','果实卵形，黄棕色有突起斑点，顶端开裂，气微香，味苦',''],
+['蒲公英','pu gong ying','Dandelion','黄花地丁','清热药','苦、甘，寒；肝、胃经','清热解毒，消痈散结，利尿通淋','乳痈，疔疮肿毒，咽痛，目赤，湿热黄疸，淋证','10~30g','用量过大可致缓泻','根圆锥形棕褐色，叶灰绿色边缘羽状深裂，花黄色，气微，味微苦',''],
+['鱼腥草','yu xing cao','Houttuynia','折耳根','清热药','辛，微寒；肺经','清热解毒，消痈排脓，利尿通淋','肺痈吐脓，痰热喘咳，热痢，热淋，痈肿疮毒','15~30g','虚寒证及阴性疮疡者忌服','叶片心形暗黄绿色，穗状花序，搓之有浓烈鱼腥气，味微涩',''],
+['生地黄','sheng di huang','Rehmannia Root','生地','清热药','甘、苦，寒；心、肝、肾经','清热凉血，养阴生津','热入营血，温毒发斑，吐血衄血，热病伤阴，内热消渴','10~30g','脾虚湿滞、腹满便溏者不宜','块根不规则，棕黑色，断面棕黑色油润，气微，味微甜微苦',''],
+['玄参','xuan shen','Scrophularia Root','元参','清热药','甘、苦、咸，微寒；肺、胃、肾经','清热凉血，滋阴降火，解毒散结','热入营血，温毒发斑，热病伤阴，咽喉肿痛，瘰疬','9~15g','脾胃虚寒、食少便溏者不宜','根圆锥形，灰黄色，断面乌黑色油润，气微，味微甜后苦咸',''],
+['牡丹皮','mu dan pei','Tree Peony Bark','丹皮','清热药','苦、辛，微寒；心、肝、肾经','清热凉血，活血化瘀','温毒发斑，吐血衄血，夜热早凉，无汗骨蒸，经闭痛经，痈肿','6~12g','血虚有寒、孕妇及月经过多者慎用','根皮筒状，灰褐色内面淡黄色，断面平坦，气芳香，味微苦涩',''],
+['赤芍','chi shao','Red Peony Root','赤芍药','清热药','苦，微寒；肝经','清热凉血，散瘀止痛','温毒发斑，吐血衄血，目赤肿痛，肝郁胁痛，经闭痛经','6~12g','血虚无瘀者不宜，孕妇慎用','根圆柱形，棕褐色，断面黄白色有放射状纹理，气微，味微苦涩',''],
+['青蒿','qing hao','Sweet Wormwood','青蒿草','清热药','苦、辛，寒；肝、胆、肾经','退虚热，凉血，解暑，截疟','温病后期夜热早凉，骨蒸劳热，疟疾，暑热','6~12g','脾胃虚寒、肠滑腹泻者忌服','茎圆柱形黄绿色，叶灰绿色多裂，气特异芳香，味微苦',''],
+['独活','du huo','Angelica Pubescens Root','独活草','祛风湿药','辛、苦，微温；肾、膀胱经','祛风除湿，通痹止痛','风寒湿痹，腰膝疼痛，少阴伏风头痛','3~10g','气血虚而遍身痛者忌用','根圆锥形棕褐色，断面黄白色有油点，气特异，味苦辛麻',''],
+['威灵仙','wei ling xian','Clematis Root','铁扫帚','祛风湿药','辛、咸，温；膀胱经','祛风湿，通经络，止痛，消骨骾','风湿痹痛，肢体麻木，筋脉拘挛，诸骨鲠喉','6~10g','气虚血弱、孕妇慎用','根茎柱状，表面黑褐色，断面黄白色，气微，味微苦',''],
+['木瓜','mu gua','Chaenomeles Fruit','宣木瓜','祛风湿药','酸，温；肝、脾经','舒筋活络，和胃化湿','风湿痹痛，肢体酸重，筋脉拘挛，脚气肿痛，吐泻转筋','6~12g','胃酸过多者慎用','果实长圆形，红棕色，质坚硬，气微香，味酸',''],
+['秦艽','qin jiao','Gentiana Macrophylla Root','大叶龙胆','祛风湿药','辛、苦，平；胃、肝、胆经','祛风湿，通经络，清虚热，利湿热','风湿痹痛，筋脉拘挛，骨蒸潮热，黄疸','3~10g','气虚、血虚及孕妇慎用','根圆锥形，灰黄色，有纵向扭纹，断面黄白色，气特异，味苦涩',''],
+['桑寄生','sang ji sheng','Taxillus Branch','寄生草','祛风湿药','苦、甘，平；肝、肾经','祛风湿，补肝肾，强筋骨，安胎','风湿痹痛，腰膝酸软，筋骨无力，崩漏，胎动不安','9~15g','无特殊禁忌','茎枝圆柱形，灰棕色有细纵纹及皮孔，质硬，断面黄褐色，气微，味微苦',''],
+['藿香','huo xiang','Patchouli','广藿香','化湿药','辛，微温；脾、胃、肺经','芳香化浊，和中止呕，发表解暑','湿浊中阻，脘痞呕吐，暑湿表证，湿温初起','3~10g','阴虚火旺者不宜','茎方形灰褐色，叶灰绿色边缘钝齿，气芳香特异，味微苦',''],
+['苍术','cang zhu','Atractylodes Rhizome','茅苍术','化湿药','辛、苦，温；脾、胃、肝经','燥湿健脾，祛风散寒，明目','湿阻中焦，脘腹胀满，泄泻，水肿，风湿痹痛，夜盲','3~10g','阴虚内热、气虚多汗者忌用','根茎不规则块状，灰棕色，断面黄白色有橙黄色油点，气特异芳香',''],
+['厚朴','hou po','Magnolia Bark','川朴','化湿药','苦、辛，温；脾、胃、肺、大肠经','燥湿消痰，下气除满','湿滞伤中，脘痞吐泻，食积气滞，腹胀便秘，痰饮喘咳','3~10g','气虚、津伤及孕妇慎用','树皮卷筒状，灰棕色内面紫褐色，断面纤维性，气芳香，味辛微苦',''],
+['砂仁','sha ren','Amomum Fruit','春砂仁','化湿药','辛，温；脾、胃、肾经','化湿开胃，温脾止泻，理气安胎','湿浊中阻，脘痞不饥，脾胃虚寒，呕吐泄泻，妊娠恶阻','3~6g','阴虚血燥者慎用','果实椭圆形棕褐色有刺状突起，种子团分3瓣，气芳香，味辛微苦','fructus-amomi'],
+['豆蔻','dou kou','Cardamom','白豆蔻','化湿药','辛，温；肺、脾、胃经','化湿行气，温中止呕','湿浊中阻，不思饮食，湿温初起，胸闷不饥，寒湿呕逆','3~6g','阴虚血燥者忌用','果实类球形，黄白色有纵向棱线，种子棕褐色，气芳香，味辛',''],
+['茯苓','fu ling','Poria','云茯苓','利水渗湿药','甘、淡，平；心、肺、脾、肾经','利水渗湿，健脾，宁心','水肿尿少，痰饮眩悸，脾虚食少，便溏泄泻，心神不安，惊悸失眠','10~15g','虚寒精滑者忌服','菌核块状，外皮棕褐色，断面白色或淡红色粉性，气微味淡，嚼之粘牙','poris-cocos'],
+['薏苡仁','yi yi ren','Coix Seed','苡仁','利水渗湿药','甘、淡，凉；脾、胃、肺经','利水渗湿，健脾止泻，除痹，排脓，解毒散结','水肿，脚气，小便不利，脾虚泄泻，湿痹拘挛，肺痈，肠痈','9~30g','孕妇慎用；津液不足者慎用','种仁宽卵形乳白色，断面白色粉性，气微，味微甜','coix-seed'],
+['泽泻','ze xie','Alisma Rhizome','泽泻草','利水渗湿药','甘、淡，寒；肾、膀胱经','利水渗湿，泄热','水肿胀满，小便不利，淋浊，带下，痰饮眩晕，热淋','6~10g','肾虚精滑无湿热者忌服','块根类球形，黄白色，断面黄白色粉性有多数细孔，气微，味微苦',''],
+['车前子','che qian zi','Plantago Seed','车前实','利水渗湿药','甘，寒；肝、肾、肺、小肠经','清热利尿通淋，渗湿止泻，明目，祛痰','热淋涩痛，水肿胀满，暑湿泄泻，目赤肿痛，痰热咳嗽','9~15g','肾虚寒、精滑者忌服','种子细小椭圆形棕褐色，有细皱纹，遇水粘滑，气微，味微苦',''],
+['茵陈','yin chen','Artemisia Capillaris','绵茵陈','利水渗湿药','苦、辛，微寒；脾、胃、肝、胆经','清利湿热，利胆退黄','黄疸尿少，湿温暑温，湿疮瘙痒','6~15g','蓄血发黄及血虚萎黄者慎用','幼苗卷缩成团，灰白色密被白色绒毛，绵软如絮，气清香，味微苦',''],
+['金钱草','jin qian cao','Lysimachia','过路黄','利水渗湿药','甘、咸，微寒；肝、胆、肾、膀胱经','利湿退黄，利尿通淋，解毒消肿','湿热黄疸，胆胀胁痛，石淋，热淋，小便涩痛，痈肿疔疮','15~60g','无特殊禁忌','茎细长，叶对生宽卵形灰绿色，叶柄长，气微，味微苦',''],
+['虎杖','hu zhang','Polygonum Cuspidatum','虎杖根','利水渗湿药','微苦，微寒；肝、胆、肺经','利湿退黄，清热解毒，散瘀止痛，止咳化痰','湿热黄疸，淋浊带下，风湿痹痛，跌打损伤，肺热咳嗽','9~15g','孕妇慎用','根根茎圆柱形棕褐色，断面黄白色有放射状纹理，气微，味微苦涩',''],
+['附子','fu zi','Aconite Root','黑顺片','温里药','辛、甘，大热；心、肾、脾经','回阳救逆，补火助阳，散寒止痛','亡阳虚脱，肢冷脉微，心阳不足，肾阳虚衰，寒湿痹痛','3~15g','有毒！须先煎久煎；孕妇及阴虚阳盛者忌用','加工品黑褐色有光泽，断面角质样半透明，气微，味淡麻舌',''],
+['干姜','gan jiang','Dried Ginger','干生姜','温里药','辛，热；脾、胃、肾、心、肺经','温中散寒，回阳通脉，温肺化饮','脘腹冷痛，呕吐泄泻，肢冷脉微，寒饮喘咳','3~10g','阴虚内热、血热妄行者忌用','根茎扁平块状灰黄色，断面黄白色纤维状，气特异，味辛辣',''],
+['肉桂','rou gui','Cinnamon Bark','桂皮','温里药','辛、甘，大热；肾、脾、心、肝经','补火助阳，散寒止痛，温通经脉，引火归元','阳痿宫冷，腰膝冷痛，肾虚作喘，寒疝腹痛，痛经经闭','1~5g','阴虚火旺、里有实热、血热妄行及孕妇忌用','树皮卷筒状红棕色，内面红褐色，断面颗粒状，气芳香，味甘辛',''],
+['吴茱萸','wu zhu yu','Evodia Fruit','吴萸','温里药','辛、苦，热；肝、脾、胃、肾经','散寒止痛，降逆止呕，助阳止泻','厥阴头痛，寒疝腹痛，寒湿脚气，经行腹痛，呕吐吞酸，五更泄泻','2~5g','有小毒；阴虚火旺者忌用','果实类球形，暗黄绿色至褐色，表面粗糙有凹点，气芳香浓烈，味辛辣苦',''],
+['小茴香','xiao hui xiang','Fennel Fruit','茴香籽','温里药','辛，温；肝、肾、脾、胃经','散寒止痛，理气和胃','寒疝腹痛，睾丸偏坠，痛经，少腹冷痛，脘腹胀痛，食少吐泻','3~6g','阴虚火旺者慎用','双悬果细圆柱形黄绿色，有纵向棱线，气芳香特异，味微甜辛',''],
+['丁香','ding xiang','Clove','公丁香','温里药','辛，温；脾、胃、肺、肾经','温中降逆，补肾助阳','脾胃虚寒，呃逆呕吐，食少吐泻，心腹冷痛，肾虚阳痿','1~3g','不宜与郁金同用；热证及阴虚内热者忌用','花蕾棒状红棕色至棕褐色，花瓣包裹，气芳香浓烈，味辛辣麻舌',''],
+['八角茴香','ba jiao hui xiang','Star Anise','大料','温里药','辛、甘，温；肝、肾、脾、胃经','温阳散寒，理气止痛','寒疝腹痛，肾虚腰痛，胃寒呕吐，脘腹冷痛','3~6g','阴虚火旺者慎用','聚合果放射状排成八角，红棕色，每角含种子1粒，气芳香，味甘辛','star-anise'],
+['陈皮','chen pi','Tangerine Peel','橘皮','理气药','辛、苦，温；脾、肺经','理气健脾，燥湿化痰','脘腹胀满，食少吐泻，咳嗽痰多','3~10g','气虚、阴虚燥咳者慎用','果皮不规则片状橙红色，有凹点油室，气芳香，味辛微苦',''],
+['枳实','zhi shi','Bitter Orange Fruit','江枳实','理气药','苦、辛、酸，微寒；脾、胃经','破气消积，化痰散痞','积滞内停，痞满胀痛，泻痢后重，大便不通，痰滞气阻，胸痹','3~10g','脾胃虚弱及孕妇慎用','果实半球形，外果皮黑绿色，切面黄白色，瓤囊棕褐色，气清香，味苦微酸',''],
+['木香','mu xiang','Aucklandia Root','广木香','理气药','辛、苦，温；脾、胃、肝、大肠经','行气止痛，健脾消食','胸胁胀痛，脘腹胀痛，泻痢后重，食积不消，不思饮食','3~6g','阴虚津液不足者慎用','根圆柱形黄棕色，断面黄白色有放射状纹理及油点，气芳香，味微苦',''],
+['香附','xiang fu','Cyperus Rhizome','莎草根','理气药','辛、微苦、微甘，平；肝、脾、三焦经','疏肝解郁，理气宽中，调经止痛','肝郁气滞，胸胁胀痛，疝气疼痛，乳房胀痛，月经不调，经闭痛经','6~10g','气虚无滞、阴虚血热者忌服','根茎纺锤形棕褐色有环节，断面黄棕色，气芳香，味微苦',''],
+['川楝子','chuan lian zi','Toosendan Fruit','金铃子','理气药','苦，寒；有小毒；肝、小肠、膀胱经','疏肝泄热，行气止痛，杀虫','肝郁化火，胸胁胀痛，疝气疼痛，脘腹胀痛，虫积腹痛','5~10g','有小毒，不宜过量久服；脾胃虚寒者慎用','果实类球形金黄色至棕黄色有光泽，表面凹点，气微，味酸苦',''],
+['山楂','shan zha','Hawthorn Fruit','红果','消食药','酸、甘，微温；脾、胃、肝经','消食健胃，行气散瘀，化浊降脂','肉食积滞，胃脘胀满，泻痢腹痛，瘀血经闭，高脂血症','9~12g','脾胃虚弱无积滞者慎用；孕妇慎用','果实球形红色有黄色斑点，果肉黄白色，气微清香，味酸微甜',''],
+['麦芽','mai ya','Malt','大麦芽','消食药','甘，平；脾、胃经','行气消食，健脾开胃，回乳消胀','食积不消，脘腹胀痛，脾虚食少，乳汁郁积，妇女断乳','10~15g','哺乳期妇女慎用（回乳）','果实细长纺锤形淡黄色，断面黄色，气微，味微甜',''],
+['莱菔子','lai fu zi','Radish Seed','萝卜籽','消食药','辛、甘，平；肺、脾、胃经','消食除胀，降气化痰','饮食停滞，脘腹胀痛，大便秘结，积滞泻痢，痰壅喘咳','9~12g','气虚及无食积、痰滞者慎用','种子类卵形红棕色，有细网纹，气微，味微辛微苦',''],
+['鸡内金','ji nei jin','Chicken Gizzard Lining','鸡肫皮','消食药','甘，平；脾、胃、小肠、膀胱经','健胃消食，涩精止遗，通淋化石','食积不消，呕吐泻痢，小儿疳积，遗尿，遗精，石淋涩痛，胆胀胁痛','3~10g','脾虚无积滞者慎用','内壁黄色或黄绿色，有不规则皱纹，质脆断面角质样，气微，味微涩',''],
+['三七','san qi','Notoginseng Root','田七','止血药','甘、微苦，温；肝、胃经','散瘀止血，消肿定痛','咯血，吐血，衄血，便血，崩漏，外伤出血，胸腹刺痛，跌扑肿痛','3~9g','孕妇慎用；血虚无瘀者忌用','根类圆锥形灰黄色，断面灰绿色有放射状纹理，气微，味微苦回甜',''],
+['地榆','di yu','Sanguisorba Root','地榆炭','止血药','苦、酸、涩，微寒；肝、大肠经','凉血止血，解毒敛疮','便血，痔血，血痢，崩漏，水火烫伤，痈肿疮毒','9~15g','虚寒性便血、下痢及孕妇慎用','根不规则纺锤形棕褐色，断面黄白色有放射状纹理，气微，味微苦涩',''],
+['白茅根','bai mao gen','Imperata Rhizome','茅根','止血药','甘，寒；肺、胃、小肠经','凉血止血，清热利尿','血热吐血，衄血，尿血，便血，崩漏，热病烦渴，黄疸，水肿','9~30g','脾胃虚寒、溲多不渴者忌服','根茎细长圆柱形黄白色有节，节间中空，气微，味微甜',''],
+['艾叶','ai ye','Mugwort Leaf','艾草','止血药','辛、苦，温；肝、脾、肾经','温经止血，散寒止痛；外用祛湿止痒','吐血，衄血，崩漏，月经过多，胎漏下血，少腹冷痛；外治皮肤瘙痒','3~10g','阴虚血热者慎用','叶片皱缩灰绿色密被白色绒毛，边缘锯齿，气芳香，味苦辛',''],
+['川芎','chuan xiong','Chuanxiong Rhizome','芎藭','活血化瘀药','辛，温；肝、胆、心包经','活血行气，祛风止痛','胸痹心痛，经闭痛经，月经不调，跌扑肿痛，头痛，风湿痹痛','3~10g','阴虚火旺、月经过多及有出血倾向者慎用','根茎不规则结节状黄褐色，断面有波状环纹，气浓香，味苦辛',''],
+['丹参','dan shen','Salvia Root','紫丹参','活血化瘀药','苦，微寒；心、肝经','活血祛瘀，通经止痛，清心除烦，凉血消痈','胸痹心痛，脘腹胁痛，癥瘕积聚，热痹疼痛，心烦不眠，疮疡肿痛','10~15g','无瘀血者慎用；不宜与藜芦同用','根圆柱形棕红色，断面黄白色有放射状纹理，气微，味微苦涩',''],
+['红花','hong hua','Safflower','草红花','活血化瘀药','辛，温；心、肝经','活血通经，散瘀止痛','经闭，痛经，恶露不行，癥瘕痞块，胸痹心痛，瘀滞腹痛，跌扑损伤','3~10g','孕妇忌用；有出血倾向者慎用','花冠橙红色管状细长，质柔软，气微香，味微苦',''],
+['桃仁','tao ren','Peach Kernel','山桃仁','活血化瘀药','苦、甘，平；心、肝、大肠经','活血祛瘀，润肠通便，止咳平喘','经闭痛经，癥瘕痞块，肺痈肠痈，跌扑损伤，肠燥便秘，咳嗽气喘','5~10g','孕妇忌用；便溏者慎用','种子扁卵形黄棕色，有纵脉纹，一端尖一端钝圆，气微，味微苦',''],
+['益母草','yi mu cao','Motherwort','益母蒿','活血化瘀药','苦、辛，微寒；肝、心包、膀胱经','活血调经，利尿消肿，清热解毒','月经不调，痛经经闭，恶露不尽，水肿尿少，疮疡肿毒','9~30g','孕妇慎用；阴虚血少者忌用','茎方形灰绿色，叶掌状分裂，轮伞花序腋生，气微，味微苦',''],
+['牛膝','niu xi','Achyranthes Root','怀牛膝','活血化瘀药','苦、甘、酸，平；肝、肾经','逐瘀通经，补肝肾，强筋骨，利尿通淋，引血下行','经闭痛经，癥瘕，腰膝酸痛，筋骨无力，淋证，水肿，头痛眩晕，吐血衄血','5~12g','孕妇及月经过多者忌用','根细长圆柱形灰黄色，断面黄白色有同心环纹，气微，味微甜微苦',''],
+['半夏','ban xia','Pinellia Rhizome','法半夏','化痰止咳平喘药','辛，温；有毒；脾、胃、肺经','燥湿化痰，降逆止呕，消痞散结','湿痰寒痰，咳喘痰多，痰饮眩悸，风痰眩晕，呕吐反胃，胸脘痞闷','3~10g','有毒，生品内服宜慎；不宜与乌头类同用','块茎类球形灰白色，顶端有凹陷茎痕，周围有麻点须根痕，味辛辣麻舌',''],
+['桔梗','jie geng','Platycodon Root','苦桔梗','化痰止咳平喘药','苦、辛，平；肺经','宣肺，利咽，祛痰，排脓','咳嗽痰多，胸闷不畅，咽痛音哑，肺痈吐脓','3~10g','用量过大易致恶心呕吐；阴虚久咳、咯血者忌用','根圆柱形淡黄白色，断面有放射状裂隙，气微，味微苦后甜',''],
+['川贝母','chuan bei mu','Fritillaria Cirrhosa','川贝','化痰止咳平喘药','苦、甘，微寒；肺、心经','清热润肺，化痰止咳，散结消肿','肺热燥咳，干咳少痰，阴虚劳嗽，咯痰带血，瘰疬，乳痈','3~10g','不宜与乌头类同用；寒痰、湿痰者慎用','鳞茎圆锥形类白色，外层鳞叶2瓣大小悬殊，断面白色粉性，气微，味微苦','unibract-fritillary-bulb'],
+['浙贝母','zhe bei mu','Fritillaria Thunbergii','象贝','化痰止咳平喘药','苦，寒；肺、心经','清热化痰止咳，解毒散结消痈','风热或痰热咳嗽，咽喉肿痛，瘰疬，瘿瘤，疮毒，乳痈','5~10g','不宜与乌头类同用；脾胃虚寒及寒痰者慎用','鳞茎扁球形类白色，外层鳞叶2瓣大小相近，断面白色，气微，味微苦',''],
+['瓜蒌','gua lou','Trichosanthes Fruit','栝楼','化痰止咳平喘药','甘、微苦，寒；肺、胃、大肠经','清热涤痰，宽胸散结，润燥滑肠','痰热咳嗽，胸痹心痛，结胸痞满，乳痈，肺痈，肠痈，大便秘结','9~15g','脾胃虚寒、大便不实者忌用','果实类球形橙黄色至橙红色，有细皱纹，果皮厚，气微，味微酸苦',''],
+['苦杏仁','ku xing ren','Apricot Kernel','杏仁','化痰止咳平喘药','苦，微温；有小毒；肺、大肠经','降气止咳平喘，润肠通便','咳嗽气喘，胸满痰多，血虚津枯，肠燥便秘','5~10g','有小毒，不宜过量；婴儿慎用','种子扁心形黄褐色，一端尖一端钝圆，气微香，味苦',''],
+['紫菀','zi wan','Aster Root','青菀','化痰止咳平喘药','辛、苦，温；肺经','润肺下气，消痰止咳','痰多喘咳，新久咳嗽，劳嗽咳血','5~10g','有实热者忌用','根茎不规则块状紫褐色，簇生多数细根，表面紫红色，气微香，味微苦',''],
+['枇杷叶','pi pa ye','Loquat Leaf','杷叶','化痰止咳平喘药','苦，微寒；肺、胃经','清肺止咳，降逆止呕','肺热咳嗽，气逆喘急，胃热呕逆，烦热口渴','6~10g','须刷去毛；肺寒咳嗽者忌用','叶片长椭圆形灰绿色，边缘锯齿，下表面密被黄色绒毛，革质，味微苦',''],
+['罗汉果','luo han guo','Monk Fruit','甜果','化痰止咳平喘药','甘，凉；肺、大肠经','清热润肺，利咽开音，滑肠通便','肺热燥咳，咽痛失音，肠燥便秘','9~15g','夜尿多、脾虚便溏者慎用','果实球形或椭圆形黄褐色，有纵棱及细绒毛，质轻脆，气微，味极甜','siraitia-grosvenorii'],
+['酸枣仁','suan zao ren','Jujube Seed','枣仁','安神药','甘、酸，平；肝、胆、心经','养心补肝，宁心安神，敛汗，生津','虚烦不眠，惊悸多梦，体虚多汗，津伤口渴','10~15g','有实邪郁火者慎用','种子扁圆形紫褐色有光泽，断面黄白色，气微，味微苦',''],
+['远志','yuan zhi','Polygala Root','远志筒','安神药','苦、辛，温；心、肾、肺经','安神益智，交通心肾，祛痰，消肿','心肾不交引起的失眠多梦，健忘惊悸，神志恍惚，咳痰不爽，疮疡肿毒','3~10g','心火亢盛、阴虚火旺者忌用','根圆柱形灰黄色有横皱纹，断面黄白色，气微，味苦微辛刺喉',''],
+['龙骨','long gu','Fossil Bone','煅龙骨','安神药','甘、涩，平；心、肝、肾经','镇惊安神，平肝潜阳，收敛固涩','心神不宁，心悸失眠，惊癫狂躁，肝阳上亢，自汗盗汗，遗精崩漏','15~30g','湿热积滞者不宜','骨骼化石，灰白色表面粗糙，断面不平坦，吸湿力强，气微，味淡',''],
+['合欢皮','he huan pi','Albizia Bark','夜合皮','安神药','甘，平；心、肝、肺经','解郁安神，活血消肿','心神不宁，愤怒忧郁，烦躁失眠，跌打损伤，疮痈肿毒','6~12g','孕妇慎用','树皮卷筒状灰褐色，有细皱纹及皮孔，断面纤维性，气微香，味微涩',''],
+['天麻','tian ma','Gastrodia Rhizome','赤箭','平肝息风药','甘，平；肝经','息风止痉，平抑肝阳，祛风通络','小儿惊风，癫痫抽搐，破伤风，肝阳上亢，头痛眩晕，手足不遂，风湿痹痛','3~10g','气血虚甚者慎用','块茎椭圆形灰黄色，有环纹及点状须根痕，顶端有芽痕，断面角质样，气微，味甘',''],
+['钩藤','gou teng','Uncaria Stem','双钩藤','平肝息风药','甘，凉；肝、心包经','息风定惊，清热平肝','肝风内动，惊痫抽搐，高热惊厥，妊娠子痫，头痛眩晕','3~12g','后下；脾胃虚寒者慎用','茎枝圆柱形红棕色，有对生或单生弯钩，钩端尖，表面光滑，气微，味微苦',''],
+['地龙','di long','Earthworm','蚯蚓','平肝息风药','咸，寒；肝、脾、膀胱经','清热定惊，通络，平喘，利尿','高热神昏，惊痫抽搐，关节痹痛，半身不遂，肺热喘咳，水肿尿少','5~10g','脾胃虚寒者慎用','虫体长条形灰褐色有环节，质脆断面黄白色，气腥，味微咸',''],
+['全蝎','quan xie','Scorpion','蝎子','平肝息风药','辛，平；有毒；肝经','息风镇痉，通络止痛，攻毒散结','肝风内动，痉挛抽搐，小儿惊风，中风口㖞，半身不遂，破伤风，疮疡肿毒','3~6g','有毒；孕妇及血虚生风者慎用','虫体扁平，头胸部与前腹部扁平长椭圆形，后腹部尾状，黄棕色，有10足，气微腥，味微咸',''],
+['石决明','shi jue ming','Abalone Shell','鲍鱼壳','平肝息风药','咸，寒；肝经','平肝潜阳，清肝明目','肝阳上亢，头痛眩晕，目赤翳障，视物昏花','6~20g','脾胃虚寒者慎用','贝壳椭圆形灰褐色，内壁有珍珠样光泽，质坚硬，气微，味微咸',''],
+['冰片','bing pian','Borneol','龙脑','开窍药','辛、苦，微寒；心、脾、肺经','开窍醒神，清热止痛','热病神昏，惊厥，中风痰厥，中恶昏迷，目赤，口疮，咽喉肿痛','0.15~0.3g','孕妇慎用；气血虚者忌用','无色透明或白色半透明片状结晶，气芳香，味辛凉',''],
+['人参','ren shen','Ginseng','生晒参','补虚药','甘、微苦，微温；脾、肺、心、肾经','大补元气，复脉固脱，补脾益肺，生津养血，安神益智','体虚欲脱，肢冷脉微，脾虚食少，肺虚喘咳，津伤口渴，气血亏虚，心悸失眠','3~9g','不宜与藜芦、五灵脂同用；实证热证忌用','根纺锤形灰黄色，有疏浅断续横纹，断面黄白色，气微香，味微苦甘',''],
+['党参','dang shen','Codonopsis Root','潞党参','补虚药','甘，平；脾、肺经','健脾益肺，养血生津','脾肺气虚，食少倦怠，咳嗽虚喘，气血不足，心悸气短，津伤口渴','9~30g','不宜与藜芦同用；实热证不宜','根长圆柱形灰黄色，顶端有芦头，断面黄白色有裂隙，气微香，味微甜',''],
+['黄芪','huang qi','Astragalus Root','北芪','补虚药','甘，微温；脾、肺经','补气升阳，固表止汗，利水消肿，生津养血，行滞通痹，托毒排脓，敛疮生肌','气虚乏力，食少便溏，中气下陷，表虚自汗，气虚水肿，气血两虚，久溃不敛','9~30g','表实邪盛、气滞湿阻、阴虚阳亢者忌用','根圆柱形淡棕黄色，断面黄白色纤维性呈菊花心，气微，味微甜',''],
+['白术','bai zhu','Atractylodes Macrocephala','于术','补虚药','苦、甘，温；脾、胃经','健脾益气，燥湿利水，止汗，安胎','脾虚食少，腹胀泄泻，痰饮眩悸，水肿，自汗，胎动不安','6~12g','阴虚燥渴、气滞胀满者忌用','根茎不规则肥厚块状灰黄色，断面黄白色有棕黄色油点，气清香，味微苦甘','rhizoma-atractylodis-macrocephalae'],
+['山药','shan yao','Chinese Yam','怀山药','补虚药','甘，平；脾、肺、肾经','补脾养胃，生津益肺，补肾涩精','脾虚食少，久泻不止，肺虚喘咳，肾虚遗精，带下，尿频，虚热消渴','15~30g','湿盛中满或有积滞者忌用','根茎圆柱形淡黄色，断面白色粉性，气微，味微甘，嚼之发黏',''],
+['甘草','gan cao','Licorice Root / Liquorice','国老','补虚药','甘，平；心、肺、脾、胃经','补脾益气，清热解毒，祛痰止咳，缓急止痛，调和诸药','脾胃虚弱，倦怠乏力，心悸气短，咳嗽痰多，脘腹四肢挛急疼痛，痈肿疮毒','2~10g','不宜与海藻、京大戟、甘遂、芫花同用；长期大量致水肿、血压升高','根圆柱形红棕色，断面黄白色纤维性有菊花心，气微，味甜','liquorice'],
+['当归','dang gui','Chinese Angelica','岷归','补虚药','甘、辛，温；肝、心、脾经','补血活血，调经止痛，润肠通便','血虚萎黄，眩晕心悸，月经不调，经闭痛经，虚寒腹痛，风湿痹痛，肠燥便秘','6~12g','湿盛中满、大便泄泻者忌用','根圆柱形黄棕色，断面黄白色有棕褐色油点，气浓香，味甘辛微苦',''],
+['熟地黄','shu di huang','Prepared Rehmannia','熟地','补虚药','甘，微温；肝、肾经','补血滋阴，益精填髓','血虚萎黄，心悸怔忡，月经不调，崩漏下血，肝肾阴虚，腰膝酸软，盗汗遗精，须发早白','9~15g','脾胃虚弱、气滞痰多、腹满食少者慎用','不规则块状乌黑色有光泽，质地柔软黏腻，气微，味甜',''],
+['白芍','bai shao','White Peony Root','杭白芍','补虚药','苦、酸，微寒；肝、脾经','养血调经，敛阴止汗，柔肝止痛，平抑肝阳','血虚萎黄，月经不调，自汗盗汗，胁痛，腹痛，四肢挛痛，头痛眩晕','6~15g','不宜与藜芦同用；虚寒之证不宜单独使用','根圆柱形灰白色，断面黄白色有放射状纹理，气微，味微苦酸',''],
+['阿胶','e jiao','Donkey Hide Gelatin','驴皮胶','补虚药','甘，平；肺、肝、肾经','补血滋阴，润燥，止血','血虚萎黄，眩晕心悸，肌痿无力，心烦不眠，虚风内动，肺燥咳嗽，吐血崩漏','3~9g','脾胃虚弱、消化不良者慎用','长方形块状黑褐色有光泽，质硬脆，断面光亮，气微，味微甘',''],
+['何首乌','he shou wu','Fo-ti','制首乌','补虚药','苦、甘、涩，微温；肝、心、肾经','制用补肝肾益精血乌须发强筋骨；生用解毒截疟润肠通便','血虚萎黄，眩晕耳鸣，须发早白，腰膝酸软，崩漏带下，疟疾，肠燥便秘','6~12g','生首乌有肝毒性须炮制后用；不宜与瓜蒌同用','块根纺锤形红棕色，断面有云锦花纹，气微，味微苦甘涩',''],
+['麦冬','mai dong','Ophiopogon Root','麦门冬','补虚药','甘、微苦，微寒；心、肺、胃经','养阴润肺，益胃生津，清心除烦','肺燥干咳，阴虚痨嗽，喉痹咽痛，津伤口渴，内热消渴，心烦失眠，肠燥便秘','6~12g','脾胃虚寒、大便溏稀者慎用','块根纺锤形黄白色，断面角质样，气微香，味微甜',''],
+['百合','bai he','Lily Bulb','百合干','补虚药','甘，寒；心、肺经','养阴润肺，清心安神','阴虚燥咳，劳嗽咳血，虚烦惊悸，失眠多梦，精神恍惚','6~12g','风寒咳嗽、中寒便溏者忌用','鳞叶长椭圆形类白色，边缘微波状，质硬脆断面角质样，气微，味微苦','lily'],
+['枸杞子','gou qi zi','Goji Berry','宁夏枸杞','补虚药','甘，平；肝、肾、肺经','滋补肝肾，益精明目','虚劳精亏，腰膝酸痛，眩晕耳鸣，阳痿遗精，内热消渴，血虚萎黄，目昏不明','6~12g','外邪实热、脾虚湿滞及肠滑便溏者不宜','果实椭圆形红色，表面有细皱纹，肉质柔软，气微，味甜微酸',''],
+['女贞子','nv zhen zi','Glossy Privet Fruit','冬青子','补虚药','甘、苦，凉；肝、肾经','滋补肝肾，明目','肝肾阴虚，腰膝酸软，头晕目眩，耳鸣，须发早白，目暗不明','6~12g','脾胃虚寒、泄泻者忌用','果实肾形或卵形黑紫色，表面皱缩，体轻，气微，味微苦涩',''],
+['杜仲','du zhong','Eucommia Bark','川杜仲','补虚药','甘，温；肝、肾经','补肝肾，强筋骨，安胎','肝肾不足，腰膝酸痛，筋骨无力，头晕目眩，妊娠漏血，胎动不安','6~10g','阴虚火旺者慎用','树皮板状灰褐色，内面暗紫色，断面有白色胶丝相连，气微，味微苦',''],
+['续断','xu duan','Dipsacus Root','川续断','补虚药','苦、辛，微温；肝、肾经','补肝肾，强筋骨，续折伤，止崩漏','肝肾不足，腰膝酸软，风湿痹痛，跌扑损伤，筋伤骨折，崩漏，胎漏','9~15g','风湿热痹者慎用','根圆柱形灰褐色，断面黄白色有放射状纹理，气微香，味微苦涩',''],
+['肉苁蓉','rou cong rong','Cistanche','大芸','补虚药','甘、咸，温；肾、大肠经','补肾阳，益精血，润肠通便','肾阳不足，精血亏虚，阳痿不孕，腰膝酸软，筋骨无力，肠燥便秘','6~10g','阴虚火旺、大便泄泻者忌用','茎肉质长圆柱形棕褐色，断面有淡棕色点状维管束，气微，味微甜微苦',''],
+['淫羊藿','yin yang huo','Epimedium','仙灵脾','补虚药','辛、甘，温；肝、肾经','补肾阳，强筋骨，祛风湿','肾阳虚衰，阳痿遗精，筋骨痿软，风湿痹痛，麻木拘挛','6~10g','阴虚火旺者忌用','叶片卵形黄绿色，边缘有细刺齿，叶脉明显，气微，味微苦',''],
+['冬虫夏草','dong chong xia cao','Cordyceps','虫草','补虚药','甘，平；肺、肾经','补肾益肺，止血化痰','肾虚精亏，腰膝酸痛，久咳虚喘，劳嗽咯血','3~9g','有表邪者慎用','虫体似蚕深黄色，有环纹20~30个，头部红棕色，子座细长圆柱形棕褐色，气微腥，味微苦','cordyceps-sinensis'],
+['灵芝','ling zhi','Ganoderma','赤芝','补虚药','甘，平；心、肺、肝、肾经','补气安神，止咳平喘','心神不宁，失眠心悸，肺虚咳喘，虚劳短气，不思饮食','6~12g','实证、外感者慎用','子实体伞形，菌盖半圆形红褐色有漆样光泽，边缘薄，菌柄侧生，气微香，味微苦涩','glossy-ganoderma'],
+['银耳','yin er','Tremella','白木耳','补虚药','甘、淡，平；肺、胃、肾经','滋阴润肺，养胃生津','虚劳咳嗽，津少口渴，病后体虚','6~12g','风寒咳嗽、湿痰多者不宜','子实体瓣状白色或淡黄色，半透明胶质，气微，味微甘','tremella'],
+['大枣','da zao','Jujube','红枣','补虚药','甘，温；脾、胃、心经','补中益气，养血安神','脾虚食少，乏力便溏，妇人脏躁','6~15g','湿盛中满、食积、齿病、虫病者不宜','果实椭圆形红棕色，表面有细皱纹，果肉棕黄色质柔软，气微香，味甜','red-dates'],
+['白扁豆','bai bian dou','Hyacinth Bean','扁豆','补虚药','甘，微温；脾、胃经','健脾化湿，和中消暑','脾胃虚弱，食欲不振，大便溏泻，白带过多，暑湿吐泻','9~15g','无特殊禁忌','种子扁卵形黄白色，边缘有隆起白色半月形种阜，气微，味微甘','semen-dolichos'],
+['草果','cao guo','Amomum Tsaoko','草果仁','化湿药','辛，温；脾、胃经','燥湿温中，截疟除痰','寒湿内阻，脘腹胀痛，痞满呕吐，疟疾寒热','3~6g','阴虚血燥者慎用','果实长椭圆形红棕色，有纵棱及突起，顶端有宿存花柱残基，气特异，味辛辣','amomum-tsaoko'],
+['赤小豆','chi xiao dou','Adzuki Bean','红豆','利水渗湿药','甘、酸，平；心、小肠经','利水消肿，解毒排脓','水肿胀满，脚气肢肿，黄疸尿赤，风湿热痹，痈肿疮毒，肠痈腹痛','9~30g','津液亏损者慎用','种子长圆形暗红色，有细皱纹，一端钝圆一端稍尖，气微，味微甘','phaseolus-calcaratus'],
+['大黄','da huang','Rhubarb','川军','泻下药','苦，寒；脾、胃、大肠、肝、心包经','泻下攻积，清热泻火，凉血解毒，逐瘀通经，利湿退黄','实热积滞便秘，血热吐衄，目赤咽肿，热毒疮疡，瘀血经闭，湿热黄疸','3~15g','生用泻下力强；孕妇及脾胃虚弱者慎用','根根茎圆柱形黄棕色，断面黄白色有放射状纹理及星点，气微香，味苦微涩','rhubarb'],
+['胖大海','pang da hai','Sterculia Seed','大海子','清热药','甘，寒；肺、大肠经','清热润肺，利咽开音，润肠通便','肺热声哑，干咳无痰，咽喉干痛，热结便闭，头痛目赤','2~3枚','脾胃虚寒、便溏者不宜','种子椭圆形棕褐色有细皱纹，遇水膨胀成海绵状，气微，味微甘淡','scaphium-scaphigerum'],
+['莲子','lian zi','Lotus Seed','莲肉','收涩药','甘、涩，平；脾、肾、心经','补脾止泻，止带，益肾涩精，养心安神','脾虚泄泻，带下，遗精，心悸失眠','6~15g','中满痞胀及大便燥结者忌服','种子椭圆形淡黄棕色，一端凹陷，断面白色粉性，气微，味微甘涩','lotus-seed'],
+['五味子','wu wei zi','Schisandra Fruit','北五味','收涩药','酸、甘，温；肺、心、肾经','收敛固涩，益气生津，补肾宁心','久咳虚喘，梦遗滑精，遗尿尿频，久泻不止，自汗盗汗，津伤口渴，心悸失眠','3~6g','外有表邪、内有实热或咳嗽初起者忌用','果实类球形红色至紫红色，表面皱缩，果肉柔软，气微香，味酸微苦',''],
+['乌梅','wu mei','Mume Fruit','酸梅','收涩药','酸、涩，平；肝、脾、肺、大肠经','敛肺止咳，涩肠止泻，生津止渴，安蛔止痛','肺虚久咳，久泻久痢，虚热消渴，蛔厥呕吐腹痛','6~12g','外有表邪或内有实热积滞者不宜','果实类球形乌黑色，表面皱缩，质硬，气微，味极酸',''],
+['山茱萸','shan zhu yu','Cornus Fruit','萸肉','收涩药','酸、涩，微温；肝、肾经','补益肝肾，收涩固脱','眩晕耳鸣，腰膝酸痛，阳痿遗精，遗尿尿频，崩漏带下，大汗虚脱，内热消渴','6~12g','命门火炽、素有湿热及小便不利者不宜','果实椭圆形红色至紫红色有光泽，果肉柔软，气微，味酸涩微苦',''],
+['芡实','qian shi','Euryale Seed','鸡头米','收涩药','甘、涩，平；脾、肾经','益肾固精，补脾止泻，除湿止带','遗精滑精，遗尿尿频，脾虚久泻，白浊，带下','9~15g','便秘及消化不良者慎用','种子类球形乳白色，断面白色粉性，气微，味微甘涩',''],
+['金樱子','jin ying zi','Cherokee Rose Fruit','糖罐子','收涩药','酸、甘、涩，平；肾、膀胱、大肠经','固精缩尿，涩肠止泻，固崩止带','遗精滑精，遗尿尿频，久泻久痢，崩漏带下','6~12g','有实火、邪热者忌用','果实倒卵形红棕色，表面有细密针刺痕，顶端宿存花萼，气微，味微酸涩',''],
+['香薷','xiang ru','Mosla Herb','香薷草','解表药','辛，微温；肺、胃经','发汗解表，化湿和中，利水消肿','夏月感冒，恶寒发热，头痛无汗，呕吐腹泻，水肿','3~10g','表虚有汗、阴虚火旺者忌用','茎方形，紫褐色，叶卵形有锯齿，穗状花序，气芳香，味辛微苦',''],
+['羌活','qiang huo','Notopterygium Root','羌青','解表药','辛、苦，温；膀胱、肾经','解表散寒，祛风除湿，止痛','风寒感冒，头痛项强，风湿痹痛，肩背痛','3~10g','血虚头痛、阴虚火旺者忌用','根茎不规则圆柱形，棕褐色，断面黄白色有放射状纹理及油点，气特异，味微苦辛',''],
+['蔓荆子','man jing zi','Vitex Fruit','蔓荆实','解表药','辛、苦，微寒；膀胱、肝、胃经','疏散风热，清利头目','风热感冒头痛，齿龈肿痛，目赤多泪，目暗不明','5~10g','血虚有火之头痛目眩及胃虚者慎用','果实球形，灰黑色，有细纵沟及宿存花萼，气微香，味微苦',''],
+['淡豆豉','dan dou chi','Fermented Soybean','香豉','解表药','苦、辛、凉；肺、胃经','解表，除烦，宣发郁热','感冒，寒热头痛，烦躁胸闷，虚烦不眠','6~12g','无特殊禁忌','种子椭圆形，黑色，表面皱缩，有黄白色膜状胚乳，气微香，味微苦',''],
+['浮萍','fu ping','Duckweed','紫背浮萍','解表药','辛，寒；肺、膀胱经','宣散风热，透疹，利尿','麻疹不透，风疹瘙痒，水肿尿少','3~10g','表虚自汗者忌用','叶状体扁平，卵形或圆形，表面绿色或紫褐色，背面紫色，质轻，气微，味微苦',''],
+['木贼','mu ze','Equisetum','木贼草','解表药','甘、苦，平；肺、肝经','疏散风热，明目退翳','风热目赤，迎风流泪，目生云翳','3~10g','气血虚者慎用','茎长圆柱形，灰绿色，有纵棱及节，节上有鳞叶，断面中空，气微，味微苦',''],
+['竹叶','zhu ye','Bamboo Leaf','淡竹叶','清热药','甘、淡，寒；心、胃、小肠经','清热泻火，除烦，生津，利尿','热病烦渴，口舌生疮，小便短赤','6~15g','阴虚火旺、骨蒸潮热者不宜','叶片披针形，灰绿色，叶脉平行，质轻，气微，味微苦',''],
+['淡竹叶','dan zhu ye','Lophatherum Herb','竹叶草','清热药','甘、淡，寒；心、胃、小肠经','清热泻火，除烦止渴，利尿通淋','热病烦渴，口舌生疮，小便短赤涩痛','6~15g','孕妇及虚寒者慎用','茎叶干品，叶片长披针形，淡绿色，有纵向脉纹，气微，味微苦',''],
+['决明子','jue ming zi','Cassia Seed','草决明','清热药','甘、苦、咸，微寒；肝、大肠经','清热明目，润肠通便','目赤涩痛，羞明多泪，头痛眩晕，目暗不明，大便秘结','9~15g','气虚便溏者不宜','种子菱形，棕褐色，有光泽，一端尖一端截形，气微，味微苦',''],
+['青黛','qing dai','Indigo Naturalis','靛青','清热药','咸，寒；肝、心、肺经','清热解毒，凉血消斑，泻火定惊','温毒发斑，血热吐衄，胸痛咳血，口疮，痄腮，惊痫','1.5~3g','胃寒者慎用','深蓝色粉末，质轻，易飞扬，气微香，味微咸',''],
+['板蓝根','ban lan gen','Isatis Root','大青根','清热药','苦，寒；心、胃经','清热解毒，凉血利咽','温疫时毒，发热咽痛，温毒发斑，痄腮，烂喉丹痧，大头瘟疫','9~15g','脾胃虚寒、无实热毒者慎用','根圆柱形，灰黄色，断面黄白色，放射状纹理，气微，味微苦',''],
+['大青叶','da qing ye','Isatis Leaf','蓝靛叶','清热药','苦，寒；心、胃经','清热解毒，凉血消斑','温疫高热，神昏，发斑发疹，黄疸，热痢，痄腮，喉痹','9~15g','脾胃虚寒者慎用','叶片皱缩，暗灰绿色，全缘或微波状，气微，味微苦',''],
+['败酱草','bai jiang cao','Patrinia','败酱','清热药','辛、苦，微寒；胃、大肠、肝经','清热解毒，消痈排脓，祛瘀止痛','肠痈肺痈，痈肿疮毒，产后瘀阻腹痛','6~15g','脾胃虚弱及孕妇慎用','根茎圆柱形，黄褐色，茎叶灰绿色，搓之有陈腐豆酱气，味微苦',''],
+['紫花地丁','zi hua di ding','Viola Yedoensis','地丁草','清热药','苦、辛，寒；心、肝经','清热解毒，凉血消肿','疔疮肿毒，痈疽发背，丹毒，毒蛇咬伤','15~30g','阴疽漫肿无头者忌用','全草皱缩，根细长黄白色，叶基生心形，花紫色，气微，味微苦',''],
+['野菊花','ye ju hua','Wild Chrysanthemum','野菊','清热药','苦、辛，微寒；肝、心经','清热解毒，泻火平肝','疔疮痈肿，目赤肿痛，头痛眩晕，湿疹湿疮','9~15g','脾胃虚寒者慎用','头状花序类球形，黄色，花小而多，气芳香，味苦',''],
+['山慈菇','shan ci gu','Iphigenia Bulb','慈菇','清热药','甘、微辛，凉；肝、脾经','清热解毒，化痰散结','痈肿疔毒，瘰疬痰核，蛇虫咬伤，癥瘕痞块','3~9g','孕妇慎用','鳞茎类球形，灰黄色，顶端有茎痕，断面灰白色粉性，气微，味微苦',''],
+['白鲜皮','bai xian pi','Dictamnus Bark','山牡丹皮','清热药','苦，寒；脾、胃、膀胱经','清热燥湿，祛风解毒','湿热疮毒，黄水淋漓，湿疹，风疹，疥癣疮癞，风湿热痹','5~10g','脾胃虚寒者慎用','根皮卷筒状，灰白色，内面黄白色，断面层次明显，气微香，味微苦',''],
+['苦参','ku shen','Sophora Root','苦参根','清热药','苦，寒；脾、胃、大肠、膀胱、心、肝经','清热燥湿，杀虫，利尿','湿热泻痢，便血黄疸，阴肿阴痒，带下，湿疹湿疮，疥癣，小便不利','5~10g','不宜与藜芦同用；脾胃虚寒者忌用','根圆柱形，灰棕色，断面黄白色纤维性，气微，味极苦',''],
+['地骨皮','di gu pi','Wolfberry Bark','枸杞根皮','清热药','甘，寒；肺、肝、肾经','退虚热，凉血，清肺降火，生津','阴虚潮热，骨蒸盗汗，肺热咳嗽，咯血衄血，内热消渴','9~15g','外感风寒、脾虚便溏者忌用','根皮筒状，灰黄色，内面黄白色，断面不平坦，气微，味微苦',''],
+['白薇','bai wei','Cynanchum Root','薇草','清热药','苦、咸，寒；胃、肝、肾经','清热凉血，利尿通淋，解毒疗疮','温邪伤营发热，阴虚发热，骨蒸劳热，热淋，血淋，痈疽肿毒','5~10g','脾胃虚寒、食少便溏者忌用','根茎细短，簇生多数细根，黄棕色，断面黄白色，气微香，味微苦',''],
+['银柴胡','yin chai hu','Stellaria Root','银胡','清热药','甘，微寒；肝、胃经','退虚热，清疳热','阴虚发热，骨蒸劳热，小儿疳热','3~10g','外感发热及血虚无热者忌用','根圆柱形，淡黄棕色，有密集环纹（珍珠盘），断面黄白色，气微，味微苦',''],
+['胡黄连','hu huang lian','Picrorhiza Rhizome','胡连','清热药','苦，寒；肝、胃、大肠经','退虚热，清疳热，清湿热','骨蒸潮热，小儿疳热，湿热泻痢，黄疸','3~10g','脾胃虚弱者慎用','根茎圆柱形，灰棕色，有环节，断面灰黑色，气微，味极苦',''],
+['射干','she gan','Belamcanda Rhizome','乌扇','清热药','苦，寒；肺经','清热解毒，祛痰利咽，散结消肿','咽喉肿痛，痰多咳喘，瘰疬痰核，痈肿疮毒','6~10g','孕妇及脾胃虚寒者慎用','根茎不规则结节状，灰黄色，断面黄色放射状纹理，气微，味微苦',''],
+['山豆根','shan dou gen','Sophora Tonkinensis Root','广豆根','清热药','苦，寒；有毒；肺、胃经','清热解毒，利咽消肿','咽喉肿痛，齿龈肿痛，热毒疮肿','3~6g','有毒，不宜过量；脾胃虚寒者忌用','根圆柱形，棕褐色，断面皮部棕黄色，木部黄白色，气微，味极苦',''],
+['马勃','ma bo','Puffball','马粪包','清热药','辛，平；肺经','清热解毒，利咽，止血','咽喉肿痛，咳嗽失音，吐血衄血，外伤出血','2~6g','风寒咽痛及肺虚久咳者忌用','子实体类球形，灰褐色，外皮薄，内部黄褐色粉状，质轻，气微，味微苦',''],
+['白头翁','bai tou weng','Pulsatilla Root','白头公','清热药','苦，寒；胃、大肠经','清热解毒，凉血止痢','热毒血痢，阿米巴痢疾，疮疡肿毒','9~15g','虚寒泄痢者忌用','根圆柱形，棕褐色，顶端有白色绒毛，断面黄白色，气微，味微苦',''],
+['芒硝','mang xiao','Mirabilite','朴硝','泻下药','咸、苦，寒；胃、大肠经','泻下通便，润燥软坚，清火消肿','实热积滞，腹满胀痛，大便燥结，肠痈肿痛；外治乳痈','6~12g','孕妇及脾胃虚寒者忌用','无色透明或白色半透明结晶，棱柱状，质重，味咸苦，易风化',''],
+['番泻叶','fan xie ye','Senna Leaf','泻叶','泻下药','甘、苦，寒；大肠经','泻热行滞，通便，利水','热结积滞，便秘腹痛，水肿胀满','2~6g','孕妇及体虚者慎用；不宜长期服用','叶片长卵形，黄绿色，叶脉明显，气微香，味微苦',''],
+['火麻仁','huo ma ren','Hemp Seed','大麻仁','泻下药','甘，平；脾、胃、大肠经','润肠通便','血虚津亏，肠燥便秘','10~15g','便溏者慎用','种子卵圆形，灰绿色或灰黄色，有微细白色网纹，气微，味微甘',''],
+['郁李仁','yu li ren','Bush Cherry Kernel','郁李','泻下药','辛、苦、甘，平；脾、大肠、小肠经','润肠通便，下气利水','津枯肠燥，食积气滞，腹胀便秘，水肿，脚气','6~10g','孕妇慎用','种子卵形，黄棕色，表面有细密纵纹，一端钝圆一端尖，气微，味微苦',''],
+['甘遂','gan sui','Kansui Root','甘遂根','泻下药','苦，寒；有毒；肺、肾、大肠经','泻水逐饮，消肿散结','水肿胀满，胸腹积水，痰饮积聚，气逆喘咳，痈肿疮毒','0.5~1.5g','有毒；孕妇及体弱者忌用；不宜与甘草同用','根椭圆形或长圆柱形，灰白色，断面白色粉性，气微，味微甘后辛辣',''],
+['牵牛子','qian niu zi','Pharbitis Seed','黑丑','泻下药','苦，寒；有毒；肺、肾、大肠经','泻水通便，消痰涤饮，杀虫攻积','水肿胀满，二便不通，痰饮积聚，气逆喘咳，虫积腹痛','3~6g','有毒；孕妇及脾胃虚弱者忌用','种子类球形，黑色或黄白色（白丑），表面有细皱纹，气微，味微苦辛',''],
+['川乌','chuan wu','Aconite Root (Chuanwu)','乌头','祛风湿药','辛、苦，热；有大毒；心、肝、肾、脾经','祛风除湿，温经止痛','风寒湿痹，关节疼痛，心腹冷痛，寒疝作痛，跌打损伤','1.5~3g','有大毒！须炮制先煎久煎；孕妇忌用；不宜与半夏、瓜蒌、贝母同用','母根乌头形，灰褐色，断面灰白色，形成层环纹明显，气微，味辛辣麻舌',''],
+['蕲蛇','qi she','Agkistrodon','白花蛇','祛风湿药','甘、咸，温；有毒；肝经','祛风，通络，止痉','风湿顽痹，中风半身不遂，小儿惊风，抽搐痉挛，破伤风，麻风，疥癣','3~9g','有毒；孕妇及血虚生风者慎用','蛇体卷盘状，背部灰褐色，有菱形斑纹，腹部黄白色，气腥，味微咸',''],
+['乌梢蛇','wu shao she','Zaocys','乌蛇','祛风湿药','甘，平；肝经','祛风，通络，止痉','风湿顽痹，麻木拘挛，中风口眼㖞斜，半身不遂，抽搐痉挛，破伤风，麻风疥癣','6~12g','血虚生风者慎用','蛇体细长，背部灰褐色或黑褐色，有纵纹，腹部灰白色，气腥，味微甘',''],
+['伸筋草','shen jin cao','Clubmoss','石松草','祛风湿药','微苦、辛，温；肝、脾、肾经','祛风除湿，舒筋活络','关节酸痛，屈伸不利','3~12g','孕妇及出血过多者慎用','茎匍匐细长，黄绿色，叶密生螺旋状排列，孢子囊穗生于枝顶，气微，味微苦',''],
+['海风藤','hai feng teng','Kadsura Pepper Stem','风藤','祛风湿药','辛、苦，微温；肝经','祛风湿，通经络，止痛','风湿痹痛，关节不利，腰腿疼痛','6~12g','孕妇慎用','茎藤圆柱形，灰褐色，有纵沟及皮孔，断面皮部窄木部灰黄色，气芳香，味微苦辛',''],
+['五加皮','wu jia pi','Acanthopanax Bark','南五加皮','祛风湿药','辛、苦，温；肝、肾、脾经','祛风除湿，补益肝肾，强筋壮骨，利水消肿','风湿痹痛，筋骨痿软，小儿行迟，体虚乏力，水肿，脚气','5~10g','阴虚火旺者慎用','根皮卷筒状，灰褐色，内面黄白色，断面纤维性，有香气，味微苦辛',''],
+['桑枝','sang zhi','Mulberry Branch','桑树枝','祛风湿药','微苦，平；肝经','祛风湿，利关节','风湿痹痛，肩臂关节酸痛麻木','9~15g','无特殊禁忌','茎枝圆柱形，灰黄色，有细纵纹及皮孔，断面黄白色纤维性，气微，味微苦',''],
+['丝瓜络','si gua luo','Luffa Sponge','丝瓜筋','祛风湿药','甘，平；肺、胃、肝经','祛风通络，活血化痰','风湿痹痛，筋脉拘挛，胸胁疼痛，乳汁不通，咳嗽痰多','5~12g','无特殊禁忌','呈长圆筒形，黄白色，由多层丝状纤维交织而成，质轻，气微，味淡',''],
+['路路通','lu lu tong','Sweetgum Fruit','枫球','祛风湿药','苦，平；肝、肾经','祛风活络，利水通经','关节痹痛，麻木拘挛，水肿胀满，乳少，经闭','5~10g','孕妇及月经过多者慎用','果实类球形，灰棕色，有多数尖刺及喙状小钝刺，气微，味淡',''],
+['海桐皮','hai tong pi','Erythrina Bark','刺桐皮','祛风湿药','苦、辛，平；肝经','祛风湿，通络止痛','风湿痹痛，四肢拘挛，腰膝酸痛，疥癣湿疹','5~12g','血虚无风湿者慎用','树皮板状或卷筒状，灰褐色，有钉刺，断面纤维性，气微，味微苦',''],
+['佩兰','pei lan','Eupatorium','兰草','化湿药','辛，平；脾、胃、肺经','芳香化湿，醒脾开胃，发表解暑','湿浊中阻，脘痞呕恶，口中甜腻，口臭，多涎，暑湿表证','3~10g','阴虚、气虚及胃寒者慎用','茎圆柱形，黄褐色，叶皱缩灰绿色，边缘有锯齿，气芳香，味微苦',''],
+['草豆蔻','cao dou kou','Alpinia Katsumadae Seed','草蔻','化湿药','辛，温；脾、胃经','燥湿行气，温中止呕','寒湿内阻，脘腹胀满冷痛，嗳气呕逆，不思饮食','3~6g','阴虚血燥、津液不足者慎用','种子团类球形，灰褐色，被白色膜质假种皮，气芳香，味辛微苦',''],
+['猪苓','zhu ling','Polyporus','猪茯苓','利水渗湿药','甘、淡，平；肾、膀胱经','利水渗湿','水肿，小便不利，泄泻，淋浊，带下','6~15g','无水湿者忌服','菌核块状，外皮黑褐色，断面白色或黄白色，体轻，气微，味淡',''],
+['冬瓜皮','dong gua pi','Winter Melon Peel','冬瓜衣','利水渗湿药','甘，凉；脾、小肠经','利尿消肿','水肿胀满，小便不利，暑热口渴','15~30g','营养不良性水肿慎用','果皮卷筒状或不规则片状，灰绿色，表面有白霜，气微，味淡',''],
+['玉米须','yu mi xu','Corn Stigma','玉米花须','利水渗湿药','甘，平；膀胱、肝、胆经','利水消肿，利湿退黄','水肿，小便不利，湿热黄疸，胆胁痛','15~30g','无特殊禁忌','须状物，淡黄色至棕黄色，细长柔软，气微，味淡',''],
+['通草','tong cao','Tetrapanax Pith','通脱木','利水渗湿药','甘、淡，微寒；肺、胃经','清热利湿，通气下乳','湿热淋证，水肿尿少，乳汁不下','3~5g','孕妇及气虚无湿热者慎用','茎髓圆柱形，白色或淡黄色，表面有浅纵沟，体轻，断面平坦，气微，味淡',''],
+['瞿麦','qu mai','Dianthus','瞿麦穗','利水渗湿药','苦，寒；心、小肠经','利尿通淋，活血通经','热淋，血淋，石淋，小便不通，淋沥涩痛，经闭瘀阻','9~15g','孕妇及脾胃虚寒者慎用','茎圆柱形，黄绿色，节明显，叶对生线形，花萼筒状，气微，味微苦',''],
+['萹蓄','bian xu','Knotgrass','扁竹','利水渗湿药','苦，微寒；膀胱经','利尿通淋，杀虫止痒','热淋涩痛，小便短赤，虫积腹痛，湿疹阴痒','9~15g','脾胃虚寒及孕妇慎用','茎细长圆柱形，灰绿色，节明显，叶互生披针形，气微，味微苦',''],
+['地肤子','di fu zi','Kochia Fruit','扫帚菜子','利水渗湿药','辛、苦，寒；肾、膀胱经','清热利湿，祛风止痒','小便涩痛，阴痒带下，风疹，湿疹，皮肤瘙痒','9~15g','无特殊禁忌','果实扁球形，灰褐色，周围有五枚膜质翅，气微香，味微苦',''],
+['海金沙','hai jin sha','Lygodium Spores','金沙粉','利水渗湿药','甘、咸，寒；膀胱、小肠经','清热利湿，通淋止痛','热淋，血淋，石淋，膏淋，尿道涩痛','6~15g','阴虚火旺者慎用','孢子细小粉末状，棕黄色，质轻，手捻有滑泽感，气微，味淡',''],
+['石韦','shi wei','Pyrrosia Leaf','石韦叶','利水渗湿药','苦、甘，微寒；肺、膀胱经','利尿通淋，清肺止咳，凉血止血','热淋，血淋，石淋，小便不通，肺热咳喘，血热吐血衄血','6~12g','阴虚及无湿热者慎用','叶片披针形，灰褐色，下表面密被棕褐色星状毛，气微，味微苦',''],
+['萆薢','bi xie','Dioscorea Hypoglauca Root','川萆薢','利水渗湿药','苦，平；肾、胃经','利湿去浊，祛风除痹','膏淋，白浊，小便混浊，风湿痹痛，腰膝酸痛','9~15g','肾虚阴亏者慎用','根茎不规则块状，灰黄色，断面黄白色放射状纹理，气微，味微苦',''],
+['高良姜','gao liang jiang','Galangal Root','良姜','温里药','辛，热；脾、胃经','温胃止呕，散寒止痛','胃寒冷痛，胃寒呕吐，脘腹冷痛','3~6g','阴虚火旺者忌用','根茎圆柱形，棕红色，断面红棕色纤维性，气芳香，味辛辣',''],
+['胡椒','hu jiao','Pepper','黑胡椒','温里药','辛，热；胃、大肠经','温中散寒，下气消痰','胃寒呕吐，腹痛泄泻，食欲不振，癫痫痰多','1.5~3g','阴虚火旺、实热证者忌用','果实类球形，黑褐色，表面有网状皱纹，气芳香，味辛辣',''],
+['花椒','hua jiao','Sichuan Pepper','川椒','温里药','辛，温；脾、胃、肾经','温中止痛，杀虫止痒','脘腹冷痛，呕吐泄泻，虫积腹痛，湿疹阴痒','3~6g','阴虚火旺者忌用','果实类球形，紫红色，表面有粗大凸起油点，气芳香，味辛辣麻舌',''],
+['荜茇','bi ba','Long Pepper','荜拨','温里药','辛，热；胃、大肠经','温中散寒，下气止痛','脘腹冷痛，呕吐泄泻，头痛，牙痛','1.5~3g','阴虚火旺、实热证者忌用','果穗圆柱形，灰褐色，由多数小浆果组成，气芳香，味辛辣',''],
+['青皮','qing pi','Green Tangerine Peel','青橘皮','理气药','苦、辛，温；肝、胆、胃经','疏肝破气，消积化滞','胸胁胀痛，疝气疼痛，乳癖，乳痈，食积腹痛，癥瘕积聚','3~10g','气虚者慎用','果皮不规则片状，暗绿色或黑绿色，有细皱纹及凹点，气清香，味苦辛',''],
+['檀香','tan xiang','Sandalwood','白檀','理气药','辛，温；脾、胃、心、肺经','行气温中，开胃止痛','寒凝气滞，胸痛，腹痛，胃痛食少，冠心病心绞痛','2~5g','阴虚火旺者慎用','木段圆柱形，淡黄棕色，质坚硬，气芳香，味微苦',''],
+['乌药','wu yao','Lindera Root','台乌药','理气药','辛，温；肺、脾、肾、膀胱经','行气止痛，温肾散寒','胸胁胀痛，脘腹胀痛，疝气疼痛，痛经，尿频，遗尿','6~10g','气虚及阴虚火旺者慎用','根纺锤形，黄棕色，断面黄白色放射状纹理，气微香，味微苦辛',''],
+['荔枝核','li zhi he','Litchi Seed','荔核','理气药','甘、微苦，温；肝、肾经','行气散结，祛寒止痛','寒疝腹痛，睾丸肿痛，胃脘痛，痛经','5~10g','无寒湿滞气者慎用','种子长圆形，棕褐色，有光泽，种脐白色，质硬，气微，味微甘苦',''],
+['佛手','fo shou','Finger Citron','佛手柑','理气药','辛、苦、酸，温；肝、脾、胃、肺经','疏肝理气，和胃止痛，燥湿化痰','肝郁气滞，胸胁胀痛，胃脘痞满，食少呕吐，咳嗽痰多','3~10g','阴虚火旺、气虚者慎用','果实切片长条形，黄褐色，顶端分裂如手指，气芳香，味微苦酸',''],
+['香橼','xiang yuan','Citron','枸橼','理气药','辛、苦、酸，温；肝、脾、肺经','疏肝理气，宽中，化痰','肝郁气滞，胸胁胀痛，脘腹痞满，呕吐噫气，痰多咳嗽','3~10g','气虚及阴虚者慎用','果实切片圆形，黄褐色，边缘有波状棱线，瓢囊约占三分之二，气芳香，味酸苦',''],
+['玫瑰花','mei gui hua','Rose Flower','玫瑰','理气药','甘、微苦，温；肝、脾经','行气解郁，和血，止痛','肝胃气痛，食少呕恶，月经不调，经前乳房胀痛，跌扑伤痛','3~6g','阴虚火旺者慎用','花蕾类球形，紫红色，花瓣多层，气芳香浓郁，味微苦',''],
+['薤白','xie bai','Chinese Chive Bulb','薤白头','理气药','辛、苦，温；心、肺、胃、大肠经','通阳散结，行气导滞','胸痹心痛，胸脘痞满，咳喘痰多，泻痢后重','5~10g','气虚者慎用','鳞茎类球形，黄白色，半透明，顶端有残茎，气微辛，味微苦',''],
+['使君子','shi jun zi','Quisqualis Fruit','使君子仁','驱虫药','甘，温；脾、胃经','杀虫消积','蛔虫病，蛲虫病，虫积腹痛，小儿疳积','9~12g','不宜与热茶同服；大量服用可致呃逆、呕吐','果实纺锤形，黑褐色，有5条纵棱，顶端狭尖，气微香，味微甜',''],
+['苦楝皮','ku lian pi','Melia Bark','楝树皮','驱虫药','苦，寒；有毒；肝、脾、胃经','杀虫，疗癣','蛔虫病，蛲虫病，钩虫病，头癣，体癣','3~6g','有毒；孕妇及肝肾功能不全者忌用','树皮板状或槽状，灰褐色，断面纤维性，气微，味极苦',''],
+['槟榔','bing lang','Areca Seed','槟榔子','驱虫药','苦、辛，温；胃、大肠经','杀虫消积，行气，利水，截疟','绦虫病，蛔虫病，姜片虫病，虫积腹痛，积滞泻痢，里急后重，水肿脚气，疟疾','3~10g','孕妇及气虚下陷者慎用','种子类球形，棕褐色，表面有棕色网状纹理，断面有大理石样花纹，气微香，味微苦涩',''],
+['南瓜子','nan gua zi','Pumpkin Seed','南瓜仁','驱虫药','甘，平；胃、大肠经','杀虫','绦虫病，蛔虫病，血吸虫病','60~120g','无特殊禁忌','种子扁平卵形，黄白色，边缘有棱，表面有细皱纹，气微香，味微甘',''],
+['榧子','fei zi','Torreya Seed','香榧','驱虫药','甘，平；肺、胃、大肠经','杀虫消积，润肠通便，润肺止咳','钩虫病，蛔虫病，绦虫病，虫积腹痛，小儿疳积，肠燥便秘，肺燥咳嗽','9~15g','便溏者慎用','种子椭圆形，棕褐色，表面有纵皱纹，种脐圆形，气微香，味微甘',''],
+['大蓟','da ji','Cirsium Herb','大蓟草','止血药','甘、苦，凉；心、肝经','凉血止血，散瘀解毒消痈','衄血，吐血，尿血，便血，崩漏，外伤出血，痈肿疮毒','9~15g','脾胃虚寒、无瘀滞者忌用','根纺锤形，灰褐色，茎叶灰绿色，叶边缘有针刺，花紫红色，气微，味微苦',''],
+['小蓟','xiao ji','Cephalanoplos Herb','小蓟草','止血药','甘、苦，凉；心、肝经','凉血止血，散瘀解毒消痈','衄血，吐血，尿血，便血，崩漏，外伤出血，热毒疮疡','5~12g','脾胃虚寒及孕妇慎用','茎细圆柱形，灰绿色，叶长椭圆形边缘有针刺，花淡紫色，气微，味微苦',''],
+['槐花','huai hua','Sophora Flower','槐米','止血药','苦，微寒；肝、大肠经','凉血止血，清肝泻火','便血，痔血，血痢，崩漏，吐血衄血，肝热目赤，头晕目眩','9~12g','脾胃虚寒者慎用','花蕾卵形，黄绿色，花瓣略呈卷曲状，气微香，味微苦',''],
+['侧柏叶','ce bai ye','Arborvitae Leaf','柏叶','止血药','苦、涩，寒；肺、肝、脾经','凉血止血，化痰止咳，生发乌发','吐血衄血，便血崩漏，肺热咳嗽，脱发白发','6~12g','脾胃虚寒者慎用','枝叶扁平，灰绿色，叶鳞片状紧贴枝上，气微香，味微苦涩',''],
+['茜草','qian cao','Rubia Root','茜草根','止血药','苦，寒；肝经','凉血，止血，活血化瘀','吐血衄血，崩漏，便血，尿血，经闭瘀阻，关节痹痛，跌打肿痛','6~10g','脾胃虚寒及无瘀滞者慎用','根圆柱形，红棕色，断面黄红色，气微，味微苦',''],
+['蒲黄','pu huang','Cattail Pollen','香蒲花粉','止血药','甘，平；肝、心包经','止血，化瘀，通淋','吐血衄血，咯血，崩漏，外伤出血，胸腹刺痛，经闭痛经，小便不利','5~10g','孕妇慎用；须包煎','花粉细小粉末状，黄色，质轻，手捻润滑，气微香，味微苦',''],
+['白及','bai ji','Bletilla Rhizome','白芨','止血药','苦、甘、涩，微寒；肺、肝、胃经','收敛止血，消肿生肌','咯血吐血，外伤出血，疮疡肿毒，皮肤皲裂','6~15g','不宜与川乌、草乌同用；外感咯血者慎用','根茎不规则块状，灰白色，断面类白色角质样，气微，味微苦',''],
+['仙鹤草','xian he cao','Agrimony','龙芽草','止血药','苦、涩，平；心、肝经','收敛止血，截疟，止痢，解毒，补虚','咯血，吐血，崩漏，便血，尿血，疟疾，腹泻，疮疡肿毒，脱力劳伤','6~12g','无特殊禁忌','全草皱缩，茎灰绿色，叶羽状复叶，花黄色，气微香，味微苦',''],
+['郁金','yu jin','Curcuma Root','广郁金','活血化瘀药','辛、苦，寒；肝、心、肺经','活血止痛，行气解郁，清心凉血，利胆退黄','胸腹胁肋胀痛，痛经经闭，热病神昏，癫痫发狂，血热吐衄，黄疸','3~10g','孕妇及气血虚无瘀滞者慎用','块根纺锤形，灰黄色，断面灰褐色角质样，气微香，味微苦辛',''],
+['姜黄','jiang huang','Turmeric Rhizome','黄姜','活血化瘀药','辛、苦，温；脾、肝经','破血行气，通经止痛','胸胁刺痛，闭经，癥瘕，风湿肩臂疼痛，跌打肿痛','3~10g','孕妇及血虚无瘀者慎用','根茎圆柱形，棕黄色，断面黄棕色有角质样光泽，气芳香，味苦辛',''],
+['乳香','ru xiang','Frankincense','乳香珠','活血化瘀药','辛、苦，温；心、肝、脾经','活血定痛，消肿生肌','胸痹心痛，胃脘疼痛，痛经经闭，产后瘀阻，风湿痹痛，跌打损伤，疮疡肿痛','3~10g','孕妇及胃弱者慎用','树脂呈不规则颗粒状，淡黄色，半透明，质脆，气芳香，味微苦',''],
+['没药','mo yao','Myrrh','末药','活血化瘀药','苦，平；心、肝、脾经','散瘀定痛，消肿生肌','胸痹心痛，胃脘疼痛，痛经经闭，产后瘀阻，风湿痹痛，跌打损伤，疮疡肿痛','3~10g','孕妇及胃弱者慎用','树脂不规则颗粒状，棕褐色，半透明，质脆，气特异芳香，味苦',''],
+['三棱','san ling','Sparganium Rhizome','荆三棱','活血化瘀药','辛、苦，平；肝、脾经','破血行气，消积止痛','癥瘕痞块，痛经瘀血，经闭，食积胀痛','5~10g','孕妇及气虚体弱者慎用','块茎类球形，灰黄色，断面黄白色粉性，有横环纹，气微，味微苦',''],
+['莪术','e zhu','Curcuma Zedoary Rhizome','蓬莪术','活血化瘀药','辛、苦，温；肝、脾经','破血行气，消积止痛','癥瘕痞块，瘀血经闭，食积胀痛，跌打损伤','6~10g','孕妇及气血虚无积滞者慎用','根茎类球形，灰黄色，断面灰褐色角质样，气微香，味微苦辛',''],
+['鸡血藤','ji xue teng','Spatholobus Stem','血藤','活血化瘀药','苦、甘，温；肝、肾经','活血补血，调经止痛，舒筋活络','月经不调，痛经经闭，风湿痹痛，麻木瘫痪，血虚萎黄','9~15g','阴虚火旺者慎用','茎藤圆柱形，灰褐色，断面有偏心性半圆形环，红棕色树脂状分泌物，气微，味微苦',''],
+['王不留行','wang bu liu xing','Vaccaria Seed','王不留','活血化瘀药','苦，平；肝、胃经','活血通经，下乳消肿，利尿通淋','经闭痛经，乳汁不下，乳痈肿痛，淋证涩痛','5~10g','孕妇慎用','种子类球形，黑色，表面有细密颗粒状突起，一侧有凹陷纵沟，气微，味微苦',''],
+['土鳖虫','tu bie chong','Ground Beetle','䗪虫','活血化瘀药','咸，寒；有小毒；肝经','破血逐瘀，续筋接骨','跌打损伤，筋伤骨折，血瘀经闭，产后瘀阻，癥瘕痞块','3~10g','孕妇及虚寒者慎用','虫体扁平卵形，紫褐色，头端较窄，背部有横节，腹面红棕色，气腥，味微咸',''],
+['水蛭','shui zhi','Leech','蚂蟥','活血化瘀药','咸、苦，平；有小毒；肝经','破血通经，逐瘀消癥','血瘀经闭，癥瘕痞块，中风偏瘫，跌打损伤','1.5~3g','孕妇及体弱血虚者忌用','虫体扁平纺锤形，黑褐色，有多数环节，两端有吸盘，气腥，味微咸',''],
+['天南星','tian nan xing','Arisaema Rhizome','南星','化痰止咳平喘药','苦、辛，温；有毒；肺、肝、脾经','燥湿化痰，祛风解痉，散结消肿','顽痰咳嗽，风痰眩晕，中风痰壅，口眼㖞斜，癫痫，破伤风，痈肿','3~10g','有毒；孕妇及阴虚燥咳者忌用','块茎扁球形，灰黄色，顶端有凹陷茎痕，周围有须根痕，断面白色粉性，气微，味辛辣麻舌',''],
+['白附子','bai fu zi','Typhonium Rhizome','禹白附','化痰止咳平喘药','辛，温；有毒；胃、肝经','祛风痰，定惊搐，解毒散结，止痛','中风痰壅，口眼㖞斜，语言謇涩，惊风癫痫，破伤风，痰厥头痛，瘰疬','3~6g','有毒；孕妇及阴虚火旺者忌用','块茎卵圆形，灰黄色，断面白色粉性，气微，味辛辣麻舌',''],
+['旋覆花','xuan fu hua','Inula Flower','旋覆花','化痰止咳平喘药','苦、辛、咸，微温；肺、脾、胃、大肠经','降气，消痰，行水，止呕','风寒咳嗽，痰饮蓄结，胸膈痞满，喘咳痰多，呕吐噫气','3~10g','须包煎；阴虚燥咳者慎用','头状花序类球形，黄色，舌状花细长，气微香，味微苦',''],
+['白前','bai qian','Cynanchum Stauntonii Root','鹅管白前','化痰止咳平喘药','辛、苦，微温；肺经','降气化痰，止咳','咳嗽痰多，气逆喘促','3~10g','肺虚咯血者慎用','根茎细长圆柱形，灰黄色，节明显，断面黄白色，气微，味微苦',''],
+['前胡','qian hu','Peucedanum Root','前胡根','化痰止咳平喘药','苦、辛，微寒；肺经','降气化痰，散风清热','痰热喘满，咯痰黄稠，风热咳嗽痰多','6~10g','阴虚燥咳、寒痰者慎用','根圆锥形，棕褐色，断面黄白色有放射状纹理及油点，气芳香，味微苦辛',''],
+['白果','bai guo','Ginkgo Seed','银杏果','化痰止咳平喘药','甘、苦、涩，平；有毒；肺、肾经','敛肺定喘，止带缩尿','痰多喘咳，带下白浊，遗尿尿频','5~10g','有毒，不宜过量；孕妇及小儿慎用','种子椭圆形，黄色，外壳坚硬，种仁淡黄色，断面粉性，气微香，味微苦',''],
+['葶苈子','ting li zi','Descurainia Seed','苦葶苈','化痰止咳平喘药','辛、苦，大寒；肺、膀胱经','泻肺平喘，行水消肿','痰涎壅肺，喘咳痰多，胸胁胀满，不得平卧，水肿，小便不利','3~10g','肺虚喘咳、脾虚肿满者慎用','种子细小椭圆形，红棕色，表面有细纵纹，气微，味微苦辛',''],
+['桑白皮','sang bai pi','Mulberry Bark','桑根皮','化痰止咳平喘药','甘，寒；肺经','泻肺平喘，利水消肿','肺热喘咳，水肿胀满，小便不利，面目肌肤浮肿','6~12g','肺寒咳嗽及津液不足者慎用','根皮卷筒状，灰白色，内面黄白色，纤维性，气微，味微甘',''],
+['款冬花','kuan dong hua','Coltsfoot Flower','冬花','化痰止咳平喘药','辛、微苦，温；肺经','润肺下气，止咳化痰','新久咳嗽，喘咳痰多，劳嗽咯血','5~10g','阴虚劳嗽、肺热咳喘者慎用','花蕾椭圆形，紫红色，外层苞片紫褐色，气微香，味微苦',''],
+['紫苏子','zi su zi','Perilla Fruit','苏子','化痰止咳平喘药','辛，温；肺、大肠经','降气化痰，止咳平喘，润肠通便','痰壅气逆，咳嗽气喘，肠燥便秘','3~10g','气虚及阴虚喘咳者慎用','果实类球形，灰褐色，有网状皱纹，气微香，味微辛',''],
+['朱砂','zhu sha','Cinnabar','辰砂','安神药','甘，微寒；有毒；心经','清心镇惊，安神解毒','心神不宁，心悸易惊，失眠多梦，癫痫发狂，小儿惊风，口疮，疮疡肿毒','0.1~0.5g','有毒！不宜久服；孕妇及肝肾功能不全者忌用','矿物片状或块状，鲜红色，有光泽，质重，气微，味淡',''],
+['磁石','ci shi','Magnetite','灵磁石','安神药','咸，寒；心、肝、肾经','镇惊安神，平肝潜阳，聪耳明目，纳气平喘','心神不宁，惊悸失眠，头晕目眩，耳鸣耳聋，视物昏花，肾虚气喘','9~30g','脾胃虚弱者慎用','矿石不规则块状，灰黑色，有磁性，条痕黑色，气微，味淡',''],
+['琥珀','hu po','Amber','琥珀屑','安神药','甘，平；心、肝、膀胱经','镇惊安神，活血散瘀，利尿通淋','心神不宁，心悸失眠，惊风癫痫，瘀血阻滞，血淋，小便不通','1.5~3g','阴虚内热及无瘀滞者慎用','不规则块状，红棕色或黄棕色，透明或半透明，质轻，断面玻璃光泽，气微，味淡',''],
+['柏子仁','bai zi ren','Biota Seed','柏籽仁','安神药','甘，平；心、肾、大肠经','养心安神，润肠通便','心悸怔忡，虚烦失眠，神志不安，肠燥便秘','6~12g','便溏及痰多者慎用','种子长卵形，灰黄色，外有膜质翅，种仁黄白色，气微香，味微甘',''],
+['夜交藤','ye jiao teng','Polygonum Multiflorum Stem','何首乌藤','安神药','甘，平；心、肝经','养血安神，祛风通络','失眠多梦，血虚身痛，风湿痹痛；外治皮肤瘙痒','9~15g','无特殊禁忌','茎藤细长，紫褐色，有细纵纹，节部有分枝，断面黄白色，气微，味微苦',''],
+['珍珠母','zhen zhu mu','Pearl Shell','珠母','平肝息风药','咸，寒；肝、心经','平肝潜阳，清肝明目，镇惊安神','肝阳上亢，头晕目眩，惊悸失眠，目赤翳障，视物昏花','10~25g','脾胃虚寒者慎用','贝壳类圆形或破碎片状，灰白色，内壁有珍珠光泽，质硬，气微，味微咸',''],
+['牡蛎','mu li','Oyster Shell','蛎房','平肝息风药','咸，微寒；肝、肾、脾经','潜阳补阴，重镇安神，软坚散结，收敛固涩','惊悸失眠，眩晕耳鸣，瘰疬痰核，癥瘕痞块，自汗盗汗，遗精崩漏，胃痛泛酸','9~30g','脾胃虚寒、溏便者慎用','贝壳不规则块状，灰白色，表面有层状波纹，质硬，断面层状，气微，味微咸',''],
+['赭石','zhe shi','Hematite','代赭石','平肝息风药','苦，寒；肝、胃、心包经','平肝潜阳，重镇降逆，凉血止血','眩晕耳鸣，呕吐噫气，呃逆，喘息，吐血衄血，崩漏','9~30g','孕妇及脾胃虚寒者慎用','矿物不规则扁平块状，暗棕红色，有金属光泽，条痕红棕色，质重，气微，味淡',''],
+['羚羊角','ling yang jiao','Antelope Horn','羚角','平肝息风药','咸，寒；肝、心经','平肝息风，清肝明目，散血解毒','肝风内动，惊痫抽搐，妊娠子痫，高热痉厥，癫痫发狂，头痛眩晕，目赤翳障，温毒发斑','1~3g','孕妇及脾虚慢惊者慎用','角细长圆锥形，灰黑色，有环脊10~20个，尖端光滑，基部有血色斑纹，气微，味淡',''],
+['牛黄','niu huang','Calculus Bovis','犀黄','平肝息风药','苦，凉；心、肝经','清热解毒，化痰定惊','热病神昏，中风痰迷，惊厥抽搐，癫狂，咽喉肿痛，口舌生疮，痈肿疔疮','0.15~0.35g','孕妇慎用；须凭医师处方使用','结石类球形或方块状，黄棕色，表面有细密纹理，质轻脆，断面金黄色，气清香，味微苦',''],
+['僵蚕','jiang can','Silkworm larva','白僵蚕','平肝息风药','咸、辛，平；肝、肺、胃经','息风止痉，祛风止痛，化痰散结','肝风内动，惊痫抽搐，小儿惊风，中风口㖞，头痛，咽喉肿痛，瘰疬，痄腮','5~10g','血虚无风者慎用','虫体圆柱形，灰白色，表面有白色粉霜，头部棕褐色，有8对足，气微腥，味微咸',''],
+['蜈蚣','wu gong','Centipede','天龙','平肝息风药','辛，温；有毒；肝经','息风镇痉，通络止痛，攻毒散结','肝风内动，痉挛抽搐，小儿惊风，中风口㖞，半身不遂，破伤风，风湿顽痹，疮疡肿毒','3~5g','有毒；孕妇及血虚生风者慎用','虫体扁平长条形，头部红褐色，躯干部有21节，每节有足1对，气微腥，味微咸',''],
+['麝香','she xiang','Musk','麝脐香','开窍药','辛，温；心、脾、肝、肾经','开窍醒神，活血通经，消肿止痛','热病神昏，中风痰厥，气郁暴厥，中恶昏迷，经闭，癥瘕，难产死胎，胸痹心痛，疮疡肿毒','0.03~0.1g','孕妇禁用；不宜与川乌、草乌同用','分泌物干燥后呈颗粒状或块状，暗棕色，有强烈特异香气，味微苦',''],
+['苏合香','su he xiang','Storax','苏合油','开窍药','辛，温；心、脾经','开窍醒神，辟秽，止痛','中风痰厥，猝然昏倒，惊痫，胸痹心痛，脘腹冷痛','0.3~1g','阴虚火旺、气血虚者慎用','半流动黏稠液体，棕黄色，透明，有特异芳香，味微苦',''],
+['石菖蒲','shi chang pu','Acorus Rhizome','菖蒲','开窍药','辛、苦，温；心、胃经','开窍豁痰，醒神益智，化湿开胃','神昏癫痫，健忘失眠，耳鸣耳聋，脘痞不饥，噤口下痢','3~10g','阴虚火旺、汗多者慎用','根茎圆柱形，棕褐色，有环节，断面黄棕色纤维性，气芳香，味微苦',''],
+['太子参','tai zi shen','Pseudostellaria Root','孩儿参','补虚药','甘、微苦，平；脾、肺经','益气健脾，生津润肺','脾虚体倦，食欲不振，病后虚弱，气阴不足，自汗口渴，肺燥干咳','9~30g','不宜与藜芦同用','根细长纺锤形，灰黄色，顶端有茎痕，断面黄白色，气微，味微甘',''],
+['西洋参','xi yang shen','American Ginseng','花旗参','补虚药','甘、微苦，凉；心、肺、肾经','补气养阴，清热生津','气虚阴亏，虚热烦倦，咳喘痰血，内热消渴，口燥咽干','3~6g','不宜与藜芦同用；中阳虚衰、寒湿内盛者忌用','根纺锤形，浅黄褐色，有细密横纹，断面黄白色，气微香，味微苦回甘',''],
+['蜂蜜','feng mi','Honey','白蜜','补虚药','甘，平；脾、肺、大肠经','补中润燥，止痛，解毒','脘腹虚痛，肺燥干咳，肠燥便秘，疮疡不敛，水火烫伤','15~30g','痰湿内蕴、湿阻中满者慎用','黏稠液体，黄白色，半透明，有光泽，气芳香，味极甜',''],
+['鹿茸','lu rong','Deer Antler','鹿角茸','补虚药','甘、咸，温；肾、肝经','壮肾阳，益精血，强筋骨，调冲任，托疮毒','阳痿滑精，宫冷不孕，羸瘦神疲，畏寒眩晕，耳鸣耳聋，腰脊冷痛，筋骨痿软，崩漏带下','1~2g','阴虚阳亢、血分有热者忌用','幼角圆柱形，灰褐色，外皮有棕黄色茸毛，断面蜂巢状小孔，气微腥，味微咸',''],
+['巴戟天','ba ji tian','Morinda Root','巴戟','补虚药','甘、辛，微温；肾、肝经','补肾阳，强筋骨，祛风湿','阳痿遗精，宫冷不孕，月经不调，少腹冷痛，风湿痹痛，筋骨痿软','3~10g','阴虚火旺及有湿热者忌用','根扁圆柱形，灰黄色，外皮横向断裂露出木心（鸡肠风），断面皮部厚，气微香，味微甘',''],
+['补骨脂','bu gu zhi','Psoralea Fruit','破故纸','补虚药','辛、苦，温；肾、脾经','补肾助阳，纳气平喘，温脾止泻；外用消风祛斑','肾虚阳痿，遗精遗尿，腰膝冷痛，肾虚作喘，五更泄泻；外治白癜风','6~10g','阴虚火旺、大便秘结者忌用','果实肾形，黑褐色，表面有细密皱纹，气微香，味微苦辛',''],
+['锁阳','suo yang','Cynomorium Stem','锁阳草','补虚药','甘，温；肝、肾、大肠经','补肾阳，益精血，润肠通便','肾阳不足，精血亏虚，腰膝痿软，阳痿滑精，肠燥便秘','6~10g','阴虚火旺、脾虚泄泻者忌用','茎圆柱形，棕褐色，断面棕黄色，有黄色三角状维管束，气微香，味微苦涩',''],
+['菟丝子','tu si zi','Cuscuta Seed','菟丝','补虚药','辛、甘，平；肝、肾、脾经','补益肝肾，固精缩尿，安胎，明目，止泻','肝肾不足，腰膝酸软，阳痿遗精，遗尿尿频，肾虚胎漏，目昏耳鸣，脾虚泄泻','6~12g','阴虚火旺、大便燥结者慎用','种子类球形，灰棕色，表面有细密突起，气微，味微苦',''],
+['龟甲','gui jia','Turtle Shell','龟板','补虚药','咸、甘，微寒；肝、肾、心经','滋阴潜阳，益肾强骨，养血补心，固经止崩','阴虚潮热，骨蒸盗汗，头晕目眩，虚风内动，筋骨痿软，心虚健忘，崩漏经多','9~24g','脾胃虚寒、孕妇及痰湿壅滞者慎用','背板长方形，棕褐色，有放射状纹理，内面黄白色，质坚硬，气微腥，味微咸',''],
+['鳖甲','bie jia','Turtle Carapace','鳖壳','补虚药','咸，微寒；肝、肾经','滋阴潜阳，退热除蒸，软坚散结','阴虚发热，骨蒸劳热，阴虚阳亢，头晕目眩，虚风内动，癥瘕痞块，经闭','9~24g','脾胃虚寒、食少便溏及孕妇慎用','背甲椭圆形，灰褐色，表面有细密网状皱纹，边缘有锯齿状裙边，气微腥，味微咸',''],
+['天冬','tian dong','Asparagus Root','天门冬','补虚药','甘、苦，寒；肺、肾经','养阴润燥，清肺生津','肺燥干咳，顿咳痰黏，腰膝酸痛，骨蒸潮热，内热消渴，热病津伤','6~12g','脾胃虚寒、食少便溏者忌用','块根长纺锤形，黄白色，半透明，断面角质样，气微香，味微苦回甜',''],
+['石斛','shi hu','Dendrobium','金钗石斛','补虚药','甘，微寒；胃、肾经','益胃生津，滋阴清热','热病津伤，口干烦渴，胃阴不足，食少干呕，病后虚热不退，阴虚火旺，骨蒸劳热，目暗不明','6~12g','温热病初期、湿热未化燥者忌用','茎圆柱形，黄绿色，有节，节上有膜质叶鞘，断面灰白色，气微香，味微苦',''],
+['玉竹','yu zhu','Solomon Seal Rhizome','萎蕤','补虚药','甘，微寒；肺、胃经','养阴润燥，生津止渴','肺阴不足，燥热咳嗽，胃阴不足，咽干口渴，内热消渴','6~12g','脾胃虚寒、痰湿内盛者慎用','根茎圆柱形，黄白色，有环节，断面黄白色角质样，气微香，味微苦回甜',''],
+['黄精','huang jing','Polygonatum Rhizome','鸡头黄精','补虚药','甘，平；脾、肺、肾经','补气养阴，健脾，润肺，益肾','脾胃气虚，体倦乏力，胃阴不足，口干食少，肺虚燥咳，精血不足，腰膝酸软，须发早白','9~15g','痰湿壅滞、中寒便溏者忌用','根茎结节状，黄白色，顶端有茎痕，断面半透明角质样，气微香，味微甜',''],
+['龙眼肉','long yan rou','Longan Aril','桂圆肉','补虚药','甘，温；心、脾经','补益心脾，养血安神','气血不足，心悸怔忡，健忘失眠，血虚萎黄','9~15g','内有痰火及湿滞停饮者忌用','假种皮不规则块状，黄棕色，半透明，质柔软，气微香，味极甜',''],
+['肉豆蔻','rou dou kou','Nutmeg','肉果','收涩药','辛，温；脾、胃、大肠经','温中行气，涩肠止泻','脾胃虚寒，久泻不止，脘腹胀痛，食少呕吐','3~10g','湿热泻痢及孕妇慎用；不宜过量','种子卵圆形，灰褐色，表面有网状皱纹，一端有圆形种脐，气芳香，味辛微苦',''],
+['诃子','he zi','Terminalia Fruit','诃黎勒','收涩药','苦、酸、涩，平；肺、大肠经','涩肠止泻，敛肺止咳，降火利咽','久泻久痢，便血脱肛，肺虚喘咳，久咳不止，咽痛音哑','3~10g','外有表邪、内有实热积滞者不宜','果实长圆形，黄褐色，有细密纵棱及横向皱纹，质坚硬，气微，味微苦涩',''],
+['赤石脂','chi shi zhi','Halloysite','红石脂','收涩药','甘、酸、涩，温；胃、大肠经','涩肠止泻，收敛止血，收湿敛疮','久泻久痢，大便失禁，便血，崩漏，外伤出血；外治湿疮','9~12g','孕妇及湿热积滞者忌用；不宜与官桂同用','矿物不规则块状，粉红色或红褐色，表面有光泽，质软，吸水性强，气微，味淡',''],
+['桑螵蛸','sang piao xiao','Mantis Egg Case','螳螂卵鞘','收涩药','甘、咸，平；肝、肾、膀胱经','固精缩尿，补肾助阳','遗精滑精，遗尿尿频，小便白浊，阳痿','5~10g','阴虚火旺或膀胱有热者慎用','卵鞘长圆形，灰黄色，表面有层状薄膜，质轻而韧，断面有黄褐色幼虫，气微腥，味微甘',''],
+['覆盆子','fu pen zi','Raspberry Fruit','覆盆','收涩药','甘、酸，温；肝、肾、膀胱经','益肾固精缩尿，养肝明目','遗精滑精，遗尿尿频，阳痿早泄，目暗昏花','6~12g','阴虚火旺、小便短赤者忌用','聚合果类球形，灰绿色，由多数小核果组成，表面有细毛，气微香，味微酸甜',''],
+['雄黄','xiong huang','Realgar','石黄','攻毒杀虫止痒药','辛，温；有毒；肝、大肠经','解毒杀虫，燥湿祛痰，截疟','痈肿疔疮，蛇虫咬伤，虫积腹痛，惊痫，疟疾，湿疹疥癣','0.05~0.1g','有毒！孕妇禁用；忌火煅；不宜久服','矿物不规则块状，橙红色，有金刚光泽，半透明，质脆，气微特异，味微苦',''],
+['硫黄','liu huang','Sulfur','硫磺','攻毒杀虫止痒药','酸，温；有毒；肾、大肠经','外用解毒杀虫疗疮；内服补火助阳通便','疥癣，秃疮，阴蚀恶疮；阳痿，虚寒便秘','外用适量；内服1.5~3g','有毒；孕妇及阴虚火旺者忌服；不宜与芒硝同用','淡黄色结晶性粉末或块状，有特异臭气，质轻，易燃，味微苦',''],
+['白矾','bai fan','Alum','明矾','攻毒杀虫止痒药','酸、涩，寒；肺、脾、肝、大肠经','外用解毒杀虫，燥湿止痒；内服止血止泻，祛除风痰','湿疹，疥癣，脱肛，痔疮，便血，久泻，癫痫发狂','外用适量；内服0.6~1.5g','不宜久服；脾胃虚弱者慎用','无色透明结晶，不规则块状，玻璃光泽，质硬脆，气微，味微酸涩',''],
+['蛇床子','she chuang zi','Cnidium Seed','蛇米','攻毒杀虫止痒药','辛、苦，温；有小毒；肾经','燥湿祛风，杀虫止痒，温肾壮阳','阴痒带下，湿疹瘙痒，湿痹腰痛，肾虚阳痿，宫冷不孕','3~10g','阴虚火旺或下焦有湿热者不宜','双悬果椭圆形，灰黄色，有纵棱，气芳香，味微苦辛','']
+];
+
+const FIELDS=['name','py','en','alias','cat','nature','effect','indication','dose','caution','identify','slug'];
+const HERBS = RAW.map(r=>{
+  const o={}; FIELDS.forEach((k,i)=>o[k]=r[i]||'');
+  o.imgs = o.slug ? ['herb-images/'+o.slug+'/1.jpg','herb-images/'+o.slug+'/2.jpg'] : [];
+  o.pyCompact = o.py.replace(/\s+/g,'');
+  o.initials = o.py.split(/\s+/).map(s=>s[0]).join('');
+  o.search = (o.name+' '+o.py+' '+o.pyCompact+' '+o.initials+' '+o.en+' '+o.alias).toLowerCase().replace(/\s+/g,'');
+  return o;
+});
+
+const $ = id => document.getElementById(id);
+const FAV_KEY='herb-lookup-favorites-v1';
+let favs = new Set();
+try{ favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]')); }catch(e){}
+const localImgs = new Map(); // 会话内导入的图片：name -> [objectURL]
+
+let filterCat='全部', onlyImg=false, onlyFav=false, keyword='';
+
+const cats = [...new Set(HERBS.map(h=>h.cat))];
+$('statTotal').textContent = HERBS.length;
+$('statImg').textContent = HERBS.filter(h=>h.imgs.length).length;
+$('statCat').textContent = cats.length;
+function updateFavStat(){ $('statFav').textContent = favs.size; }
+updateFavStat();
+
+function renderFilters(){
+  const items=['全部',...cats,'有实拍图','我的收藏'];
+  $('filters').innerHTML = items.map(c=>`<span class="chip ${(c==='全部'&&filterCat==='全部'&&!onlyImg&&!onlyFav)||(c===filterCat&&c!=='全部')||(c==='有实拍图'&&onlyImg)||(c==='我的收藏'&&onlyFav)?'on':''}" data-c="${c}">${c}</span>`).join('');
+  $('filters').querySelectorAll('.chip').forEach(el=>el.onclick=()=>{
+    const c=el.dataset.c;
+    filterCat='全部'; onlyImg=false; onlyFav=false;
+    if(c==='有实拍图') onlyImg=true;
+    else if(c==='我的收藏') onlyFav=true;
+    else filterCat=c;
+    renderFilters(); render();
+  });
+}
+
+function matches(h){
+  if(onlyFav && !favs.has(h.name)) return false;
+  if(onlyImg && !h.imgs.length && !localImgs.has(h.name)) return false;
+  if(filterCat!=='全部' && h.cat!==filterCat) return false;
+  if(keyword){
+    if(/^[a-z]+$/.test(keyword)){
+      // 纯字母：拼音/首字母/英文名按前缀匹配，避免 'gc' 命中 'yuxingcao' 这类连写噪声
+      const ok = h.pyCompact.startsWith(keyword) || h.initials.startsWith(keyword)
+        || h.en.toLowerCase().includes(keyword) || h.name.includes(keyword)
+        || h.alias.toLowerCase().includes(keyword);
+      if(!ok) return false;
+    }else if(!h.search.includes(keyword)) return false;
+  }
+  return true;
+}
+
+function thumb(h){
+  const imgs=localImgs.get(h.name)||h.imgs;
+  if(imgs.length) return `<div class="card-img"><img src="${imgs[0]}" alt="${h.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=ph>药</div>'"><span class="badge-img">实拍图</span></div>`;
+  return `<div class="card-img"><div class="ph">药</div></div>`;
+}
+
+function render(){
+  const list=HERBS.filter(matches);
+  $('resultCount').textContent = `共 ${list.length} 味`;
+  $('resultTitle').textContent = onlyFav?'我的收藏':onlyImg?'有实拍图':filterCat==='全部'?(keyword?'检索结果':'全部药材'):filterCat;
+  $('empty').style.display = list.length?'none':'block';
+  $('grid').innerHTML = list.map(h=>`
+    <article class="card" data-name="${h.name}">
+      ${thumb(h)}
+      <div class="card-body">
+        <div class="card-title"><h3>${h.name}</h3><small>${h.py}</small></div>
+        <span class="cat-tag">${h.cat}</span>
+        <div class="effect">${h.effect}</div>
+        <div class="card-alias">${h.alias?'别名：'+h.alias:h.en}</div>
+      </div>
+    </article>`).join('');
+  $('grid').querySelectorAll('.card').forEach(card=>{
+    card.onclick=e=>{ if(e.target.classList.contains('fav-btn'))return; openDetail(card.dataset.name); };
+  });
+}
+
+let current=null;
+function openDetail(name){
+  const h=HERBS.find(x=>x.name===name); if(!h)return;
+  current=h;
+  const imgs=localImgs.get(h.name)||h.imgs;
+  $('gallery').innerHTML = imgs.length
+    ? `<div class="gallery-main"><img id="mainImg" src="${imgs[0]}" alt="${h.name}" onerror="this.parentNode.innerHTML='<div class=no-img>图片加载失败</div>'"></div>
+       <div class="gallery-thumbs">${imgs.map((u,i)=>`<img src="${u}" class="${i===0?'on':''}" data-i="${i}" alt="图${i+1}">`).join('')}</div>
+       <div style="font-size:10.5px;color:#BBA487;text-align:center">${localImgs.has(h.name)?'本地导入图片':'图片来源：CNH-98 中药材图像数据集'}</div>`
+    : `<div class="no-img"><span class="big">✧</span>暂无本地实拍图<br>可点下方「在线查图」查看多角度照片<br><span style="font-size:11px;opacity:.7">或导入本地图片按名称自动匹配</span></div>`;
+  $('gallery').querySelectorAll('.gallery-thumbs img').forEach(t=>t.onclick=()=>{
+    $('mainImg').src = imgs[+t.dataset.i];
+    $('gallery').querySelectorAll('.gallery-thumbs img').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+  });
+  const q=encodeURIComponent(h.name);
+  $('detail').innerHTML = `
+    <h2>${h.name}</h2>
+    <div class="py">${h.py} · ${h.en}</div>
+    <div class="meta"><span>${h.cat}</span>${h.alias?`<span>别名 ${h.alias}</span>`:''}<span>${favs.has(h.name)?'★ 已收藏':'☆ 未收藏'}</span></div>
+    <div class="row"><div class="k">性味归经</div><div class="v">${h.nature}</div></div>
+    <div class="row"><div class="k">功　　效</div><div class="v">${h.effect}</div></div>
+    <div class="row"><div class="k">主　　治</div><div class="v">${h.indication}</div></div>
+    <div class="row"><div class="k">用法用量</div><div class="v">${h.dose}</div></div>
+    <div class="row caution"><div class="k">使用注意</div><div class="v">${h.caution}</div></div>
+    <div class="row identify"><div class="k">🔍 辨认要点</div><div class="v">${h.identify}</div></div>
+    <div class="actions">
+      <a class="btn primary" target="_blank" rel="noopener" href="https://image.baidu.com/search/index?tn=baiduimage&word=${q}">在线查图</a>
+      <a class="btn" target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?search=${q}">维基资料</a>
+      <button class="btn" id="favToggle">${favs.has(h.name)?'★ 取消收藏':'☆ 收藏'}</button>
+      <button class="btn" id="copyBtn">复制信息</button>
+    </div>`;
+  $('favToggle').onclick=()=>{
+    favs.has(h.name)?favs.delete(h.name):favs.add(h.name);
+    localStorage.setItem(FAV_KEY,JSON.stringify([...favs]));
+    updateFavStat(); renderFilters(); render(); openDetail(h.name);
+  };
+  $('copyBtn').onclick=()=>{
+    const txt=`【${h.name}】${h.py} / ${h.en}\n分类：${h.cat}\n别名：${h.alias}\n性味归经：${h.nature}\n功效：${h.effect}\n主治：${h.indication}\n用法用量：${h.dose}\n注意：${h.caution}\n辨认要点：${h.identify}`;
+    navigator.clipboard.writeText(txt).then(()=>{$('copyBtn').textContent='✓ 已复制';setTimeout(()=>$('copyBtn').textContent='复制信息',1500);});
+  };
+  $('mask').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeDetail(){ $('mask').classList.remove('show'); document.body.style.overflow=''; }
+
+$('q').addEventListener('input',e=>{ keyword=e.target.value.toLowerCase().replace(/\s+/g,''); render(); });
+$('clearBtn').onclick=()=>{$('q').value='';keyword='';render();$('q').focus();};
+$('closeBtn').onclick=closeDetail;
+$('mask').onclick=e=>{if(e.target===$('mask'))closeDetail();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail();});
+
+// 本地图片导入：按文件名（中文名/拼音/英文名/别名）匹配
+$('importBtn').onclick=()=>$('fileInput').click();
+$('fileInput').addEventListener('change',e=>{
+  let ok=0, miss=[];
+  [...e.target.files].forEach(f=>{
+    const base=f.name.replace(/\.[^.]+$/,'').toLowerCase().replace(/[\s_\-]/g,'');
+    const hit=HERBS.find(h=>[h.name,h.pyCompact,h.initials,h.en,h.alias].some(k=>k&&k.toLowerCase().replace(/[\s_\-]/g,'')===base));
+    if(hit){
+      if(!localImgs.has(hit.name)) localImgs.set(hit.name,[]);
+      localImgs.get(hit.name).push(URL.createObjectURL(f)); ok++;
+    }else miss.push(f.name);
+  });
+  render();
+  alert(`已匹配 ${ok} 张图片（本次会话有效）。\n${miss.length?'未匹配 '+miss.length+' 张：'+miss.slice(0,5).join('、'):''}\n\n提示：要永久保存，请把图片按 herb-images/英文目录名/1.jpg 的命名放入对应文件夹。`);
+  e.target.value='';
+});
+
+
+// ===== 外部数据源面板 =====
+let srcTab = 'sources';
+function esc(x){ return String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function linkHtml(list){ return (list||[]).map(x=>`<a class="src-link" href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)} ↗</a>`).join(''); }
+function renderSources(){
+  return `<div class="src-grid">` + SOURCES.map(x=>`
+    <div class="src-card">
+      <span class="badge ${x.c}">${esc(x.k)}</span>
+      <h3>${esc(x.n)}</h3>
+      <div class="d">${esc(x.d)}</div>
+      <div class="src-links">${linkHtml(x.l)}</div>
+    </div>`).join('') + `</div>`;
+}
+function renderDatasets(kw){
+  const k=(kw||'').toLowerCase().trim();
+  const list=DATASETS.filter(x=>!k || (x.n+' '+x.d+' '+x.s).toLowerCase().includes(k));
+  return `<input class="ds-search" id="dsQ" placeholder="搜索数据集名称、说明或分类，如 CHM、药材、舌象" value="${esc(kw||'')}">
+    <div class="ds-list">` + (list.length?list.map(x=>`
+      <div class="ds-item">
+        <div class="t">${esc(x.n)}<span class="tag">${esc(x.s)}</span></div>
+        <div class="x">${esc(x.d)}</div>
+        <div class="src-links">${linkHtml(x.l)}</div>
+      </div>`).join(''):'<div class="src-empty">没有匹配的数据集</div>') + `</div>`;
+}
+function renderLatin(kw){
+  const k=(kw||'').toLowerCase().trim();
+  const list=LATIN300.filter(x=>!k || x.toLowerCase().includes(k));
+  return `<input class="ds-search" id="latQ" placeholder="搜索拉丁学名，如 Glycyrrhiza、Aconitum" value="${esc(kw||'')}">
+    <div class="lat-list">` + (list.length?list.map(x=>`<div class="lat-item">${esc(x)}</div>`).join(''):'<div class="src-empty">没有匹配的学名</div>') + `</div>`;
+}
+function renderSrcContent(){
+  $('dsCount').textContent=DATASETS.length;
+  $('latCount').textContent=LATIN300.length;
+  $('srcContent').innerHTML = srcTab==='sources' ? renderSources() : srcTab==='datasets' ? renderDatasets('') : renderLatin('');
+  const q=$('dsQ')||$('latQ');
+  if(q) q.oninput=e=>{
+    const pos=e.target.selectionStart;
+    $('srcContent').innerHTML = srcTab==='datasets'?renderDatasets(e.target.value):renderLatin(e.target.value);
+    const nq=$('dsQ')||$('latQ'); if(nq){nq.focus(); try{nq.setSelectionRange(pos,pos);}catch(_){}}
+  };
+}
+function openSources(){ $('srcMask').classList.add('show'); document.body.style.overflow='hidden'; renderSrcContent(); }
+function closeSources(){ $('srcMask').classList.remove('show'); document.body.style.overflow=''; }
+$('sourceBtn').onclick=openSources;
+$('srcCloseBtn').onclick=closeSources;
+$('srcMask').onclick=e=>{ if(e.target===$('srcMask')) closeSources(); };
+$('srcTabs').onclick=e=>{
+  const chip=e.target.closest('.chip'); if(!chip) return;
+  srcTab=chip.dataset.tab;
+  $('srcTabs').querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===chip));
+  renderSrcContent();
+};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDetail();closeSources();}});
+
+renderFilters();
+render();
+</script>
+</body>
+</html>
