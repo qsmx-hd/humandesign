@@ -156,7 +156,6 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;border-t
     </div>
     <div class="top-stats">
       <span><b id="statTotal">0</b>味收录</span>
-      <span><b id="statImg">0</b>味实拍图</span>
       <span><b id="statCat">0</b>个类别</span>
       <span><b id="statFav">0</b>味收藏</span>
     </div>
@@ -175,7 +174,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;border-t
       <input type="file" id="fileInput" multiple accept="image/*" hidden>
     </div>
     <div class="filters" id="filters"></div>
-    <div class="hint">💡 <b>辨认提示：</b>先按中文名或别名检索 → 对照「辨认要点」与实拍图 → 点击「在线查图」看更多角度。支持拼音首字母（如 <b>gc</b> 查甘草）。收藏与导入图片仅保存在本机浏览器。</div>
+    <div class="hint">💡 <b>辨认提示：</b>先按中文名或别名检索 → 对照「辨认要点」→ 点击「在线查图」看更多角度。支持拼音首字母（如 <b>gc</b> 查甘草）。收藏与导入图片仅保存在本机浏览器。</div>
   </div>
 </div>
 
@@ -220,6 +219,11 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;border-t
 <script>
 /*
  * CHANGELOG
+ * v4.0 (2026-11-25) 移除内置实拍图，统一药材展示
+ *   - 修复白芷等 20 味药详情弹窗「图片加载失败」bug：彻底移除内置实拍图路径生成与展示
+ *   - 20 味药卡片/详情统一为与其他药材一致的占位样式（本地导入图片仍可正常展示）
+ *   - 删除顶部「20 味实拍图」统计标记
+ *   - 删除筛选栏「有实拍图」标签及其筛选逻辑
  * v3.1 (2026-11-24) 版权信息
  *   - Footer 新增版权信息 Powered By Kan Man Tang
  *   - VERSION 由 3.0 升至 3.1（小迭代，其余功能不变）
@@ -242,7 +246,7 @@ footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;border-t
  *   - 详情弹层、图片切换、在线查图、本地图片导入、localStorage 收藏
  *   - 响应式布局，禅意暖棕金配色
  */
-const VERSION = '3.1';
+const VERSION = '4.0';
 const SOURCES = [{"n": "CHM-100（MPM-Net）", "k": "外链 · 需登录下载", "c": "link", "d": "100 类常用中药材饮片图像，首个完全公开的高质量饮片数据集。GitHub 仓库只放说明文档，全量数据在百度网盘（提取码 6666），需百度账号登录，本环境无法免登录抓取。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/KevinYang95/MPM-Net"}, {"t": "百度网盘（码 6666）", "u": "https://pan.baidu.com/s/1xC83Gq6nULQXfeUTiNrYVw?pwd=6666"}, {"t": "类别说明表", "u": "https://github.com/KevinYang95/MPM-Net/blob/main/CHM-100_Data_Description.xlsx"}]}, {"n": "TCMP-300", "k": "元数据已载入", "c": "ok", "d": "52,089 张药用植物图像 / 300 类，含根、叶、花等细粒度部位。仓库的 name.txt 已抓取，300 个拉丁学名内置在第三个标签可检索；图像需运行仓库爬虫从 Bing 下载，本环境不能直接批量抓取。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/winycg/TCMP-300"}, {"t": "论文 DOI", "u": "https://doi.org/10.1038/s41597-025-05522-7"}]}, {"n": "ChineseMed-dataset", "k": "外链 · 需登录下载", "c": "link", "d": "18,000 张 / 100+ 类中药材图像，COCO 格式标注（适合目标检测训练）。仓库仅 README 与预览图，数据走百度网盘（提取码 rkft），需登录。", "l": [{"t": "GitHub 仓库", "u": "https://github.com/shaojiwan/ChineseMed-dataset"}, {"t": "百度网盘（码 rkft）", "u": "https://pan.baidu.com/s/18mcia4KaKQfOci-duvIdOQ?pwd=rkft"}]}, {"n": "香港浸会大学中药材图像数据库", "k": "在线入口 · 人机验证", "c": "link", "d": "收录常用中药材 420 余种，含来源、产地、性状、性味功效和高清图像，支持中文名 / 拉丁名 / 英文名检索。站点启用 Cloudflare Turnstile 人机验证，需在浏览器中人工验证后使用；不能批量下载。", "l": [{"t": "图书馆介绍页", "u": "https://library.hkbu.edu.hk/electronic/libdbs/mmd/"}, {"t": "图像库入口", "u": "https://sys01.lib.hkbu.edu.hk/cmed/mmid/index.php?lang=cht"}]}, {"n": "药用植物综合数据库 MPDB（日本）", "k": "在线入口 · 会话令牌", "c": "link", "d": "医薬基盤・健康・栄養研究所的汉方与生药综合图鉴：药用植物、生药、成分基因、栽培及内部形态图，附日本药局方收载生药列表。检索表单带会话 token，需在网页内操作。", "l": [{"t": "MPDB 首页", "u": "https://mpdb.nibn.go.jp/"}, {"t": "生药检索入口", "u": "https://mpdb.nibn.go.jp/mpdb-bin/search.cgi?category=crudedrug&mode=menu&lang=en"}, {"t": "药局方生药列表", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=jplist&lang=ja"}]}, {"n": "Awesome-TCM-LLM 数据集清单", "k": "清单已载入", "c": "ok", "d": "已完整抓取该项目的 Datasets wiki（39KB），从中提取图像 / 视觉相关数据集条目，内置在第二个标签可检索。清单只做索引，原始下载请走各条目的官方链接。", "l": [{"t": "Datasets wiki", "u": "https://github.com/tyang816/Awesome-TCM-LLM/wiki/Datasets"}, {"t": "GitHub 仓库", "u": "https://github.com/tyang816/Awesome-TCM-LLM"}]}];
 const DATASETS = [{"n": "CHM-315", "d": "中药材细粒度图像集，DataCite 说明包含 315 类常用中药、共 126000 张图像，每类 400 张", "s": "中药组方 / 提取物", "l": [{"t": "数据集", "u": "https://doi.org/10.6084/m9.figshare.32745123"}]}, {"n": "Baize TCM Botanical Origin Images", "d": "药用植物基原鉴定图像数据，DataCite 标题写明用于 Baize Traditional Chinese Medicine，包含生境、原植物和药用部位图像，以及依据中国药典、中国植物志和恩格勒系统的中文与拉丁文鉴定信息", "s": "中药组方 / 提取物", "l": [{"t": "数据集", "u": "https://doi.org/10.57760/sciencedb.41638"}]}, {"n": "古代经典名方关键信息表", "d": "官方公布的经典名方关键信息，不是患者病历。三份通知分别是 2020 年 7 首、2023 年「竹叶石膏汤」等 25 首、2025 年「旋覆代赭汤」等 43 首。2025 年附表逐味给出基原、炮制规格和折算剂量。旋覆代赭汤中甘草为炒甘草 41.40 克、半夏为清半夏 34.50 克；全方以水 2000 毫升煮取 1200 毫升，去渣再煎至 600 毫升，每次温", "s": "中药组方 / 提取物", "l": [{"t": "2020通知", "u": "http://www.natcm.gov.cn/kejisi/zhengcewenjian/2020-11-10/18132.html"}, {"t": "2023通知", "u": "http://www.natcm.gov.cn/kejisi/gongzuodongtai/2023-07-28/31404.html"}, {"t": "2025通知", "u": "http://www.natcm.gov.cn/kejisi/gongzuodongtai/2025-02-12/35831.html"}]}, {"n": "TCMP-300", "d": "用于中药材植物识别的综合图像数据集", "s": "中药组方 / 提取物", "l": [{"t": "论文", "u": "https://doi.org/10.1038/s41597-025-05522-7"}, {"t": "代码", "u": "https://github.com/winycg/TCMP-300"}]}, {"n": "香港浸会大学中药方剂图像数据库", "d": "香港浸会大学中医药学院的方剂图像库，公开浏览方剂组成、功用、主治和图像。浏览页显示约182首，访问计数自2017年11月起。在线查阅，不是方剂表批量下载", "s": "中药组方 / 提取物", "l": [{"t": "网站", "u": "https://library.hkbu.edu.hk/electronic/libdbs/cmfid/"}]}, {"n": "香港浸会大学中药材图像数据库", "d": "香港浸会大学中医药学院的中药材图像库。图书馆页面写明收录常用中药材420余种，包括来源、产地、性状、性味功效和高清图像，可按中文名、拉丁名和英文名检索。2013年上线，可公开在线浏览，不是批量下载包", "s": "中药组方 / 提取物", "l": [{"t": "网站", "u": "https://library.hkbu.edu.hk/electronic/libdbs/mmd/"}]}, {"n": "东亚医学协会针灸经络图版库", "d": "既有资源补录（首发年份未确认）。按经脉并列展示十四经发挥、针灸资生经、类经图翼、经穴汇解和经络研究图版，可用于版本比较和针灸图文资料检索。是历史图版入口，非已标注视觉问答集；未确认统一批量下载及训练许可", "s": "东亚传统医学", "l": [{"t": "网站", "u": "https://aeam.jp/keiraku/"}]}, {"n": "药用植物综合信息数据库 (MPDB)", "d": "医薬基盤·健康·营养研究所药用植物资源研究中心的汉方与生药综合图鉴。首页写明收录药用植物、生药、成分与基因、栽培和内部形态，并对国内流通的模型生药做了实测；页脚版权为2012–2025，资助来自厚生劳动科学研究费。另有可打开的汉方处方列表和日本药局方收载生药列表", "s": "东亚传统医学", "l": [{"t": "网站", "u": "https://mpdb.nibn.go.jp/"}, {"t": "汉方列表", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=syohou&lang="}, {"t": "药局方生药", "u": "https://mpdb.nibn.go.jp/mpdb-bin/list_data.cgi?category=jplist&lang=ja"}]}, {"n": "中医笈成", "d": "中医药古籍整理项目，按医经、诊法、本草、医方、医案等分类，提供全文检索、公开GitLab版本库与原始文件下载入口。公有领域文本的筛选、标点等编辑成果声明CC0，自创介绍页面CC BY 4.0；图片与个别页面另查", "s": "原始书籍 / 预训练语料", "l": [{"t": "网站", "u": "https://jicheng.tw/tcm/book/"}, {"t": "下载", "u": "https://jicheng.tw/tcm/download.html"}, {"t": "许可", "u": "https://jicheng.tw/tcm/copyright.html"}]}, {"n": "病理标注舌象数据集", "d": "带病理标注的中医舌象图像集，用于降低人工舌诊的主观性", "s": "评测基准", "l": [{"t": "论文", "u": "https://doi.org/10.62762/bish.2026.303296"}]}, {"n": "病机思维链证候识别数据", "d": "在病机推理思维链监督下构建的证候表现识别数据，含结构化病案、金标准证候标签和模型预测", "s": "评测基准", "l": [{"t": "数据集", "u": "https://doi.org/10.57760/sciencedb.35044"}]}, {"n": "TongueBench", "d": "2,694 张舌象、22 个标签；比较 9 个多模态模型、3 种提示策略及重复输出稳定性，配有图像数据和推理/评分示例", "s": "评测基准", "l": [{"t": "DOI", "u": "https://doi.org/10.3389/frai.2026.1943004"}, {"t": "代码", "u": "https://github.com/mengyiha/TongueBench-Open"}, {"t": "数据集", "u": "https://zenodo.org/records/20701288"}]}, {"n": "TongueProjectTCM Color Classification", "d": "TongueProjectTCM 舌图像颜色分类数据，数据卡列出图像和整数标签，训练集 807 条、验证集 121 条", "s": "评测基准", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/TongueProjectTCM/color-classification-opensource"}]}, {"n": "TongueDx 远程舌诊多标签数据集", "d": "面向远程舌诊的公开图像集：5109 张、4650 名受试者，8 个二分类舌象属性（淡、边尖红、红点、瘀斑、裂纹、齿痕、厚苔、黄苔），并带年龄和性别。仓库可下。与后续消融论文 TongueDx2 不是同一篇", "s": "评测基准", "l": [{"t": "数据集", "u": "https://github.com/tonguedx/tonguedx"}, {"t": "论文", "u": "https://arxiv.org/abs/2501.03053"}]}, {"n": "TCM-Ladder 中医多模态问答评测基准 (NeurIPS 2025)", "d": "中医多模态问答基准，含 52,169 个问答对，并包含图像、音频和视频数据（NeurIPS 2025）", "s": "评测基准", "l": [{"t": "数据集", "u": "https://github.com/orangeshushu/TCM-Ladder"}, {"t": "HF", "u": "https://huggingface.co/datasets/timzzyus/TCM-Ladder"}, {"t": "榜单", "u": "https://tcmladder.com"}]}, {"n": "MetaAcuPoint", "d": "用 Unreal Engine 的 MetaHuman 生成 900 张手部图像，按骨骼插槽标注 5 个手部穴位，供韩医穴位定位使用", "s": "评测基准", "l": [{"t": "论文", "u": "https://doi.org/10.3390/healthcare13233093"}]}, {"n": "TriCM-DF Acupuncture Corpus", "d": "面向中医大模型的专家审核指令语料，在针灸子领域按共识、专家经验和感知三个维度发布；仓库公开文本表，图像和视频文件不随包提供", "s": "指令/对话数据集", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/Shutcm-TCME/TriCMDF"}]}, {"n": "Fu_TCM", "d": "已核验Fu_bianzheng.json、Fu_text.json、Fu_vision.json和图像文件；仓库共505个文件，标注Apache-2.0，但数据卡没有来源、样本统计或标注说明。图像文件名包含现代诊断图谱书名，底层素材授权尚待核对", "s": "指令/对话数据集", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/fudanxai/Fu_TCM"}]}, {"n": "TCM-NER 中药说明书实体识别（OpenKG / CHIP）", "d": "中药说明书的实体识别数据，用来做用药知识图谱。许可是 CC BY-NC 2.0", "s": "知识图谱", "l": [{"t": "数据", "u": "https://tianchi.aliyun.com/dataset/dataDetail?dataId=86819"}, {"t": "资料", "u": "http://openkg.cn/dataset/tcm-ner"}]}, {"n": "TCM-Vision-Benchmark 中医视觉评测", "d": "中医视觉评测集，含药材识别/望诊等约 7k 题", "s": "评测基准", "l": [{"t": "数据集", "u": "https://huggingface.co/datasets/FreedomIntelligence/TCM-Vision-Benchmark"}]}];
 const LATIN300 = ["Abutilon theophrasti Medikus", "Acalypha australis L.", "Achyranthes bidentata Blume", "Aconitum carmichaelii Debeaux", "Acorus calamus L.", "Actaea cimicifuga L.", "Adenophora tetraphylla (Thunb.) Fisch.", "Adenophora trachelioides Maxim.", "Agastache rugosa (Fisch. & C. A. Mey.) Kuntze", "Agrimonia pilosa Ledeb.", "Ajuga decumbens Thunb.", "Alangium chinense (Lour.) Harms", "Albizia julibrissin Durazz.", "Alisma plantago-aquatica L.", "Alkekengi officinarum var. franchetii (Mast.) R. J. Wang", "Allium macrostemon Bunge", "Amana edulis (Miq.) Honda", "Ampelopsis japonica (Thunb.) Makino", "Andrographis paniculata (Burm. f.) Wall. ex Nees in Wallich", "Androsace umbellata (Lour.) Merr.", "Anemarrhena asphodeloides Bunge", "Angelica dahurica (Fisch. ex Hoffm.) Benth. & Hook. f. ex Franch. & Sav.", "Angelica decursiva (Miq.) Franch. & Sav.", "Angelica sinensis (Oliv.) Diels", "Apocynum venetum L.", "Aralia elata (Miq.) Seem.", "Arctium lappa L.", "Areca catechu L.", "Arisaema heterophyllum Blume", "Aristolochia debilis Siebold & Zucc.", "Artemisia capillaris Thunb.", "Asarum forbesii Maxim.", "Asarum heterotropoides F. Schmidt", "Asparagus cochinchinensis (Lour.) Merr.", "Aster tataricus L. f.", "Astilbe chinensis (Maxim.) Franch. & Sav.", "Atractylodes lancea (Thunb.) DC.", "Atropa belladonna L.", "Baphicacanthus cusia(Nees)Bremek.", "Belamcanda chinensis (L.) Redout", "Berberis amurensis Rupr.", "Bidens pilosa L.", "Bletilla striata (Thunb. ex A. Murray) Rchb. f.", "Bothriospermum chinense Bunge", "Broussonetia papyrifera (L.) L'Hr. ex Vent.", "Bupleurum scorzonerifolium Willd.", "Callicarpa bodinieri H. Lv.", "Capsella bursa-pastoris (L.) Medik.", "Cardiocrinum cathayanum (E. H. Wilson) Stearn", "Carpesium abrotanoides L.", "Carthamus tinctorius L.", "Catharanthus roseus (L.) G. Don", "Centipeda minima (L.) A. Braun & Asch.", "Chelidonium majus L.", "Chenopodium album L.", "Chloranthus serratus (Thunb.) Roem. & Schult.", "Chrysanthemum morifolium Ramat.", "Cirsium arvense var. integrifolium Wimm. & Grab.", "Cirsium japonicum Fisch. ex DC.", "Clematis florida Thunb.", "Clerodendrum bungei Steud.", "Clerodendrum trichotomum Thunb.", "Clinopodium chinense (Benth.) Kuntze", "Cocculus orbiculatus (L.) DC.", "Codonopsis lanceolata (Siebold & Zucc.) Trautv.", "Codonopsis pilosula (Franch.) Nannf.", "Coix lacryma-jobi L.", "Commelina communis L.", "Coniogramme japonica (Thunb.) Diels", "Convolvulus arvensis L.", "Coptis deltoidea C. Y. Cheng & P. G. Xiao", "Cornus officinalis Sieb. & Zucc.", "Corydalis incisa (Thunb.) Pers.", "Corydalis ophiocarpa Hook. f. & Thomson", "Corydalis yanhusuo (Y. H. Chou & C. C. Hsu) W. T. Wang ex Z. Y. Su & C. Y. Wu", "Crepidiastrum sonchifolium (Bunge) Pak & Kawano", "Crocus sativus L.", "Curculigo orchioides Gaertn.", "Cuscuta chinensis Lam.", "Cuscuta japonica Choisy in Zoll.", "Cyathula officinalis K. C. Kuan", "Cycas revoluta Thunb.", "Cynanchum bungei Decne.", "Cynanchum rostellatum (Turcz.) Liede & Khanum", "Cyperus rotundus L.", "Cyrtomium fortunei J. Sm.", "Daphne genkwa Siebold & Zucc.", "Datura metel L.", "Daucus carota L.", "Descurainia sophia (L.) Webb ex Prantl", "Dianthus chinensis L.", "Dianthus superbus L.", "Dioscorea polystachya Turcz.", "Draba nemorosa L.", "Drynaria roosii Nakaike", "Eclipta prostrata (L.) L.", "Eleutherococcus nodiflorus (Dunn) S. Y. Hu", "Epimedium brevicornu Maxim.", "Equisetum arvense L.", "Equisetum hyemale L.", "Erigeron annuus (L.) Pers.", "Eriobotrya japonica (Thunb.) Lindl.", "Eriocaulon buergerianum Krn.", "Eucommia ulmoides Oliv.", "Euonymus alatus (Thunb.) Siebold", "Eupatorium fortunei Turcz.", "Euphorbia esula L.", "Euphorbia helioscopia L.", "Euphorbia hirta L.", "Euphorbia maculata L.", "Euphorbia pekinensis Rupr.", "Euryale ferox Salisb. ex K. D. Koenig & Sims", "Fagopyrum esculentum Moench", "Forsythia suspensa (Thunb.) Vahl", "Fraxinus chinensis Roxb.", "Fritillaria thunbergii Miq.", "Gardenia  jasminoides J. Ellis", "Gastrodia elata Bl.", "Geranium wilfordii Maxim.", "Geranium wilfordii Maxim.", "Ginkgo biloba L.", "Glechoma longituba (Nakai) Kupr.", "Gleditsia sinensis Lam.", "Glehnia littoralis F. Schmidt ex Miq.", "Gynostemma pentaphyllum (Thunb.) Makino", "Gynura japonica (Thunb.) Juel", "Hedera nepalensis var. sinensis (Tobler) Rehder", "Hemerocallis citrina Baroni", "Hibiscus syriacus L.", "Houttuynia cordata Thunb.", "Humulus scandens (Lour.) Merr.", "Hyoscyamus niger L.", "Hypericum japonicum Thunb. in Murr.", "Hypericum perforatum L.", "Hypericum sampsonii Hance", "Ilex cornuta Lindl. & Paxton", "Impatiens balsamina L.", "Inula japonica Thunb.", "Ipomoea nil (L.) Roth", "Iris tectorum Maxim.", "Isatis tinctoria L.", "Isodon rubescens (Hemsl.) H. Hara", "Ixeris chinensis (Thunb.) Nakai", "Juncus effusus L.", "Justicia procumbens L.", "Lapsanastrum apogonoides (Maxim.) Pak & K.Bremer", "Leonurus japonicus Houtt.", "Lepisorus thunbergianus (Kaulf.) Ching", "Ligusticum chuanxiong Hort.", "Ligustrum lucidum W. T. Aiton", "Lilium brownii F. E. Brown ex Miellez var. viridulum Baker", "Lithospermum zollingeri A. DC.", "Lobelia chinensis Lour.", "Lonicera japonica Thunb.", "Lycium chinense Mill.", "Lycopus lucidus Turcz. ex Benth.", "Lycoris aurea (L'Hr.) Herb.", "Lycoris radiata (L'Hr.) Herb.", "Lygodium japonicum (Thunb.) Sw.", "Lysimachia christinae Hance", "Lysimachia clethroides Duby", "Lysimachia congestiflora Hemsl.", "Lysimachia grammica Hance", "Macleaya cordata (Willd.) R. Br.", "Mahonia fortunei (Lindl.) Fedde", "Mazus pumilus (Burm. f.) Steenis", "Mazus stachydifolius (Turcz.) Maxim.", "Menispermum dauricum DC.", "Mentha canadensis L.", "Mimosa pudica L.", "Momordica cochinchinensis (Lour.) Spreng.", "Morus alba L.", "Nandina domestica Thunb.", "Nepeta cataria L.", "Nerium oleander L.", "Ophiopogon japonicus (L. f.) Ker Gawl.", "Origanum vulgare L.", "Orostachys fimbriata (Turcz.) A. Berger", "Oroxylum indicum (L.) Kurz", "Orychophragmus violaceus (L.) O. E. Schulz", "Osmunda japonica Thunb.", "Oxalis corymbosa DC.", "P.bistorta L.", "Paederia  foetida L.", "Paeonia lactiflora Pall.", "Panax ginseng C. A. Mey.", "Panax notoginseng (Burkill) F. H. Chen ex C. H. Chow", "Papaver somniferum L.", "Paris polyphylla Sm.", "Patrinia scabiosaefolia Fisch.ex Trev.", "Penthorum chinense Pursh", "Perilla frutescens (L.) Britton", "Periploca sepium Bunge", "Persicaria hydropiper (L.) Spach", "Persicaria perfoliata (L.) H. Gross", "Peucedanum praeruptorum Dunn", "Phedimus aizoon (L.) 't Hart", "Phytolacca acinosa Roxb.", "Pilea pumila (L.) A. Gray", "Pinellia ternata (Thunb.) Ten. ex Breitenb.", "Pittosporum tobira (Thunb.) W. T. Aiton", "Plantago asiatica L.", "Platycladus orientalis (L.) Franco", "Platycodon grandiflorus (Jacq.) A. DC.", "Pleuropterus multiflorus (Thunb.) Nakai", "Polygala japonica Houtt.", "Polygala tenuifolia Willd.", "Polygonatum odoratum (Mill.) Druce", "Polygonatum sibiricum Redout", "Polygonum aviculare L.", "Portulaca oleracea L.", "Potentilla discolor Bunge", "Prunella vulgaris L.", "Pseudognaphalium affine (D. Don) Anderb.", "Pteroxygonum giraldii Damm. & Diels", "Pueraria montana var. lobata (Ohwi) Maesen & S. M. Almeida", "Pulsatilla chinensis (Bunge) Regel", "Pyrrosia lingua (Thunb.) Farw.", "Ranunculus chinensis Bunge", "Ranunculus japonicus Thunb.", "Ranunculus sceleratus L.", "Ranunculus ternatus Thunb.", "Raphanus sativus L.", "Rehmannia glutinosa (Gaertn.) Libosch. ex Fisch. & C. A. Mey.", "Reynoutria japonica Houtt.", "Rhodiola cretinii subsp. sinoalpina (Frd.) H. Ohba", "Rhodotypos scandens (Thunb.) Makino", "Rhus chinensis Mill.", "Rorippa indica (L.) Hiern", "Rosa laevigata Michx.", "Rubia  cordifolia L.", "Rubus idaeus L", "Rumex crispus L.", "Sagittaria trifolia subsp. leucopetala (Miquel) Q. F. Wang", "Salvia miltiorrhiza Bunge", "Salvia plebeia R. Br.", "Sambucus javanica Reinw. ex Blume", "Sambucus williamsii Hance", "Sanguisorba officinalis L.", "Saposhnikovia divaricata (Turcz.) Schischk.", "Sargentodoxa cuneata (Oliv.) Rehd. & E. H. Wilson in C. S. Sargent", "Sauromatum giganteum (Engl.) Cusimano & Hett.", "Saururus chinensis (Lour.) Baill.", "Saxifraga stolonifera Curtis", "Sceptridium ternatum (Thunb.) Lyon", "Schisandra chinensis (Turcz.) Baill.", "Scrophularia ningpoensis Hemsl.", "Scutellaria baicalensis Georgi", "Scutellaria barbata D. Don", "Scutellaria indica L.", "Sedum sarmentosum Bunge", "Selaginella tamariscina (P. Beauv.) Spring", "Semiaquilegia adoxoides (DC.) Makino", "Senecio scandens Buch.-Ham. ex D. Don", "Senna tora (L.) Roxb.", "Siegesbeckia orientalis L", "Sinosenecio oldhamianus (Maxim.) B. Nord.", "Siphonostegia chinensis Benth.", "Smilax china L.", "Solanum lyratum Thunb.", "Solanum nigrum L.", "Solanum pseudocapsicum L.", "Sophora flavescens Aiton", "Spatholobus suberectus Dunn", "Stachys sieboldii Miq.", "Staphylea bumalda DC.", "Stellaria media (L.) Vill.", "Stephania cephalantha Hayata", "Stephania tetrandra S. Moore", "Styphnolobium japonicum (L.) Schott", "Syneilesis aconitifolia (Bunge) Maxim.", "Talinum paniculatum (Jacq.) Gaertn.", "Taraxacum mongolicum Hand.-Mazz.", "Taxus wallichiana var. chinensis (Pilg.) Florin", "Tetrapanax papyrifer (Hook.) K. Koch", "Thladiantha dubia Bunge", "Thlaspi arvense L.", "Torilis scabra (Thunb.) DC.", "Trachelospermum jasminoides (Lindl.) Lem.", "Triadica sebifera (L.) Small", "Trichosanthes kirilowii Maxim.", "Trigonotis peduncularis (Trevis.) Benth. ex Baker & S. Moore", "Vaccaria segetalis(Neck.)Garcke", "Veratrum nigrum L.", "Verbena officinalis L.", "Veronica persica Poir.", "Vicia cracca L.", "Vicia hirsuta (L.) Gray", "Vicia sativa L.", "Vincetoxicum pycnostelma Kitag.", "Viola acuminata Ledeb.", "Viola diffusa Ging. in DC.", "Viola japonica Langsd. ex DC.", "Viola philippica Cav.", "Vitex negundo L.", "Vitex negundo var. cannabifolia (Siebold & Zucc.) Hand.-Mazz.", "Xanthium strumarium L.", "Youngia japonica (L.) DC.", "Yulania denudata (Desr.) D. L. Fu", "Zehneria indica (Lour.)Keraudren"];
@@ -522,7 +526,7 @@ const RAW = [
 const FIELDS=['name','py','en','alias','cat','nature','effect','indication','dose','caution','identify','slug'];
 const HERBS = RAW.map(r=>{
   const o={}; FIELDS.forEach((k,i)=>o[k]=r[i]||'');
-  o.imgs = o.slug ? ['herb-images/'+o.slug+'/1.jpg','herb-images/'+o.slug+'/2.jpg'] : [];
+  o.imgs = []; // V4.0 移除内置实拍图：全部药材统一占位样式，本地导入图片仍可用
   o.pyCompact = o.py.replace(/\s+/g,'');
   o.initials = o.py.split(/\s+/).map(s=>s[0]).join('');
   o.search = (o.name+' '+o.py+' '+o.pyCompact+' '+o.initials+' '+o.en+' '+o.alias).toLowerCase().replace(/\s+/g,'');
@@ -535,23 +539,21 @@ let favs = new Set();
 try{ favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]')); }catch(e){}
 const localImgs = new Map(); // 会话内导入的图片：name -> [objectURL]
 
-let filterCat='全部', onlyImg=false, onlyFav=false, keyword='';
+let filterCat='全部', onlyFav=false, keyword='';
 
 const cats = [...new Set(HERBS.map(h=>h.cat))];
 $('statTotal').textContent = HERBS.length;
-$('statImg').textContent = HERBS.filter(h=>h.imgs.length).length;
 $('statCat').textContent = cats.length;
 function updateFavStat(){ $('statFav').textContent = favs.size; }
 updateFavStat();
 
 function renderFilters(){
-  const items=['全部',...cats,'有实拍图','我的收藏'];
-  $('filters').innerHTML = items.map(c=>`<span class="chip ${(c==='全部'&&filterCat==='全部'&&!onlyImg&&!onlyFav)||(c===filterCat&&c!=='全部')||(c==='有实拍图'&&onlyImg)||(c==='我的收藏'&&onlyFav)?'on':''}" data-c="${c}">${c}</span>`).join('');
+  const items=['全部',...cats,'我的收藏'];
+  $('filters').innerHTML = items.map(c=>`<span class="chip ${(c==='全部'&&filterCat==='全部'&&!onlyFav)||(c===filterCat&&c!=='全部')||(c==='我的收藏'&&onlyFav)?'on':''}" data-c="${c}">${c}</span>`).join('');
   $('filters').querySelectorAll('.chip').forEach(el=>el.onclick=()=>{
     const c=el.dataset.c;
-    filterCat='全部'; onlyImg=false; onlyFav=false;
-    if(c==='有实拍图') onlyImg=true;
-    else if(c==='我的收藏') onlyFav=true;
+    filterCat='全部'; onlyFav=false;
+    if(c==='我的收藏') onlyFav=true;
     else filterCat=c;
     renderFilters(); render();
   });
@@ -559,7 +561,6 @@ function renderFilters(){
 
 function matches(h){
   if(onlyFav && !favs.has(h.name)) return false;
-  if(onlyImg && !h.imgs.length && !localImgs.has(h.name)) return false;
   if(filterCat!=='全部' && h.cat!==filterCat) return false;
   if(keyword){
     if(/^[a-z]+$/.test(keyword)){
@@ -574,15 +575,15 @@ function matches(h){
 }
 
 function thumb(h){
-  const imgs=localImgs.get(h.name)||h.imgs;
-  if(imgs.length) return `<div class="card-img"><img src="${imgs[0]}" alt="${h.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=ph>药</div>'"><span class="badge-img">实拍图</span></div>`;
+  const imgs=localImgs.get(h.name)||[];
+  if(imgs.length) return `<div class="card-img"><img src="${imgs[0]}" alt="${h.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=ph>药</div>'"><span class="badge-img">本地图</span></div>`;
   return `<div class="card-img"><div class="ph">药</div></div>`;
 }
 
 function render(){
   const list=HERBS.filter(matches);
   $('resultCount').textContent = `共 ${list.length} 味`;
-  $('resultTitle').textContent = onlyFav?'我的收藏':onlyImg?'有实拍图':filterCat==='全部'?(keyword?'检索结果':'全部药材'):filterCat;
+  $('resultTitle').textContent = onlyFav?'我的收藏':filterCat==='全部'?(keyword?'检索结果':'全部药材'):filterCat;
   $('empty').style.display = list.length?'none':'block';
   $('grid').innerHTML = list.map(h=>`
     <article class="card" data-name="${h.name}">
@@ -603,11 +604,11 @@ let current=null;
 function openDetail(name){
   const h=HERBS.find(x=>x.name===name); if(!h)return;
   current=h;
-  const imgs=localImgs.get(h.name)||h.imgs;
+  const imgs=localImgs.get(h.name)||[];
   $('gallery').innerHTML = imgs.length
     ? `<div class="gallery-main"><img id="mainImg" src="${imgs[0]}" alt="${h.name}" onerror="this.parentNode.innerHTML='<div class=no-img>图片加载失败</div>'"></div>
        <div class="gallery-thumbs">${imgs.map((u,i)=>`<img src="${u}" class="${i===0?'on':''}" data-i="${i}" alt="图${i+1}">`).join('')}</div>
-       <div style="font-size:10.5px;color:#BBA487;text-align:center">${localImgs.has(h.name)?'本地导入图片':'图片来源：CNH-98 中药材图像数据集'}</div>`
+       <div style="font-size:10.5px;color:#BBA487;text-align:center">本地导入图片</div>`
     : `<div class="no-img"><span class="big">✧</span>暂无本地实拍图<br>可点下方「在线查图」查看多角度照片<br><span style="font-size:11px;opacity:.7">或导入本地图片按名称自动匹配</span></div>`;
   $('gallery').querySelectorAll('.gallery-thumbs img').forEach(t=>t.onclick=()=>{
     $('mainImg').src = imgs[+t.dataset.i];
